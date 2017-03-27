@@ -1,22 +1,26 @@
 package mochi
 
 type View interface {
-	Update() map[string]View
+	Update(*UpdateContext) map[string]View
 	// Painter() Painter   // immutable object that paints
 	Layouter() Layouter // immutable object that layouts
-    Handler() Handler // immutable object that handles events
+	Handler() Handler   // immutable object that handles events
+}
+
+type UpdateContext struct {
+	Children map[string]View
 }
 
 // Immutable tree...
 type node struct {
 	children map[string]*node
 	layouter Layouter
-    guide *Guide
+	guide    *Guide
 }
 
 func nodeFromView(view View) *node {
 	chl := make(map[string]*node)
-	for k, v := range view.Update() {
+	for k, v := range view.Update(nil) {
 		chl[k] = nodeFromView(v)
 	}
 
@@ -27,26 +31,26 @@ func nodeFromView(view View) *node {
 }
 
 func (n *node) layout(maxSize Size, minSize Size) {
-    // Create the LayoutContext
-    chl := make(map[string]*LayoutChild)
-    for k, v := range n.children {
-        chl[k] = &LayoutChild{
-            node: v,
-        }
-    }
+	// Create the LayoutContext
+	chl := make(map[string]*LayoutChild)
+	for k, v := range n.children {
+		chl[k] = &LayoutChild{
+			node: v,
+		}
+	}
 	ctx := &LayoutContext{
-	    MaxSize: maxSize,
-	    MinSize: minSize,
-	    Children: chl,
+		MaxSize:  maxSize,
+		MinSize:  minSize,
+		Children: chl,
 	}
 
-    // Perform layout
+	// Perform layout
 	l := n.layouter
 	if l == nil {
 		l = &FullLayout{}
 	}
-    g, _ := l.Layout(ctx)
-    n.guide = &g
+	g, _ := l.Layout(ctx)
+	n.guide = &g
 }
 
 func Display(v View) *node {

@@ -220,3 +220,46 @@ func (r constraintSolver) solve() constraintSolver {
 func (r constraintSolver) rect() Rect {
 	return Rt(r.left.nearest(0), r.top.nearest(0), r.width.nearest(0), r.height.nearest(0))
 }
+
+// Left
+// Right
+// Top
+// Bottom
+// Width
+// Height
+// CenterX
+// CenterY
+
+// InLft
+// InRgt
+// InTop
+// InBot
+// InWid
+// InHei
+// InCnx
+// InCny
+
+// Gr
+// Eq
+// Ls
+
+// Lft
+// Rgt
+// Top
+// Bot
+// Wid
+// Hei
+// Cnx
+// Cny
+
+// LftIn
+// RgtIn
+// TopIn
+// BotIn
+// WidIn
+// HeiIn
+// CnxIn
+// CnyIn
+
+// {lay.LftIn, lay.Eq, lay.RgtIn, "", 0}
+
