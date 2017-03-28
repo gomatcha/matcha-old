@@ -8,42 +8,19 @@ import (
 func main() {
 	fmt.Println("Hello, 世界")
 	// mochi.Display(nil)
-
-	test := "blah"
-	ok := true
-	if !ok {
-		test = "a"
-	}
-	fmt.Println(test)
 }
 
-type View {
-	Update(prev, next *Node)
-	UpdateHandlers(prev, next *Node)
-	UpdateLayout(prev, next *Node)
-	UpdatePaint(prev, next *Node)
-
-	NeedsUpdate()
-	NeedsRehandle()
-	NeedsRelayout()
-	NeedsRepaint()
-}
-
-type Node struct {
-	Children map[string]Component
-	Layouter *Layouter
-	Painter *Painter
-	Handlers map[string]Handlers
-
-	Context map[interface{}] interface{}
-	// Accessibility
-	// Gesture Recognizers
-	// OnAboutToScrollIntoView??
-	// LayoutData?	
-}
-
+/*
 type AnimatedView struct {
 	Animator Animator
+}
+
+func AddAnimatedView(p, n *Node, k interface{}) *AnimatedView {
+	v, ok = p.Children[k].(*AnimatedView)
+	if !ok {
+		v = &AnimatedView{}
+	}
+	return v
 }
 
 func (v *AnimatedView)Update(prev, next *Node) {
@@ -69,6 +46,97 @@ func (v *AnimatedView)UpdateLayout(prev *Layouter) {
 func (v *AnimatedView)UpdateChildren(prev map[string]Component) {
 	return prev
 }
+
+type Todo struct {
+	Items []string
+	Input string
+}
+
+const (
+	labelId = "todo.label"
+	listId = "todo.list"
+	textFieldId = "todo.textField"
+	buttonId = "todo.button"
+	scrollId = "todo.scroll"
+)
+
+func NewTodoView(v interface{}) {
+	todoView, ok := v.(*TodoView)
+	if !ok {
+		todoView = (*TodoView){}
+	}
+	return todoView
+}
+
+func (v *TodoView) Update(p *Node) *Node {
+	n := &Node{}
+
+	label := NewLabel(p.Get(labelId))
+	label.Text = "TODO"
+	n.Add(labelId, label)
+
+	list := NewList(p.Get(listId))
+	list.Items = v.Items
+	n.Add(listID, list)
+
+	text := NewTextField(p.Get(textFieldId))
+	text.Input = v.Input
+	text.OnChange = func(str string) {
+		v.Input = str
+		v.NeedsUpdate()
+	}
+	n.Add(textFieldId, textField)
+
+	button := NewButton(p.Get(buttonId))
+	button.OnClick = func() {
+		if v.Input == "" {
+			return
+		}
+		append(v.Items, v.Input)
+		v.Input = ""
+		v.NeedsUpdate()
+	}
+	n.Add(textFieldId, textField)
+	scrollView := NewScrollView(p.Get(scrollId))
+	contentView := NewTextField(scrollView.ContentView)
+	scrollView.ContentView = contentView
+}
+
+func (v *TodoView) UpdateLayout(p Layouter) Layouter {
+	l := &constraint.Layout{}
+	l.AddGuide("", func(ctx *layout.Context, s *constraint.Solver) {
+		s.TopEqual(0)
+		s.LeftEqual(0)
+		s.WidthEqual(ctx.MinSize.Width)
+		s.HeightEqual(ctx.MaxSize.Height)
+	})
+	l.AddGuide(labelId, func(ctx *layout.Context, s *constraint.Solver) {
+		s.TopEqual(g[""].Top())
+		s.BotLess(g[""].Bot())
+		s.RightEqual(g[""].Right())
+		s.LeftEqual(g[""].Left())
+	})
+	l.AddGuide(listId, func(ctx *layout.Context, s *constraint.Solver) {
+		s.TopEqual(g[labelId].Top())
+		s.BotLess(g[""].Bot())
+		s.RightEqual(g[""].Right())
+		s.LeftEqual(g[""].Left())
+	})
+	l.AddGuide(textFieldId, func(ctx *layout.Context, s *constraint.Solver) {
+		s.TopEqual(g[listId].Top())
+		s.BotLess(g[""].Bot())
+		s.RightEqual(g[""].Right())
+		s.LeftEqual(g[""].Left())
+	})
+	l.AddGuide(buttonId, func(ctx *layout.Context, s *constraint.Solver) {
+		s.TopEqual(g[textFieldId].Top())
+		s.BotLess(g[""].Bot())
+		s.RightEqual(g[""].Right())
+		s.LeftEqual(g[""].Left())
+	})
+	return l
+}
+*/
 
 // Handlers usually have no state, but in some cases they may need to (ie gesture recognizers need to build up state)
 // Do layouts need to hold onto state? Do we want to support multiple layouters?
@@ -330,78 +398,6 @@ func (v *AnimatedView)UpdateChildren(prev map[string]Component) {
 
 // 	v.layouter = l
 // 	return c
-// }
-
-// type Todo struct {
-// 	Items []string
-// 	Input string
-// }
-
-// const (
-// 	labelId = "todo.label"
-// 	listId = "todo.list"
-// 	textFieldId = "todo.textField"
-// 	buttonId = "todo.button"
-// )
-
-// func (v *Todo) Update(ctx *UpdateContext) {
-// 	label := AddLabel(ctx, labelId)
-// 	label.Text = "TODO"
-
-// 	list := AddList(ctx, listId)
-// 	list.Items = v.Items
-
-// 	text := AddTextField(ctx, textFieldId)
-// 	text.Input = v.Input
-// 	text.OnChange = func(str string) {
-// 		v.Input = str
-// 		v.NeedsUpdate()
-// 	}
-
-// 	button := AddButton(ctx, buttonId)
-// 	button.OnClick = func() {
-// 		if v.Input == "" {
-// 			return
-// 		}
-// 		append(v.Items, v.Input)
-// 		v.Input = ""
-// 		v.NeedsUpdate()
-// 	}
-// }
-
-// func (v *Todo) Layouter() Layouter {
-// 	l := &constraint.Layout{}
-// 	l.AddGuide("", func(ctx *layout.Context, s *constraint.Solver) {
-// 		s.TopEqual(0)
-// 		s.LeftEqual(0)
-// 		s.WidthEqual(ctx.MinSize.Width)
-// 		s.HeightEqual(ctx.MaxSize.Height)
-// 	})
-// 	l.AddGuide(labelId, func(ctx *layout.Context, s *constraint.Solver) {
-// 		s.TopEqual(g[""].Top())
-// 		s.BotLess(g[""].Bot())
-// 		s.RightEqual(g[""].Right())
-// 		s.LeftEqual(g[""].Left())
-// 	})
-// 	l.AddGuide(listId, func(ctx *layout.Context, s *constraint.Solver) {
-// 		s.TopEqual(g[labelId].Top())
-// 		s.BotLess(g[""].Bot())
-// 		s.RightEqual(g[""].Right())
-// 		s.LeftEqual(g[""].Left())
-// 	})
-// 	l.AddGuide(textFieldId, func(ctx *layout.Context, s *constraint.Solver) {
-// 		s.TopEqual(g[listId].Top())
-// 		s.BotLess(g[""].Bot())
-// 		s.RightEqual(g[""].Right())
-// 		s.LeftEqual(g[""].Left())
-// 	})
-// 	l.AddGuide(buttonId, func(ctx *layout.Context, s *constraint.Solver) {
-// 		s.TopEqual(g[textFieldId].Top())
-// 		s.BotLess(g[""].Bot())
-// 		s.RightEqual(g[""].Right())
-// 		s.LeftEqual(g[""].Left())
-// 	})
-// 	return l
 // }
 
 // 	l.ConstrainChild(labelId, []Constraint{

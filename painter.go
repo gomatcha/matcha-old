@@ -5,7 +5,6 @@ import "image/color"
 type Painter interface {
 	Paint()
 	PaintOptions() PaintOptions
-	NeedsPaint(func())
 }
 
 type PaintOptions struct {

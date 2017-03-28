@@ -1,5 +1,9 @@
 package mochi
 
+import (
+	"time"
+)
+
 type Handler interface {
 	Handle(event Event) bool
 }
@@ -13,10 +17,10 @@ type OnTapHandler struct {
 }
 
 func (h *OnTapHandler) Handle(event interface{}) {
-	switch i := e.(type) {
-	case TouchEvent:
+	// switch i := e.(type) {
+	// case TouchEvent:
 
-	}
+	// }
 }
 
 type Type int
@@ -52,10 +56,10 @@ type TouchEvent struct {
 
 type KeyKind int
 
-const (
-	Begin KeyKind = iota
-	End
-)
+// const (
+// 	Begin KeyKind = iota
+// 	End
+// )
 
 type KeyCode int
 

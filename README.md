@@ -25,6 +25,64 @@
 * Niche usecases
     * This isn't supposed to replace graphing libraries, game engines, etc.
 
+## Renderer
+
+Building the tree 
+
+### Blah
+
+func (v *TodoView) Render(prev, next *Node) {
+    ...
+}
+
+### RenderContext
+
+func (v *TodoView) Render(ctx *RenderContext) {
+    label := AddLabel(ctx, labelId)
+    label.Text = "TODO"
+
+    scroll := AddScrollView(ctx, scrollId)
+    content := AddWebView(scroll.ContentContext, contentId)
+    content.URL = "www.example.com"
+    scroll.ContentView = content
+}
+
+### 
+
+func (v *TodoView) Update(p *Node) *Node {
+	n := &Node{}
+
+	label := NewLabel(p.Get(labelId))
+	label.Text = "TODO"
+	n.Add(labelId, label)
+
+	list := NewList(p.Get(listId))
+	list.Items = v.Items
+	n.Add(listID, list)
+
+	text := NewTextField(p.Get(textFieldId))
+	text.Input = v.Input
+	text.OnChange = func(str string) {
+		v.Input = str
+		v.NeedsUpdate()
+	}
+	n.Add(textFieldId, textField)
+
+	button := NewButton(p.Get(buttonId))
+	button.OnClick = func() {
+		if v.Input == "" {
+			return
+		}
+		append(v.Items, v.Input)
+		v.Input = ""
+		v.NeedsUpdate()
+	}
+	n.Add(textFieldId, textField)
+	scrollView := NewScrollView(p.Get(scrollId))
+	contentView := NewTextField(scrollView.ContentView)
+	scrollView.ContentView = contentView
+}
+
 ## Drawing
 
 What is the minimum api necessary for drawing? 
@@ -39,11 +97,9 @@ What is the minimum api necessary for drawing?
 
 Layout should happen on a background thread. Parent always knows where the child is. Does this include 3d transforms? Rotations?
 
-- Ignore Transforms and rotations for now.
+Ignore Transforms and rotations for now.
 
 ## Event 
-
-## Event Handling
 
 Mouse, keyboard and touch input is handled by event handlers attached to each view. Events start at the handler deepest in the view hierarchy. Handlers are given an option to bubble the event further upwards or capture it. Multi-touch events will behave similar to UIGestureRecognizer.
 

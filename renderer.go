@@ -1,66 +1,88 @@
 package mochi
 
 type View interface {
-	Update(*UpdateContext) map[string]View
-	// Painter() Painter   // immutable object that paints
-	Layouter() Layouter // immutable object that layouts
-	Handler() Handler   // immutable object that handles events
+	Update(n *Node) *Node
+	// UpdateLayouter(n *Layouter) *Layouter
+	// UptadePainter(n *Painter) *Painter
+	// UpdateHandlers(prev, next *Node)
+
+	NeedsUpdate()
+	// NeedsRehandle()
+	// NeedsRelayout()
+	// NeedsRepaint()
 }
 
-type UpdateContext struct {
-	Children map[string]View
+
+type Node struct {
+	Children map[interface{}]View
+	Layouter Layouter
+	Painter  Painter
+	Handlers map[interface{}]Handler
+
+	// Context map[string] interface{}
+	// Accessibility
+	// Gesture Recognizers
+	// OnAboutToScrollIntoView??
+	// LayoutData?
+
+	nodeChildren map[interface{}]*Node
+	layoutGuide Guide
+	paintOptions PaintOptions
 }
 
-// Immutable tree...
-type node struct {
-	children map[string]*node
-	layouter Layouter
-	guide    *Guide
+func NewNode() *Node {
+	n := &Node{}
+	n.Children = map[interface{}]View{}
+	n.Handlers = map[interface{}]Handler{}
+	n.nodeChildren = map[interface{}]*Node{}
+	return n
 }
 
-func nodeFromView(view View) *node {
-	chl := make(map[string]*node)
-	for k, v := range view.Update(nil) {
-		chl[k] = nodeFromView(v)
+func nodeFromView(view View, prev *Node) *Node {
+	node := view.Update(prev)
+	for k, v := range node.Children {
+		node.nodeChildren[k] = nodeFromView(v, prev.nodeChildren[k])
 	}
-
-	return &node{
-		children: chl,
-		layouter: view.Layouter(),
-	}
+	return node
 }
 
-func (n *node) layout(maxSize Size, minSize Size) {
+func (n *Node) Layout(maxSize Size, minSize Size) Guide {
 	// Create the LayoutContext
-	chl := make(map[string]*LayoutChild)
-	for k, v := range n.children {
-		chl[k] = &LayoutChild{
-			node: v,
-		}
-	}
 	ctx := &LayoutContext{
 		MaxSize:  maxSize,
 		MinSize:  minSize,
-		Children: chl,
+		ChildKeys: []interface{}{},
+		node: n,
+	}
+	for i := range n.nodeChildren {
+		ctx.ChildKeys = append(ctx.ChildKeys, i)
 	}
 
 	// Perform layout
-	l := n.layouter
-	if l == nil {
-		l = &FullLayout{}
+	layouter := n.Layouter
+	if layouter == nil {
+		layouter = &FullLayout{}
 	}
-	g, _ := l.Layout(ctx)
-	n.guide = &g
+	n.layoutGuide = layouter.Layout(ctx)
+	return n.layoutGuide
 }
 
-func Display(v View) *node {
-	node := nodeFromView(v)
-	_ = node
+func (n *Node) getPaintOptions() {
+	if p := n.Painter; p != nil {
+		n.paintOptions = p.PaintOptions()
+	}
+	for _, v := range n.nodeChildren {
+		v.getPaintOptions()
+	}
+}
 
+func Display(v View) *Node {
+	node := nodeFromView(v, nil)
+	_ = node.Layout(Sz(0, 0), Sz(0, 0))
+	node.getPaintOptions()
 	return nil
 
-	// Generate a mutable tree
-	// Copy into an immutable tree
+	// Generate immutable tree
 	// Run a layout pass on the immutable tree
 	// Run a paint pass on the immutable tree
 }

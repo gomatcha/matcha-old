@@ -31,11 +31,11 @@ type Constraint struct {
 	Value      float64
 }
 
-func Constrain(in Insets, c []Constraint) Guide {
-	return ConstrainChild(nil, in, c)
+func Constrain(ctx *LayoutContext, in Insets, c []Constraint) Guide {
+	return ConstrainChild(ctx, nil, in, c)
 }
 
-func ConstrainChild(chl *LayoutChild, in Insets, c []Constraint) Guide {
+func ConstrainChild(ctx *LayoutContext, key interface{}, in Insets, c []Constraint) Guide {
 	solver := newConstraintSolver()
 	for _, i := range c {
 		copy := solver
@@ -79,8 +79,9 @@ func ConstrainChild(chl *LayoutChild, in Insets, c []Constraint) Guide {
 		solver = copy
 	}
 
-	if chl != nil {
-		guide := chl.Layout(Sz(solver.width.min, solver.height.min), Sz(solver.width.max, solver.height.max))
+
+	if key != nil {
+		guide := ctx.LayoutChild(key, Sz(solver.width.min, solver.height.min), Sz(solver.width.max, solver.height.max))
 
 		copy := solver
 		copy.width = copy.width.intersect(_range{min: guide.Frame.Size.Width, max: guide.Frame.Size.Width})
