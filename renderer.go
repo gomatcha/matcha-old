@@ -12,7 +12,6 @@ type View interface {
 	// NeedsRepaint()
 }
 
-
 type Node struct {
 	Children map[interface{}]View
 	Layouter Layouter
@@ -26,7 +25,7 @@ type Node struct {
 	// LayoutData?
 
 	nodeChildren map[interface{}]*Node
-	layoutGuide Guide
+	layoutGuide  Guide
 	paintOptions PaintOptions
 }
 
@@ -46,13 +45,13 @@ func nodeFromView(view View, prev *Node) *Node {
 	return node
 }
 
-func (n *Node) Layout(maxSize Size, minSize Size) Guide {
+func (n *Node) layout(maxSize Size, minSize Size) Guide {
 	// Create the LayoutContext
 	ctx := &LayoutContext{
-		MaxSize:  maxSize,
-		MinSize:  minSize,
+		MaxSize:   maxSize,
+		MinSize:   minSize,
 		ChildKeys: []interface{}{},
-		node: n,
+		node:      n,
 	}
 	for i := range n.nodeChildren {
 		ctx.ChildKeys = append(ctx.ChildKeys, i)
@@ -78,11 +77,7 @@ func (n *Node) getPaintOptions() {
 
 func Display(v View) *Node {
 	node := nodeFromView(v, nil)
-	_ = node.Layout(Sz(0, 0), Sz(0, 0))
+	node.layout(Sz(0, 0), Sz(0, 0))
 	node.getPaintOptions()
-	return nil
-
-	// Generate immutable tree
-	// Run a layout pass on the immutable tree
-	// Run a paint pass on the immutable tree
+	return node
 }

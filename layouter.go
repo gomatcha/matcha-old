@@ -1,22 +1,22 @@
 package mochi
 
 type LayoutContext struct {
-	MinSize  Size
-	MaxSize  Size
+	MinSize   Size
+	MaxSize   Size
 	ChildKeys []interface{}
-	node *Node
+	node      *Node
 }
 
 type Layouter interface {
 	Layout(ctx *LayoutContext) Guide
 }
 
-func (l *LayoutContext)LayoutChild(k interface{}, minSize, maxSize Size) Guide {
+func (l *LayoutContext) LayoutChild(k interface{}, minSize, maxSize Size) Guide {
 	n := l.node.nodeChildren[k]
 	if n == nil {
 		return Guide{}
 	}
-	return n.Layout(minSize, maxSize)
+	return n.layout(minSize, maxSize)
 }
 
 type FullLayout struct {

@@ -3,7 +3,6 @@ package mochi
 import "image/color"
 
 type Painter interface {
-	Paint()
 	PaintOptions() PaintOptions
 }
 

@@ -79,7 +79,6 @@ func ConstrainChild(ctx *LayoutContext, key interface{}, in Insets, c []Constrai
 		solver = copy
 	}
 
-
 	if key != nil {
 		guide := ctx.LayoutChild(key, Sz(solver.width.min, solver.height.min), Sz(solver.width.max, solver.height.max))
 
@@ -263,4 +262,3 @@ func (r constraintSolver) rect() Rect {
 // CnyIn
 
 // {lay.LftIn, lay.Eq, lay.RgtIn, "", 0}
-
