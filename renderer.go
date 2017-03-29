@@ -2,14 +2,7 @@ package mochi
 
 type View interface {
 	Update(n *Node) *Node
-	// UpdateLayouter(n *Layouter) *Layouter
-	// UptadePainter(n *Painter) *Painter
-	// UpdateHandlers(prev, next *Node)
-
 	NeedsUpdate()
-	// NeedsRehandle()
-	// NeedsRelayout()
-	// NeedsRepaint()
 }
 
 type Node struct {

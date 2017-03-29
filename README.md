@@ -2,28 +2,121 @@
 
 ## Goals
 * It should be straight forward to build general purpose UIs
-    * Implementing swipe to delete and animated table views should not require complex logic
-* Orthogonal composable components over inheritance hierarchies
-    * This is just good design. Components can evolve over time independently.
+	* Implementing swipe to delete and animated table views should not require complex logic
+* Composable components over inheritance hierarchies
+	* This is just good design. Components can evolve over time independently.
 * Conceptually consistent
 * Follow Go idioms while pushing a common set of idioms ourselves
-    * There should be one right way to do things.
+	* There should be one right way to do things.
 * Favor conciseness over extra hooks
-    * This seems to be the general trend in popular frameworks
-    * Most of the hooks I leave myself I never use.
+	* This seems to be the general trend in popular frameworks
+	* Most of the hooks I leave myself I never use.
 * System desgin should be visible in the API. Minimize action at a distance
-    * Using the API should help you learn how the framework works, rather than hide it away
+	* Using the API should help you learn how the framework works, rather than hide it away
 * Scalability
-    * Support large programs with large numbers of dependencies, with large teams of programmers working on them.
+	* Support large programs with large numbers of dependencies, with large teams of programmers working on them.
 
 ## Non-goals
 * Ultra-high performance
 * Model and data fetching
-    * Out of scope
+	* Out of scope
 * Templating
-    * I dont get templating... 
+	* I dont get templating... 
 * Niche usecases
-    * This isn't supposed to replace graphing libraries, game engines, etc.
+	* This isn't supposed to replace graphing libraries, game engines, etc.
+
+
+## Example
+
+```go
+type TodoView struct {
+	Items []string
+	Input string
+}
+
+const (
+	labelId = "todo.label"
+	listId = "todo.list"
+	textFieldId = "todo.textField"
+	buttonId = "todo.button"
+)
+
+func NewTodoView(v interface{}) {
+	todoView, ok := v.(*TodoView)
+	if !ok {
+		todoView = (*TodoView){}
+	}
+	return todoView
+}
+
+func (v *TodoView) Update(p *Node) *Node {
+	l := &constraint.System{}
+	n := &Node{}
+	n.layouter = l
+
+	var prev *constraint.Guide
+	{
+		// Label
+		chl := NewLabel(p.Get(labelId))
+		chl.Text = "TODO"
+		n.Set(labelId, chl)
+
+		prev = l.AddGuide(labelID, func(constraint.Solver *s){
+			s.TopEqual(l.Top())
+			s.BotLess(l.Bot())
+		})
+	}
+	{
+		// List
+		chl := NewList(p.Get(listId))
+		chl.Items = v.Items
+		n.Set(listID, chl)
+
+		prev = l.AddGuide(labelID, func(constraint.Solver *s){
+			s.TopEqual(prev.Bot())
+			s.BotLess(l.Bot())
+		})
+	}
+	{
+		// Text Input
+		chl := NewTextField(p.Get(textFieldId))
+		chl.Input = v.Input
+		chl.OnChange = func(str string) {
+			v.Input = str
+			v.NeedsUpdate()
+		}
+		n.Set(textFieldId, chl)
+
+		prev = l.AddGuide(labelID, func(constraint.Solver *s){
+			s.TopEqual(prev.Bot())
+			s.BotLess(l.Bot())
+		})
+	}
+	{
+		// Button
+		chl := NewButton(p.Get(buttonId))
+		chl.OnClick = func() {
+			if v.Input == "" {
+				return
+			}
+			append(v.Items, v.Input)
+			v.Input = ""
+			v.NeedsUpdate()
+		}
+		n.Set(buttonId, chl)
+
+		g = l.AddGuide(buttonId, func(constraint.Solver *s){
+			s.TopEqual(prev.Bot())
+			s.BotLess(l.Bot())
+		})
+	}
+
+	l.Solve(func(constraint.Solver *s){
+		s.BotEqual(prev.Bot())
+	})
+	return n
+}
+```
 
 ## Renderer
 
@@ -32,19 +125,19 @@ Building the tree
 ### Blah
 
 func (v *TodoView) Render(prev, next *Node) {
-    ...
+	...
 }
 
 ### RenderContext
 
 func (v *TodoView) Render(ctx *RenderContext) {
-    label := AddLabel(ctx, labelId)
-    label.Text = "TODO"
+	label := AddLabel(ctx, labelId)
+	label.Text = "TODO"
 
-    scroll := AddScrollView(ctx, scrollId)
-    content := AddWebView(scroll.ContentContext, contentId)
-    content.URL = "www.example.com"
-    scroll.ContentView = content
+	scroll := AddScrollView(ctx, scrollId)
+	content := AddWebView(scroll.ContentContext, contentId)
+	content.URL = "www.example.com"
+	scroll.ContentView = content
 }
 
 ### 
@@ -133,7 +226,7 @@ Button = press -> hold / drag -> release
 Scroll = press -> hold / drag
 
 - ScrollView : Scroll, Double Tap
-    - Button : Button, Press and Hold
+	- Button : Button, Press and Hold
 
 Scenario 1: press -> release. Only the button will be triggered. But double tap is waiting to trigger?
 Scenario 2: press -> hold. Press and Hold will be triggered. Button will be waiting to trigger.
@@ -160,9 +253,9 @@ We could wrap it the event, and rebubble. There needs to be some synchronization
 GestureCompletedEvent {}
 
 GestureEvent {
-    Events []Event
-    Possible bool
-    Complete func()complete
+	Events []Event
+	Possible bool
+	Complete func()complete
 }
 
 GestureEvent flows through the system. If any are possible, then do nothing. When a gesture flows through and possible is still false, but complete is true. Call the completion() and send through a GestureCompleteEvent. 
