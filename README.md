@@ -105,7 +105,7 @@ func (v *TodoView) Update(p *Node) *Node {
 		}
 		n.Set(buttonId, chl)
 
-		g = l.AddGuide(buttonId, func(constraint.Solver *s){
+		prev = l.AddGuide(buttonId, func(constraint.Solver *s){
 			s.TopEqual(prev.Bot())
 			s.BotLess(l.Bot())
 		})
