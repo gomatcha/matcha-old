@@ -25,7 +25,6 @@
 * Niche usecases
 	* This isn't supposed to replace graphing libraries, game engines, etc.
 
-
 ## Example
 
 ```go
@@ -117,6 +116,10 @@ func (v *TodoView) Update(p *Node) *Node {
 	return n
 }
 ```
+<!--
+## Blah
+
+
 
 ## Renderer
 
@@ -267,4 +270,4 @@ GestureEvent flows through the system. If any are possible, then do nothing. Whe
 What if we didn't need to call NeedsUpdate? We have it so that when a component modifies itself, it can trigger a rerender. Also to give opportunity to stop the update from flowing downwards.
 Instead of calling setters, NeedsUpdate will automatically flow through the entire tree. We can stop by calling, DoesntNeedsUpdate()?
 
-Rather than calling setState(). We instead mark v.NeedsUpdate(). And instead of passing in components, we assume you don't modify components except in the Update() func.
+Rather than calling setState(). We instead mark v.NeedsUpdate(). And instead of passing in components, we assume you don't modify components except in the Update() func.-->
