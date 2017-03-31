@@ -1,0 +1,8 @@
+framework module "Bridge" {
+	header "ref.h"
+    header "Bridge.objc.h"
+    header "Universe.objc.h"
+    header "Bridge.h"
+
+    export *
+}
