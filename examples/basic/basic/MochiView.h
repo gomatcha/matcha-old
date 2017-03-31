@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Bridge+Extensions.h"
+#import "MochiBridge.h"
 
 @interface MochiView : UIView
 @property (nonatomic, strong) BridgeValue *node;

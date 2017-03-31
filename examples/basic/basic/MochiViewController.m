@@ -8,7 +8,7 @@
 
 #import "MochiViewController.h"
 #import "MochiView.h"
-#import "Bridge+Extensions.h"
+#import "MochiBridge.h"
 
 @interface MochiViewController ()
 @property (nonatomic, strong) MochiView *mochiView;

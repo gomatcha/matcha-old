@@ -1,21 +1,11 @@
 package mochi
 
 type Rect struct {
-	Origin Point
-	Size   Size
+	Min, Max Point
 }
 
-func Rt(x, y, w, h float64) Rect {
-	return Rect{Origin: Point{X: x, Y: y}, Size: Size{Width: w, Height: h}}
-}
-
-type Size struct {
-	Width  float64
-	Height float64
-}
-
-func Sz(w, h float64) Size {
-	return Size{Width: w, Height: h}
+func Rt(x0, y0, x1, y1 float64) Rect {
+	return Rect{Min: Point{X: x0, Y: y0}, Max: Point{X: x1, Y: y1}}
 }
 
 type Point struct {

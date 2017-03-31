@@ -79,17 +79,17 @@ func ConstrainChild(ctx *LayoutContext, key interface{}, in Insets, c []Constrai
 		solver = copy
 	}
 
-	if key != nil {
-		guide := ctx.LayoutChild(key, Sz(solver.width.min, solver.height.min), Sz(solver.width.max, solver.height.max))
+	// if key != nil {
+	// 	guide := ctx.LayoutChild(key, Sz(solver.width.min, solver.height.min), Sz(solver.width.max, solver.height.max))
 
-		copy := solver
-		copy.width = copy.width.intersect(_range{min: guide.Frame.Size.Width, max: guide.Frame.Size.Width})
-		copy.height = copy.height.intersect(_range{min: guide.Frame.Size.Height, max: guide.Frame.Size.Height})
-		copy = copy.solve()
-		if !copy.isValid() {
-			solver = copy
-		}
-	}
+	// 	copy := solver
+	// 	copy.width = copy.width.intersect(_range{min: guide.Frame.Size.Width, max: guide.Frame.Size.Width})
+	// 	copy.height = copy.height.intersect(_range{min: guide.Frame.Size.Height, max: guide.Frame.Size.Height})
+	// 	copy = copy.solve()
+	// 	if !copy.isValid() {
+	// 		solver = copy
+	// 	}
+	// }
 
 	return Guide{Frame: solver.rect(), Insets: in}
 }

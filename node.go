@@ -38,7 +38,7 @@ func nodeFromView(view View, prev *Node) *Node {
 	return node
 }
 
-func (n *Node) layout(maxSize Size, minSize Size) Guide {
+func (n *Node) layout(maxSize Point, minSize Point) Guide {
 	// Create the LayoutContext
 	ctx := &LayoutContext{
 		MaxSize:   maxSize,
@@ -55,8 +55,13 @@ func (n *Node) layout(maxSize Size, minSize Size) Guide {
 	if layouter == nil {
 		layouter = &FullLayout{}
 	}
-	n.layoutGuide = layouter.Layout(ctx)
-	return n.layoutGuide
+	g, gs := layouter.Layout(ctx)
+
+	// Assign guides to children
+	for k, v := range gs {
+		n.nodeChildren[k].layoutGuide = v
+	}
+	return g
 }
 
 func (n *Node) getPaintOptions() {
@@ -70,7 +75,7 @@ func (n *Node) getPaintOptions() {
 
 func Display(v View) *Node {
 	node := nodeFromView(v, nil)
-	node.layout(Sz(0, 0), Sz(0, 0))
+	node.layout(Pt(0, 0), Pt(0, 0))
 	node.getPaintOptions()
 	return node
 }

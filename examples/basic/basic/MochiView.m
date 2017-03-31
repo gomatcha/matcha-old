@@ -7,7 +7,6 @@
 //
 
 #import "MochiView.h"
-#import "MochiBridge.h"
 
 @interface MochiView ()
 @end
@@ -17,7 +16,7 @@
 - (void)setNode:(BridgeValue *)value {
     if (_node != value) {
         _node = value;
-        self.backgroundColor = [[UIColor alloc] initWithBridgeValue:value];
+        // self.backgroundColor = [[UIColor alloc] initWithBridgeValue:value];
     }
 }
 

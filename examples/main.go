@@ -46,116 +46,116 @@ func main() {
 // 	return prev
 // }
 
-type TodoView struct {
-	Items []string
-	Input string
-}
+// type TodoView struct {
+// 	Items []string
+// 	Input string
+// }
 
-const (
-	labelId = "todo.label"
-	listId = "todo.list"
-	textFieldId = "todo.textField"
-	buttonId = "todo.button"
-	scrollId = "todo.scroll"
-	wrapperId = "todo.centerWrapper"
-)
+// const (
+// 	labelId = "todo.label"
+// 	listId = "todo.list"
+// 	textFieldId = "todo.textField"
+// 	buttonId = "todo.button"
+// 	scrollId = "todo.scroll"
+// 	wrapperId = "todo.centerWrapper"
+// )
 
-func NewTodoView(v interface{}) {
-	todoView, ok := v.(*TodoView)
-	if !ok {
-		todoView = (*TodoView){}
-	}
-	return todoView
-}
+// func NewTodoView(v interface{}) {
+// 	todoView, ok := v.(*TodoView)
+// 	if !ok {
+// 		todoView = (*TodoView){}
+// 	}
+// 	return todoView
+// }
 
-func (v *TodoView) Update(p *Node) *Node {
-	l := &constraint.System{}
-	l.Update(func(constraint.Solver *s) {
-		s.HeightEqual(constraint.Const(40))
-		s.Equal(l.Max())
-	})
+// func (v *TodoView) Update(p *Node) *Node {
+// 	l := &constraint.System{}
+// 	l.Update(func(constraint.Solver *s) {
+// 		s.HeightEqual(constraint.Const(40))
+// 		s.Equal(l.Max())
+// 	})
 
-	n := &Node{}
-	n.layouter = l
+// 	n := &Node{}
+// 	n.layouter = l
 
-	// Wrapper
-	wrap := l.Add(wrapId)
-	var prev constraint.Guide
-	{
-		// Label
-		chl := NewLabel(p.Get(labelId))
-		chl.Text = "TODO"
-		n.Set(labelId, chl)
+// 	// Wrapper
+// 	wrap := l.Add(wrapId)
+// 	var prev constraint.Guide
+// 	{
+// 		// Label
+// 		chl := NewLabel(p.Get(labelId))
+// 		chl.Text = "TODO"
+// 		n.Set(labelId, chl)
 
-		prev = l.Add(labelID)
-		prev.Solve(func(constraint.Solver *s){
-			s.TopEqual(l.Top())
-			s.BotLess(l.Bot())
-		})
-	}
-	{
-		// List
-		chl := NewList(p.Get(listId))
-		chl.Items = v.Items
-		n.Set(listID, chl)
+// 		prev = l.Add(labelID)
+// 		prev.Solve(func(constraint.Solver *s){
+// 			s.TopEqual(l.Top())
+// 			s.BotLess(l.Bot())
+// 		})
+// 	}
+// 	{
+// 		// List
+// 		chl := NewList(p.Get(listId))
+// 		chl.Items = v.Items
+// 		n.Set(listID, chl)
 
-		prev = l.Add(labelID)
-		prev.Solve(func(constraint.Solver *s){
-			s.TopEqual(prev.Bot())
-			s.BotLess(l.Bot())
-		})
-	}
-	{
-		// Text
-		chl := NewTextField(p.Get(textFieldId))
-		chl.Input = v.Input
-		chl.OnChange = func(str string) {
-			v.Input = str
-			v.NeedsUpdate()
-		}
-		n.Add(textFieldId, chl)
+// 		prev = l.Add(labelID)
+// 		prev.Solve(func(constraint.Solver *s){
+// 			s.TopEqual(prev.Bot())
+// 			s.BotLess(l.Bot())
+// 		})
+// 	}
+// 	{
+// 		// Text
+// 		chl := NewTextField(p.Get(textFieldId))
+// 		chl.Input = v.Input
+// 		chl.OnChange = func(str string) {
+// 			v.Input = str
+// 			v.NeedsUpdate()
+// 		}
+// 		n.Add(textFieldId, chl)
 
-		cst := constraint.New(wrap)
-		cst.TopEqual(prev.Top())
-		cst.BotLess(wrap.Bot())
-		cst.Equal(wrap)
-		l.Solve(textId, cst)
-		prev = cst
-	}
-	{
-		// Button
-		chl := NewButton(p.Get(buttonId))
-		chl.OnClick = func() {
-			if v.Input == "" {
-				return
-			}
-			append(v.Items, v.Input)
-			v.Input = ""
-			v.NeedsUpdate()
-		}
-		n.Add(buttonId, chl)
+// 		cst := constraint.New(wrap)
+// 		cst.TopEqual(prev.Top())
+// 		cst.BotLess(wrap.Bot())
+// 		cst.Equal(wrap)
+// 		l.Solve(textId, cst)
+// 		prev = cst
+// 	}
+// 	{
+// 		// Button
+// 		chl := NewButton(p.Get(buttonId))
+// 		chl.OnClick = func() {
+// 			if v.Input == "" {
+// 				return
+// 			}
+// 			append(v.Items, v.Input)
+// 			v.Input = ""
+// 			v.NeedsUpdate()
+// 		}
+// 		n.Add(buttonId, chl)
 
-		cst := constraint.New()
-		cst.TopEqual(prev.Top())
-		cst.BotLess(wrap.Bot())
-		cst.Equal(wrap)
-		l.Solve(buttonId, cst)
-		prev = cst
-	}
+// 		cst := constraint.New()
+// 		cst.TopEqual(prev.Top())
+// 		cst.BotLess(wrap.Bot())
+// 		cst.Equal(wrap)
+// 		l.Solve(buttonId, cst)
+// 		prev = cst
+// 	}
 
-	// ScrollView
-	scrollView := NewScrollView(p.Get(scrollId))
-	contentView := NewTextField(scrollView.ContentView)
-	scrollView.ContentView = contentView
+// 	// ScrollView
+// 	scrollView := NewScrollView(p.Get(scrollId))
+// 	contentView := NewTextField(scrollView.ContentView)
+// 	scrollView.ContentView = contentView
 
-	// Layout ScrollView??
+// 	// Layout ScrollView??
 
-	// Root
-	root.BotEqual(text.Bot().Add(constraint.Const(10)))
-	l.Solve(nil, root)
+// 	// Root
+// 	root.BotEqual(text.Bot().Add(constraint.Const(10)))
+// 	l.Solve(nil, root)
 
-	return n
-}
+// 	return n
+// }
 
 // func (v *TodoView) UpdateLayout(p Layouter) Layouter {
 // 	l := &constraint.NewLayouter()

@@ -61,10 +61,3 @@ This is a fairly clean approach for flagging functions but it is unclear how it 
 
 ...
 
-## Attempt 1
-
-```
-BridgeValue *node = Bridge.Run()
-BridegValue *node = [node call:@"Children"]
-
-```
