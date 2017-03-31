@@ -1,12 +1,14 @@
 package bridge
 
 import (
+	"image/color"
 	"reflect"
 	_ "github.com/overcyn/mochi"
 )
 
 func Run() *Value {
-	return &Value{}
+	c := color.RGBA {0xff, 0, 0, 0xff}
+	return &Value{reflect.ValueOf(c)}
 }
 
 type ValueSlice struct {

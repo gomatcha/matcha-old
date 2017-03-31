@@ -14,6 +14,9 @@
 		676EF4E41E8E34E300C1488A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4E31E8E34E300C1488A /* ViewController.m */; };
 		676EF4E91E8E382200C1488A /* Bridge+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4E81E8E382200C1488A /* Bridge+Extensions.m */; };
 		676EF4ED1E8E393200C1488A /* Bridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 676EF4EC1E8E393200C1488A /* Bridge.framework */; };
+		676EF4F01E8ECF2700C1488A /* MochiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4EF1E8ECF2700C1488A /* MochiViewController.m */; };
+		676EF4F41E8ECF5D00C1488A /* MochiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4F31E8ECF5D00C1488A /* MochiView.m */; };
+		676EF4F71E8ED68800C1488A /* MochiBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4F61E8ED68800C1488A /* MochiBridge.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +32,12 @@
 		676EF4E71E8E382100C1488A /* Bridge+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridge+Extensions.h"; sourceTree = "<group>"; };
 		676EF4E81E8E382200C1488A /* Bridge+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Bridge+Extensions.m"; sourceTree = "<group>"; };
 		676EF4EC1E8E393200C1488A /* Bridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bridge.framework; sourceTree = "<group>"; };
+		676EF4EE1E8ECF2700C1488A /* MochiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiViewController.h; sourceTree = "<group>"; };
+		676EF4EF1E8ECF2700C1488A /* MochiViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiViewController.m; sourceTree = "<group>"; };
+		676EF4F21E8ECF5D00C1488A /* MochiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiView.h; sourceTree = "<group>"; };
+		676EF4F31E8ECF5D00C1488A /* MochiView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiView.m; sourceTree = "<group>"; };
+		676EF4F51E8ED68800C1488A /* MochiBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiBridge.h; sourceTree = "<group>"; };
+		676EF4F61E8ED68800C1488A /* MochiBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiBridge.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,9 +79,8 @@
 				676EF4D71E8E341900C1488A /* Assets.xcassets */,
 				676EF4D91E8E341900C1488A /* LaunchScreen.storyboard */,
 				676EF4DC1E8E341900C1488A /* Info.plist */,
+				676EF4F11E8ECF4400C1488A /* Mochi */,
 				676EF4CB1E8E341800C1488A /* Supporting Files */,
-				676EF4E71E8E382100C1488A /* Bridge+Extensions.h */,
-				676EF4E81E8E382200C1488A /* Bridge+Extensions.m */,
 			);
 			path = basic;
 			sourceTree = "<group>";
@@ -83,6 +91,21 @@
 				676EF4CC1E8E341800C1488A /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		676EF4F11E8ECF4400C1488A /* Mochi */ = {
+			isa = PBXGroup;
+			children = (
+				676EF4EE1E8ECF2700C1488A /* MochiViewController.h */,
+				676EF4EF1E8ECF2700C1488A /* MochiViewController.m */,
+				676EF4E71E8E382100C1488A /* Bridge+Extensions.h */,
+				676EF4E81E8E382200C1488A /* Bridge+Extensions.m */,
+				676EF4F21E8ECF5D00C1488A /* MochiView.h */,
+				676EF4F31E8ECF5D00C1488A /* MochiView.m */,
+				676EF4F51E8ED68800C1488A /* MochiBridge.h */,
+				676EF4F61E8ED68800C1488A /* MochiBridge.m */,
+			);
+			name = Mochi;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,6 +182,9 @@
 				676EF4E41E8E34E300C1488A /* ViewController.m in Sources */,
 				676EF4D01E8E341900C1488A /* AppDelegate.m in Sources */,
 				676EF4E91E8E382200C1488A /* Bridge+Extensions.m in Sources */,
+				676EF4F41E8ECF5D00C1488A /* MochiView.m in Sources */,
+				676EF4F01E8ECF2700C1488A /* MochiViewController.m in Sources */,
+				676EF4F71E8ED68800C1488A /* MochiBridge.m in Sources */,
 				676EF4CD1E8E341800C1488A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

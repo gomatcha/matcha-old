@@ -50,6 +50,33 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
     return result.toArray;
 }
 
+- (double)toDouble {
+    BridgeKind kind = self.kind;
+    if (kind == BridgeKindInterface || 
+        kind == BridgeKindPtr) {
+        return [self.elem toDouble];
+    }
+    return self.float_;
+}
+
+- (unsigned long)toUnsignedLong {
+    BridgeKind kind = self.kind;
+    if (kind == BridgeKindInterface || 
+        kind == BridgeKindPtr) {
+        return [self.elem toUnsignedLong];
+    }
+    return self.uint_;
+}
+
+- (long)toLong {
+    BridgeKind kind = self.kind;
+    if (kind == BridgeKindInterface || 
+        kind == BridgeKindPtr) {
+        return [self.elem toLong];
+    }
+    return self.int_;
+}
+
 - (NSData *)toData {
     BridgeKind kind = self.kind;
     if (kind == BridgeKindInterface || 

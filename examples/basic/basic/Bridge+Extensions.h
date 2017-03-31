@@ -10,12 +10,15 @@
 #import <Bridge/Bridge.h>
 
 @interface BridgeValue (Extensions) <NSCopying>
-- (NSArray *)call:(NSString *)method args:(NSArray *)args;
+- (NSArray<BridgeValue *> *)call:(NSString *)method args:(NSArray<BridgeValue *> *)args;
 - (NSData *)toData;
 - (NSString *)toString;
 - (NSDictionary *)toDictionary;
-- (NSArray *)toArray;
+- (NSArray<BridgeValue *> *)toArray;
 - (NSNumber *)toNumber;
+- (double)toDouble;
+- (unsigned long)toUnsignedLong;
+- (long)toLong;
 @end
 
 @interface BridgeValueSlice (Extensions)
