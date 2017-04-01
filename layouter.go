@@ -12,7 +12,7 @@ type Layouter interface {
 }
 
 func (l *LayoutContext) LayoutChild(k interface{}, minSize, maxSize Point) Guide {
-	n := l.node.nodeChildren[k]
+	n := l.node.NodeChildren[k]
 	return n.layout(minSize, maxSize)
 }
 

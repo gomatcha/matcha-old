@@ -13,10 +13,11 @@
 
 @implementation MochiView
 
-- (void)setNode:(BridgeValue *)value {
+- (void)setNode:(MochiNode *)value {
     if (_node != value) {
         _node = value;
-        // self.backgroundColor = [[UIColor alloc] initWithBridgeValue:value];
+        self.backgroundColor = _node.paintOptions.backgroundColor;
+        
     }
 }
 

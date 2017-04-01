@@ -59,9 +59,10 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
     BridgeValue *value = self;
     while (true) {
         BridgeKind kind = value.kind;
-        if (kind == BridgeKindInterface || kind == BridgeKindPtr) {
-            value = self.elem;
+        if (kind != BridgeKindInterface && kind != BridgeKindPtr) {
+            break;
         }
+        value = self.elem;
     }
     return value;
 }
@@ -155,7 +156,6 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
 @implementation UIColor (Mochi)
 - (id)initWithBridgeValue:(BridgeValue *)value {
     NSArray<BridgeValue *> *array = [value call:@"RGBA" args:nil];
-    NSLog(@"%@",@(array[0].toUnsignedLong));
     return [UIColor colorWithRed:array[0].toUnsignedLong/0xffff green:array[1].toUnsignedLong/0xffff blue:array[2].toUnsignedLong/0xffff alpha:array[3].toUnsignedLong/0xffff];
 }
 @end
@@ -169,5 +169,15 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
     rect.size.width = [[v get:@"Max"] get:@"X"].toDouble - rect.origin.x;
     rect.size.height = [[v get:@"Max"] get:@"Y"].toDouble - rect.origin.y;
     return rect;
+}
+
+- (UIEdgeInsets)toUIEdgeInsets {
+    BridgeValue *v = self.toUnderlying;
+    UIEdgeInsets insets;
+    insets.top = v[@"Top"].toDouble;
+    insets.bottom = v[@"Bottom"].toDouble;
+    insets.right = v[@"Right"].toDouble;
+    insets.left = v[@"Left"].toDouble;
+    return insets;
 }
 @end

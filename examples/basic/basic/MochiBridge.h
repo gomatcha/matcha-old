@@ -21,6 +21,7 @@
 - (double)toDouble;
 - (unsigned long)toUnsignedLong;
 - (long)toLong;
+- (BridgeValue *)objectForKeyedSubscript:(NSString *)key;
 @end
 
 @interface BridgeValueSlice (Extensions)
@@ -33,4 +34,5 @@
 
 @interface BridgeValue (Mochi)
 - (CGRect)toCGRect;
+- (UIEdgeInsets)toUIEdgeInsets;
 @end

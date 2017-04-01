@@ -18,7 +18,7 @@
 
 - (void)loadView {
     self.mochiView = [[MochiView alloc] initWithFrame:CGRectZero];
-    self.mochiView.node = BridgeRun();
+    self.mochiView.node = [[MochiNode alloc] initWithBridgeValue:BridgeRun()];
     self.view = self.mochiView;
 }
 

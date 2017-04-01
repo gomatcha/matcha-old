@@ -1,8 +1,17 @@
 package mochi
 
-type View interface {
-	Update(n *Node) *Node
-	NeedsUpdate()
+import (
+	_ "image/color"
+)
+
+func TestNode() *Node {
+	v := &NestedView{}
+	return Display(v)
+	// n := NewNode()
+	// n.PaintOptions = PaintOptions{
+	// 	BackgroundColor: color.RGBA{0xff, 0, 0, 0xff},
+	// }
+	// return n
 }
 
 type Node struct {
@@ -17,25 +26,41 @@ type Node struct {
 	// OnAboutToScrollIntoView??
 	// LayoutData?
 
-	nodeChildren map[interface{}]*Node
-	layoutGuide  Guide
-	paintOptions PaintOptions
+	// These should be hidden, probs
+	NodeChildren map[interface{}]*Node
+	LayoutGuide  Guide
+	PaintOptions PaintOptions
 }
 
 func NewNode() *Node {
 	n := &Node{}
 	n.Children = map[interface{}]View{}
 	n.Handlers = map[interface{}]Handler{}
-	n.nodeChildren = map[interface{}]*Node{}
+	n.NodeChildren = map[interface{}]*Node{}
 	return n
 }
 
 func nodeFromView(view View, prev *Node) *Node {
 	node := view.Update(prev)
 	for k, v := range node.Children {
-		node.nodeChildren[k] = nodeFromView(v, prev.nodeChildren[k])
+		var prevNode *Node
+		if prev != nil {
+			prevNode = prev.NodeChildren[k]
+		}
+		node.NodeChildren[k] = nodeFromView(v, prevNode)
 	}
 	return node
+}
+
+func (n *Node) Get(k interface{}) View {
+	if n == nil {
+		return nil
+	}
+	return n.Children[k]
+}
+
+func (n *Node) Set(k interface{}, v View) {
+	n.Children[k] = v
 }
 
 func (n *Node) layout(maxSize Point, minSize Point) Guide {
@@ -46,7 +71,7 @@ func (n *Node) layout(maxSize Point, minSize Point) Guide {
 		ChildKeys: []interface{}{},
 		node:      n,
 	}
-	for i := range n.nodeChildren {
+	for i := range n.NodeChildren {
 		ctx.ChildKeys = append(ctx.ChildKeys, i)
 	}
 
@@ -59,16 +84,16 @@ func (n *Node) layout(maxSize Point, minSize Point) Guide {
 
 	// Assign guides to children
 	for k, v := range gs {
-		n.nodeChildren[k].layoutGuide = v
+		n.NodeChildren[k].LayoutGuide = v
 	}
 	return g
 }
 
 func (n *Node) getPaintOptions() {
 	if p := n.Painter; p != nil {
-		n.paintOptions = p.PaintOptions()
+		n.PaintOptions = p.PaintOptions()
 	}
-	for _, v := range n.nodeChildren {
+	for _, v := range n.NodeChildren {
 		v.getPaintOptions()
 	}
 }

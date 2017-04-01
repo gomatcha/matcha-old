@@ -2,13 +2,11 @@ package bridge
 
 import (
 	"github.com/overcyn/mochi"
-	_ "image/color"
 	"reflect"
 )
 
 func Run() *Value {
-	n := &mochi.Node{}
-	// c := color.RGBA{0xff, 0, 0, 0xff}
+	n := mochi.TestNode()
 	return &Value{reflect.ValueOf(n)}
 }
 
