@@ -61,8 +61,10 @@ func (v *TodoView) Update(p *Node) *Node {
 		n.Set(labelId, chl)
 
 		prev = l.AddGuide(labelId, func(constraint.Solver *s){
-			s.TopEqual(l.Top())
-			s.BotLess(l.Bot())
+			s.WidthEqual(l.Width().Multiply(0.5))
+			s.HeightEqual(l.Height().Multiply(0.5))
+			s.TopEqual(constraint.Const(10))
+			s.BottomEqual(constraint.Const(10))
 		})
 	}
 	{

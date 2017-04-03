@@ -15,7 +15,7 @@
 - (BridgeValue *)toUnderlying;
 - (NSData *)toData;
 - (NSString *)toString;
-- (NSDictionary *)toDictionary;
+- (NSDictionary<BridgeValue *, BridgeValue *> *)toDictionary;
 - (NSArray<BridgeValue *> *)toArray;
 - (NSNumber *)toNumber;
 - (double)toDouble;

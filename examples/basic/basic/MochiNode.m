@@ -25,13 +25,17 @@
     return [[MochiPaintOptions alloc] initWithBridgeValue:self.bridgeValue[@"PaintOptions"]];
 }
 
-- (NSArray<MochiNode *> *)nodeChildren {
-    NSArray<BridgeValue *> *children = self.bridgeValue[@"NodeChildren"].toArray;
-    NSMutableArray *nodeChildren = [NSMutableArray array];
+- (NSDictionary<BridgeValue *, MochiNode *> *)nodeChildren {
+    NSDictionary<BridgeValue *, BridgeValue *> *children = self.bridgeValue[@"NodeChildren"].toDictionary;
+    NSMutableDictionary *nodeChildren = [NSMutableDictionary dictionary];
     for (BridgeValue *i in children) {
-        [nodeChildren addObject:[[MochiNode alloc] initWithBridgeValue:i]];
+        nodeChildren[i] = [[MochiNode alloc] initWithBridgeValue:children[i]];
     }
     return nodeChildren;
+}
+
+- (MochiLayoutGuide *)guide {
+    return [[MochiLayoutGuide alloc] initWithBridgeValue:self.bridgeValue[@"LayoutGuide"]];
 }
 
 @end

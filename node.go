@@ -1,12 +1,15 @@
 package mochi
 
 import (
+	"fmt"
 	_ "image/color"
 )
 
 func TestNode() *Node {
 	v := &NestedView{}
-	return Display(v)
+	n := Display(v)
+	// fmt.Println(n, n.LayoutGuide)
+	return n
 	// n := NewNode()
 	// n.PaintOptions = PaintOptions{
 	// 	BackgroundColor: color.RGBA{0xff, 0, 0, 0xff},
@@ -77,6 +80,7 @@ func (n *Node) layout(maxSize Point, minSize Point) Guide {
 
 	// Perform layout
 	layouter := n.Layouter
+	fmt.Println("layouter", layouter)
 	if layouter == nil {
 		layouter = &FullLayout{}
 	}
@@ -100,7 +104,7 @@ func (n *Node) getPaintOptions() {
 
 func Display(v View) *Node {
 	node := nodeFromView(v, nil)
-	node.layout(Pt(0, 0), Pt(0, 0))
+	node.layout(Pt(0, 0), Pt(1000, 1000))
 	node.getPaintOptions()
 	return node
 }

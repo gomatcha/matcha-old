@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "MochiBridge.h"
 @class MochiPaintOptions;
-@class MochiGuide;
+@class MochiLayoutGuide;
 
 @interface MochiNode : NSObject
 - (id)initWithBridgeValue:(BridgeValue *)value;
-@property (nonatomic, readonly) NSArray<MochiNode *> *nodeChildren;
-@property (nonatomic, readonly) MochiGuide *guide;
+@property (nonatomic, readonly) NSDictionary<BridgeValue *, MochiNode *> *nodeChildren;
+@property (nonatomic, readonly) MochiLayoutGuide *guide;
 @property (nonatomic, readonly) MochiPaintOptions *paintOptions;
 @end
 
@@ -24,6 +24,7 @@
 @end
 
 @interface MochiLayoutGuide : NSObject
+- (id)initWithBridgeValue:(BridgeValue *)value;
 @property (nonatomic, readonly) CGRect frame;
 @property (nonatomic, readonly) UIEdgeInsets insets;
 @end

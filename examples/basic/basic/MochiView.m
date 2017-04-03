@@ -17,7 +17,12 @@
     if (_node != value) {
         _node = value;
         self.backgroundColor = _node.paintOptions.backgroundColor;
-        
+        self.frame = _node.guide.frame;
+        for (MochiNode *i in _node.nodeChildren.allValues) {
+            MochiView *child = [[MochiView alloc] init];
+            [self addSubview:child];
+            child.node = i;
+        }
     }
 }
 

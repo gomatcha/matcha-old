@@ -14,6 +14,8 @@ type NestedView struct {
 
 func (v *NestedView) Update(p *Node) *Node {
 	l := NewAbsoluteLayout()
+	l.Guide = Guide{Frame: Rt(0, 0, 500, 500)}
+
 	n := NewNode()
 	n.Layouter = l
 
@@ -25,7 +27,7 @@ func (v *NestedView) Update(p *Node) *Node {
 
 	chl2id := "2"
 	chl2 := NewBasicView(p.Get(chl2id))
-	chl2.PaintOptions.BackgroundColor = greenColor
+	chl2.PaintOptions.BackgroundColor = yellowColor
 	n.Set(chl2id, chl2)
 	l.ChildGuides[chl2id] = Guide{Frame: Rt(0, 100, 100, 200)}
 
