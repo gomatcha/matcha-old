@@ -8,6 +8,15 @@ func Rt(x0, y0, x1, y1 float64) Rect {
 	return Rect{Min: Point{X: x0, Y: y0}, Max: Point{X: x1, Y: y1}}
 }
 
+func (r Rect) Add(p Point) Rect {
+	n := r
+	n.Min.X += p.X
+	n.Min.Y += p.Y
+	n.Max.X += p.X
+	n.Max.Y += p.Y
+	return n
+}
+
 type Point struct {
 	X float64
 	Y float64

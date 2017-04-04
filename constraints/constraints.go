@@ -2,7 +2,7 @@ package constraints
 
 import (
 	"github.com/overcyn/mochi"
-	_ "math"
+	"math"
 )
 
 type comparison int
@@ -16,14 +16,14 @@ const (
 type attribute int
 
 const (
-	left attribute = iota
-	right
-	top
-	bottom
-	width
-	height
-	centerX
-	centerY
+	leftAttr attribute = iota
+	rightAttr
+	topAttr
+	bottomAttr
+	widthAttr
+	heightAttr
+	centerXAttr
+	centerYAttr
 )
 
 type Anchor struct {
@@ -49,7 +49,7 @@ func (a Anchor) Multiply(v float64) Anchor {
 }
 
 type anchor interface {
-	value() float64
+	value(*System) float64
 }
 
 type multiplierAnchor struct {
@@ -57,8 +57,8 @@ type multiplierAnchor struct {
 	underlying anchor
 }
 
-func (a multiplierAnchor) value() float64 {
-	return a.underlying.value() * a.multiplier
+func (a multiplierAnchor) value(sys *System) float64 {
+	return a.underlying.value(sys) * a.multiplier
 }
 
 type offsetAnchor struct {
@@ -66,13 +66,13 @@ type offsetAnchor struct {
 	underlying anchor
 }
 
-func (a offsetAnchor) value() float64 {
-	return a.underlying.value() + a.offset
+func (a offsetAnchor) value(sys *System) float64 {
+	return a.underlying.value(sys) + a.offset
 }
 
 type constAnchor float64
 
-func (a constAnchor) value() float64 {
+func (a constAnchor) value(sys *System) float64 {
 	return float64(a)
 }
 
@@ -81,8 +81,42 @@ type guideAnchor struct {
 	attribute attribute
 }
 
-func (a guideAnchor) value() float64 {
-	return 0 // TODO:
+func (a guideAnchor) value(sys *System) float64 {
+	var g mochi.Guide
+	switch a.guide.id {
+	case rootId:
+		g = *sys.Guide.mochiGuide
+	case minId:
+		g = *sys.min.mochiGuide
+	case maxId:
+		g = *sys.max.mochiGuide
+	default:
+		g = *sys.children[a.guide.id].mochiGuide
+	}
+
+	// if g == nil {
+	// 	return 0
+	// }
+
+	switch a.attribute {
+	case leftAttr:
+		return g.Left()
+	case rightAttr:
+		return g.Right()
+	case topAttr:
+		return g.Top()
+	case bottomAttr:
+		return g.Bottom()
+	case widthAttr:
+		return g.Width()
+	case heightAttr:
+		return g.Height()
+	case centerXAttr:
+		return g.CenterX()
+	case centerYAttr:
+		return g.CenterY()
+	}
+	return 0
 }
 
 func Const(f float64) *Anchor {
@@ -90,134 +124,236 @@ func Const(f float64) *Anchor {
 }
 
 type Guide struct {
-	id     interface{}
-	system *System // is this unneccessary?
+	id         interface{}
+	system     *System
+	children   map[interface{}]*Guide
+	mochiGuide *mochi.Guide
 }
 
 func (g *Guide) Top() *Anchor {
-	return &Anchor{guideAnchor{guide: g, attribute: top}}
+	return &Anchor{guideAnchor{guide: g, attribute: topAttr}}
 }
 
 func (g *Guide) Right() *Anchor {
-	return &Anchor{guideAnchor{guide: g, attribute: right}}
+	return &Anchor{guideAnchor{guide: g, attribute: rightAttr}}
 }
 
 func (g *Guide) Bottom() *Anchor {
-	return &Anchor{guideAnchor{guide: g, attribute: bottom}}
+	return &Anchor{guideAnchor{guide: g, attribute: bottomAttr}}
 }
 
 func (g *Guide) Left() *Anchor {
-	return &Anchor{guideAnchor{guide: g, attribute: left}}
+	return &Anchor{guideAnchor{guide: g, attribute: leftAttr}}
 }
 
 func (g *Guide) Width() *Anchor {
-	return &Anchor{guideAnchor{guide: g, attribute: width}}
+	return &Anchor{guideAnchor{guide: g, attribute: widthAttr}}
 }
 
 func (g *Guide) Height() *Anchor {
-	return &Anchor{guideAnchor{guide: g, attribute: height}}
+	return &Anchor{guideAnchor{guide: g, attribute: heightAttr}}
 }
 
 func (g *Guide) CenterX() *Anchor {
-	return &Anchor{guideAnchor{guide: g, attribute: centerX}}
+	return &Anchor{guideAnchor{guide: g, attribute: centerXAttr}}
 }
 
 func (g *Guide) CenterY() *Anchor {
-	return &Anchor{guideAnchor{guide: g, attribute: centerY}}
+	return &Anchor{guideAnchor{guide: g, attribute: centerYAttr}}
+}
+
+func (g *Guide) AddGuide(id interface{}, solveFunc func(*Solver)) *Guide {
+	chl := &Guide{
+		id:         id,
+		system:     g.system,
+		children:   map[interface{}]*Guide{},
+		mochiGuide: nil,
+	}
+	s := &Solver{id: id}
+	if solveFunc != nil {
+		solveFunc(s)
+	}
+	g.children[id] = chl
+	g.system.solvers = append(g.system.solvers, s)
+	return chl
 }
 
 type constraint struct {
 	attribute  attribute
 	comparison comparison
-	anchor     *Anchor
+	anchor     anchor
 }
 
 type Solver struct {
-	guide       *Guide
+	id          interface{}
 	constraints []constraint
 }
 
-func (s *Solver) solve(sys *System) mochi.Guide {
-	g := mochi.Guide{}
-	return g
+func (s *Solver) solve(sys *System, ctx *mochi.LayoutContext) {
+	cr := newConstrainedRect()
+
+	for _, i := range s.constraints {
+		copy := cr
+
+		// Generate the range from constraint
+		var r _range
+		switch i.comparison {
+		case equal:
+			r = _range{min: i.anchor.value(sys), max: i.anchor.value(sys)}
+		case greater:
+			r = _range{min: i.anchor.value(sys), max: math.Inf(1)}
+		case less:
+			r = _range{min: math.Inf(-1), max: i.anchor.value(sys)}
+		}
+
+		// Update the solver
+		switch i.attribute {
+		case leftAttr:
+			copy.left = copy.left.intersect(r)
+		case rightAttr:
+			copy.right = copy.right.intersect(r)
+		case topAttr:
+			copy.top = copy.top.intersect(r)
+		case bottomAttr:
+			copy.bottom = copy.bottom.intersect(r)
+		case widthAttr:
+			copy.width = copy.width.intersect(r)
+		case heightAttr:
+			copy.height = copy.height.intersect(r)
+		case centerXAttr:
+			copy.centerX = copy.centerX.intersect(r)
+		case centerYAttr:
+			copy.centerY = copy.centerY.intersect(r)
+		}
+
+		// Validate that the new system is well-formed. Otherwise ignore the changes.
+		if !copy.isValid() {
+			continue
+		}
+		cr = copy
+	}
+
+	// Get parent guide.
+	var parent mochi.Guide
+	if s.id == rootId {
+		parent = *sys.max.mochiGuide
+	} else {
+		parent = *sys.Guide.mochiGuide
+	}
+
+	// Solve for width & height.
+	var width, height float64
+	var g mochi.Guide
+	if s.id == rootId {
+		g = mochi.Guide{}
+		width = cr.solveWidth(parent.Width())
+		height = cr.solveHeight(parent.Height())
+	} else {
+		g = ctx.LayoutChild(s.id, mochi.Pt(cr.width.min, cr.height.min), mochi.Pt(cr.width.max, cr.height.max))
+		width = g.Width()
+		height = g.Height()
+	}
+
+	// Solve for centerX & centerY using new width & height.
+	cr.width = cr.width.intersect(_range{min: width, max: width})
+	cr.height = cr.height.intersect(_range{min: height, max: height})
+	if !cr.isValid() {
+		panic("constraints: system inconsistency")
+	}
+	centerX := cr.solveCenterX(parent.CenterY())
+	centerY := cr.solveCenterY(parent.CenterY())
+
+	// Update the guide and the system.
+	g.Frame = mochi.Rt(centerX-width/2, centerY-height/2, centerX+width/2, centerY+height/2)
+	if s.id == rootId {
+		sys.Guide.mochiGuide = &g
+	} else {
+		sys.Guide.children[s.id].mochiGuide = &g
+	}
 }
 
 func (s *Solver) TopEqual(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: top, comparison: equal, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: topAttr, comparison: equal, anchor: a.anchor})
 }
 
 func (s *Solver) TopLess(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: top, comparison: less, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: topAttr, comparison: less, anchor: a.anchor})
 }
 
 func (s *Solver) TopGreater(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: top, comparison: greater, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: topAttr, comparison: greater, anchor: a.anchor})
 }
 
 func (s *Solver) RightEqual(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: right, comparison: equal, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: rightAttr, comparison: equal, anchor: a.anchor})
 }
 
 func (s *Solver) RightLess(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: right, comparison: less, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: rightAttr, comparison: less, anchor: a.anchor})
 }
 
 func (s *Solver) RightGreater(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: right, comparison: greater, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: rightAttr, comparison: greater, anchor: a.anchor})
 }
 
 func (s *Solver) BottomEqual(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: bottom, comparison: equal, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: bottomAttr, comparison: equal, anchor: a.anchor})
 }
 
 func (s *Solver) BottomLess(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: bottom, comparison: less, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: bottomAttr, comparison: less, anchor: a.anchor})
 }
 
 func (s *Solver) BottomGreater(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: bottom, comparison: greater, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: bottomAttr, comparison: greater, anchor: a.anchor})
 }
 
 func (s *Solver) LeftEqual(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: left, comparison: equal, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: leftAttr, comparison: equal, anchor: a.anchor})
 }
 
 func (s *Solver) LeftLess(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: left, comparison: less, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: leftAttr, comparison: less, anchor: a.anchor})
 }
 
 func (s *Solver) LeftGreater(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: left, comparison: greater, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: leftAttr, comparison: greater, anchor: a.anchor})
 }
 
 func (s *Solver) WidthEqual(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: width, comparison: equal, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: widthAttr, comparison: equal, anchor: a.anchor})
 }
 
 func (s *Solver) WidthLess(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: width, comparison: less, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: widthAttr, comparison: less, anchor: a.anchor})
 }
 
 func (s *Solver) WidthGreater(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: width, comparison: greater, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: widthAttr, comparison: greater, anchor: a.anchor})
 }
 
 func (s *Solver) HeightEqual(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: height, comparison: equal, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: heightAttr, comparison: equal, anchor: a.anchor})
 }
 
 func (s *Solver) HeightLess(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: height, comparison: less, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: heightAttr, comparison: less, anchor: a.anchor})
 }
 
 func (s *Solver) HeightGreater(a *Anchor) {
-	s.constraints = append(s.constraints, constraint{attribute: height, comparison: greater, anchor: a})
+	s.constraints = append(s.constraints, constraint{attribute: heightAttr, comparison: greater, anchor: a.anchor})
 }
 
 type systemId int
 
+const (
+	rootId systemId = iota
+	minId
+	maxId
+)
+
 type System struct {
-	Guide
+	*Guide
 	min     *Guide
 	max     *Guide
 	solvers []*Solver
@@ -225,10 +361,9 @@ type System struct {
 
 func New() *System {
 	sys := &System{}
-	sys.min = &Guide{system: sys}
-	sys.max = &Guide{system: sys}
-	sys.Guide.system = sys
-	sys.Guide.id = systemId(0)
+	sys.min = &Guide{id: minId, system: sys}
+	sys.max = &Guide{id: maxId, system: sys}
+	sys.Guide = &Guide{id: rootId, system: sys}
 	return sys
 }
 
@@ -240,216 +375,212 @@ func (sys *System) MaxGuide() *Guide {
 	return sys.max
 }
 
-func (sys *System) AddGuide(id interface{}, solveFunc func(*Solver)) *Guide {
-	s := &Solver{guide: &Guide{id: id}}
-	if solveFunc != nil {
-		solveFunc(s)
-	}
-	sys.solvers = append(sys.solvers, s)
-	return s.guide
-}
-
 func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
-	guide := mochi.Guide{}
-	childGuides := map[interface{}]mochi.Guide{}
+	// TODO(Kevin) reset all guides
 
 	for _, i := range sys.solvers {
-		g := i.solve(sys)
-		if i.guide.id == sys.Guide.id {
-			guide = g
-		} else {
-			childGuides[i.guide.id] = g
-		}
+		i.solve(sys, ctx)
 	}
-	return guide, childGuides
+
+	g := *sys.Guide.mochiGuide
+	gs := map[interface{}]mochi.Guide{}
+	// for k, v := range sol.children {
+	// 	gs[k] = v.guide
+	// }
+	return g, gs
 }
 
-// func Constrain(ctx *LayoutContext, in Insets, c []Constraint) Guide {
-// 	return ConstrainChild(ctx, nil, in, c)
-// }
+type _range struct {
+	min float64
+	max float64
+}
 
-// func ConstrainChild(ctx *LayoutContext, key interface{}, in Insets, c []Constraint) Guide {
-// 	solver := newConstraintSolver()
-// 	for _, i := range c {
-// 		copy := solver
+func (r _range) intersectMin(v float64) _range {
+	r.min = math.Max(r.min, v)
+	return r
+}
 
-// 		// Generate the range from constraint
-// 		var r _range
-// 		switch i.Comparison {
-// 		case Equal:
-// 			r = _range{min: i.Value, max: i.Value}
-// 		case Greater:
-// 			r = _range{min: i.Value, max: math.Inf(1)}
-// 		case Less:
-// 			r = _range{min: math.Inf(-1), max: i.Value}
-// 		}
+func (r _range) intersectMax(v float64) _range {
+	r.max = math.Min(r.max, v)
+	return r
+}
 
-// 		// Update the solver
-// 		switch i.Attribute {
-// 		case Left:
-// 			solver.left = solver.left.intersect(r)
-// 		case Right:
-// 			solver.right = solver.right.intersect(r)
-// 		case Top:
-// 			solver.top = solver.top.intersect(r)
-// 		case Bottom:
-// 			solver.bottom = solver.bottom.intersect(r)
-// 		case Width:
-// 			solver.width = solver.width.intersect(r)
-// 		case Height:
-// 			solver.height = solver.height.intersect(r)
-// 		case CenterX:
-// 			solver.centerX = solver.centerX.intersect(r)
-// 		case CenterY:
-// 			solver.centerY = solver.centerY.intersect(r)
-// 		}
+func (r _range) intersect(r2 _range) _range {
+	return _range{min: math.Max(r.min, r2.min), max: math.Min(r.max, r2.max)}
+}
 
-// 		// Solve and validate that the new system is well-formed. Otherwise ignore the changes.
-// 		copy = copy.solve()
-// 		if !copy.isValid() {
-// 			continue
-// 		}
-// 		solver = copy
-// 	}
+func (r _range) nearest(v float64) float64 {
+	switch {
+	case r.min == r.max:
+		return r.min
+	case r.min >= v:
+		return r.min
+	case r.max <= v:
+		return r.max
+	default:
+		return v
+	}
+}
 
-// 	// if key != nil {
-// 	// 	guide := ctx.LayoutChild(key, Sz(solver.width.min, solver.height.min), Sz(solver.width.max, solver.height.max))
+type constrainedRect struct {
+	left, right, top, bottom, width, height, centerX, centerY _range
+}
 
-// 	// 	copy := solver
-// 	// 	copy.width = copy.width.intersect(_range{min: guide.Frame.Size.Width, max: guide.Frame.Size.Width})
-// 	// 	copy.height = copy.height.intersect(_range{min: guide.Frame.Size.Height, max: guide.Frame.Size.Height})
-// 	// 	copy = copy.solve()
-// 	// 	if !copy.isValid() {
-// 	// 		solver = copy
-// 	// 	}
-// 	// }
+func newConstrainedRect() constrainedRect {
+	all := _range{min: math.Inf(-1), max: math.Inf(1)}
+	pos := _range{min: 0, max: math.Inf(1)}
+	return constrainedRect{
+		left: all, right: all, top: all, bottom: all, width: pos, height: pos, centerX: all, centerY: all,
+	}
+}
 
-// 	return Guide{Frame: solver.rect(), Insets: in}
-// }
+func (r constrainedRect) isValid() bool {
+	if r.left.max > r.left.min ||
+		r.right.max > r.right.min ||
+		r.top.max > r.top.min ||
+		r.bottom.max > r.bottom.min ||
+		r.width.max > r.width.min ||
+		r.height.max > r.height.min ||
+		r.centerX.max > r.centerX.min ||
+		r.centerY.max > r.centerY.min ||
+		r.width.max < 0 ||
+		r.width.min < 0 ||
+		r.height.max < 0 ||
+		r.height.min < 0 {
+		return false
+	}
+	return true
+}
 
-// type _range struct {
-// 	min float64
-// 	max float64
-// }
+func (r constrainedRect) solveWidth(b float64) float64 {
+	centerXMax, centerXMin := r.centerX.max, r.centerX.min
+	rightMax, rightMin := r.right.max, r.right.min
+	leftMax, leftMin := r.left.max, r.left.min
 
-// func (r _range) intersect(r2 _range) _range {
-// 	return _range{min: math.Max(r.min, r2.min), max: math.Min(r.max, r2.max)}
-// }
+	// Width = (Right - CenterX) * 2
+	if !math.IsInf(centerXMin, 0) && !math.IsInf(rightMax, 0) {
+		r.width = r.width.intersectMax((rightMax - centerXMin) * 2)
+	}
+	if !math.IsInf(centerXMax, 0) && !math.IsInf(rightMin, 0) {
+		r.width = r.width.intersectMin((rightMin - centerXMax) * 2)
+	}
 
-// func (r _range) nearest(v float64) float64 {
-// 	switch {
-// 	case r.min == r.max:
-// 		return r.min
-// 	case r.min >= v:
-// 		return r.min
-// 	case r.max <= v:
-// 		return r.max
-// 	default:
-// 		return v
-// 	}
-// }
+	// Width = Right - Left
+	if !math.IsInf(rightMax, 0) && !math.IsInf(leftMin, 0) {
+		r.width = r.width.intersectMax(rightMax - leftMin)
+	}
+	if !math.IsInf(rightMin, 0) && !math.IsInf(leftMax, 0) {
+		r.width = r.width.intersectMin(rightMin - leftMax)
+	}
 
-// type constraintSolver struct {
-// 	left, right, top, bottom, width, height, centerX, centerY _range
-// }
+	// Width = (CenterX - Left) * 2
+	if !math.IsInf(centerXMax, 0) && !math.IsInf(leftMin, 0) {
+		r.width = r.width.intersectMax((centerXMax - leftMin) * 2)
+	}
+	if !math.IsInf(centerXMin, 0) && !math.IsInf(leftMax, 0) {
+		r.width = r.width.intersectMin((centerXMin - leftMax) * 2)
+	}
 
-// func newConstraintSolver() constraintSolver {
-// 	all := _range{min: math.Inf(-1), max: math.Inf(1)}
-// 	pos := _range{min: 0, max: math.Inf(1)}
-// 	return constraintSolver{
-// 		left: all, right: all, top: all, bottom: all, width: pos, height: pos, centerX: all, centerY: all,
-// 	}
-// }
+	return r.width.nearest(b)
+}
 
-// func (r constraintSolver) isValid() bool {
-// 	if r.left.max > r.left.min ||
-// 		r.right.max > r.right.min ||
-// 		r.top.max > r.top.min ||
-// 		r.bottom.max > r.bottom.min ||
-// 		r.width.max > r.width.min ||
-// 		r.height.max > r.height.min ||
-// 		r.centerX.max > r.centerX.min ||
-// 		r.centerY.max > r.centerY.min ||
-// 		r.width.max < 0 ||
-// 		r.width.min < 0 ||
-// 		r.height.max < 0 ||
-// 		r.height.min < 0 {
-// 		return false
-// 	}
-// 	return true
-// }
+func (r constrainedRect) solveCenterX(b float64) float64 {
+	rightMax, rightMin := r.right.max, r.right.min
+	leftMax, leftMin := r.left.max, r.left.min
+	widthMax, widthMin := r.width.max, r.width.min
 
-// // Layout along the x-axis is determined by the `Left`, `Right`, `CenterX`, and `Width` attributes.
-// // And any x-axis attribute can be determined given two other x-axis attributes. We can therefore
-// // solve this constraint system by giving each attribute a unique priority and iteratively
-// // updating higher priority attributes from every possible combination of lower priority attributes.
-// // Our priorities from highest to lowest are: `Width`, `Left`, `Right`, `CenterX`.
-// // And for the y-axis are: `Height`, `Top`, `Bottom`, `CenterY`.
-// func (r constraintSolver) solve() constraintSolver {
-// 	// Left = CenterX * 2 - Right
-// 	left := _range{min: math.Inf(-1), max: math.Inf(1)}
-// 	if !math.IsInf(r.centerX.min, 0) && !math.IsInf(r.right.max, 0) {
-// 		left.min = r.centerX.min*2 - r.right.max
-// 	}
-// 	if !math.IsInf(r.centerX.max, 0) && !math.IsInf(r.right.min, 0) {
-// 		left.max = r.centerX.max*2 - r.right.min
-// 	}
-// 	r.left = r.left.intersect(left)
+	// CenterX = (Right + Left)/2
+	if !math.IsInf(rightMax, 0) && !math.IsInf(leftMax, 0) {
+		r.centerX = r.centerX.intersectMax((rightMax + leftMax) / 2)
+	}
+	if !math.IsInf(rightMin, 0) && !math.IsInf(leftMin, 0) {
+		r.centerX = r.centerX.intersectMin((rightMin + leftMin) / 2)
+	}
 
-// 	// Width = Right - Left
-// 	width := _range{min: 0, max: math.Inf(1)}
-// 	if !math.IsInf(r.right.max, 0) && !math.IsInf(r.left.min, 0) {
-// 		width.max = r.right.max - r.left.min
-// 	}
-// 	if !math.IsInf(r.right.min, 0) && !math.IsInf(r.left.max, 0) {
-// 		width.min = r.right.min - r.left.max
-// 	}
-// 	r.width = r.width.intersect(width)
+	// CenterX = Right - Width / 2
+	if !math.IsInf(rightMax, 0) && !math.IsInf(widthMin, 0) {
+		r.centerX = r.centerX.intersectMax(rightMax - widthMin/2)
+	}
+	if !math.IsInf(rightMin, 0) && !math.IsInf(widthMax, 0) {
+		r.centerX = r.centerX.intersectMin(rightMin - widthMax/2)
+	}
 
-// 	// Width = (CenterX - Left) * 2
-// 	width = _range{min: 0, max: math.Inf(1)}
-// 	if !math.IsInf(r.centerX.max, 0) && !math.IsInf(r.left.min, 0) {
-// 		width.max = (r.centerX.max - r.left.min) * 2
-// 	}
-// 	if !math.IsInf(r.centerX.min, 0) && !math.IsInf(r.left.max, 0) {
-// 		width.min = (r.centerX.min - r.left.max) * 2
-// 	}
-// 	r.width = r.width.intersect(width)
+	// CenterX = Left + Width / 2
+	if !math.IsInf(leftMax, 0) && !math.IsInf(widthMax, 0) {
+		r.centerX = r.centerX.intersectMax(leftMax + widthMax/2)
+	}
+	if !math.IsInf(leftMin, 0) && !math.IsInf(widthMin, 0) {
+		r.centerX = r.centerX.intersectMin(leftMin + widthMin/2)
+	}
 
-// 	// Top = CenterY * 2 - Bottom
-// 	top := _range{min: 0, max: math.Inf(1)}
-// 	if !math.IsInf(r.centerY.min, 0) && !math.IsInf(r.bottom.max, 0) {
-// 		left.min = r.centerY.min*2 - r.bottom.max
-// 	}
-// 	if !math.IsInf(r.centerY.max, 0) && !math.IsInf(r.bottom.min, 0) {
-// 		left.max = r.centerY.max*2 - r.bottom.min
-// 	}
-// 	r.top = r.top.intersect(top)
+	return r.centerX.nearest(b)
+}
 
-// 	// Height = Bottom - Top
-// 	height := _range{min: 0, max: math.Inf(1)}
-// 	if !math.IsInf(r.bottom.max, 0) && !math.IsInf(r.top.min, 0) {
-// 		height.max = r.bottom.max - r.top.min
-// 	}
-// 	if !math.IsInf(r.bottom.min, 0) && !math.IsInf(r.top.max, 0) {
-// 		height.min = r.bottom.min - r.top.max
-// 	}
-// 	r.height = r.height.intersect(height)
+func (r constrainedRect) solveHeight(b float64) float64 {
+	centerYMax, centerYMin := r.centerY.max, r.centerY.min
+	bottomMax, bottomMin := r.bottom.max, r.bottom.min
+	topMax, topMin := r.top.max, r.top.min
 
-// 	// Height = (CenterY - Top) * 2
-// 	height = _range{min: 0, max: math.Inf(1)}
-// 	if !math.IsInf(r.centerY.max, 0) && !math.IsInf(r.top.min, 0) {
-// 		height.max = (r.centerY.max - r.top.min) * 2
-// 	}
-// 	if !math.IsInf(r.centerY.min, 0) && !math.IsInf(r.top.max, 0) {
-// 		height.min = (r.centerY.min - r.top.max) * 2
-// 	}
-// 	r.height = r.height.intersect(height)
+	// height = (bottom - centerY) * 2
+	if !math.IsInf(centerYMin, 0) && !math.IsInf(bottomMax, 0) {
+		r.height = r.height.intersectMax((bottomMax - centerYMin) * 2)
+	}
+	if !math.IsInf(centerYMax, 0) && !math.IsInf(bottomMin, 0) {
+		r.height = r.height.intersectMin((bottomMin - centerYMax) * 2)
+	}
 
-// 	return r
-// }
+	// height = bottom - top
+	if !math.IsInf(bottomMax, 0) && !math.IsInf(topMin, 0) {
+		r.height = r.height.intersectMax(bottomMax - topMin)
+	}
+	if !math.IsInf(bottomMin, 0) && !math.IsInf(topMax, 0) {
+		r.height = r.height.intersectMin(bottomMin - topMax)
+	}
 
-// // Assumes `constraintSolver` is valid. Returns the smallest possible size, and the origin closest to (0, 0).
-// func (r constraintSolver) rect() Rect {
-// 	return Rt(r.left.nearest(0), r.top.nearest(0), r.width.nearest(0), r.height.nearest(0))
-// }
+	// height = (centerY - top) * 2
+	if !math.IsInf(centerYMax, 0) && !math.IsInf(topMin, 0) {
+		r.height = r.height.intersectMax((centerYMax - topMin) * 2)
+	}
+	if !math.IsInf(centerYMin, 0) && !math.IsInf(topMax, 0) {
+		r.height = r.height.intersectMin((centerYMin - topMax) * 2)
+	}
+
+	return r.height.nearest(b)
+}
+
+func (r constrainedRect) solveCenterY(b float64) float64 {
+	bottomMax, bottomMin := r.bottom.max, r.bottom.min
+	topMax, topMin := r.top.max, r.top.min
+	heightMax, heightMin := r.height.max, r.height.min
+
+	// centerY = (bottom + top)/2
+	if !math.IsInf(bottomMax, 0) && !math.IsInf(topMax, 0) {
+		r.centerY = r.centerY.intersectMax((bottomMax + topMax) / 2)
+	}
+	if !math.IsInf(bottomMin, 0) && !math.IsInf(topMin, 0) {
+		r.centerY = r.centerY.intersectMin((bottomMin + topMin) / 2)
+	}
+
+	// centerY = bottom - height / 2
+	if !math.IsInf(bottomMax, 0) && !math.IsInf(heightMin, 0) {
+		r.centerY = r.centerY.intersectMax(bottomMax - heightMin/2)
+	}
+	if !math.IsInf(bottomMin, 0) && !math.IsInf(heightMax, 0) {
+		r.centerY = r.centerY.intersectMin(bottomMin - heightMax/2)
+	}
+
+	// centerY = top + height / 2
+	if !math.IsInf(topMax, 0) && !math.IsInf(heightMax, 0) {
+		r.centerY = r.centerY.intersectMax(topMax + heightMax/2)
+	}
+	if !math.IsInf(topMin, 0) && !math.IsInf(heightMin, 0) {
+		r.centerY = r.centerY.intersectMin(topMin + heightMin/2)
+	}
+
+	return r.centerX.nearest(b)
+}
+
+// // Assumes `constrainedRect` is valid. Returns the smallest possible size, and the origin closest to (0, 0).
+func (r constrainedRect) rect(n mochi.Rect) mochi.Rect {
+	return mochi.Rt(r.left.nearest(n.Min.X), r.top.nearest(n.Min.Y), r.right.nearest(n.Max.X), r.bottom.nearest(n.Max.Y))
+}
