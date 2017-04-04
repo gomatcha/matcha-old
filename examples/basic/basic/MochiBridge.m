@@ -40,6 +40,13 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
 
 @implementation BridgeValue (Extensions)
 
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[BridgeValue class]]) {
+        return [self ptrEqual:object];
+    }
+    return NO;
+}
+
 - (NSArray *)call:(NSString *)method args:(NSArray *)args {
     BridgeValueSlice *valueSlice = BridgeNewValueSlice();
     for (BridgeValue *i in args) {

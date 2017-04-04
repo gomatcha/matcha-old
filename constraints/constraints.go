@@ -361,9 +361,9 @@ type System struct {
 
 func New() *System {
 	sys := &System{}
-	sys.min = &Guide{id: minId, system: sys}
-	sys.max = &Guide{id: maxId, system: sys}
-	sys.Guide = &Guide{id: rootId, system: sys}
+	sys.min = &Guide{id: minId, system: sys, children: map[interface{}]*Guide{}}
+	sys.max = &Guide{id: maxId, system: sys, children: map[interface{}]*Guide{}}
+	sys.Guide = &Guide{id: rootId, system: sys, children: map[interface{}]*Guide{}}
 	return sys
 }
 
@@ -376,6 +376,15 @@ func (sys *System) MaxGuide() *Guide {
 }
 
 func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
+	sys.min.mochiGuide = &mochi.Guide{
+		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
+	}
+	sys.max.mochiGuide = &mochi.Guide{
+		Frame: mochi.Rt(0, 0, ctx.MaxSize.X, ctx.MaxSize.Y),
+	}
+	sys.Guide.mochiGuide = &mochi.Guide{
+		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
+	}
 	// TODO(Kevin): reset all guides
 
 	for _, i := range sys.solvers {
@@ -410,14 +419,14 @@ func (r _range) intersect(r2 _range) _range {
 }
 
 func (r _range) isValid() bool {
-	return r.max < r.min
+	return r.max >= r.min
 }
 
 func (r _range) nearest(v float64) float64 {
+	// return a sane value even if range is invalid
 	if r.max < r.min {
 		r.max, r.min = r.min, r.max
 	}
-
 	switch {
 	case r.min == r.max:
 		return r.min
@@ -442,11 +451,11 @@ func newConstrainedRect() constrainedRect {
 	}
 }
 
-func (r constrainedRect) isValid() bool {
-	_, ok := r.solveWidth(0)
-	_, ok2 := r.solveHeight(0)
-	_, ok3 := r.solveCenterX(0)
-	_, ok4 := r.solveCenterY(0)
+func (cr constrainedRect) isValid() bool {
+	_, ok := cr.solveWidth(0)
+	_, ok2 := cr.solveHeight(0)
+	_, ok3 := cr.solveCenterX(0)
+	_, ok4 := cr.solveCenterY(0)
 	return ok && ok2 && ok3 && ok4
 }
 

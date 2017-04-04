@@ -10,8 +10,19 @@
 #include "Universe.objc.h"
 
 
+@class BridgeNestedView;
 @class BridgeValue;
 @class BridgeValueSlice;
+
+@interface BridgeNestedView : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) id _ref;
+
+- (id)initWithRef:(id)ref;
+- (void)needsUpdate;
+// skipped method NestedView.Update with unsupported parameter or return types
+
+@end
 
 @interface BridgeValue : NSObject <goSeqRefInterface> {
 }
@@ -34,6 +45,7 @@
 - (BridgeValue*)mapIndex:(BridgeValue*)key;
 - (BridgeValueSlice*)mapKeys;
 - (BridgeValue*)methodByName:(NSString*)name;
+- (BOOL)ptrEqual:(BridgeValue*)v2;
 - (NSString*)string_;
 - (int64_t)uint_;
 @end

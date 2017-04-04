@@ -28,7 +28,7 @@
 - (NSDictionary<BridgeValue *, MochiNode *> *)nodeChildren {
     NSDictionary<BridgeValue *, BridgeValue *> *children = self.bridgeValue[@"NodeChildren"].toDictionary;
     NSMutableDictionary *nodeChildren = [NSMutableDictionary dictionary];
-    for (BridgeValue *i in children) {
+    for (BridgeValue *i in children.allKeys) {
         nodeChildren[i] = [[MochiNode alloc] initWithBridgeValue:children[i]];
     }
     return nodeChildren;

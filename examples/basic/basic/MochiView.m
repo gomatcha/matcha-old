@@ -20,8 +20,8 @@
         self.frame = _node.guide.frame;
         for (MochiNode *i in _node.nodeChildren.allValues) {
             MochiView *child = [[MochiView alloc] init];
-            [self addSubview:child];
             child.node = i;
+            [self addSubview:child];
         }
     }
 }

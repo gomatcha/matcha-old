@@ -1,14 +1,84 @@
 package bridge
 
 import (
+	"fmt"
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/constraints"
 	"reflect"
 )
 
 func Run() *Value {
-	n := mochi.TestNode()
+	v := &NestedView{}
+	n := mochi.Display(v)
+	for _, i := range n.NodeChildren {
+		fmt.Println("blah", i.LayoutGuide)
+	}
 	return &Value{reflect.ValueOf(n)}
 }
+
+type NestedView struct {
+}
+
+func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
+	l := constraints.New()
+	n := mochi.NewNode()
+	n.Layouter = l
+
+	chl1id := "1"
+	chl1 := mochi.NewBasicView(p.Get(chl1id))
+	chl1.PaintOptions.BackgroundColor = mochi.RedColor
+	n.Set(chl1id, chl1)
+	g1 := l.AddGuide(chl1id, func(s *constraints.Solver) {
+		s.TopEqual(constraints.Const(0))
+		s.LeftEqual(constraints.Const(0))
+		s.WidthEqual(constraints.Const(100))
+		s.HeightEqual(constraints.Const(100))
+	})
+
+	chl2id := "2"
+	chl2 := mochi.NewBasicView(p.Get(chl2id))
+	chl2.PaintOptions.BackgroundColor = mochi.YellowColor
+	n.Set(chl2id, chl2)
+	g2 := l.AddGuide(chl2id, func(s *constraints.Solver) {
+		s.TopEqual(g1.Bottom())
+		s.LeftEqual(g1.Left())
+		s.WidthEqual(constraints.Const(300))
+		s.HeightEqual(constraints.Const(300))
+	})
+
+	chl3id := "3"
+	chl3 := mochi.NewBasicView(p.Get(chl3id))
+	chl3.PaintOptions.BackgroundColor = mochi.BlueColor
+	n.Set(chl3id, chl3)
+	g3 := l.AddGuide(chl3id, func(s *constraints.Solver) {
+		s.TopEqual(g2.Bottom())
+		s.LeftEqual(g2.Left())
+		s.WidthEqual(constraints.Const(100))
+		s.HeightEqual(constraints.Const(100))
+	})
+
+	chl4id := "4"
+	chl4 := mochi.NewBasicView(p.Get(chl4id))
+	chl4.PaintOptions.BackgroundColor = mochi.CyanColor
+	n.Set(chl4id, chl4)
+	_ = l.AddGuide(chl4id, func(s *constraints.Solver) {
+		s.TopEqual(g2.Bottom())
+		s.LeftEqual(g3.Right())
+		s.WidthEqual(constraints.Const(50))
+		s.HeightEqual(constraints.Const(50))
+	})
+	_ = g3
+
+	n.PaintOptions.BackgroundColor = mochi.GreenColor
+
+	return n
+}
+
+func (n *NestedView) NeedsUpdate() {
+	// ?
+}
+
+// End Example
 
 type ValueSlice struct {
 	v []reflect.Value
@@ -76,7 +146,8 @@ func (v *Value) Len() int {
 
 // MapIndex returns the value associated with key in the map v. It panics if v's Kind is not Map. It returns the zero Value if key is not found in the map or if v represents a nil map. As in Go, the key's value must be assignable to the map's key type.
 func (v *Value) MapIndex(key *Value) *Value {
-	return &Value{v.v.MapIndex(key.v)}
+	x := &Value{v.v.MapIndex(key.v)}
+	return x
 }
 
 // MapKeys returns a slice containing all the keys present in the map, in unspecified order. It panics if v's Kind is not Map. It returns an empty slice if v represents a nil map.
@@ -122,4 +193,8 @@ func (v *Value) Kind() int {
 // Copy returns a copy of v.
 func (v *Value) Copy() *Value {
 	return &Value{v.v}
+}
+
+func (v *Value) PtrEqual(v2 *Value) bool {
+	return v.v.Interface() == v2.v.Interface()
 }

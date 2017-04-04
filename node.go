@@ -1,21 +1,9 @@
 package mochi
 
 import (
-	"fmt"
+	_ "fmt"
 	_ "image/color"
 )
-
-func TestNode() *Node {
-	v := &NestedView{}
-	n := Display(v)
-	// fmt.Println(n, n.LayoutGuide)
-	return n
-	// n := NewNode()
-	// n.PaintOptions = PaintOptions{
-	// 	BackgroundColor: color.RGBA{0xff, 0, 0, 0xff},
-	// }
-	// return n
-}
 
 type Node struct {
 	Children map[interface{}]View
@@ -80,7 +68,6 @@ func (n *Node) layout(maxSize Point, minSize Point) Guide {
 
 	// Perform layout
 	layouter := n.Layouter
-	fmt.Println("layouter", layouter)
 	if layouter == nil {
 		layouter = &FullLayout{}
 	}
