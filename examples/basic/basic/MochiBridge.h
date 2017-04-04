@@ -15,7 +15,8 @@
 - (BridgeValue *)toUnderlying;
 - (NSData *)toData;
 - (NSString *)toString;
-- (NSDictionary<BridgeValue *, BridgeValue *> *)toDictionary;
+// - (NSDictionary<BridgeValue *, BridgeValue *> *)toDictionary; TODO(KD): Issue where adding values get turned to nil in dictionary
+- (NSMapTable *)toMapTable;
 - (NSArray<BridgeValue *> *)toArray;
 - (NSNumber *)toNumber;
 - (double)toDouble;
@@ -35,4 +36,9 @@
 @interface BridgeValue (Mochi)
 - (CGRect)toCGRect;
 - (UIEdgeInsets)toUIEdgeInsets;
+@end
+
+@interface NSMapTable (Mochi)
+- (id)objectForKeyedSubscript:(id)key;
+- (void)setObject:(id)obj forKeyedSubscript:(id)key;
 @end

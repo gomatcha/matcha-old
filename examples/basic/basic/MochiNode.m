@@ -25,10 +25,10 @@
     return [[MochiPaintOptions alloc] initWithBridgeValue:self.bridgeValue[@"PaintOptions"]];
 }
 
-- (NSDictionary<BridgeValue *, MochiNode *> *)nodeChildren {
-    NSDictionary<BridgeValue *, BridgeValue *> *children = self.bridgeValue[@"NodeChildren"].toDictionary;
-    NSMutableDictionary *nodeChildren = [NSMutableDictionary dictionary];
-    for (BridgeValue *i in children.allKeys) {
+- (NSMapTable *)nodeChildren {
+    NSMapTable *children = self.bridgeValue[@"NodeChildren"].toMapTable;
+    NSMapTable *nodeChildren = [NSMapTable strongToStrongObjectsMapTable];
+    for (BridgeValue *i in children) {
         nodeChildren[i] = [[MochiNode alloc] initWithBridgeValue:children[i]];
     }
     return nodeChildren;

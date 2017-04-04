@@ -98,9 +98,20 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
     BridgeValue *value = self.toUnderlying;
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     for (BridgeValue *i in value.mapKeys.toArray) {
-        dict[i] = [value mapIndex:i];
+        id v = [value mapIndex:i];
+        dict[i] = v;
     }
     return dict;
+}
+
+- (NSMapTable *)toMapTable {
+    BridgeValue *value = self.toUnderlying;
+    NSMapTable *mapTable = [NSMapTable strongToStrongObjectsMapTable];
+    for (BridgeValue *i in value.mapKeys.toArray) {
+        id v = [value mapIndex:i];
+        mapTable[i] = v;
+    }
+    return mapTable;
 }
 
 - (NSArray *)toArray {
@@ -186,5 +197,19 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
     insets.right = v[@"Right"].toDouble;
     insets.left = v[@"Left"].toDouble;
     return insets;
+}
+@end
+
+@implementation NSMapTable (Mochi) 
+- (id)objectForKeyedSubscript:(id)key {
+    return [self objectForKey:key];
+}
+
+- (void)setObject:(id)obj forKeyedSubscript:(id)key {
+    if (obj != nil) {
+        [self setObject:obj forKey:key];
+    } else {
+        [self removeObjectForKey:key];
+    }
 }
 @end

@@ -60,7 +60,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 
 	chl4id := "4"
 	chl4 := mochi.NewBasicView(p.Get(chl4id))
-	chl4.PaintOptions.BackgroundColor = mochi.CyanColor
+	chl4.PaintOptions.BackgroundColor = mochi.MagentaColor
 	n.Set(chl4id, chl4)
 	_ = l.AddGuide(chl4id, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
@@ -68,7 +68,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.WidthEqual(constraint.Const(50))
 		s.HeightEqual(constraint.Const(50))
 	})
-	_ = g3
+
 	return n
 }
 
@@ -190,9 +190,13 @@ func (v *Value) Kind() int {
 
 // Copy returns a copy of v.
 func (v *Value) Copy() *Value {
-	return &Value{v.v}
+	v2 := &Value{v.v}
+	// fmt.Printf("copy %p %p\n", v, v2)
+	return v2
 }
 
 func (v *Value) PtrEqual(v2 *Value) bool {
-	return v.v.Interface() == v2.v.Interface()
+	b := v.v == v2.v
+	// fmt.Printf("ptrequal %p %p %v\n",v, v2, b)
+	return b
 }

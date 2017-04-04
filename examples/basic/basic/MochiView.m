@@ -18,7 +18,7 @@
         _node = value;
         self.backgroundColor = _node.paintOptions.backgroundColor;
         self.frame = _node.guide.frame;
-        for (MochiNode *i in _node.nodeChildren.allValues) {
+        for (MochiNode *i in _node.nodeChildren.objectEnumerator) {
             MochiView *child = [[MochiView alloc] init];
             child.node = i;
             [self addSubview:child];
