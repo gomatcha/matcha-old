@@ -3,7 +3,7 @@ package bridge
 import (
 	"fmt"
 	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/constraints"
+	"github.com/overcyn/mochi/constraint"
 	"reflect"
 )
 
@@ -20,57 +20,55 @@ type NestedView struct {
 }
 
 func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
-	l := constraints.New()
+	l := constraint.New()
 	n := mochi.NewNode()
 	n.Layouter = l
+	n.PaintOptions.BackgroundColor = mochi.GreenColor
 
 	chl1id := "1"
 	chl1 := mochi.NewBasicView(p.Get(chl1id))
 	chl1.PaintOptions.BackgroundColor = mochi.RedColor
 	n.Set(chl1id, chl1)
-	g1 := l.AddGuide(chl1id, func(s *constraints.Solver) {
-		s.TopEqual(constraints.Const(0))
-		s.LeftEqual(constraints.Const(0))
-		s.WidthEqual(constraints.Const(100))
-		s.HeightEqual(constraints.Const(100))
+	g1 := l.AddGuide(chl1id, func(s *constraint.Solver) {
+		s.TopEqual(constraint.Const(0))
+		s.LeftEqual(constraint.Const(0))
+		s.WidthEqual(constraint.Const(100))
+		s.HeightEqual(constraint.Const(100))
 	})
 
 	chl2id := "2"
 	chl2 := mochi.NewBasicView(p.Get(chl2id))
 	chl2.PaintOptions.BackgroundColor = mochi.YellowColor
 	n.Set(chl2id, chl2)
-	g2 := l.AddGuide(chl2id, func(s *constraints.Solver) {
+	g2 := l.AddGuide(chl2id, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
 		s.LeftEqual(g1.Left())
-		s.WidthEqual(constraints.Const(300))
-		s.HeightEqual(constraints.Const(300))
+		s.WidthEqual(constraint.Const(300))
+		s.HeightEqual(constraint.Const(300))
 	})
 
 	chl3id := "3"
 	chl3 := mochi.NewBasicView(p.Get(chl3id))
 	chl3.PaintOptions.BackgroundColor = mochi.BlueColor
 	n.Set(chl3id, chl3)
-	g3 := l.AddGuide(chl3id, func(s *constraints.Solver) {
+	g3 := l.AddGuide(chl3id, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g2.Left())
-		s.WidthEqual(constraints.Const(100))
-		s.HeightEqual(constraints.Const(100))
+		s.WidthEqual(constraint.Const(100))
+		s.HeightEqual(constraint.Const(100))
 	})
 
 	chl4id := "4"
 	chl4 := mochi.NewBasicView(p.Get(chl4id))
 	chl4.PaintOptions.BackgroundColor = mochi.CyanColor
 	n.Set(chl4id, chl4)
-	_ = l.AddGuide(chl4id, func(s *constraints.Solver) {
+	_ = l.AddGuide(chl4id, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g3.Right())
-		s.WidthEqual(constraints.Const(50))
-		s.HeightEqual(constraints.Const(50))
+		s.WidthEqual(constraint.Const(50))
+		s.HeightEqual(constraint.Const(50))
 	})
 	_ = g3
-
-	n.PaintOptions.BackgroundColor = mochi.GreenColor
-
 	return n
 }
 

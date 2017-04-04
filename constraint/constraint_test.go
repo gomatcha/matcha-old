@@ -1,4 +1,4 @@
-package constraints
+package constraint
 
 import (
 	"math"
