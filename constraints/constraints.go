@@ -246,8 +246,8 @@ func (s *Solver) solve(sys *System, ctx *mochi.LayoutContext) {
 	var g mochi.Guide
 	if s.id == rootId {
 		g = mochi.Guide{}
-		width = cr.solveWidth(parent.Width())
-		height = cr.solveHeight(parent.Height())
+		width, _ = cr.solveWidth(parent.Width())
+		height, _ = cr.solveHeight(parent.Height())
 	} else {
 		g = ctx.LayoutChild(s.id, mochi.Pt(cr.width.min, cr.height.min), mochi.Pt(cr.width.max, cr.height.max))
 		width = g.Width()
@@ -260,8 +260,8 @@ func (s *Solver) solve(sys *System, ctx *mochi.LayoutContext) {
 	if !cr.isValid() {
 		panic("constraints: system inconsistency")
 	}
-	centerX := cr.solveCenterX(parent.CenterY())
-	centerY := cr.solveCenterY(parent.CenterY())
+	centerX, _ := cr.solveCenterX(parent.CenterY())
+	centerY, _ := cr.solveCenterY(parent.CenterY())
 
 	// Update the guide and the system.
 	g.Frame = mochi.Rt(centerX-width/2, centerY-height/2, centerX+width/2, centerY+height/2)
@@ -376,7 +376,7 @@ func (sys *System) MaxGuide() *Guide {
 }
 
 func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
-	// TODO(Kevin) reset all guides
+	// TODO(Kevin): reset all guides
 
 	for _, i := range sys.solvers {
 		i.solve(sys, ctx)
@@ -384,9 +384,9 @@ func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{
 
 	g := *sys.Guide.mochiGuide
 	gs := map[interface{}]mochi.Guide{}
-	// for k, v := range sol.children {
-	// 	gs[k] = v.guide
-	// }
+	for k, v := range sys.Guide.children {
+		gs[k] = *v.mochiGuide
+	}
 	return g, gs
 }
 
@@ -409,7 +409,15 @@ func (r _range) intersect(r2 _range) _range {
 	return _range{min: math.Max(r.min, r2.min), max: math.Min(r.max, r2.max)}
 }
 
+func (r _range) isValid() bool {
+	return r.max < r.min
+}
+
 func (r _range) nearest(v float64) float64 {
+	if r.max < r.min {
+		r.max, r.min = r.min, r.max
+	}
+
 	switch {
 	case r.min == r.max:
 		return r.min
@@ -435,24 +443,14 @@ func newConstrainedRect() constrainedRect {
 }
 
 func (r constrainedRect) isValid() bool {
-	if r.left.max > r.left.min ||
-		r.right.max > r.right.min ||
-		r.top.max > r.top.min ||
-		r.bottom.max > r.bottom.min ||
-		r.width.max > r.width.min ||
-		r.height.max > r.height.min ||
-		r.centerX.max > r.centerX.min ||
-		r.centerY.max > r.centerY.min ||
-		r.width.max < 0 ||
-		r.width.min < 0 ||
-		r.height.max < 0 ||
-		r.height.min < 0 {
-		return false
-	}
-	return true
+	_, ok := r.solveWidth(0)
+	_, ok2 := r.solveHeight(0)
+	_, ok3 := r.solveCenterX(0)
+	_, ok4 := r.solveCenterY(0)
+	return ok && ok2 && ok3 && ok4
 }
 
-func (r constrainedRect) solveWidth(b float64) float64 {
+func (r constrainedRect) solveWidth(b float64) (float64, bool) {
 	centerXMax, centerXMin := r.centerX.max, r.centerX.min
 	rightMax, rightMin := r.right.max, r.right.min
 	leftMax, leftMin := r.left.max, r.left.min
@@ -481,10 +479,10 @@ func (r constrainedRect) solveWidth(b float64) float64 {
 		r.width = r.width.intersectMin((centerXMin - leftMax) * 2)
 	}
 
-	return r.width.nearest(b)
+	return r.width.nearest(b), r.width.isValid()
 }
 
-func (r constrainedRect) solveCenterX(b float64) float64 {
+func (r constrainedRect) solveCenterX(b float64) (float64, bool) {
 	rightMax, rightMin := r.right.max, r.right.min
 	leftMax, leftMin := r.left.max, r.left.min
 	widthMax, widthMin := r.width.max, r.width.min
@@ -513,10 +511,10 @@ func (r constrainedRect) solveCenterX(b float64) float64 {
 		r.centerX = r.centerX.intersectMin(leftMin + widthMin/2)
 	}
 
-	return r.centerX.nearest(b)
+	return r.centerX.nearest(b), r.centerX.isValid()
 }
 
-func (r constrainedRect) solveHeight(b float64) float64 {
+func (r constrainedRect) solveHeight(b float64) (float64, bool) {
 	centerYMax, centerYMin := r.centerY.max, r.centerY.min
 	bottomMax, bottomMin := r.bottom.max, r.bottom.min
 	topMax, topMin := r.top.max, r.top.min
@@ -545,10 +543,10 @@ func (r constrainedRect) solveHeight(b float64) float64 {
 		r.height = r.height.intersectMin((centerYMin - topMax) * 2)
 	}
 
-	return r.height.nearest(b)
+	return r.height.nearest(b), r.height.isValid()
 }
 
-func (r constrainedRect) solveCenterY(b float64) float64 {
+func (r constrainedRect) solveCenterY(b float64) (float64, bool) {
 	bottomMax, bottomMin := r.bottom.max, r.bottom.min
 	topMax, topMin := r.top.max, r.top.min
 	heightMax, heightMin := r.height.max, r.height.min
@@ -577,10 +575,5 @@ func (r constrainedRect) solveCenterY(b float64) float64 {
 		r.centerY = r.centerY.intersectMin(topMin + heightMin/2)
 	}
 
-	return r.centerX.nearest(b)
-}
-
-// // Assumes `constrainedRect` is valid. Returns the smallest possible size, and the origin closest to (0, 0).
-func (r constrainedRect) rect(n mochi.Rect) mochi.Rect {
-	return mochi.Rt(r.left.nearest(n.Min.X), r.top.nearest(n.Min.Y), r.right.nearest(n.Max.X), r.bottom.nearest(n.Max.Y))
+	return r.centerY.nearest(b), r.centerY.isValid()
 }
