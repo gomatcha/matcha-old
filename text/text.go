@@ -3,6 +3,7 @@ package text
 import (
 	"github.com/overcyn/mochi"
 	"image/color"
+	_ "fmt"
 )
 
 type Alignment int
@@ -14,23 +15,26 @@ const (
 	AlignmentJustified
 )
 
-type Decoration int
+type StrikethroughStyle int
 
 const (
-	DecorationNone Decoration = iota
-	DecorationStrikethrough
-	DecorationUnderline
-	DecorationOverline
+	StrikethroughStyleNone StrikethroughStyle = iota
+	StrikethroughStyleSingle
+	StrikethroughStyleDouble
+	StrikethroughStyleThick
+	StrikethroughStyleDotted
+	StrikethroughStyleDashed
 )
 
-type DecorationStyle int
+type UnderlineStyle int
 
 const (
-	DecorationStyleSingle DecorationStyle = iota
-	DecorationStyleDouble
-	DecorationStyleThick
-	DecorationStyleDotted
-	DecorationStyleDashed
+	UnderlineStyleNone  UnderlineStyle = iota
+	UnderlineStyleSingle
+	UnderlineStyleDouble
+	UnderlineStyleThick
+	UnderlineStyleDotted
+	UnderlineStyleDashed
 )
 
 type Font struct {
@@ -61,9 +65,10 @@ type AttributeKey int
 
 const (
 	AttributeKeyAlignment AttributeKey = iota
-	AttributeKeyDecoration
-	AttributeKeyDecorationColor
-	AttributeKeyDecorationStyle
+	AttributeKeyStrikethroughStyle
+	AttributeKeyStrikethroughColor
+	AttributeKeyUnderlineStyle
+	AttributeKeyUnderlineColor
 	AttributeKeyFont
 	AttributeKeyHyphenation
 	AttributeKeyLineHeightMultiple
@@ -94,12 +99,14 @@ func (f *Format) Get(k AttributeKey) interface{} {
 	switch k {
 	case AttributeKeyAlignment:
 		return AlignmentLeft
-	case AttributeKeyDecoration:
-		return DecorationNone
-	case AttributeKeyDecorationColor:
+	case AttributeKeyStrikethroughStyle:
+		return StrikethroughStyleNone
+	case AttributeKeyStrikethroughColor:
 		return color.Gray{0}
-	case AttributeKeyDecorationStyle:
-		return DecorationStyleSingle
+	case AttributeKeyUnderlineStyle:
+		return UnderlineStyleNone
+	case AttributeKeyUnderlineColor:
+		return color.Gray{0}
 	case AttributeKeyFont:
 		return nil // TODO(KD): what should the default font be?
 	case AttributeKeyHyphenation:
@@ -117,25 +124,28 @@ func (f *Format) Get(k AttributeKey) interface{} {
 	case AttributeKeyTruncationString:
 		return "…"
 	}
+	return nil
 }
 
 func (f *Format) Set(k AttributeKey, v interface{}) {
 	if f.attributes == nil {
-		f.attributes = map[AttributeKey]attribute{}
+		f.attributes = map[AttributeKey]interface{}{}
 	}
 	switch k {
 	case AttributeKeyAlignment:
 		f.attributes[k] = v.(Alignment)
-	case AttributeKeyDecoration:
-		f.attributes[k] = v.(Decoration)
-	case AttributeKeyDecorationColor:
+	case AttributeKeyStrikethroughStyle:
+		f.attributes[k] = v.(StrikethroughStyle)
+	case AttributeKeyStrikethroughColor:
 		f.attributes[k] = v.(color.Color)
-	case AttributeKeyDecorationStyle:
-		f.attributes[k] = v.(DecorationStyle)
+	case AttributeKeyUnderlineStyle:
+		f.attributes[k] = v.(UnderlineStyle)
+	case AttributeKeyUnderlineColor:
+		f.attributes[k] = v.(color.Color)
 	case AttributeKeyFont:
 		f.attributes[k] = v.(Font)
 	case AttributeKeyHyphenation:
-		f.attributes[k] = v.(Hyphenation)
+		f.attributes[k] = v.(float64)
 	case AttributeKeyLineHeightMultiple:
 		f.attributes[k] = v.(int)
 	case AttributeKeyMaxLines:
@@ -159,28 +169,36 @@ func (f *Format) SetAlignment(v Alignment) {
 	f.Set(AttributeKeyAlignment, v)
 }
 
-func (f *Format) Decoration() Decoration {
-	return f.Get(AttributeKeyDecoration).(Decoration)
+func (f *Format) StrikethroughStyle() StrikethroughStyle {
+	return f.Get(AttributeKeyStrikethroughStyle).(StrikethroughStyle)
 }
 
-func (f *Format) SetDecoration(v Decoration) {
-	f.Set(AttributeKeyDecoration, v)
+func (f *Format) SetStrikethroughStyle(v StrikethroughStyle) {
+	f.Set(AttributeKeyStrikethroughStyle, v)
 }
 
-func (f *Format) DecorationColor() color.Color {
-	return f.Get(AttributeKeyDecorationColor).(color.Color)
+func (f *Format) StrikethroughColor() color.Color {
+	return f.Get(AttributeKeyStrikethroughColor).(color.Color)
 }
 
-func (f *Format) SetDecorationColor(v color.Color) {
-	f.Set(AttributeKeyDecorationColor, v)
+func (f *Format) SetStrikethroughColor(v color.Color) {
+	f.Set(AttributeKeyStrikethroughColor, v)
 }
 
-func (f *Format) DecorationStyle() DecorationStyle {
-	return f.Get(AttributeKeyDecorationStyle).(DecorationStyle)
+func (f *Format) UnderlineStyle() UnderlineStyle {
+	return f.Get(AttributeKeyUnderlineStyle).(UnderlineStyle)
 }
 
-func (f *Format) SetDecorationStyle(v DecorationStyle) {
-	f.Set(AttributeKeyDecorationStyle, v)
+func (f *Format) SetUnderlineStyle(v UnderlineStyle) {
+	f.Set(AttributeKeyUnderlineStyle, v)
+}
+
+func (f *Format) UnderlineColor() color.Color {
+	return f.Get(AttributeKeyUnderlineColor).(color.Color)
+}
+
+func (f *Format) SetUnderlineColor(v color.Color) {
+	f.Set(AttributeKeyUnderlineColor, v)
 }
 
 func (f *Format) Font() Font {
@@ -249,7 +267,7 @@ func (f *Format) SetTruncationString(v string) {
 
 type FormattedText struct {
 	str    string
-	format Format
+	format *Format
 }
 
 func (ts *FormattedText) String() string {
@@ -260,11 +278,14 @@ func (ts *FormattedText) setString(text string) {
 	ts.str = text
 }
 
-func (ts *FormattedText) FormatAt(idx int) *Format {
+func (ts *FormattedText) Format() *Format {
+	if ts.format == nil {
+		ts.format = &Format{}
+	}
 	return ts.format
 }
 
-func (ts *FormattedText) SetFormatAt(f *Format, start, end int) {
+func (ts *FormattedText) SetFormat(f *Format) {
 	ts.format = f
 }
 
@@ -272,26 +293,32 @@ type TextView struct {
 	Text          string
 	Format        *Format
 	FormattedText *FormattedText
-	PaintOptions  PaintOptions
+	PaintOptions  mochi.PaintOptions
 }
 
 func NewTextView(p interface{}) *TextView {
 	v, ok := p.(*TextView)
 	if !ok {
 		v = &TextView{}
-		v.Format = Format{}
+		v.Format = &Format{}
 	}
 	return v
 }
 
-func (v *TextView) Update(p *Node) *Node {
-	n := NewNode()
+func (v *TextView) Update(p *mochi.Node) *mochi.Node {
+	ft := v.FormattedText
+	if ft == nil {
+		ft = &FormattedText{
+			str: v.Text,
+			format: v.Format,
+		}
+	}
+
+	n := mochi.NewNode()
 	n.PaintOptions = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi TextView"
 	n.Bridge.State = &TextViewState{
-		Text:          v.Text,
-		Format:        v.Format,
-		FormattedText: v.FormattedText,
+		FormattedText: ft,
 	}
 	return n
 }
@@ -301,7 +328,5 @@ func (v *TextView) NeedsUpdate() {
 }
 
 type TextViewState struct {
-	Text          string
-	Format        *Format
 	FormattedText *FormattedText
 }

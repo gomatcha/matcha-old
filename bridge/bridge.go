@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/constraint"
+	"github.com/overcyn/mochi/text"
 	"reflect"
 )
 
@@ -73,18 +74,16 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.HeightEqual(constraint.Const(50))
 	})
 
-	// chl5 := mochi.NewTextView(p.Get(chl5id))
-	// chl5.PaintOptions.BackgroundColor = mochi.CyanColor
-	// chl5.Text = "poop"
-	// // chl5.StyledText = NewStyledString()
-	// // chl5.TextStyle = mochi.RedColor
-	// n.Set(chl5id, chl5)
-	// _ = l.AddGuide(chl5id, func(s *constraint.Solver) {
-	// 	s.BottomEqual(g2.Bottom())
-	// 	s.RightEqual(g2.Right())
-	// 	s.WidthEqual(constraint.Const(100))
-	// 	s.HeightEqual(constraint.Const(50))
-	// })
+	chl5 := text.NewTextView(p.Get(chl5id))
+	chl5.PaintOptions.BackgroundColor = mochi.CyanColor
+	chl5.Text = "poop"
+	n.Set(chl5id, chl5)
+	_ = l.AddGuide(chl5id, func(s *constraint.Solver) {
+		s.BottomEqual(g2.Bottom())
+		s.RightEqual(g2.Right())
+		s.WidthEqual(constraint.Const(100))
+		s.HeightEqual(constraint.Const(50))
+	})
 
 	return n
 }

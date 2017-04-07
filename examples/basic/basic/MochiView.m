@@ -51,9 +51,13 @@
 - (void)setNode:(MochiNode *)node {
     [super setNode:node];
     BridgeValue *state = node.bridgeState;
-    BridgeValue *text = state[@"Text"];
-    self.label.text = text.toString;
-    self.label.textColor = [[UIColor alloc] initWithBridgeValue:state[@"TextColor"]];
+    // BridgeValue *text = state[@"Text"];
+    // BridgeValue *format = state[@"Format"];
+    BridgeValue *formattedText = state[@"FormattedText"];
+    if (!formattedText.isNil) {
+        NSAttributedString *attrString = [[NSAttributedString alloc] initWithBridgeValue:formattedText];
+        self.label.attributedText = attrString;
+    }
 }
 
 - (void)layoutSubviews {
@@ -61,3 +65,5 @@
 }
 
 @end
+
+
