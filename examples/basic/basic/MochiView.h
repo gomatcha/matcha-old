@@ -13,3 +13,6 @@
 @interface MochiView : UIView
 @property (nonatomic, strong) MochiNode *node;
 @end
+
+@interface MochiTextView : MochiView
+@end

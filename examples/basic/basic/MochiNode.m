@@ -38,6 +38,14 @@
     return [[MochiLayoutGuide alloc] initWithBridgeValue:self.bridgeValue[@"LayoutGuide"]];
 }
 
+- (NSString *)bridgeName {
+    return self.bridgeValue[@"Bridge"][@"Name"].toString;
+}
+
+- (BridgeValue *)bridgeState {
+    return self.bridgeValue[@"Bridge"][@"State"];
+}
+
 @end
 
 @interface MochiPaintOptions ()

@@ -11,4 +11,6 @@ var (
 	YellowColor  = color.RGBA{0xff, 0xff, 0, 0xff}
 	CyanColor    = color.RGBA{0, 0xff, 0xff, 0xff}
 	MagentaColor = color.RGBA{0xff, 0, 0xff, 0xff}
+	BlackColor   = color.Gray{0xff}
+	WhiteColor   = color.Gray{0}
 )

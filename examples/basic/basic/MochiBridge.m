@@ -58,7 +58,13 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
 }
 
 - (BridgeValue *)get:(NSString *)field {
+    if ([field isEqual:@"Text"]) {
+		NSLog(@"KD:%s, %@", __FUNCTION__, self);
+	}
     BridgeValue *value = self.toUnderlying;
+    if ([field isEqual:@"Text"]) {
+		NSLog(@"KD:%s, %@", __FUNCTION__, self);
+	}
     return [value fieldByName:field];
 }
 
@@ -69,7 +75,7 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
         if (kind != BridgeKindInterface && kind != BridgeKindPtr) {
             break;
         }
-        value = self.elem;
+        value = value.elem;
     }
     return value;
 }

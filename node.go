@@ -5,11 +5,18 @@ import (
 	_ "image/color"
 )
 
+type Bridge struct {
+	Name  string
+	State interface{}
+}
+
 type Node struct {
 	Children map[interface{}]View
 	Layouter Layouter
 	Painter  Painter
 	Handlers map[interface{}]Handler
+
+	Bridge Bridge
 
 	// Context map[string] interface{}
 	// Accessibility

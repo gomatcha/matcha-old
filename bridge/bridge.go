@@ -16,6 +16,14 @@ func Run() *Value {
 	return &Value{reflect.ValueOf(n)}
 }
 
+const (
+	chl1id int = iota
+	chl2id
+	chl3id
+	chl4id
+	chl5id
+)
+
 type NestedView struct {
 }
 
@@ -25,7 +33,6 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 	n.Layouter = l
 	n.PaintOptions.BackgroundColor = mochi.GreenColor
 
-	chl1id := "1"
 	chl1 := mochi.NewBasicView(p.Get(chl1id))
 	chl1.PaintOptions.BackgroundColor = mochi.RedColor
 	n.Set(chl1id, chl1)
@@ -36,7 +43,6 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl2id := "2"
 	chl2 := mochi.NewBasicView(p.Get(chl2id))
 	chl2.PaintOptions.BackgroundColor = mochi.YellowColor
 	n.Set(chl2id, chl2)
@@ -47,7 +53,6 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.HeightEqual(constraint.Const(300))
 	})
 
-	chl3id := "3"
 	chl3 := mochi.NewBasicView(p.Get(chl3id))
 	chl3.PaintOptions.BackgroundColor = mochi.BlueColor
 	n.Set(chl3id, chl3)
@@ -58,7 +63,6 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl4id := "4"
 	chl4 := mochi.NewBasicView(p.Get(chl4id))
 	chl4.PaintOptions.BackgroundColor = mochi.MagentaColor
 	n.Set(chl4id, chl4)
@@ -68,6 +72,19 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.WidthEqual(constraint.Const(50))
 		s.HeightEqual(constraint.Const(50))
 	})
+
+	// chl5 := mochi.NewTextView(p.Get(chl5id))
+	// chl5.PaintOptions.BackgroundColor = mochi.CyanColor
+	// chl5.Text = "poop"
+	// // chl5.StyledText = NewStyledString()
+	// // chl5.TextStyle = mochi.RedColor
+	// n.Set(chl5id, chl5)
+	// _ = l.AddGuide(chl5id, func(s *constraint.Solver) {
+	// 	s.BottomEqual(g2.Bottom())
+	// 	s.RightEqual(g2.Right())
+	// 	s.WidthEqual(constraint.Const(100))
+	// 	s.HeightEqual(constraint.Const(50))
+	// })
 
 	return n
 }
@@ -165,6 +182,9 @@ func (v *Value) CallSlice(args *ValueSlice) *ValueSlice {
 
 // FieldByName returns the struct field with the given name. It returns the zero Value if no field was found. It panics if v's Kind is not struct.
 func (v *Value) FieldByName(name string) *Value {
+	if name == "Text" {
+		fmt.Println("nnn", v.v)
+	}
 	return &Value{v.v.FieldByName(name)}
 }
 
@@ -188,6 +208,7 @@ func (v *Value) Kind() int {
 	return int(v.v.Kind())
 }
 
+// TODO(KD): This doesn't work correctly
 // Copy returns a copy of v.
 func (v *Value) Copy() *Value {
 	v2 := &Value{v.v}
@@ -195,6 +216,7 @@ func (v *Value) Copy() *Value {
 	return v2
 }
 
+// TODO(KD): This doesn't work correctly
 func (v *Value) PtrEqual(v2 *Value) bool {
 	b := v.v == v2.v
 	// fmt.Printf("ptrequal %p %p %v\n",v, v2, b)
