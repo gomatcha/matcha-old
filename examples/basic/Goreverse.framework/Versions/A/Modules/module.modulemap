@@ -1,0 +1,8 @@
+framework module "Goreverse" {
+	header "ref.h"
+    header "Goreverse.objc.h"
+    header "Universe.objc.h"
+    header "Goreverse.h"
+
+    export *
+}

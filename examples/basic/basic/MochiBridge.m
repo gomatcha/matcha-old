@@ -9,32 +9,32 @@
 #import "MochiBridge.h"
 
 typedef NS_ENUM(NSInteger, BridgeKind) {
-    BridgeKindInvalid,
+    BridgeKindInvalid, // 0
     BridgeKindBool,
     BridgeKindInt,
     BridgeKindInt8,
     BridgeKindInt16,
-    BridgeKindInt32,
+    BridgeKindInt32, // 5
     BridgeKindInt64,
     BridgeKindUint,
     BridgeKindUint8,
     BridgeKindUint16,
-    BridgeKindUint32,
+    BridgeKindUint32, // 10
     BridgeKindUint64,
     BridgeKindUintptr,
     BridgeKindFloat32,
     BridgeKindFloat64,
-    BridgeKindComplex64,
+    BridgeKindComplex64, // 15
     BridgeKindComplex128,
     BridgeKindArray,
     BridgeKindChan,
     BridgeKindFunc,
-    BridgeKindInterface,
+    BridgeKindInterface, // 20
     BridgeKindMap,
     BridgeKindPtr,
     BridgeKindSlice,
     BridgeKindString,
-    BridgeKindStruct,
+    BridgeKindStruct, // 25
     BridgeKindUnsafePointer,
 };
 
@@ -53,18 +53,13 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
         [valueSlice append:i];
     }
     
-    BridgeValueSlice *result = [[self methodByName:method] call:valueSlice];
+    BridgeValue *m = [self methodByName:method];
+    BridgeValueSlice *result = [m call:valueSlice];
     return result.toArray;
 }
 
 - (BridgeValue *)get:(NSString *)field {
-    if ([field isEqual:@"Text"]) {
-		NSLog(@"KD:%s, %@", __FUNCTION__, self);
-	}
     BridgeValue *value = self.toUnderlying;
-    if ([field isEqual:@"Text"]) {
-		NSLog(@"KD:%s, %@", __FUNCTION__, self);
-	}
     return [value fieldByName:field];
 }
 
@@ -227,8 +222,9 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
     NSMapTable *attrTable = [format call:@"Attributes" args:nil][0].toMapTable;
 
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    dictionary[NSParagraphStyleAttributeName] = paragraphStyle;
+
     for (BridgeValue *i in attrTable.keyEnumerator) {
         BridgeValue *value = attrTable[i];
         NSInteger key = i.toLong;
@@ -282,7 +278,7 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
             break;
         }
         case 2: { //AttributeKeyStrikethroughColor
-            dictionary[NSStrikethroughColorAttributeName] = [[UIColor alloc] initWithBridgeValue:value];
+            dictionary[NSStrikethroughColorAttributeName] = [[UIColor alloc] initWithBridgeValue:value.toUnderlying];
             break;
         }
         case 3: { //AttributeKeyUnderlineStyle
@@ -313,7 +309,7 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
             break;
         }
         case 4: { //AttributeKeyUnderlineColor
-            dictionary[NSUnderlineColorAttributeName] = [[UIColor alloc] initWithBridgeValue:value];
+            dictionary[NSUnderlineColorAttributeName] = [[UIColor alloc] initWithBridgeValue:value.toUnderlying];
             break;
         }
         case 5: { //AttributeKeyFont
@@ -350,9 +346,6 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
         }
         }
     }
-
-    NSLog(@"string,%@,%@", string, dictionary);
-
     return [[NSAttributedString alloc] initWithString:string attributes:dictionary];
 }
 @end
@@ -363,9 +356,9 @@ typedef NS_ENUM(NSInteger, BridgeKind) {
     attr[UIFontDescriptorFamilyAttribute] = value[@"Family"].toString;
     attr[UIFontDescriptorFaceAttribute] = value[@"Face"].toString;
     attr[UIFontDescriptorSizeAttribute] = value[@"Size"].toNumber;
-    // attr[UIFontDescriptorTraitsAttribute] = @{UIFontWeightTrait: value[@"Weight"].toNumber}
 
     UIFontDescriptor *desc = [[UIFontDescriptor alloc] initWithFontAttributes:attr];
-    return [UIFont fontWithDescriptor:desc size:0];
+    UIFont *font = [UIFont fontWithDescriptor:desc size:0];
+    return font;
 }
 @end

@@ -40,6 +40,7 @@ func (l *FullLayout) Layout(ctx *LayoutContext) (Guide, map[interface{}]Guide) {
 type Guide struct {
 	Frame  Rect
 	Insets Insets
+	ZIndex int
 	// Transform?
 }
 

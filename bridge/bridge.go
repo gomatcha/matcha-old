@@ -26,6 +26,11 @@ const (
 )
 
 type NestedView struct {
+	marker mochi.Marker
+}
+
+func (v *NestedView) Mount(m *mochi.Marker) {
+	v.marker = m
 }
 
 func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
@@ -77,6 +82,16 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 	chl5 := text.NewTextView(p.Get(chl5id))
 	chl5.PaintOptions.BackgroundColor = mochi.CyanColor
 	chl5.Text = "poop"
+	chl5.Format.SetAlignment(text.AlignmentCenter)
+	chl5.Format.SetStrikethroughStyle(text.StrikethroughStyleSingle)
+	chl5.Format.SetStrikethroughColor(mochi.MagentaColor)
+	chl5.Format.SetUnderlineStyle(text.UnderlineStyleDouble)
+	chl5.Format.SetUnderlineColor(mochi.GreenColor)
+	chl5.Format.SetFont(text.Font{
+		Family:"American Typewriter",
+		Face:"Bold",
+		Size:20,
+	})
 	n.Set(chl5id, chl5)
 	_ = l.AddGuide(chl5id, func(s *constraint.Solver) {
 		s.BottomEqual(g2.Bottom())
@@ -88,11 +103,16 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 	return n
 }
 
-func (n *NestedView) NeedsUpdate() {
-	// ?
+func (v *NestedView) Unmount() {
+	v.marker = nil
 }
 
 // End Example
+
+// type ObjC struct {
+// }
+
+// Go Bindings
 
 type ValueSlice struct {
 	v []reflect.Value
@@ -118,7 +138,7 @@ type Value struct {
 	v reflect.Value
 }
 
-// String returns the string v's underlying value, as a string. String is a special case because of Go's String method convention. Unlike the other getters, it does not panic if v's Kind is not String. Instead, it returns a string of the form "<T value>" where T is v's type. The fmt package treats Values specially. It does not call their String method implicitly but instead prints the concrete values they hold.
+// String_ returns the string v's underlying value, as a string. String is a special case because of Go's String method convention. Unlike the other getters, it does not panic if v's Kind is not String. Instead, it returns a string of the form "<T value>" where T is v's type. The fmt package treats Values specially. It does not call their String method implicitly but instead prints the concrete values they hold.
 func (v *Value) String_() string {
 	return v.v.String()
 }

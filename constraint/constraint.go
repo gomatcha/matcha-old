@@ -263,6 +263,10 @@ func (s *Solver) solve(sys *System, ctx *mochi.LayoutContext) {
 	centerX, _ := cr.solveCenterX(parent.CenterY())
 	centerY, _ := cr.solveCenterY(parent.CenterY())
 
+	// Set zIndex
+	g.ZIndex = sys.zIndex
+	sys.zIndex += 1
+
 	// Update the guide and the system.
 	g.Frame = mochi.Rt(centerX-width/2, centerY-height/2, centerX+width/2, centerY+height/2)
 	if s.id == rootId {
@@ -357,6 +361,7 @@ type System struct {
 	min     *Guide
 	max     *Guide
 	solvers []*Solver
+	zIndex int
 }
 
 func New() *System {

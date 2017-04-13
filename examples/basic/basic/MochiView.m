@@ -18,6 +18,7 @@
         _node = value;
         self.backgroundColor = _node.paintOptions.backgroundColor;
         self.frame = _node.guide.frame;
+        self.layer.zPosition = _node.guide.zIndex;
         for (MochiNode *i in _node.nodeChildren.objectEnumerator) {
             NSString *name = i.bridgeName;
             MochiView *child = nil;

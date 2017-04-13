@@ -37,11 +37,11 @@ const (
 	UnderlineStyleDashed
 )
 
+// TODO(KD): Rethink how to do this.
 type Font struct {
 	Family string
 	Face   string
 	Size   float64
-	Weight int // 100 - 900 or maybe -1 to 1
 }
 
 type TextWrap int
@@ -289,7 +289,16 @@ func (ts *FormattedText) SetFormat(f *Format) {
 	ts.format = f
 }
 
+type textViewLayouter struct {
+	formattedText *FormattedText
+}
+
+func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
+	return mochi.Guide{}, nil
+}
+
 type TextView struct {
+	marker 		  mochi.Marker
 	Text          string
 	Format        *Format
 	FormattedText *FormattedText
@@ -305,6 +314,10 @@ func NewTextView(p interface{}) *TextView {
 	return v
 }
 
+func (v *TextView) Mount(m mochi.Marker) {
+	v.Marker = m
+}
+
 func (v *TextView) Update(p *mochi.Node) *mochi.Node {
 	ft := v.FormattedText
 	if ft == nil {
@@ -315,6 +328,7 @@ func (v *TextView) Update(p *mochi.Node) *mochi.Node {
 	}
 
 	n := mochi.NewNode()
+	n.Layouter = &textViewLayouter{formattedText: ft}
 	n.PaintOptions = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi TextView"
 	n.Bridge.State = &TextViewState{
@@ -323,8 +337,8 @@ func (v *TextView) Update(p *mochi.Node) *mochi.Node {
 	return n
 }
 
-func (v *TextView) NeedsUpdate() {
-	// ??
+func (v *TextView) Unmount() {
+	v.Marker = nil
 }
 
 type TextViewState struct {

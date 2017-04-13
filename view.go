@@ -5,16 +5,39 @@ import (
 )
 
 type View interface {
+    Mount(m *Marker)
 	Update(n *Node) *Node
-	NeedsUpdate()
+    Unmount()
+	// NeedsUpdate()
+    // Marker
+}
+
+type Marker interface {
+    Update()
+    UpdateChild(interface{})
+    Run()
+}
+
+type marker struct {
+}
+func (m *marker)Update() {
+}
+func (m *marker)UpdateChild(interface{}) {
+}
+func (m *marker)Run() {
 }
 
 type BasicView struct {
+    marker Marker
 	PaintOptions PaintOptions
 }
 
 func NewBasicView(p interface{}) *BasicView {
 	return &BasicView{}
+}
+
+func (v *BasicView) Mount(m Marker) {
+    v.marker = m
 }
 
 func (v *BasicView) Update(p *Node) *Node {
@@ -23,6 +46,6 @@ func (v *BasicView) Update(p *Node) *Node {
 	return n
 }
 
-func (v *BasicView) NeedsUpdate() {
-	// ?
+func (v *BasicView) Unmount() {
+    v.marker = nil
 }

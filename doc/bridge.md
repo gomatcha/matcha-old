@@ -2,6 +2,22 @@
 
 Mochi need some way of connecting the iOS/Android app with Go code. 
 
+## Mochi
+
+This is our fork of Gomobile to better understand it.
+
+    go install golang.org/x/mobile/cmd/gomobile
+    gomobile init
+    gomobile bind -target=ios golang.org/x/mobile/example/bind/hello
+
+	-n      print the commands but do not run them.
+    -x      print the commands
+    -v      print the names of packages as they are compiled.
+    -work   print the name of the temporary work directory and do not delete it when exiting.
+    -o      output
+/var/folders/c3/8xb38pfj2kvg1c87nfdq8h140000gn/T/gomobile-work-618387728
+
+
 ## Gomobile
 
 Go provides some basic tools for binding in [Go Mobile](golang.org/x/mobile). There are two methods of using `gomobile` to build a Go backed application. 
@@ -19,6 +35,18 @@ Mochi will be focusing on the second option, as developers will likely need to f
 * Any struct type, all of whose exported methods have supported function types and all of whose exported fields have supported types.
 
 Note that maps and slices are unexported. And any types that are declared outside of the package are not included.
+
+Mobile Wiki
+https://github.com/golang/go/wiki/Mobile
+
+Expose Java to Gomobile
+https://github.com/golang/go/issues/16876
+
+Expose ObjC to Gomobile
+https://github.com/golang/go/issues/17102
+
+Binding Go and Java
+https://docs.google.com/document/d/1y9hStonl9wpj-5VM-xWrSTuEJFUAxGOXOhxvAs7GZHE/edit
 
 ## JavaScriptCore
 

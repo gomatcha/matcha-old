@@ -29,4 +29,5 @@
 - (id)initWithBridgeValue:(BridgeValue *)value;
 @property (nonatomic, readonly) CGRect frame;
 @property (nonatomic, readonly) UIEdgeInsets insets;
+@property (nonatomic, readonly) NSInteger zIndex;
 @end

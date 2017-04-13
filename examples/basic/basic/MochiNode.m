@@ -71,6 +71,7 @@
 @interface MochiLayoutGuide ()
 @property (nonatomic, assign) CGRect frame;
 @property (nonatomic, assign) UIEdgeInsets insets;
+@property (nonatomic, assign) NSInteger zIndex;
 @end
 
 @implementation MochiLayoutGuide
@@ -79,6 +80,7 @@
     if (self = [super init]) {
         self.frame = value[@"Frame"].toCGRect;
         self.insets = value[@"Insets"].toUIEdgeInsets;
+        self.zIndex = value[@"ZIndex"].toLong;
     }
     return self;
 }
