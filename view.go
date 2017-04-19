@@ -5,11 +5,9 @@ import (
 )
 
 type View interface {
-    Mount(m *Marker)
+    Mount(m Marker)
 	Update(n *Node) *Node
     Unmount()
-	// NeedsUpdate()
-    // Marker
 }
 
 type Marker interface {

@@ -294,7 +294,11 @@ type textViewLayouter struct {
 }
 
 func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
-	return mochi.Guide{}, nil
+	
+	// val := bridge.Call("Size", bridge.WithGo(blah));
+	
+	g := mochi.Guide{Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y)}
+	return g, nil
 }
 
 type TextView struct {
@@ -315,7 +319,7 @@ func NewTextView(p interface{}) *TextView {
 }
 
 func (v *TextView) Mount(m mochi.Marker) {
-	v.Marker = m
+	v.marker = m
 }
 
 func (v *TextView) Update(p *mochi.Node) *mochi.Node {
@@ -338,7 +342,7 @@ func (v *TextView) Update(p *mochi.Node) *mochi.Node {
 }
 
 func (v *TextView) Unmount() {
-	v.Marker = nil
+	v.marker = nil
 }
 
 type TextViewState struct {

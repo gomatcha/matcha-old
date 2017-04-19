@@ -7,6 +7,7 @@ Mochi need some way of connecting the iOS/Android app with Go code.
 This is our fork of Gomobile to better understand it.
 
     go install golang.org/x/mobile/cmd/gomobile
+    cd $GOPATH/src/golang.org/x/mobile/example/bind/ios
     gomobile init
     gomobile bind -target=ios golang.org/x/mobile/example/bind/hello
 
@@ -15,6 +16,39 @@ This is our fork of Gomobile to better understand it.
     -v      print the names of packages as they are compiled.
     -work   print the name of the temporary work directory and do not delete it when exiting.
     -o      output
+    
+Directory Structure
+    
+    /go-build1209348/               # goInstall() - Working directory for go tool. Product is installed in $GOPATH/pkg as usual.
+    /fakegopath/pkg/.../(pkg).a     # loadExportData() - Copied from $GOPATH/pkg...
+    /gen
+        /src
+            /ObjC
+                interfaces.go       # GenObjcWrappers()
+    /src
+        /gomobile_bind
+            interfaces.go           # GenObjcWrappers() - Go wrapper for ObjC Interfaces. Reverse binding.
+            interfaces.h            # GenObjcWrappers()
+            interfaces.m            # GenObjcWrappers()
+            
+            go_(pkg name)main.go    # binder.GenGo() - CGo wrapper for Go packages.
+            (pkg).h                 # binder.GenObjC() - ObjC wrapper for CGo
+            (pkg).m                 # binder.GenObjC() - ObjC wrapper for CGo interfaces
+            (pkg).objc.h            # binder.GenObjC() - ObjC wrapper for CGo structs and functions
+            
+            go_main.go              # binder.GenGo(nil) - CGo wrapper for Error.
+            Universe.h              # binder.GenObjC() - ObjC wrapper for CGo Error
+            Universe.m              # binder.GenObjC() - ObjC wrapper for CGo Error interfaces
+            Univers.objc.h          # binder.GenObjC() - ObjC wrapper for CGo Error structs and functions
+            
+            seq_darwin.m            # binder.GenObjCSupport() - ???
+            seq_darwin.go           # binder.GenObjCSupport() - ???
+            ref.h                   # binder.GenObjCSupport() - ???
+            seq.h                   # binder.GenObjCSupport() - ???
+            seq.go                  # binder.GenGoSupport() - ???
+        /iosbin
+            main.go                 # goIOSBind(): The "main" go package that references the others.
+    
 /var/folders/c3/8xb38pfj2kvg1c87nfdq8h140000gn/T/gomobile-work-618387728
 
 

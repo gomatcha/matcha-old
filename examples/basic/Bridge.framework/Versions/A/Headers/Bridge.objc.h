@@ -19,7 +19,9 @@
 @property(strong, readonly) id _ref;
 
 - (id)initWithRef:(id)ref;
-- (void)needsUpdate;
+// skipped method NestedView.Mount with unsupported parameter or return types
+
+- (void)unmount;
 // skipped method NestedView.Update with unsupported parameter or return types
 
 @end

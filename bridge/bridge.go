@@ -29,7 +29,7 @@ type NestedView struct {
 	marker mochi.Marker
 }
 
-func (v *NestedView) Mount(m *mochi.Marker) {
+func (v *NestedView) Mount(m mochi.Marker) {
 	v.marker = m
 }
 

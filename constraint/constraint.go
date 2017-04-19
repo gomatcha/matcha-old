@@ -252,6 +252,10 @@ func (s *Solver) solve(sys *System, ctx *mochi.LayoutContext) {
 		g = ctx.LayoutChild(s.id, mochi.Pt(cr.width.min, cr.height.min), mochi.Pt(cr.width.max, cr.height.max))
 		width = g.Width()
 		height = g.Height()
+
+		if width < cr.width.min || height < cr.height.min || width > cr.height.max || height > cr.height.max {
+			panic("constraints: child guide is outside of bounds", cr.width, cr.height, width, height)
+		}
 	}
 
 	// Solve for centerX & centerY using new width & height.
@@ -361,7 +365,7 @@ type System struct {
 	min     *Guide
 	max     *Guide
 	solvers []*Solver
-	zIndex int
+	zIndex  int
 }
 
 func New() *System {
