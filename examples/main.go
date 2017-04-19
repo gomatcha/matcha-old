@@ -1,8 +1,8 @@
-package main
+package basic
 
 import (
 	"fmt"
-	_ "github.com/overcyn/mochi"
+	"github.com/overcyn/mochi"
 )
 
 func main() {

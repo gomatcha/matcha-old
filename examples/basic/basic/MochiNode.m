@@ -7,62 +7,63 @@
 //
 
 #import "MochiNode.h"
+#import "MochiBridge.h"
 
 @interface MochiNode ()
-@property (nonatomic, strong) BridgeValue *bridgeValue;
+@property (nonatomic, strong) MochiGoValue *goValue;
 @end
 
 @implementation MochiNode
 
-- (id)initWithBridgeValue:(BridgeValue *)value {
+- (id)initWithGoValue:(MochiGoValue *)value {
     if (self = [super init]) {
-        self.bridgeValue = value;
+        self.goValue = value;
     }
     return self;
 }
 
 - (MochiPaintOptions *)paintOptions {
-    return [[MochiPaintOptions alloc] initWithBridgeValue:self.bridgeValue[@"PaintOptions"]];
+    return [[MochiPaintOptions alloc] initWithGoValue:self.goValue[@"PaintOptions"]];
 }
 
-- (NSMapTable *)nodeChildren {
-    NSMapTable *children = self.bridgeValue[@"NodeChildren"].toMapTable;
-    NSMapTable *nodeChildren = [NSMapTable strongToStrongObjectsMapTable];
-    for (BridgeValue *i in children) {
-        nodeChildren[i] = [[MochiNode alloc] initWithBridgeValue:children[i]];
-    }
-    return nodeChildren;
-}
+// - (NSMapTable *)nodeChildren {
+//     NSMapTable *children = self.goValue[@"NodeChildren"].toMapTable;
+//     NSMapTable *nodeChildren = [NSMapTable strongToStrongObjectsMapTable];
+//     for (MochiGoValue *i in children) {
+//         nodeChildren[i] = [[MochiNode alloc] initWithBridgeValue:children[i]];
+//     }
+//     return nodeChildren;
+// }
 
 - (MochiLayoutGuide *)guide {
-    return [[MochiLayoutGuide alloc] initWithBridgeValue:self.bridgeValue[@"LayoutGuide"]];
+    return [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
 }
 
-- (NSString *)bridgeName {
-    return self.bridgeValue[@"Bridge"][@"Name"].toString;
-}
+// - (NSString *)bridgeName {
+//     return self.goValue[@"Bridge"][@"Name"].toString;
+// }
 
-- (BridgeValue *)bridgeState {
-    return self.bridgeValue[@"Bridge"][@"State"];
-}
+// - (MochiGoValue *)bridgeState {
+//     return self.goValue[@"Bridge"][@"State"];
+// }
 
 @end
 
 @interface MochiPaintOptions ()
-@property (nonatomic, strong) BridgeValue *bridgeValue;
+@property (nonatomic, strong) MochiGoValue *goValue;
 @end
 
 @implementation MochiPaintOptions
 
-- (id)initWithBridgeValue:(BridgeValue *)value {
+- (id)initWithGoValue:(MochiGoValue *)value {
     if (self = [super init]) {
-        self.bridgeValue = value;
+        self.goValue = value;
     }
     return self;
 }
 
 - (UIColor *)backgroundColor {
-    return [[UIColor alloc] initWithBridgeValue:self.bridgeValue[@"BackgroundColor"]];
+    return [[UIColor alloc] initWithGoValue:self.goValue[@"BackgroundColor"]];
 }
 
 @end
@@ -76,11 +77,11 @@
 
 @implementation MochiLayoutGuide
 
-- (id)initWithBridgeValue:(BridgeValue *)value {
+- (id)initWithGoValue:(MochiGoValue *)value {
     if (self = [super init]) {
         self.frame = value[@"Frame"].toCGRect;
         self.insets = value[@"Insets"].toUIEdgeInsets;
-        self.zIndex = value[@"ZIndex"].toLong;
+        self.zIndex = value[@"ZIndex"].toLongLong;
     }
     return self;
 }

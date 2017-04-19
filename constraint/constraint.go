@@ -254,7 +254,7 @@ func (s *Solver) solve(sys *System, ctx *mochi.LayoutContext) {
 		height = g.Height()
 
 		if width < cr.width.min || height < cr.height.min || width > cr.height.max || height > cr.height.max {
-			panic("constraints: child guide is outside of bounds", cr.width, cr.height, width, height)
+			panic("constraints: child guide is outside of bounds")
 		}
 	}
 

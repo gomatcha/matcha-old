@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@import Mochi;
 
 @interface MochiViewController : UIViewController
 @end

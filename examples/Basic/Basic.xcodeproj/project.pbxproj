@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		67608ABC1E8F966500AE2EC7 /* MochiGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608ABB1E8F966500AE2EC7 /* MochiGuide.m */; };
+		67608AC41EA7EB5E00AE2EC7 /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */; };
 		676EF4CD1E8E341800C1488A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4CC1E8E341800C1488A /* main.m */; };
 		676EF4D01E8E341900C1488A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4CF1E8E341900C1488A /* AppDelegate.m */; };
 		676EF4D81E8E341900C1488A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 676EF4D71E8E341900C1488A /* Assets.xcassets */; };
 		676EF4DB1E8E341900C1488A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 676EF4D91E8E341900C1488A /* LaunchScreen.storyboard */; };
 		676EF4E41E8E34E300C1488A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4E31E8E34E300C1488A /* ViewController.m */; };
-		676EF4ED1E8E393200C1488A /* Bridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 676EF4EC1E8E393200C1488A /* Bridge.framework */; };
 		676EF4F01E8ECF2700C1488A /* MochiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4EF1E8ECF2700C1488A /* MochiViewController.m */; };
 		676EF4F41E8ECF5D00C1488A /* MochiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4F31E8ECF5D00C1488A /* MochiView.m */; };
 		676EF4F71E8ED68800C1488A /* MochiBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4F61E8ED68800C1488A /* MochiBridge.m */; };
@@ -23,6 +23,7 @@
 /* Begin PBXFileReference section */
 		67608ABA1E8F966500AE2EC7 /* MochiGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiGuide.h; sourceTree = "<group>"; };
 		67608ABB1E8F966500AE2EC7 /* MochiGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiGuide.m; sourceTree = "<group>"; };
+		67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mochi.framework; sourceTree = "<group>"; };
 		676EF4C81E8E341800C1488A /* basic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = basic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		676EF4CC1E8E341800C1488A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		676EF4CE1E8E341900C1488A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -32,7 +33,6 @@
 		676EF4DC1E8E341900C1488A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		676EF4E21E8E34E300C1488A /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		676EF4E31E8E34E300C1488A /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		676EF4EC1E8E393200C1488A /* Bridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bridge.framework; sourceTree = "<group>"; };
 		676EF4EE1E8ECF2700C1488A /* MochiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiViewController.h; sourceTree = "<group>"; };
 		676EF4EF1E8ECF2700C1488A /* MochiViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiViewController.m; sourceTree = "<group>"; };
 		676EF4F21E8ECF5D00C1488A /* MochiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiView.h; sourceTree = "<group>"; };
@@ -48,7 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				676EF4ED1E8E393200C1488A /* Bridge.framework in Frameworks */,
+				67608AC41EA7EB5E00AE2EC7 /* Mochi.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,7 +60,7 @@
 			children = (
 				676EF4CA1E8E341800C1488A /* basic */,
 				676EF4C91E8E341800C1488A /* Products */,
-				676EF4EC1E8E393200C1488A /* Bridge.framework */,
+				67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */,
 			);
 			sourceTree = "<group>";
 		};

@@ -6,7 +6,7 @@
 //  Copyright © 2017 Mochi. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 #import "MochiBridge.h"
 #import "MochiNode.h"
 
@@ -14,5 +14,5 @@
 @property (nonatomic, strong) MochiNode *node;
 @end
 
-@interface MochiTextView : MochiView
-@end
+// @interface MochiTextView : MochiView
+// @end
