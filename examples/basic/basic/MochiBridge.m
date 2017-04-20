@@ -106,13 +106,13 @@
 // }
 
 // - (NSMapTable *)toMapTable {
-//     BridgeValue *value = self.toUnderlying;
-//     NSMapTable *mapTable = [NSMapTable strongToStrongObjectsMapTable];
-//     for (BridgeValue *i in value.mapKeys.toArray) {
-//         id v = [value mapIndex:i];
-//         mapTable[i] = v;
-//     }
-//     return mapTable;
+    // BridgeValue *value = self.toUnderlying;
+    // NSMapTable *mapTable = [NSMapTable strongToStrongObjectsMapTable];
+    // for (BridgeValue *i in value.mapKeys.toArray) {
+    //     id v = [value mapIndex:i];
+    //     mapTable[i] = v;
+    // }
+    // return mapTable;
 // }
 
 // - (NSArray *)toArray {
@@ -199,19 +199,19 @@
 }
 @end
 
-// @implementation NSMapTable (Mochi) 
-// - (id)objectForKeyedSubscript:(id)key {
-//     return [self objectForKey:key];
-// }
+@implementation NSMapTable (Mochi) 
+- (id)objectForKeyedSubscript:(id)key {
+    return [self objectForKey:key];
+}
 
-// - (void)setObject:(id)obj forKeyedSubscript:(id)key {
-//     if (obj != nil) {
-//         [self setObject:obj forKey:key];
-//     } else {
-//         [self removeObjectForKey:key];
-//     }
-// }
-// @end
+- (void)setObject:(id)obj forKeyedSubscript:(id)key {
+    if (obj != nil) {
+        [self setObject:obj forKey:key];
+    } else {
+        [self removeObjectForKey:key];
+    }
+}
+@end
 
 // @implementation NSAttributedString (Mochi)
 // - (id)initWithBridgeValue:(BridgeValue *)value {

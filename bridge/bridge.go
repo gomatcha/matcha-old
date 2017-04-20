@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/constraint"
-	"github.com/overcyn/mochi/text"
+	_ "github.com/overcyn/mochi/text"
 	"mochi/bridge"
 )
 
@@ -13,8 +13,8 @@ type GoRoot struct {
 
 func (b *GoRoot) Display() *mochi.Node {
 	fmt.Println("display")
-	v := NestedView{}
-	n := v.Update(nil)
+	v := &NestedView{}
+	n := mochi.Display(v)
 	fmt.Println(n)
 	return n
 }
@@ -85,26 +85,26 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.HeightEqual(constraint.Const(50))
 	})
 
-	chl5 := text.NewTextView(p.Get(chl5id))
-	chl5.PaintOptions.BackgroundColor = mochi.CyanColor
-	chl5.Text = "poop"
-	chl5.Format.SetAlignment(text.AlignmentCenter)
-	chl5.Format.SetStrikethroughStyle(text.StrikethroughStyleSingle)
-	chl5.Format.SetStrikethroughColor(mochi.MagentaColor)
-	chl5.Format.SetUnderlineStyle(text.UnderlineStyleDouble)
-	chl5.Format.SetUnderlineColor(mochi.GreenColor)
-	chl5.Format.SetFont(text.Font{
-		Family: "American Typewriter",
-		Face:   "Bold",
-		Size:   20,
-	})
-	n.Set(chl5id, chl5)
-	_ = l.AddGuide(chl5id, func(s *constraint.Solver) {
-		s.BottomEqual(g2.Bottom())
-		s.RightEqual(g2.Right())
-		s.WidthEqual(constraint.Const(100))
-		s.HeightEqual(constraint.Const(50))
-	})
+	// chl5 := text.NewTextView(p.Get(chl5id))
+	// chl5.PaintOptions.BackgroundColor = mochi.CyanColor
+	// chl5.Text = "poop"
+	// chl5.Format.SetAlignment(text.AlignmentCenter)
+	// chl5.Format.SetStrikethroughStyle(text.StrikethroughStyleSingle)
+	// chl5.Format.SetStrikethroughColor(mochi.MagentaColor)
+	// chl5.Format.SetUnderlineStyle(text.UnderlineStyleDouble)
+	// chl5.Format.SetUnderlineColor(mochi.GreenColor)
+	// chl5.Format.SetFont(text.Font{
+	// 	Family: "American Typewriter",
+	// 	Face:   "Bold",
+	// 	Size:   20,
+	// })
+	// n.Set(chl5id, chl5)
+	// _ = l.AddGuide(chl5id, func(s *constraint.Solver) {
+	// 	s.BottomEqual(g2.Bottom())
+	// 	s.RightEqual(g2.Right())
+	// 	s.WidthEqual(constraint.Const(100))
+	// 	s.HeightEqual(constraint.Const(50))
+	// })
 
 	return n
 }

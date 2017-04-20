@@ -1,9 +1,9 @@
 package text
 
 import (
+	_ "fmt"
 	"github.com/overcyn/mochi"
 	"image/color"
-	_ "fmt"
 )
 
 type Alignment int
@@ -29,7 +29,7 @@ const (
 type UnderlineStyle int
 
 const (
-	UnderlineStyleNone  UnderlineStyle = iota
+	UnderlineStyleNone UnderlineStyle = iota
 	UnderlineStyleSingle
 	UnderlineStyleDouble
 	UnderlineStyleThick
@@ -294,15 +294,15 @@ type textViewLayouter struct {
 }
 
 func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
-	
+
 	// val := bridge.Call("Size", bridge.WithGo(blah));
-	
+
 	g := mochi.Guide{Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y)}
 	return g, nil
 }
 
 type TextView struct {
-	marker 		  mochi.Marker
+	marker        mochi.Marker
 	Text          string
 	Format        *Format
 	FormattedText *FormattedText
@@ -326,13 +326,13 @@ func (v *TextView) Update(p *mochi.Node) *mochi.Node {
 	ft := v.FormattedText
 	if ft == nil {
 		ft = &FormattedText{
-			str: v.Text,
+			str:    v.Text,
 			format: v.Format,
 		}
 	}
 
 	n := mochi.NewNode()
-	n.Layouter = &textViewLayouter{formattedText: ft}
+	// n.Layouter = &textViewLayouter{formattedText: ft}
 	n.PaintOptions = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi TextView"
 	n.Bridge.State = &TextViewState{

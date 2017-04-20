@@ -19,17 +19,19 @@
         self.backgroundColor = _node.paintOptions.backgroundColor;
         self.frame = _node.guide.frame;
         self.layer.zPosition = _node.guide.zIndex;
-        // for (MochiNode *i in _node.nodeChildren.objectEnumerator) {
-        //     NSString *name = i.bridgeName;
-        //     MochiView *child = nil;
-        //     if ([name isEqual:@""]) {
-        //         child = [[MochiView alloc] init];
-        //     } else if ([name isEqual:@"github.com/overcyn/mochi TextView"]) {
-        //         child = [[MochiTextView alloc] init];
-        //     }
-        //     child.node = i;
-        //     [self addSubview:child];
-        // }
+        NSLog(@"children:%@", _node.nodeChildren);
+        for (MochiNode *i in _node.nodeChildren.objectEnumerator) {
+            NSLog(@"Child %@",i);
+            // NSString *name = i.bridgeName;
+            MochiView *child = nil;
+            // if ([name isEqual:@""]) {
+                child = [[MochiView alloc] init];
+            // } else if ([name isEqual:@"github.com/overcyn/mochi TextView"]) {
+            //     child = [[MochiTextView alloc] init];
+            // }
+            child.node = i;
+            [self addSubview:child];
+        }
     }
 }
 

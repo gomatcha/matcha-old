@@ -38,10 +38,10 @@
 - (UIEdgeInsets)toUIEdgeInsets;
 @end
 
-// @interface NSMapTable (Mochi)
-// - (id)objectForKeyedSubscript:(id)key;
-// - (void)setObject:(id)obj forKeyedSubscript:(id)key;
-// @end
+@interface NSMapTable (Mochi)
+- (id)objectForKeyedSubscript:(id)key;
+- (void)setObject:(id)obj forKeyedSubscript:(id)key;
+@end
 
 // @interface NSAttributedString (Mochi)
 // - (id)initWithBridgeValue:(BridgeValue *)value;

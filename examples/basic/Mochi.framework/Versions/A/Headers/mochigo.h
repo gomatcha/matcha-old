@@ -26,6 +26,11 @@ int64_t mochiGoArrayLen(GoRef);
 GoRef mochiGoArrayAppend(GoRef, GoRef);
 GoRef mochiGoArrayAt(GoRef, int64_t);
 
+GoRef mochiGoMap();
+GoRef mochiGoMapKeys(GoRef);
+GoRef mochiGoMapGet(GoRef map, GoRef key);
+void mochiGoMapSet(GoRef map, GoRef key, GoRef value);
+
 GoRef mochiGoCall(GoRef, CGoBuffer, GoRef);
 GoRef mochiGoField(GoRef, CGoBuffer);
 
@@ -52,6 +57,7 @@ void mochiGoUntrack(GoRef);
 - (NSString *)toString;
 - (NSData *)toData;
 - (NSArray *)toArray;
+- (NSMapTable *)toMapTable;
 // - (NSDictionary *)toDictionary;
 // - (BOOL)isNil;
 - (NSArray<MochiGoValue *> *)call:(NSString *)method args:(NSArray<MochiGoValue *> *)args;

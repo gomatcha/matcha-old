@@ -26,14 +26,14 @@
     return [[MochiPaintOptions alloc] initWithGoValue:self.goValue[@"PaintOptions"]];
 }
 
-// - (NSMapTable *)nodeChildren {
-//     NSMapTable *children = self.goValue[@"NodeChildren"].toMapTable;
-//     NSMapTable *nodeChildren = [NSMapTable strongToStrongObjectsMapTable];
-//     for (MochiGoValue *i in children) {
-//         nodeChildren[i] = [[MochiNode alloc] initWithBridgeValue:children[i]];
-//     }
-//     return nodeChildren;
-// }
+- (NSMapTable<MochiGoValue *, MochiNode *> *)nodeChildren {
+    NSMapTable *children = self.goValue[@"NodeChildren"].toMapTable;
+    NSMapTable<MochiGoValue *, MochiNode *> *nodeChildren = [NSMapTable strongToStrongObjectsMapTable];
+    for (MochiGoValue *i in children) {
+        nodeChildren[i] = [[MochiNode alloc] initWithGoValue:children[i]];
+    }
+    return nodeChildren;
+}
 
 - (MochiLayoutGuide *)guide {
     return [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
