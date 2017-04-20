@@ -5,8 +5,6 @@
 #include "mochiobjc.h"
 @class MochiGoValue;
 
-typedef int64_t GoRef;
-
 GoRef mochiGoRoot();
 GoRef mochiGoBool(bool);
 bool mochiGoToBool(GoRef);
@@ -52,6 +50,7 @@ void mochiGoUntrack(GoRef);
 - (id)initWithString:(NSString *)v;
 - (id)initWithData:(NSData *)v;
 - (id)initWithArray:(NSArray<MochiGoValue *> *)v;
+@property (nonatomic, readonly) GoRef ref;
 - (BOOL)toBool;
 - (long long)toLongLong;
 - (unsigned long long)toUnsignedLongLong;

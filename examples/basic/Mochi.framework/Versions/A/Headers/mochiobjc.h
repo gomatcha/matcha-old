@@ -6,6 +6,7 @@
 int MochiTest();
 
 typedef int64_t ObjcRef;
+typedef int64_t GoRef;
 
 typedef struct CGoBuffer {
     void *ptr; // UTF8 encoded string
@@ -25,6 +26,8 @@ ObjcRef MochiObjcInt64(int64_t v);
 int64_t MochiObjcToInt64(ObjcRef v);
 ObjcRef MochiObjcFloat64(double v);
 double MochiObjcToFloat64(ObjcRef v);
+ObjcRef MochiObjcGoRef(GoRef v);
+GoRef MochiObjcToGoRef(ObjcRef v);
 ObjcRef MochiObjcString(CGoBuffer str); // Frees the buffer
 CGoBuffer MochiObjcToString(ObjcRef v);
 ObjcRef MochiObjcBytes(CGoBuffer bytes); // Frees the buffer
@@ -42,6 +45,7 @@ ObjcRef MochiObjcArrayAt(ObjcRef v, int64_t index);
 // ObjcRef MochiObjcDictSet(ObjcRef v, ObjcRef key, ObjCRef value);
 
 // Call
+ObjcRef MochiObjcCallSentinel();
 ObjcRef MochiObjcCall(ObjcRef v, CGoBuffer str, ObjcRef args);
 
 // Tracker

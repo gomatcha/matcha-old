@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		67608ABC1E8F966500AE2EC7 /* MochiGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608ABB1E8F966500AE2EC7 /* MochiGuide.m */; };
 		67608AC41EA7EB5E00AE2EC7 /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */; };
+		67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608AC61EA8545600AE2EC7 /* MochiRoot.m */; };
 		676EF4CD1E8E341800C1488A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4CC1E8E341800C1488A /* main.m */; };
 		676EF4D01E8E341900C1488A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4CF1E8E341900C1488A /* AppDelegate.m */; };
 		676EF4D81E8E341900C1488A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 676EF4D71E8E341900C1488A /* Assets.xcassets */; };
@@ -24,6 +25,8 @@
 		67608ABA1E8F966500AE2EC7 /* MochiGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiGuide.h; sourceTree = "<group>"; };
 		67608ABB1E8F966500AE2EC7 /* MochiGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiGuide.m; sourceTree = "<group>"; };
 		67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mochi.framework; sourceTree = "<group>"; };
+		67608AC51EA8545600AE2EC7 /* MochiRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiRoot.h; sourceTree = "<group>"; };
+		67608AC61EA8545600AE2EC7 /* MochiRoot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiRoot.m; sourceTree = "<group>"; };
 		676EF4C81E8E341800C1488A /* basic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = basic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		676EF4CC1E8E341800C1488A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		676EF4CE1E8E341900C1488A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -99,6 +102,8 @@
 		676EF4F11E8ECF4400C1488A /* Mochi */ = {
 			isa = PBXGroup;
 			children = (
+				67608AC51EA8545600AE2EC7 /* MochiRoot.h */,
+				67608AC61EA8545600AE2EC7 /* MochiRoot.m */,
 				676EF4F51E8ED68800C1488A /* MochiBridge.h */,
 				676EF4F61E8ED68800C1488A /* MochiBridge.m */,
 				676EF4EE1E8ECF2700C1488A /* MochiViewController.h */,
@@ -184,6 +189,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */,
 				676EF4E41E8E34E300C1488A /* ViewController.m in Sources */,
 				676EF4D01E8E341900C1488A /* AppDelegate.m in Sources */,
 				676EF4F41E8ECF5D00C1488A /* MochiView.m in Sources */,

@@ -4,6 +4,7 @@ import (
 	_ "fmt"
 	"github.com/overcyn/mochi"
 	"image/color"
+	"mochi/bridge"
 )
 
 type Alignment int
@@ -294,7 +295,8 @@ type textViewLayouter struct {
 }
 
 func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
-
+	bridge.Root()
+	// bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(l.formattedText), bridge.Interface(minSize), bridge.Interface(maxSize))
 	// val := bridge.Call("Size", bridge.WithGo(blah));
 
 	g := mochi.Guide{Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y)}

@@ -1,6 +1,7 @@
 package bridge
 
 import (
+	"fmt"
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/constraint"
 	"github.com/overcyn/mochi/text"
@@ -11,6 +12,9 @@ type GoRoot struct {
 }
 
 func (b *GoRoot) Display() *mochi.Node {
+	str := bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", nil, nil, nil).ToString()
+	fmt.Println(str)
+
 	v := &NestedView{}
 	n := mochi.Display(v)
 	return n

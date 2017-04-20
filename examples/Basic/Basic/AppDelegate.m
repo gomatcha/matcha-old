@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "MochiViewController.h"
+#import "MochiRoot.h"
+@import Mochi;
 
 @interface AppDelegate ()
 
@@ -17,6 +19,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [MochiObjcBridge sharedBridge].root = [[MochiRoot alloc] init];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[MochiViewController alloc] init];
     [self.window makeKeyAndVisible];
