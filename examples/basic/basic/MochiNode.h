@@ -16,8 +16,8 @@
 @property (nonatomic, readonly) NSMapTable<MochiGoValue *, MochiNode *> *nodeChildren;
 @property (nonatomic, readonly) MochiLayoutGuide *guide;
 @property (nonatomic, readonly) MochiPaintOptions *paintOptions;
-// @property (nonatomic, readonly) NSString *bridgeName;
-// @property (nonatomic, readonly) BridgeValue *bridgeState;
+@property (nonatomic, readonly) NSString *bridgeName;
+@property (nonatomic, readonly) MochiGoValue *bridgeState;
 @end
 
 @interface MochiPaintOptions : NSObject

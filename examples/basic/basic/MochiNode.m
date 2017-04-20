@@ -39,13 +39,13 @@
     return [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
 }
 
-// - (NSString *)bridgeName {
-//     return self.goValue[@"Bridge"][@"Name"].toString;
-// }
+- (NSString *)bridgeName {
+    return self.goValue[@"Bridge"][@"Name"].toString;
+}
 
-// - (MochiGoValue *)bridgeState {
-//     return self.goValue[@"Bridge"][@"State"];
-// }
+- (MochiGoValue *)bridgeState {
+    return self.goValue[@"Bridge"][@"State"];
+}
 
 @end
 

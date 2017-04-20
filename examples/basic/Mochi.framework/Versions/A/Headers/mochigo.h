@@ -31,6 +31,8 @@ GoRef mochiGoMapKeys(GoRef);
 GoRef mochiGoMapGet(GoRef map, GoRef key);
 void mochiGoMapSet(GoRef map, GoRef key, GoRef value);
 
+bool mochiGoIsNil(GoRef);
+GoRef mochiGoElem(GoRef);
 GoRef mochiGoCall(GoRef, CGoBuffer, GoRef);
 GoRef mochiGoField(GoRef, CGoBuffer);
 
@@ -59,7 +61,8 @@ void mochiGoUntrack(GoRef);
 - (NSArray *)toArray;
 - (NSMapTable *)toMapTable;
 // - (NSDictionary *)toDictionary;
-// - (BOOL)isNil;
+- (BOOL)isNil;
+- (MochiGoValue *)elem;
 - (NSArray<MochiGoValue *> *)call:(NSString *)method args:(NSArray<MochiGoValue *> *)args;
 - (MochiGoValue *)field:(NSString *)name;
 - (MochiGoValue *)objectForKeyedSubscript:(NSString *)key;

@@ -213,150 +213,150 @@
 }
 @end
 
-// @implementation NSAttributedString (Mochi)
-// - (id)initWithBridgeValue:(BridgeValue *)value {
-//     NSString *string = [value call:@"String" args:nil][0].toString;
-//     BridgeValue *format = [value call:@"Format" args:nil][0];
-//     NSMapTable *attrTable = [format call:@"Attributes" args:nil][0].toMapTable;
+@implementation NSAttributedString (Mochi)
+- (id)initWithGoValue:(MochiGoValue *)value {
+    NSString *string = [value call:@"String" args:nil][0].toString;
+    MochiGoValue *format = [value call:@"Format" args:nil][0];
+    NSMapTable *attrTable = [format call:@"Attributes" args:nil][0].toMapTable;
 
-//     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-//     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//     dictionary[NSParagraphStyleAttributeName] = paragraphStyle;
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    dictionary[NSParagraphStyleAttributeName] = paragraphStyle;
 
-//     for (BridgeValue *i in attrTable.keyEnumerator) {
-//         BridgeValue *value = attrTable[i];
-//         NSInteger key = i.toLong;
-//         switch (key) {
-//         case 0: { // AttributeKeyAlignment
-//             NSTextAlignment alignment;
-//             switch (value.toLong) {
-//             case 0:
-//                 alignment = NSTextAlignmentLeft;
-//                 break;
-//             case 1: 
-//                 alignment = NSTextAlignmentRight;
-//                 break;
-//             case 2:
-//                 alignment = NSTextAlignmentCenter;
-//                 break;
-//             case 3:
-//                 alignment = NSTextAlignmentJustified;
-//                 break;
-//             default:
-//                 alignment = NSTextAlignmentLeft;
-//             }
-//             paragraphStyle.alignment = alignment;
-//             break;
-//         }
-//         case 1: { //AttributeKeyStrikethroughStyle
-//             NSUnderlineStyle style;
-//             switch (value.toLong) {
-//             case 0:
-//                 style = NSUnderlineStyleNone;
-//                 break;
-//             case 1: 
-//                 style = NSUnderlineStyleSingle;
-//                 break;
-//             case 2:
-//                 style = NSUnderlineStyleDouble;
-//                 break;
-//             case 3:
-//                 style = NSUnderlineStyleThick;
-//                 break;
-//             case 4:
-//                 style = NSUnderlinePatternDot;
-//                 break;
-//             case 5:
-//                 style = NSUnderlinePatternDash;
-//                 break;
-//             default:
-//                 style = NSUnderlineStyleNone;
-//             }
-//             dictionary[NSStrikethroughStyleAttributeName] = @(style);
-//             break;
-//         }
-//         case 2: { //AttributeKeyStrikethroughColor
-//             dictionary[NSStrikethroughColorAttributeName] = [[UIColor alloc] initWithBridgeValue:value.toUnderlying];
-//             break;
-//         }
-//         case 3: { //AttributeKeyUnderlineStyle
-//             NSUnderlineStyle style;
-//             switch (value.toLong) {
-//             case 0:
-//                 style = NSUnderlineStyleNone;
-//                 break;
-//             case 1: 
-//                 style = NSUnderlineStyleSingle;
-//                 break;
-//             case 2:
-//                 style = NSUnderlineStyleDouble;
-//                 break;
-//             case 3:
-//                 style = NSUnderlineStyleThick;
-//                 break;
-//             case 4:
-//                 style = NSUnderlinePatternDot;
-//                 break;
-//             case 5:
-//                 style = NSUnderlinePatternDash;
-//                 break;
-//             default:
-//                 style = NSUnderlineStyleNone;
-//             }
-//             dictionary[NSUnderlineStyleAttributeName] = @(style);
-//             break;
-//         }
-//         case 4: { //AttributeKeyUnderlineColor
-//             dictionary[NSUnderlineColorAttributeName] = [[UIColor alloc] initWithBridgeValue:value.toUnderlying];
-//             break;
-//         }
-//         case 5: { //AttributeKeyFont
-//             dictionary[NSFontAttributeName] = [[UIFont alloc] initWithBridgeValue:value];
-//             break;
-//         }
-//         case 6: { //AttributeKeyHyphenation
-//             dictionary[NSHyphenationFactorDocumentAttribute] = value.toNumber;
-//             break;
-//         }
-//         case 7: { //AttributeKeyLineHeightMultiple
-//             paragraphStyle.lineHeightMultiple = value.toDouble;
-//             break;
-//         }
-//         case 8: { //AttributeKeyMaxLines
-//             // TODO(KD):
-//             break;
-//         }
-//         case 9: { //AttributeKeyTextColor
-//             dictionary[NSForegroundColorAttributeName] = [[UIColor alloc] initWithBridgeValue:value];
-//             break;
-//         }
-//         case 10: { //AttributeKeyTextWrap
-//             // TODO(KD):
-//             break;
-//         }
-//         case 11: { //AttributeKeyTruncation
-//             // TODO(KD):
-//             break;
-//         }
-//         case 12: { //AttributeKeyTruncationString 
-//             // TODO(KD):
-//             break;
-//         }
-//         }
-//     }
-//     return [[NSAttributedString alloc] initWithString:string attributes:dictionary];
-// }
-// @end
+    for (MochiGoValue *i in attrTable.keyEnumerator) {
+        MochiGoValue *value = ((MochiGoValue *)attrTable[i]).elem;
+        NSInteger key = i.toLongLong;
+        switch (key) {
+        case 0: { // AttributeKeyAlignment
+            NSTextAlignment alignment;
+            switch (value.toLongLong) {
+            case 0:
+                alignment = NSTextAlignmentLeft;
+                break;
+            case 1: 
+                alignment = NSTextAlignmentRight;
+                break;
+            case 2:
+                alignment = NSTextAlignmentCenter;
+                break;
+            case 3:
+                alignment = NSTextAlignmentJustified;
+                break;
+            default:
+                alignment = NSTextAlignmentLeft;
+            }
+            paragraphStyle.alignment = alignment;
+            break;
+        }
+        case 1: { //AttributeKeyStrikethroughStyle
+            NSUnderlineStyle style;
+            switch (value.toLongLong) {
+            case 0:
+                style = NSUnderlineStyleNone;
+                break;
+            case 1: 
+                style = NSUnderlineStyleSingle;
+                break;
+            case 2:
+                style = NSUnderlineStyleDouble;
+                break;
+            case 3:
+                style = NSUnderlineStyleThick;
+                break;
+            case 4:
+                style = NSUnderlinePatternDot;
+                break;
+            case 5:
+                style = NSUnderlinePatternDash;
+                break;
+            default:
+                style = NSUnderlineStyleNone;
+            }
+            dictionary[NSStrikethroughStyleAttributeName] = @(style);
+            break;
+        }
+        case 2: { //AttributeKeyStrikethroughColor
+            dictionary[NSStrikethroughColorAttributeName] = [[UIColor alloc] initWithGoValue:value];
+            break;
+        }
+        case 3: { //AttributeKeyUnderlineStyle
+            NSUnderlineStyle style;
+            switch (value.toLongLong) {
+            case 0:
+                style = NSUnderlineStyleNone;
+                break;
+            case 1: 
+                style = NSUnderlineStyleSingle;
+                break;
+            case 2:
+                style = NSUnderlineStyleDouble;
+                break;
+            case 3:
+                style = NSUnderlineStyleThick;
+                break;
+            case 4:
+                style = NSUnderlinePatternDot;
+                break;
+            case 5:
+                style = NSUnderlinePatternDash;
+                break;
+            default:
+                style = NSUnderlineStyleNone;
+            }
+            dictionary[NSUnderlineStyleAttributeName] = @(style);
+            break;
+        }
+        case 4: { //AttributeKeyUnderlineColor
+            dictionary[NSUnderlineColorAttributeName] = [[UIColor alloc] initWithGoValue:value];
+            break;
+        }
+        case 5: { //AttributeKeyFont
+            dictionary[NSFontAttributeName] = [[UIFont alloc] initWithGoValue:value];
+            break;
+        }
+        case 6: { //AttributeKeyHyphenation
+            // dictionary[NSHyphenationFactorDocumentAttribute] = value.toNumber; // TODO(KD):
+            break;
+        }
+        case 7: { //AttributeKeyLineHeightMultiple
+            paragraphStyle.lineHeightMultiple = value.toDouble;
+            break;
+        }
+        case 8: { //AttributeKeyMaxLines
+            // TODO(KD):
+            break;
+        }
+        case 9: { //AttributeKeyTextColor
+            dictionary[NSForegroundColorAttributeName] = [[UIColor alloc] initWithGoValue:value];
+            break;
+        }
+        case 10: { //AttributeKeyTextWrap
+            // TODO(KD):
+            break;
+        }
+        case 11: { //AttributeKeyTruncation
+            // TODO(KD):
+            break;
+        }
+        case 12: { //AttributeKeyTruncationString 
+            // TODO(KD):
+            break;
+        }
+        }
+    }
+    return [[NSAttributedString alloc] initWithString:string attributes:dictionary];
+}
+@end
 
-// @implementation UIFont (Mochi)
-// - (id)initWithBridgeValue:(BridgeValue *)value {
-//     NSMutableDictionary *attr = [NSMutableDictionary dictionary];
-//     attr[UIFontDescriptorFamilyAttribute] = value[@"Family"].toString;
-//     attr[UIFontDescriptorFaceAttribute] = value[@"Face"].toString;
-//     attr[UIFontDescriptorSizeAttribute] = value[@"Size"].toNumber;
+@implementation UIFont (Mochi)
+- (id)initWithGoValue:(MochiGoValue *)value {
+    NSMutableDictionary *attr = [NSMutableDictionary dictionary];
+    attr[UIFontDescriptorFamilyAttribute] = value[@"Family"].toString;
+    attr[UIFontDescriptorFaceAttribute] = value[@"Face"].toString;
+    attr[UIFontDescriptorSizeAttribute] = @(value[@"Size"].toDouble);
 
-//     UIFontDescriptor *desc = [[UIFontDescriptor alloc] initWithFontAttributes:attr];
-//     UIFont *font = [UIFont fontWithDescriptor:desc size:0];
-//     return font;
-// }
-// @end
+    UIFontDescriptor *desc = [[UIFontDescriptor alloc] initWithFontAttributes:attr];
+    UIFont *font = [UIFont fontWithDescriptor:desc size:0];
+    return font;
+}
+@end

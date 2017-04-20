@@ -14,5 +14,5 @@
 @property (nonatomic, strong) MochiNode *node;
 @end
 
-// @interface MochiTextView : MochiView
-// @end
+@interface MochiTextView : MochiView
+@end

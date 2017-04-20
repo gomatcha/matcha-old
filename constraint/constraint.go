@@ -1,6 +1,7 @@
 package constraint
 
 import (
+	"fmt"
 	"github.com/overcyn/mochi"
 	"math"
 )
@@ -253,8 +254,10 @@ func (s *Solver) solve(sys *System, ctx *mochi.LayoutContext) {
 		width = g.Width()
 		height = g.Height()
 
-		if width < cr.width.min || height < cr.height.min || width > cr.height.max || height > cr.height.max {
-			panic("constraints: child guide is outside of bounds")
+		if width < cr.width.min || height < cr.height.min || width > cr.width.max || height > cr.height.max {
+			fmt.Sprintf("constraints: child guide is outside of bounds. Min:%v Max:%v Actual:%v", mochi.Pt(cr.width.min, cr.height.min), mochi.Pt(cr.width.max, cr.height.max), mochi.Pt(width, height))
+			width = cr.width.min
+			height = cr.height.min
 		}
 	}
 

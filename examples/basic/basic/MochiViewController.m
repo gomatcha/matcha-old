@@ -20,7 +20,7 @@
 - (void)loadView {
     MochiGoValue *root = [[MochiGoBridge sharedBridge] root];
     NSLog(@"root%@", root);
-    MochiGoValue *value = [root call:@"Display" args:@[]][0];
+    MochiGoValue *value = [root call:@"Display" args:nil][0];
     NSLog(@"value%@", value);
     MochiNode *node = [[MochiNode alloc] initWithGoValue:value];
     

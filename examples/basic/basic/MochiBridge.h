@@ -43,10 +43,10 @@
 - (void)setObject:(id)obj forKeyedSubscript:(id)key;
 @end
 
-// @interface NSAttributedString (Mochi)
-// - (id)initWithBridgeValue:(BridgeValue *)value;
-// @end
+@interface NSAttributedString (Mochi)
+- (id)initWithGoValue:(MochiGoValue *)value;
+@end
 
-// @interface UIFont (Mochi)
-// - (id)initWithBridgeValue:(BridgeValue *)value;
-// @end
+@interface UIFont (Mochi)
+- (id)initWithGoValue:(MochiGoValue *)value;
+@end

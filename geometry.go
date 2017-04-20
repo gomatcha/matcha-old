@@ -1,5 +1,9 @@
 package mochi
 
+import (
+	"fmt"
+)
+
 type Rect struct {
 	Min, Max Point
 }
@@ -15,6 +19,10 @@ func (r Rect) Add(p Point) Rect {
 	n.Max.X += p.X
 	n.Max.Y += p.Y
 	return n
+}
+
+func (r Rect) String() string {
+	return fmt.Sprintf("Rect{%v, %v, %v, %v}", r.Min.X, r.Min.Y, r.Max.X, r.Max.Y)
 }
 
 type Point struct {
