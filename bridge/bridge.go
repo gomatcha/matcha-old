@@ -6,13 +6,25 @@ import (
 	"github.com/overcyn/mochi/constraint"
 	"github.com/overcyn/mochi/text"
 	"mochi/bridge"
+	"reflect"
 )
 
 type GoRoot struct {
 }
 
 func (b *GoRoot) Display() *mochi.Node {
-	str := bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", nil, nil, nil).ToString()
+	format := &text.Format{}
+	format.SetAlignment(text.AlignmentCenter)
+	format.SetStrikethroughStyle(text.StrikethroughStyleSingle)
+	format.SetStrikethroughColor(mochi.MagentaColor)
+	format.SetUnderlineStyle(text.UnderlineStyleDouble)
+	format.SetUnderlineColor(mochi.GreenColor)
+
+	formatted := &text.FormattedText{}
+	formatted.SetString("Blah blah")
+	formatted.SetFormat(format)
+
+	str := bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(formatted), nil, nil).ToInterface().(mochi.Rect)
 	fmt.Println(str)
 
 	v := &NestedView{}
@@ -22,6 +34,8 @@ func (b *GoRoot) Display() *mochi.Node {
 
 func init() {
 	bridge.SetGoRoot(&GoRoot{})
+	bridge.RegisterType("mochi.Point", reflect.TypeOf(mochi.Point{}))
+	bridge.RegisterType("mochi.Rect", reflect.TypeOf(mochi.Rect{}))
 }
 
 const (

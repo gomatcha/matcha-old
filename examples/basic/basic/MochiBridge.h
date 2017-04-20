@@ -14,6 +14,11 @@
 @end
 
 @interface MochiGoValue (Mochi)
+- (id)initWithCGPoint:(CGPoint)point;
+- (id)initWithCGSize:(CGSize)size;
+- (id)initWithCGRect:(CGRect)rect;
+- (CGPoint)toCGPoint;
+- (CGSize)toCGSize;
 - (CGRect)toCGRect;
 - (UIEdgeInsets)toUIEdgeInsets;
 @end

@@ -7,12 +7,14 @@
 //
 
 #import "MochiRoot.h"
+#import "MochiBridge.h"
 
 @implementation MochiRoot
 
-- (NSString *)sizeForAttributedString:(MochiGoValue *)string minSize:(MochiGoValue *)minSize maxSize:(MochiGoValue *)maxSize {
-    NSLog(@"root test");
-    return @"test";
+- (MochiGoValue *)sizeForAttributedString:(MochiGoValue *)string minSize:(MochiGoValue *)minSize maxSize:(MochiGoValue *)maxSize {
+    NSAttributedString *attrStr = [[NSAttributedString alloc] initWithGoValue:string];
+    CGRect rect = [attrStr boundingRectWithSize:maxSize.toCGSize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
+    return [[MochiGoValue alloc] initWithCGRect:rect];
 }
 
 @end

@@ -33,7 +33,6 @@ CGoBuffer MochiObjcToString(ObjcRef v);
 ObjcRef MochiObjcBytes(CGoBuffer bytes); // Frees the buffer
 CGoBuffer MochiObjcToBytes(ObjcRef v);
 
-// Array
 ObjcRef MochiObjcArray();
 int64_t MochiObjcArrayLen(ObjcRef v);
 void MochiObjcArrayAppend(ObjcRef v, ObjcRef a);

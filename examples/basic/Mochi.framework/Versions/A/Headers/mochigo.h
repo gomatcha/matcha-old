@@ -6,6 +6,7 @@
 @class MochiGoValue;
 
 GoRef mochiGoRoot();
+
 GoRef mochiGoBool(bool);
 bool mochiGoToBool(GoRef);
 GoRef mochiGoInt64(int64_t);
@@ -29,10 +30,13 @@ GoRef mochiGoMapKeys(GoRef);
 GoRef mochiGoMapGet(GoRef map, GoRef key);
 void mochiGoMapSet(GoRef map, GoRef key, GoRef value);
 
+GoRef mochiGoType(CGoBuffer); // Frees the buffer
+
 bool mochiGoIsNil(GoRef);
 GoRef mochiGoElem(GoRef);
 GoRef mochiGoCall(GoRef, CGoBuffer, GoRef);
 GoRef mochiGoField(GoRef, CGoBuffer);
+void mochiGoFieldSet(GoRef, CGoBuffer, GoRef);
 
 void mochiGoUntrack(GoRef);
 
@@ -50,6 +54,7 @@ void mochiGoUntrack(GoRef);
 - (id)initWithString:(NSString *)v;
 - (id)initWithData:(NSData *)v;
 - (id)initWithArray:(NSArray<MochiGoValue *> *)v;
+- (id)initWithType:(NSString *)typeName;
 @property (nonatomic, readonly) GoRef ref;
 - (BOOL)toBool;
 - (long long)toLongLong;
@@ -64,7 +69,9 @@ void mochiGoUntrack(GoRef);
 - (MochiGoValue *)elem;
 - (NSArray<MochiGoValue *> *)call:(NSString *)method args:(NSArray<MochiGoValue *> *)args;
 - (MochiGoValue *)field:(NSString *)name;
+- (void)setField:(NSString *)name value:(MochiGoValue *)value;
 - (MochiGoValue *)objectForKeyedSubscript:(NSString *)key;
+- (void)setObject:(MochiGoValue *)object forKeyedSubscript:(NSString *)key;
 @end
 
 #endif // MOCHIGO_H

@@ -275,7 +275,7 @@ func (ts *FormattedText) String() string {
 	return ts.str
 }
 
-func (ts *FormattedText) setString(text string) {
+func (ts *FormattedText) SetString(text string) {
 	ts.str = text
 }
 
