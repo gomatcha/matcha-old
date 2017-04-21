@@ -160,23 +160,23 @@ func main() {
 // func (v *TodoView) UpdateLayout(p Layouter) Layouter {
 // 	l := &constraint.NewLayouter()
 
-// 	root := l.AddGuide(nil)
+// 	root := l.Add(nil)
 // 	root.HeightEqual(constraint.Const(40))
 // 	root.Equal(l.Max())
 // 	root.Solve()
 
-// 	label := l.AddGuide(labelId)
+// 	label := l.Add(labelId)
 // 	label.BotLess(root.Bot())
 // 	label.Equal(root)
 // 	label.Solve()
 
-// 	list := l.AddGuide(root)
+// 	list := l.Add(root)
 // 	list.TopEqual(label.Top())
 // 	list.BotLess(root.Bot())
 // 	list.Equal(root)
 // 	list.Solve()
 
-// 	text := l.AddGuide(root)
+// 	text := l.Add(root)
 // 	text.TopEqual(list.Top())
 // 	text.BotLess(root.Bot())
 // 	text.Equal(root)

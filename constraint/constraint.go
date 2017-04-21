@@ -163,7 +163,7 @@ func (g *Guide) CenterY() *Anchor {
 	return &Anchor{guideAnchor{guide: g, attribute: centerYAttr}}
 }
 
-func (g *Guide) AddGuide(id interface{}, solveFunc func(*Solver)) *Guide {
+func (g *Guide) Add(id interface{}, solveFunc func(*Solver)) *Guide {
 	chl := &Guide{
 		id:         id,
 		system:     g.system,

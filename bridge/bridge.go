@@ -49,7 +49,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 	chl1 := mochi.NewBasicView(p.Get(chl1id))
 	chl1.PaintOptions.BackgroundColor = mochi.RedColor
 	n.Set(chl1id, chl1)
-	g1 := l.AddGuide(chl1id, func(s *constraint.Solver) {
+	g1 := l.Add(chl1id, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
 		s.WidthEqual(constraint.Const(100))
@@ -59,7 +59,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 	chl2 := mochi.NewBasicView(p.Get(chl2id))
 	chl2.PaintOptions.BackgroundColor = mochi.YellowColor
 	n.Set(chl2id, chl2)
-	g2 := l.AddGuide(chl2id, func(s *constraint.Solver) {
+	g2 := l.Add(chl2id, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
 		s.LeftEqual(g1.Left())
 		s.WidthEqual(constraint.Const(300))
@@ -69,7 +69,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 	chl3 := mochi.NewBasicView(p.Get(chl3id))
 	chl3.PaintOptions.BackgroundColor = mochi.BlueColor
 	n.Set(chl3id, chl3)
-	g3 := l.AddGuide(chl3id, func(s *constraint.Solver) {
+	g3 := l.Add(chl3id, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g2.Left())
 		s.WidthEqual(constraint.Const(100))
@@ -79,7 +79,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 	chl4 := mochi.NewBasicView(p.Get(chl4id))
 	chl4.PaintOptions.BackgroundColor = mochi.MagentaColor
 	n.Set(chl4id, chl4)
-	_ = l.AddGuide(chl4id, func(s *constraint.Solver) {
+	_ = l.Add(chl4id, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g3.Right())
 		s.WidthEqual(constraint.Const(50))
@@ -100,7 +100,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		Size:   20,
 	})
 	n.Set(chl5id, chl5)
-	g5 := l.AddGuide(chl5id, func(s *constraint.Solver) {
+	g5 := l.Add(chl5id, func(s *constraint.Solver) {
 		s.BottomEqual(g2.Bottom())
 		s.RightEqual(g2.Right().Add(-15))
 	})
@@ -114,7 +114,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		Size:   20,
 	})
 	n.Set(chl6id, chl6)
-	_ = l.AddGuide(chl6id, func(s *constraint.Solver) {
+	_ = l.Add(chl6id, func(s *constraint.Solver) {
 		s.BottomEqual(g5.Top())
 		s.RightEqual(g2.Right().Add(-15))
 	})

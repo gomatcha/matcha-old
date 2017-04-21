@@ -60,7 +60,7 @@ func (v *TodoView) Update(p *Node) *Node {
 		chl.Text = "TODO"
 		n.Set(labelId, chl)
 
-		prev = l.AddGuide(labelId, func(constraint.Solver *s){
+		prev = l.Add(labelId, func(constraint.Solver *s){
 			s.WidthEqual(l.Width().Multiply(0.5))
 			s.HeightEqual(l.Height().Multiply(0.5))
 			s.TopEqual(constraint.Const(10))
@@ -73,7 +73,7 @@ func (v *TodoView) Update(p *Node) *Node {
 		chl.Items = v.Items
 		n.Set(listID, chl)
 
-		prev = l.AddGuide(listId, func(constraint.Solver *s){
+		prev = l.Add(listId, func(constraint.Solver *s){
 			s.TopEqual(prev.Bot())
 			s.BotLess(l.Bot())
 		})
@@ -88,7 +88,7 @@ func (v *TodoView) Update(p *Node) *Node {
 		}
 		n.Set(textFieldId, chl)
 
-		prev = l.AddGuide(textFieldId, func(constraint.Solver *s){
+		prev = l.Add(textFieldId, func(constraint.Solver *s){
 			s.TopEqual(prev.Bot())
 			s.BotLess(l.Bot())
 		})
@@ -106,7 +106,7 @@ func (v *TodoView) Update(p *Node) *Node {
 		}
 		n.Set(buttonId, chl)
 
-		prev = l.AddGuide(buttonId, func(constraint.Solver *s){
+		prev = l.Add(buttonId, func(constraint.Solver *s){
 			s.TopEqual(prev.Bot())
 			s.BotLess(l.Bot())
 		})
