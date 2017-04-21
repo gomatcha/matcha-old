@@ -12,19 +12,6 @@ type GoRoot struct {
 }
 
 func (b *GoRoot) Display() *mochi.Node {
-	format := &text.Format{}
-	format.SetAlignment(text.AlignmentCenter)
-	format.SetStrikethroughStyle(text.StrikethroughStyleSingle)
-	format.SetStrikethroughColor(mochi.MagentaColor)
-	format.SetUnderlineStyle(text.UnderlineStyleDouble)
-	format.SetUnderlineColor(mochi.GreenColor)
-
-	formatted := &text.FormattedText{}
-	formatted.SetString("Blah blah")
-	formatted.SetFormat(format)
-
-	_ = bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(formatted), nil, nil).ToInterface().(mochi.Point)
-
 	v := &NestedView{}
 	n := mochi.Display(v)
 	return n
@@ -42,6 +29,7 @@ const (
 	chl3id
 	chl4id
 	chl5id
+	chl6id
 )
 
 type NestedView struct {
@@ -112,11 +100,23 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		Size:   20,
 	})
 	n.Set(chl5id, chl5)
-	_ = l.AddGuide(chl5id, func(s *constraint.Solver) {
+	g5 := l.AddGuide(chl5id, func(s *constraint.Solver) {
 		s.BottomEqual(g2.Bottom())
-		s.RightEqual(g2.Right())
-		// s.WidthEqual(constraint.Const(100))
-		// s.HeightEqual(constraint.Const(50))
+		s.RightEqual(g2.Right().Add(-15))
+	})
+
+	chl6 := text.NewTextView(p.Get(chl6id))
+	chl6.PaintOptions.BackgroundColor = mochi.RedColor
+	chl6.Text = "Title y"
+	chl6.Format.SetFont(text.Font{
+		Family: "American Typewriter",
+		Face:   "Bold",
+		Size:   20,
+	})
+	n.Set(chl6id, chl6)
+	_ = l.AddGuide(chl6id, func(s *constraint.Solver) {
+		s.BottomEqual(g5.Top())
+		s.RightEqual(g2.Right().Add(-15))
 	})
 
 	return n

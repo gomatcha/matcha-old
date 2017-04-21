@@ -31,8 +31,8 @@ type Anchor struct {
 	anchor anchor
 }
 
-func (a Anchor) Add(v float64) Anchor {
-	return Anchor{
+func (a *Anchor) Add(v float64) *Anchor {
+	return &Anchor{
 		offsetAnchor{
 			offset:     v,
 			underlying: a.anchor,
@@ -40,8 +40,8 @@ func (a Anchor) Add(v float64) Anchor {
 	}
 }
 
-func (a Anchor) Multiply(v float64) Anchor {
-	return Anchor{
+func (a *Anchor) Multiply(v float64) *Anchor {
+	return &Anchor{
 		multiplierAnchor{
 			multiplier: v,
 			underlying: a.anchor,
