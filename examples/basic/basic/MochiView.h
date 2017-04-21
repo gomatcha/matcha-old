@@ -16,3 +16,6 @@
 
 @interface MochiTextView : MochiView
 @end
+
+@interface MochiImageView : MochiView
+@end

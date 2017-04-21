@@ -1,7 +1,11 @@
-package text
+package image
 
 import (
+	"bytes"
+	"fmt"
 	"github.com/overcyn/mochi"
+	"golang.org/x/image/bmp"
+	"image"
 	// "image/color"
 	// "mochi/bridge"
 )
@@ -43,10 +47,13 @@ func (v *URLImageView) Unmount() {
 	v.marker = nil
 }
 
+// ImageView
+
 type ImageView struct {
-	marker       mochi.Marker
 	PaintOptions mochi.PaintOptions
-	ImageBytes   []byte
+	Image        image.Image
+	image        image.Image
+	bytes        []byte
 }
 
 func NewImageView(p interface{}) *ImageView {
@@ -58,17 +65,27 @@ func NewImageView(p interface{}) *ImageView {
 }
 
 func (v *ImageView) Mount(m mochi.Marker) {
-	v.marker = m
 }
 
 func (v *ImageView) Update(p *mochi.Node) *mochi.Node {
 	n := mochi.NewNode()
+
+	if v.Image != v.image {
+		v.image = v.Image
+
+		buf := &bytes.Buffer{}
+		err := bmp.Encode(buf, v.image)
+		if err != nil {
+			fmt.Println("ImageView encoding error:", err)
+		}
+		v.bytes = buf.Bytes()
+	}
+
 	n.PaintOptions = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi ImageView"
-	n.Bridge.State = v.ImageBytes
+	n.Bridge.State = v.bytes
 	return n
 }
 
 func (v *ImageView) Unmount() {
-	v.marker = nil
 }

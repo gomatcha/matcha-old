@@ -5,28 +5,45 @@ import (
 )
 
 type View interface {
-    Mount(m Marker)
+	Mount(m Marker)
 	Update(n *Node) *Node
-    Unmount()
+	Unmount()
+	// TODO(KD): Thinking
+	// Key() interface{}
+}
+
+type ViewImpl struct {
+	key interface{}
+}
+
+func (v ViewImpl) Mount(m Marker) {
+}
+
+func (v ViewImpl) Key() interface{} {
+	return v.key
+}
+
+func (v ViewImpl) Unmount() {
 }
 
 type Marker interface {
-    Update()
-    UpdateChild(interface{})
-    Run()
+	Update()
+	UpdateChild(interface{})
+	Run()
 }
 
 type marker struct {
 }
-func (m *marker)Update() {
+
+func (m *marker) Update() {
 }
-func (m *marker)UpdateChild(interface{}) {
+func (m *marker) UpdateChild(interface{}) {
 }
-func (m *marker)Run() {
+func (m *marker) Run() {
 }
 
 type BasicView struct {
-    marker Marker
+	marker       Marker
 	PaintOptions PaintOptions
 }
 
@@ -35,7 +52,7 @@ func NewBasicView(p interface{}) *BasicView {
 }
 
 func (v *BasicView) Mount(m Marker) {
-    v.marker = m
+	v.marker = m
 }
 
 func (v *BasicView) Update(p *Node) *Node {
@@ -45,5 +62,5 @@ func (v *BasicView) Update(p *Node) *Node {
 }
 
 func (v *BasicView) Unmount() {
-    v.marker = nil
+	v.marker = nil
 }

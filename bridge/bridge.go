@@ -3,7 +3,9 @@ package bridge
 import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/constraint"
+	mimage "github.com/overcyn/mochi/image"
 	"github.com/overcyn/mochi/text"
+	"image"
 	"mochi/bridge"
 	"reflect"
 )
@@ -30,6 +32,7 @@ const (
 	chl4id
 	chl5id
 	chl6id
+	chl7id
 )
 
 type NestedView struct {
@@ -114,9 +117,27 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		Size:   20,
 	})
 	n.Set(chl6id, chl6)
-	_ = l.Add(chl6id, func(s *constraint.Solver) {
+	g6 := l.Add(chl6id, func(s *constraint.Solver) {
 		s.BottomEqual(g5.Top())
 		s.RightEqual(g2.Right().Add(-15))
+	})
+
+	img := image.NewRGBA(image.Rect(0, 0, 100, 100))
+	for x := 0; x < 100; x++ {
+		for y := 0; y < 100; y++ {
+			img.Set(x, y, mochi.MagentaColor)
+		}
+	}
+
+	chl7 := mimage.NewImageView(p.Get(chl7id))
+	chl7.PaintOptions.BackgroundColor = mochi.CyanColor
+	chl7.Image = img
+	n.Set(chl7id, chl7)
+	_ = l.Add(chl7id, func(s *constraint.Solver) {
+		s.BottomEqual(g6.Top())
+		s.RightEqual(g2.Right().Add(-15))
+		s.WidthEqual(constraint.Const(100))
+		s.HeightEqual(constraint.Const(100))
 	})
 
 	return n

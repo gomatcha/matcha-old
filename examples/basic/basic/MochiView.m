@@ -26,6 +26,8 @@
                 child = [[MochiView alloc] init];
             } else if ([name isEqual:@"github.com/overcyn/mochi TextView"]) {
                 child = [[MochiTextView alloc] init];
+            } else if ([name isEqual:@"github.com/overcyn/mochi ImageView"]) {
+                child = [[MochiImageView alloc] init];
             }
             child.node = i;
             [self addSubview:child];
@@ -61,6 +63,38 @@
 
 - (void)layoutSubviews {
     self.label.frame = self.bounds;
+}
+
+@end
+
+@interface MochiImageView ()
+@property (nonatomic, strong) UIImageView *imageView;
+@end
+
+@implementation MochiImageView
+
+- (id)initWithFrame:(CGRect)frame {
+    if ((self = [super initWithFrame:frame])) {
+        self.imageView = [[UIImageView alloc] init];
+        [self addSubview:self.imageView];
+    }
+    return self;
+}
+
+- (void)setNode:(MochiNode *)node {
+    [super setNode:node];
+    MochiGoValue *state = node.bridgeState;
+    if (!state.isNil) {
+        NSData *data = state.elem.toData;
+        UIImage *image = [[UIImage alloc] initWithData:data];
+        self.imageView.image = image;
+    } else {
+        self.imageView.image = nil;
+    }
+}
+
+- (void)layoutSubviews {
+    self.imageView.frame = self.bounds;
 }
 
 @end
