@@ -1,7 +1,6 @@
 package text
 
 import (
-	_ "fmt"
 	"github.com/overcyn/mochi"
 	"image/color"
 	"mochi/bridge"
@@ -295,11 +294,8 @@ type textViewLayouter struct {
 }
 
 func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
-	bridge.Root()
-	// bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(l.formattedText), bridge.Interface(minSize), bridge.Interface(maxSize))
-	// val := bridge.Call("Size", bridge.WithGo(blah));
-
-	g := mochi.Guide{Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y)}
+	size := bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(l.formattedText), nil, bridge.Interface(ctx.MaxSize)).ToInterface().(mochi.Point)
+	g := mochi.Guide{Frame: mochi.Rt(0, 0, size.X, size.Y)}
 	return g, nil
 }
 
@@ -334,7 +330,7 @@ func (v *TextView) Update(p *mochi.Node) *mochi.Node {
 	}
 
 	n := mochi.NewNode()
-	// n.Layouter = &textViewLayouter{formattedText: ft}
+	n.Layouter = &textViewLayouter{formattedText: ft}
 	n.PaintOptions = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi TextView"
 	n.Bridge.State = &TextViewState{

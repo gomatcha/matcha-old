@@ -14,7 +14,8 @@
 - (MochiGoValue *)sizeForAttributedString:(MochiGoValue *)string minSize:(MochiGoValue *)minSize maxSize:(MochiGoValue *)maxSize {
     NSAttributedString *attrStr = [[NSAttributedString alloc] initWithGoValue:string];
     CGRect rect = [attrStr boundingRectWithSize:maxSize.toCGSize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
-    return [[MochiGoValue alloc] initWithCGRect:rect];
+    MochiGoValue *value = [[MochiGoValue alloc] initWithCGSize:rect.size];
+    return value;
 }
 
 @end

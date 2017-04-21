@@ -61,11 +61,11 @@ func (n *Node) Set(k interface{}, v View) {
 	n.Children[k] = v
 }
 
-func (n *Node) layout(maxSize Point, minSize Point) Guide {
+func (n *Node) layout(minSize Point, maxSize Point) Guide {
 	// Create the LayoutContext
 	ctx := &LayoutContext{
-		MaxSize:   maxSize,
 		MinSize:   minSize,
+		MaxSize:   maxSize,
 		ChildKeys: []interface{}{},
 		node:      n,
 	}
@@ -79,6 +79,7 @@ func (n *Node) layout(maxSize Point, minSize Point) Guide {
 		layouter = &FullLayout{}
 	}
 	g, gs := layouter.Layout(ctx)
+	g = g.fit(ctx)
 
 	// Assign guides to children
 	for k, v := range gs {

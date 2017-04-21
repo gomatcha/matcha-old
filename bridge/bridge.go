@@ -1,7 +1,6 @@
 package bridge
 
 import (
-	"fmt"
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/constraint"
 	"github.com/overcyn/mochi/text"
@@ -24,8 +23,7 @@ func (b *GoRoot) Display() *mochi.Node {
 	formatted.SetString("Blah blah")
 	formatted.SetFormat(format)
 
-	str := bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(formatted), nil, nil).ToInterface().(mochi.Rect)
-	fmt.Println(str)
+	_ = bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(formatted), nil, nil).ToInterface().(mochi.Point)
 
 	v := &NestedView{}
 	n := mochi.Display(v)
@@ -117,8 +115,8 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 	_ = l.AddGuide(chl5id, func(s *constraint.Solver) {
 		s.BottomEqual(g2.Bottom())
 		s.RightEqual(g2.Right())
-		s.WidthEqual(constraint.Const(100))
-		s.HeightEqual(constraint.Const(50))
+		// s.WidthEqual(constraint.Const(100))
+		// s.HeightEqual(constraint.Const(50))
 	})
 
 	return n
