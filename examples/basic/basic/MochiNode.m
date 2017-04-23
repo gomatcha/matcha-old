@@ -27,7 +27,7 @@
 }
 
 - (NSMapTable<MochiGoValue *, MochiNode *> *)nodeChildren {
-    NSMapTable *children = self.goValue[@"NodeChildren"].toMapTable;
+    NSMapTable *children = self.goValue[@"Children"].toMapTable;
     NSMapTable<MochiGoValue *, MochiNode *> *nodeChildren = [NSMapTable strongToStrongObjectsMapTable];
     for (MochiGoValue *i in children) {
         nodeChildren[i] = [[MochiNode alloc] initWithGoValue:children[i]];

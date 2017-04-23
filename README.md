@@ -118,6 +118,15 @@ func (v *TodoView) Update(p *Node) *Node {
 	return n
 }
 ```
+
+Similar Libraries
+
+* https://github.com/murlokswarm/app
+* https://github.com/andlabs/ui
+* https://github.com/golang/exp/tree/master/shiny
+* https://github.com/cztomczak/cef2go
+* https://github.com/google/gxui
+* https://github.com/go-ui/ui
 <!--
 ## Blah
 

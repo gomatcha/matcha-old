@@ -4,40 +4,30 @@ import (
 	_ "fmt"
 )
 
+type Config struct {
+	Prev   View
+	Marker Marker
+}
+
 type View interface {
-	Mount(m Marker)
-	Update(n *Node) *Node
-	Unmount()
-	// TODO(KD): Thinking
+	Update(*ViewContext) *Node
 	// Key() interface{}
+	// Lifecycle(Stage)
 }
 
-type ViewImpl struct {
-	key interface{}
-}
-
-func (v ViewImpl) Mount(m Marker) {
-}
-
-func (v ViewImpl) Key() interface{} {
-	return v.key
-}
-
-func (v ViewImpl) Unmount() {
-}
+type Stage int
 
 type Marker interface {
 	Update()
-	UpdateChild(interface{})
-	Run()
+	// UpdateChild(interface{})
+	// Run()
 }
 
 type marker struct {
+	KeyPath []interface{}
 }
 
 func (m *marker) Update() {
-}
-func (m *marker) UpdateChild(interface{}) {
 }
 func (m *marker) Run() {
 }
@@ -47,20 +37,17 @@ type BasicView struct {
 	PaintOptions PaintOptions
 }
 
-func NewBasicView(p interface{}) *BasicView {
-	return &BasicView{}
+func NewBasicView(c Config) *BasicView {
+	v, ok := c.Prev.(*BasicView)
+	if !ok {
+		v = &BasicView{}
+		v.marker = c.Marker
+	}
+	return v
 }
 
-func (v *BasicView) Mount(m Marker) {
-	v.marker = m
-}
-
-func (v *BasicView) Update(p *Node) *Node {
+func (v *BasicView) Update(ctx *ViewContext) *Node {
 	n := &Node{}
-	n.PaintOptions = v.PaintOptions
+	n.Painter = v.PaintOptions
 	return n
-}
-
-func (v *BasicView) Unmount() {
-	v.marker = nil
 }

@@ -18,5 +18,8 @@ type PaintOptions struct {
 	ShadowColor     color.Color
 	// Transform?
 	// Mask
+}
 
+func (p PaintOptions) PaintOptions() PaintOptions {
+	return p
 }

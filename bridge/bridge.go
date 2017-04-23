@@ -13,7 +13,7 @@ import (
 type GoRoot struct {
 }
 
-func (b *GoRoot) Display() *mochi.Node {
+func (b *GoRoot) Display() *mochi.RenderNode {
 	v := &NestedView{}
 	n := mochi.Display(v)
 	return n
@@ -39,17 +39,15 @@ type NestedView struct {
 	marker mochi.Marker
 }
 
-func (v *NestedView) Mount(m mochi.Marker) {
-	v.marker = m
-}
-
-func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
+func (v *NestedView) Update(ctx *mochi.ViewContext) *mochi.Node {
 	l := constraint.New()
-	n := mochi.NewNode()
+	p := mochi.PaintOptions{}
+	p.BackgroundColor = mochi.GreenColor
+	n := &mochi.Node{}
 	n.Layouter = l
-	n.PaintOptions.BackgroundColor = mochi.GreenColor
+	n.Painter = p
 
-	chl1 := mochi.NewBasicView(p.Get(chl1id))
+	chl1 := mochi.NewBasicView(ctx.Get(chl1id))
 	chl1.PaintOptions.BackgroundColor = mochi.RedColor
 	n.Set(chl1id, chl1)
 	g1 := l.Add(chl1id, func(s *constraint.Solver) {
@@ -59,7 +57,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl2 := mochi.NewBasicView(p.Get(chl2id))
+	chl2 := mochi.NewBasicView(ctx.Get(chl2id))
 	chl2.PaintOptions.BackgroundColor = mochi.YellowColor
 	n.Set(chl2id, chl2)
 	g2 := l.Add(chl2id, func(s *constraint.Solver) {
@@ -69,7 +67,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.HeightEqual(constraint.Const(300))
 	})
 
-	chl3 := mochi.NewBasicView(p.Get(chl3id))
+	chl3 := mochi.NewBasicView(ctx.Get(chl3id))
 	chl3.PaintOptions.BackgroundColor = mochi.BlueColor
 	n.Set(chl3id, chl3)
 	g3 := l.Add(chl3id, func(s *constraint.Solver) {
@@ -79,7 +77,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl4 := mochi.NewBasicView(p.Get(chl4id))
+	chl4 := mochi.NewBasicView(ctx.Get(chl4id))
 	chl4.PaintOptions.BackgroundColor = mochi.MagentaColor
 	n.Set(chl4id, chl4)
 	_ = l.Add(chl4id, func(s *constraint.Solver) {
@@ -89,7 +87,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.HeightEqual(constraint.Const(50))
 	})
 
-	chl5 := text.NewTextView(p.Get(chl5id))
+	chl5 := text.NewTextView(ctx.Get(chl5id))
 	chl5.PaintOptions.BackgroundColor = mochi.CyanColor
 	chl5.Text = "poop"
 	chl5.Format.SetAlignment(text.AlignmentCenter)
@@ -108,7 +106,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	chl6 := text.NewTextView(p.Get(chl6id))
+	chl6 := text.NewTextView(ctx.Get(chl6id))
 	chl6.PaintOptions.BackgroundColor = mochi.RedColor
 	chl6.Text = "Title y"
 	chl6.Format.SetFont(text.Font{
@@ -129,7 +127,7 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 		}
 	}
 
-	chl7 := mimage.NewImageView(p.Get(chl7id))
+	chl7 := mimage.NewImageView(ctx.Get(chl7id))
 	chl7.PaintOptions.BackgroundColor = mochi.CyanColor
 	chl7.Image = img
 	n.Set(chl7id, chl7)
@@ -141,8 +139,4 @@ func (v *NestedView) Update(p *mochi.Node) *mochi.Node {
 	})
 
 	return n
-}
-
-func (v *NestedView) Unmount() {
-	v.marker = nil
 }

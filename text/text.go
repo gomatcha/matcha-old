@@ -307,8 +307,8 @@ type TextView struct {
 	PaintOptions  mochi.PaintOptions
 }
 
-func NewTextView(p interface{}) *TextView {
-	v, ok := p.(*TextView)
+func NewTextView(cfg mochi.Config) *TextView {
+	v, ok := cfg.Prev.(*TextView)
 	if !ok {
 		v = &TextView{}
 		v.Format = &Format{}
@@ -316,11 +316,7 @@ func NewTextView(p interface{}) *TextView {
 	return v
 }
 
-func (v *TextView) Mount(m mochi.Marker) {
-	v.marker = m
-}
-
-func (v *TextView) Update(p *mochi.Node) *mochi.Node {
+func (v *TextView) Update(ctx *mochi.ViewContext) *mochi.Node {
 	ft := v.FormattedText
 	if ft == nil {
 		ft = &FormattedText{
@@ -329,18 +325,14 @@ func (v *TextView) Update(p *mochi.Node) *mochi.Node {
 		}
 	}
 
-	n := mochi.NewNode()
+	n := &mochi.Node{}
 	n.Layouter = &textViewLayouter{formattedText: ft}
-	n.PaintOptions = v.PaintOptions
+	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi TextView"
 	n.Bridge.State = &TextViewState{
 		FormattedText: ft,
 	}
 	return n
-}
-
-func (v *TextView) Unmount() {
-	v.marker = nil
 }
 
 type TextViewState struct {

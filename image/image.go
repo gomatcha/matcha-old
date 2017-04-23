@@ -10,42 +10,34 @@ import (
 	// "mochi/bridge"
 )
 
-const (
-	urlImageViewId int = iota
-)
+// const (
+// 	urlImageViewId int = iota
+// )
 
-type URLImageView struct {
-	marker       mochi.Marker
-	PaintOptions mochi.PaintOptions
-	URL          string
-}
+// type URLImageView struct {
+// 	marker       mochi.Marker
+// 	PaintOptions mochi.PaintOptions
+// 	URL          string
+// }
 
-func NewURLImageView(p interface{}) *URLImageView {
-	v, ok := p.(*URLImageView)
-	if !ok {
-		v = &URLImageView{}
-	}
-	return v
-}
+// func NewURLImageView(p interface{}) *URLImageView {
+// 	v, ok := p.(*URLImageView)
+// 	if !ok {
+// 		v = &URLImageView{}
+// 	}
+// 	return v
+// }
 
-func (v *URLImageView) Mount(m mochi.Marker) {
-	v.marker = m
-}
+// func (v *URLImageView) Update(p *mochi.Node) *mochi.Node {
+// 	n := mochi.NewNode()
+// 	n.Painter = &mochi.BasicPainter{v.PaintOptions}
 
-func (v *URLImageView) Update(p *mochi.Node) *mochi.Node {
-	n := mochi.NewNode()
-	n.PaintOptions = v.PaintOptions
+// 	chl := NewImageView(p.Get(urlImageViewId))
+// 	chl.PaintOptions.BackgroundColor = mochi.RedColor
+// 	n.Set(urlImageViewId, chl)
 
-	chl := NewImageView(p.Get(urlImageViewId))
-	chl.PaintOptions.BackgroundColor = mochi.RedColor
-	n.Set(urlImageViewId, chl)
-
-	return n
-}
-
-func (v *URLImageView) Unmount() {
-	v.marker = nil
-}
+// 	return n
+// }
 
 // ImageView
 
@@ -56,19 +48,16 @@ type ImageView struct {
 	bytes        []byte
 }
 
-func NewImageView(p interface{}) *ImageView {
-	v, ok := p.(*ImageView)
+func NewImageView(cfg mochi.Config) *ImageView {
+	v, ok := cfg.Prev.(*ImageView)
 	if !ok {
 		v = &ImageView{}
 	}
 	return v
 }
 
-func (v *ImageView) Mount(m mochi.Marker) {
-}
-
-func (v *ImageView) Update(p *mochi.Node) *mochi.Node {
-	n := mochi.NewNode()
+func (v *ImageView) Update(ctx *mochi.ViewContext) *mochi.Node {
+	n := &mochi.Node{}
 
 	if v.Image != v.image {
 		v.image = v.Image
@@ -81,11 +70,8 @@ func (v *ImageView) Update(p *mochi.Node) *mochi.Node {
 		v.bytes = buf.Bytes()
 	}
 
-	n.PaintOptions = v.PaintOptions
+	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi ImageView"
 	n.Bridge.State = v.bytes
 	return n
-}
-
-func (v *ImageView) Unmount() {
 }
