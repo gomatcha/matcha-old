@@ -301,7 +301,7 @@ func main() {
 // 		})
 // 	})
 
-// 	footerMarker.Clean(func() {
+// 	footerUpdater.Clean(func() {
 // 		scroll.SetFooterViewFunc(func(prev View) View {
 // 			t := NewTextField(View)
 // 			t.SetString(contentString)

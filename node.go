@@ -77,16 +77,16 @@ func (n *RenderNode) getPaintOptions() {
 	}
 }
 
-type ViewContext struct {
+type PaintContext struct {
 	keyPath  []interface{}
 	view     View
 	node     *Node
 	markerId int
-	children map[interface{}]*ViewContext
+	children map[interface{}]*PaintContext
 }
 
-func (ctx *ViewContext) Get(k interface{}) Config {
-	marker := Marker{
+func (ctx *PaintContext) Get(k interface{}) Config {
+	marker := Updater{
 		keyPath: ctx.keyPath,
 		id:      ctx.markerId,
 	}
@@ -98,7 +98,7 @@ func (ctx *ViewContext) Get(k interface{}) Config {
 	// return n.Children[k]
 }
 
-func (ctx *ViewContext) RenderNode() *RenderNode {
+func (ctx *PaintContext) RenderNode() *RenderNode {
 	renderNode := &RenderNode{}
 	renderNode.Layouter = ctx.node.Layouter
 	renderNode.Painter = ctx.node.Painter
@@ -111,15 +111,15 @@ func (ctx *ViewContext) RenderNode() *RenderNode {
 	return renderNode
 }
 
-func (ctx *ViewContext) Update() {
+func (ctx *PaintContext) Update() {
 	// Generate the new node.
-	node := ctx.view.Update(ctx)
+	node := ctx.view.Build(ctx)
 
 	// Build new children from the node.
 	prevChildren := ctx.children
-	children := map[interface{}]*ViewContext{}
+	children := map[interface{}]*PaintContext{}
 	for k, v := range node.Children {
-		chlCtx := &ViewContext{}
+		chlCtx := &PaintContext{}
 		chlCtx.keyPath = append([]interface{}(nil), ctx.keyPath)
 		chlCtx.keyPath = append(chlCtx.keyPath, k)
 		chlCtx.view = v
@@ -166,7 +166,7 @@ func (ctx *ViewContext) Update() {
 }
 
 func Display(v View) *RenderNode {
-	ctx := &ViewContext{}
+	ctx := &PaintContext{}
 	ctx.view = v
 	ctx.Update()
 	renderNode := ctx.RenderNode()

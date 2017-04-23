@@ -15,7 +15,7 @@ import (
 // )
 
 // type URLImageView struct {
-// 	marker       mochi.Marker
+// 	marker       mochi.Updater
 // 	PaintOptions mochi.PaintOptions
 // 	URL          string
 // }
@@ -42,7 +42,7 @@ import (
 // ImageView
 
 type ImageView struct {
-	marker       mochi.Marker
+	marker       mochi.Updater
 	PaintOptions mochi.PaintOptions
 	Image        image.Image
 	image        image.Image
@@ -53,12 +53,12 @@ func NewImageView(cfg mochi.Config) *ImageView {
 	v, ok := cfg.Prev.(*ImageView)
 	if !ok {
 		v = &ImageView{}
-		v.marker = cfg.Marker
+		v.marker = cfg.Updater
 	}
 	return v
 }
 
-func (v *ImageView) Update(ctx *mochi.ViewContext) *mochi.Node {
+func (v *ImageView) Build(ctx *mochi.PaintContext) *mochi.Node {
 	n := &mochi.Node{}
 
 	if v.Image != v.image {

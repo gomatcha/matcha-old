@@ -5,19 +5,19 @@ import (
 )
 
 type Config struct {
-	Prev   View
-	Marker Marker
+	Prev    View
+	Updater Updater
 }
 
 type View interface {
-	Update(*ViewContext) *Node
+	Build(*PaintContext) *Node
 	// Key() interface{}
 	// Lifecycle(Stage)
 }
 
 type Stage int
 
-type Marker interface {
+type Updater interface {
 	Update()
 	// UpdateChild(interface{})
 	// Run()
@@ -31,7 +31,7 @@ func (m *marker) Update() {
 }
 
 type BasicView struct {
-	marker       Marker
+	marker       Updater
 	PaintOptions PaintOptions
 }
 
@@ -39,12 +39,12 @@ func NewBasicView(c Config) *BasicView {
 	v, ok := c.Prev.(*BasicView)
 	if !ok {
 		v = &BasicView{}
-		v.marker = c.Marker
+		v.marker = c.Updater
 	}
 	return v
 }
 
-func (v *BasicView) Update(ctx *ViewContext) *Node {
+func (v *BasicView) Build(ctx *PaintContext) *Node {
 	n := &Node{}
 	n.Painter = v.PaintOptions
 	return n

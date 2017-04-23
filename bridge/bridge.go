@@ -36,10 +36,10 @@ const (
 )
 
 type NestedView struct {
-	marker mochi.Marker
+	marker mochi.Updater
 }
 
-func (v *NestedView) Update(ctx *mochi.ViewContext) *mochi.Node {
+func (v *NestedView) Update(ctx *mochi.PaintContext) *mochi.Node {
 	l := constraint.New()
 	p := mochi.PaintOptions{}
 	p.BackgroundColor = mochi.GreenColor
