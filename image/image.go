@@ -42,6 +42,7 @@ import (
 // ImageView
 
 type ImageView struct {
+	marker       mochi.Marker
 	PaintOptions mochi.PaintOptions
 	Image        image.Image
 	image        image.Image
@@ -52,6 +53,7 @@ func NewImageView(cfg mochi.Config) *ImageView {
 	v, ok := cfg.Prev.(*ImageView)
 	if !ok {
 		v = &ImageView{}
+		v.marker = cfg.Marker
 	}
 	return v
 }

@@ -89,14 +89,30 @@ func (v *TodoView) Update(p *Node) *Node {
         
         chl := NewTextField(p.Get(textFieldId))
         chl.Input = v.Input
-        
-        l := sig.NewLoop(v.onChange)
-        l.Chan = chl.OnChange()
-        l.Func = func(s string){
+        chl.OnChange = func(s string) {
+            v.Lock()
+            defer v.Unlock()
+            
             v.Input = s
-            v.sig <-Mochi.Update{}
-        })
-        l.Listen()
+            v.Update(nil)
+        }
+        
+        chl.OnChange = func(s string) {
+            v.UpdateFunc(func() {
+                v.Input = s
+            })
+        }
+        
+        // l := sig.NewLoop(v.onChange)
+        // l.Chan = chl.OnChange()
+        // l.Func = func(s string){
+        //     v.Lock()
+        //     defer v.Unlock()
+            
+        //     v.Input = s
+        //     v.Update()
+        // })
+        // l.Listen()
         
         // chl := NewTextField(p.Get(textFieldId))
         // chl.Input = v.Input
@@ -184,10 +200,10 @@ func (v *TodoView) Update(p *Node) *Node {
         // go func () {
         //     select {
         //     case in := <-input
-                // v.sig <- Mochi.Func{func() {
-                //     v.Input = in
-                //     v.sig <-Mochi.Update{}
-                // }}
+        //         v.sig <- Mochi.Func{func() {
+        //             v.Input = in
+        //             v.sig <-Mochi.Update{}
+        //         }}
         //     case cancel
         //     }
         // }

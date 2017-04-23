@@ -311,6 +311,7 @@ func NewTextView(cfg mochi.Config) *TextView {
 	v, ok := cfg.Prev.(*TextView)
 	if !ok {
 		v = &TextView{}
+		v.marker = cfg.Marker
 		v.Format = &Format{}
 	}
 	return v

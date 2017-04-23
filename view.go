@@ -29,8 +29,6 @@ type marker struct {
 
 func (m *marker) Update() {
 }
-func (m *marker) Run() {
-}
 
 type BasicView struct {
 	marker       Marker

@@ -86,6 +86,11 @@ type ViewContext struct {
 }
 
 func (ctx *ViewContext) Get(k interface{}) Config {
+	marker := Marker{
+		keyPath: ctx.keyPath,
+		id:      ctx.markerId,
+	}
+
 	return Config{} // KD: TODO
 	// if n == nil {
 	// 	return nil
