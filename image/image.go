@@ -2,42 +2,86 @@ package image
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"github.com/overcyn/mochi"
 	"golang.org/x/image/bmp"
 	"image"
+	"net/http"
 	// "image/color"
 	// "mochi/bridge"
 )
 
-// const (
-// 	urlImageViewId int = iota
-// )
+const (
+	urlImageViewId int = iota
+)
 
-// type URLImageView struct {
-// 	marker       mochi.Updater
-// 	PaintOptions mochi.PaintOptions
-// 	URL          string
-// }
+type URLImageView struct {
+	*mochi.Embed
+	PaintOptions mochi.PaintOptions
+	URL          string
+	// Image request
+	url    string
+	cancel context.CancelFunc
+	image  image.Image
+	err    error
+}
 
-// func NewURLImageView(p interface{}) *URLImageView {
-// 	v, ok := p.(*URLImageView)
-// 	if !ok {
-// 		v = &URLImageView{}
-// 	}
-// 	return v
-// }
+func NewURLImageView(c mochi.Config) *URLImageView {
+	v, ok := c.Prev.(*URLImageView)
+	if !ok {
+		v = &URLImageView{}
+		v.Embed = c.Embed
+	}
+	return v
+}
 
-// func (v *URLImageView) Update(p *mochi.Node) *mochi.Node {
-// 	n := mochi.NewNode()
-// 	n.Painter = &mochi.BasicPainter{v.PaintOptions}
+func (v *URLImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
+	if v.URL != v.url {
+		if v.cancel != nil {
+			v.cancel()
+		}
 
-// 	chl := NewImageView(p.Get(urlImageViewId))
-// 	chl.PaintOptions.BackgroundColor = mochi.RedColor
-// 	n.Set(urlImageViewId, chl)
+		c, cancel := context.WithCancel(context.Background())
+		v.url = v.URL
+		v.cancel = cancel
+		v.image = nil
+		v.err = nil
+		go func(url string) {
+			image, err := loadImageURL(url)
 
-// 	return n
-// }
+			v.Lock()
+			defer v.Unlock()
+			select {
+			case <-c.Done():
+			default:
+				v.image = image
+				v.err = err
+				v.Update(nil)
+			}
+		}(v.url)
+	}
+
+	n := &mochi.Node{}
+	n.Painter = v.PaintOptions
+
+	chl := NewImageView(ctx.Get(urlImageViewId))
+	chl.Image = v.image
+	chl.PaintOptions.BackgroundColor = mochi.RedColor
+	n.Set(urlImageViewId, chl)
+
+	return n
+}
+
+func loadImageURL(url string) (image.Image, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	img, _, err := image.Decode(resp.Body)
+	return img, err
+}
 
 // ImageView
 
@@ -59,8 +103,6 @@ func NewImageView(c mochi.Config) *ImageView {
 }
 
 func (v *ImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
-	n := &mochi.Node{}
-
 	if v.Image != v.image {
 		v.image = v.Image
 
@@ -72,6 +114,7 @@ func (v *ImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		v.bytes = buf.Bytes()
 	}
 
+	n := &mochi.Node{}
 	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi ImageView"
 	n.Bridge.State = v.bytes
