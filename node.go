@@ -1,8 +1,7 @@
 package mochi
 
 import (
-	_ "fmt"
-	_ "image/color"
+	"sync"
 )
 
 type Bridge struct {
@@ -77,28 +76,30 @@ func (n *RenderNode) getPaintOptions() {
 	}
 }
 
-type PaintContext struct {
+type Config struct {
+	Prev  View
+	Embed *Embed
+}
+
+type BuildContext struct {
 	keyPath  []interface{}
 	view     View
 	node     *Node
 	markerId int
-	children map[interface{}]*PaintContext
+	children map[interface{}]*BuildContext
 }
 
-func (ctx *PaintContext) Get(k interface{}) Config {
-	marker := Updater{
-		keyPath: ctx.keyPath,
-		id:      ctx.markerId,
+func (ctx *BuildContext) Get(k interface{}) Config {
+	return Config{
+		Prev: nil, // TODO(KD):
+		Embed: &Embed{
+			mu:      &sync.Mutex{},
+			keyPath: append([]interface{}(nil), k),
+		},
 	}
-
-	return Config{} // KD: TODO
-	// if n == nil {
-	// 	return nil
-	// }
-	// return n.Children[k]
 }
 
-func (ctx *PaintContext) RenderNode() *RenderNode {
+func (ctx *BuildContext) RenderNode() *RenderNode {
 	renderNode := &RenderNode{}
 	renderNode.Layouter = ctx.node.Layouter
 	renderNode.Painter = ctx.node.Painter
@@ -111,15 +112,15 @@ func (ctx *PaintContext) RenderNode() *RenderNode {
 	return renderNode
 }
 
-func (ctx *PaintContext) Update() {
+func (ctx *BuildContext) Update() {
 	// Generate the new node.
 	node := ctx.view.Build(ctx)
 
 	// Build new children from the node.
 	prevChildren := ctx.children
-	children := map[interface{}]*PaintContext{}
+	children := map[interface{}]*BuildContext{}
 	for k, v := range node.Children {
-		chlCtx := &PaintContext{}
+		chlCtx := &BuildContext{}
 		chlCtx.keyPath = append([]interface{}(nil), ctx.keyPath)
 		chlCtx.keyPath = append(chlCtx.keyPath, k)
 		chlCtx.view = v
@@ -166,7 +167,7 @@ func (ctx *PaintContext) Update() {
 }
 
 func Display(v View) *RenderNode {
-	ctx := &PaintContext{}
+	ctx := &BuildContext{}
 	ctx.view = v
 	ctx.Update()
 	renderNode := ctx.RenderNode()

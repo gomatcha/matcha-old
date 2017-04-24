@@ -42,23 +42,23 @@ import (
 // ImageView
 
 type ImageView struct {
-	marker       mochi.Updater
+	*mochi.Embed
 	PaintOptions mochi.PaintOptions
 	Image        image.Image
 	image        image.Image
 	bytes        []byte
 }
 
-func NewImageView(cfg mochi.Config) *ImageView {
-	v, ok := cfg.Prev.(*ImageView)
+func NewImageView(c mochi.Config) *ImageView {
+	v, ok := c.Prev.(*ImageView)
 	if !ok {
 		v = &ImageView{}
-		v.marker = cfg.Updater
+		v.Embed = c.Embed
 	}
 	return v
 }
 
-func (v *ImageView) Build(ctx *mochi.PaintContext) *mochi.Node {
+func (v *ImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n := &mochi.Node{}
 
 	if v.Image != v.image {

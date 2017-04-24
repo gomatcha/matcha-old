@@ -127,6 +127,7 @@ Similar Libraries
 * https://github.com/cztomczak/cef2go
 * https://github.com/google/gxui
 * https://github.com/go-ui/ui
+* https://sciter.com
 <!--
 ## Blah
 

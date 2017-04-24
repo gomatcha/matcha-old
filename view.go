@@ -1,37 +1,44 @@
 package mochi
 
 import (
-	_ "fmt"
+	"sync"
 )
 
-type Config struct {
-	Prev    View
-	Updater Updater
-}
-
 type View interface {
-	Build(*PaintContext) *Node
-	// Key() interface{}
-	// Lifecycle(Stage)
+	Build(*BuildContext) *Node
+	// Lifecyle(*Stage)
+	Key() interface{}
+	Lock()
+	Unlock()
 }
 
-type Stage int
-
-type Updater interface {
-	Update()
-	// UpdateChild(interface{})
-	// Run()
+type Embed struct {
+	mu      *sync.Mutex
+	keyPath []interface{}
 }
 
-type marker struct {
-	KeyPath []interface{}
+func (e *Embed) Build(ctx *BuildContext) *Node {
+	return &Node{}
 }
 
-func (m *marker) Update() {
+func (e *Embed) Key() interface{} {
+	return e.keyPath[len(e.keyPath)-1]
+}
+
+func (e *Embed) Lock() {
+	e.mu.Lock()
+}
+
+func (e *Embed) Unlock() {
+	e.mu.Unlock()
+}
+
+func (e *Embed) Update(key interface{}) {
+	// e.marks.Update(key)
 }
 
 type BasicView struct {
-	marker       Updater
+	*Embed
 	PaintOptions PaintOptions
 }
 
@@ -39,12 +46,12 @@ func NewBasicView(c Config) *BasicView {
 	v, ok := c.Prev.(*BasicView)
 	if !ok {
 		v = &BasicView{}
-		v.marker = c.Updater
+		v.Embed = c.Embed
 	}
 	return v
 }
 
-func (v *BasicView) Build(ctx *PaintContext) *Node {
+func (v *BasicView) Build(ctx *BuildContext) *Node {
 	n := &Node{}
 	n.Painter = v.PaintOptions
 	return n

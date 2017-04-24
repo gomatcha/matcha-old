@@ -63,7 +63,11 @@
 }
 
 - (UIColor *)backgroundColor {
-    return [[UIColor alloc] initWithGoValue:self.goValue[@"BackgroundColor"]];
+    MochiGoValue *value = self.goValue[@"BackgroundColor"];
+    if (!value.isNil) {
+        return [[UIColor alloc] initWithGoValue:value];
+    }
+    return nil;
 }
 
 @end

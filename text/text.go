@@ -300,24 +300,24 @@ func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[in
 }
 
 type TextView struct {
-	marker        mochi.Updater
+	*mochi.Embed
 	Text          string
 	Format        *Format
 	FormattedText *FormattedText
 	PaintOptions  mochi.PaintOptions
 }
 
-func NewTextView(cfg mochi.Config) *TextView {
-	v, ok := cfg.Prev.(*TextView)
+func NewTextView(c mochi.Config) *TextView {
+	v, ok := c.Prev.(*TextView)
 	if !ok {
 		v = &TextView{}
-		v.marker = cfg.Updater
+		v.Embed = c.Embed
 		v.Format = &Format{}
 	}
 	return v
 }
 
-func (v *TextView) Build(ctx *mochi.PaintContext) *mochi.Node {
+func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	ft := v.FormattedText
 	if ft == nil {
 		ft = &FormattedText{

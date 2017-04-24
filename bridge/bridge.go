@@ -36,15 +36,17 @@ const (
 )
 
 type NestedView struct {
-	marker mochi.Updater
+	*mochi.Embed
 }
 
-func (v *NestedView) Update(ctx *mochi.PaintContext) *mochi.Node {
+func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
+	n := &mochi.Node{}
+
 	l := constraint.New()
+	n.Layouter = l
+
 	p := mochi.PaintOptions{}
 	p.BackgroundColor = mochi.GreenColor
-	n := &mochi.Node{}
-	n.Layouter = l
 	n.Painter = p
 
 	chl1 := mochi.NewBasicView(ctx.Get(chl1id))
