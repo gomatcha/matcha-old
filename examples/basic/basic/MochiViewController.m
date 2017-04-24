@@ -58,7 +58,7 @@
 - (void)reload {
     [self.buildContext call:@"Build" args:nil];
     MochiGoValue *renderNode = [self.buildContext call:@"RenderNode" args:nil][0];
-    [renderNode call:@"Layout" args:@[[[MochiGoValue alloc] initWithCGPoint:CGPointZero], [[MochiGoValue alloc] initWithCGPoint:CGPointMake(1000, 1000)]]];
+    [renderNode call:@"LayoutRoot" args:@[[[MochiGoValue alloc] initWithCGPoint:CGPointZero], [[MochiGoValue alloc] initWithCGPoint:CGPointMake(1000, 1000)]]];
     [renderNode call:@"Paint" args:nil];
     
     self.mochiView.node = [[MochiNode alloc] initWithGoValue:renderNode];

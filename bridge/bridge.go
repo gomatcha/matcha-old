@@ -5,7 +5,7 @@ import (
 	"github.com/overcyn/mochi/constraint"
 	mimage "github.com/overcyn/mochi/image"
 	"github.com/overcyn/mochi/text"
-	"image"
+	_ "image"
 	"mochi/bridge"
 	"reflect"
 )
@@ -90,7 +90,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 
 	chl5 := text.NewTextView(ctx.Get(chl5id))
 	chl5.PaintOptions.BackgroundColor = mochi.CyanColor
-	chl5.Text = "poop"
+	chl5.Text = "Subtitle"
 	chl5.Format.SetAlignment(text.AlignmentCenter)
 	chl5.Format.SetStrikethroughStyle(text.StrikethroughStyleSingle)
 	chl5.Format.SetStrikethroughColor(mochi.MagentaColor)
@@ -109,7 +109,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 
 	chl6 := text.NewTextView(ctx.Get(chl6id))
 	chl6.PaintOptions.BackgroundColor = mochi.RedColor
-	chl6.Text = "Title y"
+	chl6.Text = "Title"
 	chl6.Format.SetFont(text.Font{
 		Family: "American Typewriter",
 		Face:   "Bold",
@@ -121,33 +121,39 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	img := image.NewRGBA(image.Rect(0, 0, 100, 100))
-	for x := 0; x < 100; x++ {
-		for y := 0; y < 100; y++ {
-			img.Set(x, y, mochi.MagentaColor)
-		}
-	}
+	// img := image.NewRGBA(image.Rect(0, 0, 100, 100))
+	// for x := 0; x < 100; x++ {
+	// 	for y := 0; y < 100; y++ {
+	// 		img.Set(x, y, mochi.MagentaColor)
+	// 	}
+	// }
 
-	chl7 := mimage.NewImageView(ctx.Get(chl7id))
-	chl7.PaintOptions.BackgroundColor = mochi.CyanColor
-	chl7.Image = img
-	n.Set(chl7id, chl7)
-	_ = l.Add(chl7id, func(s *constraint.Solver) {
-		s.BottomEqual(g6.Top())
-		s.RightEqual(g2.Right().Add(-15))
-		s.WidthEqual(constraint.Const(100))
-		s.HeightEqual(constraint.Const(100))
-	})
+	// chl7 := mimage.NewImageView(ctx.Get(chl7id))
+	// chl7.PaintOptions.BackgroundColor = mochi.CyanColor
+	// chl7.Image = img
+	// n.Set(chl7id, chl7)
+	// _ = l.Add(chl7id, func(s *constraint.Solver) {
+	// 	s.BottomEqual(g6.Top())
+	// 	s.RightEqual(g2.Right().Add(-15))
+	// 	s.WidthEqual(constraint.Const(100))
+	// 	s.HeightEqual(constraint.Const(100))
+	// })
 
 	chl8 := mimage.NewURLImageView(ctx.Get(chl8id))
 	chl8.PaintOptions.BackgroundColor = mochi.CyanColor
-	chl8.URL = "https://instagram.fsnc1-2.fna.fbcdn.net/t51.2885-15/e35/17881386_1919986304946281_1599104023238017024_n.jpg"
+	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+	chl8.ResizeMode = mimage.ResizeModeFit
 	n.Set(chl8id, chl8)
 	_ = l.Add(chl8id, func(s *constraint.Solver) {
 		s.BottomEqual(g6.Top())
 		s.RightEqual(g2.Right().Add(-15))
 		s.WidthEqual(constraint.Const(200))
 		s.HeightEqual(constraint.Const(200))
+	})
+
+	l.Solve(func(s *constraint.Solver) {
+		s.WidthEqual(l.MaxGuide().Width())
+		s.HeightEqual(l.MaxGuide().Height())
 	})
 
 	return n

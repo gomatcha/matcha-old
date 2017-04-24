@@ -10,8 +10,6 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 	"net/http"
-	// "image/color"
-	// "mochi/bridge"
 )
 
 const (
@@ -21,6 +19,7 @@ const (
 type URLImageView struct {
 	*mochi.Embed
 	PaintOptions mochi.PaintOptions
+	ResizeMode   ResizeMode
 	URL          string
 	// Image request
 	url    string
@@ -69,6 +68,7 @@ func (v *URLImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n.Painter = v.PaintOptions
 
 	chl := NewImageView(ctx.Get(urlImageViewId))
+	chl.ResizeMode = v.ResizeMode
 	chl.Image = v.image
 	chl.PaintOptions.BackgroundColor = mochi.RedColor
 	n.Set(urlImageViewId, chl)
@@ -88,10 +88,20 @@ func loadImageURL(url string) (image.Image, error) {
 
 // ImageView
 
+type ResizeMode int
+
+const (
+	ResizeModeFit ResizeMode = iota
+	ResizeModeFill
+	ResizeModeStretch
+	ResizeModeCenter
+)
+
 type ImageView struct {
 	*mochi.Embed
 	PaintOptions mochi.PaintOptions
 	Image        image.Image
+	ResizeMode   ResizeMode
 	image        image.Image
 	bytes        []byte
 }
@@ -120,6 +130,12 @@ func (v *ImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n := &mochi.Node{}
 	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi ImageView"
-	n.Bridge.State = v.bytes
+	n.Bridge.State = struct {
+		Bytes      []byte
+		ResizeMode ResizeMode
+	}{
+		Bytes:      v.bytes,
+		ResizeMode: v.ResizeMode,
+	}
 	return n
 }

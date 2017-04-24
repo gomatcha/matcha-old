@@ -179,6 +179,14 @@ func (g *Guide) Add(id interface{}, solveFunc func(*Solver)) *Guide {
 	return chl
 }
 
+func (g *Guide) Solve(solveFunc func(*Solver)) {
+	s := &Solver{id: g.id}
+	if solveFunc != nil {
+		solveFunc(s)
+	}
+	g.system.solvers = append(g.system.solvers, s)
+}
+
 type constraint struct {
 	attribute  attribute
 	comparison comparison

@@ -93,12 +93,24 @@
 - (void)setNode:(MochiNode *)node {
     [super setNode:node];
     MochiGoValue *state = node.bridgeState;
-    if (!state.isNil) {
-        NSData *data = state.elem.toData;
+    MochiGoValue *imageData = state[@"Bytes"];
+    if (!imageData.isNil) {
+        NSData *data = imageData.toData;
         UIImage *image = [[UIImage alloc] initWithData:data];
         self.imageView.image = image;
     } else {
         self.imageView.image = nil;
+    }
+    
+    switch (state[@"ResizeMode"].toLongLong) {
+    case 1:
+        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    case 2:
+        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    case 3:
+        self.imageView.contentMode = UIViewContentModeScaleToFill;
+    case 4:
+        self.imageView.contentMode = UIViewContentModeCenter;
     }
 }
 

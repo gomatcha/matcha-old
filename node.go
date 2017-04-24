@@ -40,6 +40,12 @@ type RenderNode struct {
 	PaintOptions PaintOptions
 }
 
+func (n *RenderNode) LayoutRoot(minSize Point, maxSize Point) {
+	g := n.Layout(minSize, maxSize)
+	g.Frame = g.Frame.Add(Pt(-g.Frame.Min.X, -g.Frame.Min.Y)) // Move Frame.Min to the origin.
+	n.LayoutGuide = g
+}
+
 func (n *RenderNode) Layout(minSize Point, maxSize Point) Guide {
 	// Create the LayoutContext
 	ctx := &LayoutContext{
@@ -160,7 +166,7 @@ func (ctx *BuildContext) Build() {
 	}
 
 	// Pass properties from the old child to the new if it was unupdated.
-	for k := range unupdatedKeys {
+	for _, k := range unupdatedKeys {
 		prevChlCtx := prevChildren[k]
 		chlCtx := children[k]
 		chlCtx.markerId = prevChlCtx.markerId

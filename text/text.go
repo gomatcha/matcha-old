@@ -330,12 +330,10 @@ func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n.Layouter = &textViewLayouter{formattedText: ft}
 	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi TextView"
-	n.Bridge.State = &TextViewState{
+	n.Bridge.State = struct {
+		FormattedText *FormattedText
+	}{
 		FormattedText: ft,
 	}
 	return n
-}
-
-type TextViewState struct {
-	FormattedText *FormattedText
 }
