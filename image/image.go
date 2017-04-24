@@ -7,6 +7,8 @@ import (
 	"github.com/overcyn/mochi"
 	"golang.org/x/image/bmp"
 	"image"
+	_ "image/jpeg"
+	_ "image/png"
 	"net/http"
 	// "image/color"
 	// "mochi/bridge"
@@ -52,6 +54,7 @@ func (v *URLImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
 
 			v.Lock()
 			defer v.Unlock()
+
 			select {
 			case <-c.Done():
 			default:

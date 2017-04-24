@@ -31,6 +31,7 @@ const (
 	chl5id
 	chl6id
 	chl7id
+	chl8id
 )
 
 type NestedView struct {
@@ -136,6 +137,17 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.RightEqual(g2.Right().Add(-15))
 		s.WidthEqual(constraint.Const(100))
 		s.HeightEqual(constraint.Const(100))
+	})
+
+	chl8 := mimage.NewURLImageView(ctx.Get(chl8id))
+	chl8.PaintOptions.BackgroundColor = mochi.CyanColor
+	chl8.URL = "https://instagram.fsnc1-2.fna.fbcdn.net/t51.2885-15/e35/17881386_1919986304946281_1599104023238017024_n.jpg"
+	n.Set(chl8id, chl8)
+	_ = l.Add(chl8id, func(s *constraint.Solver) {
+		s.BottomEqual(g6.Top())
+		s.RightEqual(g2.Right().Add(-15))
+		s.WidthEqual(constraint.Const(200))
+		s.HeightEqual(constraint.Const(200))
 	})
 
 	return n

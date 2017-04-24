@@ -96,8 +96,12 @@ func NewBuildContext(v View) *BuildContext {
 }
 
 func (ctx *BuildContext) Get(k interface{}) Config {
+	var prev View
+	if chl := ctx.children[k]; chl != nil {
+		prev = chl.view
+	}
 	return Config{
-		Prev: nil, // TODO(KD):
+		Prev: prev,
 		Embed: &Embed{
 			mu:      &sync.Mutex{},
 			keyPath: append([]interface{}(nil), k),
