@@ -13,10 +13,8 @@ import (
 type GoRoot struct {
 }
 
-func (b *GoRoot) Display() *mochi.RenderNode {
-	v := &NestedView{}
-	n := mochi.Display(v)
-	return n
+func (b *GoRoot) NewBuildContext() *mochi.BuildContext {
+	return mochi.NewBuildContext(&NestedView{})
 }
 
 func init() {

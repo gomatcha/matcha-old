@@ -40,7 +40,7 @@ type RenderNode struct {
 	PaintOptions PaintOptions
 }
 
-func (n *RenderNode) layout(minSize Point, maxSize Point) Guide {
+func (n *RenderNode) Layout(minSize Point, maxSize Point) Guide {
 	// Create the LayoutContext
 	ctx := &LayoutContext{
 		MinSize:   minSize,
@@ -67,12 +67,12 @@ func (n *RenderNode) layout(minSize Point, maxSize Point) Guide {
 	return g
 }
 
-func (n *RenderNode) getPaintOptions() {
+func (n *RenderNode) Paint() {
 	if p := n.Painter; p != nil {
 		n.PaintOptions = p.PaintOptions()
 	}
 	for _, v := range n.Children {
-		v.getPaintOptions()
+		v.Paint()
 	}
 }
 
@@ -89,6 +89,12 @@ type BuildContext struct {
 	children map[interface{}]*BuildContext
 }
 
+func NewBuildContext(v View) *BuildContext {
+	return &BuildContext{
+		view: v,
+	}
+}
+
 func (ctx *BuildContext) Get(k interface{}) Config {
 	return Config{
 		Prev: nil, // TODO(KD):
@@ -100,19 +106,19 @@ func (ctx *BuildContext) Get(k interface{}) Config {
 }
 
 func (ctx *BuildContext) RenderNode() *RenderNode {
-	renderNode := &RenderNode{}
-	renderNode.Layouter = ctx.node.Layouter
-	renderNode.Painter = ctx.node.Painter
-	renderNode.Bridge = ctx.node.Bridge
-	renderNode.Children = map[interface{}]*RenderNode{}
+	n := &RenderNode{}
+	n.Layouter = ctx.node.Layouter
+	n.Painter = ctx.node.Painter
+	n.Bridge = ctx.node.Bridge
+	n.Children = map[interface{}]*RenderNode{}
 
 	for k, v := range ctx.children {
-		renderNode.Children[k] = v.RenderNode()
+		n.Children[k] = v.RenderNode()
 	}
-	return renderNode
+	return n
 }
 
-func (ctx *BuildContext) Update() {
+func (ctx *BuildContext) Build() {
 	// Generate the new node.
 	node := ctx.view.Build(ctx)
 
@@ -162,16 +168,6 @@ func (ctx *BuildContext) Update() {
 	ctx.children = children
 	ctx.node = node
 	for _, i := range children {
-		i.Update()
+		i.Build()
 	}
-}
-
-func Display(v View) *RenderNode {
-	ctx := &BuildContext{}
-	ctx.view = v
-	ctx.Update()
-	renderNode := ctx.RenderNode()
-	renderNode.layout(Pt(0, 0), Pt(1000, 1000))
-	renderNode.getPaintOptions()
-	return renderNode
 }

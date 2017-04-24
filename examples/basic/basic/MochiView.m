@@ -9,16 +9,23 @@
 #import "MochiView.h"
 
 @interface MochiView ()
+@property (nonatomic, strong) NSArray *childViews;
 @end
 
 @implementation MochiView
 
 - (void)setNode:(MochiNode *)value {
     if (_node != value) {
+        for (UIView *i in self.childViews) {
+            [i removeFromSuperview];
+        }
+        
         _node = value;
         self.backgroundColor = _node.paintOptions.backgroundColor;
         self.frame = _node.guide.frame;
         self.layer.zPosition = _node.guide.zIndex;
+        
+        NSMutableArray *array = [NSMutableArray array];
         for (MochiNode *i in _node.nodeChildren.objectEnumerator) {
             NSString *name = i.bridgeName;
             MochiView *child = nil;
@@ -31,7 +38,9 @@
             }
             child.node = i;
             [self addSubview:child];
+            [array addObject:child];
         }
+        self.childViews = array;
     }
 }
 

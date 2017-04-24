@@ -10,4 +10,5 @@
 @import Mochi;
 
 @interface MochiViewController : UIViewController
+- (id)initWithName:(NSString *)name;
 @end
