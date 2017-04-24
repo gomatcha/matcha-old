@@ -11,4 +11,5 @@
 
 @interface MochiRoot : NSObject
 - (MochiGoValue *)sizeForAttributedString:(MochiGoValue *)string minSize:(MochiGoValue *)minSize maxSize:(MochiGoValue *)maxSize;
+- (void)rerender;
 @end

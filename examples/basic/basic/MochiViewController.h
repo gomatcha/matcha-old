@@ -10,5 +10,7 @@
 @import Mochi;
 
 @interface MochiViewController : UIViewController
++ (NSPointerArray *)viewControllers;
++ (void)reload;
 - (id)initWithName:(NSString *)name;
 @end

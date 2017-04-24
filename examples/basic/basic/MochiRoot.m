@@ -8,6 +8,7 @@
 
 #import "MochiRoot.h"
 #import "MochiBridge.h"
+#import "MochiViewController.h"
 
 @implementation MochiRoot
 
@@ -16,6 +17,12 @@
     CGRect rect = [attrStr boundingRectWithSize:maxSize.toCGSize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
     MochiGoValue *value = [[MochiGoValue alloc] initWithCGSize:rect.size];
     return value;
+}
+
+- (void)rerender {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [MochiViewController reload];
+    });
 }
 
 @end

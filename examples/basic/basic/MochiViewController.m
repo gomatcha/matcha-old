@@ -19,9 +19,25 @@
 
 @implementation MochiViewController
 
++ (NSPointerArray *)viewControllers {
+    static NSPointerArray *sPointerArray;
+    static dispatch_once_t sOnce;
+    dispatch_once(&sOnce, ^{
+        sPointerArray = [NSPointerArray weakObjectsPointerArray];
+    });
+    return sPointerArray;
+}
+
++ (void)reload {
+    for (MochiViewController *i in [MochiViewController viewControllers]) {
+        [i reload];
+    }
+}
+
 - (id)initWithName:(NSString *)name {
     if ((self = [super initWithNibName:nil bundle:nil])) {
         self.name = name;
+        [[MochiViewController viewControllers] addPointer:(__bridge void *)self];
     }
     return self;
 }
