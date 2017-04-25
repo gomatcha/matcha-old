@@ -67,7 +67,7 @@ void mochiGoUntrack(GoRef);
 // - (NSDictionary *)toDictionary;
 - (BOOL)isNil;
 - (MochiGoValue *)elem;
-- (NSArray<MochiGoValue *> *)call:(NSString *)method args:(NSArray<MochiGoValue *> *)args;
+- (NSArray<MochiGoValue *> *)call:(NSString *)method args:(NSArray<MochiGoValue *> *)args; // pass in nil for the method to call a closure.
 - (MochiGoValue *)field:(NSString *)name;
 - (void)setField:(NSString *)name value:(MochiGoValue *)value;
 - (MochiGoValue *)objectForKeyedSubscript:(NSString *)key;

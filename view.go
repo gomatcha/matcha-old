@@ -36,23 +36,3 @@ func (e *Embed) Unlock() {
 func (e *Embed) Update(key interface{}) {
 	// e.marks.Update(key)
 }
-
-type BasicView struct {
-	*Embed
-	PaintOptions PaintOptions
-}
-
-func NewBasicView(c Config) *BasicView {
-	v, ok := c.Prev.(*BasicView)
-	if !ok {
-		v = &BasicView{}
-		v.Embed = c.Embed
-	}
-	return v
-}
-
-func (v *BasicView) Build(ctx *BuildContext) *Node {
-	n := &Node{}
-	n.Painter = v.PaintOptions
-	return n
-}

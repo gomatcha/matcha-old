@@ -4,6 +4,7 @@ import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/constraint"
 	"github.com/overcyn/mochi/text"
+	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/button"
 	"github.com/overcyn/mochi/view/imageview"
 
@@ -15,6 +16,7 @@ import (
 	// "mochi.io/mochi/layout/constraint"
 	// "mochi.io/mochi/layout"
 
+	"fmt"
 	_ "image"
 	"mochi/bridge"
 	"reflect"
@@ -59,7 +61,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	p.BackgroundColor = mochi.GreenColor
 	n.Painter = p
 
-	chl1 := mochi.NewBasicView(ctx.Get(chl1id))
+	chl1 := basicview.New(ctx.Get(chl1id))
 	chl1.PaintOptions.BackgroundColor = mochi.RedColor
 	n.Set(chl1id, chl1)
 	g1 := l.Add(chl1id, func(s *constraint.Solver) {
@@ -69,7 +71,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl2 := mochi.NewBasicView(ctx.Get(chl2id))
+	chl2 := basicview.New(ctx.Get(chl2id))
 	chl2.PaintOptions.BackgroundColor = mochi.YellowColor
 	n.Set(chl2id, chl2)
 	g2 := l.Add(chl2id, func(s *constraint.Solver) {
@@ -79,7 +81,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.HeightEqual(constraint.Const(300))
 	})
 
-	chl3 := mochi.NewBasicView(ctx.Get(chl3id))
+	chl3 := basicview.New(ctx.Get(chl3id))
 	chl3.PaintOptions.BackgroundColor = mochi.BlueColor
 	n.Set(chl3id, chl3)
 	g3 := l.Add(chl3id, func(s *constraint.Solver) {
@@ -89,7 +91,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl4 := mochi.NewBasicView(ctx.Get(chl4id))
+	chl4 := basicview.New(ctx.Get(chl4id))
 	chl4.PaintOptions.BackgroundColor = mochi.MagentaColor
 	n.Set(chl4id, chl4)
 	_ = l.Add(chl4id, func(s *constraint.Solver) {
@@ -164,6 +166,9 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	chl9 := button.New(ctx.Get(chl9id))
 	chl9.PaintOptions.BackgroundColor = mochi.WhiteColor
 	chl9.Text = "Button"
+	chl9.OnPress = func() {
+		fmt.Println("On Click")
+	}
 	n.Set(chl9id, chl9)
 	_ = l.Add(chl9id, func(s *constraint.Solver) {
 		s.BottomEqual(g8.Top())

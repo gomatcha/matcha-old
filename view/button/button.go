@@ -21,7 +21,7 @@ type Button struct {
 	*mochi.Embed
 	Text         string
 	PaintOptions mochi.PaintOptions
-	// OnPress
+	OnPress      func()
 }
 
 func New(c mochi.Config) *Button {
@@ -48,8 +48,10 @@ func (v *Button) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n.Bridge.Name = "github.com/overcyn/mochi/view/button Button"
 	n.Bridge.State = struct {
 		FormattedText *text.FormattedText
+		OnPress       func()
 	}{
 		FormattedText: ft,
+		OnPress:       v.OnPress,
 	}
 	return n
 }

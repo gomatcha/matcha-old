@@ -135,6 +135,7 @@
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         self.button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.button addTarget:self action:@selector(onPress) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.button];
     }
     return self;
@@ -150,6 +151,13 @@
 
 - (void)layoutSubviews {
     self.button.frame = self.bounds;
+}
+
+- (void)onPress {
+    MochiGoValue *onPress = self.node.bridgeState[@"OnPress"];
+    if (!onPress.isNil) {
+        [onPress call:nil args:nil];
+    }
 }
 
 @end
