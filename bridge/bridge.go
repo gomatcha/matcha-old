@@ -20,7 +20,10 @@ type GoRoot struct {
 }
 
 func (b *GoRoot) NewBuildContext() *mochi.BuildContext {
-	return mochi.NewBuildContext(&NestedView{})
+	ctx := mochi.NewBuildContext(func(c mochi.Config) mochi.View {
+		return New(c)
+	})
+	return ctx
 }
 
 func init() {
@@ -43,6 +46,16 @@ const (
 
 type NestedView struct {
 	*mochi.Embed
+	counter int
+}
+
+func New(c mochi.Config) *NestedView {
+	v, ok := c.Prev.(*NestedView)
+	if !ok {
+		v = &NestedView{}
+		v.Embed = c.Embed
+	}
+	return v
 }
 
 func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
@@ -116,7 +129,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 
 	chl6 := text.NewTextView(ctx.Get(chl6id))
 	chl6.PaintOptions.BackgroundColor = mochi.RedColor
-	chl6.Text = "Title"
+	chl6.Text = fmt.Sprintf("Counter: %v", v.counter)
 	chl6.Format.SetFont(text.Font{
 		Family: "Helvetica Neue",
 		Size:   20,
@@ -161,7 +174,12 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	chl9.PaintOptions.BackgroundColor = mochi.WhiteColor
 	chl9.Text = "Button"
 	chl9.OnPress = func() {
+		v.Lock()
+		defer v.Unlock()
+
 		fmt.Println("On Click")
+		v.counter += 1
+		v.Update(nil)
 	}
 	n.Set(chl9id, chl9)
 	_ = l.Add(chl9id, func(s *constraint.Solver) {

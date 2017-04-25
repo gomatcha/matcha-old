@@ -92,15 +92,19 @@ type BuildContext struct {
 	keyPath  []interface{}
 	view     View
 	node     *Node
-	markerId int
 	children map[interface{}]*BuildContext
 	root     *BuildContext
 }
 
-func NewBuildContext(v View) *BuildContext {
-	ctx := &BuildContext{
-		view: v,
+func NewBuildContext(f func(Config) View) *BuildContext {
+	ctx := &BuildContext{}
+	e := &Embed{
+		mu:      &sync.Mutex{},
+		keyPath: nil,
+		root:    ctx,
 	}
+	cfg := Config{Embed: e}
+	ctx.view = f(cfg)
 	ctx.root = ctx
 	return ctx
 }
@@ -175,7 +179,6 @@ func (ctx *BuildContext) Build() {
 	for _, k := range unupdatedKeys {
 		prevChlCtx := prevChildren[k]
 		chlCtx := children[k]
-		chlCtx.markerId = prevChlCtx.markerId
 		chlCtx.node = prevChlCtx.node
 		chlCtx.children = prevChlCtx.children
 	}
