@@ -3,9 +3,9 @@ package bridge
 import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/constraint"
-	mimage "github.com/overcyn/mochi/image"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view/button"
+	"github.com/overcyn/mochi/view/imageview"
 
 	// "mochi.io/mochi/view/datepicker"
 	// "mochi.io/mochi/view/textview"
@@ -138,7 +138,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	// 	}
 	// }
 
-	// chl7 := mimage.NewImageView(ctx.Get(chl7id))
+	// chl7 := imageview.NewImageView(ctx.Get(chl7id))
 	// chl7.PaintOptions.BackgroundColor = mochi.CyanColor
 	// chl7.Image = img
 	// n.Set(chl7id, chl7)
@@ -149,10 +149,10 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	// 	s.HeightEqual(constraint.Const(100))
 	// })
 
-	chl8 := mimage.NewURLImageView(ctx.Get(chl8id))
+	chl8 := imageview.NewURLImageView(ctx.Get(chl8id))
 	chl8.PaintOptions.BackgroundColor = mochi.CyanColor
 	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
-	chl8.ResizeMode = mimage.ResizeModeFit
+	chl8.ResizeMode = imageview.ResizeModeFit
 	n.Set(chl8id, chl8)
 	g8 := l.Add(chl8id, func(s *constraint.Solver) {
 		s.BottomEqual(g6.Top())
