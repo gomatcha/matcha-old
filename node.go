@@ -1,6 +1,7 @@
 package mochi
 
 import (
+	"mochi/bridge"
 	"sync"
 )
 
@@ -93,12 +94,15 @@ type BuildContext struct {
 	node     *Node
 	markerId int
 	children map[interface{}]*BuildContext
+	root     *BuildContext
 }
 
 func NewBuildContext(v View) *BuildContext {
-	return &BuildContext{
+	ctx := &BuildContext{
 		view: v,
 	}
+	ctx.root = ctx
+	return ctx
 }
 
 func (ctx *BuildContext) Get(k interface{}) Config {
@@ -111,6 +115,7 @@ func (ctx *BuildContext) Get(k interface{}) Config {
 		Embed: &Embed{
 			mu:      &sync.Mutex{},
 			keyPath: append([]interface{}(nil), k),
+			root:    ctx.root,
 		},
 	}
 }
@@ -140,6 +145,7 @@ func (ctx *BuildContext) Build() {
 		chlCtx.keyPath = append([]interface{}(nil), ctx.keyPath)
 		chlCtx.keyPath = append(chlCtx.keyPath, k)
 		chlCtx.view = v
+		chlCtx.root = ctx.root
 		children[k] = chlCtx
 	}
 
@@ -180,4 +186,8 @@ func (ctx *BuildContext) Build() {
 	for _, i := range children {
 		i.Build()
 	}
+}
+
+func (ctx *BuildContext) Update(keyPath []interface{}, key interface{}) {
+	bridge.Root().Call("rerender")
 }

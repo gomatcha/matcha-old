@@ -22,7 +22,7 @@
     [MochiObjcBridge sharedBridge].root = [[MochiRoot alloc] init];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [[MochiViewController alloc] init];
+    self.window.rootViewController = [[MochiViewController alloc] initWithName:@"blah"];
     [self.window makeKeyAndVisible];
     return YES;
 }

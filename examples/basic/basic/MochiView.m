@@ -145,8 +145,7 @@
     [super setNode:node];
     MochiGoValue *state = node.bridgeState[@"FormattedText"];
     NSAttributedString *string = [[NSAttributedString alloc] initWithGoValue:state];
-    // [self.button setAttributedTitle:string forState:UIControlStateNormal]; 
-    [self.button setTitle:string.string forState:UIControlStateNormal]; 
+    [self.button setAttributedTitle:string forState:UIControlStateNormal];
 }
 
 - (void)layoutSubviews {

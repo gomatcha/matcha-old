@@ -7,12 +7,6 @@ import (
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/button"
 	"github.com/overcyn/mochi/view/imageview"
-
-	// "mochi.io/mochi/view/datepicker"
-	// "mochi.io/mochi/view/textview"
-	// "mochi.io/mochi/view/scrollview"
-	// "mochi.io/mochi/view/webview"
-	// "mochi.io/mochi/view/button"
 	// "mochi.io/mochi/layout/constraint"
 	// "mochi.io/mochi/layout"
 

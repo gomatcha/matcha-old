@@ -15,6 +15,7 @@ type View interface {
 type Embed struct {
 	mu      *sync.Mutex
 	keyPath []interface{}
+	root    *BuildContext
 }
 
 func (e *Embed) Build(ctx *BuildContext) *Node {
@@ -34,5 +35,5 @@ func (e *Embed) Unlock() {
 }
 
 func (e *Embed) Update(key interface{}) {
-	// e.marks.Update(key)
+	e.root.Update(e.keyPath, key)
 }
