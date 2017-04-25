@@ -289,12 +289,16 @@ func (ts *FormattedText) SetFormat(f *Format) {
 	ts.format = f
 }
 
+func (ts *FormattedText) Size(max mochi.Point) mochi.Point {
+	return bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(ts), nil, bridge.Interface(max)).ToInterface().(mochi.Point)
+}
+
 type textViewLayouter struct {
 	formattedText *FormattedText
 }
 
 func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
-	size := bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(l.formattedText), nil, bridge.Interface(ctx.MaxSize)).ToInterface().(mochi.Point)
+	size := l.formattedText.Size(ctx.MaxSize)
 	g := mochi.Guide{Frame: mochi.Rt(0, 0, size.X, size.Y)}
 	return g, nil
 }

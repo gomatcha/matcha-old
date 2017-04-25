@@ -11,6 +11,7 @@
 
 @interface MochiNode ()
 @property (nonatomic, strong) MochiGoValue *goValue;
+@property (nonatomic, strong) MochiLayoutGuide *guide;
 @end
 
 @implementation MochiNode
@@ -36,7 +37,10 @@
 }
 
 - (MochiLayoutGuide *)guide {
-    return [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
+    if (_guide == nil) {
+        _guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
+    }
+    return _guide;
 }
 
 - (NSString *)bridgeName {

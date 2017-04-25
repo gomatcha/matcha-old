@@ -5,6 +5,16 @@ import (
 	"github.com/overcyn/mochi/constraint"
 	mimage "github.com/overcyn/mochi/image"
 	"github.com/overcyn/mochi/text"
+	"github.com/overcyn/mochi/view/button"
+
+	// "mochi.io/mochi/view/datepicker"
+	// "mochi.io/mochi/view/textview"
+	// "mochi.io/mochi/view/scrollview"
+	// "mochi.io/mochi/view/webview"
+	// "mochi.io/mochi/view/button"
+	// "mochi.io/mochi/layout/constraint"
+	// "mochi.io/mochi/layout"
+
 	_ "image"
 	"mochi/bridge"
 	"reflect"
@@ -32,6 +42,7 @@ const (
 	chl6id
 	chl7id
 	chl8id
+	chl9id
 )
 
 type NestedView struct {
@@ -111,8 +122,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	chl6.PaintOptions.BackgroundColor = mochi.RedColor
 	chl6.Text = "Title"
 	chl6.Format.SetFont(text.Font{
-		Family: "American Typewriter",
-		Face:   "Bold",
+		Family: "Helvetica Neue",
 		Size:   20,
 	})
 	n.Set(chl6id, chl6)
@@ -144,17 +154,25 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl8.ResizeMode = mimage.ResizeModeFit
 	n.Set(chl8id, chl8)
-	_ = l.Add(chl8id, func(s *constraint.Solver) {
+	g8 := l.Add(chl8id, func(s *constraint.Solver) {
 		s.BottomEqual(g6.Top())
 		s.RightEqual(g2.Right().Add(-15))
 		s.WidthEqual(constraint.Const(200))
 		s.HeightEqual(constraint.Const(200))
 	})
 
+	chl9 := button.New(ctx.Get(chl9id))
+	chl9.PaintOptions.BackgroundColor = mochi.WhiteColor
+	chl9.Text = "Button"
+	n.Set(chl9id, chl9)
+	_ = l.Add(chl9id, func(s *constraint.Solver) {
+		s.BottomEqual(g8.Top())
+		s.RightEqual(g2.Right().Add(-15))
+	})
+
 	l.Solve(func(s *constraint.Solver) {
 		s.WidthEqual(l.MaxGuide().Width())
 		s.HeightEqual(l.MaxGuide().Height())
 	})
-
 	return n
 }

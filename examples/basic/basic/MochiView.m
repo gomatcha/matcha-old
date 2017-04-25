@@ -23,7 +23,6 @@
         _node = value;
         self.backgroundColor = _node.paintOptions.backgroundColor;
         self.frame = _node.guide.frame;
-        self.layer.zPosition = _node.guide.zIndex;
         
         NSMutableArray *array = [NSMutableArray array];
         for (MochiNode *i in _node.nodeChildren.objectEnumerator) {
@@ -35,10 +34,17 @@
                 child = [[MochiTextView alloc] init];
             } else if ([name isEqual:@"github.com/overcyn/mochi ImageView"]) {
                 child = [[MochiImageView alloc] init];
+            } else if ([name isEqual:@"github.com/overcyn/mochi/view/button Button"]) {
+                child = [[MochiButton alloc] init];
             }
             child.node = i;
-            [self addSubview:child];
             [array addObject:child];
+        }
+        [array sortUsingComparator:^NSComparisonResult(MochiView *obj1, MochiView *obj2) {
+            return obj1.node.guide.zIndex > obj2.node.guide.zIndex;
+        }];
+        for (UIView *i in array) {
+            [self addSubview:i];
         }
         self.childViews = array;
     }
@@ -116,6 +122,34 @@
 
 - (void)layoutSubviews {
     self.imageView.frame = self.bounds;
+}
+
+@end
+
+@interface MochiButton ()
+@property (nonatomic, strong) UIButton *button;
+@end
+
+@implementation MochiButton
+
+- (id)initWithFrame:(CGRect)frame {
+    if ((self = [super initWithFrame:frame])) {
+        self.button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self addSubview:self.button];
+    }
+    return self;
+}
+
+- (void)setNode:(MochiNode *)node {
+    [super setNode:node];
+    MochiGoValue *state = node.bridgeState[@"FormattedText"];
+    NSAttributedString *string = [[NSAttributedString alloc] initWithGoValue:state];
+    // [self.button setAttributedTitle:string forState:UIControlStateNormal]; 
+    [self.button setTitle:string.string forState:UIControlStateNormal]; 
+}
+
+- (void)layoutSubviews {
+    self.button.frame = self.bounds;
 }
 
 @end
