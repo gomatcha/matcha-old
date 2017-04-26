@@ -7,6 +7,7 @@ import (
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/button"
 	"github.com/overcyn/mochi/view/imageview"
+	"github.com/overcyn/mochi/view/textview"
 	// "mochi.io/mochi/layout/constraint"
 	// "mochi.io/mochi/layout"
 
@@ -108,7 +109,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.HeightEqual(constraint.Const(50))
 	})
 
-	chl5 := text.NewTextView(ctx.Get(chl5id))
+	chl5 := textview.New(ctx.Get(chl5id))
 	chl5.PaintOptions.BackgroundColor = mochi.CyanColor
 	chl5.Text = "Subtitle"
 	chl5.Format.SetAlignment(text.AlignmentCenter)
@@ -127,7 +128,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	chl6 := text.NewTextView(ctx.Get(chl6id))
+	chl6 := textview.New(ctx.Get(chl6id))
 	chl6.PaintOptions.BackgroundColor = mochi.RedColor
 	chl6.Text = fmt.Sprintf("Counter: %v", v.counter)
 	chl6.Format.SetFont(text.Font{

@@ -5,6 +5,8 @@
 Option 1.
 Each attribute gets a type. And Format.Attributes() returns a slice of attributes that can be type casted. Downside is that it dirtys the package namespace, with a bunch of types.
 
+marker, sentinel, flag, dummy
+
 ## Considerations
 
 * Right-to-left text
@@ -15,6 +17,10 @@ Each attribute gets a type. And Format.Attributes() returns a slice of attribute
 * Text spannig across multiple frames
 * https://developer.apple.com/reference/foundation/nsattributedstring/character_attributes
 https://developer.apple.com/reference/foundation/nsattributedstring/document_attributes
+* Tokenizing
+* Inline views
+* UTF8 normalization
+* 
 
 ## Flutter
 
@@ -124,7 +130,14 @@ NSAttributedString
 ## YetiCharacterLabelExample
 
 ## Draft.js
-## Rope (Data structure)
+## Data structure
+Rope
+GapBuffer
+Zipper
+PieceTable Piece Chain
+https://www.cs.unm.edu/~crowley/papers/sds.pdf
+
+https://blog.golang.org/normalization
 
 # iOS Fonts
 

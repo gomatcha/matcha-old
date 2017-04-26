@@ -1,0 +1,37 @@
+package textinput
+
+import (
+	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/text"
+)
+
+type TextInput struct {
+	*mochi.Embed
+	Text          text.Text
+	Format        text.Format
+	FormattedText text.FormattedText
+	PaintOptions  mochi.PaintOptions
+}
+
+func New(c mochi.Config) *TextInput {
+	v, ok := c.Prev.(*TextInput)
+	if !ok {
+		v = &TextInput{}
+		v.Embed = c.Embed
+	}
+	return v
+}
+
+func (v *TextInput) Build(ctx *mochi.BuildContext) *mochi.Node {
+	n := &mochi.Node{}
+	n.Painter = v.PaintOptions
+	n.Bridge.Name = "github.com/overcyn/mochi/view/textinput TextInput"
+	n.Bridge.State = struct {
+		FormattedText *text.FormattedText
+		OnPress       func()
+	}{
+		FormattedText: ft,
+		OnPress:       v.OnPress,
+	}
+	return n
+}
