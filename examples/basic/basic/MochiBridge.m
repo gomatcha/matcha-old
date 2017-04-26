@@ -94,7 +94,7 @@
 - (id)initWithGoValue:(MochiGoValue *)value {
     NSString *string = [value call:@"String" args:nil][0].toString;
     MochiGoValue *format = [value call:@"Format" args:nil][0];
-    NSMapTable *attrTable = [format call:@"Attributes" args:nil][0].toMapTable;
+    NSMapTable *attrTable = [format call:@"Map" args:nil][0].toMapTable;
 
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];

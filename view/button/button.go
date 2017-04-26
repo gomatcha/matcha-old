@@ -8,7 +8,7 @@ import (
 const padding = 10.0
 
 type buttonLayouter struct {
-	formattedText *text.FormattedText
+	formattedText *text.Text
 }
 
 func (l *buttonLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
@@ -34,7 +34,7 @@ func New(c mochi.Config) *Button {
 }
 
 func (v *Button) Build(ctx *mochi.BuildContext) *mochi.Node {
-	ft := &text.FormattedText{}
+	ft := &text.Text{}
 	ft.SetString(v.Text)
 	ft.Format().SetAlignment(text.AlignmentCenter)
 	ft.Format().SetFont(text.Font{
@@ -47,11 +47,11 @@ func (v *Button) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi/view/button Button"
 	n.Bridge.State = struct {
-		FormattedText *text.FormattedText
-		OnPress       func()
+		Text    *text.Text
+		OnPress func()
 	}{
-		FormattedText: ft,
-		OnPress:       v.OnPress,
+		Text:    ft,
+		OnPress: v.OnPress,
 	}
 	return n
 }

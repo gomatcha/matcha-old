@@ -6,7 +6,7 @@ import (
 )
 
 type textViewLayouter struct {
-	formattedText *text.FormattedText
+	formattedText *text.Text
 }
 
 func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
@@ -17,10 +17,14 @@ func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[in
 
 type TextView struct {
 	*mochi.Embed
-	Text          string
-	Format        *text.Format
-	FormattedText *text.FormattedText
-	PaintOptions  mochi.PaintOptions
+	String string
+	Format *text.Format
+	Text   *text.Text
+
+	// String     string
+	// Text       text.Text
+	// Attributes text.Attributes
+	PaintOptions mochi.PaintOptions
 }
 
 func New(c mochi.Config) *TextView {
@@ -34,10 +38,10 @@ func New(c mochi.Config) *TextView {
 }
 
 func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.Node {
-	ft := v.FormattedText
+	ft := v.Text
 	if ft == nil {
-		ft = &text.FormattedText{}
-		ft.SetString(v.Text)
+		ft = &text.Text{}
+		ft.SetString(v.String)
 		ft.SetFormat(v.Format)
 	}
 
@@ -46,9 +50,9 @@ func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi TextView"
 	n.Bridge.State = struct {
-		FormattedText *text.FormattedText
+		Text *text.Text
 	}{
-		FormattedText: ft,
+		Text: ft,
 	}
 	return n
 }

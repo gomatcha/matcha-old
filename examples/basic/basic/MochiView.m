@@ -69,7 +69,7 @@
 - (void)setNode:(MochiNode *)node {
     [super setNode:node];
     MochiGoValue *state = node.bridgeState;
-    MochiGoValue *formattedText = state[@"FormattedText"];
+    MochiGoValue *formattedText = state[@"Text"];
     if (!formattedText.isNil) {
         NSAttributedString *attrString = [[NSAttributedString alloc] initWithGoValue:formattedText];
         self.label.attributedText = attrString;
@@ -143,7 +143,7 @@
 
 - (void)setNode:(MochiNode *)node {
     [super setNode:node];
-    MochiGoValue *state = node.bridgeState[@"FormattedText"];
+    MochiGoValue *state = node.bridgeState[@"Text"];
     NSAttributedString *string = [[NSAttributedString alloc] initWithGoValue:state];
     [self.button setAttributedTitle:string forState:UIControlStateNormal];
 }

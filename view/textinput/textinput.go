@@ -7,10 +7,9 @@ import (
 
 type TextInput struct {
 	*mochi.Embed
-	Text          text.Text
-	Format        text.Format
-	FormattedText text.FormattedText
-	PaintOptions  mochi.PaintOptions
+	Text         text.Text
+	Format       text.Format
+	PaintOptions mochi.PaintOptions
 }
 
 func New(c mochi.Config) *TextInput {
@@ -27,11 +26,11 @@ func (v *TextInput) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi/view/textinput TextInput"
 	n.Bridge.State = struct {
-		FormattedText *text.FormattedText
-		OnPress       func()
+		Text    *text.Text
+		OnPress func()
 	}{
-		FormattedText: ft,
-		OnPress:       v.OnPress,
+		Text:    ft,
+		OnPress: v.OnPress,
 	}
 	return n
 }

@@ -44,12 +44,12 @@ type Font struct {
 	Size   float64
 }
 
-type TextWrap int
+type Wrap int
 
 const (
-	TextWrapNone TextWrap = iota
-	TextWrapWord
-	TextWrapCharacter
+	WrapNone Wrap = iota
+	WrapWord
+	WrapCharacter
 )
 
 type Truncation int
@@ -61,234 +61,207 @@ const (
 	TruncationEnd
 )
 
-type AttributeKey int
+type FormatKey int
 
 const (
-	AttributeKeyAlignment AttributeKey = iota
-	AttributeKeyStrikethroughStyle
-	AttributeKeyStrikethroughColor
-	AttributeKeyUnderlineStyle
-	AttributeKeyUnderlineColor
-	AttributeKeyFont
-	AttributeKeyHyphenation
-	AttributeKeyLineHeightMultiple
-	AttributeKeyMaxLines
-	AttributeKeyTextColor
-	AttributeKeyTextWrap
-	AttributeKeyTruncation
-	AttributeKeyTruncationString
+	FormatKeyAlignment FormatKey = iota
+	FormatKeyStrikethroughStyle
+	FormatKeyStrikethroughColor
+	FormatKeyUnderlineStyle
+	FormatKeyUnderlineColor
+	FormatKeyFont
+	FormatKeyHyphenation
+	FormatKeyLineHeightMultiple
+	FormatKeyMaxLines
+	FormatKeyTextColor
+	FormatKeyWrap
+	FormatKeyTruncation
+	FormatKeyTruncationString
 )
 
 type Format struct {
-	attributes map[AttributeKey]interface{}
+	attributes map[FormatKey]interface{}
 }
 
-func (f *Format) Attributes() map[AttributeKey]interface{} {
+func (f *Format) Map() map[FormatKey]interface{} {
 	return f.attributes
 }
 
-func (f *Format) Del(k AttributeKey) {
+func (f *Format) Del(k FormatKey) {
 	delete(f.attributes, k)
 }
 
-func (f *Format) Get(k AttributeKey) interface{} {
+func (f *Format) Get(k FormatKey) interface{} {
 	v, ok := f.attributes[k]
 	if ok {
 		return v
 	}
 	switch k {
-	case AttributeKeyAlignment:
+	case FormatKeyAlignment:
 		return AlignmentLeft
-	case AttributeKeyStrikethroughStyle:
+	case FormatKeyStrikethroughStyle:
 		return StrikethroughStyleNone
-	case AttributeKeyStrikethroughColor:
+	case FormatKeyStrikethroughColor:
 		return color.Gray{0}
-	case AttributeKeyUnderlineStyle:
+	case FormatKeyUnderlineStyle:
 		return UnderlineStyleNone
-	case AttributeKeyUnderlineColor:
+	case FormatKeyUnderlineColor:
 		return color.Gray{0}
-	case AttributeKeyFont:
+	case FormatKeyFont:
 		return nil // TODO(KD): what should the default font be?
-	case AttributeKeyHyphenation:
+	case FormatKeyHyphenation:
 		return 0
-	case AttributeKeyLineHeightMultiple:
+	case FormatKeyLineHeightMultiple:
 		return 1
-	case AttributeKeyMaxLines:
+	case FormatKeyMaxLines:
 		return 0
-	case AttributeKeyTextColor:
+	case FormatKeyTextColor:
 		return color.Gray{0}
-	case AttributeKeyTextWrap:
-		return TextWrapWord
-	case AttributeKeyTruncation:
+	case FormatKeyWrap:
+		return WrapWord
+	case FormatKeyTruncation:
 		return TruncationNone
-	case AttributeKeyTruncationString:
+	case FormatKeyTruncationString:
 		return "…"
 	}
 	return nil
 }
 
-func (f *Format) Set(k AttributeKey, v interface{}) {
+func (f *Format) Set(k FormatKey, v interface{}) {
 	if f.attributes == nil {
-		f.attributes = map[AttributeKey]interface{}{}
+		f.attributes = map[FormatKey]interface{}{}
 	}
-	switch k {
-	case AttributeKeyAlignment:
-		f.attributes[k] = v.(Alignment)
-	case AttributeKeyStrikethroughStyle:
-		f.attributes[k] = v.(StrikethroughStyle)
-	case AttributeKeyStrikethroughColor:
-		f.attributes[k] = v.(color.Color)
-	case AttributeKeyUnderlineStyle:
-		f.attributes[k] = v.(UnderlineStyle)
-	case AttributeKeyUnderlineColor:
-		f.attributes[k] = v.(color.Color)
-	case AttributeKeyFont:
-		f.attributes[k] = v.(Font)
-	case AttributeKeyHyphenation:
-		f.attributes[k] = v.(float64)
-	case AttributeKeyLineHeightMultiple:
-		f.attributes[k] = v.(int)
-	case AttributeKeyMaxLines:
-		f.attributes[k] = v.(int)
-	case AttributeKeyTextColor:
-		f.attributes[k] = v.(color.Color)
-	case AttributeKeyTextWrap:
-		f.attributes[k] = v.(TextWrap)
-	case AttributeKeyTruncation:
-		f.attributes[k] = v.(Truncation)
-	case AttributeKeyTruncationString:
-		f.attributes[k] = v.(string)
-	}
+	f.attributes[k] = v
 }
 
 func (f *Format) Alignment() Alignment {
-	return f.Get(AttributeKeyAlignment).(Alignment)
+	return f.Get(FormatKeyAlignment).(Alignment)
 }
 
 func (f *Format) SetAlignment(v Alignment) {
-	f.Set(AttributeKeyAlignment, v)
+	f.Set(FormatKeyAlignment, v)
 }
 
 func (f *Format) StrikethroughStyle() StrikethroughStyle {
-	return f.Get(AttributeKeyStrikethroughStyle).(StrikethroughStyle)
+	return f.Get(FormatKeyStrikethroughStyle).(StrikethroughStyle)
 }
 
 func (f *Format) SetStrikethroughStyle(v StrikethroughStyle) {
-	f.Set(AttributeKeyStrikethroughStyle, v)
+	f.Set(FormatKeyStrikethroughStyle, v)
 }
 
 func (f *Format) StrikethroughColor() color.Color {
-	return f.Get(AttributeKeyStrikethroughColor).(color.Color)
+	return f.Get(FormatKeyStrikethroughColor).(color.Color)
 }
 
 func (f *Format) SetStrikethroughColor(v color.Color) {
-	f.Set(AttributeKeyStrikethroughColor, v)
+	f.Set(FormatKeyStrikethroughColor, v)
 }
 
 func (f *Format) UnderlineStyle() UnderlineStyle {
-	return f.Get(AttributeKeyUnderlineStyle).(UnderlineStyle)
+	return f.Get(FormatKeyUnderlineStyle).(UnderlineStyle)
 }
 
 func (f *Format) SetUnderlineStyle(v UnderlineStyle) {
-	f.Set(AttributeKeyUnderlineStyle, v)
+	f.Set(FormatKeyUnderlineStyle, v)
 }
 
 func (f *Format) UnderlineColor() color.Color {
-	return f.Get(AttributeKeyUnderlineColor).(color.Color)
+	return f.Get(FormatKeyUnderlineColor).(color.Color)
 }
 
 func (f *Format) SetUnderlineColor(v color.Color) {
-	f.Set(AttributeKeyUnderlineColor, v)
+	f.Set(FormatKeyUnderlineColor, v)
 }
 
 func (f *Format) Font() Font {
-	return f.Get(AttributeKeyFont).(Font)
+	return f.Get(FormatKeyFont).(Font)
 }
 
 func (f *Format) SetFont(v Font) {
-	f.Set(AttributeKeyFont, v)
+	f.Set(FormatKeyFont, v)
 }
 
 func (f *Format) Hyphenation() float64 {
-	return f.Get(AttributeKeyHyphenation).(float64)
+	return f.Get(FormatKeyHyphenation).(float64)
 }
 
 func (f *Format) SetHyphenation(v float64) {
-	f.Set(AttributeKeyHyphenation, v)
+	f.Set(FormatKeyHyphenation, v)
 }
 
 func (f *Format) LineHeightMultiple() float64 {
-	return f.Get(AttributeKeyLineHeightMultiple).(float64)
+	return f.Get(FormatKeyLineHeightMultiple).(float64)
 }
 
 func (f *Format) SetLineHeightMultiple(v float64) {
-	f.Set(AttributeKeyLineHeightMultiple, v)
+	f.Set(FormatKeyLineHeightMultiple, v)
 }
 
 func (f *Format) MaxLines() int {
-	return f.Get(AttributeKeyMaxLines).(int)
+	return f.Get(FormatKeyMaxLines).(int)
 }
 
 func (f *Format) SetMaxLines(v int) {
-	f.Set(AttributeKeyMaxLines, v)
+	f.Set(FormatKeyMaxLines, v)
 }
 
 func (f *Format) TextColor() color.Color {
-	return f.Get(AttributeKeyTextColor).(color.Color)
+	return f.Get(FormatKeyTextColor).(color.Color)
 }
 
 func (f *Format) SetTextColor(v color.Color) {
-	f.Set(AttributeKeyTextColor, v)
+	f.Set(FormatKeyTextColor, v)
 }
 
-func (f *Format) TextWrap() TextWrap {
-	return f.Get(AttributeKeyTextWrap).(TextWrap)
+func (f *Format) Wrap() Wrap {
+	return f.Get(FormatKeyWrap).(Wrap)
 }
 
-func (f *Format) SetTextWrap(v TextWrap) {
-	f.Set(AttributeKeyTextWrap, v)
+func (f *Format) SetWrap(v Wrap) {
+	f.Set(FormatKeyWrap, v)
 }
 
 func (f *Format) Truncation() Truncation {
-	return f.Get(AttributeKeyTruncation).(Truncation)
+	return f.Get(FormatKeyTruncation).(Truncation)
 }
 
 func (f *Format) SetTruncation(v Truncation) {
-	f.Set(AttributeKeyTruncation, v)
+	f.Set(FormatKeyTruncation, v)
 }
 
 func (f *Format) TruncationString() string {
-	return f.Get(AttributeKeyTruncationString).(string)
+	return f.Get(FormatKeyTruncationString).(string)
 }
 
 func (f *Format) SetTruncationString(v string) {
-	f.Set(AttributeKeyTruncationString, v)
+	f.Set(FormatKeyTruncationString, v)
 }
 
-type FormattedText struct {
+type Text struct {
 	str    string
 	format *Format
 }
 
-func (ts *FormattedText) String() string {
+func (ts *Text) String() string {
 	return ts.str
 }
 
-func (ts *FormattedText) SetString(text string) {
+func (ts *Text) SetString(text string) {
 	ts.str = text
 }
 
-func (ts *FormattedText) Format() *Format {
+func (ts *Text) Format() *Format {
 	if ts.format == nil {
 		ts.format = &Format{}
 	}
 	return ts.format
 }
 
-func (ts *FormattedText) SetFormat(f *Format) {
+func (ts *Text) SetFormat(f *Format) {
 	ts.format = f
 }
 
-func (ts *FormattedText) Size(max mochi.Point) mochi.Point {
+func (ts *Text) Size(max mochi.Point) mochi.Point {
 	return bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(ts), nil, bridge.Interface(max)).ToInterface().(mochi.Point)
 }

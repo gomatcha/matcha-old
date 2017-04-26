@@ -111,7 +111,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 
 	chl5 := textview.New(ctx.Get(chl5id))
 	chl5.PaintOptions.BackgroundColor = mochi.CyanColor
-	chl5.Text = "Subtitle"
+	chl5.String = "Subtitle"
 	chl5.Format.SetAlignment(text.AlignmentCenter)
 	chl5.Format.SetStrikethroughStyle(text.StrikethroughStyleSingle)
 	chl5.Format.SetStrikethroughColor(mochi.MagentaColor)
@@ -130,7 +130,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 
 	chl6 := textview.New(ctx.Get(chl6id))
 	chl6.PaintOptions.BackgroundColor = mochi.RedColor
-	chl6.Text = fmt.Sprintf("Counter: %v", v.counter)
+	chl6.String = fmt.Sprintf("Counter: %v", v.counter)
 	chl6.Format.SetFont(text.Font{
 		Family: "Helvetica Neue",
 		Size:   20,
