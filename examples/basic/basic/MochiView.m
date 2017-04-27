@@ -18,7 +18,7 @@ NSArray *MochiConfigureViewWithNode(UIView *view,  MochiNode *node, NSArray *pre
         [i removeFromSuperview];
     }
     
-    view.backgroundColor = node.paintOptions.backgroundColor;
+    view.backgroundColor = node.paintOptions.backgroundColor ?: [UIColor clearColor];
     view.frame = node.guide.frame;
     
     NSMutableArray *array = [NSMutableArray array];

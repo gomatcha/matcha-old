@@ -255,7 +255,6 @@ func (v *TableCell) Build(ctx *mochi.BuildContext) *mochi.Node {
 	})
 
 	textView := textview.New(ctx.Get(textId))
-	textView.PaintOptions.BackgroundColor = mochi.WhiteColor
 	textView.String = v.String
 	textView.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
