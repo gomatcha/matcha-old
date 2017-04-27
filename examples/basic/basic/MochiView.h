@@ -14,11 +14,14 @@
 @property (nonatomic, strong) MochiNode *node;
 @end
 
-@interface MochiTextView : MochiView
+@interface MochiTextView : UILabel
 @end
 
-@interface MochiImageView : MochiView
+@interface MochiImageView : UIImageView
 @end
 
 @interface MochiButton : MochiView
+@end
+
+@interface MochiScrollView : UIScrollView
 @end

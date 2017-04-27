@@ -6,6 +6,7 @@ import (
 
 type ScrollView struct {
 	*mochi.Embed
+	ContentView  View
 	PaintOptions mochi.PaintOptions
 }
 
@@ -22,7 +23,7 @@ func (v *ScrollView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n := &mochi.Node{}
 	n.Layouter = &textViewLayouter{formattedText: ft}
 	n.Painter = v.PaintOptions
-	n.Bridge.Name = "github.com/overcyn/mochi/view/scrollview ScrollView"
+	n.Bridge.Name = "github.com/overcyn/mochi/view/scrollview"
 	n.Bridge.State = nil
 	return n
 }

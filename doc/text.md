@@ -7,7 +7,7 @@ Each attribute gets a type. And Style.Attributes() returns a slice of attributes
 
 marker, sentinel, flag, dummy
 
-Spannable?
+Model it after Androids SpannableString?
 The textspan object should not care about mutations. It should be able to support them but styling across mutations is out of scope.
 
 type TextInput struct

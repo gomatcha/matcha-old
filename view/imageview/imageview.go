@@ -129,7 +129,7 @@ func (v *ImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
 
 	n := &mochi.Node{}
 	n.Painter = v.PaintOptions
-	n.Bridge.Name = "github.com/overcyn/mochi ImageView"
+	n.Bridge.Name = "github.com/overcyn/mochi/view/imageview"
 	n.Bridge.State = struct {
 		Bytes      []byte
 		ResizeMode ResizeMode

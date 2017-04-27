@@ -50,7 +50,7 @@ func (v *Button) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n := &mochi.Node{}
 	n.Layouter = &buttonLayouter{formattedText: ft}
 	n.Painter = v.PaintOptions
-	n.Bridge.Name = "github.com/overcyn/mochi/view/button Button"
+	n.Bridge.Name = "github.com/overcyn/mochi/view/button"
 	n.Bridge.State = struct {
 		Text    *text.Text
 		OnPress func()
