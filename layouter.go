@@ -63,10 +63,10 @@ func (g Guide) Height() float64 {
 	return g.Frame.Max.Y - g.Frame.Min.Y
 }
 func (g Guide) CenterX() float64 {
-	return (g.Frame.Min.X - g.Frame.Max.X) / 2
+	return (g.Frame.Max.X - g.Frame.Min.X) / 2
 }
 func (g Guide) CenterY() float64 {
-	return (g.Frame.Min.Y - g.Frame.Max.Y) / 2
+	return (g.Frame.Max.Y - g.Frame.Min.Y) / 2
 }
 
 // Fit adjusts the frame of the guide to be within MinSize and MaxSize of the LayoutContext.

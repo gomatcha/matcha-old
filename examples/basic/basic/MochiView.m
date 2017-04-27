@@ -168,7 +168,9 @@ NSArray *MochiConfigureViewWithNode(UIView *view,  MochiNode *node, NSArray *pre
             self.contentSize = ((UIView *)self.childViews[0]).frame.size;
         }
         MochiGoValue *state = _node.bridgeState;
-//        MochiGoValue *imageData = state[@"Bytes"];
+        self.scrollEnabled = state[@"ScrollEnabled"].toBool;
+        self.showsVerticalScrollIndicator = state[@"ShowsVerticalScrollIndicator"].toBool;
+        self.showsHorizontalScrollIndicator = state[@"ShowsHorizontalScrollIndicator"].toBool;
     }
 }
 @end

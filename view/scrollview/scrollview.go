@@ -9,26 +9,13 @@ const (
 	chlid int = iota
 )
 
-type scrollViewLayouter struct {
-}
-
-func (l *scrollViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
-	gs := map[interface{}]mochi.Guide{}
-	if len(ctx.ChildKeys) > 0 {
-		g := ctx.LayoutChild(chlid, mochi.Pt(0, 0), mochi.Pt(math.Inf(1), math.Inf(1)))
-		g.Frame = g.Frame.Add(mochi.Pt(-g.Frame.Min.X, -g.Frame.Min.Y))
-		gs[chlid] = g
-		println("layout scrollview", g.Frame.String())
-	}
-	return mochi.Guide{
-		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
-	}, gs
-}
-
 type ScrollView struct {
 	*mochi.Embed
-	ContentView  mochi.View
-	PaintOptions mochi.PaintOptions
+	ScrollEnabled                  bool
+	ShowsHorizontalScrollIndicator bool
+	ShowsVerticalScrollIndicator   bool
+	ContentView                    mochi.View
+	PaintOptions                   mochi.PaintOptions
 }
 
 func New(c mochi.Config) *ScrollView {
@@ -36,6 +23,9 @@ func New(c mochi.Config) *ScrollView {
 	if !ok {
 		v = &ScrollView{}
 		v.Embed = c.Embed
+		v.ShowsHorizontalScrollIndicator = true
+		v.ShowsVerticalScrollIndicator = true
+		v.ScrollEnabled = true
 	}
 	return v
 }
@@ -48,14 +38,32 @@ func (v *ScrollView) Build(ctx *mochi.BuildContext) *mochi.Node {
 
 	if v.ContentView != nil {
 		n.Set(chlid, v.ContentView)
-		println(v.ContentView)
 	}
 
 	n.Bridge.Name = "github.com/overcyn/mochi/view/scrollview"
-	// n.Bridge.State = struct {
-	// 	Size mochi.Point
-	// }{
-	// 	Size: nil,
-	// }
+	n.Bridge.State = struct {
+		ScrollEnabled                  bool
+		ShowsHorizontalScrollIndicator bool
+		ShowsVerticalScrollIndicator   bool
+	}{
+		ScrollEnabled:                  v.ScrollEnabled,
+		ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
+		ShowsVerticalScrollIndicator:   v.ShowsVerticalScrollIndicator,
+	}
 	return n
+}
+
+type scrollViewLayouter struct {
+}
+
+func (l *scrollViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
+	gs := map[interface{}]mochi.Guide{}
+	if len(ctx.ChildKeys) > 0 {
+		g := ctx.LayoutChild(chlid, ctx.MinSize, mochi.Pt(math.Inf(1), math.Inf(1)))
+		g.Frame = g.Frame.Add(mochi.Pt(-g.Frame.Min.X, -g.Frame.Min.Y))
+		gs[chlid] = g
+	}
+	return mochi.Guide{
+		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
+	}, gs
 }

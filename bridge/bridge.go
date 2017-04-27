@@ -2,18 +2,16 @@ package bridge
 
 import (
 	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/constraint"
+	"github.com/overcyn/mochi/layout/constraint"
+	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/button"
 	"github.com/overcyn/mochi/view/imageview"
 	"github.com/overcyn/mochi/view/scrollview"
 	"github.com/overcyn/mochi/view/textview"
-	// "mochi.io/mochi/layout/constraint"
-	// "mochi.io/mochi/layout"
 
 	"fmt"
-	_ "image"
 	"mochi/bridge"
 	"reflect"
 )
@@ -191,17 +189,21 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	// {
-	childLayouter := constraint.New()
+	childLayouter := &table.Layout{}
+	childViews := map[interface{}]mochi.View{}
+	for i := 100; i < 110; i++ {
+		childView := NewTableCell(ctx.Get(i))
+		childView.String = "TEST TEST"
+		childView.PaintOptions.BackgroundColor = mochi.RedColor
+		childViews[i] = childView
+		childLayouter.Add(i)
+	}
+
 	scrollChild := basicview.New(ctx.Get(scrollChildId))
 	scrollChild.PaintOptions.BackgroundColor = mochi.WhiteColor
 	scrollChild.Layouter = childLayouter
-
+	scrollChild.Children = childViews
 	n.Set(scrollChildId, scrollChild)
-	childLayouter.Solve(func(s *constraint.Solver) {
-		s.WidthEqual(constraint.Const(1000))
-		s.HeightEqual(constraint.Const(1000))
-	})
 
 	chl10 := scrollview.New(ctx.Get(chl10id))
 	chl10.PaintOptions.BackgroundColor = mochi.CyanColor
@@ -218,5 +220,53 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.WidthEqual(l.MaxGuide().Width())
 		s.HeightEqual(l.MaxGuide().Height())
 	})
+	return n
+}
+
+const (
+	textId int = 1000
+)
+
+type TableCell struct {
+	*mochi.Embed
+	String string
+	// Style        *text.Style
+	// Text         *text.Text
+	PaintOptions mochi.PaintOptions
+}
+
+func NewTableCell(c mochi.Config) *TableCell {
+	v, ok := c.Prev.(*TableCell)
+	if !ok {
+		v = &TableCell{}
+		v.Embed = c.Embed
+	}
+	return v
+}
+
+func (v *TableCell) Build(ctx *mochi.BuildContext) *mochi.Node {
+	l := constraint.New()
+	n := &mochi.Node{}
+	n.Layouter = l
+	n.Painter = v.PaintOptions
+
+	l.Solve(func(s *constraint.Solver) {
+		s.HeightEqual(constraint.Const(50))
+	})
+
+	textView := textview.New(ctx.Get(textId))
+	textView.PaintOptions.BackgroundColor = mochi.WhiteColor
+	textView.String = v.String
+	textView.Style.SetFont(text.Font{
+		Family: "Helvetica Neue",
+		Size:   20,
+	})
+	n.Set(textId, textView)
+	l.Add(textId, func(s *constraint.Solver) {
+		s.LeftEqual(l.Left().Add(10))
+		s.RightEqual(l.Right().Add(-10))
+		s.CenterYEqual(l.CenterY())
+	})
+
 	return n
 }
