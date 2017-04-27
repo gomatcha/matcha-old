@@ -1,267 +1,224 @@
 package text
 
 import (
-	"github.com/overcyn/mochi"
-	"image/color"
-	"mochi/bridge"
+	"golang.org/x/text/unicode/norm"
+	"runtime"
+	"sync"
+	"unicode/utf8"
 )
 
-type Alignment int
-
-const (
-	AlignmentLeft Alignment = iota
-	AlignmentRight
-	AlignmentCenter
-	AlignmentJustified
-)
-
-type StrikethroughStyle int
-
-const (
-	StrikethroughStyleNone StrikethroughStyle = iota
-	StrikethroughStyleSingle
-	StrikethroughStyleDouble
-	StrikethroughStyleThick
-	StrikethroughStyleDotted
-	StrikethroughStyleDashed
-)
-
-type UnderlineStyle int
-
-const (
-	UnderlineStyleNone UnderlineStyle = iota
-	UnderlineStyleSingle
-	UnderlineStyleDouble
-	UnderlineStyleThick
-	UnderlineStyleDotted
-	UnderlineStyleDashed
-)
-
-// TODO(KD): Rethink how to do this.
-type Font struct {
-	Family string
-	Face   string
-	Size   float64
+type Position struct {
+	id   int64
+	text *Text
 }
 
-type Wrap int
-
-const (
-	WrapNone Wrap = iota
-	WrapWord
-	WrapCharacter
-)
-
-type Truncation int
-
-const (
-	TruncationNone Truncation = iota
-	TruncationStart
-	TruncationMiddle
-	TruncationEnd
-)
-
-type FormatKey int
-
-const (
-	FormatKeyAlignment FormatKey = iota
-	FormatKeyStrikethroughStyle
-	FormatKeyStrikethroughColor
-	FormatKeyUnderlineStyle
-	FormatKeyUnderlineColor
-	FormatKeyFont
-	FormatKeyHyphenation
-	FormatKeyLineHeightMultiple
-	FormatKeyMaxLines
-	FormatKeyTextColor
-	FormatKeyWrap
-	FormatKeyTruncation
-	FormatKeyTruncationString
-)
-
-type Format struct {
-	attributes map[FormatKey]interface{}
+// -1 if the position has been removed
+func (p *Position) Index() int {
+	p.text.positionMu.Lock()
+	defer p.text.positionMu.Unlock()
+	return p.text.positions[p.id]
 }
 
-func (f *Format) Map() map[FormatKey]interface{} {
-	return f.attributes
-}
-
-func (f *Format) Del(k FormatKey) {
-	delete(f.attributes, k)
-}
-
-func (f *Format) Get(k FormatKey) interface{} {
-	v, ok := f.attributes[k]
-	if ok {
-		return v
-	}
-	switch k {
-	case FormatKeyAlignment:
-		return AlignmentLeft
-	case FormatKeyStrikethroughStyle:
-		return StrikethroughStyleNone
-	case FormatKeyStrikethroughColor:
-		return color.Gray{0}
-	case FormatKeyUnderlineStyle:
-		return UnderlineStyleNone
-	case FormatKeyUnderlineColor:
-		return color.Gray{0}
-	case FormatKeyFont:
-		return nil // TODO(KD): what should the default font be?
-	case FormatKeyHyphenation:
-		return 0
-	case FormatKeyLineHeightMultiple:
-		return 1
-	case FormatKeyMaxLines:
-		return 0
-	case FormatKeyTextColor:
-		return color.Gray{0}
-	case FormatKeyWrap:
-		return WrapWord
-	case FormatKeyTruncation:
-		return TruncationNone
-	case FormatKeyTruncationString:
-		return "…"
-	}
-	return nil
-}
-
-func (f *Format) Set(k FormatKey, v interface{}) {
-	if f.attributes == nil {
-		f.attributes = map[FormatKey]interface{}{}
-	}
-	f.attributes[k] = v
-}
-
-func (f *Format) Alignment() Alignment {
-	return f.Get(FormatKeyAlignment).(Alignment)
-}
-
-func (f *Format) SetAlignment(v Alignment) {
-	f.Set(FormatKeyAlignment, v)
-}
-
-func (f *Format) StrikethroughStyle() StrikethroughStyle {
-	return f.Get(FormatKeyStrikethroughStyle).(StrikethroughStyle)
-}
-
-func (f *Format) SetStrikethroughStyle(v StrikethroughStyle) {
-	f.Set(FormatKeyStrikethroughStyle, v)
-}
-
-func (f *Format) StrikethroughColor() color.Color {
-	return f.Get(FormatKeyStrikethroughColor).(color.Color)
-}
-
-func (f *Format) SetStrikethroughColor(v color.Color) {
-	f.Set(FormatKeyStrikethroughColor, v)
-}
-
-func (f *Format) UnderlineStyle() UnderlineStyle {
-	return f.Get(FormatKeyUnderlineStyle).(UnderlineStyle)
-}
-
-func (f *Format) SetUnderlineStyle(v UnderlineStyle) {
-	f.Set(FormatKeyUnderlineStyle, v)
-}
-
-func (f *Format) UnderlineColor() color.Color {
-	return f.Get(FormatKeyUnderlineColor).(color.Color)
-}
-
-func (f *Format) SetUnderlineColor(v color.Color) {
-	f.Set(FormatKeyUnderlineColor, v)
-}
-
-func (f *Format) Font() Font {
-	return f.Get(FormatKeyFont).(Font)
-}
-
-func (f *Format) SetFont(v Font) {
-	f.Set(FormatKeyFont, v)
-}
-
-func (f *Format) Hyphenation() float64 {
-	return f.Get(FormatKeyHyphenation).(float64)
-}
-
-func (f *Format) SetHyphenation(v float64) {
-	f.Set(FormatKeyHyphenation, v)
-}
-
-func (f *Format) LineHeightMultiple() float64 {
-	return f.Get(FormatKeyLineHeightMultiple).(float64)
-}
-
-func (f *Format) SetLineHeightMultiple(v float64) {
-	f.Set(FormatKeyLineHeightMultiple, v)
-}
-
-func (f *Format) MaxLines() int {
-	return f.Get(FormatKeyMaxLines).(int)
-}
-
-func (f *Format) SetMaxLines(v int) {
-	f.Set(FormatKeyMaxLines, v)
-}
-
-func (f *Format) TextColor() color.Color {
-	return f.Get(FormatKeyTextColor).(color.Color)
-}
-
-func (f *Format) SetTextColor(v color.Color) {
-	f.Set(FormatKeyTextColor, v)
-}
-
-func (f *Format) Wrap() Wrap {
-	return f.Get(FormatKeyWrap).(Wrap)
-}
-
-func (f *Format) SetWrap(v Wrap) {
-	f.Set(FormatKeyWrap, v)
-}
-
-func (f *Format) Truncation() Truncation {
-	return f.Get(FormatKeyTruncation).(Truncation)
-}
-
-func (f *Format) SetTruncation(v Truncation) {
-	f.Set(FormatKeyTruncation, v)
-}
-
-func (f *Format) TruncationString() string {
-	return f.Get(FormatKeyTruncationString).(string)
-}
-
-func (f *Format) SetTruncationString(v string) {
-	f.Set(FormatKeyTruncationString, v)
+type position struct {
+	id    int64
+	index int
 }
 
 type Text struct {
-	str    string
-	format *Format
+	bytes         []byte
+	isRune        []bool
+	isGlyph       []bool
+	runeCount     int
+	glyphCount    int
+	positions     map[int64]int
+	positionMaxId int64
+	positionMu    *sync.Mutex
+	//
+	str   string
+	style *Style
 }
 
-func (ts *Text) String() string {
-	return ts.str
+func New(b []byte) *Text {
+	t := &Text{}
+	t.bytes = b
+	t.positions = map[int64]int{}
+	t.normalize()
+	return t
 }
 
-func (ts *Text) SetString(text string) {
-	ts.str = text
+func (t *Text) ByteAt(byteIdx int) byte {
+	return t.bytes[byteIdx]
 }
 
-func (ts *Text) Format() *Format {
-	if ts.format == nil {
-		ts.format = &Format{}
+func (t *Text) RuneAt(byteIdx int) rune {
+	// Start at the position and look backwards until we find the start of the rune
+	var runeStart int = -1
+	for i := byteIdx; i >= 0; i -= 1 {
+		isRune := t.isRune[i]
+		if isRune {
+			runeStart = i
+			break
+		}
 	}
-	return ts.format
+
+	if runeStart == -1 {
+		panic("RuneAt: Couldn't find rune start")
+	}
+
+	bytes := []byte{t.bytes[runeStart]}
+	// Add bytes until next rune
+	for i := runeStart + 1; i < len(bytes); i++ {
+		if t.isRune[i] {
+			break
+		}
+		bytes = append(bytes, t.bytes[i])
+	}
+	return []rune(string(bytes))[0]
 }
 
-func (ts *Text) SetFormat(f *Format) {
-	ts.format = f
+func (t *Text) GlyphAt(byteIdx int) string {
+	// Start at the position and look backwards until we find the start of the glyph
+	var glyphStart int = -1
+	for i := byteIdx; i >= 0; i -= 1 {
+		isGlyph := t.isGlyph[i]
+		if isGlyph {
+			glyphStart = i
+			break
+		}
+	}
+
+	if glyphStart == -1 {
+		panic("GlyphAt: Couldn't find glyph start")
+	}
+
+	bytes := []byte{t.bytes[glyphStart]}
+	// Add bytes until next glyph
+	for i := glyphStart + 1; i < len(bytes); i++ {
+		if t.isGlyph[i] {
+			break
+		}
+		bytes = append(bytes, t.bytes[i])
+	}
+	return string(bytes)
 }
 
-func (ts *Text) Size(max mochi.Point) mochi.Point {
-	return bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(ts), nil, bridge.Interface(max)).ToInterface().(mochi.Point)
+func (t *Text) ByteIndex(byteIdx int) int {
+	return 0
+}
+
+func (t *Text) RuneIndex(runeIdx int) int {
+	return 0
+}
+
+func (t *Text) GlyphIndex(glyphIdx int) int {
+	return 0
+}
+
+func (t *Text) ByteNextIndex(byteIdx int) int {
+	return byteIdx + 1
+}
+
+func (t *Text) RuneNextIndex(byteIdx int) int {
+	return 0
+}
+
+func (t *Text) GlyphNextIndex(byteIdx int) int {
+	return 0
+}
+
+func (t *Text) BytePrevIndex(byteIdx int) int {
+	return byteIdx - 1
+}
+
+func (t *Text) RunePrevIndex(byteIdx int) int {
+	return 0
+}
+
+func (t *Text) GlyphPrevIndex(byteIdx int) int {
+	return 0
+}
+
+func (t *Text) ByteCount() int {
+	return len(t.str)
+}
+
+func (t *Text) RuneCount() int {
+	return t.runeCount
+}
+
+func (t *Text) GlyphCount() int {
+	return t.glyphCount
+}
+
+func (t *Text) ReplaceRange(minByteIdx, maxByteIdx int, new string) {
+}
+
+func (t *Text) Position(byteIdx int) *Position {
+	t.positionMu.Lock()
+	defer t.positionMu.Unlock()
+
+	t.positionMaxId += 1
+	t.positions[t.positionMaxId] = byteIdx
+
+	p := &Position{
+		id:   t.positionMaxId,
+		text: t,
+	}
+	runtime.SetFinalizer(p, func(final *Position) {
+		text := final.text
+		text.positionMu.Lock()
+		defer text.positionMu.Unlock()
+		delete(text.positions, final.id)
+	})
+	return p
+}
+
+func (t *Text) normalize() {
+	runeCount := 0
+	glyphCount := 0
+	isRune := make([]bool, 0, len(t.bytes))
+	isGlyph := make([]bool, 0, len(t.bytes))
+	bytes := make([]byte, 0, len(t.bytes))
+
+	var iter norm.Iter
+	iter.Init(norm.NFD, t.bytes)
+	for !iter.Done() {
+		glyph := iter.Next()
+		rc := utf8.RuneCount(glyph)
+		bytes = append(bytes, glyph...)
+
+		for i := range glyph {
+			isGlyph = append(isGlyph, i == 0)
+		}
+		for i := 0; i < rc; i++ {
+			isRune = append(isGlyph, i == 0)
+		}
+
+		runeCount += rc
+		glyphCount += 1
+	}
+	t.glyphCount = glyphCount
+	t.runeCount = runeCount
+	t.isGlyph = isGlyph
+	t.isRune = isRune
+	t.bytes = bytes
+}
+
+func (t *Text) String() string {
+	return t.str
+}
+
+func (t *Text) SetString(text string) {
+	t.str = text
+}
+
+func (t *Text) Style() *Style {
+	if t.style == nil {
+		t.style = &Style{}
+	}
+	return t.style
+}
+
+func (t *Text) SetStyle(f *Style) {
+	t.style = f
 }

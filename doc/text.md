@@ -3,9 +3,20 @@
 ## Mochi
 
 Option 1.
-Each attribute gets a type. And Format.Attributes() returns a slice of attributes that can be type casted. Downside is that it dirtys the package namespace, with a bunch of types.
+Each attribute gets a type. And Style.Attributes() returns a slice of attributes that can be type casted. Downside is that it dirtys the package namespace, with a bunch of types.
 
 marker, sentinel, flag, dummy
+
+Spannable?
+The textspan object should not care about mutations. It should be able to support them but styling across mutations is out of scope.
+
+type TextInput struct
+    String      text.String
+    Style       text.Style
+    Text        text.Text
+    
+Text.AddSpan(Style, StyleKey, min, max)
+Text.RemoveSpan(StyleKey, min, max)
 
 ## Considerations
 

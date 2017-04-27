@@ -3,6 +3,7 @@ package textview
 import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/text"
+	"mochi/bridge"
 )
 
 type textViewLayouter struct {
@@ -10,15 +11,19 @@ type textViewLayouter struct {
 }
 
 func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
-	size := l.formattedText.Size(ctx.MaxSize)
+	size := textSize(l.formattedText, ctx.MaxSize)
 	g := mochi.Guide{Frame: mochi.Rt(0, 0, size.X, size.Y)}
 	return g, nil
+}
+
+func textSize(t *text.Text, max mochi.Point) mochi.Point {
+	return bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(t), nil, bridge.Interface(max)).ToInterface().(mochi.Point)
 }
 
 type TextView struct {
 	*mochi.Embed
 	String string
-	Format *text.Format
+	Style  *text.Style
 	Text   *text.Text
 
 	// String     string
@@ -32,7 +37,7 @@ func New(c mochi.Config) *TextView {
 	if !ok {
 		v = &TextView{}
 		v.Embed = c.Embed
-		v.Format = &text.Format{}
+		v.Style = &text.Style{}
 	}
 	return v
 }
@@ -42,7 +47,7 @@ func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	if ft == nil {
 		ft = &text.Text{}
 		ft.SetString(v.String)
-		ft.SetFormat(v.Format)
+		ft.SetStyle(v.Style)
 	}
 
 	n := &mochi.Node{}

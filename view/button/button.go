@@ -3,7 +3,12 @@ package button
 import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/text"
+	"mochi/bridge"
 )
+
+func textSize(t *text.Text, max mochi.Point) mochi.Point {
+	return bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(t), nil, bridge.Interface(max)).ToInterface().(mochi.Point)
+}
 
 const padding = 10.0
 
@@ -12,7 +17,7 @@ type buttonLayouter struct {
 }
 
 func (l *buttonLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
-	size := l.formattedText.Size(ctx.MaxSize)
+	size := textSize(l.formattedText, ctx.MaxSize)
 	g := mochi.Guide{Frame: mochi.Rt(0, 0, size.X+padding*2, size.Y+padding*2)}
 	return g, nil
 }
@@ -36,8 +41,8 @@ func New(c mochi.Config) *Button {
 func (v *Button) Build(ctx *mochi.BuildContext) *mochi.Node {
 	ft := &text.Text{}
 	ft.SetString(v.Text)
-	ft.Format().SetAlignment(text.AlignmentCenter)
-	ft.Format().SetFont(text.Font{
+	ft.Style().SetAlignment(text.AlignmentCenter)
+	ft.Style().SetFont(text.Font{
 		Family: "Helvetica Neue",
 		Size:   20,
 	})

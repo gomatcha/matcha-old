@@ -112,12 +112,12 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	chl5 := textview.New(ctx.Get(chl5id))
 	chl5.PaintOptions.BackgroundColor = mochi.CyanColor
 	chl5.String = "Subtitle"
-	chl5.Format.SetAlignment(text.AlignmentCenter)
-	chl5.Format.SetStrikethroughStyle(text.StrikethroughStyleSingle)
-	chl5.Format.SetStrikethroughColor(mochi.MagentaColor)
-	chl5.Format.SetUnderlineStyle(text.UnderlineStyleDouble)
-	chl5.Format.SetUnderlineColor(mochi.GreenColor)
-	chl5.Format.SetFont(text.Font{
+	chl5.Style.SetAlignment(text.AlignmentCenter)
+	chl5.Style.SetStrikethroughStyle(text.StrikethroughStyleSingle)
+	chl5.Style.SetStrikethroughColor(mochi.MagentaColor)
+	chl5.Style.SetUnderlineStyle(text.UnderlineStyleDouble)
+	chl5.Style.SetUnderlineColor(mochi.GreenColor)
+	chl5.Style.SetFont(text.Font{
 		Family: "American Typewriter",
 		Face:   "Bold",
 		Size:   20,
@@ -131,7 +131,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	chl6 := textview.New(ctx.Get(chl6id))
 	chl6.PaintOptions.BackgroundColor = mochi.RedColor
 	chl6.String = fmt.Sprintf("Counter: %v", v.counter)
-	chl6.Format.SetFont(text.Font{
+	chl6.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
 		Size:   20,
 	})

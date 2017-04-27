@@ -93,7 +93,7 @@
 @implementation NSAttributedString (Mochi)
 - (id)initWithGoValue:(MochiGoValue *)value {
     NSString *string = [value call:@"String" args:nil][0].toString;
-    MochiGoValue *format = [value call:@"Format" args:nil][0];
+    MochiGoValue *format = [value call:@"Style" args:nil][0];
     NSMapTable *attrTable = [format call:@"Map" args:nil][0].toMapTable;
 
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];

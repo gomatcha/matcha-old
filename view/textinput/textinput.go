@@ -8,7 +8,7 @@ import (
 type TextInput struct {
 	*mochi.Embed
 	Text         text.Text
-	Format       text.Format
+	Style        text.Style
 	PaintOptions mochi.PaintOptions
 }
 
