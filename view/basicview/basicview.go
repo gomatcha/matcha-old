@@ -7,6 +7,7 @@ import (
 type BasicView struct {
 	*mochi.Embed
 	PaintOptions mochi.PaintOptions
+	Layouter     mochi.Layouter
 }
 
 func New(c mochi.Config) *BasicView {
@@ -21,5 +22,6 @@ func New(c mochi.Config) *BasicView {
 func (v *BasicView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n := &mochi.Node{}
 	n.Painter = v.PaintOptions
+	n.Layouter = v.Layouter
 	return n
 }

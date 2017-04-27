@@ -14,6 +14,18 @@ const (
 	less
 )
 
+func (c comparison) String() string {
+	switch c {
+	case equal:
+		return "="
+	case greater:
+		return ">"
+	case less:
+		return "<"
+	}
+	return ""
+}
+
 type attribute int
 
 const (
@@ -26,6 +38,28 @@ const (
 	centerXAttr
 	centerYAttr
 )
+
+func (a attribute) String() string {
+	switch a {
+	case leftAttr:
+		return "Left"
+	case rightAttr:
+		return "Right"
+	case topAttr:
+		return "Top"
+	case bottomAttr:
+		return "Bottom"
+	case widthAttr:
+		return "Width"
+	case heightAttr:
+		return "Height"
+	case centerXAttr:
+		return "CenterX"
+	case centerYAttr:
+		return "CenterY"
+	}
+	return ""
+}
 
 type Anchor struct {
 	anchor anchor
@@ -193,6 +227,10 @@ type constraint struct {
 	anchor     anchor
 }
 
+func (c constraint) String() string {
+	return fmt.Sprintf("%v%v%v", c.attribute, c.comparison, c.anchor)
+}
+
 type Solver struct {
 	id          interface{}
 	constraints []constraint
@@ -245,7 +283,7 @@ func (s *Solver) solve(sys *System, ctx *mochi.LayoutContext) {
 	// Get parent guide.
 	var parent mochi.Guide
 	if s.id == rootId {
-		parent = *sys.max.mochiGuide
+		parent = *sys.min.mochiGuide
 	} else {
 		parent = *sys.Guide.mochiGuide
 	}
@@ -361,6 +399,10 @@ func (s *Solver) HeightLess(a *Anchor) {
 
 func (s *Solver) HeightGreater(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: heightAttr, comparison: greater, anchor: a.anchor})
+}
+
+func (s *Solver) String() string {
+	return fmt.Sprintf("Solver{%v, %v}", s.id, s.constraints)
 }
 
 type systemId int

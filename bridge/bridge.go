@@ -7,6 +7,7 @@ import (
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/button"
 	"github.com/overcyn/mochi/view/imageview"
+	"github.com/overcyn/mochi/view/scrollview"
 	"github.com/overcyn/mochi/view/textview"
 	// "mochi.io/mochi/layout/constraint"
 	// "mochi.io/mochi/layout"
@@ -43,6 +44,8 @@ const (
 	chl7id
 	chl8id
 	chl9id
+	chl10id
+	scrollChildId
 )
 
 type NestedView struct {
@@ -102,7 +105,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	chl4 := basicview.New(ctx.Get(chl4id))
 	chl4.PaintOptions.BackgroundColor = mochi.MagentaColor
 	n.Set(chl4id, chl4)
-	_ = l.Add(chl4id, func(s *constraint.Solver) {
+	g4 := l.Add(chl4id, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g3.Right())
 		s.WidthEqual(constraint.Const(50))
@@ -186,6 +189,29 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	_ = l.Add(chl9id, func(s *constraint.Solver) {
 		s.BottomEqual(g8.Top())
 		s.RightEqual(g2.Right().Add(-15))
+	})
+
+	// {
+	childLayouter := constraint.New()
+	scrollChild := basicview.New(ctx.Get(scrollChildId))
+	scrollChild.PaintOptions.BackgroundColor = mochi.WhiteColor
+	scrollChild.Layouter = childLayouter
+
+	n.Set(scrollChildId, scrollChild)
+	childLayouter.Solve(func(s *constraint.Solver) {
+		s.WidthEqual(constraint.Const(1000))
+		s.HeightEqual(constraint.Const(1000))
+	})
+
+	chl10 := scrollview.New(ctx.Get(chl10id))
+	chl10.PaintOptions.BackgroundColor = mochi.CyanColor
+	chl10.ContentView = scrollChild
+	n.Set(chl10id, chl10)
+	_ = l.Add(chl10id, func(s *constraint.Solver) {
+		s.TopEqual(g4.Bottom())
+		s.LeftEqual(g4.Left())
+		s.WidthEqual(constraint.Const(200))
+		s.HeightEqual(constraint.Const(200))
 	})
 
 	l.Solve(func(s *constraint.Solver) {

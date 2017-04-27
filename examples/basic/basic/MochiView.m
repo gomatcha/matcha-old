@@ -163,6 +163,10 @@ NSArray *MochiConfigureViewWithNode(UIView *view,  MochiNode *node, NSArray *pre
     if (_node != value) {
         _node = value;
         self.childViews = MochiConfigureViewWithNode(self, _node, self.childViews);
+        
+        if (self.childViews.count > 0) {
+            self.contentSize = ((UIView *)self.childViews[0]).frame.size;
+        }
         MochiGoValue *state = _node.bridgeState;
 //        MochiGoValue *imageData = state[@"Bytes"];
     }

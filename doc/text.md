@@ -15,8 +15,17 @@ type TextInput struct
     Style       text.Style
     Text        text.Text
     
-Text.AddSpan(Style, StyleKey, min, max)
+<!-- Text.AddSpan(Style, StyleKey, min, max)
 Text.RemoveSpan(StyleKey, min, max)
+ -->
+Text.AddSpan(s, min, max)
+Text.RemoveSpan(s)
+Text.Spans
+Text.SpanAtIndex
+type Span interface {
+    Key()
+    WhatToDoWhenModified()
+}
 
 ## Considerations
 
