@@ -49,13 +49,17 @@
     self.mochiView = [[MochiView alloc] initWithFrame:CGRectZero];
     self.view = self.mochiView;
     
+    // [self reload];
+}
+
+- (void)viewDidLayoutSubviews {
     [self reload];
 }
 
 - (void)reload {
     [self.buildContext call:@"Build" args:nil];
     MochiGoValue *renderNode = [self.buildContext call:@"RenderNode" args:nil][0];
-    [renderNode call:@"LayoutRoot" args:@[[[MochiGoValue alloc] initWithCGPoint:CGPointZero], [[MochiGoValue alloc] initWithCGPoint:CGPointMake(1000, 1000)]]];
+    [renderNode call:@"LayoutRoot" args:@[[[MochiGoValue alloc] initWithCGPoint:CGPointZero], [[MochiGoValue alloc] initWithCGPoint:CGPointMake(self.view.frame.size.width, self.view.frame.size.height)]]];
     [renderNode call:@"Paint" args:nil];
     
     self.mochiView.node = [[MochiNode alloc] initWithGoValue:renderNode];
