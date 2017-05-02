@@ -10,7 +10,6 @@
 * Cliboard
 * Video / Sound / Microphone / Accelerometer
 
-* TableView
 * GridView
 * UINavigationController
 * UITabViewController

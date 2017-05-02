@@ -2,6 +2,7 @@ package bridge
 
 import (
 	"github.com/overcyn/mochi"
+	_ "github.com/overcyn/mochi/animation"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/text"
@@ -59,6 +60,10 @@ func New(c mochi.Config) *NestedView {
 	}
 	return v
 }
+
+// func (v *NestedView) OnMount() {
+// 	animationSource.Start()
+// }
 
 func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n := &mochi.Node{}
@@ -142,24 +147,6 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	// img := image.NewRGBA(image.Rect(0, 0, 100, 100))
-	// for x := 0; x < 100; x++ {
-	// 	for y := 0; y < 100; y++ {
-	// 		img.Set(x, y, mochi.MagentaColor)
-	// 	}
-	// }
-
-	// chl7 := imageview.NewImageView(ctx.Get(chl7id))
-	// chl7.PaintOptions.BackgroundColor = mochi.CyanColor
-	// chl7.Image = img
-	// n.Set(chl7id, chl7)
-	// _ = l.Add(chl7id, func(s *constraint.Solver) {
-	// 	s.BottomEqual(g6.Top())
-	// 	s.RightEqual(g2.Right().Add(-15))
-	// 	s.WidthEqual(constraint.Const(100))
-	// 	s.HeightEqual(constraint.Const(100))
-	// })
-
 	chl8 := imageview.NewURLImageView(ctx.Get(chl8id))
 	chl8.PaintOptions.BackgroundColor = mochi.CyanColor
 	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
@@ -229,9 +216,7 @@ const (
 
 type TableCell struct {
 	*mochi.Embed
-	String string
-	// Style        *text.Style
-	// Text         *text.Text
+	String       string
 	PaintOptions mochi.PaintOptions
 }
 
