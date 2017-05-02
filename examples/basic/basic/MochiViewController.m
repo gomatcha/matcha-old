@@ -48,8 +48,6 @@
     self.buildContext = buildContext;
     self.mochiView = [[MochiView alloc] initWithFrame:CGRectZero];
     self.view = self.mochiView;
-    
-    // [self reload];
 }
 
 - (void)viewDidLayoutSubviews {

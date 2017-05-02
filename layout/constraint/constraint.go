@@ -3,6 +3,7 @@ package constraint
 import (
 	"fmt"
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/animate"
 	"math"
 )
 
@@ -111,6 +112,14 @@ func (a constAnchor) value(sys *System) float64 {
 	return float64(a)
 }
 
+type notifierAnchor struct {
+	n animate.FloatNotifier
+}
+
+func (a notifierAnchor) value(sys *System) float64 {
+	return a.n.Value()
+}
+
 type guideAnchor struct {
 	guide     *Guide
 	attribute attribute
@@ -156,6 +165,10 @@ func (a guideAnchor) value(sys *System) float64 {
 
 func Const(f float64) *Anchor {
 	return &Anchor{constAnchor(f)}
+}
+
+func FloatNotifier(n animate.FloatNotifier) *Anchor {
+	return &Anchor{notifierAnchor{n}}
 }
 
 type Guide struct {

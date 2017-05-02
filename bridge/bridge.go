@@ -2,7 +2,7 @@ package bridge
 
 import (
 	"github.com/overcyn/mochi"
-	_ "github.com/overcyn/mochi/animation"
+	_ "github.com/overcyn/mochi/animate"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/text"

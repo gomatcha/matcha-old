@@ -12,6 +12,7 @@
 @interface MochiNode ()
 @property (nonatomic, strong) MochiGoValue *goValue;
 @property (nonatomic, strong) MochiLayoutGuide *guide;
+@property (nonatomic, assign) NSInteger buildId;
 @end
 
 @implementation MochiNode
@@ -19,6 +20,7 @@
 - (id)initWithGoValue:(MochiGoValue *)value {
     if (self = [super init]) {
         self.goValue = value;
+        self.buildId = value[@"BuildId"].toLongLong;
     }
     return self;
 }

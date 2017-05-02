@@ -18,6 +18,7 @@
 @property (nonatomic, readonly) MochiPaintOptions *paintOptions;
 @property (nonatomic, readonly) NSString *bridgeName;
 @property (nonatomic, readonly) MochiGoValue *bridgeState;
+@property (nonatomic, readonly) NSInteger buildId;
 @end
 
 @interface MochiPaintOptions : NSObject

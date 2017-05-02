@@ -9,6 +9,7 @@
 @import UIKit;
 #import "MochiBridge.h"
 #import "MochiNode.h"
+@class MochiViewConfig;
 
 @interface MochiView : UIView
 @property (nonatomic, strong) MochiNode *node;
@@ -20,7 +21,7 @@
 @interface MochiImageView : UIImageView
 @end
 
-@interface MochiButton : MochiView
+@interface MochiButton : UIView
 @end
 
 @interface MochiScrollView : UIScrollView

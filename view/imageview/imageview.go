@@ -57,6 +57,7 @@ func (v *URLImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
 			select {
 			case <-c.Done():
 			default:
+				v.cancel()
 				v.image = image
 				v.err = err
 				v.Update(nil)

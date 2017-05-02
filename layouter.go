@@ -7,6 +7,11 @@ type LayoutContext struct {
 	node      *RenderNode
 }
 
+type NotifyLayouter interface {
+	Notifier
+	Layouter
+}
+
 type Layouter interface {
 	Layout(ctx *LayoutContext) (Guide, map[interface{}]Guide)
 }

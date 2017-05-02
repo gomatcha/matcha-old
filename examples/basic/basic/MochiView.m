@@ -8,68 +8,53 @@
 
 #import "MochiView.h"
 
-@interface MochiView ()
+bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config);
+
+@interface MochiViewConfig : NSObject
+@property (nonatomic, strong) NSMapTable *childViewsTable;
 @property (nonatomic, strong) NSArray *childViews;
+@property (nonatomic, strong) MochiNode *node;
 @end
 
-NSArray *MochiConfigureViewWithNode(UIView *view,  MochiNode *node, NSArray *prevChildren);
-NSArray *MochiConfigureViewWithNode(UIView *view,  MochiNode *node, NSArray *prevChildren) {
-    for (UIView *i in prevChildren) {
-        [i removeFromSuperview];
-    }
-    
-    view.backgroundColor = node.paintOptions.backgroundColor ?: [UIColor clearColor];
-    view.frame = node.guide.frame;
-    
-    NSMutableArray *array = [NSMutableArray array];
-    for (MochiNode *i in node.nodeChildren.objectEnumerator) {
-        NSString *name = i.bridgeName;
-        MochiView *child = nil;
-        if ([name isEqual:@""]) {
-            child = [[MochiView alloc] init];
-        } else if ([name isEqual:@"github.com/overcyn/mochi/view/textview"]) {
-            child = (id)[[MochiTextView alloc] init];
-        } else if ([name isEqual:@"github.com/overcyn/mochi/view/imageview"]) {
-            child = (id)[[MochiImageView alloc] init];
-        } else if ([name isEqual:@"github.com/overcyn/mochi/view/button"]) {
-            child = [[MochiButton alloc] init];
-        } else if ([name isEqual:@"github.com/overcyn/mochi/view/scrollview"]) {
-            child = (id)[[MochiScrollView alloc] init];
-        }
-        child.node = i;
-        [array addObject:child];
-    }
-    [array sortUsingComparator:^NSComparisonResult(MochiView *obj1, MochiView *obj2) {
-        return obj1.node.guide.zIndex > obj2.node.guide.zIndex;
-    }];
-    for (UIView *i in array) {
-        [view addSubview:i];
-    }
-    return array;
-}
+@implementation MochiViewConfig
+@end
+
+@interface MochiView ()
+@property (nonatomic, strong) MochiViewConfig *config;
+@end
 
 @implementation MochiView
 
-- (void)setNode:(MochiNode *)value {
-    if (_node != value) {
-        _node = value;
-        self.childViews = MochiConfigureViewWithNode(self, _node, self.childViews);
+- (id)initWithFrame:(CGRect)frame {
+    if ((self = [super initWithFrame:frame])) {
+        self.config = [[MochiViewConfig alloc] init];
     }
+    return self;
+}
+
+- (void)setNode:(MochiNode *)value {
+    _node = value;
+    MochiConfigureViewWithNode(self, self.node, self.config);
 }
 
 @end
 
 @interface MochiTextView ()
-@property (nonatomic, strong) MochiNode *node;
-@property (nonatomic, strong) NSArray *childViews;
+@property (nonatomic, strong) MochiViewConfig *config;
 @end
 
 @implementation MochiTextView
 
+- (id)initWithFrame:(CGRect)frame {
+    if ((self = [super initWithFrame:frame])) {
+        self.config = [[MochiViewConfig alloc] init];
+    }
+    return self;
+}
+
 - (void)setNode:(MochiNode *)value {
-    if (_node != value) {
-        _node = value;
-        self.childViews = MochiConfigureViewWithNode(self, _node, self.childViews);
+    bool update = MochiConfigureViewWithNode(self, value, self.config);
+    if (update) {
         MochiGoValue *state = value.bridgeState;
         MochiGoValue *formattedText = state[@"Text"];
         if (!formattedText.isNil) {
@@ -82,17 +67,22 @@ NSArray *MochiConfigureViewWithNode(UIView *view,  MochiNode *node, NSArray *pre
 @end
 
 @interface MochiImageView ()
-@property (nonatomic, strong) MochiNode *node;
-@property (nonatomic, strong) NSArray *childViews;
+@property (nonatomic, strong) MochiViewConfig *config;
 @end
 
 @implementation MochiImageView
 
+- (id)initWithFrame:(CGRect)frame {
+    if ((self = [super initWithFrame:frame])) {
+        self.config = [[MochiViewConfig alloc] init];
+    }
+    return self;
+}
+
 - (void)setNode:(MochiNode *)value {
-    if (_node != value) {
-        _node = value;
-        self.childViews = MochiConfigureViewWithNode(self, _node, self.childViews);
-        MochiGoValue *state = _node.bridgeState;
+    bool update = MochiConfigureViewWithNode(self, value, self.config);
+    if (update) {
+        MochiGoValue *state = value.bridgeState;
         MochiGoValue *imageData = state[@"Bytes"];
         if (!imageData.isNil) {
             NSData *data = imageData.toData;
@@ -119,12 +109,14 @@ NSArray *MochiConfigureViewWithNode(UIView *view,  MochiNode *node, NSArray *pre
 
 @interface MochiButton ()
 @property (nonatomic, strong) UIButton *button;
+@property (nonatomic, strong) MochiViewConfig *config;
 @end
 
 @implementation MochiButton
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
+        self.config = [[MochiViewConfig alloc] init];
         self.button = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.button addTarget:self action:@selector(onPress) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.button];
@@ -132,11 +124,13 @@ NSArray *MochiConfigureViewWithNode(UIView *view,  MochiNode *node, NSArray *pre
     return self;
 }
 
-- (void)setNode:(MochiNode *)node {
-    [super setNode:node];
-    MochiGoValue *state = node.bridgeState[@"Text"];
-    NSAttributedString *string = [[NSAttributedString alloc] initWithGoValue:state];
-    [self.button setAttributedTitle:string forState:UIControlStateNormal];
+- (void)setNode:(MochiNode *)value {
+    bool update = MochiConfigureViewWithNode(self, value, self.config);
+    if (update) {
+        MochiGoValue *state = value.bridgeState[@"Text"];
+        NSAttributedString *string = [[NSAttributedString alloc] initWithGoValue:state];
+        [self.button setAttributedTitle:string forState:UIControlStateNormal];
+    }
 }
 
 - (void)layoutSubviews {
@@ -144,7 +138,7 @@ NSArray *MochiConfigureViewWithNode(UIView *view,  MochiNode *node, NSArray *pre
 }
 
 - (void)onPress {
-    MochiGoValue *onPress = self.node.bridgeState[@"OnPress"];
+    MochiGoValue *onPress = self.config.node.bridgeState[@"OnPress"];
     if (!onPress.isNil) {
         [onPress call:nil args:nil];
     }
@@ -153,24 +147,75 @@ NSArray *MochiConfigureViewWithNode(UIView *view,  MochiNode *node, NSArray *pre
 @end
 
 @interface MochiScrollView ()
-@property (nonatomic, strong) MochiNode *node;
-@property (nonatomic, strong) NSArray *childViews;
+@property (nonatomic, strong) MochiViewConfig *config;
 @end
 
 @implementation MochiScrollView
 
+- (id)initWithFrame:(CGRect)frame {
+    if ((self = [super initWithFrame:frame])) {
+        self.config = [[MochiViewConfig alloc] init];
+    }
+    return self;
+}
+
 - (void)setNode:(MochiNode *)value {
-    if (_node != value) {
-        _node = value;
-        self.childViews = MochiConfigureViewWithNode(self, _node, self.childViews);
-        
-        if (self.childViews.count > 0) {
-            self.contentSize = ((UIView *)self.childViews[0]).frame.size;
+    bool update = MochiConfigureViewWithNode(self, value, self.config);
+    if (update) {
+        if (self.config.childViews.count > 0) {
+            self.contentSize = ((UIView *)self.config.childViews[0]).frame.size;
         }
-        MochiGoValue *state = _node.bridgeState;
+
+        MochiGoValue *state = value.bridgeState;
         self.scrollEnabled = state[@"ScrollEnabled"].toBool;
         self.showsVerticalScrollIndicator = state[@"ShowsVerticalScrollIndicator"].toBool;
         self.showsHorizontalScrollIndicator = state[@"ShowsHorizontalScrollIndicator"].toBool;
     }
 }
 @end
+
+bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config) {
+    bool update = node.buildId != config.node.buildId;
+    
+    // Update layout and paint options
+    view.backgroundColor = node.paintOptions.backgroundColor ?: [UIColor clearColor];
+    view.frame = node.guide.frame;
+    
+    // Rebuild children
+    if (update) {
+        for (UIView *i in config.childViews) {
+            [i removeFromSuperview];
+        }
+        
+        NSMutableArray *childViews = [NSMutableArray array];
+        for (MochiNode *i in node.nodeChildren.objectEnumerator) {
+            NSString *name = i.bridgeName;
+            MochiView *child = nil;
+            if ([name isEqual:@""]) {
+                child = [[MochiView alloc] init];
+            } else if ([name isEqual:@"github.com/overcyn/mochi/view/textview"]) {
+                child = (id)[[MochiTextView alloc] init];
+            } else if ([name isEqual:@"github.com/overcyn/mochi/view/imageview"]) {
+                child = (id)[[MochiImageView alloc] init];
+            } else if ([name isEqual:@"github.com/overcyn/mochi/view/button"]) {
+                child = (id)[[MochiButton alloc] init];
+            } else if ([name isEqual:@"github.com/overcyn/mochi/view/scrollview"]) {
+                child = (id)[[MochiScrollView alloc] init];
+            }
+            child.node = i;
+            [childViews addObject:child];
+        }
+        [childViews sortUsingComparator:^NSComparisonResult(MochiView *obj1, MochiView *obj2) {
+            return obj1.config.node.guide.zIndex > obj2.config.node.guide.zIndex;
+        }];
+        for (UIView *i in childViews) {
+            [view addSubview:i];
+        }
+        config.childViews = childViews;
+    } else {
+        
+    }
+    
+    config.node = node;
+    return update;
+}
