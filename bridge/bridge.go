@@ -4,7 +4,7 @@ import (
 	"github.com/overcyn/mochi"
 	_ "github.com/overcyn/mochi/animate"
 	"github.com/overcyn/mochi/layout/constraint"
-	_ "github.com/overcyn/mochi/layout/table"
+	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/button"
@@ -43,8 +43,8 @@ const (
 	chl7id
 	chl8id
 	chl9id
-	chl10id
-	scrollChildId
+	scrollId      = "scroll"
+	scrollChildId = "scrollChild"
 )
 
 type NestedView struct {
@@ -188,27 +188,27 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	// childLayouter := &table.Layout{}
-	// childViews := map[interface{}]mochi.View{}
-	// for i := 100; i < 110; i++ {
-	// 	childView := NewTableCell(ctx.Get(i))
-	// 	childView.String = "TEST TEST"
-	// 	childView.PaintOptions.BackgroundColor = mochi.RedColor
-	// 	childViews[i] = childView
-	// 	childLayouter.Add(i)
-	// }
+	childLayouter := &table.Layout{}
+	childViews := map[interface{}]mochi.View{}
+	for i := 100; i < 120; i++ {
+		childView := NewTableCell(ctx.Get(i))
+		childView.String = "TEST TEST"
+		childView.PaintOptions.BackgroundColor = mochi.RedColor
+		childViews[i] = childView
+		childLayouter.Add(i)
+	}
 
-	// scrollChild := basicview.New(ctx.Get(scrollChildId))
-	// scrollChild.PaintOptions.BackgroundColor = mochi.WhiteColor
-	// scrollChild.Layouter = childLayouter
-	// scrollChild.Children = childViews
-	// n.Set(scrollChildId, scrollChild)
+	scrollChild := basicview.New(ctx.Get(scrollChildId))
+	scrollChild.PaintOptions.BackgroundColor = mochi.WhiteColor
+	scrollChild.Layouter = childLayouter
+	scrollChild.Children = childViews
+	n.Set(scrollChildId, scrollChild)
 
-	chl10 := scrollview.New(ctx.Get(chl10id))
+	chl10 := scrollview.New(ctx.Get(scrollId))
 	chl10.PaintOptions.BackgroundColor = mochi.CyanColor
-	// chl10.ContentView = scrollChild
-	n.Set(chl10id, chl10)
-	_ = l.Add(chl10id, func(s *constraint.Solver) {
+	chl10.ContentView = scrollChild
+	n.Set(scrollId, chl10)
+	_ = l.Add(scrollId, func(s *constraint.Solver) {
 		s.TopEqual(g4.Bottom())
 		s.LeftEqual(g4.Left())
 		s.WidthEqual(constraint.Const(200))

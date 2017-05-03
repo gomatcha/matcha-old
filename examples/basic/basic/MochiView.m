@@ -187,15 +187,18 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
         NSMutableArray *addedKeys = [NSMutableArray array];
         NSMutableArray *removedKeys = [NSMutableArray array];
         NSMutableArray *rebuiltKeys = [NSMutableArray array];
+        NSMutableArray *rebuiltKeys2 = [NSMutableArray array];
         NSMutableArray *unmodifiedKeys = [NSMutableArray array];
         NSMutableArray *unmodifiedKeys2 = [NSMutableArray array];
         
         for (MochiGoValue *i in config.node.nodeChildren.keyEnumerator) {
             MochiNode *prevChild = config.node.nodeChildren[i];
             MochiNode *child = nil;
+            MochiNode *key = nil;
             for (MochiGoValue *j in node.nodeChildren.keyEnumerator) {
                 if ([i isEqual:j]) {
                     child = node.nodeChildren[j];
+                    key = j;
                     break;
                 }
             }
@@ -203,6 +206,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
                 [removedKeys addObject:i];
             } else if (child.buildId != prevChild.buildId) {
                 [rebuiltKeys addObject:i];
+                [rebuiltKeys2 addObject:key];
             }
         }
         for (MochiGoValue *i in node.nodeChildren.keyEnumerator) {
@@ -224,16 +228,19 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
                 [unmodifiedKeys2 addObject:prevKey];
             }
         }
+        NSLog(@"configure:%@ %@ %@ %@", addedKeys, removedKeys, rebuiltKeys, unmodifiedKeys);
         
         NSMapTable *childViewsTable = [NSMapTable strongToStrongObjectsMapTable];
         for (MochiGoValue *i in removedKeys) {
             [config.childViewsTable[i] removeFromSuperview];
         }
-        for (MochiGoValue *i in rebuiltKeys) {
-            [config.childViewsTable[i] removeFromSuperview];
+        for (NSInteger i = 0; i < rebuiltKeys.count; i++) {
+            MochiGoValue *prevKey = rebuiltKeys[i];
+            MochiGoValue *key = rebuiltKeys2[i];
             
-            MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);
-            childViewsTable[i] = childView;
+            [config.childViewsTable[prevKey] removeFromSuperview];
+            MochiView *childView = MochiViewWithNode(node.nodeChildren[key]);
+            childViewsTable[key] = childView;
         }
         for (MochiGoValue *i in addedKeys) {
             MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);

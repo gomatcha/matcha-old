@@ -201,7 +201,7 @@ func (ctx *BuildContext) RenderNode() *RenderNode {
 func (ctx *BuildContext) Build() {
 	if ctx.needsUpdate {
 		ctx.needsUpdate = false
-		ctx.updateId = rand.Int()
+		ctx.updateId += 1
 
 		// Generate the new node.
 		node := ctx.view.Build(ctx)
@@ -216,7 +216,7 @@ func (ctx *BuildContext) Build() {
 			chlCtx.view = v
 			chlCtx.root = ctx.root
 			chlCtx.buildId = rand.Int()
-			chlCtx.updateId = rand.Int()
+			chlCtx.updateId = 0
 			children[k] = chlCtx
 		}
 
