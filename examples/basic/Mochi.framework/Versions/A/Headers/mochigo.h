@@ -33,6 +33,7 @@ void mochiGoMapSet(GoRef map, GoRef key, GoRef value);
 GoRef mochiGoType(CGoBuffer); // Frees the buffer
 
 bool mochiGoIsNil(GoRef);
+bool mochiGoEqual(GoRef, GoRef);
 GoRef mochiGoElem(GoRef);
 GoRef mochiGoCall(GoRef, CGoBuffer, GoRef);
 GoRef mochiGoField(GoRef, CGoBuffer);
@@ -66,6 +67,7 @@ void mochiGoUntrack(GoRef);
 - (NSMapTable *)toMapTable;
 // - (NSDictionary *)toDictionary;
 - (BOOL)isNil;
+- (BOOL)isEqual:(MochiGoValue *)value;
 - (MochiGoValue *)elem;
 - (NSArray<MochiGoValue *> *)call:(NSString *)method args:(NSArray<MochiGoValue *> *)args; // pass in nil for the method to call a closure.
 - (MochiGoValue *)field:(NSString *)name;

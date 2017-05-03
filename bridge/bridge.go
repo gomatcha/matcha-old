@@ -4,7 +4,7 @@ import (
 	"github.com/overcyn/mochi"
 	_ "github.com/overcyn/mochi/animate"
 	"github.com/overcyn/mochi/layout/constraint"
-	"github.com/overcyn/mochi/layout/table"
+	_ "github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/button"
@@ -74,6 +74,18 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	p := mochi.PaintOptions{}
 	p.BackgroundColor = mochi.GreenColor
 	n.Painter = p
+
+	// chl1 := imageview.NewURLImageView(ctx.Get(chl1id))
+	// chl1.PaintOptions.BackgroundColor = mochi.CyanColor
+	// chl1.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+	// chl1.ResizeMode = imageview.ResizeModeFit
+	// n.Set(chl1id, chl1)
+	// g1 := l.Add(chl1id, func(s *constraint.Solver) {
+	// 	s.TopEqual(constraint.Const(0))
+	// 	s.LeftEqual(constraint.Const(0))
+	// 	s.WidthEqual(constraint.Const(100))
+	// 	s.HeightEqual(constraint.Const(100))
+	// })
 
 	chl1 := basicview.New(ctx.Get(chl1id))
 	chl1.PaintOptions.BackgroundColor = mochi.RedColor
@@ -176,25 +188,25 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	childLayouter := &table.Layout{}
-	childViews := map[interface{}]mochi.View{}
-	for i := 100; i < 110; i++ {
-		childView := NewTableCell(ctx.Get(i))
-		childView.String = "TEST TEST"
-		childView.PaintOptions.BackgroundColor = mochi.RedColor
-		childViews[i] = childView
-		childLayouter.Add(i)
-	}
+	// childLayouter := &table.Layout{}
+	// childViews := map[interface{}]mochi.View{}
+	// for i := 100; i < 110; i++ {
+	// 	childView := NewTableCell(ctx.Get(i))
+	// 	childView.String = "TEST TEST"
+	// 	childView.PaintOptions.BackgroundColor = mochi.RedColor
+	// 	childViews[i] = childView
+	// 	childLayouter.Add(i)
+	// }
 
-	scrollChild := basicview.New(ctx.Get(scrollChildId))
-	scrollChild.PaintOptions.BackgroundColor = mochi.WhiteColor
-	scrollChild.Layouter = childLayouter
-	scrollChild.Children = childViews
-	n.Set(scrollChildId, scrollChild)
+	// scrollChild := basicview.New(ctx.Get(scrollChildId))
+	// scrollChild.PaintOptions.BackgroundColor = mochi.WhiteColor
+	// scrollChild.Layouter = childLayouter
+	// scrollChild.Children = childViews
+	// n.Set(scrollChildId, scrollChild)
 
 	chl10 := scrollview.New(ctx.Get(chl10id))
 	chl10.PaintOptions.BackgroundColor = mochi.CyanColor
-	chl10.ContentView = scrollChild
+	// chl10.ContentView = scrollChild
 	n.Set(chl10id, chl10)
 	_ = l.Add(chl10id, func(s *constraint.Solver) {
 		s.TopEqual(g4.Bottom())

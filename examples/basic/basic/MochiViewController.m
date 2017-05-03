@@ -55,6 +55,7 @@
 }
 
 - (void)reload {
+    NSLog(@"KD:%s", __FUNCTION__);
     [self.buildContext call:@"Build" args:nil];
     MochiGoValue *renderNode = [self.buildContext call:@"RenderNode" args:nil][0];
     [renderNode call:@"LayoutRoot" args:@[[[MochiGoValue alloc] initWithCGPoint:CGPointZero], [[MochiGoValue alloc] initWithCGPoint:CGPointMake(self.view.frame.size.width, self.view.frame.size.height)]]];

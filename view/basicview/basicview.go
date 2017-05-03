@@ -1,6 +1,7 @@
 package basicview
 
 import (
+	"fmt"
 	"github.com/overcyn/mochi"
 )
 
@@ -28,4 +29,8 @@ func (v *BasicView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		n.Set(k, v)
 	}
 	return n
+}
+
+func (v *BasicView) String() string {
+	return fmt.Sprintf("&BasicView{%p}", v)
 }

@@ -9,6 +9,7 @@
 #import "MochiView.h"
 
 bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config);
+MochiView *MochiViewWithNode(MochiNode *node);
 
 @interface MochiViewConfig : NSObject
 @property (nonatomic, strong) NSMapTable *childViewsTable;
@@ -33,8 +34,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
 }
 
 - (void)setNode:(MochiNode *)value {
-    _node = value;
-    MochiConfigureViewWithNode(self, self.node, self.config);
+    MochiConfigureViewWithNode(self, value, self.config);
 }
 
 @end
@@ -175,7 +175,8 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
 @end
 
 bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config) {
-    bool update = node.buildId != config.node.buildId;
+    bool update = node.updateId != config.node.updateId;
+    update = true;
     
     // Update layout and paint options
     view.backgroundColor = node.paintOptions.backgroundColor ?: [UIColor clearColor];
@@ -183,27 +184,74 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
     
     // Rebuild children
     if (update) {
-        for (UIView *i in config.childViews) {
-            [i removeFromSuperview];
+        NSMutableArray *addedKeys = [NSMutableArray array];
+        NSMutableArray *removedKeys = [NSMutableArray array];
+        NSMutableArray *rebuiltKeys = [NSMutableArray array];
+        NSMutableArray *unmodifiedKeys = [NSMutableArray array];
+        NSMutableArray *unmodifiedKeys2 = [NSMutableArray array];
+        
+        for (MochiGoValue *i in config.node.nodeChildren.keyEnumerator) {
+            MochiNode *prevChild = config.node.nodeChildren[i];
+            MochiNode *child = nil;
+            for (MochiGoValue *j in node.nodeChildren.keyEnumerator) {
+                if ([i isEqual:j]) {
+                    child = node.nodeChildren[j];
+                    break;
+                }
+            }
+            if (child == nil) {
+                [removedKeys addObject:i];
+            } else if (child.buildId != prevChild.buildId) {
+                [rebuiltKeys addObject:i];
+            }
+        }
+        for (MochiGoValue *i in node.nodeChildren.keyEnumerator) {
+            MochiGoValue *prevKey = nil;
+            MochiNode *prevChild = nil;
+            MochiNode *child = node.nodeChildren[i];
+            for (MochiGoValue *j in config.node.nodeChildren.keyEnumerator) {
+                if ([i isEqual:j]) {
+                    prevChild = config.node.nodeChildren[j];
+                    prevKey = j;
+                    break;
+                }
+            }
+           
+            if (prevChild == nil) {
+                [addedKeys addObject:i];
+            } else if (child.buildId == prevChild.buildId) {
+                [unmodifiedKeys addObject:i];
+                [unmodifiedKeys2 addObject:prevKey];
+            }
+        }
+        
+        NSMapTable *childViewsTable = [NSMapTable strongToStrongObjectsMapTable];
+        for (MochiGoValue *i in removedKeys) {
+            [config.childViewsTable[i] removeFromSuperview];
+        }
+        for (MochiGoValue *i in rebuiltKeys) {
+            [config.childViewsTable[i] removeFromSuperview];
+            
+            MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);
+            childViewsTable[i] = childView;
+        }
+        for (MochiGoValue *i in addedKeys) {
+            MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);
+            childViewsTable[i] = childView;
+        }
+        for (NSInteger i = 0; i < unmodifiedKeys.count; i++) {
+            MochiGoValue *prevKey = unmodifiedKeys2[i];
+            MochiGoValue *key = unmodifiedKeys[i];
+            
+            MochiView *childView = config.childViewsTable[prevKey];
+            childView.node = node.nodeChildren[key];
+            childViewsTable[key] = childView;
+            [childView removeFromSuperview];
         }
         
         NSMutableArray *childViews = [NSMutableArray array];
-        for (MochiNode *i in node.nodeChildren.objectEnumerator) {
-            NSString *name = i.bridgeName;
-            MochiView *child = nil;
-            if ([name isEqual:@""]) {
-                child = [[MochiView alloc] init];
-            } else if ([name isEqual:@"github.com/overcyn/mochi/view/textview"]) {
-                child = (id)[[MochiTextView alloc] init];
-            } else if ([name isEqual:@"github.com/overcyn/mochi/view/imageview"]) {
-                child = (id)[[MochiImageView alloc] init];
-            } else if ([name isEqual:@"github.com/overcyn/mochi/view/button"]) {
-                child = (id)[[MochiButton alloc] init];
-            } else if ([name isEqual:@"github.com/overcyn/mochi/view/scrollview"]) {
-                child = (id)[[MochiScrollView alloc] init];
-            }
-            child.node = i;
-            [childViews addObject:child];
+        for (UIView *i in childViewsTable.objectEnumerator) {
+            [childViews addObject:i];
         }
         [childViews sortUsingComparator:^NSComparisonResult(MochiView *obj1, MochiView *obj2) {
             return obj1.config.node.guide.zIndex > obj2.config.node.guide.zIndex;
@@ -211,11 +259,29 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
         for (UIView *i in childViews) {
             [view addSubview:i];
         }
-        config.childViews = childViews;
-    } else {
         
+        config.childViews = childViews;
+        config.childViewsTable = childViewsTable;
     }
     
     config.node = node;
     return update;
+}
+
+MochiView *MochiViewWithNode(MochiNode *node) {
+    NSString *name = node.bridgeName;
+    MochiView *child = nil;
+    if ([name isEqual:@""]) {
+        child = [[MochiView alloc] initWithFrame:CGRectZero];
+    } else if ([name isEqual:@"github.com/overcyn/mochi/view/textview"]) {
+        child = (id)[[MochiTextView alloc] initWithFrame:CGRectZero];
+    } else if ([name isEqual:@"github.com/overcyn/mochi/view/imageview"]) {
+        child = (id)[[MochiImageView alloc] initWithFrame:CGRectZero];
+    } else if ([name isEqual:@"github.com/overcyn/mochi/view/button"]) {
+        child = (id)[[MochiButton alloc] initWithFrame:CGRectZero];
+    } else if ([name isEqual:@"github.com/overcyn/mochi/view/scrollview"]) {
+        child = (id)[[MochiScrollView alloc] initWithFrame:CGRectZero];
+    }
+    child.node = node;
+    return child;
 }

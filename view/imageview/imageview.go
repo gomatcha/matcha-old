@@ -77,6 +77,10 @@ func (v *URLImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	return n
 }
 
+func (v *URLImageView) String() string {
+	return fmt.Sprintf("&URLImageView{%p URL:%v}", v, v.URL)
+}
+
 func loadImageURL(url string) (image.Image, error) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -139,4 +143,8 @@ func (v *ImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		ResizeMode: v.ResizeMode,
 	}
 	return n
+}
+
+func (v *ImageView) String() string {
+	return fmt.Sprintf("&ImageView{%p}", v)
 }

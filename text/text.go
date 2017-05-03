@@ -205,7 +205,10 @@ func (t *Text) normalize() {
 }
 
 func (t *Text) String() string {
-	return t.str
+	if t != nil {
+		return t.str
+	}
+	return ""
 }
 
 func (t *Text) SetString(text string) {
