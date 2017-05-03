@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) MochiView *mochiView;
 @property (nonatomic, strong) MochiGoValue *buildContext;
+@property (nonatomic, assign) CGRect lastFrame;
 @end
 
 @implementation MochiViewController
@@ -51,7 +52,10 @@
 }
 
 - (void)viewDidLayoutSubviews {
-    [self reload];
+    if (!CGRectEqualToRect(self.lastFrame, self.view.frame)) {
+        self.lastFrame = self.view.frame;
+        [self reload];
+    }
 }
 
 - (void)reload {
