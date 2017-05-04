@@ -167,7 +167,7 @@ func Const(f float64) *Anchor {
 	return &Anchor{constAnchor(f)}
 }
 
-func FloatNotifier(n animate.FloatNotifier) *Anchor {
+func Notifier(n animate.FloatNotifier) *Anchor {
 	return &Anchor{notifierAnchor{n}}
 }
 

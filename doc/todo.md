@@ -1,3 +1,5 @@
+The float notifier constraint should mark the node tree as needing relayout.
+
 * Animations
 * Event Handling / Gestures
 * Responder Chain

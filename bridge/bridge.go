@@ -1,9 +1,9 @@
 package bridge
 
 import (
+	"fmt"
 	"github.com/overcyn/mochi"
-	_ "github.com/overcyn/mochi/animate"
-	_ "github.com/overcyn/mochi/layout/absolute"
+	"github.com/overcyn/mochi/animate"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/text"
@@ -12,11 +12,9 @@ import (
 	"github.com/overcyn/mochi/view/imageview"
 	"github.com/overcyn/mochi/view/scrollview"
 	"github.com/overcyn/mochi/view/textview"
-
-	"fmt"
 	"mochi/bridge"
 	"reflect"
-	_ "time"
+	"time"
 )
 
 type GoRoot struct {
@@ -50,8 +48,9 @@ const (
 
 type NestedView struct {
 	*mochi.Embed
-	counter int
-	// ticker  *animate.Ticker
+	counter     int
+	ticker      *animate.Ticker
+	floatTicker animate.FloatNotifier
 }
 
 func NewNestedView(c mochi.Config) *NestedView {
@@ -59,14 +58,12 @@ func NewNestedView(c mochi.Config) *NestedView {
 	if !ok {
 		v = &NestedView{}
 		v.Embed = c.Embed
-		// v.ticker = animate.NewTicker(time.Second * 3)
+		v.ticker = animate.NewTicker(time.Second * 5)
+		v.floatTicker = animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 150})
+		fmt.Println("Float ticker", v.floatTicker.Value())
 	}
 	return v
 }
-
-// func (v *NestedView) OnMount() {
-// 	animationSource.Start()
-// }
 
 func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n := &mochi.Node{}
@@ -78,26 +75,14 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	p.BackgroundColor = mochi.GreenColor
 	n.Painter = p
 
-	// chl1 := imageview.NewURLImageView(ctx.Get(chl1id))
-	// chl1.PaintOptions.BackgroundColor = mochi.CyanColor
-	// chl1.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
-	// chl1.ResizeMode = imageview.ResizeModeFit
-	// n.Set(chl1id, chl1)
-	// g1 := l.Add(chl1id, func(s *constraint.Solver) {
-	// 	s.TopEqual(constraint.Const(0))
-	// 	s.LeftEqual(constraint.Const(0))
-	// 	s.WidthEqual(constraint.Const(100))
-	// 	s.HeightEqual(constraint.Const(100))
-	// })
-
 	chl1 := basicview.New(ctx.Get(chl1id))
 	chl1.PaintOptions.BackgroundColor = mochi.RedColor
 	n.Set(chl1id, chl1)
 	g1 := l.Add(chl1id, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
-		s.WidthEqual(constraint.Const(100))
-		s.HeightEqual(constraint.Const(100))
+		s.WidthEqual(constraint.Notifier(v.floatTicker))
+		s.HeightEqual(constraint.Notifier(v.floatTicker))
 	})
 
 	chl2 := basicview.New(ctx.Get(chl2id))

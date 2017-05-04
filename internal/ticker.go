@@ -1,6 +1,7 @@
 package internal
 
 import (
+	_ "fmt"
 	"mochi/bridge"
 	"sync"
 	"time"
@@ -96,7 +97,7 @@ func (t *Ticker) UnnotifyFunc(key int) {
 }
 
 func (t *Ticker) Value() float64 {
-	v := float64(time.Since(t.start) / t.duration)
+	v := float64(time.Since(t.start)) / float64(t.duration)
 	if v < 0 {
 		v = 0
 	} else if v > 1 {

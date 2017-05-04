@@ -46,7 +46,7 @@
 
 - (id)initWithName:(NSString *)name {
     if ((self = [super initWithNibName:nil bundle:nil])) {
-        self.identifier = arc4random();
+        self.identifier = arc4random_uniform(10000); // TODO(KD): Negative numbers don't pass through correctly?
         [[MochiViewController viewControllers] addPointer:(__bridge void *)self];
         
         self.goVC = [[[MochiGoBridge sharedBridge] root] call:@"NewViewController" args:@[[[MochiGoValue alloc] initWithInt:self.identifier]]][0];
@@ -69,10 +69,8 @@
 }
 
 - (void)render {
-    NSLog(@"RENDER");
-    
     MochiGoValue *renderNode = [self.goVC call:@"Render" args:nil][0];
-    self.mochiView.node = [[MochiNode alloc] initWithGoValue:renderNode];
+    [self update:[[MochiNode alloc] initWithGoValue:renderNode]];
 }
 
 - (void)update:(MochiNode *)node {

@@ -259,11 +259,11 @@ func FloatInterpolate(w UnitNotifier, l FloatInterpolater) FloatNotifier {
 }
 
 type FloatLerp struct {
-	start, end float64
+	Start, End float64
 }
 
 func (f FloatLerp) Interpolate(a float64) float64 {
-	return f.start + (f.end-f.start)*a
+	return f.Start + (f.End-f.Start)*a
 }
 
 // value := animate.UnitValue()
