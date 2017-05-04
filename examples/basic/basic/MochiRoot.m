@@ -8,6 +8,7 @@
 
 #import "MochiRoot.h"
 #import "MochiBridge.h"
+#import "MochiNode.h"
 #import "MochiViewController.h"
 
 @interface MochiRoot ()
@@ -21,6 +22,7 @@
     if ((self = [super init])) {
         self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(screenUpdate)];
         [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+        self.displayLink.preferredFramesPerSecond = 5;
         self.screenUpdateFunc = [[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/animate screenUpdate"];
     }
     return self;
@@ -43,8 +45,10 @@
     [self.screenUpdateFunc call:nil args:nil];
 }
 
-- (void)goWantsUpdate {
-    NSLog(@"KD:%s, %@", __FUNCTION__, @([NSThread isMainThread]));
+- (void)updateId:(NSInteger)identifier withRenderNode:(MochiGoValue *)renderNode {
+    MochiViewController *vc = [MochiViewController viewControllerWithIdentifier:identifier];
+    [vc update:[[MochiNode alloc] initWithGoValue:renderNode]];
+    // NSLog(@"KD:%s, %@, %@", __FUNCTION__, @([NSThread isMainThread]), @(identifier), renderNode);
 }
 
 @end

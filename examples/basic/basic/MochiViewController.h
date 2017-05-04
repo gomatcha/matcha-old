@@ -8,9 +8,14 @@
 
 #import <UIKit/UIKit.h>
 @import Mochi;
+@class MochiNode;
 
 @interface MochiViewController : UIViewController
 + (NSPointerArray *)viewControllers;
++ (MochiViewController *)viewControllerWithIdentifier:(NSInteger)identifier;
 + (void)render;
 - (id)initWithName:(NSString *)name;
+- (void)render;
+- (void)update:(MochiNode *)node;
+@property (nonatomic, readonly) NSInteger identifier;
 @end

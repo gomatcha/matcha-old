@@ -162,67 +162,66 @@ func (n *RenderNode) Copy() *RenderNode {
 }
 
 type ViewController struct {
+	id           int
 	mu           *sync.Mutex
 	buildContext *BuildContext
 	renderNode   *RenderNode
-	stop         chan struct{}
+	stopped      bool
 	size         Point
 	ticker       *internal.Ticker
 }
 
-func NewViewController(f func(Config) View) *ViewController {
+func NewViewController(f func(Config) View, id int) *ViewController {
 	vc := &ViewController{
 		mu:           &sync.Mutex{},
 		buildContext: NewBuildContext(f),
 		ticker:       internal.NewTicker(time.Hour * 99999),
-		stop:         make(chan struct{}),
+		id:           id,
 	}
 
 	// start run loop
-	go func() {
-		c := make(chan struct{})
-		vc.ticker.Notify(c)
-	loop:
-		for {
-			select {
-			case <-c:
-				vc.mu.Lock()
-				rn := vc.renderNode
-				vc.mu.Unlock()
-				_ = rn
-				// fmt.Println("tick")
-				bridge.Root().Call("goWantsUpdate")
-				// send render node to objective c
-			case <-vc.stop:
-				break loop
-			}
+	vc.ticker.NotifyFunc(func() {
+		vc.mu.Lock()
+		defer vc.mu.Unlock()
+
+		if vc.stopped {
+			return
 		}
-		vc.ticker.Unnotify(c)
-	}()
+		rn := vc.renderNode
+		rn.LayoutRoot(Pt(0, 0), vc.size)
+		rn.Paint()
+
+		bridge.Root().Call("updateId:withRenderNode:", bridge.Int64(int64(id)), bridge.Interface(rn))
+	})
 
 	return vc
 }
 
 func (vc *ViewController) Render() *RenderNode {
+	vc.mu.Lock()
+	defer vc.mu.Unlock()
+
 	vc.buildContext.Build()
 	vc.renderNode = vc.buildContext.RenderNode()
 
-	renderNode := vc.renderNode.Copy()
-	renderNode.LayoutRoot(Pt(0, 0), vc.size)
-	renderNode.Paint()
-	return renderNode
+	rn := vc.renderNode.Copy()
+	rn.LayoutRoot(Pt(0, 0), vc.size)
+	rn.Paint()
+	return rn
 }
 
 func (vc *ViewController) SetSize(p Point) {
+	vc.mu.Lock()
+	defer vc.mu.Unlock()
+
 	vc.size = p
 }
 
 func (vc *ViewController) Stop() {
-	if vc.stop == nil {
-		return
-	}
-	vc.stop <- struct{}{}
-	vc.stop = nil
+	vc.mu.Lock()
+	defer vc.mu.Unlock()
+
+	vc.stopped = true
 }
 
 type Config struct {

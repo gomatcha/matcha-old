@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"mochi/bridge"
 	"sync"
 	"time"
@@ -22,21 +21,19 @@ var tickers = struct {
 }
 
 func screenUpdate() {
-	fmt.Println("start")
-	bridge.Root().Call("goWantsUpdate")
 	tickers.mu.Lock()
 	defer tickers.mu.Unlock()
 
 	for _, i := range tickers.ts {
 		i.send()
 	}
-	fmt.Println("done")
 }
 
 type Ticker struct {
 	key      int
 	mu       *sync.Mutex
-	chans    []chan<- struct{}
+	chans    []chan struct{}
+	funcs    []func()
 	timer    *time.Timer
 	start    time.Time
 	duration time.Duration
@@ -64,18 +61,18 @@ func NewTicker(duration time.Duration) *Ticker {
 	return t
 }
 
-func (t *Ticker) Notify(c chan<- struct{}) {
+func (t *Ticker) Notify(c chan struct{}) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
 	t.chans = append(t.chans, c)
 }
 
-func (t *Ticker) Unnotify(c chan<- struct{}) {
+func (t *Ticker) Unnotify(c chan struct{}) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	chans := []chan<- struct{}{}
+	chans := []chan struct{}{}
 	for _, i := range t.chans {
 		if c != i {
 			chans = append(chans, c)
@@ -84,6 +81,18 @@ func (t *Ticker) Unnotify(c chan<- struct{}) {
 		}
 	}
 	t.chans = chans
+}
+
+func (t *Ticker) NotifyFunc(f func()) int {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+
+	t.funcs = append(t.funcs, f)
+	return 0
+}
+
+func (t *Ticker) UnnotifyFunc(key int) {
+	// TODO(KD):
 }
 
 func (t *Ticker) Value() float64 {
@@ -108,12 +117,17 @@ func (t *Ticker) Stop() {
 func (t *Ticker) send() {
 	t.mu.Lock()
 	chans := t.chans
+	funcs := t.funcs
 	t.mu.Unlock()
 
 	for _, i := range chans {
 		select {
 		case i <- struct{}{}:
+			<-i
 		default:
 		}
+	}
+	for _, i := range funcs {
+		i()
 	}
 }

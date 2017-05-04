@@ -22,10 +22,10 @@ import (
 type GoRoot struct {
 }
 
-func (b *GoRoot) NewViewController() *mochi.ViewController {
+func (b *GoRoot) NewViewController(id int) *mochi.ViewController {
 	return mochi.NewViewController(func(c mochi.Config) mochi.View {
 		return NewNestedView(c)
-	})
+	}, id)
 }
 
 func init() {

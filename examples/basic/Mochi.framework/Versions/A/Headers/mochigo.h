@@ -9,6 +9,7 @@ GoRef mochiGoRoot();
 
 GoRef mochiGoBool(bool);
 bool mochiGoToBool(GoRef);
+GoRef mochiGoInt(int);
 GoRef mochiGoInt64(int64_t);
 int64_t mochiGoToInt64(GoRef);
 GoRef mochiGoUint64(uint64_t);
@@ -50,6 +51,7 @@ void mochiGoUntrack(GoRef);
 @interface MochiGoValue : NSObject
 - (id)initWithGoRef:(GoRef)ref;
 - (id)initWithBool:(BOOL)v;
+- (id)initWithInt:(int)v;
 - (id)initWithLongLong:(long long)v;
 - (id)initWithUnsignedLongLong:(unsigned long long)v;
 - (id)initWithDouble:(double)v;

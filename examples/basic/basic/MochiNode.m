@@ -25,7 +25,6 @@
         self.buildId = value[@"BuildId"].toLongLong;
         self.updateId = value[@"UpdateId"].toLongLong;
         self.guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
-        NSLog(@"guide:%@",NSStringFromCGRect(self.guide.frame));
     }
     return self;
 }

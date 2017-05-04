@@ -6,25 +6,25 @@ import (
 )
 
 type value struct {
-	chans     []chan<- struct{}
+	chans     []chan struct{}
 	mu        *sync.Mutex
 	value     interface{}
 	notifiers []mochi.Notifier
-	onNotify  func()
+	done      []chan struct{}
 }
 
-func (v *value) Notify(c chan<- struct{}) {
+func (v *value) Notify(c chan struct{}) {
 	v.mu.Lock()
 	defer v.mu.Unlock()
 
 	v.chans = append(v.chans, c)
 }
 
-func (v *value) Unnotify(c chan<- struct{}) {
+func (v *value) Unnotify(c chan struct{}) {
 	v.mu.Lock()
 	defer v.mu.Unlock()
 
-	chans := make([]chan<- struct{}, 0, len(v.chans))
+	chans := make([]chan struct{}, 0, len(v.chans))
 	for _, i := range chans {
 		if i != c {
 			chans = append(chans, i)
@@ -47,6 +47,49 @@ func (v *value) Set(a interface{}) {
 	v.value = a
 	for _, i := range v.chans {
 		i <- struct{}{}
+		<-i
+	}
+}
+
+func (v *value) Watch(n mochi.Notifier, f func() interface{}) {
+	v.mu.Lock()
+	defer v.mu.Unlock()
+
+	c := make(chan struct{})
+	done := make(chan struct{})
+	v.notifiers = append(v.notifiers, n)
+	v.done = append(v.done, done)
+	n.Notify(c)
+
+	// setup a go routine waiting for notifications from n.
+	go func() {
+	loop:
+		for {
+			select {
+			case <-c:
+				v.Set(f())
+				c <- struct{}{}
+			case <-done:
+				n.Unnotify(c)
+				break loop
+			}
+		}
+	}()
+}
+
+func (v *value) Unwatch(n mochi.Notifier) {
+	v.mu.Lock()
+	defer v.mu.Unlock()
+
+	notifiers := []mochi.Notifier{}
+	done := []chan struct{}{}
+	for idx, i := range v.notifiers {
+		if i == n {
+			v.done[idx] <- struct{}{}
+		} else {
+			notifiers = append(notifiers, i)
+			done = append(done, v.done[idx])
+		}
 	}
 }
 
@@ -60,11 +103,11 @@ type unitNotifier struct {
 	interpolater UnitInterpolater
 }
 
-func (w *unitNotifier) Notify(c chan<- struct{}) {
+func (w *unitNotifier) Notify(c chan struct{}) {
 	w.watcher.Notify(c)
 }
 
-func (w *unitNotifier) Unnotify(c chan<- struct{}) {
+func (w *unitNotifier) Unnotify(c chan struct{}) {
 	w.watcher.Unnotify(c)
 }
 
@@ -76,11 +119,21 @@ type UnitValue struct {
 	v *value
 }
 
-func (v *UnitValue) Notify(c chan<- struct{}) {
+func (v *UnitValue) Watch(n UnitNotifier) {
+	v.v.Watch(n, func() interface{} {
+		return n.Value()
+	})
+}
+
+func (v *UnitValue) Unwatch(n UnitNotifier) {
+	v.Unwatch(n)
+}
+
+func (v *UnitValue) Notify(c chan struct{}) {
 	v.v.Notify(c)
 }
 
-func (v *UnitValue) Unnotify(c chan<- struct{}) {
+func (v *UnitValue) Unnotify(c chan struct{}) {
 	v.v.Unnotify(c)
 }
 
@@ -146,11 +199,11 @@ type floatNotifier struct {
 	interpolater FloatInterpolater
 }
 
-func (w *floatNotifier) Notify(c chan<- struct{}) {
+func (w *floatNotifier) Notify(c chan struct{}) {
 	w.watcher.Notify(c)
 }
 
-func (w *floatNotifier) Unnotify(c chan<- struct{}) {
+func (w *floatNotifier) Unnotify(c chan struct{}) {
 	w.watcher.Unnotify(c)
 }
 
@@ -159,9 +212,7 @@ func (w *floatNotifier) Value() float64 {
 }
 
 type FloatValue struct {
-	v         *value
-	notifiers []FloatNotifier
-	done      []chan struct{}
+	v *value
 }
 
 func NewFloatValue() *FloatValue {
@@ -171,50 +222,20 @@ func NewFloatValue() *FloatValue {
 }
 
 func (v *FloatValue) Watch(n FloatNotifier) {
-	v.v.mu.Lock()
-	defer v.v.mu.Unlock()
-
-	c := make(chan struct{})
-	done := make(chan struct{})
-	v.notifiers = append(v.notifiers, n)
-	v.done = append(v.done, done)
-	n.Notify(c)
-
-	go func() {
-	loop:
-		for {
-			select {
-			case <-c:
-				v.Set(n.Value())
-			case <-done:
-				n.Unnotify(c)
-				break loop
-			}
-		}
-	}()
+	v.v.Watch(n, func() interface{} {
+		return n.Value()
+	})
 }
 
 func (v *FloatValue) Unwatch(n FloatNotifier) {
-	v.v.mu.Lock()
-	defer v.v.mu.Unlock()
-
-	notifiers := []FloatNotifier{}
-	done := []chan struct{}{}
-	for idx, i := range v.notifiers {
-		if i == n {
-			v.done[idx] <- struct{}{}
-		} else {
-			notifiers = append(notifiers, i)
-			done = append(done, v.done[idx])
-		}
-	}
+	v.Unwatch(n)
 }
 
-func (v *FloatValue) Notify(c chan<- struct{}) {
+func (v *FloatValue) Notify(c chan struct{}) {
 	v.v.Notify(c)
 }
 
-func (v *FloatValue) Unnotify(c chan<- struct{}) {
+func (v *FloatValue) Unnotify(c chan struct{}) {
 	v.v.Unnotify(c)
 }
 

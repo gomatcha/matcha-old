@@ -509,13 +509,13 @@ func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{
 	return g, gs
 }
 
-func (sys *System) Notify(c chan<- struct{}) {
+func (sys *System) Notify(c chan struct{}) {
 	for _, i := range sys.notifiers {
 		i.Notify(c)
 	}
 }
 
-func (sys *System) Unnotify(c chan<- struct{}) {
+func (sys *System) Unnotify(c chan struct{}) {
 	for _, i := range sys.notifiers {
 		i.Unnotify(c)
 	}
