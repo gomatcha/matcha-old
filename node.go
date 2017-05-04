@@ -2,10 +2,12 @@ package mochi
 
 import (
 	"fmt"
+	"github.com/overcyn/mochi/internal"
 	"math/rand"
 	"mochi/bridge"
 	"strings"
 	"sync"
+	"time"
 )
 
 type View interface {
@@ -160,49 +162,67 @@ func (n *RenderNode) Copy() *RenderNode {
 }
 
 type ViewController struct {
+	mu           *sync.Mutex
 	buildContext *BuildContext
 	renderNode   *RenderNode
-	cancel       chan struct{}
+	stop         chan struct{}
 	size         Point
+	ticker       *internal.Ticker
 }
 
 func NewViewController(f func(Config) View) *ViewController {
-	return &ViewController{
+	vc := &ViewController{
+		mu:           &sync.Mutex{},
 		buildContext: NewBuildContext(f),
-	}
-}
-
-func (c *ViewController) Render() *RenderNode {
-	// Cancel the old run loop
-	if c.cancel != nil {
-		c.cancel <- struct{}{}
-		c.cancel = nil
+		ticker:       internal.NewTicker(time.Hour * 99999),
+		stop:         make(chan struct{}),
 	}
 
-	c.buildContext.Build()
-	c.renderNode = c.buildContext.RenderNode()
-	c.cancel = make(chan struct{})
-
+	// start run loop
 	go func() {
+		c := make(chan struct{})
+		vc.ticker.Notify(c)
 	loop:
 		for {
 			select {
-			// case <-c.renderNode:
-			// update uiview somehow
-			case <-c.cancel:
+			case <-c:
+				vc.mu.Lock()
+				rn := vc.renderNode
+				vc.mu.Unlock()
+				_ = rn
+				// fmt.Println("tick")
+				bridge.Root().Call("goWantsUpdate")
+				// send render node to objective c
+			case <-vc.stop:
 				break loop
 			}
 		}
+		vc.ticker.Unnotify(c)
 	}()
 
-	renderNode := c.renderNode.Copy()
-	renderNode.LayoutRoot(Pt(0, 0), c.size)
+	return vc
+}
+
+func (vc *ViewController) Render() *RenderNode {
+	vc.buildContext.Build()
+	vc.renderNode = vc.buildContext.RenderNode()
+
+	renderNode := vc.renderNode.Copy()
+	renderNode.LayoutRoot(Pt(0, 0), vc.size)
 	renderNode.Paint()
 	return renderNode
 }
 
-func (c *ViewController) SetSize(p Point) {
-	c.size = p
+func (vc *ViewController) SetSize(p Point) {
+	vc.size = p
+}
+
+func (vc *ViewController) Stop() {
+	if vc.stop == nil {
+		return
+	}
+	vc.stop <- struct{}{}
+	vc.stop = nil
 }
 
 type Config struct {

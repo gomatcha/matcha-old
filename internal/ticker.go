@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"mochi/bridge"
 	"sync"
 	"time"
@@ -21,13 +22,15 @@ var tickers = struct {
 }
 
 func screenUpdate() {
-	// bridge.Root().Call("goWantsUpdate")
+	fmt.Println("start")
+	bridge.Root().Call("goWantsUpdate")
 	tickers.mu.Lock()
 	defer tickers.mu.Unlock()
 
 	for _, i := range tickers.ts {
 		i.send()
 	}
+	fmt.Println("done")
 }
 
 type Ticker struct {

@@ -1,3 +1,5 @@
+package internal
+
 // package mochi
 
 // import (

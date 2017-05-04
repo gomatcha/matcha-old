@@ -44,7 +44,7 @@
 }
 
 - (void)goWantsUpdate {
-    // NSLog(@"KD:%s, %@", __FUNCTION__, @([NSThread isMainThread]));
+    NSLog(@"KD:%s, %@", __FUNCTION__, @([NSThread isMainThread]));
 }
 
 @end
