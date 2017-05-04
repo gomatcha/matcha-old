@@ -74,7 +74,7 @@ type RenderNode struct {
 	Painter  Painter
 	Bridge   Bridge
 
-	LayoutGuide  Guide
+	LayoutGuide  *Guide
 	PaintOptions PaintOptions
 
 	BuildId  int
@@ -84,7 +84,7 @@ type RenderNode struct {
 func (n *RenderNode) LayoutRoot(minSize Point, maxSize Point) {
 	g := n.Layout(minSize, maxSize)
 	g.Frame = g.Frame.Add(Pt(-g.Frame.Min.X, -g.Frame.Min.Y)) // Move Frame.Min to the origin.
-	n.LayoutGuide = g
+	n.LayoutGuide = &g
 }
 
 func (n *RenderNode) Layout(minSize Point, maxSize Point) Guide {
@@ -109,7 +109,8 @@ func (n *RenderNode) Layout(minSize Point, maxSize Point) Guide {
 
 	// Assign guides to children
 	for k, v := range gs {
-		n.Children[k].LayoutGuide = v
+		guide := v
+		n.Children[k].LayoutGuide = &guide
 	}
 	return g
 }
@@ -121,6 +122,87 @@ func (n *RenderNode) Paint() {
 	for _, v := range n.Children {
 		v.Paint()
 	}
+}
+
+func (n *RenderNode) DebugString() string {
+	all := []string{}
+	for _, i := range n.Children {
+		lines := strings.Split(i.DebugString(), "\n")
+		for idx, line := range lines {
+			lines[idx] = "|	" + line
+		}
+		all = append(all, lines...)
+	}
+
+	str := fmt.Sprintf("{%p Bridge:%v LayoutGuide:%v PaintOptions:%v buildId:%v updateId:%v}", n, n.Bridge, n.LayoutGuide, n.PaintOptions, n.BuildId, n.UpdateId)
+	if len(all) > 0 {
+		str += "\n" + strings.Join(all, "\n")
+	}
+	return str
+}
+
+func (n *RenderNode) Copy() *RenderNode {
+	children := map[interface{}]*RenderNode{}
+	for k, v := range n.Children {
+		children[k] = v
+	}
+	copy := &RenderNode{
+		Children:     children,
+		Layouter:     n.Layouter,
+		Painter:      n.Painter,
+		Bridge:       n.Bridge,
+		LayoutGuide:  n.LayoutGuide,
+		PaintOptions: n.PaintOptions,
+		BuildId:      n.BuildId,
+		UpdateId:     n.UpdateId,
+	}
+	return copy
+}
+
+type ViewController struct {
+	buildContext *BuildContext
+	renderNode   *RenderNode
+	cancel       chan struct{}
+	size         Point
+}
+
+func NewViewController(f func(Config) View) *ViewController {
+	return &ViewController{
+		buildContext: NewBuildContext(f),
+	}
+}
+
+func (c *ViewController) Render() *RenderNode {
+	// Cancel the old run loop
+	if c.cancel != nil {
+		c.cancel <- struct{}{}
+		c.cancel = nil
+	}
+
+	c.buildContext.Build()
+	c.renderNode = c.buildContext.RenderNode()
+	c.cancel = make(chan struct{})
+
+	go func() {
+	loop:
+		for {
+			select {
+			// case <-c.renderNode:
+			// update uiview somehow
+			case <-c.cancel:
+				break loop
+			}
+		}
+	}()
+
+	renderNode := c.renderNode.Copy()
+	renderNode.LayoutRoot(Pt(0, 0), c.size)
+	renderNode.Paint()
+	return renderNode
+}
+
+func (c *ViewController) SetSize(p Point) {
+	c.size = p
 }
 
 type Config struct {
@@ -264,11 +346,6 @@ func (ctx *BuildContext) Build() {
 	// Recursively update children.
 	for _, i := range ctx.children {
 		i.Build()
-	}
-
-	// TODO(KD): Debug log
-	if len(ctx.keyPath) == 0 {
-		fmt.Println(ctx.DebugString())
 	}
 }
 

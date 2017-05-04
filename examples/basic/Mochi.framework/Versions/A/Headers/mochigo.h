@@ -31,6 +31,7 @@ GoRef mochiGoMapGet(GoRef map, GoRef key);
 void mochiGoMapSet(GoRef map, GoRef key, GoRef value);
 
 GoRef mochiGoType(CGoBuffer); // Frees the buffer
+GoRef mochiGoFunc(CGoBuffer); // Frees the buffer
 
 bool mochiGoIsNil(GoRef);
 bool mochiGoEqual(GoRef, GoRef);
@@ -56,6 +57,7 @@ void mochiGoUntrack(GoRef);
 - (id)initWithData:(NSData *)v;
 - (id)initWithArray:(NSArray<MochiGoValue *> *)v;
 - (id)initWithType:(NSString *)typeName;
+- (id)initWithFunc:(NSString *)funcName;
 @property (nonatomic, readonly) GoRef ref;
 - (BOOL)toBool;
 - (long long)toLongLong;

@@ -194,7 +194,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
         for (MochiGoValue *i in config.node.nodeChildren.keyEnumerator) {
             MochiNode *prevChild = config.node.nodeChildren[i];
             MochiNode *child = nil;
-            MochiNode *key = nil;
+            MochiGoValue *key = nil;
             for (MochiGoValue *j in node.nodeChildren.keyEnumerator) {
                 if ([i isEqual:j]) {
                     child = node.nodeChildren[j];
@@ -202,6 +202,10 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
                     break;
                 }
             }
+            if (child.guide == nil) { // Ignore nodes without a guide
+                continue;
+            }
+            
             if (child == nil) {
                 [removedKeys addObject:i];
             } else if (child.buildId != prevChild.buildId) {
@@ -220,6 +224,9 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
                     break;
                 }
             }
+            if (child.guide == nil) { // Ignore nodes without a guide
+                continue;
+            }
            
             if (prevChild == nil) {
                 [addedKeys addObject:i];
@@ -228,7 +235,6 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
                 [unmodifiedKeys2 addObject:prevKey];
             }
         }
-        NSLog(@"configure:%@ %@ %@ %@", addedKeys, removedKeys, rebuiltKeys, unmodifiedKeys);
         
         NSMapTable *childViewsTable = [NSMapTable strongToStrongObjectsMapTable];
         for (MochiGoValue *i in removedKeys) {

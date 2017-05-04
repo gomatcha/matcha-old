@@ -3,6 +3,7 @@ package bridge
 import (
 	"github.com/overcyn/mochi"
 	_ "github.com/overcyn/mochi/animate"
+	_ "github.com/overcyn/mochi/layout/absolute"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/text"
@@ -15,16 +16,16 @@ import (
 	"fmt"
 	"mochi/bridge"
 	"reflect"
+	_ "time"
 )
 
 type GoRoot struct {
 }
 
-func (b *GoRoot) NewBuildContext() *mochi.BuildContext {
-	ctx := mochi.NewBuildContext(func(c mochi.Config) mochi.View {
-		return New(c)
+func (b *GoRoot) NewViewController() *mochi.ViewController {
+	return mochi.NewViewController(func(c mochi.Config) mochi.View {
+		return NewNestedView(c)
 	})
-	return ctx
 }
 
 func init() {
@@ -50,13 +51,15 @@ const (
 type NestedView struct {
 	*mochi.Embed
 	counter int
+	// ticker  *animate.Ticker
 }
 
-func New(c mochi.Config) *NestedView {
+func NewNestedView(c mochi.Config) *NestedView {
 	v, ok := c.Prev.(*NestedView)
 	if !ok {
 		v = &NestedView{}
 		v.Embed = c.Embed
+		// v.ticker = animate.NewTicker(time.Second * 3)
 	}
 	return v
 }
@@ -196,6 +199,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		childView.PaintOptions.BackgroundColor = mochi.RedColor
 		childViews[i] = childView
 		childLayouter.Add(i)
+		n.Set(i, childView)
 	}
 
 	scrollChild := basicview.New(ctx.Get(scrollChildId))

@@ -11,6 +11,6 @@
 
 @interface MochiViewController : UIViewController
 + (NSPointerArray *)viewControllers;
-+ (void)reload;
++ (void)render;
 - (id)initWithName:(NSString *)name;
 @end

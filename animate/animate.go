@@ -3,45 +3,7 @@ package animate
 import (
 	"github.com/overcyn/mochi"
 	"sync"
-	"time"
 )
-
-type Timing struct {
-	ticker *time.Ticker
-	after  <-chan time.Time
-	value  UnitValue
-	start  time.Time
-}
-
-func NewTiming(duration time.Duration, value UnitValue) *Timing {
-	t := &Timing{
-		ticker: time.NewTicker(time.Second / 30),
-		after:  time.After(duration),
-		start:  time.Now(),
-	}
-	go func() {
-	loop:
-		for {
-			select {
-			case <-t.after:
-				t.ticker.Stop()
-				break loop
-			case <-t.ticker.C:
-				fraction := float64(time.Since(t.start) / duration)
-				if fraction > 1 {
-					fraction = 1
-				} else if fraction < 0 {
-					fraction = 0
-				}
-			}
-		}
-	}()
-	return t
-}
-
-func (t *Timing) Stop() {
-	t.ticker.Stop()
-}
 
 type value struct {
 	chans     []chan<- struct{}
@@ -284,11 +246,11 @@ func (f FloatLerp) Interpolate(a float64) float64 {
 }
 
 // value := animate.UnitValue()
-// timing := animate.NewTiming(10, value)
+// Ticker := animate.NewTicker(10, value)
 // func onMount() {
-// 	// I want multiple timings to be able to update the animate.UnitValue()
+// 	// I want multiple Tickers to be able to update the animate.UnitValue()
 // 	// And I want multiple things to be able to watch animate.UnitValue
-// 	unitN := animate.UnitInterpolate(animate.NewTiming(10), animate.LinearEase{})
+// 	unitN := animate.UnitInterpolate(animate.NewTicker(10), animate.LinearEase{})
 // 	floatN = animate.FloatInterpolate(w, animate.FloatLerp{0, 10})
 
 // 	value := &animate.FloatValue{}

@@ -24,6 +24,8 @@
         self.goValue = value;
         self.buildId = value[@"BuildId"].toLongLong;
         self.updateId = value[@"UpdateId"].toLongLong;
+        self.guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
+        NSLog(@"guide:%@",NSStringFromCGRect(self.guide.frame));
     }
     return self;
 }
@@ -42,13 +44,6 @@
         _nodeChildren = nodeChildren;
     }
     return _nodeChildren;
-}
-
-- (MochiLayoutGuide *)guide {
-    if (_guide == nil) {
-        _guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
-    }
-    return _guide;
 }
 
 - (NSString *)bridgeName {
@@ -94,6 +89,9 @@
 @implementation MochiLayoutGuide
 
 - (id)initWithGoValue:(MochiGoValue *)value {
+    if (value.isNil) {
+        return nil;
+    }
     if (self = [super init]) {
         self.frame = value[@"Frame"].toCGRect;
         self.insets = value[@"Insets"].toUIEdgeInsets;

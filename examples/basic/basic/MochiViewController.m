@@ -14,7 +14,7 @@
 @interface MochiViewController ()
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) MochiView *mochiView;
-@property (nonatomic, strong) MochiGoValue *buildContext;
+@property (nonatomic, strong) MochiGoValue *viewController;
 @property (nonatomic, assign) CGRect lastFrame;
 @end
 
@@ -29,9 +29,9 @@
     return sPointerArray;
 }
 
-+ (void)reload {
++ (void)render {
     for (MochiViewController *i in [MochiViewController viewControllers]) {
-        [i reload];
+        [i render];
     }
 }
 
@@ -45,8 +45,7 @@
 
 - (void)loadView {
     MochiGoValue *root = [[MochiGoBridge sharedBridge] root];
-    MochiGoValue *buildContext = [root call:@"NewBuildContext" args:nil][0];
-    self.buildContext = buildContext;
+    self.viewController = [root call:@"NewViewController" args:nil][0];
     self.mochiView = [[MochiView alloc] initWithFrame:CGRectZero];
     self.view = self.mochiView;
 }
@@ -54,17 +53,16 @@
 - (void)viewDidLayoutSubviews {
     if (!CGRectEqualToRect(self.lastFrame, self.view.frame)) {
         self.lastFrame = self.view.frame;
-        [self reload];
+        
+        [self.viewController call:@"SetSize" args:@[[[MochiGoValue alloc] initWithCGPoint:CGPointMake(self.view.frame.size.width, self.view.frame.size.height)]]];
+        [self render];
     }
 }
 
-- (void)reload {
-    NSLog(@"KD:%s", __FUNCTION__);
-    [self.buildContext call:@"Build" args:nil];
-    MochiGoValue *renderNode = [self.buildContext call:@"RenderNode" args:nil][0];
-    [renderNode call:@"LayoutRoot" args:@[[[MochiGoValue alloc] initWithCGPoint:CGPointZero], [[MochiGoValue alloc] initWithCGPoint:CGPointMake(self.view.frame.size.width, self.view.frame.size.height)]]];
-    [renderNode call:@"Paint" args:nil];
+- (void)render {
+    NSLog(@"RENDER");
     
+    MochiGoValue *renderNode = [self.viewController call:@"Render" args:nil][0];
     self.mochiView.node = [[MochiNode alloc] initWithGoValue:renderNode];
 }
 

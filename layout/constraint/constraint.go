@@ -462,10 +462,11 @@ const (
 
 type System struct {
 	*Guide
-	min     *Guide
-	max     *Guide
-	solvers []*Solver
-	zIndex  int
+	min       *Guide
+	max       *Guide
+	solvers   []*Solver
+	notifiers []animate.FloatNotifier
+	zIndex    int
 }
 
 func New() *System {
@@ -506,6 +507,18 @@ func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{
 		gs[k] = *v.mochiGuide
 	}
 	return g, gs
+}
+
+func (sys *System) Notify(c chan<- struct{}) {
+	for _, i := range sys.notifiers {
+		i.Notify(c)
+	}
+}
+
+func (sys *System) Unnotify(c chan<- struct{}) {
+	for _, i := range sys.notifiers {
+		i.Unnotify(c)
+	}
 }
 
 type _range struct {
