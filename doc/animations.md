@@ -1,4 +1,5 @@
 * Inspiration
+https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CoreAnimation_guide/AnimatableProperties/AnimatableProperties.html
 Flutter https://medium.com/dartlang/zero-to-one-with-flutter-43b13fd7b354
 https://flutter.io/animations/
 ReactNative
