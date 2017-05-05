@@ -16,7 +16,7 @@ type buttonLayouter struct {
 	formattedText *text.Text
 }
 
-func (l *buttonLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
+func (l *buttonLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]mochi.Guide) {
 	size := textSize(l.formattedText, ctx.MaxSize)
 	g := mochi.Guide{Frame: mochi.Rt(0, 0, size.X+padding*2, size.Y+padding*2)}
 	return g, nil

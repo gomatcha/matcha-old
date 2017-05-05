@@ -72,7 +72,7 @@ func (n *Node) Set(k interface{}, v View) {
 }
 
 type RenderNode struct {
-	Children map[interface{}]*RenderNode
+	Children map[Id]*RenderNode
 	Layouter Layouter
 	Painter  Painter
 	Bridge   Bridge
@@ -90,13 +90,13 @@ func (n *RenderNode) LayoutRoot(minSize Point, maxSize Point) {
 func (n *RenderNode) Layout(minSize Point, maxSize Point) Guide {
 	// Create the LayoutContext
 	ctx := &LayoutContext{
-		MinSize:   minSize,
-		MaxSize:   maxSize,
-		ChildKeys: []interface{}{},
-		node:      n,
+		MinSize:  minSize,
+		MaxSize:  maxSize,
+		ChildIds: []Id{},
+		node:     n,
 	}
 	for i := range n.Children {
-		ctx.ChildKeys = append(ctx.ChildKeys, i)
+		ctx.ChildIds = append(ctx.ChildIds, i)
 	}
 
 	// Perform layout
@@ -142,7 +142,7 @@ func (n *RenderNode) DebugString() string {
 }
 
 func (n *RenderNode) Copy() *RenderNode {
-	children := map[interface{}]*RenderNode{}
+	children := map[Id]*RenderNode{}
 	for k, v := range n.Children {
 		children[k] = v
 	}
@@ -285,11 +285,10 @@ func (ctx *BuildContext) RenderNode() *RenderNode {
 		Layouter: ctx.node.Layouter,
 		Painter:  ctx.node.Painter,
 		Bridge:   ctx.node.Bridge,
-		Children: map[interface{}]*RenderNode{},
+		Children: map[Id]*RenderNode{},
 	}
-	for k, v := range ctx.children {
-		rn := v.RenderNode()
-		n.Children[k] = rn
+	for _, v := range ctx.children {
+		n.Children[v.view.Id()] = v.RenderNode()
 	}
 	return n
 }

@@ -10,7 +10,7 @@ type textViewLayouter struct {
 	formattedText *text.Text
 }
 
-func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
+func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]mochi.Guide) {
 	size := textSize(l.formattedText, ctx.MaxSize)
 	g := mochi.Guide{Frame: mochi.Rt(0, 0, size.X, size.Y)}
 	return g, nil

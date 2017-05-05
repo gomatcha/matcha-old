@@ -1,10 +1,10 @@
 package mochi
 
 type LayoutContext struct {
-	MinSize   Point
-	MaxSize   Point
-	ChildKeys []interface{}
-	node      *RenderNode
+	MinSize  Point
+	MaxSize  Point
+	ChildIds []Id
+	node     *RenderNode
 }
 
 type NotifyLayouter interface {
@@ -13,11 +13,11 @@ type NotifyLayouter interface {
 }
 
 type Layouter interface {
-	Layout(ctx *LayoutContext) (Guide, map[interface{}]Guide)
+	Layout(ctx *LayoutContext) (Guide, map[Id]Guide)
 }
 
-func (l *LayoutContext) LayoutChild(k interface{}, minSize, maxSize Point) Guide {
-	n := l.node.Children[k]
+func (l *LayoutContext) LayoutChild(id Id, minSize, maxSize Point) Guide {
+	n := l.node.Children[id] // TODO(KD): FIX!!!!!!!!!!
 	return n.Layout(minSize, maxSize)
 }
 
@@ -31,11 +31,11 @@ func (l *FullLayout) NeedsLayoutFunc(f func()) {
 	l.needsLayoutFunc = f
 }
 
-func (l *FullLayout) Layout(ctx *LayoutContext) (Guide, map[interface{}]Guide) {
+func (l *FullLayout) Layout(ctx *LayoutContext) (Guide, map[Id]Guide) {
 	g := Guide{Frame: Rect{Max: ctx.MinSize}}
-	gs := map[interface{}]Guide{}
-	for k := range ctx.ChildKeys {
-		gs[k] = ctx.LayoutChild(k, ctx.MinSize, ctx.MinSize)
+	gs := map[Id]Guide{}
+	for _, id := range ctx.ChildIds {
+		gs[id] = ctx.LayoutChild(id, ctx.MinSize, ctx.MinSize)
 	}
 	return g, gs
 }

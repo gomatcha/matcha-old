@@ -5,10 +5,6 @@ import (
 	"math"
 )
 
-const (
-	chlid int = iota
-)
-
 type ScrollView struct {
 	*mochi.Embed
 	ScrollEnabled                  bool
@@ -37,7 +33,7 @@ func (v *ScrollView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n.Layouter = &scrollViewLayouter{}
 
 	if v.ContentView != nil {
-		n.Set(chlid, v.ContentView)
+		n.Set(1, v.ContentView)
 	}
 
 	n.Bridge.Name = "github.com/overcyn/mochi/view/scrollview"
@@ -56,12 +52,12 @@ func (v *ScrollView) Build(ctx *mochi.BuildContext) *mochi.Node {
 type scrollViewLayouter struct {
 }
 
-func (l *scrollViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
-	gs := map[interface{}]mochi.Guide{}
-	if len(ctx.ChildKeys) > 0 {
-		g := ctx.LayoutChild(chlid, ctx.MinSize, mochi.Pt(math.Inf(1), math.Inf(1)))
+func (l *scrollViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]mochi.Guide) {
+	gs := map[mochi.Id]mochi.Guide{}
+	if len(ctx.ChildIds) > 0 {
+		g := ctx.LayoutChild(ctx.ChildIds[0], ctx.MinSize, mochi.Pt(math.Inf(1), math.Inf(1)))
 		g.Frame = g.Frame.Add(mochi.Pt(-g.Frame.Min.X, -g.Frame.Min.Y))
-		gs[chlid] = g
+		gs[ctx.ChildIds[0]] = g
 	}
 	return mochi.Guide{
 		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),

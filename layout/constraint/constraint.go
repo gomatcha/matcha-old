@@ -172,9 +172,9 @@ func Notifier(n animate.FloatNotifier) *Anchor {
 }
 
 type Guide struct {
-	id         interface{}
+	id         mochi.Id
 	system     *System
-	children   map[interface{}]*Guide
+	children   map[mochi.Id]*Guide
 	mochiGuide *mochi.Guide
 }
 
@@ -210,11 +210,12 @@ func (g *Guide) CenterY() *Anchor {
 	return &Anchor{guideAnchor{guide: g, attribute: centerYAttr}}
 }
 
-func (g *Guide) Add(id interface{}, solveFunc func(*Solver)) *Guide {
+func (g *Guide) Add(view mochi.View, solveFunc func(*Solver)) *Guide {
+	id := view.Id()
 	chl := &Guide{
 		id:         id,
 		system:     g.system,
-		children:   map[interface{}]*Guide{},
+		children:   map[mochi.Id]*Guide{},
 		mochiGuide: nil,
 	}
 	s := &Solver{id: id}
@@ -245,7 +246,7 @@ func (c constraint) String() string {
 }
 
 type Solver struct {
-	id          interface{}
+	id          mochi.Id
 	constraints []constraint
 }
 
@@ -455,7 +456,7 @@ func (s *Solver) String() string {
 type systemId int
 
 const (
-	rootId systemId = iota
+	rootId mochi.Id = -1 * iota
 	minId
 	maxId
 )
@@ -471,9 +472,9 @@ type System struct {
 
 func New() *System {
 	sys := &System{}
-	sys.min = &Guide{id: minId, system: sys, children: map[interface{}]*Guide{}}
-	sys.max = &Guide{id: maxId, system: sys, children: map[interface{}]*Guide{}}
-	sys.Guide = &Guide{id: rootId, system: sys, children: map[interface{}]*Guide{}}
+	sys.min = &Guide{id: minId, system: sys, children: map[mochi.Id]*Guide{}}
+	sys.max = &Guide{id: maxId, system: sys, children: map[mochi.Id]*Guide{}}
+	sys.Guide = &Guide{id: rootId, system: sys, children: map[mochi.Id]*Guide{}}
 	return sys
 }
 
@@ -485,7 +486,7 @@ func (sys *System) MaxGuide() *Guide {
 	return sys.max
 }
 
-func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{}]mochi.Guide) {
+func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]mochi.Guide) {
 	sys.min.mochiGuide = &mochi.Guide{
 		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
@@ -502,7 +503,7 @@ func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[interface{
 	}
 
 	g := *sys.Guide.mochiGuide
-	gs := map[interface{}]mochi.Guide{}
+	gs := map[mochi.Id]mochi.Guide{}
 	for k, v := range sys.Guide.children {
 		gs[k] = *v.mochiGuide
 	}
