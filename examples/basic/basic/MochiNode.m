@@ -13,8 +13,8 @@
 @property (nonatomic, strong) NSMapTable *nodeChildren;
 @property (nonatomic, strong) MochiGoValue *goValue;
 @property (nonatomic, strong) MochiLayoutGuide *guide;
-@property (nonatomic, assign) NSInteger buildId;
-@property (nonatomic, assign) NSInteger updateId;
+// @property (nonatomic, assign) NSInteger buildId;
+// @property (nonatomic, assign) NSInteger updateId;
 @end
 
 @implementation MochiNode
@@ -33,12 +33,12 @@
     return [[MochiPaintOptions alloc] initWithGoValue:self.goValue[@"PaintOptions"]];
 }
 
-- (NSMapTable<MochiGoValue *, MochiNode *> *)nodeChildren {
+- (NSMapTable<NSNumber *, MochiNode *> *)nodeChildren {
     if (_nodeChildren == nil) {
         NSMapTable *children = self.goValue[@"Children"].toMapTable;
-        NSMapTable<MochiGoValue *, MochiNode *> *nodeChildren = [NSMapTable strongToStrongObjectsMapTable];
+        NSMapTable<NSNumber *, MochiNode *> *nodeChildren = [NSMapTable strongToStrongObjectsMapTable];
         for (MochiGoValue *i in children) {
-            nodeChildren[i] = [[MochiNode alloc] initWithGoValue:children[i]];
+            nodeChildren[@(i.toLongLong)] = [[MochiNode alloc] initWithGoValue:children[i]];
         }
         _nodeChildren = nodeChildren;
     }

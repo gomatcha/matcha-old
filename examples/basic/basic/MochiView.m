@@ -186,83 +186,44 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
     if (update) {
         NSMutableArray *addedKeys = [NSMutableArray array];
         NSMutableArray *removedKeys = [NSMutableArray array];
-        NSMutableArray *rebuiltKeys = [NSMutableArray array];
-        NSMutableArray *rebuiltKeys2 = [NSMutableArray array];
         NSMutableArray *unmodifiedKeys = [NSMutableArray array];
-        NSMutableArray *unmodifiedKeys2 = [NSMutableArray array];
         
         for (MochiGoValue *i in config.node.nodeChildren.keyEnumerator) {
-            [removedKeys addObject:i];
-            // MochiNode *prevChild = config.node.nodeChildren[i];
-            // MochiNode *child = nil;
-            // MochiGoValue *key = nil;
-            // for (MochiGoValue *j in node.nodeChildren.keyEnumerator) {
-            //     if ([i isEqual:j]) {
-            //         child = node.nodeChildren[j];
-            //         key = j;
-            //         break;
-            //     }
-            // }
-            // if (child.guide == nil) { // Ignore nodes without a guide
-            //     continue;
-            // }
-            
-            // if (child == nil) {
-            //     [removedKeys addObject:i];
-            // } else if (child.buildId != prevChild.buildId) {
-            //     [rebuiltKeys addObject:i];
-            //     [rebuiltKeys2 addObject:key];
-            // }
+            MochiNode *child = node.nodeChildren[i];
+            if (child.guide == nil) { // Ignore nodes without a guide
+                continue;
+            }            
+            if (child == nil) {
+                [removedKeys addObject:i];
+            }
         }
         for (MochiGoValue *i in node.nodeChildren.keyEnumerator) {
-            [addedKeys addObject:i];
-            // MochiGoValue *prevKey = nil;
-            // MochiNode *prevChild = nil;
-            // MochiNode *child = node.nodeChildren[i];
-            // for (MochiGoValue *j in config.node.nodeChildren.keyEnumerator) {
-            //     if ([i isEqual:j]) {
-            //         prevChild = config.node.nodeChildren[j];
-            //         prevKey = j;
-            //         break;
-            //     }
-            // }
-            // if (child.guide == nil) { // Ignore nodes without a guide
-            //     continue;
-            // }
-           
-            // if (prevChild == nil) {
-            //     [addedKeys addObject:i];
-            // } else if (child.buildId == prevChild.buildId) {
-            //     [unmodifiedKeys addObject:i];
-            //     [unmodifiedKeys2 addObject:prevKey];
-            // }
+            MochiNode *prevChild = config.node.nodeChildren[i];
+            MochiNode *child = node.nodeChildren[i];
+            if (child.guide == nil) { // Ignore nodes without a guide
+                continue;
+            }
+            if (prevChild == nil) {
+                [addedKeys addObject:i];
+            } else {
+                [unmodifiedKeys addObject:i];
+            }
         }
         
         NSMapTable *childViewsTable = [NSMapTable strongToStrongObjectsMapTable];
-        for (MochiGoValue *i in removedKeys) {
+        for (NSNumber *i in removedKeys) {
             [config.childViewsTable[i] removeFromSuperview];
         }
-        // for (NSInteger i = 0; i < rebuiltKeys.count; i++) {
-        //     MochiGoValue *prevKey = rebuiltKeys[i];
-        //     MochiGoValue *key = rebuiltKeys2[i];
-            
-        //     [config.childViewsTable[prevKey] removeFromSuperview];
-        //     MochiView *childView = MochiViewWithNode(node.nodeChildren[key]);
-        //     childViewsTable[key] = childView;
-        // }
-        for (MochiGoValue *i in addedKeys) {
+        for (NSNumber *i in addedKeys) {
             MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);
             childViewsTable[i] = childView;
         }
-        // for (NSInteger i = 0; i < unmodifiedKeys.count; i++) {
-        //     MochiGoValue *prevKey = unmodifiedKeys2[i];
-        //     MochiGoValue *key = unmodifiedKeys[i];
-            
-        //     MochiView *childView = config.childViewsTable[prevKey];
-        //     childView.node = node.nodeChildren[key];
-        //     childViewsTable[key] = childView;
-        //     [childView removeFromSuperview];
-        // }
+        for (NSNumber *i in unmodifiedKeys) {
+            MochiView *childView = config.childViewsTable[i];
+            childView.node = node.nodeChildren[i];
+            childViewsTable[i] = childView;
+            [childView removeFromSuperview];
+        }
         
         NSMutableArray *childViews = [NSMutableArray array];
         for (UIView *i in childViewsTable.objectEnumerator) {
