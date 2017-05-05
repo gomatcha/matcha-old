@@ -3,33 +3,34 @@ package mochi
 import (
 	"fmt"
 	"github.com/overcyn/mochi/internal"
-	"math/rand"
 	"mochi/bridge"
 	"strings"
 	"sync"
 	"time"
 )
 
+type Id int64
+
 type View interface {
 	Build(*BuildContext) *Node
 	// Lifecyle(*Stage)
-	Key() interface{}
+	Id() Id
 	Lock()
 	Unlock()
 }
 
 type Embed struct {
-	mu      *sync.Mutex
-	keyPath []interface{}
-	root    *BuildContext
+	mu   *sync.Mutex
+	id   Id
+	root *BuildContextRoot
 }
 
 func (e *Embed) Build(ctx *BuildContext) *Node {
 	return &Node{}
 }
 
-func (e *Embed) Key() interface{} {
-	return e.keyPath[len(e.keyPath)-1]
+func (e *Embed) Id() Id {
+	return e.id
 }
 
 func (e *Embed) Lock() {
@@ -41,7 +42,7 @@ func (e *Embed) Unlock() {
 }
 
 func (e *Embed) Update(key interface{}) {
-	e.root.Update(e.keyPath, key)
+	e.root.Update(key)
 }
 
 type Bridge struct {
@@ -78,9 +79,6 @@ type RenderNode struct {
 
 	LayoutGuide  *Guide
 	PaintOptions PaintOptions
-
-	BuildId  int
-	UpdateId int
 }
 
 func (n *RenderNode) LayoutRoot(minSize Point, maxSize Point) {
@@ -136,7 +134,7 @@ func (n *RenderNode) DebugString() string {
 		all = append(all, lines...)
 	}
 
-	str := fmt.Sprintf("{%p Bridge:%v LayoutGuide:%v PaintOptions:%v buildId:%v updateId:%v}", n, n.Bridge, n.LayoutGuide, n.PaintOptions, n.BuildId, n.UpdateId)
+	str := fmt.Sprintf("{%p Bridge:%v LayoutGuide:%v PaintOptions:%v}", n, n.Bridge, n.LayoutGuide, n.PaintOptions)
 	if len(all) > 0 {
 		str += "\n" + strings.Join(all, "\n")
 	}
@@ -155,8 +153,6 @@ func (n *RenderNode) Copy() *RenderNode {
 		Bridge:       n.Bridge,
 		LayoutGuide:  n.LayoutGuide,
 		PaintOptions: n.PaintOptions,
-		BuildId:      n.BuildId,
-		UpdateId:     n.UpdateId,
 	}
 	return copy
 }
@@ -229,35 +225,40 @@ type Config struct {
 	Embed *Embed
 }
 
+type BuildContextRoot struct {
+	ctx       *BuildContext
+	viewCache map[Id]View
+	maxId     Id
+}
+
+func (root *BuildContextRoot) Update(key interface{}) {
+	root.ctx.needsUpdate = true
+	bridge.Root().Call("rerender")
+}
+
+func (root *BuildContextRoot) NewId() Id {
+	root.maxId += 1
+	return root.maxId
+}
+
 type BuildContext struct {
-	keyPath     []interface{}
 	view        View
 	node        *Node
 	children    map[interface{}]*BuildContext
-	root        *BuildContext
+	root        *BuildContextRoot
 	needsUpdate bool
-	updateId    int
-	buildId     int
 }
 
 func NewBuildContext(f func(Config) View) *BuildContext {
 	ctx := &BuildContext{}
 	e := &Embed{
-		mu:      &sync.Mutex{},
-		keyPath: nil,
-		root:    ctx,
+		mu: &sync.Mutex{},
 	}
 	cfg := Config{Embed: e}
 	ctx.view = f(cfg)
-	ctx.root = ctx
+	ctx.root = &BuildContextRoot{ctx: ctx}
 	ctx.needsUpdate = true
-	return ctx
-}
-
-func (ctx *BuildContext) At(keyPath []interface{}) *BuildContext {
-	for _, i := range keyPath {
-		ctx = ctx.children[i]
-	}
+	e.root = ctx.root
 	return ctx
 }
 
@@ -269,16 +270,12 @@ func (ctx *BuildContext) Get(k interface{}) Config {
 		fmt.Println("No Prev", ctx.view, k)
 	}
 
-	// keyPath := append([]interface{}(nil), k)
-	keyPath := append(append([]interface{}(nil), ctx.keyPath...), k)
-	// fmt.Println("Get", keyPath, ctx.keyPath, k)
-
 	return Config{
 		Prev: prev,
 		Embed: &Embed{
-			mu:      &sync.Mutex{},
-			keyPath: keyPath,
-			root:    ctx.root,
+			mu:   &sync.Mutex{},
+			root: ctx.root,
+			id:   ctx.root.NewId(),
 		},
 	}
 }
@@ -289,8 +286,6 @@ func (ctx *BuildContext) RenderNode() *RenderNode {
 		Painter:  ctx.node.Painter,
 		Bridge:   ctx.node.Bridge,
 		Children: map[interface{}]*RenderNode{},
-		UpdateId: ctx.updateId,
-		BuildId:  ctx.buildId,
 	}
 	for k, v := range ctx.children {
 		rn := v.RenderNode()
@@ -302,7 +297,6 @@ func (ctx *BuildContext) RenderNode() *RenderNode {
 func (ctx *BuildContext) Build() {
 	if ctx.needsUpdate {
 		ctx.needsUpdate = false
-		ctx.updateId += 1
 
 		// Generate the new node.
 		node := ctx.view.Build(ctx)
@@ -312,12 +306,8 @@ func (ctx *BuildContext) Build() {
 		children := map[interface{}]*BuildContext{}
 		for k, v := range node.Children {
 			chlCtx := &BuildContext{}
-			chlCtx.keyPath = append([]interface{}(nil), ctx.keyPath...)
-			chlCtx.keyPath = append(chlCtx.keyPath, k)
 			chlCtx.view = v
 			chlCtx.root = ctx.root
-			chlCtx.buildId = rand.Int()
-			chlCtx.updateId = 0
 			children[k] = chlCtx
 		}
 
@@ -349,8 +339,6 @@ func (ctx *BuildContext) Build() {
 			chlCtx := children[k]
 			chlCtx.node = prevChlCtx.node
 			chlCtx.children = prevChlCtx.children
-			chlCtx.updateId = prevChlCtx.updateId
-			chlCtx.buildId = prevChlCtx.buildId
 		}
 
 		// Mark all children as needing update since we updated
@@ -378,15 +366,9 @@ func (ctx *BuildContext) DebugString() string {
 		all = append(all, lines...)
 	}
 
-	str := fmt.Sprintf("{%p keyPath:%v view:%v node:%p buildId:%v updateId:%v}", ctx, ctx.keyPath, ctx.view, ctx.node, ctx.buildId, ctx.updateId)
+	str := fmt.Sprintf("{%p view:%v node:%p}", ctx, ctx.view, ctx.node)
 	if len(all) > 0 {
 		str += "\n" + strings.Join(all, "\n")
 	}
 	return str
-}
-
-func (ctx *BuildContext) Update(keyPath []interface{}, key interface{}) {
-	fmt.Println("Update KeyPath", keyPath)
-	ctx.needsUpdate = true
-	bridge.Root().Call("rerender")
 }

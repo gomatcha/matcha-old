@@ -22,8 +22,8 @@
 - (id)initWithGoValue:(MochiGoValue *)value {
     if (self = [super init]) {
         self.goValue = value;
-        self.buildId = value[@"BuildId"].toLongLong;
-        self.updateId = value[@"UpdateId"].toLongLong;
+        // self.buildId = value[@"BuildId"].toLongLong;
+        // self.updateId = value[@"UpdateId"].toLongLong;
         self.guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
     }
     return self;
