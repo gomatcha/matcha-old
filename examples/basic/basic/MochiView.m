@@ -12,8 +12,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
 MochiView *MochiViewWithNode(MochiNode *node);
 
 @interface MochiViewConfig : NSObject
-@property (nonatomic, strong) NSMapTable *childViewsTable;
-@property (nonatomic, strong) NSArray *childViews;
+@property (nonatomic, strong) NSDictionary<NSNumber *, UIView *> *childViews;
 @property (nonatomic, strong) MochiNode *node;
 @end
 
@@ -163,7 +162,7 @@ MochiView *MochiViewWithNode(MochiNode *node);
     bool update = MochiConfigureViewWithNode(self, value, self.config);
     if (update) {
         if (self.config.childViews.count > 0) {
-            self.contentSize = ((UIView *)self.config.childViews[0]).frame.size;
+            self.contentSize = ((UIView *)self.config.childViews.allValues[0]).frame.size;
         }
 
         MochiGoValue *state = value.bridgeState;
@@ -188,7 +187,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
         NSMutableArray *removedKeys = [NSMutableArray array];
         NSMutableArray *unmodifiedKeys = [NSMutableArray array];
         
-        for (MochiGoValue *i in config.node.nodeChildren.keyEnumerator) {
+        for (NSNumber *i in config.node.nodeChildren) {
             MochiNode *child = node.nodeChildren[i];
             if (child.guide == nil) { // Ignore nodes without a guide
                 continue;
@@ -197,7 +196,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
                 [removedKeys addObject:i];
             }
         }
-        for (MochiGoValue *i in node.nodeChildren.keyEnumerator) {
+        for (NSNumber *i in node.nodeChildren) {
             MochiNode *prevChild = config.node.nodeChildren[i];
             MochiNode *child = node.nodeChildren[i];
             if (child.guide == nil) { // Ignore nodes without a guide
@@ -210,34 +209,34 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
             }
         }
         
-        NSMapTable *childViewsTable = [NSMapTable strongToStrongObjectsMapTable];
+        NSMutableDictionary *childViews = [NSMutableDictionary dictionary];
         for (NSNumber *i in removedKeys) {
-            [config.childViewsTable[i] removeFromSuperview];
+            [config.childViews[i] removeFromSuperview];
         }
         for (NSNumber *i in addedKeys) {
             MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);
-            childViewsTable[i] = childView;
+            [view addSubview:childView];
+            childViews[i] = childView;
         }
         for (NSNumber *i in unmodifiedKeys) {
-            MochiView *childView = config.childViewsTable[i];
+            MochiView *childView = (id)config.childViews[i];
             childView.node = node.nodeChildren[i];
-            childViewsTable[i] = childView;
+            childViews[i] = childView;
             [childView removeFromSuperview];
         }
         
-        NSMutableArray *childViews = [NSMutableArray array];
-        for (UIView *i in childViewsTable.objectEnumerator) {
-            [childViews addObject:i];
-        }
-        [childViews sortUsingComparator:^NSComparisonResult(MochiView *obj1, MochiView *obj2) {
-            return obj1.config.node.guide.zIndex > obj2.config.node.guide.zIndex;
+        NSArray *sortedKeys = [[childViews allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
+            return node.nodeChildren[obj1].guide.zIndex > node.nodeChildren[obj2].guide.zIndex;
         }];
-        for (UIView *i in childViews) {
-            [view addSubview:i];
+        NSArray *subviews = view.subviews;
+        for (NSInteger i = 0; i < sortedKeys.count; i++) {
+            NSNumber *key = sortedKeys[i];
+            UIView *subview = childViews[key];
+            if ([subviews indexOfObject:subview] != i) {
+                [view insertSubview:subview atIndex:i];
+            }
         }
-        
         config.childViews = childViews;
-        config.childViewsTable = childViewsTable;
     }
     
     config.node = node;

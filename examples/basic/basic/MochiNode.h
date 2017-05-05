@@ -13,7 +13,7 @@
 
 @interface MochiNode : NSObject
 - (id)initWithGoValue:(MochiGoValue *)value;
-@property (nonatomic, readonly) NSMapTable<NSNumber *, MochiNode *> *nodeChildren;
+@property (nonatomic, readonly) NSDictionary<NSNumber *, MochiNode *> *nodeChildren;
 @property (nonatomic, readonly) MochiLayoutGuide *guide;
 @property (nonatomic, readonly) MochiPaintOptions *paintOptions;
 @property (nonatomic, readonly) NSString *bridgeName;

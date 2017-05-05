@@ -10,7 +10,7 @@
 #import "MochiBridge.h"
 
 @interface MochiNode ()
-@property (nonatomic, strong) NSMapTable *nodeChildren;
+@property (nonatomic, strong) NSDictionary *nodeChildren;
 @property (nonatomic, strong) MochiGoValue *goValue;
 @property (nonatomic, strong) MochiLayoutGuide *guide;
 // @property (nonatomic, assign) NSInteger buildId;
@@ -33,10 +33,10 @@
     return [[MochiPaintOptions alloc] initWithGoValue:self.goValue[@"PaintOptions"]];
 }
 
-- (NSMapTable<NSNumber *, MochiNode *> *)nodeChildren {
+- (NSDictionary<NSNumber *, MochiNode *> *)nodeChildren {
     if (_nodeChildren == nil) {
         NSMapTable *children = self.goValue[@"Children"].toMapTable;
-        NSMapTable<NSNumber *, MochiNode *> *nodeChildren = [NSMapTable strongToStrongObjectsMapTable];
+        NSMutableDictionary<NSNumber *, MochiNode *> *nodeChildren = [NSMutableDictionary dictionary];
         for (MochiGoValue *i in children) {
             nodeChildren[@(i.toLongLong)] = [[MochiNode alloc] initWithGoValue:children[i]];
         }
