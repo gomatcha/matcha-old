@@ -29,8 +29,8 @@ func (v *TextInput) Build(ctx *mochi.BuildContext) *mochi.Node {
 		Text    *text.Text
 		OnPress func()
 	}{
-		Text:    ft,
-		OnPress: v.OnPress,
+	// Text:    ft,
+	// OnPress: v.OnPress,
 	}
 	return n
 }

@@ -1,14 +1,14 @@
 package basic
 
-import (
-	"fmt"
-	"github.com/overcyn/mochi"
-)
+// import (
+// 	"fmt"
+// 	"github.com/overcyn/mochi"
+// )
 
-func main() {
-	fmt.Println("Hello, 世界")
-	// mochi.Display(nil)
-}
+// func main() {
+// 	fmt.Println("Hello, 世界")
+// mochi.Display(nil)
+// }
 
 // type AnimatedView struct {
 // 	Animator Animator
