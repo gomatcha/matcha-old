@@ -6,6 +6,7 @@ import (
 	"github.com/overcyn/mochi/animate"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
+	_ "github.com/overcyn/mochi/store"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/button"
@@ -147,9 +148,12 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	chl8 := imageview.NewURLImageView(ctx.Get(chl8id))
+	// chl8 := imageview.NewURLImageView(ctx.Get(chl8id))
+	// chl8.PaintOptions.BackgroundColor = mochi.CyanColor
+	// chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+	// chl8.ResizeMode = imageview.ResizeModeFit
+	chl8 := imageview.NewImageView(ctx.Get(chl8id))
 	chl8.PaintOptions.BackgroundColor = mochi.CyanColor
-	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl8.ResizeMode = imageview.ResizeModeFit
 	n.Set(chl8id, chl8)
 	g8 := l.Add(chl8, func(s *constraint.Solver) {

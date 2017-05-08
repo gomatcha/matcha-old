@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/overcyn/mochi/internal"
 	"mochi/bridge"
+	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
@@ -234,6 +235,7 @@ type BuildContextRoot struct {
 func (root *BuildContextRoot) Update(key interface{}) {
 	root.ctx.needsUpdate = true
 	bridge.Root().Call("rerender")
+	debug.PrintStack()
 }
 
 func (root *BuildContextRoot) NewId() Id {
@@ -244,7 +246,7 @@ func (root *BuildContextRoot) NewId() Id {
 type BuildContext struct {
 	view        View
 	node        *Node
-	children    map[interface{}]*BuildContext
+	children    map[Id]*BuildContext
 	root        *BuildContextRoot
 	needsUpdate bool
 }
@@ -263,12 +265,12 @@ func NewBuildContext(f func(Config) View) *BuildContext {
 }
 
 func (ctx *BuildContext) Get(k interface{}) Config {
-	var prev View
-	if chl := ctx.children[k]; chl != nil {
-		prev = chl.view
-	} else {
-		fmt.Println("No Prev", ctx.view, k)
-	}
+	var prev View = nil
+	// if chl := ctx.children[k]; chl != nil {
+	// 	prev = chl.view
+	// } else {
+	// 	fmt.Println("No Prev", ctx.view, k)
+	// }
 
 	return Config{
 		Prev: prev,
@@ -287,8 +289,8 @@ func (ctx *BuildContext) RenderNode() *RenderNode {
 		Bridge:   ctx.node.Bridge,
 		Children: map[Id]*RenderNode{},
 	}
-	for _, v := range ctx.children {
-		n.Children[v.view.Id()] = v.RenderNode()
+	for k, v := range ctx.children {
+		n.Children[k] = v.RenderNode()
 	}
 	return n
 }
@@ -300,44 +302,51 @@ func (ctx *BuildContext) Build() {
 		// Generate the new node.
 		node := ctx.view.Build(ctx)
 
-		// Build new children from the node.
-		prevChildren := ctx.children
-		children := map[interface{}]*BuildContext{}
-		for k, v := range node.Children {
-			chlCtx := &BuildContext{}
-			chlCtx.view = v
-			chlCtx.root = ctx.root
-			children[k] = chlCtx
-		}
+		// Diff the old children (ctx.children) with new children (node.Children).
+		addedKeys := []Id{}
+		removedKeys := []Id{}
+		unupdatedKeys := []Id{}
+		for id := range ctx.children {
+			found := false
+			for _, view := range node.Children {
+				if view.Id() == id {
+					found = true
+					break
+				}
+			}
 
-		// Diff the children.
-		addedKeys := []interface{}{}
-		removedKeys := []interface{}{}
-		updatedKeys := []interface{}{}
-		unupdatedKeys := []interface{}{}
-		for k, prevChlCtx := range prevChildren {
-			chlCtx, ok := children[k]
-			if !ok {
-				removedKeys = append(removedKeys, k)
-			} else if prevChlCtx.view == chlCtx.view {
-				unupdatedKeys = append(unupdatedKeys, k)
+			if !found {
+				removedKeys = append(removedKeys, id)
 			} else {
-				updatedKeys = append(updatedKeys, k)
+				unupdatedKeys = append(unupdatedKeys, id)
 			}
 		}
-		for k := range children {
-			_, ok := prevChildren[k]
-			if !ok {
-				addedKeys = append(addedKeys, k)
+		for _, v := range node.Children {
+			id := v.Id()
+			if _, ok := ctx.children[id]; !ok {
+				addedKeys = append(addedKeys, id)
 			}
 		}
 
-		// Pass properties from the old child to the new if it was unupdated.
-		for _, k := range unupdatedKeys {
-			prevChlCtx := prevChildren[k]
-			chlCtx := children[k]
-			chlCtx.node = prevChlCtx.node
-			chlCtx.children = prevChlCtx.children
+		children := map[Id]*BuildContext{}
+		// Add build contexts for new children
+		for _, id := range addedKeys {
+			var view View
+			for _, i := range node.Children {
+				if i.Id() == id {
+					view = i
+					break
+				}
+			}
+			children[id] = &BuildContext{
+				view:     view,
+				children: map[Id]*BuildContext{},
+				root:     ctx.root,
+			}
+		}
+		// Reuse old context for unupdated keys
+		for _, id := range unupdatedKeys {
+			children[id] = ctx.children[id]
 		}
 
 		// Mark all children as needing update since we updated

@@ -191,7 +191,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
             MochiNode *child = node.nodeChildren[i];
             if (child.guide == nil) { // Ignore nodes without a guide
                 continue;
-            }            
+            }
             if (child == nil) {
                 [removedKeys addObject:i];
             }
@@ -222,8 +222,10 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
             MochiView *childView = (id)config.childViews[i];
             childView.node = node.nodeChildren[i];
             childViews[i] = childView;
-            [childView removeFromSuperview];
         }
+        // NSLog(@"removed:%@", removedKeys);
+        // NSLog(@"added:%@", addedKeys);
+        // NSLog(@"unmodified:%@", unmodifiedKeys);
         
         NSArray *sortedKeys = [[childViews allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
             return node.nodeChildren[obj1].guide.zIndex > node.nodeChildren[obj2].guide.zIndex;
