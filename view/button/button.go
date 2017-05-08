@@ -3,11 +3,11 @@ package button
 import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/text"
-	"mochi/bridge"
+	"github.com/overcyn/mochibridge"
 )
 
 func textSize(t *text.Text, max mochi.Point) mochi.Point {
-	return bridge.Root().Call("sizeForAttributedString:minSize:maxSize:", bridge.Interface(t), nil, bridge.Interface(max)).ToInterface().(mochi.Point)
+	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(mochi.Point)
 }
 
 const padding = 10.0

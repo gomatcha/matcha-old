@@ -9,6 +9,7 @@ type LayoutContext struct {
 
 type NotifyLayouter interface {
 	Layouter
+	Notifier
 }
 
 type Layouter interface {

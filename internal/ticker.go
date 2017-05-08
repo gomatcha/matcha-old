@@ -2,13 +2,13 @@ package internal
 
 import (
 	_ "fmt"
-	"mochi/bridge"
+	"github.com/overcyn/mochibridge"
 	"sync"
 	"time"
 )
 
 func init() {
-	bridge.RegisterFunc("github.com/overcyn/mochi/animate screenUpdate", screenUpdate)
+	mochibridge.RegisterFunc("github.com/overcyn/mochi/animate screenUpdate", screenUpdate)
 }
 
 var tickers = struct {

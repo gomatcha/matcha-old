@@ -1,4 +1,4 @@
-package bridge
+package app
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 	"github.com/overcyn/mochi/view/imageview"
 	"github.com/overcyn/mochi/view/scrollview"
 	"github.com/overcyn/mochi/view/textview"
-	"mochi/bridge"
+	"github.com/overcyn/mochibridge"
 	"reflect"
 	"time"
 )
@@ -28,9 +28,9 @@ func (b *GoRoot) NewViewController(id int) *mochi.ViewController {
 }
 
 func init() {
-	bridge.SetGoRoot(&GoRoot{})
-	bridge.RegisterType("mochi.Point", reflect.TypeOf(mochi.Point{}))
-	bridge.RegisterType("mochi.Rect", reflect.TypeOf(mochi.Rect{}))
+	mochibridge.SetGoRoot(&GoRoot{})
+	mochibridge.RegisterType("mochi.Point", reflect.TypeOf(mochi.Point{}))
+	mochibridge.RegisterType("mochi.Rect", reflect.TypeOf(mochi.Rect{}))
 }
 
 const (

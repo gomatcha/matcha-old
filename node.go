@@ -3,7 +3,7 @@ package mochi
 import (
 	"fmt"
 	"github.com/overcyn/mochi/internal"
-	"mochi/bridge"
+	"github.com/overcyn/mochibridge"
 	"runtime/debug"
 	"strings"
 	"sync"
@@ -188,7 +188,7 @@ func NewViewController(f func(Config) View, id int) *ViewController {
 		rn.LayoutRoot(Pt(0, 0), vc.size)
 		rn.Paint()
 
-		bridge.Root().Call("updateId:withRenderNode:", bridge.Int64(int64(id)), bridge.Interface(rn))
+		mochibridge.Root().Call("updateId:withRenderNode:", mochibridge.Int64(int64(id)), mochibridge.Interface(rn))
 	})
 
 	return vc
@@ -234,7 +234,7 @@ type BuildContextRoot struct {
 
 func (root *BuildContextRoot) Update(key interface{}) {
 	root.ctx.needsUpdate = true
-	bridge.Root().Call("rerender")
+	mochibridge.Root().Call("rerender")
 	debug.PrintStack()
 }
 
