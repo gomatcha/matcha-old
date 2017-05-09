@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/overcyn/mochi/internal"
 	"github.com/overcyn/mochibridge"
-	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
@@ -161,21 +160,21 @@ func (n *RenderNode) Copy() *RenderNode {
 }
 
 type ViewController struct {
-	id           int
-	mu           *sync.Mutex
-	buildContext *BuildContext
-	renderNode   *RenderNode
-	stopped      bool
-	size         Point
-	ticker       *internal.Ticker
+	id         int
+	mu         *sync.Mutex
+	root       *BuildContextRoot
+	renderNode *RenderNode
+	stopped    bool
+	size       Point
+	ticker     *internal.Ticker
 }
 
 func NewViewController(f func(Config) View, id int) *ViewController {
 	vc := &ViewController{
-		mu:           &sync.Mutex{},
-		buildContext: NewBuildContext(f),
-		ticker:       internal.NewTicker(time.Hour * 99999),
-		id:           id,
+		mu:     &sync.Mutex{},
+		root:   NewBuildContextRoot(f),
+		ticker: internal.NewTicker(time.Hour * 99999),
+		id:     id,
 	}
 
 	// start run loop
@@ -199,14 +198,13 @@ func (vc *ViewController) Render() *RenderNode {
 	vc.mu.Lock()
 	defer vc.mu.Unlock()
 
-	vc.buildContext.Build()
-	fmt.Println("VC", vc.buildContext.DebugString())
-	vc.renderNode = vc.buildContext.RenderNode()
+	vc.root.Build()
+	vc.renderNode = vc.root.ctx.RenderNode()
 
 	rn := vc.renderNode.Copy()
 	rn.LayoutRoot(Pt(0, 0), vc.size)
 	rn.Paint()
-	fmt.Println("WTF", rn.DebugString())
+	fmt.Println("rn", rn.DebugString())
 	return rn
 }
 
@@ -229,16 +227,65 @@ type Config struct {
 	Embed *Embed
 }
 
+type viewCacheKey struct {
+	id  Id
+	key interface{}
+}
+
 type BuildContextRoot struct {
-	ctx       *BuildContext
-	viewCache map[Id]View
-	maxId     Id
+	ctx      *BuildContext
+	ids      map[viewCacheKey]Id
+	prevIds  map[viewCacheKey]Id
+	ctxs     map[Id]*BuildContext
+	prevCtxs map[Id]*BuildContext
+	maxId    Id
 }
 
 func (root *BuildContextRoot) Update(key interface{}) {
 	root.ctx.needsUpdate = true
 	mochibridge.Root().Call("rerender")
-	debug.PrintStack()
+}
+
+func (root *BuildContextRoot) Build() {
+	root.prevIds = root.ids
+	root.ids = map[viewCacheKey]Id{}
+	root.prevCtxs = root.ctxs
+	root.ctxs = map[Id]*BuildContext{}
+	fmt.Println("BUILD!!!!!!!", root.prevIds, root.ids, root.prevCtxs, root.ctxs)
+	root.ctx.Build()
+
+	keys := map[Id]viewCacheKey{}
+	for k, v := range root.ids {
+		keys[v] = k
+	}
+	for k, v := range root.prevIds {
+		keys[v] = k
+	}
+
+	ids := map[viewCacheKey]Id{}
+	for k := range root.ctxs {
+		ids[keys[k]] = k
+	}
+	root.ids = ids
+}
+
+func NewBuildContextRoot(f func(Config) View) *BuildContextRoot {
+	root := &BuildContextRoot{}
+
+	id := root.NewId()
+	cfg := Config{Embed: &Embed{
+		mu:   &sync.Mutex{},
+		root: root,
+		id:   id,
+	}}
+	ctx := &BuildContext{
+		id:          id,
+		view:        f(cfg),
+		root:        root,
+		needsUpdate: true,
+	}
+	root.ctx = ctx
+	return root
 }
 
 func (root *BuildContextRoot) NewId() Id {
@@ -255,34 +302,25 @@ type BuildContext struct {
 	needsUpdate bool
 }
 
-func NewBuildContext(f func(Config) View) *BuildContext {
-	ctx := &BuildContext{}
-	e := &Embed{
-		mu: &sync.Mutex{},
-	}
-	cfg := Config{Embed: e}
-	ctx.view = f(cfg)
-	ctx.root = &BuildContextRoot{ctx: ctx}
-	ctx.id = ctx.root.NewId()
-	ctx.needsUpdate = true
-	e.root = ctx.root
-	return ctx
-}
-
 func (ctx *BuildContext) Get(k interface{}) Config {
-	var prev View = nil
-	// if chl := ctx.children[k]; chl != nil {
-	// 	prev = chl.view
-	// } else {
-	// 	fmt.Println("No Prev", ctx.view, k)
-	// }
+	cacheKey := viewCacheKey{key: k, id: ctx.id}
+	id := ctx.root.NewId()
 
+	prevId := ctx.root.prevIds[cacheKey]
+	prevCtx := ctx.root.prevCtxs[prevId]
+	var prevView View
+	if prevCtx != nil {
+		prevView = prevCtx.view
+	}
+	fmt.Println("Prev", prevView, cacheKey)
+
+	ctx.root.ids[cacheKey] = id
 	return Config{
-		Prev: prev,
+		Prev: prevView,
 		Embed: &Embed{
 			mu:   &sync.Mutex{},
 			root: ctx.root,
-			id:   ctx.root.NewId(),
+			id:   id,
 		},
 	}
 }
@@ -324,6 +362,10 @@ func (ctx *BuildContext) Build() {
 				addedKeys = append(addedKeys, id)
 			}
 		}
+		if len(addedKeys) > 0 {
+			fmt.Println("added", addedKeys)
+			fmt.Println(node.Children, ctx.children)
+		}
 
 		children := map[Id]*BuildContext{}
 		// Add build contexts for new children
@@ -359,6 +401,9 @@ func (ctx *BuildContext) Build() {
 	// Recursively update children.
 	for _, i := range ctx.children {
 		i.Build()
+
+		// Also add to the root
+		ctx.root.ctxs[i.id] = i
 	}
 }
 

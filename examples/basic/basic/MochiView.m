@@ -174,8 +174,7 @@ MochiView *MochiViewWithNode(MochiNode *node);
 @end
 
 bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config) {
-     bool update = ![node.identifier isEqual:config.node.identifier];
-    // NSLog(@"KD:%s, %@,%@", __FUNCTION__, node.identifier, config.node.identifier);
+    // bool update = ![node.identifier isEqual:config.node.identifier];
     
     // Update layout and paint options
     view.backgroundColor = node.paintOptions.backgroundColor ?: [UIColor clearColor];
@@ -206,21 +205,17 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
         [config.childViews[i] removeFromSuperview];
     }
     for (NSNumber *i in addedKeys) {
+        NSLog(@"KD:%s, added:%@", __FUNCTION__, i);
         MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);
         [view addSubview:childView];
         childViews[i] = childView;
-        NSLog(@"KD:%s, added:%@", __FUNCTION__, childView);
     }
     for (NSNumber *i in unmodifiedKeys) {
         MochiView *childView = (id)config.childViews[i];
         childView.node = node.nodeChildren[i];
         childViews[i] = childView;
     }
-    // NSLog(@"prev:%@", config.node.nodeChildren);
-    // NSLog(@"removed:%@", removedKeys);
-    // NSLog(@"added:%@", addedKeys);
-    // NSLog(@"unmodified:%@", unmodifiedKeys);
-    
+
     NSArray *sortedKeys = [[childViews allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
         return node.nodeChildren[obj1].guide.zIndex > node.nodeChildren[obj2].guide.zIndex;
     }];
@@ -234,7 +229,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
     }
     config.childViews = childViews;
     config.node = node;
-    return update;
+    return YES;
 }
 
 MochiView *MochiViewWithNode(MochiNode *node) {

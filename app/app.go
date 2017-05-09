@@ -33,8 +33,10 @@ func init() {
 	mochibridge.RegisterType("mochi.Rect", reflect.TypeOf(mochi.Rect{}))
 }
 
+type blah int
+
 const (
-	chl1id int = iota
+	chl1id blah = 1000 + iota
 	chl2id
 	chl3id
 	chl4id
@@ -76,7 +78,8 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	p.BackgroundColor = mochi.GreenColor
 	n.Painter = p
 
-	chl1 := basicview.New(ctx.Get(chl1id))
+	config := ctx.Get(chl1id)
+	chl1 := basicview.New(config)
 	chl1.PaintOptions.BackgroundColor = mochi.RedColor
 	n.Add(chl1)
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
@@ -85,6 +88,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.WidthEqual(constraint.Notifier(v.floatTicker))
 		s.HeightEqual(constraint.Notifier(v.floatTicker))
 	})
+	fmt.Println("id", chl1, chl1.Id(), config.Prev)
 
 	chl2 := basicview.New(ctx.Get(chl2id))
 	chl2.PaintOptions.BackgroundColor = mochi.YellowColor
@@ -188,14 +192,12 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		childView.PaintOptions.BackgroundColor = mochi.RedColor
 		childViews = append(childViews, childView)
 		childLayouter.Add(childView)
-		n.Add(childView)
 	}
 
 	scrollChild := basicview.New(ctx.Get(scrollChildId))
 	scrollChild.PaintOptions.BackgroundColor = mochi.WhiteColor
 	scrollChild.Layouter = childLayouter
 	scrollChild.Children = childViews
-	n.Add(scrollChild)
 
 	chl10 := scrollview.New(ctx.Get(scrollId))
 	chl10.PaintOptions.BackgroundColor = mochi.CyanColor
