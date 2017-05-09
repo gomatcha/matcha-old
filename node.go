@@ -199,7 +199,7 @@ func (vc *ViewController) Render() *RenderNode {
 	defer vc.mu.Unlock()
 
 	vc.root.Build()
-	vc.renderNode = vc.root.ctx.RenderNode()
+	vc.renderNode = vc.root.node.RenderNode()
 
 	rn := vc.renderNode.Copy()
 	rn.LayoutRoot(Pt(0, 0), vc.size)
@@ -232,12 +232,12 @@ type viewCacheKey struct {
 }
 
 type root struct {
-	ctx      *Node
-	ids      map[viewCacheKey]Id
-	prevIds  map[viewCacheKey]Id
-	ctxs     map[Id]*Node
-	prevCtxs map[Id]*Node
-	maxId    Id
+	node      *Node
+	ids       map[viewCacheKey]Id
+	prevIds   map[viewCacheKey]Id
+	nodes     map[Id]*Node
+	prevNodes map[Id]*Node
+	maxId     Id
 }
 
 func newRoot(f func(Config) View) *root {
@@ -255,21 +255,21 @@ func newRoot(f func(Config) View) *root {
 		root:        root,
 		needsUpdate: true,
 	}
-	root.ctx = ctx
+	root.node = ctx
 	return root
 }
 
 func (root *root) Update(key interface{}) {
-	root.ctx.needsUpdate = true
+	root.node.needsUpdate = true
 	mochibridge.Root().Call("rerender")
 }
 
 func (root *root) Build() {
 	root.prevIds = root.ids
 	root.ids = map[viewCacheKey]Id{}
-	root.prevCtxs = root.ctxs
-	root.ctxs = map[Id]*Node{}
-	root.ctx.Build()
+	root.prevNodes = root.nodes
+	root.nodes = map[Id]*Node{}
+	root.node.Build()
 
 	keys := map[Id]viewCacheKey{}
 	for k, v := range root.ids {
@@ -280,7 +280,7 @@ func (root *root) Build() {
 	}
 
 	ids := map[viewCacheKey]Id{}
-	for k := range root.ctxs {
+	for k := range root.nodes {
 		ids[keys[k]] = k
 	}
 	root.ids = ids
@@ -305,7 +305,7 @@ func (n *Node) Get(k interface{}) Config {
 	id := n.root.NewId()
 
 	prevId := n.root.prevIds[cacheKey]
-	prevCtx := n.root.prevCtxs[prevId]
+	prevCtx := n.root.prevNodes[prevId]
 	var prevView View
 	if prevCtx != nil {
 		prevView = prevCtx.view
@@ -396,7 +396,7 @@ func (n *Node) Build() {
 		i.Build()
 
 		// Also add to the root
-		n.root.ctxs[i.id] = i
+		n.root.nodes[i.id] = i
 	}
 }
 
