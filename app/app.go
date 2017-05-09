@@ -88,7 +88,6 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.WidthEqual(constraint.Notifier(v.floatTicker))
 		s.HeightEqual(constraint.Notifier(v.floatTicker))
 	})
-	fmt.Println("id", chl1, chl1.Id(), config.Prev)
 
 	chl2 := basicview.New(ctx.Get(chl2id))
 	chl2.PaintOptions.BackgroundColor = mochi.YellowColor
@@ -152,13 +151,13 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	// chl8 := imageview.NewURLImageView(ctx.Get(chl8id))
-	// chl8.PaintOptions.BackgroundColor = mochi.CyanColor
-	// chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
-	// chl8.ResizeMode = imageview.ResizeModeFit
-	chl8 := imageview.NewImageView(ctx.Get(chl8id))
+	chl8 := imageview.NewURLImageView(ctx.Get(chl8id))
 	chl8.PaintOptions.BackgroundColor = mochi.CyanColor
+	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl8.ResizeMode = imageview.ResizeModeFit
+	// chl8 := imageview.NewImageView(ctx.Get(chl8id))
+	// chl8.PaintOptions.BackgroundColor = mochi.CyanColor
+	// chl8.ResizeMode = imageview.ResizeModeFit
 	n.Add(chl8)
 	g8 := l.Add(chl8, func(s *constraint.Solver) {
 		s.BottomEqual(g6.Top())

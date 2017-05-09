@@ -22,7 +22,7 @@ type View interface {
 type Embed struct {
 	mu   *sync.Mutex
 	id   Id
-	root *BuildContextRoot
+	root *root
 }
 
 func (e *Embed) Build(ctx *BuildContext) *Node {
@@ -162,7 +162,7 @@ func (n *RenderNode) Copy() *RenderNode {
 type ViewController struct {
 	id         int
 	mu         *sync.Mutex
-	root       *BuildContextRoot
+	root       *root
 	renderNode *RenderNode
 	stopped    bool
 	size       Point
@@ -172,7 +172,7 @@ type ViewController struct {
 func NewViewController(f func(Config) View, id int) *ViewController {
 	vc := &ViewController{
 		mu:     &sync.Mutex{},
-		root:   NewBuildContextRoot(f),
+		root:   newRoot(f),
 		ticker: internal.NewTicker(time.Hour * 99999),
 		id:     id,
 	}
@@ -204,7 +204,6 @@ func (vc *ViewController) Render() *RenderNode {
 	rn := vc.renderNode.Copy()
 	rn.LayoutRoot(Pt(0, 0), vc.size)
 	rn.Paint()
-	fmt.Println("rn", rn.DebugString())
 	return rn
 }
 
@@ -232,7 +231,7 @@ type viewCacheKey struct {
 	key interface{}
 }
 
-type BuildContextRoot struct {
+type root struct {
 	ctx      *BuildContext
 	ids      map[viewCacheKey]Id
 	prevIds  map[viewCacheKey]Id
@@ -241,36 +240,8 @@ type BuildContextRoot struct {
 	maxId    Id
 }
 
-func (root *BuildContextRoot) Update(key interface{}) {
-	root.ctx.needsUpdate = true
-	mochibridge.Root().Call("rerender")
-}
-
-func (root *BuildContextRoot) Build() {
-	root.prevIds = root.ids
-	root.ids = map[viewCacheKey]Id{}
-	root.prevCtxs = root.ctxs
-	root.ctxs = map[Id]*BuildContext{}
-	fmt.Println("BUILD!!!!!!!", root.prevIds, root.ids, root.prevCtxs, root.ctxs)
-	root.ctx.Build()
-
-	keys := map[Id]viewCacheKey{}
-	for k, v := range root.ids {
-		keys[v] = k
-	}
-	for k, v := range root.prevIds {
-		keys[v] = k
-	}
-
-	ids := map[viewCacheKey]Id{}
-	for k := range root.ctxs {
-		ids[keys[k]] = k
-	}
-	root.ids = ids
-}
-
-func NewBuildContextRoot(f func(Config) View) *BuildContextRoot {
-	root := &BuildContextRoot{}
+func newRoot(f func(Config) View) *root {
+	root := &root{}
 
 	id := root.NewId()
 	cfg := Config{Embed: &Embed{
@@ -288,7 +259,34 @@ func NewBuildContextRoot(f func(Config) View) *BuildContextRoot {
 	return root
 }
 
-func (root *BuildContextRoot) NewId() Id {
+func (root *root) Update(key interface{}) {
+	root.ctx.needsUpdate = true
+	mochibridge.Root().Call("rerender")
+}
+
+func (root *root) Build() {
+	root.prevIds = root.ids
+	root.ids = map[viewCacheKey]Id{}
+	root.prevCtxs = root.ctxs
+	root.ctxs = map[Id]*BuildContext{}
+	root.ctx.Build()
+
+	keys := map[Id]viewCacheKey{}
+	for k, v := range root.ids {
+		keys[v] = k
+	}
+	for k, v := range root.prevIds {
+		keys[v] = k
+	}
+
+	ids := map[viewCacheKey]Id{}
+	for k := range root.ctxs {
+		ids[keys[k]] = k
+	}
+	root.ids = ids
+}
+
+func (root *root) NewId() Id {
 	root.maxId += 1
 	return root.maxId
 }
@@ -298,7 +296,7 @@ type BuildContext struct {
 	view        View
 	node        *Node
 	children    map[Id]*BuildContext
-	root        *BuildContextRoot
+	root        *root
 	needsUpdate bool
 }
 
@@ -312,7 +310,6 @@ func (ctx *BuildContext) Get(k interface{}) Config {
 	if prevCtx != nil {
 		prevView = prevCtx.view
 	}
-	fmt.Println("Prev", prevView, cacheKey)
 
 	ctx.root.ids[cacheKey] = id
 	return Config{
@@ -361,10 +358,6 @@ func (ctx *BuildContext) Build() {
 			if _, ok := ctx.children[id]; !ok {
 				addedKeys = append(addedKeys, id)
 			}
-		}
-		if len(addedKeys) > 0 {
-			fmt.Println("added", addedKeys)
-			fmt.Println(node.Children, ctx.children)
 		}
 
 		children := map[Id]*BuildContext{}
