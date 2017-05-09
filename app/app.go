@@ -68,7 +68,7 @@ func NewNestedView(c mochi.Config) *NestedView {
 	return v
 }
 
-func (v *NestedView) Build(ctx *mochi.Node) *mochi.ViewModel {
+func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	m := &mochi.ViewModel{}
 
 	l := constraint.New()
@@ -235,7 +235,7 @@ func NewTableCell(c mochi.Config) *TableCell {
 	return v
 }
 
-func (v *TableCell) Build(ctx *mochi.Node) *mochi.ViewModel {
+func (v *TableCell) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	l := constraint.New()
 	n := &mochi.ViewModel{}
 	n.Layouter = l

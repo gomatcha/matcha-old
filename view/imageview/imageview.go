@@ -37,7 +37,7 @@ func NewURLImageView(c mochi.Config) *URLImageView {
 	return v
 }
 
-func (v *URLImageView) Build(ctx *mochi.Node) *mochi.ViewModel {
+func (v *URLImageView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	if v.URL != v.url {
 		if v.cancel != nil {
 			v.cancel()
@@ -120,7 +120,7 @@ func NewImageView(c mochi.Config) *ImageView {
 	return v
 }
 
-func (v *ImageView) Build(ctx *mochi.Node) *mochi.ViewModel {
+func (v *ImageView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	if v.Image != v.image {
 		v.image = v.Image
 

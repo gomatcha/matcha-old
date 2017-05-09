@@ -42,7 +42,7 @@ func New(c mochi.Config) *TextView {
 	return v
 }
 
-func (v *TextView) Build(ctx *mochi.Node) *mochi.ViewModel {
+func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	ft := v.Text
 	if ft == nil {
 		ft = &text.Text{}

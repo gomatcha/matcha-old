@@ -38,7 +38,7 @@ func New(c mochi.Config) *Button {
 	return v
 }
 
-func (v *Button) Build(ctx *mochi.Node) *mochi.ViewModel {
+func (v *Button) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	ft := &text.Text{}
 	ft.SetString(v.Text)
 	ft.Style().SetAlignment(text.AlignmentCenter)

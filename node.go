@@ -12,7 +12,7 @@ import (
 type Id int64
 
 type View interface {
-	Build(*Node) *ViewModel
+	Build(*BuildContext) *ViewModel
 	// Lifecyle(*Stage)
 	Id() Id
 	Lock()
@@ -25,7 +25,7 @@ type Embed struct {
 	root *root
 }
 
-func (e *Embed) Build(ctx *Node) *ViewModel {
+func (e *Embed) Build(ctx *BuildContext) *ViewModel {
 	return &ViewModel{}
 }
 
@@ -231,6 +231,14 @@ type viewCacheKey struct {
 	key interface{}
 }
 
+type BuildContext struct {
+	node *Node
+}
+
+func (ctx *BuildContext) Get(key interface{}) Config {
+	return ctx.node.Get(key)
+}
+
 type root struct {
 	node      *Node
 	ids       map[viewCacheKey]Id
@@ -300,8 +308,8 @@ type Node struct {
 	needsUpdate bool
 }
 
-func (n *Node) Get(k interface{}) Config {
-	cacheKey := viewCacheKey{key: k, id: n.id}
+func (n *Node) Get(key interface{}) Config {
+	cacheKey := viewCacheKey{key: key, id: n.id}
 	id := n.root.NewId()
 
 	prevId := n.root.prevIds[cacheKey]
@@ -341,7 +349,7 @@ func (n *Node) Build() {
 		n.needsUpdate = false
 
 		// Generate the new viewModel.
-		viewModel := n.view.Build(n)
+		viewModel := n.view.Build(&BuildContext{node: n})
 
 		// Diff the old children (n.children) with new children (viewModel.Children).
 		addedKeys := []Id{}
