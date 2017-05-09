@@ -294,68 +294,68 @@ func (root *root) NewId() Id {
 type Node struct {
 	id          Id
 	view        View
-	node        *ViewModel
+	viewModel   *ViewModel
 	children    map[Id]*Node
 	root        *root
 	needsUpdate bool
 }
 
-func (ctx *Node) Get(k interface{}) Config {
-	cacheKey := viewCacheKey{key: k, id: ctx.id}
-	id := ctx.root.NewId()
+func (n *Node) Get(k interface{}) Config {
+	cacheKey := viewCacheKey{key: k, id: n.id}
+	id := n.root.NewId()
 
-	prevId := ctx.root.prevIds[cacheKey]
-	prevCtx := ctx.root.prevCtxs[prevId]
+	prevId := n.root.prevIds[cacheKey]
+	prevCtx := n.root.prevCtxs[prevId]
 	var prevView View
 	if prevCtx != nil {
 		prevView = prevCtx.view
 	}
 
-	ctx.root.ids[cacheKey] = id
+	n.root.ids[cacheKey] = id
 	return Config{
 		Prev: prevView,
 		Embed: &Embed{
 			mu:   &sync.Mutex{},
-			root: ctx.root,
+			root: n.root,
 			id:   id,
 		},
 	}
 }
 
-func (ctx *Node) RenderNode() *RenderNode {
+func (n *Node) RenderNode() *RenderNode {
 	rn := &RenderNode{
-		Id:       ctx.id,
-		Layouter: ctx.node.Layouter,
-		Painter:  ctx.node.Painter,
-		Bridge:   ctx.node.Bridge,
+		Id:       n.id,
+		Layouter: n.viewModel.Layouter,
+		Painter:  n.viewModel.Painter,
+		Bridge:   n.viewModel.Bridge,
 		Children: map[Id]*RenderNode{},
 	}
-	for k, v := range ctx.children {
+	for k, v := range n.children {
 		rn.Children[k] = v.RenderNode()
 	}
 	return rn
 }
 
-func (ctx *Node) Build() {
-	if ctx.needsUpdate {
-		ctx.needsUpdate = false
+func (n *Node) Build() {
+	if n.needsUpdate {
+		n.needsUpdate = false
 
-		// Generate the new node.
-		node := ctx.view.Build(ctx)
+		// Generate the new viewModel.
+		viewModel := n.view.Build(n)
 
-		// Diff the old children (ctx.children) with new children (node.Children).
+		// Diff the old children (n.children) with new children (viewModel.Children).
 		addedKeys := []Id{}
 		removedKeys := []Id{}
 		unupdatedKeys := []Id{}
-		for id := range ctx.children {
-			if _, ok := node.Children[id]; !ok {
+		for id := range n.children {
+			if _, ok := viewModel.Children[id]; !ok {
 				removedKeys = append(removedKeys, id)
 			} else {
 				unupdatedKeys = append(unupdatedKeys, id)
 			}
 		}
-		for id := range node.Children {
-			if _, ok := ctx.children[id]; !ok {
+		for id := range viewModel.Children {
+			if _, ok := n.children[id]; !ok {
 				addedKeys = append(addedKeys, id)
 			}
 		}
@@ -364,7 +364,7 @@ func (ctx *Node) Build() {
 		// Add build contexts for new children
 		for _, id := range addedKeys {
 			var view View
-			for _, i := range node.Children {
+			for _, i := range viewModel.Children {
 				if i.Id() == id {
 					view = i
 					break
@@ -374,12 +374,12 @@ func (ctx *Node) Build() {
 				id:       id,
 				view:     view,
 				children: map[Id]*Node{},
-				root:     ctx.root,
+				root:     n.root,
 			}
 		}
 		// Reuse old context for unupdated keys
 		for _, id := range unupdatedKeys {
-			children[id] = ctx.children[id]
+			children[id] = n.children[id]
 		}
 
 		// Mark all children as needing update since we updated
@@ -387,22 +387,22 @@ func (ctx *Node) Build() {
 			i.needsUpdate = true
 		}
 
-		ctx.children = children
-		ctx.node = node
+		n.children = children
+		n.viewModel = viewModel
 	}
 
 	// Recursively update children.
-	for _, i := range ctx.children {
+	for _, i := range n.children {
 		i.Build()
 
 		// Also add to the root
-		ctx.root.ctxs[i.id] = i
+		n.root.ctxs[i.id] = i
 	}
 }
 
-func (ctx *Node) DebugString() string {
+func (n *Node) DebugString() string {
 	all := []string{}
-	for _, i := range ctx.children {
+	for _, i := range n.children {
 		lines := strings.Split(i.DebugString(), "\n")
 		for idx, line := range lines {
 			lines[idx] = "|	" + line
@@ -410,7 +410,7 @@ func (ctx *Node) DebugString() string {
 		all = append(all, lines...)
 	}
 
-	str := fmt.Sprintf("{%p Id:%v View:%v Node:%p}", ctx, ctx.id, ctx.view, ctx.node)
+	str := fmt.Sprintf("{%p Id:%v View:%v Node:%p}", n, n.id, n.view, n.viewModel)
 	if len(all) > 0 {
 		str += "\n" + strings.Join(all, "\n")
 	}
