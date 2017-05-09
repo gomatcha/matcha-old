@@ -42,7 +42,7 @@ func (e *Embed) Unlock() {
 }
 
 func (e *Embed) Update(key interface{}) {
-	e.root.buildIds[e.id] = struct{}{}
+	e.root.updateFlags[e.id] = buildFlag
 }
 
 type Bridge struct {
@@ -123,11 +123,21 @@ func NewViewController(f func(Config) View, id int) *ViewController {
 			return
 		}
 
-		if len(vc.root.buildIds) > 0 {
+		var flag updateFlag
+		for _, v := range vc.root.updateFlags {
+			flag |= v
+		}
+
+		if flag.needsBuild() {
 			vc.root.build()
 		}
-		vc.root.layout(Pt(0, 0), vc.size)
-		vc.root.paint()
+		if flag.needsLayout() {
+			vc.root.layout(Pt(0, 0), vc.size)
+		}
+		if flag.needsPaint() {
+			vc.root.paint()
+		}
+		vc.root.updateFlags = map[Id]updateFlag{}
 
 		rn := vc.root.node.renderNode()
 		mochibridge.Root().Call("updateId:withRenderNode:", mochibridge.Int64(int64(id)), mochibridge.Interface(rn))
@@ -185,14 +195,26 @@ const (
 	paintFlag
 )
 
+func (f updateFlag) needsBuild() bool {
+	return f&buildFlag != 0
+}
+
+func (f updateFlag) needsLayout() bool {
+	return f&buildFlag != 0 || f&layoutFlag != 0
+}
+
+func (f updateFlag) needsPaint() bool {
+	return f&buildFlag != 0 || f&layoutFlag != 0 || f&paintFlag != 0
+}
+
 type root struct {
-	node      *node
-	ids       map[viewCacheKey]Id
-	prevIds   map[viewCacheKey]Id
-	nodes     map[Id]*node
-	prevNodes map[Id]*node
-	maxId     Id
-	buildIds  map[Id]struct{}
+	node        *node
+	ids         map[viewCacheKey]Id
+	prevIds     map[viewCacheKey]Id
+	nodes       map[Id]*node
+	prevNodes   map[Id]*node
+	maxId       Id
+	updateFlags map[Id]updateFlag
 }
 
 func newRoot(f func(Config) View) *root {
@@ -210,7 +232,7 @@ func newRoot(f func(Config) View) *root {
 		root: root,
 	}
 	root.node = node
-	root.buildIds = map[Id]struct{}{id: struct{}{}}
+	root.updateFlags = map[Id]updateFlag{id: buildFlag}
 	return root
 }
 
@@ -234,7 +256,6 @@ func (root *root) build() {
 		ids[keys[k]] = k
 	}
 	root.ids = ids
-	root.buildIds = map[Id]struct{}{}
 }
 
 func (root *root) paint() {
@@ -300,8 +321,7 @@ func (n *node) renderNode() *RenderNode {
 }
 
 func (n *node) build() {
-	_, needsUpdate := n.root.buildIds[n.id]
-	if needsUpdate {
+	if n.root.updateFlags[n.id].needsBuild() {
 		// Generate the new viewModel.
 		viewModel := n.view.Build(&BuildContext{node: n})
 
@@ -344,9 +364,9 @@ func (n *node) build() {
 			children[id] = n.children[id]
 		}
 
-		// Mark all children as needing update since we updated
+		// Mark all children as needing rebuild since we rebuilt
 		for k := range children {
-			n.root.buildIds[k] = struct{}{}
+			n.root.updateFlags[k] |= buildFlag
 		}
 
 		n.children = children
@@ -363,11 +383,15 @@ func (n *node) build() {
 }
 
 func (n *node) paint() {
-	if p := n.viewModel.Painter; p != nil {
-		n.paintOptions = p.PaintOptions()
-	} else {
-		n.paintOptions = PaintOptions{}
+	if n.root.updateFlags[n.id].needsPaint() {
+		if p := n.viewModel.Painter; p != nil {
+			n.paintOptions = p.PaintOptions()
+		} else {
+			n.paintOptions = PaintOptions{}
+		}
 	}
+
+	// Recursively update children
 	for _, v := range n.children {
 		v.paint()
 	}
