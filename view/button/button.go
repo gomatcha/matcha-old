@@ -22,6 +22,14 @@ func (l *buttonLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[moch
 	return g, nil
 }
 
+func (l *buttonLayouter) Notify(c chan struct{}) {
+	// no-op
+}
+
+func (l *buttonLayouter) Unnotify(chan struct{}) {
+	// no-op
+}
+
 type Button struct {
 	*mochi.Embed
 	Text         string

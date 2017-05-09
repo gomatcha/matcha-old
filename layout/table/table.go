@@ -38,3 +38,11 @@ func (l *Layout) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]moc
 	g.Frame = mochi.Rt(0, 0, x, y)
 	return g, gs
 }
+
+func (l *Layout) Notify(c chan struct{}) {
+	// no-op
+}
+
+func (l *Layout) Unnotify(chan struct{}) {
+	// no-op
+}

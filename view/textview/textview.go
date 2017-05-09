@@ -16,6 +16,14 @@ func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mo
 	return g, nil
 }
 
+func (l *textViewLayouter) Notify(c chan struct{}) {
+	// no-op
+}
+
+func (l *textViewLayouter) Unnotify(chan struct{}) {
+	// no-op
+}
+
 func textSize(t *text.Text, max mochi.Point) mochi.Point {
 	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(mochi.Point)
 }

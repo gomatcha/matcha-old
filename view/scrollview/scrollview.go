@@ -63,3 +63,11 @@ func (l *scrollViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[
 		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}, gs
 }
+
+func (l *scrollViewLayouter) Notify(c chan struct{}) {
+	// no-op
+}
+
+func (l *scrollViewLayouter) Unnotify(c chan struct{}) {
+	// no-op
+}

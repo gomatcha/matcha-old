@@ -511,15 +511,15 @@ func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]m
 }
 
 func (sys *System) Notify(c chan struct{}) {
-	for _, i := range sys.notifiers {
-		i.Notify(c)
-	}
+	// for _, i := range sys.notifiers {
+	// 	i.Notify(c)
+	// }
 }
 
 func (sys *System) Unnotify(c chan struct{}) {
-	for _, i := range sys.notifiers {
-		i.Unnotify(c)
-	}
+	// for _, i := range sys.notifiers {
+	// 	i.Unnotify(c)
+	// }
 }
 
 type _range struct {

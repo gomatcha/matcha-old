@@ -7,13 +7,9 @@ type LayoutContext struct {
 	node     *node
 }
 
-type NotifyLayouter interface {
-	Layouter
-	Notifier
-}
-
 type Layouter interface {
 	Layout(ctx *LayoutContext) (Guide, map[Id]Guide)
+	Notifier
 }
 
 func (l *LayoutContext) LayoutChild(id Id, minSize, maxSize Point) Guide {
@@ -38,6 +34,14 @@ func (l *FullLayout) Layout(ctx *LayoutContext) (Guide, map[Id]Guide) {
 		gs[id] = ctx.LayoutChild(id, ctx.MinSize, ctx.MinSize)
 	}
 	return g, gs
+}
+
+func (l *FullLayout) Notify(c chan struct{}) {
+	// no-op
+}
+
+func (l *FullLayout) Unnotify(chan struct{}) {
+	// no-op
 }
 
 // Guides
