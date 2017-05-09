@@ -42,7 +42,7 @@ func (e *Embed) Unlock() {
 }
 
 func (e *Embed) Update(key interface{}) {
-	e.root.Update(key)
+	e.root.updateIds[id] = struct{}{}
 }
 
 type Bridge struct {
@@ -185,6 +185,12 @@ func NewViewController(f func(Config) View, id int) *ViewController {
 		if vc.stopped {
 			return
 		}
+
+		if len(vc.root.updateIds) > 0 {
+			vc.root.build()
+			vc.renderNode = vc.root.node.renderNode()
+		}
+
 		rn := vc.renderNode
 		rn.LayoutRoot(Pt(0, 0), vc.size)
 		rn.Paint()
@@ -198,8 +204,8 @@ func (vc *ViewController) Render() *RenderNode {
 	vc.mu.Lock()
 	defer vc.mu.Unlock()
 
-	vc.root.Build()
-	vc.renderNode = vc.root.node.RenderNode()
+	vc.root.build()
+	vc.renderNode = vc.root.node.renderNode()
 
 	rn := vc.renderNode.Copy()
 	rn.LayoutRoot(Pt(0, 0), vc.size)
@@ -232,52 +238,48 @@ type viewCacheKey struct {
 }
 
 type BuildContext struct {
-	node *Node
+	node *node
 }
 
 func (ctx *BuildContext) Get(key interface{}) Config {
-	return ctx.node.Get(key)
+	return ctx.node.get(key)
 }
 
 type root struct {
-	node      *Node
+	node      *node
 	ids       map[viewCacheKey]Id
 	prevIds   map[viewCacheKey]Id
-	nodes     map[Id]*Node
-	prevNodes map[Id]*Node
+	nodes     map[Id]*node
+	prevNodes map[Id]*node
 	maxId     Id
+	updateIds map[Id]struct{}
 }
 
 func newRoot(f func(Config) View) *root {
 	root := &root{}
 
-	id := root.NewId()
+	id := root.newId()
 	cfg := Config{Embed: &Embed{
 		mu:   &sync.Mutex{},
 		root: root,
 		id:   id,
 	}}
-	ctx := &Node{
-		id:          id,
-		view:        f(cfg),
-		root:        root,
-		needsUpdate: true,
+	node := &node{
+		id:   id,
+		view: f(cfg),
+		root: root,
 	}
-	root.node = ctx
+	root.node = node
+	root.updateIds = map[Id]struct{}{id: struct{}{}}
 	return root
 }
 
-func (root *root) Update(key interface{}) {
-	root.node.needsUpdate = true
-	mochibridge.Root().Call("rerender")
-}
-
-func (root *root) Build() {
+func (root *root) build() {
 	root.prevIds = root.ids
 	root.ids = map[viewCacheKey]Id{}
 	root.prevNodes = root.nodes
-	root.nodes = map[Id]*Node{}
-	root.node.Build()
+	root.nodes = map[Id]*node{}
+	root.node.build()
 
 	keys := map[Id]viewCacheKey{}
 	for k, v := range root.ids {
@@ -292,25 +294,26 @@ func (root *root) Build() {
 		ids[keys[k]] = k
 	}
 	root.ids = ids
+	root.updateIds = map[Id]struct{}{}
 }
 
-func (root *root) NewId() Id {
+func (root *root) newId() Id {
 	root.maxId += 1
 	return root.maxId
 }
 
-type Node struct {
+type node struct {
 	id          Id
 	view        View
 	viewModel   *ViewModel
-	children    map[Id]*Node
 	root        *root
+	children    map[Id]*node
 	needsUpdate bool
 }
 
-func (n *Node) Get(key interface{}) Config {
+func (n *node) get(key interface{}) Config {
 	cacheKey := viewCacheKey{key: key, id: n.id}
-	id := n.root.NewId()
+	id := n.root.newId()
 
 	prevId := n.root.prevIds[cacheKey]
 	prevCtx := n.root.prevNodes[prevId]
@@ -330,7 +333,7 @@ func (n *Node) Get(key interface{}) Config {
 	}
 }
 
-func (n *Node) RenderNode() *RenderNode {
+func (n *node) renderNode() *RenderNode {
 	rn := &RenderNode{
 		Id:       n.id,
 		Layouter: n.viewModel.Layouter,
@@ -339,15 +342,14 @@ func (n *Node) RenderNode() *RenderNode {
 		Children: map[Id]*RenderNode{},
 	}
 	for k, v := range n.children {
-		rn.Children[k] = v.RenderNode()
+		rn.Children[k] = v.renderNode()
 	}
 	return rn
 }
 
-func (n *Node) Build() {
-	if n.needsUpdate {
-		n.needsUpdate = false
-
+func (n *node) build() {
+	_, needsUpdate := n.root.updateIds[n.id]
+	if needsUpdate {
 		// Generate the new viewModel.
 		viewModel := n.view.Build(&BuildContext{node: n})
 
@@ -368,7 +370,7 @@ func (n *Node) Build() {
 			}
 		}
 
-		children := map[Id]*Node{}
+		children := map[Id]*node{}
 		// Add build contexts for new children
 		for _, id := range addedKeys {
 			var view View
@@ -378,10 +380,10 @@ func (n *Node) Build() {
 					break
 				}
 			}
-			children[id] = &Node{
+			children[id] = &node{
 				id:       id,
 				view:     view,
-				children: map[Id]*Node{},
+				children: map[Id]*node{},
 				root:     n.root,
 			}
 		}
@@ -391,8 +393,8 @@ func (n *Node) Build() {
 		}
 
 		// Mark all children as needing update since we updated
-		for _, i := range children {
-			i.needsUpdate = true
+		for k := range children {
+			n.root.updateIds[k] = struct{}{}
 		}
 
 		n.children = children
@@ -401,17 +403,17 @@ func (n *Node) Build() {
 
 	// Recursively update children.
 	for _, i := range n.children {
-		i.Build()
+		i.build()
 
 		// Also add to the root
 		n.root.nodes[i.id] = i
 	}
 }
 
-func (n *Node) DebugString() string {
+func (n *node) debugString() string {
 	all := []string{}
 	for _, i := range n.children {
-		lines := strings.Split(i.DebugString(), "\n")
+		lines := strings.Split(i.debugString(), "\n")
 		for idx, line := range lines {
 			lines[idx] = "|	" + line
 		}

@@ -33,10 +33,8 @@ func init() {
 	mochibridge.RegisterType("mochi.Rect", reflect.TypeOf(mochi.Rect{}))
 }
 
-type blah int
-
 const (
-	chl1id blah = 1000 + iota
+	chl1id int = 1000 + iota
 	chl2id
 	chl3id
 	chl4id
@@ -78,8 +76,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	p.BackgroundColor = mochi.GreenColor
 	m.Painter = p
 
-	config := ctx.Get(chl1id)
-	chl1 := basicview.New(config)
+	chl1 := basicview.New(ctx.Get("red"))
 	chl1.PaintOptions.BackgroundColor = mochi.RedColor
 	m.Add(chl1)
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
