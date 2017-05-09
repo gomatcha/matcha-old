@@ -42,7 +42,7 @@ func (e *Embed) Unlock() {
 }
 
 func (e *Embed) Update(key interface{}) {
-	e.root.updateIds[id] = struct{}{}
+	e.root.updateIds[e.id] = struct{}{}
 }
 
 type Bridge struct {
@@ -303,12 +303,11 @@ func (root *root) newId() Id {
 }
 
 type node struct {
-	id          Id
-	view        View
-	viewModel   *ViewModel
-	root        *root
-	children    map[Id]*node
-	needsUpdate bool
+	id        Id
+	view      View
+	viewModel *ViewModel
+	root      *root
+	children  map[Id]*node
 }
 
 func (n *node) get(key interface{}) Config {
