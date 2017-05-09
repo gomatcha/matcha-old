@@ -42,7 +42,7 @@ func (e *Embed) Unlock() {
 }
 
 func (e *Embed) Update(key interface{}) {
-	e.root.updateIds[e.id] = struct{}{}
+	e.root.buildIds[e.id] = struct{}{}
 }
 
 type Bridge struct {
@@ -72,57 +72,11 @@ func (n *ViewModel) Add(v View) {
 }
 
 type RenderNode struct {
-	Children map[Id]*RenderNode
-	Layouter Layouter
-	Painter  Painter
-	Bridge   Bridge
-
 	Id           Id
+	Children     map[Id]*RenderNode
+	Bridge       Bridge
 	LayoutGuide  *Guide
 	PaintOptions PaintOptions
-}
-
-func (n *RenderNode) LayoutRoot(minSize Point, maxSize Point) {
-	g := n.Layout(minSize, maxSize)
-	g.Frame = g.Frame.Add(Pt(-g.Frame.Min.X, -g.Frame.Min.Y)) // Move Frame.Min to the origin.
-	n.LayoutGuide = &g
-}
-
-func (n *RenderNode) Layout(minSize Point, maxSize Point) Guide {
-	// Create the LayoutContext
-	ctx := &LayoutContext{
-		MinSize:  minSize,
-		MaxSize:  maxSize,
-		ChildIds: []Id{},
-		node:     n,
-	}
-	for i := range n.Children {
-		ctx.ChildIds = append(ctx.ChildIds, i)
-	}
-
-	// Perform layout
-	layouter := n.Layouter
-	if layouter == nil {
-		layouter = &FullLayout{}
-	}
-	g, gs := layouter.Layout(ctx)
-	g = g.fit(ctx)
-
-	// Assign guides to children
-	for k, v := range gs {
-		guide := v
-		n.Children[k].LayoutGuide = &guide
-	}
-	return g
-}
-
-func (n *RenderNode) Paint() {
-	if p := n.Painter; p != nil {
-		n.PaintOptions = p.PaintOptions()
-	}
-	for _, v := range n.Children {
-		v.Paint()
-	}
 }
 
 func (n *RenderNode) DebugString() string {
@@ -140,23 +94,6 @@ func (n *RenderNode) DebugString() string {
 		str += "\n" + strings.Join(all, "\n")
 	}
 	return str
-}
-
-func (n *RenderNode) Copy() *RenderNode {
-	children := map[Id]*RenderNode{}
-	for k, v := range n.Children {
-		children[k] = v.Copy()
-	}
-	copy := &RenderNode{
-		Id:           n.Id,
-		Children:     children,
-		Layouter:     n.Layouter,
-		Painter:      n.Painter,
-		Bridge:       n.Bridge,
-		LayoutGuide:  n.LayoutGuide,
-		PaintOptions: n.PaintOptions,
-	}
-	return copy
 }
 
 type ViewController struct {
@@ -186,15 +123,13 @@ func NewViewController(f func(Config) View, id int) *ViewController {
 			return
 		}
 
-		if len(vc.root.updateIds) > 0 {
+		if len(vc.root.buildIds) > 0 {
 			vc.root.build()
-			vc.renderNode = vc.root.node.renderNode()
 		}
+		vc.root.layout(Pt(0, 0), vc.size)
+		vc.root.paint()
 
-		rn := vc.renderNode
-		rn.LayoutRoot(Pt(0, 0), vc.size)
-		rn.Paint()
-
+		rn := vc.root.node.renderNode()
 		mochibridge.Root().Call("updateId:withRenderNode:", mochibridge.Int64(int64(id)), mochibridge.Interface(rn))
 	})
 	return vc
@@ -205,12 +140,9 @@ func (vc *ViewController) Render() *RenderNode {
 	defer vc.mu.Unlock()
 
 	vc.root.build()
-	vc.renderNode = vc.root.node.renderNode()
-
-	rn := vc.renderNode.Copy()
-	rn.LayoutRoot(Pt(0, 0), vc.size)
-	rn.Paint()
-	return rn
+	vc.root.layout(Pt(0, 0), vc.size)
+	vc.root.paint()
+	return vc.root.node.renderNode()
 }
 
 func (vc *ViewController) SetSize(p Point) {
@@ -245,6 +177,14 @@ func (ctx *BuildContext) Get(key interface{}) Config {
 	return ctx.node.get(key)
 }
 
+type updateFlag int
+
+const (
+	buildFlag updateFlag = 1 << iota
+	layoutFlag
+	paintFlag
+)
+
 type root struct {
 	node      *node
 	ids       map[viewCacheKey]Id
@@ -252,7 +192,7 @@ type root struct {
 	nodes     map[Id]*node
 	prevNodes map[Id]*node
 	maxId     Id
-	updateIds map[Id]struct{}
+	buildIds  map[Id]struct{}
 }
 
 func newRoot(f func(Config) View) *root {
@@ -270,7 +210,7 @@ func newRoot(f func(Config) View) *root {
 		root: root,
 	}
 	root.node = node
-	root.updateIds = map[Id]struct{}{id: struct{}{}}
+	root.buildIds = map[Id]struct{}{id: struct{}{}}
 	return root
 }
 
@@ -294,7 +234,17 @@ func (root *root) build() {
 		ids[keys[k]] = k
 	}
 	root.ids = ids
-	root.updateIds = map[Id]struct{}{}
+	root.buildIds = map[Id]struct{}{}
+}
+
+func (root *root) paint() {
+	root.node.paint()
+}
+
+func (root *root) layout(minSize Point, maxSize Point) {
+	g := root.node.layout(minSize, maxSize)
+	g.Frame = g.Frame.Add(Pt(-g.Frame.Min.X, -g.Frame.Min.Y)) // Move Frame.Min to the origin.
+	root.node.layoutGuide = &g
 }
 
 func (root *root) newId() Id {
@@ -303,11 +253,14 @@ func (root *root) newId() Id {
 }
 
 type node struct {
-	id        Id
-	view      View
-	viewModel *ViewModel
-	root      *root
-	children  map[Id]*node
+	id   Id
+	root *root
+	view View
+
+	viewModel    *ViewModel
+	children     map[Id]*node
+	layoutGuide  *Guide
+	paintOptions PaintOptions
 }
 
 func (n *node) get(key interface{}) Config {
@@ -334,11 +287,11 @@ func (n *node) get(key interface{}) Config {
 
 func (n *node) renderNode() *RenderNode {
 	rn := &RenderNode{
-		Id:       n.id,
-		Layouter: n.viewModel.Layouter,
-		Painter:  n.viewModel.Painter,
-		Bridge:   n.viewModel.Bridge,
-		Children: map[Id]*RenderNode{},
+		Id:           n.id,
+		Children:     map[Id]*RenderNode{},
+		Bridge:       n.viewModel.Bridge,
+		LayoutGuide:  n.layoutGuide,
+		PaintOptions: n.paintOptions,
 	}
 	for k, v := range n.children {
 		rn.Children[k] = v.renderNode()
@@ -347,7 +300,7 @@ func (n *node) renderNode() *RenderNode {
 }
 
 func (n *node) build() {
-	_, needsUpdate := n.root.updateIds[n.id]
+	_, needsUpdate := n.root.buildIds[n.id]
 	if needsUpdate {
 		// Generate the new viewModel.
 		viewModel := n.view.Build(&BuildContext{node: n})
@@ -393,7 +346,7 @@ func (n *node) build() {
 
 		// Mark all children as needing update since we updated
 		for k := range children {
-			n.root.updateIds[k] = struct{}{}
+			n.root.buildIds[k] = struct{}{}
 		}
 
 		n.children = children
@@ -407,6 +360,45 @@ func (n *node) build() {
 		// Also add to the root
 		n.root.nodes[i.id] = i
 	}
+}
+
+func (n *node) paint() {
+	if p := n.viewModel.Painter; p != nil {
+		n.paintOptions = p.PaintOptions()
+	} else {
+		n.paintOptions = PaintOptions{}
+	}
+	for _, v := range n.children {
+		v.paint()
+	}
+}
+
+func (n *node) layout(minSize Point, maxSize Point) Guide {
+	// Create the LayoutContext
+	ctx := &LayoutContext{
+		MinSize:  minSize,
+		MaxSize:  maxSize,
+		ChildIds: []Id{},
+		node:     n,
+	}
+	for i := range n.children {
+		ctx.ChildIds = append(ctx.ChildIds, i)
+	}
+
+	// Perform layout
+	layouter := n.viewModel.Layouter
+	if layouter == nil {
+		layouter = &FullLayout{}
+	}
+	g, gs := layouter.Layout(ctx)
+	g = g.fit(ctx)
+
+	// Assign guides to children
+	for k, v := range gs {
+		guide := v
+		n.children[k].layoutGuide = &guide
+	}
+	return g
 }
 
 func (n *node) debugString() string {

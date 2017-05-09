@@ -4,7 +4,7 @@ type LayoutContext struct {
 	MinSize  Point
 	MaxSize  Point
 	ChildIds []Id
-	node     *RenderNode
+	node     *node
 }
 
 type NotifyLayouter interface {
@@ -17,8 +17,8 @@ type Layouter interface {
 }
 
 func (l *LayoutContext) LayoutChild(id Id, minSize, maxSize Point) Guide {
-	n := l.node.Children[id] // TODO(KD): FIX!!!!!!!!!!
-	return n.Layout(minSize, maxSize)
+	n := l.node.children[id] // TODO(KD): FIX!!!!!!!!!!
+	return n.layout(minSize, maxSize)
 }
 
 // Full Layout
