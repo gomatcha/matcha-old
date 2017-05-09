@@ -72,7 +72,7 @@ func (v *URLImageView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	chl.ResizeMode = v.ResizeMode
 	chl.Image = v.image
 	chl.PaintOptions.BackgroundColor = mochi.RedColor
-	n.Set(urlImageViewId, chl)
+	n.Add(chl)
 
 	return n
 }

@@ -174,73 +174,65 @@ MochiView *MochiViewWithNode(MochiNode *node);
 @end
 
 bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config) {
-    // bool update = node.updateId != config.node.updateId;
-    bool update = true;
+     bool update = ![node.identifier isEqual:config.node.identifier];
+    // NSLog(@"KD:%s, %@,%@", __FUNCTION__, node.identifier, config.node.identifier);
     
     // Update layout and paint options
     view.backgroundColor = node.paintOptions.backgroundColor ?: [UIColor clearColor];
     view.frame = node.guide.frame;
     
     // Rebuild children
-    if (update) {
-        NSMutableArray *addedKeys = [NSMutableArray array];
-        NSMutableArray *removedKeys = [NSMutableArray array];
-        NSMutableArray *unmodifiedKeys = [NSMutableArray array];
-        
-        for (NSNumber *i in config.node.nodeChildren) {
-            MochiNode *child = node.nodeChildren[i];
-            if (child.guide == nil) { // Ignore nodes without a guide
-                continue;
-            }
-            if (child == nil) {
-                [removedKeys addObject:i];
-            }
+    NSMutableArray *addedKeys = [NSMutableArray array];
+    NSMutableArray *removedKeys = [NSMutableArray array];
+    NSMutableArray *unmodifiedKeys = [NSMutableArray array];
+    
+    for (NSNumber *i in config.node.nodeChildren) {
+        MochiNode *child = node.nodeChildren[i];
+        if (child == nil) {
+            [removedKeys addObject:i];
         }
-        for (NSNumber *i in node.nodeChildren) {
-            MochiNode *prevChild = config.node.nodeChildren[i];
-            MochiNode *child = node.nodeChildren[i];
-            if (child.guide == nil) { // Ignore nodes without a guide
-                continue;
-            }
-            if (prevChild == nil) {
-                [addedKeys addObject:i];
-            } else {
-                [unmodifiedKeys addObject:i];
-            }
+    }
+    for (NSNumber *i in node.nodeChildren) {
+        MochiNode *prevChild = config.node.nodeChildren[i];
+        if (prevChild == nil) {
+            [addedKeys addObject:i];
+        } else {
+            [unmodifiedKeys addObject:i];
         }
-        
-        NSMutableDictionary *childViews = [NSMutableDictionary dictionary];
-        for (NSNumber *i in removedKeys) {
-            [config.childViews[i] removeFromSuperview];
-        }
-        for (NSNumber *i in addedKeys) {
-            MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);
-            [view addSubview:childView];
-            childViews[i] = childView;
-        }
-        for (NSNumber *i in unmodifiedKeys) {
-            MochiView *childView = (id)config.childViews[i];
-            childView.node = node.nodeChildren[i];
-            childViews[i] = childView;
-        }
-        // NSLog(@"removed:%@", removedKeys);
-        // NSLog(@"added:%@", addedKeys);
-        // NSLog(@"unmodified:%@", unmodifiedKeys);
-        
-        NSArray *sortedKeys = [[childViews allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
-            return node.nodeChildren[obj1].guide.zIndex > node.nodeChildren[obj2].guide.zIndex;
-        }];
-        NSArray *subviews = view.subviews;
-        for (NSInteger i = 0; i < sortedKeys.count; i++) {
-            NSNumber *key = sortedKeys[i];
-            UIView *subview = childViews[key];
-            if ([subviews indexOfObject:subview] != i) {
-                [view insertSubview:subview atIndex:i];
-            }
-        }
-        config.childViews = childViews;
     }
     
+    NSMutableDictionary *childViews = [NSMutableDictionary dictionary];
+    for (NSNumber *i in removedKeys) {
+        [config.childViews[i] removeFromSuperview];
+    }
+    for (NSNumber *i in addedKeys) {
+        MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);
+        [view addSubview:childView];
+        childViews[i] = childView;
+        NSLog(@"KD:%s, added:%@", __FUNCTION__, childView);
+    }
+    for (NSNumber *i in unmodifiedKeys) {
+        MochiView *childView = (id)config.childViews[i];
+        childView.node = node.nodeChildren[i];
+        childViews[i] = childView;
+    }
+    // NSLog(@"prev:%@", config.node.nodeChildren);
+    // NSLog(@"removed:%@", removedKeys);
+    // NSLog(@"added:%@", addedKeys);
+    // NSLog(@"unmodified:%@", unmodifiedKeys);
+    
+    NSArray *sortedKeys = [[childViews allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
+        return node.nodeChildren[obj1].guide.zIndex > node.nodeChildren[obj2].guide.zIndex;
+    }];
+    NSArray *subviews = view.subviews;
+    for (NSInteger i = 0; i < sortedKeys.count; i++) {
+        NSNumber *key = sortedKeys[i];
+        UIView *subview = childViews[key];
+        if ([subviews indexOfObject:subview] != i) {
+            [view insertSubview:subview atIndex:i];
+        }
+    }
+    config.childViews = childViews;
     config.node = node;
     return update;
 }

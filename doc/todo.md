@@ -12,6 +12,7 @@ The float notifier constraint should mark the node tree as needing relayout.
 * LocalStorage / Keychain / UserDefaults
 * Cliboard
 * Video / Sound / Microphone / Accelerometer
+* FlatBuffers
 
 * GridView
 * UINavigationController

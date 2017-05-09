@@ -13,8 +13,7 @@
 @property (nonatomic, strong) NSDictionary *nodeChildren;
 @property (nonatomic, strong) MochiGoValue *goValue;
 @property (nonatomic, strong) MochiLayoutGuide *guide;
-// @property (nonatomic, assign) NSInteger buildId;
-// @property (nonatomic, assign) NSInteger updateId;
+@property (nonatomic, assign) NSNumber *identifier;
 @end
 
 @implementation MochiNode
@@ -22,8 +21,7 @@
 - (id)initWithGoValue:(MochiGoValue *)value {
     if (self = [super init]) {
         self.goValue = value;
-        // self.buildId = value[@"BuildId"].toLongLong;
-        // self.updateId = value[@"UpdateId"].toLongLong;
+        self.identifier = @(value[@"Id"].toLongLong);
         self.guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
     }
     return self;

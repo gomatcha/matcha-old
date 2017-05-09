@@ -52,7 +52,7 @@ type Bridge struct {
 }
 
 type Node struct {
-	Children map[interface{}]View
+	Children map[Id]View
 	Layouter Layouter
 	Painter  Painter
 	Bridge   Bridge
@@ -65,11 +65,11 @@ type Node struct {
 	// LayoutData?
 }
 
-func (n *Node) Set(k interface{}, v View) {
+func (n *Node) Add(v View) {
 	if n.Children == nil {
-		n.Children = map[interface{}]View{}
+		n.Children = map[Id]View{}
 	}
-	n.Children[k] = v
+	n.Children[v.Id()] = v
 }
 
 type RenderNode struct {
@@ -78,6 +78,7 @@ type RenderNode struct {
 	Painter  Painter
 	Bridge   Bridge
 
+	Id           Id
 	LayoutGuide  *Guide
 	PaintOptions PaintOptions
 }
@@ -135,7 +136,7 @@ func (n *RenderNode) DebugString() string {
 		all = append(all, lines...)
 	}
 
-	str := fmt.Sprintf("{%p Bridge:%v LayoutGuide:%v PaintOptions:%v}", n, n.Bridge, n.LayoutGuide, n.PaintOptions)
+	str := fmt.Sprintf("{%p Id:%v Bridge:%v LayoutGuide:%v PaintOptions:%v}", n, n.Id, n.Bridge, n.LayoutGuide, n.PaintOptions)
 	if len(all) > 0 {
 		str += "\n" + strings.Join(all, "\n")
 	}
@@ -145,9 +146,10 @@ func (n *RenderNode) DebugString() string {
 func (n *RenderNode) Copy() *RenderNode {
 	children := map[Id]*RenderNode{}
 	for k, v := range n.Children {
-		children[k] = v
+		children[k] = v.Copy()
 	}
 	copy := &RenderNode{
+		Id:           n.Id,
 		Children:     children,
 		Layouter:     n.Layouter,
 		Painter:      n.Painter,
@@ -190,7 +192,6 @@ func NewViewController(f func(Config) View, id int) *ViewController {
 
 		mochibridge.Root().Call("updateId:withRenderNode:", mochibridge.Int64(int64(id)), mochibridge.Interface(rn))
 	})
-
 	return vc
 }
 
@@ -199,11 +200,13 @@ func (vc *ViewController) Render() *RenderNode {
 	defer vc.mu.Unlock()
 
 	vc.buildContext.Build()
+	fmt.Println("VC", vc.buildContext.DebugString())
 	vc.renderNode = vc.buildContext.RenderNode()
 
 	rn := vc.renderNode.Copy()
 	rn.LayoutRoot(Pt(0, 0), vc.size)
 	rn.Paint()
+	fmt.Println("WTF", rn.DebugString())
 	return rn
 }
 
@@ -244,6 +247,7 @@ func (root *BuildContextRoot) NewId() Id {
 }
 
 type BuildContext struct {
+	id          Id
 	view        View
 	node        *Node
 	children    map[Id]*BuildContext
@@ -259,6 +263,7 @@ func NewBuildContext(f func(Config) View) *BuildContext {
 	cfg := Config{Embed: e}
 	ctx.view = f(cfg)
 	ctx.root = &BuildContextRoot{ctx: ctx}
+	ctx.id = ctx.root.NewId()
 	ctx.needsUpdate = true
 	e.root = ctx.root
 	return ctx
@@ -284,6 +289,7 @@ func (ctx *BuildContext) Get(k interface{}) Config {
 
 func (ctx *BuildContext) RenderNode() *RenderNode {
 	n := &RenderNode{
+		Id:       ctx.id,
 		Layouter: ctx.node.Layouter,
 		Painter:  ctx.node.Painter,
 		Bridge:   ctx.node.Bridge,
@@ -307,22 +313,13 @@ func (ctx *BuildContext) Build() {
 		removedKeys := []Id{}
 		unupdatedKeys := []Id{}
 		for id := range ctx.children {
-			found := false
-			for _, view := range node.Children {
-				if view.Id() == id {
-					found = true
-					break
-				}
-			}
-
-			if !found {
+			if _, ok := node.Children[id]; !ok {
 				removedKeys = append(removedKeys, id)
 			} else {
 				unupdatedKeys = append(unupdatedKeys, id)
 			}
 		}
-		for _, v := range node.Children {
-			id := v.Id()
+		for id := range node.Children {
 			if _, ok := ctx.children[id]; !ok {
 				addedKeys = append(addedKeys, id)
 			}
@@ -339,6 +336,7 @@ func (ctx *BuildContext) Build() {
 				}
 			}
 			children[id] = &BuildContext{
+				id:       id,
 				view:     view,
 				children: map[Id]*BuildContext{},
 				root:     ctx.root,
@@ -374,7 +372,7 @@ func (ctx *BuildContext) DebugString() string {
 		all = append(all, lines...)
 	}
 
-	str := fmt.Sprintf("{%p view:%v node:%p}", ctx, ctx.view, ctx.node)
+	str := fmt.Sprintf("{%p Id:%v View:%v Node:%p}", ctx, ctx.id, ctx.view, ctx.node)
 	if len(all) > 0 {
 		str += "\n" + strings.Join(all, "\n")
 	}

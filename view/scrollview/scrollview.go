@@ -33,7 +33,7 @@ func (v *ScrollView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	n.Layouter = &scrollViewLayouter{}
 
 	if v.ContentView != nil {
-		n.Set(1, v.ContentView)
+		n.Add(v.ContentView)
 	}
 
 	n.Bridge.Name = "github.com/overcyn/mochi/view/scrollview"
