@@ -21,7 +21,7 @@ func New(c mochi.Config) *TextInput {
 	return v
 }
 
-func (v *TextInput) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
+func (v *TextInput) Build(ctx *mochi.Node) *mochi.ViewModel {
 	n := &mochi.ViewModel{}
 	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi/view/textinput TextInput"

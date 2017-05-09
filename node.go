@@ -12,7 +12,7 @@ import (
 type Id int64
 
 type View interface {
-	Build(*BuildContext) *ViewModel
+	Build(*Node) *ViewModel
 	// Lifecyle(*Stage)
 	Id() Id
 	Lock()
@@ -25,7 +25,7 @@ type Embed struct {
 	root *root
 }
 
-func (e *Embed) Build(ctx *BuildContext) *ViewModel {
+func (e *Embed) Build(ctx *Node) *ViewModel {
 	return &ViewModel{}
 }
 
@@ -232,11 +232,11 @@ type viewCacheKey struct {
 }
 
 type root struct {
-	ctx      *BuildContext
+	ctx      *Node
 	ids      map[viewCacheKey]Id
 	prevIds  map[viewCacheKey]Id
-	ctxs     map[Id]*BuildContext
-	prevCtxs map[Id]*BuildContext
+	ctxs     map[Id]*Node
+	prevCtxs map[Id]*Node
 	maxId    Id
 }
 
@@ -249,7 +249,7 @@ func newRoot(f func(Config) View) *root {
 		root: root,
 		id:   id,
 	}}
-	ctx := &BuildContext{
+	ctx := &Node{
 		id:          id,
 		view:        f(cfg),
 		root:        root,
@@ -268,7 +268,7 @@ func (root *root) Build() {
 	root.prevIds = root.ids
 	root.ids = map[viewCacheKey]Id{}
 	root.prevCtxs = root.ctxs
-	root.ctxs = map[Id]*BuildContext{}
+	root.ctxs = map[Id]*Node{}
 	root.ctx.Build()
 
 	keys := map[Id]viewCacheKey{}
@@ -291,16 +291,16 @@ func (root *root) NewId() Id {
 	return root.maxId
 }
 
-type BuildContext struct {
+type Node struct {
 	id          Id
 	view        View
 	node        *ViewModel
-	children    map[Id]*BuildContext
+	children    map[Id]*Node
 	root        *root
 	needsUpdate bool
 }
 
-func (ctx *BuildContext) Get(k interface{}) Config {
+func (ctx *Node) Get(k interface{}) Config {
 	cacheKey := viewCacheKey{key: k, id: ctx.id}
 	id := ctx.root.NewId()
 
@@ -322,8 +322,8 @@ func (ctx *BuildContext) Get(k interface{}) Config {
 	}
 }
 
-func (ctx *BuildContext) RenderNode() *RenderNode {
-	n := &RenderNode{
+func (ctx *Node) RenderNode() *RenderNode {
+	rn := &RenderNode{
 		Id:       ctx.id,
 		Layouter: ctx.node.Layouter,
 		Painter:  ctx.node.Painter,
@@ -331,12 +331,12 @@ func (ctx *BuildContext) RenderNode() *RenderNode {
 		Children: map[Id]*RenderNode{},
 	}
 	for k, v := range ctx.children {
-		n.Children[k] = v.RenderNode()
+		rn.Children[k] = v.RenderNode()
 	}
-	return n
+	return rn
 }
 
-func (ctx *BuildContext) Build() {
+func (ctx *Node) Build() {
 	if ctx.needsUpdate {
 		ctx.needsUpdate = false
 
@@ -360,7 +360,7 @@ func (ctx *BuildContext) Build() {
 			}
 		}
 
-		children := map[Id]*BuildContext{}
+		children := map[Id]*Node{}
 		// Add build contexts for new children
 		for _, id := range addedKeys {
 			var view View
@@ -370,10 +370,10 @@ func (ctx *BuildContext) Build() {
 					break
 				}
 			}
-			children[id] = &BuildContext{
+			children[id] = &Node{
 				id:       id,
 				view:     view,
-				children: map[Id]*BuildContext{},
+				children: map[Id]*Node{},
 				root:     ctx.root,
 			}
 		}
@@ -400,7 +400,7 @@ func (ctx *BuildContext) Build() {
 	}
 }
 
-func (ctx *BuildContext) DebugString() string {
+func (ctx *Node) DebugString() string {
 	all := []string{}
 	for _, i := range ctx.children {
 		lines := strings.Split(i.DebugString(), "\n")

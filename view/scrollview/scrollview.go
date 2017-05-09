@@ -26,7 +26,7 @@ func New(c mochi.Config) *ScrollView {
 	return v
 }
 
-func (v *ScrollView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
+func (v *ScrollView) Build(ctx *mochi.Node) *mochi.ViewModel {
 	n := &mochi.ViewModel{}
 	n.Painter = v.PaintOptions
 

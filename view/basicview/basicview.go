@@ -21,7 +21,7 @@ func New(c mochi.Config) *BasicView {
 	return v
 }
 
-func (v *BasicView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
+func (v *BasicView) Build(ctx *mochi.Node) *mochi.ViewModel {
 	n := &mochi.ViewModel{}
 	n.Painter = v.PaintOptions
 	n.Layouter = v.Layouter
