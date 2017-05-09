@@ -38,7 +38,7 @@ func New(c mochi.Config) *Button {
 	return v
 }
 
-func (v *Button) Build(ctx *mochi.BuildContext) *mochi.Node {
+func (v *Button) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	ft := &text.Text{}
 	ft.SetString(v.Text)
 	ft.Style().SetAlignment(text.AlignmentCenter)
@@ -47,7 +47,7 @@ func (v *Button) Build(ctx *mochi.BuildContext) *mochi.Node {
 		Size:   20,
 	})
 
-	n := &mochi.Node{}
+	n := &mochi.ViewModel{}
 	n.Layouter = &buttonLayouter{formattedText: ft}
 	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi/view/button"

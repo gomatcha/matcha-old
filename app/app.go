@@ -68,20 +68,20 @@ func NewNestedView(c mochi.Config) *NestedView {
 	return v
 }
 
-func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
-	n := &mochi.Node{}
+func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
+	m := &mochi.ViewModel{}
 
 	l := constraint.New()
-	n.Layouter = l
+	m.Layouter = l
 
 	p := mochi.PaintOptions{}
 	p.BackgroundColor = mochi.GreenColor
-	n.Painter = p
+	m.Painter = p
 
 	config := ctx.Get(chl1id)
 	chl1 := basicview.New(config)
 	chl1.PaintOptions.BackgroundColor = mochi.RedColor
-	n.Add(chl1)
+	m.Add(chl1)
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
@@ -91,7 +91,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 
 	chl2 := basicview.New(ctx.Get(chl2id))
 	chl2.PaintOptions.BackgroundColor = mochi.YellowColor
-	n.Add(chl2)
+	m.Add(chl2)
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
 		s.LeftEqual(g1.Left())
@@ -101,7 +101,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 
 	chl3 := basicview.New(ctx.Get(chl3id))
 	chl3.PaintOptions.BackgroundColor = mochi.BlueColor
-	n.Add(chl3)
+	m.Add(chl3)
 	g3 := l.Add(chl3, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g2.Left())
@@ -111,7 +111,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 
 	chl4 := basicview.New(ctx.Get(chl4id))
 	chl4.PaintOptions.BackgroundColor = mochi.MagentaColor
-	n.Add(chl4)
+	m.Add(chl4)
 	g4 := l.Add(chl4, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g3.Right())
@@ -132,7 +132,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		Face:   "Bold",
 		Size:   20,
 	})
-	n.Add(chl5)
+	m.Add(chl5)
 	g5 := l.Add(chl5, func(s *constraint.Solver) {
 		s.BottomEqual(g2.Bottom())
 		s.RightEqual(g2.Right().Add(-15))
@@ -145,7 +145,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		Family: "Helvetica Neue",
 		Size:   20,
 	})
-	n.Add(chl6)
+	m.Add(chl6)
 	g6 := l.Add(chl6, func(s *constraint.Solver) {
 		s.BottomEqual(g5.Top())
 		s.RightEqual(g2.Right().Add(-15))
@@ -158,7 +158,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	// chl8 := imageview.NewImageView(ctx.Get(chl8id))
 	// chl8.PaintOptions.BackgroundColor = mochi.CyanColor
 	// chl8.ResizeMode = imageview.ResizeModeFit
-	n.Add(chl8)
+	m.Add(chl8)
 	g8 := l.Add(chl8, func(s *constraint.Solver) {
 		s.BottomEqual(g6.Top())
 		s.RightEqual(g2.Right().Add(-15))
@@ -177,7 +177,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		v.counter += 1
 		v.Update(nil)
 	}
-	n.Add(chl9)
+	m.Add(chl9)
 	_ = l.Add(chl9, func(s *constraint.Solver) {
 		s.BottomEqual(g8.Top())
 		s.RightEqual(g2.Right().Add(-15))
@@ -201,7 +201,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 	chl10 := scrollview.New(ctx.Get(scrollId))
 	chl10.PaintOptions.BackgroundColor = mochi.CyanColor
 	chl10.ContentView = scrollChild
-	n.Add(chl10)
+	m.Add(chl10)
 	_ = l.Add(chl10, func(s *constraint.Solver) {
 		s.TopEqual(g4.Bottom())
 		s.LeftEqual(g4.Left())
@@ -213,7 +213,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		s.WidthEqual(l.MaxGuide().Width())
 		s.HeightEqual(l.MaxGuide().Height())
 	})
-	return n
+	return m
 }
 
 const (
@@ -235,9 +235,9 @@ func NewTableCell(c mochi.Config) *TableCell {
 	return v
 }
 
-func (v *TableCell) Build(ctx *mochi.BuildContext) *mochi.Node {
+func (v *TableCell) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	l := constraint.New()
-	n := &mochi.Node{}
+	n := &mochi.ViewModel{}
 	n.Layouter = l
 	n.Painter = v.PaintOptions
 

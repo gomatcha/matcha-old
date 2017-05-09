@@ -21,8 +21,8 @@ func New(c mochi.Config) *BasicView {
 	return v
 }
 
-func (v *BasicView) Build(ctx *mochi.BuildContext) *mochi.Node {
-	n := &mochi.Node{}
+func (v *BasicView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
+	n := &mochi.ViewModel{}
 	n.Painter = v.PaintOptions
 	n.Layouter = v.Layouter
 	for _, i := range v.Children {

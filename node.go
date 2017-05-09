@@ -12,7 +12,7 @@ import (
 type Id int64
 
 type View interface {
-	Build(*BuildContext) *Node
+	Build(*BuildContext) *ViewModel
 	// Lifecyle(*Stage)
 	Id() Id
 	Lock()
@@ -25,8 +25,8 @@ type Embed struct {
 	root *root
 }
 
-func (e *Embed) Build(ctx *BuildContext) *Node {
-	return &Node{}
+func (e *Embed) Build(ctx *BuildContext) *ViewModel {
+	return &ViewModel{}
 }
 
 func (e *Embed) Id() Id {
@@ -50,7 +50,7 @@ type Bridge struct {
 	State interface{}
 }
 
-type Node struct {
+type ViewModel struct {
 	Children map[Id]View
 	Layouter Layouter
 	Painter  Painter
@@ -64,7 +64,7 @@ type Node struct {
 	// LayoutData?
 }
 
-func (n *Node) Add(v View) {
+func (n *ViewModel) Add(v View) {
 	if n.Children == nil {
 		n.Children = map[Id]View{}
 	}
@@ -294,7 +294,7 @@ func (root *root) NewId() Id {
 type BuildContext struct {
 	id          Id
 	view        View
-	node        *Node
+	node        *ViewModel
 	children    map[Id]*BuildContext
 	root        *root
 	needsUpdate bool

@@ -42,7 +42,7 @@ func New(c mochi.Config) *TextView {
 	return v
 }
 
-func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.Node {
+func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	ft := v.Text
 	if ft == nil {
 		ft = &text.Text{}
@@ -50,7 +50,7 @@ func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.Node {
 		ft.SetStyle(v.Style)
 	}
 
-	n := &mochi.Node{}
+	n := &mochi.ViewModel{}
 	n.Layouter = &textViewLayouter{formattedText: ft}
 	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi/view/textview"
