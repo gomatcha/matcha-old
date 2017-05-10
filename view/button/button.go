@@ -22,8 +22,9 @@ func (l *buttonLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[moch
 	return g, nil
 }
 
-func (l *buttonLayouter) Notify(c chan struct{}) {
+func (l *buttonLayouter) Notify() chan struct{} {
 	// no-op
+	return nil
 }
 
 func (l *buttonLayouter) Unnotify(chan struct{}) {

@@ -36,8 +36,9 @@ func (l *FullLayout) Layout(ctx *LayoutContext) (Guide, map[Id]Guide) {
 	return g, gs
 }
 
-func (l *FullLayout) Notify(c chan struct{}) {
+func (l *FullLayout) Notify() chan struct{} {
 	// no-op
+	return nil
 }
 
 func (l *FullLayout) Unnotify(chan struct{}) {

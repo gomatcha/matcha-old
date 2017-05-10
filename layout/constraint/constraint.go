@@ -510,7 +510,8 @@ func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]m
 	return g, gs
 }
 
-func (sys *System) Notify(c chan struct{}) {
+func (sys *System) Notify() chan struct{} {
+	return nil
 	// for _, i := range sys.notifiers {
 	// 	i.Notify(c)
 	// }

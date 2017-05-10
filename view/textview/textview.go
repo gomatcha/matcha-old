@@ -16,8 +16,9 @@ func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mo
 	return g, nil
 }
 
-func (l *textViewLayouter) Notify(c chan struct{}) {
+func (l *textViewLayouter) Notify() chan struct{} {
 	// no-op
+	return nil
 }
 
 func (l *textViewLayouter) Unnotify(chan struct{}) {

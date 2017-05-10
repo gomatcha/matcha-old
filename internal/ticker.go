@@ -62,11 +62,13 @@ func NewTicker(duration time.Duration) *Ticker {
 	return t
 }
 
-func (t *Ticker) Notify(c chan struct{}) {
+func (t *Ticker) Notify() chan struct{} {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
+	c := make(chan struct{})
 	t.chans = append(t.chans, c)
+	return c
 }
 
 func (t *Ticker) Unnotify(c chan struct{}) {

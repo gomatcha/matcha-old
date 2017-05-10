@@ -13,8 +13,9 @@ func (l *Layout) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]moc
 	return l.Guide, l.ChildGuides
 }
 
-func (l *Layout) Notify(c chan struct{}) {
+func (l *Layout) Notify() chan struct{} {
 	// no-op
+	return nil
 }
 
 func (l *Layout) Unnotify(chan struct{}) {

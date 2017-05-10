@@ -15,8 +15,8 @@ func NewTicker(duration time.Duration) *Ticker {
 	}
 }
 
-func (t *Ticker) Notify(c chan struct{}) {
-	t.ticker.Notify(c)
+func (t *Ticker) Notify() chan struct{} {
+	return t.ticker.Notify()
 }
 
 func (t *Ticker) Unnotify(c chan struct{}) {

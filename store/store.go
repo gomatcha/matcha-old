@@ -30,10 +30,11 @@ type notifier struct {
 	f     func(tx *Tx)
 }
 
-func (n *notifier) Notify(c chan struct{}) {
+func (n *notifier) Notify() chan struct{} {
 	n.mu.Lock()
 	defer n.mu.Unlock()
 
+	c := make(chan struct{})
 	if n.close == nil {
 		goChan := make(chan struct{})
 		close := make(chan struct{})
@@ -64,6 +65,7 @@ func (n *notifier) Notify(c chan struct{}) {
 	}
 
 	n.chans = append(n.chans, c)
+	return c
 }
 
 func (n *notifier) Unnotify(c chan struct{}) {

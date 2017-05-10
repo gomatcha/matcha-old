@@ -13,11 +13,13 @@ type value struct {
 	done      []chan struct{}
 }
 
-func (v *value) Notify(c chan struct{}) {
+func (v *value) Notify() chan struct{} {
 	v.mu.Lock()
 	defer v.mu.Unlock()
 
+	c := make(chan struct{})
 	v.chans = append(v.chans, c)
+	return c
 }
 
 func (v *value) Unnotify(c chan struct{}) {
@@ -55,11 +57,10 @@ func (v *value) Watch(n mochi.Notifier, f func() interface{}) {
 	v.mu.Lock()
 	defer v.mu.Unlock()
 
-	c := make(chan struct{})
 	done := make(chan struct{})
 	v.notifiers = append(v.notifiers, n)
 	v.done = append(v.done, done)
-	n.Notify(c)
+	c := n.Notify()
 
 	// setup a go routine waiting for notifications from n.
 	go func() {
@@ -103,8 +104,8 @@ type unitNotifier struct {
 	interpolater UnitInterpolater
 }
 
-func (w *unitNotifier) Notify(c chan struct{}) {
-	w.watcher.Notify(c)
+func (w *unitNotifier) Notify() chan struct{} {
+	return w.watcher.Notify()
 }
 
 func (w *unitNotifier) Unnotify(c chan struct{}) {
@@ -129,8 +130,8 @@ func (v *UnitValue) Unwatch(n UnitNotifier) {
 	v.Unwatch(n)
 }
 
-func (v *UnitValue) Notify(c chan struct{}) {
-	v.v.Notify(c)
+func (v *UnitValue) Notify() chan struct{} {
+	return v.v.Notify()
 }
 
 func (v *UnitValue) Unnotify(c chan struct{}) {
@@ -199,8 +200,8 @@ type floatNotifier struct {
 	interpolater FloatInterpolater
 }
 
-func (w *floatNotifier) Notify(c chan struct{}) {
-	w.watcher.Notify(c)
+func (w *floatNotifier) Notify() chan struct{} {
+	return w.watcher.Notify()
 }
 
 func (w *floatNotifier) Unnotify(c chan struct{}) {
@@ -231,8 +232,8 @@ func (v *FloatValue) Unwatch(n FloatNotifier) {
 	v.Unwatch(n)
 }
 
-func (v *FloatValue) Notify(c chan struct{}) {
-	v.v.Notify(c)
+func (v *FloatValue) Notify() chan struct{} {
+	return v.v.Notify()
 }
 
 func (v *FloatValue) Unnotify(c chan struct{}) {

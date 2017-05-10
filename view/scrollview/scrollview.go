@@ -64,8 +64,9 @@ func (l *scrollViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[
 	}, gs
 }
 
-func (l *scrollViewLayouter) Notify(c chan struct{}) {
+func (l *scrollViewLayouter) Notify() chan struct{} {
 	// no-op
+	return nil
 }
 
 func (l *scrollViewLayouter) Unnotify(c chan struct{}) {
