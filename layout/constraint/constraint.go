@@ -466,8 +466,10 @@ type System struct {
 	min       *Guide
 	max       *Guide
 	solvers   []*Solver
-	notifiers []animate.FloatNotifier
+	notifiers []mochi.Notifier
 	zIndex    int
+	close     chan struct{}
+	chans     []chan struct{}
 }
 
 func New() *System {
@@ -511,10 +513,44 @@ func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]m
 }
 
 func (sys *System) Notify() chan struct{} {
-	return nil
+	// c := make(chan struct{})
+	// if n.close == nil {
+	// 	goChan := make(chan struct{})
+	// 	close := make(chan struct{})
+
+	// 	// tx := &Tx{kind: txKindRead}
+	// 	// tx.begin()
+	// 	// n.f(tx)
+	// 	// tx.end(goChan)
+
+	// 	go func() {
+	// 	loop:
+	// 		for {
+	// 			select {
+	// 			case <-goChan:
+	// 				n.mu.Lock()
+	// 				for _, i := range n.chans {
+	// 					i <- struct{}{}
+	// 					<-i
+	// 				}
+	// 				n.mu.Unlock()
+	// 				goChan <- struct{}{}
+	// 			case <-close:
+	// 				break loop
+	// 			}
+	// 		}
+	// 	}()
+	// 	n.close = close
+	// }
+
+	// n.chans = append(n.chans, c)
+	// return c
+
+	// return c
 	// for _, i := range sys.notifiers {
 	// 	i.Notify(c)
 	// }
+	return nil
 }
 
 func (sys *System) Unnotify(c chan struct{}) {
