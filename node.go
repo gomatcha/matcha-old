@@ -326,25 +326,25 @@ func (n *node) build() {
 		viewModel := n.view.Build(&BuildContext{node: n})
 
 		// Diff the old children (n.children) with new children (viewModel.Children).
-		addedKeys := []Id{}
-		removedKeys := []Id{}
-		unupdatedKeys := []Id{}
+		addedIds := []Id{}
+		removedIds := []Id{}
+		unchangedIds := []Id{}
 		for id := range n.children {
 			if _, ok := viewModel.Children[id]; !ok {
-				removedKeys = append(removedKeys, id)
+				removedIds = append(removedIds, id)
 			} else {
-				unupdatedKeys = append(unupdatedKeys, id)
+				unchangedIds = append(unchangedIds, id)
 			}
 		}
 		for id := range viewModel.Children {
 			if _, ok := n.children[id]; !ok {
-				addedKeys = append(addedKeys, id)
+				addedIds = append(addedIds, id)
 			}
 		}
 
 		children := map[Id]*node{}
 		// Add build contexts for new children
-		for _, id := range addedKeys {
+		for _, id := range addedIds {
 			var view View
 			for _, i := range viewModel.Children {
 				if i.Id() == id {
@@ -360,7 +360,7 @@ func (n *node) build() {
 			}
 		}
 		// Reuse old context for unupdated keys
-		for _, id := range unupdatedKeys {
+		for _, id := range unchangedIds {
 			children[id] = n.children[id]
 		}
 
@@ -368,6 +368,32 @@ func (n *node) build() {
 		for k := range children {
 			n.root.updateFlags[k] |= buildFlag
 		}
+
+		// Watch for layout changes
+		// if n.layoutChan != nil {
+		// 	n.viewModel.Layouter.Unnotify(n.layoutChan)
+		// 	close(n.layoutDone)
+		// 	n.layoutChan = nil
+		// 	n.layoutDone = nil
+		// }
+		// layoutChan := viewModel.Layouter.Notify()
+		// if layoutChan != nil {
+		// 	layoutDone := make(chan struct{})
+		// 	go func() {
+		// 	loop:
+		// 		for {
+		// 			select {
+		// 			case <-layoutChan:
+
+		// 				layoutChan <- struct{}{}
+		// 			case <-layoutDone:
+		// 				break loop
+		// 			}
+		// 		}
+		// 	}()
+		// 	n.layoutChan = layoutChan
+		// 	n.layoutDone = layoutDone
+		// }
 
 		n.children = children
 		n.viewModel = viewModel
