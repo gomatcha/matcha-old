@@ -2,97 +2,96 @@ package animate
 
 import (
 	"github.com/overcyn/mochi"
-	"sync"
 )
 
-type value struct {
-	chans     []chan struct{}
-	mu        *sync.Mutex
-	value     interface{}
-	notifiers []mochi.Notifier
-	done      []chan struct{}
-}
+// type value struct {
+// 	chans     []chan struct{}
+// 	mu        *sync.Mutex
+// 	value     interface{}
+// 	notifiers []mochi.Notifier
+// 	done      []chan struct{}
+// }
 
-func (v *value) Notify() chan struct{} {
-	v.mu.Lock()
-	defer v.mu.Unlock()
+// func (v *value) Notify() chan struct{} {
+// 	v.mu.Lock()
+// 	defer v.mu.Unlock()
 
-	c := make(chan struct{})
-	v.chans = append(v.chans, c)
-	return c
-}
+// 	c := make(chan struct{})
+// 	v.chans = append(v.chans, c)
+// 	return c
+// }
 
-func (v *value) Unnotify(c chan struct{}) {
-	v.mu.Lock()
-	defer v.mu.Unlock()
+// func (v *value) Unnotify(c chan struct{}) {
+// 	v.mu.Lock()
+// 	defer v.mu.Unlock()
 
-	chans := make([]chan struct{}, 0, len(v.chans))
-	for _, i := range chans {
-		if i != c {
-			chans = append(chans, i)
-		}
-	}
-	v.chans = chans
-}
+// 	chans := make([]chan struct{}, 0, len(v.chans))
+// 	for _, i := range chans {
+// 		if i != c {
+// 			chans = append(chans, i)
+// 		}
+// 	}
+// 	v.chans = chans
+// }
 
-func (v *value) Value() interface{} {
-	v.mu.Lock()
-	defer v.mu.Unlock()
+// func (v *value) Value() interface{} {
+// 	v.mu.Lock()
+// 	defer v.mu.Unlock()
 
-	return v.value
-}
+// 	return v.value
+// }
 
-func (v *value) Set(a interface{}) {
-	v.mu.Lock()
-	defer v.mu.Unlock()
+// func (v *value) Set(a interface{}) {
+// 	v.mu.Lock()
+// 	defer v.mu.Unlock()
 
-	v.value = a
-	for _, i := range v.chans {
-		i <- struct{}{}
-		<-i
-	}
-}
+// 	v.value = a
+// 	for _, i := range v.chans {
+// 		i <- struct{}{}
+// 		<-i
+// 	}
+// }
 
-func (v *value) Watch(n mochi.Notifier, f func() interface{}) {
-	v.mu.Lock()
-	defer v.mu.Unlock()
+// func (v *value) Watch(n mochi.Notifier, f func() interface{}) {
+// 	v.mu.Lock()
+// 	defer v.mu.Unlock()
 
-	done := make(chan struct{})
-	v.notifiers = append(v.notifiers, n)
-	v.done = append(v.done, done)
-	c := n.Notify()
+// 	done := make(chan struct{})
+// 	v.notifiers = append(v.notifiers, n)
+// 	v.done = append(v.done, done)
+// 	c := n.Notify()
 
-	// setup a go routine waiting for notifications from n.
-	go func() {
-	loop:
-		for {
-			select {
-			case <-c:
-				v.Set(f())
-				c <- struct{}{}
-			case <-done:
-				n.Unnotify(c)
-				break loop
-			}
-		}
-	}()
-}
+// 	// setup a go routine waiting for notifications from n.
+// 	go func() {
+// 	loop:
+// 		for {
+// 			select {
+// 			case <-c:
+// 				v.Set(f())
+// 				c <- struct{}{}
+// 			case <-done:
+// 				n.Unnotify(c)
+// 				break loop
+// 			}
+// 		}
+// 	}()
+// }
 
-func (v *value) Unwatch(n mochi.Notifier) {
-	v.mu.Lock()
-	defer v.mu.Unlock()
+// func (v *value) Unwatch(n mochi.Notifier) {
+// 	v.mu.Lock()
+// 	defer v.mu.Unlock()
 
-	notifiers := []mochi.Notifier{}
-	done := []chan struct{}{}
-	for idx, i := range v.notifiers {
-		if i == n {
-			v.done[idx] <- struct{}{}
-		} else {
-			notifiers = append(notifiers, i)
-			done = append(done, v.done[idx])
-		}
-	}
-}
+// 	notifiers := []mochi.Notifier{}
+// 	done := []chan struct{}{}
+// 	for idx, i := range v.notifiers {
+// 		if i == n {
+// 			v.done[idx] <- struct{}{}
+// 		} else {
+// 			notifiers = append(notifiers, i)
+// 			done = append(done, v.done[idx])
+// 		}
+// 	}
+// }
 
 type UnitNotifier interface {
 	mochi.Notifier
@@ -116,46 +115,46 @@ func (w *unitNotifier) Value() float64 {
 	return w.interpolater.Interpolate(w.watcher.Value())
 }
 
-type UnitValue struct {
-	v *value
-}
+// type UnitValue struct {
+// 	v *value
+// }
 
-func (v *UnitValue) Watch(n UnitNotifier) {
-	v.v.Watch(n, func() interface{} {
-		return n.Value()
-	})
-}
+// func (v *UnitValue) Watch(n UnitNotifier) {
+// 	v.v.Watch(n, func() interface{} {
+// 		return n.Value()
+// 	})
+// }
 
-func (v *UnitValue) Unwatch(n UnitNotifier) {
-	v.Unwatch(n)
-}
+// func (v *UnitValue) Unwatch(n UnitNotifier) {
+// 	v.Unwatch(n)
+// }
 
-func (v *UnitValue) Notify() chan struct{} {
-	return v.v.Notify()
-}
+// func (v *UnitValue) Notify() chan struct{} {
+// 	return v.v.Notify()
+// }
 
-func (v *UnitValue) Unnotify(c chan struct{}) {
-	v.v.Unnotify(c)
-}
+// func (v *UnitValue) Unnotify(c chan struct{}) {
+// 	v.v.Unnotify(c)
+// }
 
-func (v *UnitValue) Value() float64 {
-	return v.v.Value().(float64)
-}
+// func (v *UnitValue) Value() float64 {
+// 	return v.v.Value().(float64)
+// }
 
-func (v *UnitValue) Set(a float64) {
-	if a > 1 {
-		a = 1
-	} else if a < 0 {
-		a = 0
-	}
-	v.v.Set(a)
-}
+// func (v *UnitValue) Set(a float64) {
+// 	if a > 1 {
+// 		a = 1
+// 	} else if a < 0 {
+// 		a = 0
+// 	}
+// 	v.v.Set(a)
+// }
 
 type UnitInterpolater interface {
 	Interpolate(float64) float64
 }
 
-func InterpolatedUnit(w UnitNotifier, l UnitInterpolater) UnitNotifier {
+func UnitInterpolate(w UnitNotifier, l UnitInterpolater) UnitNotifier {
 	return &unitNotifier{
 		watcher:      w,
 		interpolater: l,
@@ -190,70 +189,29 @@ func (e *PolyInOutEase) Interpolate(a float64) float64 {
 	return a
 }
 
-type FloatNotifier interface {
-	mochi.Notifier
-	Value() float64
-}
-
-type floatNotifier struct {
-	watcher      FloatNotifier
+type floatInterpolater struct {
+	watcher      mochi.Float64Notifier
 	interpolater FloatInterpolater
 }
 
-func (w *floatNotifier) Notify() chan struct{} {
+func (w *floatInterpolater) Notify() chan struct{} {
 	return w.watcher.Notify()
 }
 
-func (w *floatNotifier) Unnotify(c chan struct{}) {
+func (w *floatInterpolater) Unnotify(c chan struct{}) {
 	w.watcher.Unnotify(c)
 }
 
-func (w *floatNotifier) Value() float64 {
+func (w *floatInterpolater) Value() float64 {
 	return w.interpolater.Interpolate(w.watcher.Value())
-}
-
-type FloatValue struct {
-	v *value
-}
-
-func NewFloatValue() *FloatValue {
-	return &FloatValue{
-		v: &value{},
-	}
-}
-
-func (v *FloatValue) Watch(n FloatNotifier) {
-	v.v.Watch(n, func() interface{} {
-		return n.Value()
-	})
-}
-
-func (v *FloatValue) Unwatch(n FloatNotifier) {
-	v.Unwatch(n)
-}
-
-func (v *FloatValue) Notify() chan struct{} {
-	return v.v.Notify()
-}
-
-func (v *FloatValue) Unnotify(c chan struct{}) {
-	v.v.Unnotify(c)
-}
-
-func (v *FloatValue) Value() float64 {
-	return v.v.Value().(float64)
-}
-
-func (v *FloatValue) Set(a float64) {
-	v.v.Set(a)
 }
 
 type FloatInterpolater interface {
 	Interpolate(float64) float64
 }
 
-func FloatInterpolate(w UnitNotifier, l FloatInterpolater) FloatNotifier {
-	return &floatNotifier{
+func FloatInterpolate(w UnitNotifier, l FloatInterpolater) mochi.Float64Notifier {
+	return &floatInterpolater{
 		watcher:      w,
 		interpolater: l,
 	}

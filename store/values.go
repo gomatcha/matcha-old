@@ -1,33 +1,25 @@
 package store
 
-import (
-	"github.com/overcyn/mochi"
-)
+import ()
 
 type Interface struct {
-	store    *Store
-	value    interface{}
-	notifier mochi.Notifier
-}
-
-func NewInterface() *Interface {
-	store := NewStore()
-	return &Interface{
-		store:    store,
-		value:    nil,
-		notifier: store.Notifier(0),
-	}
+	store Store
+	value interface{}
 }
 
 func (s *Interface) Notify() chan struct{} {
-	return s.notifier.Notify()
+	return s.store.notify(0)
 }
 
 func (s *Interface) Unnotify(c chan struct{}) {
-	s.notifier.Unnotify(c)
+	s.store.unnotify(0, c)
 }
 
-func (s *Interface) Value(tx *Tx) interface{} {
+func (s *Interface) Value() interface{} {
+	return s.Get(nil)
+}
+
+func (s *Interface) Get(tx *Tx) interface{} {
 	if tx == nil {
 		tx = NewReadTx()
 		defer tx.Commit()
@@ -45,11 +37,114 @@ func (s *Interface) Set(v interface{}, tx *Tx) {
 	s.value = v
 }
 
-type String struct{}
-type Bool struct{}
-type Int struct{}
-type Uint struct{}
-type Int64 struct{}
-type Uint64 struct{}
-type Float64 struct{}
-type Bytes struct{}
+type Bool struct {
+	store Store
+	value bool
+}
+
+func (s *Bool) Notify() chan struct{} {
+	return s.store.notify(0)
+}
+
+func (s *Bool) Unnotify(c chan struct{}) {
+	s.store.unnotify(0, c)
+}
+
+func (s *Bool) Value() bool {
+	return s.Get(nil)
+}
+
+func (s *Bool) Get(tx *Tx) bool {
+	if tx == nil {
+		tx = NewReadTx()
+		defer tx.Commit()
+	}
+	s.store.Read(0, tx)
+	return s.value
+}
+
+func (s *Bool) Set(v bool, tx *Tx) {
+	if tx == nil {
+		tx = NewWriteTx()
+		defer tx.Commit()
+	}
+	s.store.Write(0, tx)
+	s.value = v
+}
+
+// type Int struct{}
+// type Uint struct{}
+// type Int64 struct{}
+// type Uint64 struct{}
+
+type Float64 struct {
+	store Store
+	value float64
+}
+
+func (s *Float64) Notify() chan struct{} {
+	return s.store.notify(0)
+}
+
+func (s *Float64) Unnotify(c chan struct{}) {
+	s.store.unnotify(0, c)
+}
+
+func (s *Float64) Value() float64 {
+	return s.Get(nil)
+}
+
+func (s *Float64) Get(tx *Tx) float64 {
+	if tx == nil {
+		tx = NewReadTx()
+		defer tx.Commit()
+	}
+	s.store.Read(0, tx)
+	return s.value
+}
+
+func (s *Float64) Set(v float64, tx *Tx) {
+	if tx == nil {
+		tx = NewWriteTx()
+		defer tx.Commit()
+	}
+	s.store.Write(0, tx)
+	s.value = v
+}
+
+type String struct {
+	store Store
+	value string
+}
+
+func (s *String) Notify() chan struct{} {
+	return s.store.notify(0)
+}
+
+func (s *String) Unnotify(c chan struct{}) {
+	s.store.unnotify(0, c)
+}
+
+func (s *String) Value() string {
+	return s.Get(nil)
+}
+
+func (s *String) Get(tx *Tx) string {
+	if tx == nil {
+		tx = NewReadTx()
+		defer tx.Commit()
+	}
+	s.store.Read(0, tx)
+	return s.value
+}
+
+func (s *String) Set(v string, tx *Tx) {
+	if tx == nil {
+		tx = NewWriteTx()
+		defer tx.Commit()
+	}
+	s.store.Write(0, tx)
+	s.value = v
+}
+
+// type Bytes struct{}

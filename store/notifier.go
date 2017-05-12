@@ -12,10 +12,6 @@ func Notifier(f func(tx *Tx)) mochi.Notifier {
 // 	return nil
 // }
 
-// func StringNotifier(f func(tx *Tx) string) mochi.StringNotifier {
-// 	return nil
-// }
-
 // func BoolNotifier(f func(tx *Tx) bool) mochi.BoolNotifier {
 // 	return nil
 // }
@@ -40,6 +36,10 @@ func Notifier(f func(tx *Tx)) mochi.Notifier {
 // 	return nil
 // }
 
-// func ByteNotifier(f func(tx *Tx) []byte) mochi.ByteNotifier {
+// func StringNotifier(f func(tx *Tx) string) mochi.StringNotifier {
+//  return nil
+// }
+
+// func BytesNotifier(f func(tx *Tx) []byte) mochi.ByteNotifier {
 // 	return nil
 // }

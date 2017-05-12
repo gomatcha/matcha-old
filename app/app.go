@@ -51,7 +51,7 @@ type NestedView struct {
 	*mochi.Embed
 	counter     int
 	ticker      *animate.Ticker
-	floatTicker animate.FloatNotifier
+	floatTicker mochi.Float64Notifier
 }
 
 func NewNestedView(c mochi.Config) *NestedView {

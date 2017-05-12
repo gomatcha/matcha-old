@@ -11,26 +11,11 @@ type storeNotifier struct {
 }
 
 func (s *storeNotifier) Notify() chan struct{} {
-	s.store.chansMu.Lock()
-	defer s.store.chansMu.Unlock()
-
-	c := make(chan struct{})
-	s.store.chans[s.key] = append(s.store.chans[s.key], c)
-	return c
+	return s.store.notify(s.key)
 }
 
 func (s *storeNotifier) Unnotify(c chan struct{}) {
-	s.store.chansMu.Lock()
-	defer s.store.chansMu.Unlock()
-
-	chans := s.store.chans[s.key]
-	copy := make([]chan struct{}, 0, len(chans)-1)
-	for _, i := range chans {
-		if i != c {
-			copy = append(copy, i)
-		}
-	}
-	s.store.chans[s.key] = copy
+	s.store.unnotify(s.key, c)
 }
 
 type Store struct {
@@ -43,13 +28,6 @@ type Store struct {
 
 	chansMu sync.Mutex
 	chans   map[interface{}][]chan struct{}
-}
-
-func NewStore() *Store {
-	return &Store{
-		chans:  map[interface{}][]chan struct{}{},
-		readTx: map[*Tx]struct{}{},
-	}
 }
 
 func (s *Store) Write(key interface{}, tx *Tx) {
@@ -80,6 +58,32 @@ func (s *Store) Notifier(key interface{}) mochi.Notifier {
 	}
 }
 
+func (s *Store) notify(k interface{}) chan struct{} {
+	s.chansMu.Lock()
+	defer s.chansMu.Unlock()
+
+	c := make(chan struct{})
+	if s.chans == nil {
+		s.chans = map[interface{}][]chan struct{}{}
+	}
+	s.chans[k] = append(s.chans[k], c)
+	return c
+}
+
+func (s *Store) unnotify(k interface{}, c chan struct{}) {
+	s.chansMu.Lock()
+	defer s.chansMu.Unlock()
+
+	chans := s.chans[k]
+	copy := []chan struct{}{}
+	for _, i := range chans {
+		if i != c {
+			copy = append(copy, i)
+		}
+	}
+	s.chans[k] = copy
+}
+
 func (s *Store) lock(tx *Tx) {
 	// If we have not used this store in the transaction, lock the store and set the Tx.
 	if tx.kind == txKindRead {
@@ -92,6 +96,9 @@ func (s *Store) lock(tx *Tx) {
 			tx.stores = append(tx.stores, s)
 
 			s.txMu.Lock()
+			if s.readTx == nil {
+				s.readTx = map[*Tx]struct{}{}
+			}
 			s.readTx[tx] = struct{}{}
 			s.txMu.Unlock()
 		}

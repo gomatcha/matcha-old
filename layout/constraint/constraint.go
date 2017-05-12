@@ -3,7 +3,6 @@ package constraint
 import (
 	"fmt"
 	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/animate"
 	"math"
 )
 
@@ -113,7 +112,7 @@ func (a constAnchor) value(sys *System) float64 {
 }
 
 type notifierAnchor struct {
-	n animate.FloatNotifier
+	n mochi.Float64Notifier
 }
 
 func (a notifierAnchor) value(sys *System) float64 {
@@ -167,7 +166,7 @@ func Const(f float64) *Anchor {
 	return &Anchor{constAnchor(f)}
 }
 
-func Notifier(n animate.FloatNotifier) *Anchor {
+func Notifier(n mochi.Float64Notifier) *Anchor {
 	return &Anchor{notifierAnchor{n}}
 }
 
@@ -224,6 +223,13 @@ func (g *Guide) Add(view mochi.View, solveFunc func(*Solver)) *Guide {
 	}
 	g.children[id] = chl
 	g.system.solvers = append(g.system.solvers, s)
+
+	// Add any new notifier anchors to our batch notifier.
+	for _, i := range s.constraints {
+		if anchor, ok := i.anchor.(notifierAnchor); ok {
+			g.system.batch.Add(anchor.n)
+		}
+	}
 	return chl
 }
 
@@ -233,6 +239,13 @@ func (g *Guide) Solve(solveFunc func(*Solver)) {
 		solveFunc(s)
 	}
 	g.system.solvers = append(g.system.solvers, s)
+
+	// Add any new notifier anchors to our batch notifier.
+	for _, i := range s.constraints {
+		if anchor, ok := i.anchor.(notifierAnchor); ok {
+			g.system.batch.Add(anchor.n)
+		}
+	}
 }
 
 type constraint struct {
@@ -463,20 +476,19 @@ const (
 
 type System struct {
 	*Guide
-	min       *Guide
-	max       *Guide
-	solvers   []*Solver
-	notifiers []mochi.Notifier
-	zIndex    int
-	close     chan struct{}
-	chans     []chan struct{}
+	min     *Guide
+	max     *Guide
+	solvers []*Solver
+	zIndex  int
+	batch   *mochi.BatchNotifier
 }
 
 func New() *System {
 	sys := &System{}
+	sys.Guide = &Guide{id: rootId, system: sys, children: map[mochi.Id]*Guide{}}
 	sys.min = &Guide{id: minId, system: sys, children: map[mochi.Id]*Guide{}}
 	sys.max = &Guide{id: maxId, system: sys, children: map[mochi.Id]*Guide{}}
-	sys.Guide = &Guide{id: rootId, system: sys, children: map[mochi.Id]*Guide{}}
+	sys.batch = mochi.NewBatchNotifier()
 	return sys
 }
 
@@ -513,50 +525,11 @@ func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]m
 }
 
 func (sys *System) Notify() chan struct{} {
-	// c := make(chan struct{})
-	// if n.close == nil {
-	// 	goChan := make(chan struct{})
-	// 	close := make(chan struct{})
-
-	// 	// tx := &Tx{kind: txKindRead}
-	// 	// tx.begin()
-	// 	// n.f(tx)
-	// 	// tx.end(goChan)
-
-	// 	go func() {
-	// 	loop:
-	// 		for {
-	// 			select {
-	// 			case <-goChan:
-	// 				n.mu.Lock()
-	// 				for _, i := range n.chans {
-	// 					i <- struct{}{}
-	// 					<-i
-	// 				}
-	// 				n.mu.Unlock()
-	// 				goChan <- struct{}{}
-	// 			case <-close:
-	// 				break loop
-	// 			}
-	// 		}
-	// 	}()
-	// 	n.close = close
-	// }
-
-	// n.chans = append(n.chans, c)
-	// return c
-
-	// return c
-	// for _, i := range sys.notifiers {
-	// 	i.Notify(c)
-	// }
-	return nil
+	return sys.batch.Notify()
 }
 
 func (sys *System) Unnotify(c chan struct{}) {
-	// for _, i := range sys.notifiers {
-	// 	i.Unnotify(c)
-	// }
+	sys.batch.Unnotify(c)
 }
 
 type _range struct {
