@@ -14,6 +14,7 @@
 @interface MochiRoot ()
 @property (nonatomic, strong) CADisplayLink *displayLink;
 @property (nonatomic, strong) MochiGoValue *screenUpdateFunc;
+@property (nonatomic, strong) MochiGoValue *printStackFunc;
 @end
 
 @implementation MochiRoot
@@ -24,6 +25,7 @@
         [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
         // self.displayLink.preferredFramesPerSecond = 2;
         self.screenUpdateFunc = [[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/animate screenUpdate"];
+        self.printStackFunc = [[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/internal printStack"];
     }
     return self;
 }
@@ -42,12 +44,19 @@
 }
 
 - (void)screenUpdate {
+    // dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
+    //     [self printStack];
+    // });
     [self.screenUpdateFunc call:nil args:nil];
 }
 
 - (void)updateId:(NSInteger)identifier withRenderNode:(MochiGoValue *)renderNode {
     MochiViewController *vc = [MochiViewController viewControllerWithIdentifier:identifier];
     [vc update:[[MochiNode alloc] initWithGoValue:renderNode]];
+}
+
+- (void)printStack {
+    [self.printStackFunc call:nil args:nil];
 }
 
 @end

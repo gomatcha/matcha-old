@@ -42,7 +42,7 @@ func (e *Embed) Unlock() {
 }
 
 func (e *Embed) Update(key interface{}) {
-	e.root.updateFlags[e.id] = buildFlag
+	e.root.addFlag(e.id, buildFlag)
 }
 
 type Bridge struct {
@@ -101,7 +101,6 @@ type ViewController struct {
 	mu         *sync.Mutex
 	root       *root
 	renderNode *RenderNode
-	stopped    bool
 	size       Point
 	ticker     *internal.Ticker
 }
@@ -119,27 +118,8 @@ func NewViewController(f func(Config) View, id int) *ViewController {
 		vc.mu.Lock()
 		defer vc.mu.Unlock()
 
-		if vc.stopped {
-			return
-		}
-
-		var flag updateFlag
-		for _, v := range vc.root.updateFlags {
-			flag |= v
-		}
-
-		if flag.needsBuild() {
-			vc.root.build()
-		}
-		if flag.needsLayout() {
-			vc.root.layout(Pt(0, 0), vc.size)
-		}
-		if flag.needsPaint() {
-			vc.root.paint()
-		}
-		vc.root.updateFlags = map[Id]updateFlag{}
-
-		rn := vc.root.node.renderNode()
+		vc.root.update(vc.size)
+		rn := vc.root.renderNode()
 		mochibridge.Root().Call("updateId:withRenderNode:", mochibridge.Int64(int64(id)), mochibridge.Interface(rn))
 	})
 	return vc
@@ -149,10 +129,9 @@ func (vc *ViewController) Render() *RenderNode {
 	vc.mu.Lock()
 	defer vc.mu.Unlock()
 
-	vc.root.build()
-	vc.root.layout(Pt(0, 0), vc.size)
-	vc.root.paint()
-	return vc.root.node.renderNode()
+	vc.root.update(vc.size)
+	rn := vc.root.renderNode()
+	return rn
 }
 
 func (vc *ViewController) SetSize(p Point) {
@@ -160,13 +139,6 @@ func (vc *ViewController) SetSize(p Point) {
 	defer vc.mu.Unlock()
 
 	vc.size = p
-}
-
-func (vc *ViewController) Stop() {
-	vc.mu.Lock()
-	defer vc.mu.Unlock()
-
-	vc.stopped = true
 }
 
 type Config struct {
@@ -208,6 +180,7 @@ func (f updateFlag) needsPaint() bool {
 }
 
 type root struct {
+	mu          sync.Mutex
 	node        *node
 	ids         map[viewCacheKey]Id
 	prevIds     map[viewCacheKey]Id
@@ -234,6 +207,42 @@ func newRoot(f func(Config) View) *root {
 	root.node = node
 	root.updateFlags = map[Id]updateFlag{id: buildFlag}
 	return root
+}
+
+func (root *root) addFlag(id Id, f updateFlag) {
+	root.mu.Lock()
+	defer root.mu.Unlock()
+
+	root.updateFlags[id] |= f
+}
+
+func (root *root) update(size Point) {
+	root.mu.Lock()
+	defer root.mu.Unlock()
+
+	var flag updateFlag
+	for _, v := range root.updateFlags {
+		flag |= v
+	}
+	fmt.Println("RunLoop", flag.needsBuild(), flag.needsLayout(), flag.needsPaint())
+
+	if flag.needsBuild() {
+		root.build()
+	}
+	if flag.needsLayout() {
+		root.layout(Pt(0, 0), size)
+	}
+	if flag.needsPaint() {
+		root.paint()
+	}
+	root.updateFlags = map[Id]updateFlag{}
+}
+
+func (root *root) renderNode() *RenderNode {
+	root.mu.Lock()
+	defer root.mu.Unlock()
+
+	return root.node.renderNode()
 }
 
 func (root *root) build() {
@@ -282,6 +291,9 @@ type node struct {
 	children     map[Id]*node
 	layoutGuide  *Guide
 	paintOptions PaintOptions
+
+	layoutChan chan struct{}
+	layoutDone chan struct{}
 }
 
 func (n *node) get(key interface{}) Config {
@@ -370,30 +382,35 @@ func (n *node) build() {
 		}
 
 		// Watch for layout changes
-		// if n.layoutChan != nil {
-		// 	n.viewModel.Layouter.Unnotify(n.layoutChan)
-		// 	close(n.layoutDone)
-		// 	n.layoutChan = nil
-		// 	n.layoutDone = nil
-		// }
-		// layoutChan := viewModel.Layouter.Notify()
-		// if layoutChan != nil {
-		// 	layoutDone := make(chan struct{})
-		// 	go func() {
-		// 	loop:
-		// 		for {
-		// 			select {
-		// 			case <-layoutChan:
+		if n.layoutChan != nil {
+			n.viewModel.Layouter.Unnotify(n.layoutChan)
+			close(n.layoutDone)
+			n.layoutChan = nil
+			n.layoutDone = nil
+		}
 
-		// 				layoutChan <- struct{}{}
-		// 			case <-layoutDone:
-		// 				break loop
-		// 			}
-		// 		}
-		// 	}()
-		// 	n.layoutChan = layoutChan
-		// 	n.layoutDone = layoutDone
-		// }
+		if viewModel.Layouter != nil {
+			fmt.Println("a")
+			layoutChan := viewModel.Layouter.Notify()
+			fmt.Println("b", layoutChan)
+			if layoutChan != nil {
+				layoutDone := make(chan struct{})
+				go func() {
+				loop:
+					for {
+						select {
+						case <-layoutChan:
+							n.root.addFlag(n.id, layoutFlag)
+							layoutChan <- struct{}{}
+						case <-layoutDone:
+							break loop
+						}
+					}
+				}()
+				n.layoutChan = layoutChan
+				n.layoutDone = layoutDone
+			}
+		}
 
 		n.children = children
 		n.viewModel = viewModel

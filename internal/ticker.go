@@ -1,7 +1,6 @@
 package internal
 
 import (
-	_ "fmt"
 	"github.com/overcyn/mochibridge"
 	"sync"
 	"time"
