@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 67294E301EC93D9F00910D6E /* MochiDeadlockLogger.m */; };
 		67608ABC1E8F966500AE2EC7 /* MochiGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608ABB1E8F966500AE2EC7 /* MochiGuide.m */; };
 		67608AC41EA7EB5E00AE2EC7 /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */; };
 		67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608AC61EA8545600AE2EC7 /* MochiRoot.m */; };
@@ -22,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		67294E2F1EC93D9F00910D6E /* MochiDeadlockLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiDeadlockLogger.h; sourceTree = "<group>"; };
+		67294E301EC93D9F00910D6E /* MochiDeadlockLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiDeadlockLogger.m; sourceTree = "<group>"; };
 		67608ABA1E8F966500AE2EC7 /* MochiGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiGuide.h; sourceTree = "<group>"; };
 		67608ABB1E8F966500AE2EC7 /* MochiGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiGuide.m; sourceTree = "<group>"; };
 		67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mochi.framework; sourceTree = "<group>"; };
@@ -114,6 +117,8 @@
 				67608ABB1E8F966500AE2EC7 /* MochiGuide.m */,
 				676EF4F81E8F19A500C1488A /* MochiNode.h */,
 				676EF4F91E8F19A500C1488A /* MochiNode.m */,
+				67294E2F1EC93D9F00910D6E /* MochiDeadlockLogger.h */,
+				67294E301EC93D9F00910D6E /* MochiDeadlockLogger.m */,
 			);
 			name = Mochi;
 			sourceTree = "<group>";
@@ -191,6 +196,7 @@
 			files = (
 				67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */,
 				676EF4E41E8E34E300C1488A /* ViewController.m in Sources */,
+				67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */,
 				676EF4D01E8E341900C1488A /* AppDelegate.m in Sources */,
 				676EF4F41E8ECF5D00C1488A /* MochiView.m in Sources */,
 				676EF4FA1E8F19A500C1488A /* MochiNode.m in Sources */,
