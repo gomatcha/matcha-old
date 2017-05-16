@@ -18,7 +18,7 @@
 @implementation MochiGoValue (Mochi)
 
 - (id)initWithCGPoint:(CGPoint)point {
-    if ((self = [self initWithType:@"mochi.Point"].elem)) {
+    if ((self = [self initWithType:@"layout.Point"].elem)) {
         self[@"X"] = [[MochiGoValue alloc] initWithDouble:point.x];
         self[@"Y"] = [[MochiGoValue alloc] initWithDouble:point.y];
     }
@@ -26,7 +26,7 @@
 }
 
 - (id)initWithCGSize:(CGSize)size {
-     if ((self = [self initWithType:@"mochi.Point"].elem)) {
+     if ((self = [self initWithType:@"layout.Point"].elem)) {
          self[@"X"] = [[MochiGoValue alloc] initWithDouble:size.width];
          self[@"Y"] = [[MochiGoValue alloc] initWithDouble:size.height];
      }
@@ -34,7 +34,7 @@
 }
 
 - (id)initWithCGRect:(CGRect)rect {
-    if ((self = [self initWithType:@"mochi.Rect"].elem)) {
+    if ((self = [self initWithType:@"layout.Rect"].elem)) {
         self[@"Min"] = [[MochiGoValue alloc] initWithCGPoint:rect.origin];
         self[@"Max"] = [[MochiGoValue alloc] initWithCGPoint:CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height)];
     }
