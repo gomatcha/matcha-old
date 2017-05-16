@@ -74,7 +74,7 @@ type BatchNotifier struct {
 func NewBatchNotifier(n ...Notifier) *BatchNotifier {
 	notifiers := map[Notifier]*batchSubscription{}
 	for _, i := range n {
-		notifiers[i] = nil
+		notifiers[i] = &batchSubscription{}
 	}
 
 	return &BatchNotifier{

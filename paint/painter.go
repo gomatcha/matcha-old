@@ -84,9 +84,50 @@ func (as *AnimatedStyle) PaintStyle() Style {
 }
 
 func (as *AnimatedStyle) Notify() chan struct{} {
-	return nil // no-op
+	ns := []mochi.Notifier{}
+	if as.Alpha != nil {
+		ns = append(ns, as.Alpha)
+	}
+	if as.BackgroundColor != nil {
+		ns = append(ns, as.BackgroundColor)
+	}
+	if as.BorderColor != nil {
+		ns = append(ns, as.BorderColor)
+	}
+	if as.BorderWidth != nil {
+		ns = append(ns, as.BorderWidth)
+	}
+	if as.CornerRadius != nil {
+		ns = append(ns, as.CornerRadius)
+	}
+	if as.ShadowOpacity != nil {
+		ns = append(ns, as.ShadowOpacity)
+	}
+	if as.ShadowRadius != nil {
+		ns = append(ns, as.ShadowRadius)
+	}
+	if as.ShadowOffset != nil {
+		ns = append(ns, as.ShadowOffset)
+	}
+	if as.ShadowColor != nil {
+		ns = append(ns, as.ShadowColor)
+	}
+
+	n := mochi.NewBatchNotifier(ns...)
+	c := n.Notify()
+	if c != nil {
+		as.batchNotifiers[c] = n
+	}
+	return c
 }
 
-func (as *AnimatedStyle) Unnotify(chan struct{}) {
-	// no-op
+func (as *AnimatedStyle) Unnotify(c chan struct{}) {
+	if c == nil {
+		return
+	}
+	n := as.batchNotifiers[c]
+	if n != nil {
+		n.Unnotify(c)
+		delete(as.batchNotifiers, c)
+	}
 }
