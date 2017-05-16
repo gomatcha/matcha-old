@@ -1,4 +1,4 @@
-package mochi
+package internal
 
 import (
 	"image/color"
