@@ -1,6 +1,5 @@
 The float notifier constraint should mark the node tree as needing relayout.
 Prevent duplicate keys.
-VC and root should be the same object.
 
 * Animations
 * Event Handling / Gestures

@@ -108,10 +108,10 @@ func (t *Ticker) Value() float64 {
 }
 
 func (t *Ticker) Stop() {
-	t.mu.Lock()
-	defer t.mu.Unlock()
 	tickers.mu.Lock()
 	defer tickers.mu.Unlock()
+	t.mu.Lock()
+	defer t.mu.Unlock()
 
 	delete(tickers.ts, t.key)
 }

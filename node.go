@@ -390,9 +390,7 @@ func (n *node) build() {
 		}
 
 		if viewModel.Layouter != nil {
-			fmt.Println("a")
 			layoutChan := viewModel.Layouter.Notify()
-			fmt.Println("b", layoutChan)
 			if layoutChan != nil {
 				layoutDone := make(chan struct{})
 				go func() {
