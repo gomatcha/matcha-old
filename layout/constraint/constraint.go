@@ -226,10 +226,10 @@ func (g *Guide) Add(view view.View, solveFunc func(*Solver)) *Guide {
 	g.children[id] = chl
 	g.system.solvers = append(g.system.solvers, s)
 
-	// Add any new notifier anchors to our batch notifier.
+	// Add any new notifier anchors to our notifier list.
 	for _, i := range s.constraints {
 		if anchor, ok := i.anchor.(notifierAnchor); ok {
-			g.system.batch.Add(anchor.n)
+			g.system.notifiers = append(g.system.notifiers, anchor.n)
 		}
 	}
 	return chl
@@ -242,10 +242,10 @@ func (g *Guide) Solve(solveFunc func(*Solver)) {
 	}
 	g.system.solvers = append(g.system.solvers, s)
 
-	// Add any new notifier anchors to our batch notifier.
+	// Add any new notifier anchors to our notifier list.
 	for _, i := range s.constraints {
 		if anchor, ok := i.anchor.(notifierAnchor); ok {
-			g.system.batch.Add(anchor.n)
+			g.system.notifiers = append(g.system.notifiers, anchor.n)
 		}
 	}
 }
@@ -478,11 +478,12 @@ const (
 
 type System struct {
 	*Guide
-	min     *Guide
-	max     *Guide
-	solvers []*Solver
-	zIndex  int
-	batch   *mochi.BatchNotifier
+	min            *Guide
+	max            *Guide
+	solvers        []*Solver
+	zIndex         int
+	notifiers      []mochi.Notifier
+	batchNotifiers map[chan struct{}]*mochi.BatchNotifier
 }
 
 func New() *System {
@@ -490,7 +491,7 @@ func New() *System {
 	sys.Guide = &Guide{id: rootId, system: sys, children: map[mochi.Id]*Guide{}}
 	sys.min = &Guide{id: minId, system: sys, children: map[mochi.Id]*Guide{}}
 	sys.max = &Guide{id: maxId, system: sys, children: map[mochi.Id]*Guide{}}
-	sys.batch = mochi.NewBatchNotifier()
+	sys.batchNotifiers = map[chan struct{}]*mochi.BatchNotifier{}
 	return sys
 }
 
@@ -527,11 +528,23 @@ func (sys *System) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layou
 }
 
 func (sys *System) Notify() chan struct{} {
-	return sys.batch.Notify()
+	n := mochi.NewBatchNotifier(sys.notifiers...)
+	c := n.Notify()
+	if c != nil {
+		sys.batchNotifiers[c] = n
+	}
+	return c
 }
 
 func (sys *System) Unnotify(c chan struct{}) {
-	sys.batch.Unnotify(c)
+	if c == nil {
+		return
+	}
+	n := sys.batchNotifiers[c]
+	if n != nil {
+		n.Unnotify(c)
+		delete(sys.batchNotifiers, c)
+	}
 }
 
 type _range struct {

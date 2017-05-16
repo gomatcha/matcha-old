@@ -2,7 +2,6 @@ package mochi
 
 import (
 	"image/color"
-	"sync"
 )
 
 type Id int64
@@ -68,49 +67,22 @@ type batchSubscription struct {
 }
 
 type BatchNotifier struct {
-	mu        sync.Mutex
 	notifiers map[Notifier]*batchSubscription
 	chans     []chan struct{}
 }
 
-func NewBatchNotifier() *BatchNotifier {
+func NewBatchNotifier(n ...Notifier) *BatchNotifier {
+	notifiers := map[Notifier]*batchSubscription{}
+	for _, i := range n {
+		notifiers[i] = nil
+	}
+
 	return &BatchNotifier{
-		notifiers: map[Notifier]*batchSubscription{},
+		notifiers: notifiers,
 	}
-}
-
-func (n *BatchNotifier) Add(ns Notifier) {
-	n.mu.Lock()
-	defer n.mu.Unlock()
-
-	_, ok := n.notifiers[ns]
-	if ok {
-		return
-	}
-	n.notifiers[ns] = &batchSubscription{}
-	n.resubscribe()
-}
-
-func (n *BatchNotifier) Remove(ns Notifier) {
-	n.mu.Lock()
-	defer n.mu.Unlock()
-
-	sub, ok := n.notifiers[ns]
-	if !ok {
-		return
-	}
-
-	if sub.c != nil {
-		ns.Unnotify(sub.c)
-		close(sub.done)
-	}
-	delete(n.notifiers, ns)
 }
 
 func (n *BatchNotifier) Notify() chan struct{} {
-	n.mu.Lock()
-	defer n.mu.Unlock()
-
 	c := make(chan struct{})
 	n.chans = append(n.chans, c)
 
@@ -121,9 +93,6 @@ func (n *BatchNotifier) Notify() chan struct{} {
 }
 
 func (n *BatchNotifier) Unnotify(c chan struct{}) {
-	n.mu.Lock()
-	defer n.mu.Unlock()
-
 	chans := []chan struct{}{}
 	for _, i := range n.chans {
 		if i != c {
@@ -161,12 +130,10 @@ func (n *BatchNotifier) resubscribe() {
 				for {
 					select {
 					case <-c:
-						n.mu.Lock()
 						for _, i := range n.chans {
 							i <- struct{}{}
 							<-i
 						}
-						n.mu.Unlock()
 						c <- struct{}{}
 					case <-done:
 						break loop

@@ -24,40 +24,69 @@ type Style struct {
 	// Mask
 }
 
-func (p *Style) PaintStyle() Style {
-	return *p
+func (s *Style) PaintStyle() Style {
+	return *s
 }
 
-func (p *Style) Notify() chan struct{} {
+func (s *Style) Notify() chan struct{} {
 	return nil // no-op
 }
 
-func (p *Style) Unnotify(chan struct{}) {
+func (s *Style) Unnotify(chan struct{}) {
 	// no-op
 }
 
 type AnimatedStyle struct {
-	Style Style
+	Style           Style
+	Alpha           mochi.Float64Notifier
+	BackgroundColor mochi.ColorNotifier
+	BorderColor     mochi.ColorNotifier
+	BorderWidth     mochi.Float64Notifier
+	CornerRadius    mochi.Float64Notifier
+	ShadowOpacity   mochi.Float64Notifier
+	ShadowRadius    mochi.Float64Notifier
+	ShadowOffset    mochi.Float64Notifier
+	ShadowColor     mochi.ColorNotifier
 
-	// Alpha           Float64Notifier
-	// BackgroundColor ColorNotifier
-	// BorderColor     ColorNotifier
-	// BorderWidth     Float64Notifier
-	// CornerRadius    Float64Notifier
-	// ShadowOpacity   Float64Notifier
-	// ShadowRadius    Float64Notifier
-	// ShadowOffset    Float64Notifier
-	// ShadowColor     ColorNotifier
+	batchNotifiers map[chan struct{}]*mochi.BatchNotifier
 }
 
-func (p *AnimatedStyle) PaintStyle() Style {
-	return p.Style
+func (as *AnimatedStyle) PaintStyle() Style {
+	s := as.Style
+	if as.Alpha != nil {
+		s.Alpha = as.Alpha.Value()
+	}
+	if as.BackgroundColor != nil {
+		s.BackgroundColor = as.BackgroundColor.Value()
+	}
+	if as.BorderColor != nil {
+		s.BorderColor = as.BorderColor.Value()
+	}
+	if as.BorderWidth != nil {
+		s.BorderWidth = as.BorderWidth.Value()
+	}
+	if as.CornerRadius != nil {
+		s.CornerRadius = as.CornerRadius.Value()
+	}
+	if as.ShadowOpacity != nil {
+		s.ShadowOpacity = as.ShadowOpacity.Value()
+	}
+	if as.ShadowRadius != nil {
+		s.ShadowRadius = as.ShadowRadius.Value()
+	}
+	if as.ShadowOffset != nil {
+		s.ShadowOffset = as.ShadowOffset.Value()
+	}
+	if as.ShadowColor != nil {
+		s.ShadowColor = as.ShadowColor.Value()
+	}
+	return s
 }
 
-func (p *AnimatedStyle) Notify() chan struct{} {
+func (as *AnimatedStyle) Notify() chan struct{} {
 	return nil // no-op
 }
 
-func (p *AnimatedStyle) Unnotify(chan struct{}) {
+func (as *AnimatedStyle) Unnotify(chan struct{}) {
 	// no-op
 }
