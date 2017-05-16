@@ -2,6 +2,9 @@ package example
 
 import (
 	"fmt"
+	"reflect"
+	"time"
+
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/animate"
 	"github.com/overcyn/mochi/internal"
@@ -17,8 +20,6 @@ import (
 	"github.com/overcyn/mochi/view/scrollview"
 	"github.com/overcyn/mochi/view/textview"
 	"github.com/overcyn/mochibridge"
-	"reflect"
-	"time"
 )
 
 type GoRoot struct {
@@ -55,6 +56,7 @@ type NestedView struct {
 	counter     int
 	ticker      *animate.Ticker
 	floatTicker mochi.Float64Notifier
+	colorTicker mochi.ColorNotifier
 }
 
 func NewNestedView(c view.Config) *NestedView {
@@ -64,6 +66,7 @@ func NewNestedView(c view.Config) *NestedView {
 		v.Embed = c.Embed
 		v.ticker = animate.NewTicker(time.Second * 5)
 		v.floatTicker = animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 150})
+		v.colorTicker = animate.ColorInterpolate(v.ticker, animate.RGBALerp{Start: internal.RedColor, End: internal.YellowColor})
 		// fmt.Println("Float ticker", v.floatTicker.Value())
 	}
 	return v
@@ -80,7 +83,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	m.Painter = p
 
 	chl1 := basicview.New(ctx.Get("red"))
-	chl1.Painter = &paint.Style{BackgroundColor: internal.RedColor}
+	chl1.Painter = &paint.AnimatedStyle{BackgroundColor: v.colorTicker}
 	m.Add(chl1)
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))

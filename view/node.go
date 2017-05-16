@@ -126,6 +126,7 @@ func NewViewController(f func(Config) View, id int) *ViewController {
 		vc.root.update(vc.size)
 		rn := vc.root.renderNode()
 		mochibridge.Root().Call("updateId:withRenderNode:", mochibridge.Int64(int64(id)), mochibridge.Interface(rn))
+		// fmt.Println(rn.DebugString())
 	})
 	return vc
 }

@@ -80,10 +80,15 @@ func (as *AnimatedStyle) PaintStyle() Style {
 	if as.ShadowColor != nil {
 		s.ShadowColor = as.ShadowColor.Value()
 	}
+	// fmt.Println(s.BackgroundColor)
 	return s
 }
 
 func (as *AnimatedStyle) Notify() chan struct{} {
+	if as.batchNotifiers == nil {
+		as.batchNotifiers = map[chan struct{}]*mochi.BatchNotifier{}
+	}
+
 	ns := []mochi.Notifier{}
 	if as.Alpha != nil {
 		ns = append(ns, as.Alpha)

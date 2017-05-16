@@ -11,7 +11,7 @@
 @implementation UIColor (Mochi)
 - (id)initWithGoValue:(MochiGoValue *)value {
     NSArray<MochiGoValue *> *array = [value call:@"RGBA" args:nil];
-    return [UIColor colorWithRed:array[0].toUnsignedLongLong/0xffff green:array[1].toUnsignedLongLong/0xffff blue:array[2].toUnsignedLongLong/0xffff alpha:array[3].toUnsignedLongLong/0xffff];
+    return [UIColor colorWithRed:((double)array[0].toUnsignedLongLong)/0xffff green:((double)array[1].toUnsignedLongLong)/0xffff blue:((double)array[2].toUnsignedLongLong)/0xffff alpha:((double)array[3].toUnsignedLongLong)/0xffff];
 }
 @end
 
