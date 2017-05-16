@@ -4,6 +4,7 @@ import "image/color"
 
 type Painter interface {
 	PaintOptions() PaintOptions
+	Notifier
 }
 
 type PaintOptions struct {
@@ -20,6 +21,26 @@ type PaintOptions struct {
 	// Mask
 }
 
+type AnimatedPaintStyle struct {
+	Alpha           Float64Notifier
+	BackgroundColor ColorNotifier
+	BorderColor     ColorNotifier
+	BorderWidth     Float64Notifier
+	CornerRadius    Float64Notifier
+	ShadowOpacity   Float64Notifier
+	ShadowRadius    Float64Notifier
+	ShadowOffset    Float64Notifier
+	ShadowColor     ColorNotifier
+}
+
 func (p PaintOptions) PaintOptions() PaintOptions {
 	return p
+}
+
+func (p PaintOptions) Notify() chan struct{} {
+	return nil // no-op
+}
+
+func (p PaintOptions) Unnotify(chan struct{}) {
+	// no-op
 }

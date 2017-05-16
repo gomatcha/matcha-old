@@ -1,12 +1,18 @@
 package mochi
 
 import (
+	"image/color"
 	"sync"
 )
 
 type Notifier interface {
 	Notify() chan struct{}
 	Unnotify(chan struct{})
+}
+
+type ColorNotifier interface {
+	Notifier
+	Value() color.Color
 }
 
 type InterfaceNotifier interface {

@@ -300,6 +300,8 @@ type node struct {
 	layoutGuide *Guide
 
 	paintId      int64
+	paintChan    chan struct{}
+	paintDone    chan struct{}
 	paintOptions PaintOptions
 }
 
@@ -367,7 +369,7 @@ func (n *node) build() {
 		}
 
 		children := map[Id]*node{}
-		// Add build contexts for new children
+		// Add build contexts for new children.
 		for _, id := range addedIds {
 			var view View
 			for _, i := range viewModel.Children {
@@ -383,17 +385,17 @@ func (n *node) build() {
 				root:     n.root,
 			}
 		}
-		// Reuse old context for unupdated keys
+		// Reuse old context for unupdated keys.
 		for _, id := range unchangedIds {
 			children[id] = n.children[id]
 		}
 
-		// Mark all children as needing rebuild since we rebuilt
+		// Mark all children as needing rebuild since we rebuilt.
 		for k := range children {
 			n.root.updateFlags[k] |= buildFlag
 		}
 
-		// Watch for layout changes
+		// Watch for layout changes.
 		if n.layoutChan != nil {
 			n.viewModel.Layouter.Unnotify(n.layoutChan)
 			close(n.layoutDone)
@@ -418,6 +420,34 @@ func (n *node) build() {
 				}()
 				n.layoutChan = layoutChan
 				n.layoutDone = layoutDone
+			}
+		}
+
+		// Watch for paint changes.
+		if n.paintChan != nil {
+			n.viewModel.Painter.Unnotify(n.paintChan)
+			close(n.paintDone)
+			n.paintChan = nil
+			n.paintDone = nil
+		}
+		if viewModel.Painter != nil {
+			paintChan := viewModel.Painter.Notify()
+			if paintChan != nil {
+				paintDone := make(chan struct{})
+				go func() {
+				loop:
+					for {
+						select {
+						case <-paintChan:
+							n.root.addFlag(n.id, paintFlag)
+							paintChan <- struct{}{}
+						case <-paintDone:
+							break loop
+						}
+					}
+				}()
+				n.paintChan = paintChan
+				n.paintDone = paintDone
 			}
 		}
 

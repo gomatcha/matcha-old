@@ -77,6 +77,8 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	m.Painter = p
 
 	chl1 := basicview.New(ctx.Get("red"))
+	// chl1.Painter = &paint.Style{BackgroundColor: mochi.RedColor}
+	// chl1.Painter = &paint.AnimatedStyle{BackgroundColor: mochi.RedColor}
 	chl1.PaintOptions.BackgroundColor = mochi.RedColor
 	m.Add(chl1)
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
