@@ -2,6 +2,7 @@ package absolute
 
 import (
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout"
 )
 
 type Layout struct {
@@ -9,7 +10,7 @@ type Layout struct {
 	ChildGuides map[mochi.Id]layout.Guide
 }
 
-func (l *Layout) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	return l.Guide, l.ChildGuides
 }
 

@@ -9,8 +9,7 @@ type View interface {
 	Build(*Context) *Model
 	Lifecycle(from, to Stage)
 	Id() mochi.Id
-	Lock()
-	Unlock()
+	sync.Locker
 }
 
 type Embed struct {

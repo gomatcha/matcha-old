@@ -1,15 +1,16 @@
 package textinput
 
 import (
-	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/text"
+	"github.com/overcyn/mochi/view"
 )
 
 type TextInput struct {
 	*view.Embed
-	Text         text.Text
-	Style        text.Style
-	PaintOptions paint.PaintStyle
+	Text    text.Text
+	Style   text.Style
+	Painter paint.Painter
 }
 
 func New(c view.Config) *TextInput {
@@ -21,9 +22,9 @@ func New(c view.Config) *TextInput {
 	return v
 }
 
-func (v *TextInput) Build(ctx *view.BuildContext) *view.ViewModel {
-	n := &view.ViewModel{}
-	n.Painter = v.PaintOptions
+func (v *TextInput) Build(ctx *view.Context) *view.Model {
+	n := &view.Model{}
+	n.Painter = v.Painter
 	n.Bridge.Name = "github.com/overcyn/mochi/view/textinput TextInput"
 	n.Bridge.State = struct {
 		Text    *text.Text
