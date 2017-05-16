@@ -2,19 +2,22 @@ package scrollview
 
 import (
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/paint"
+	"github.com/overcyn/mochi/view"
 	"math"
 )
 
 type ScrollView struct {
-	*mochi.Embed
+	*view.Embed
 	ScrollEnabled                  bool
 	ShowsHorizontalScrollIndicator bool
 	ShowsVerticalScrollIndicator   bool
-	ContentView                    mochi.View
-	Painter                        mochi.Painter
+	ContentView                    view.View
+	Painter                        paint.Painter
 }
 
-func New(c mochi.Config) *ScrollView {
+func New(c view.Config) *ScrollView {
 	v, ok := c.Prev.(*ScrollView)
 	if !ok {
 		v = &ScrollView{}
@@ -26,8 +29,8 @@ func New(c mochi.Config) *ScrollView {
 	return v
 }
 
-func (v *ScrollView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
-	n := &mochi.ViewModel{}
+func (v *ScrollView) Build(ctx *view.BuildContext) *view.ViewModel {
+	n := &view.ViewModel{}
 	n.Painter = v.Painter
 	n.Layouter = &scrollViewLayouter{}
 
@@ -51,14 +54,14 @@ func (v *ScrollView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 type scrollViewLayouter struct {
 }
 
-func (l *scrollViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]mochi.Guide) {
-	gs := map[mochi.Id]mochi.Guide{}
+func (l *scrollViewLayouter) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
+	gs := map[mochi.Id]layout.Guide{}
 	if len(ctx.ChildIds) > 0 {
 		g := ctx.LayoutChild(ctx.ChildIds[0], ctx.MinSize, mochi.Pt(math.Inf(1), math.Inf(1)))
 		g.Frame = g.Frame.Add(mochi.Pt(-g.Frame.Min.X, -g.Frame.Min.Y))
 		gs[ctx.ChildIds[0]] = g
 	}
-	return mochi.Guide{
+	return layout.Guide{
 		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}, gs
 }

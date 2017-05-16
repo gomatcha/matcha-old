@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+type Id int64
+
 type Rect struct {
 	Min, Max Point
 }

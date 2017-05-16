@@ -1,20 +1,24 @@
-package mochi
+package layout
+
+import (
+	"github.com/overcyn/mochi"
+)
 
 type LayoutContext struct {
-	MinSize  Point
-	MaxSize  Point
-	ChildIds []Id
-	node     *node
+	MinSize    mochi.Point
+	MaxSize    mochi.Point
+	ChildIds   []mochi.Id
+	LayoutFunc func(mochi.Id, mochi.Point, mochi.Point) Guide
+	// node     *node
 }
 
 type Layouter interface {
-	Layout(ctx *LayoutContext) (Guide, map[Id]Guide)
-	Notifier
+	Layout(ctx *LayoutContext) (Guide, map[mochi.Id]Guide)
+	mochi.Notifier
 }
 
-func (l *LayoutContext) LayoutChild(id Id, minSize, maxSize Point) Guide {
-	n := l.node.children[id] // TODO(KD): FIX!!!!!!!!!!
-	return n.layout(minSize, maxSize)
+func (l *LayoutContext) LayoutChild(id mochi.Id, minSize, maxSize mochi.Point) Guide {
+	return l.LayoutFunc(id, minSize, maxSize)
 }
 
 // Full Layout
@@ -27,9 +31,9 @@ func (l *FullLayout) NeedsLayoutFunc(f func()) {
 	l.needsLayoutFunc = f
 }
 
-func (l *FullLayout) Layout(ctx *LayoutContext) (Guide, map[Id]Guide) {
-	g := Guide{Frame: Rect{Max: ctx.MinSize}}
-	gs := map[Id]Guide{}
+func (l *FullLayout) Layout(ctx *LayoutContext) (Guide, map[mochi.Id]Guide) {
+	g := Guide{Frame: mochi.Rect{Max: ctx.MinSize}}
+	gs := map[mochi.Id]Guide{}
 	for _, id := range ctx.ChildIds {
 		gs[id] = ctx.LayoutChild(id, ctx.MinSize, ctx.MinSize)
 	}
@@ -47,8 +51,8 @@ func (l *FullLayout) Unnotify(chan struct{}) {
 // Guides
 
 type Guide struct {
-	Frame  Rect
-	Insets Insets
+	Frame  mochi.Rect
+	Insets mochi.Insets
 	ZIndex int
 	// Transform?
 }
@@ -79,7 +83,7 @@ func (g Guide) CenterY() float64 {
 }
 
 // Fit adjusts the frame of the guide to be within MinSize and MaxSize of the LayoutContext.
-func (g Guide) fit(ctx *LayoutContext) Guide {
+func (g Guide) Fit(ctx *LayoutContext) Guide {
 	if g.Width() < ctx.MinSize.X {
 		g.Frame.Max.X = ctx.MinSize.X - g.Frame.Min.X
 	}

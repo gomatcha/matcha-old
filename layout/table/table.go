@@ -2,6 +2,8 @@ package table
 
 import (
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/view"
 	"math"
 )
 
@@ -19,13 +21,13 @@ type Layout struct {
 	Ids       []mochi.Id
 }
 
-func (l *Layout) Add(view mochi.View) {
-	l.Ids = append(l.Ids, view.Id())
+func (l *Layout) Add(v view.View) {
+	l.Ids = append(l.Ids, v.Id())
 }
 
-func (l *Layout) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]mochi.Guide) {
-	g := mochi.Guide{}
-	gs := map[mochi.Id]mochi.Guide{}
+func (l *Layout) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
+	g := layout.Guide{}
+	gs := map[mochi.Id]layout.Guide{}
 	y := 0.0
 	x := ctx.MinSize.X
 	for i, id := range l.Ids {

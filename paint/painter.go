@@ -1,10 +1,13 @@
-package mochi
+package paint
 
-import "image/color"
+import (
+	"github.com/overcyn/mochi"
+	"image/color"
+)
 
 type Painter interface {
 	PaintStyle() PaintStyle
-	Notifier
+	mochi.Notifier
 }
 
 type PaintStyle struct {
@@ -36,15 +39,15 @@ func (p *PaintStyle) Unnotify(chan struct{}) {
 type AnimatedPaintStyle struct {
 	Style PaintStyle
 
-	Alpha           Float64Notifier
-	BackgroundColor ColorNotifier
-	BorderColor     ColorNotifier
-	BorderWidth     Float64Notifier
-	CornerRadius    Float64Notifier
-	ShadowOpacity   Float64Notifier
-	ShadowRadius    Float64Notifier
-	ShadowOffset    Float64Notifier
-	ShadowColor     ColorNotifier
+	// Alpha           Float64Notifier
+	// BackgroundColor ColorNotifier
+	// BorderColor     ColorNotifier
+	// BorderWidth     Float64Notifier
+	// CornerRadius    Float64Notifier
+	// ShadowOpacity   Float64Notifier
+	// ShadowRadius    Float64Notifier
+	// ShadowOffset    Float64Notifier
+	// ShadowColor     ColorNotifier
 }
 
 func (p *AnimatedPaintStyle) PaintStyle() PaintStyle {

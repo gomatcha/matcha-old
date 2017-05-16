@@ -2,17 +2,20 @@ package basicview
 
 import (
 	"fmt"
-	"github.com/overcyn/mochi"
+	// "github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/paint"
+	"github.com/overcyn/mochi/view"
 )
 
 type BasicView struct {
-	*mochi.Embed
-	Painter  mochi.Painter
-	Layouter mochi.Layouter
-	Children []mochi.View
+	*view.Embed
+	Painter  paint.Painter
+	Layouter layout.Layouter
+	Children []view.View
 }
 
-func New(c mochi.Config) *BasicView {
+func New(c view.Config) *BasicView {
 	v, ok := c.Prev.(*BasicView)
 	if !ok {
 		v = &BasicView{}
@@ -21,8 +24,8 @@ func New(c mochi.Config) *BasicView {
 	return v
 }
 
-func (v *BasicView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
-	n := &mochi.ViewModel{
+func (v *BasicView) Build(ctx *view.BuildContext) *view.ViewModel {
+	n := &view.ViewModel{
 		Painter:  v.Painter,
 		Layouter: v.Layouter,
 	}

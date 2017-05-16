@@ -2,7 +2,10 @@ package button
 
 import (
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/text"
+	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochibridge"
 )
 
@@ -16,9 +19,9 @@ type buttonLayouter struct {
 	formattedText *text.Text
 }
 
-func (l *buttonLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]mochi.Guide) {
+func (l *buttonLayouter) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
 	size := textSize(l.formattedText, ctx.MaxSize)
-	g := mochi.Guide{Frame: mochi.Rt(0, 0, size.X+padding*2, size.Y+padding*2)}
+	g := layout.Guide{Frame: mochi.Rt(0, 0, size.X+padding*2, size.Y+padding*2)}
 	return g, nil
 }
 
@@ -32,13 +35,13 @@ func (l *buttonLayouter) Unnotify(chan struct{}) {
 }
 
 type Button struct {
-	*mochi.Embed
+	*view.Embed
 	Text    string
-	Painter mochi.Painter
+	Painter paint.Painter
 	OnPress func()
 }
 
-func New(c mochi.Config) *Button {
+func New(c view.Config) *Button {
 	v, ok := c.Prev.(*Button)
 	if !ok {
 		v = &Button{}
@@ -47,7 +50,7 @@ func New(c mochi.Config) *Button {
 	return v
 }
 
-func (v *Button) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
+func (v *Button) Build(ctx *view.BuildContext) *view.ViewModel {
 	ft := &text.Text{}
 	ft.SetString(v.Text)
 	ft.Style().SetAlignment(text.AlignmentCenter)
@@ -56,7 +59,7 @@ func (v *Button) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 		Size:   20,
 	})
 
-	n := &mochi.ViewModel{
+	n := &view.ViewModel{
 		Layouter: &buttonLayouter{formattedText: ft},
 		Painter:  v.Painter,
 	}

@@ -3,6 +3,8 @@ package constraint
 import (
 	"fmt"
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/view"
 	"math"
 )
 
@@ -125,7 +127,7 @@ type guideAnchor struct {
 }
 
 func (a guideAnchor) value(sys *System) float64 {
-	var g mochi.Guide
+	var g layout.Guide
 	switch a.guide.id {
 	case rootId:
 		g = *sys.Guide.mochiGuide
@@ -174,7 +176,7 @@ type Guide struct {
 	id         mochi.Id
 	system     *System
 	children   map[mochi.Id]*Guide
-	mochiGuide *mochi.Guide
+	mochiGuide *layout.Guide
 }
 
 func (g *Guide) Top() *Anchor {
@@ -209,7 +211,7 @@ func (g *Guide) CenterY() *Anchor {
 	return &Anchor{guideAnchor{guide: g, attribute: centerYAttr}}
 }
 
-func (g *Guide) Add(view mochi.View, solveFunc func(*Solver)) *Guide {
+func (g *Guide) Add(view view.View, solveFunc func(*Solver)) *Guide {
 	id := view.Id()
 	chl := &Guide{
 		id:         id,
@@ -263,7 +265,7 @@ type Solver struct {
 	constraints []constraint
 }
 
-func (s *Solver) solve(sys *System, ctx *mochi.LayoutContext) {
+func (s *Solver) solve(sys *System, ctx *layout.LayoutContext) {
 	cr := newConstrainedRect()
 
 	for _, i := range s.constraints {
@@ -308,7 +310,7 @@ func (s *Solver) solve(sys *System, ctx *mochi.LayoutContext) {
 	}
 
 	// Get parent guide.
-	var parent mochi.Guide
+	var parent layout.Guide
 	if s.id == rootId {
 		parent = *sys.min.mochiGuide
 	} else {
@@ -317,9 +319,9 @@ func (s *Solver) solve(sys *System, ctx *mochi.LayoutContext) {
 
 	// Solve for width & height.
 	var width, height float64
-	var g mochi.Guide
+	var g layout.Guide
 	if s.id == rootId {
-		g = mochi.Guide{}
+		g = layout.Guide{}
 		width, _ = cr.solveWidth(parent.Width())
 		height, _ = cr.solveHeight(parent.Height())
 	} else {
@@ -500,14 +502,14 @@ func (sys *System) MaxGuide() *Guide {
 	return sys.max
 }
 
-func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]mochi.Guide) {
-	sys.min.mochiGuide = &mochi.Guide{
+func (sys *System) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
+	sys.min.mochiGuide = &layout.Guide{
 		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
-	sys.max.mochiGuide = &mochi.Guide{
+	sys.max.mochiGuide = &layout.Guide{
 		Frame: mochi.Rt(0, 0, ctx.MaxSize.X, ctx.MaxSize.Y),
 	}
-	sys.Guide.mochiGuide = &mochi.Guide{
+	sys.Guide.mochiGuide = &layout.Guide{
 		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
 	// TODO(Kevin): reset all guides
@@ -517,7 +519,7 @@ func (sys *System) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]m
 	}
 
 	g := *sys.Guide.mochiGuide
-	gs := map[mochi.Id]mochi.Guide{}
+	gs := map[mochi.Id]layout.Guide{}
 	for k, v := range sys.Guide.children {
 		gs[k] = *v.mochiGuide
 	}

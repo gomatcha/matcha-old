@@ -2,7 +2,10 @@ package textview
 
 import (
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/text"
+	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochibridge"
 )
 
@@ -10,9 +13,9 @@ type textViewLayouter struct {
 	formattedText *text.Text
 }
 
-func (l *textViewLayouter) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]mochi.Guide) {
+func (l *textViewLayouter) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
 	size := textSize(l.formattedText, ctx.MaxSize)
-	g := mochi.Guide{Frame: mochi.Rt(0, 0, size.X, size.Y)}
+	g := layout.Guide{Frame: mochi.Rt(0, 0, size.X, size.Y)}
 	return g, nil
 }
 
@@ -30,7 +33,7 @@ func textSize(t *text.Text, max mochi.Point) mochi.Point {
 }
 
 type TextView struct {
-	*mochi.Embed
+	*view.Embed
 	String string
 	Style  *text.Style
 	Text   *text.Text
@@ -38,10 +41,10 @@ type TextView struct {
 	// String     string
 	// Text       text.Text
 	// Attributes text.Attributes
-	Painter mochi.Painter
+	Painter paint.Painter
 }
 
-func New(c mochi.Config) *TextView {
+func New(c view.Config) *TextView {
 	v, ok := c.Prev.(*TextView)
 	if !ok {
 		v = &TextView{}
@@ -51,7 +54,7 @@ func New(c mochi.Config) *TextView {
 	return v
 }
 
-func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
+func (v *TextView) Build(ctx *view.BuildContext) *view.ViewModel {
 	ft := v.Text
 	if ft == nil {
 		ft = &text.Text{}
@@ -59,7 +62,7 @@ func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 		ft.SetStyle(v.Style)
 	}
 
-	n := &mochi.ViewModel{}
+	n := &view.ViewModel{}
 	n.Layouter = &textViewLayouter{formattedText: ft}
 	n.Painter = v.Painter
 	n.Bridge.Name = "github.com/overcyn/mochi/view/textview"

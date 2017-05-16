@@ -6,13 +6,13 @@ import (
 )
 
 type TextInput struct {
-	*mochi.Embed
+	*view.Embed
 	Text         text.Text
 	Style        text.Style
-	PaintOptions mochi.PaintStyle
+	PaintOptions paint.PaintStyle
 }
 
-func New(c mochi.Config) *TextInput {
+func New(c view.Config) *TextInput {
 	v, ok := c.Prev.(*TextInput)
 	if !ok {
 		v = &TextInput{}
@@ -21,8 +21,8 @@ func New(c mochi.Config) *TextInput {
 	return v
 }
 
-func (v *TextInput) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
-	n := &mochi.ViewModel{}
+func (v *TextInput) Build(ctx *view.BuildContext) *view.ViewModel {
+	n := &view.ViewModel{}
 	n.Painter = v.PaintOptions
 	n.Bridge.Name = "github.com/overcyn/mochi/view/textinput TextInput"
 	n.Bridge.State = struct {

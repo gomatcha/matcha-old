@@ -7,7 +7,9 @@ import (
 	"github.com/overcyn/mochi/internal"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
+	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/text"
+	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/button"
 	"github.com/overcyn/mochi/view/imageview"
@@ -21,8 +23,8 @@ import (
 type GoRoot struct {
 }
 
-func (b *GoRoot) NewViewController(id int) *mochi.ViewController {
-	return mochi.NewViewController(func(c mochi.Config) mochi.View {
+func (b *GoRoot) NewViewController(id int) *view.ViewController {
+	return view.NewViewController(func(c view.Config) view.View {
 		return NewNestedView(c)
 	}, id)
 }
@@ -48,50 +50,50 @@ const (
 )
 
 type NestedView struct {
-	*mochi.Embed
+	*view.Embed
 	counter     int
 	ticker      *animate.Ticker
 	floatTicker mochi.Float64Notifier
 }
 
-func NewNestedView(c mochi.Config) *NestedView {
+func NewNestedView(c view.Config) *NestedView {
 	v, ok := c.Prev.(*NestedView)
 	if !ok {
 		v = &NestedView{}
 		v.Embed = c.Embed
 		v.ticker = animate.NewTicker(time.Second * 5)
-		// v.floatTicker = animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 150})
+		v.floatTicker = animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 150})
 		// fmt.Println("Float ticker", v.floatTicker.Value())
 	}
 	return v
 }
 
-func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
-	m := &mochi.ViewModel{}
+func (v *NestedView) Build(ctx *view.BuildContext) *view.ViewModel {
+	m := &view.ViewModel{}
 
 	l := constraint.New()
 	m.Layouter = l
 
-	p := &mochi.PaintStyle{}
+	p := &paint.PaintStyle{}
 	p.BackgroundColor = internal.GreenColor
 	m.Painter = p
 
 	chl1 := basicview.New(ctx.Get("red"))
 	// chl1.Painter = &paint.Style{BackgroundColor: internal.RedColor}
 	// chl1.Painter = &paint.AnimatedStyle{BackgroundColor: internal.RedColor}
-	chl1.Painter = &mochi.PaintStyle{BackgroundColor: internal.RedColor}
+	chl1.Painter = &paint.PaintStyle{BackgroundColor: internal.RedColor}
 	m.Add(chl1)
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
-		s.WidthEqual(constraint.Const(100))
-		s.HeightEqual(constraint.Const(100))
-		// s.WidthEqual(constraint.Notifier(v.floatTicker))
-		// s.HeightEqual(constraint.Notifier(v.floatTicker))
+		// s.WidthEqual(constraint.Const(100))
+		// s.HeightEqual(constraint.Const(100))
+		s.WidthEqual(constraint.Notifier(v.floatTicker))
+		s.HeightEqual(constraint.Notifier(v.floatTicker))
 	})
 
 	chl2 := basicview.New(ctx.Get(chl2id))
-	chl2.Painter = &mochi.PaintStyle{BackgroundColor: internal.YellowColor}
+	chl2.Painter = &paint.PaintStyle{BackgroundColor: internal.YellowColor}
 	m.Add(chl2)
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
@@ -101,7 +103,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl3 := basicview.New(ctx.Get(chl3id))
-	chl3.Painter = &mochi.PaintStyle{BackgroundColor: internal.BlueColor}
+	chl3.Painter = &paint.PaintStyle{BackgroundColor: internal.BlueColor}
 	m.Add(chl3)
 	g3 := l.Add(chl3, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
@@ -111,7 +113,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl4 := basicview.New(ctx.Get(chl4id))
-	chl4.Painter = &mochi.PaintStyle{BackgroundColor: internal.MagentaColor}
+	chl4.Painter = &paint.PaintStyle{BackgroundColor: internal.MagentaColor}
 	m.Add(chl4)
 	g4 := l.Add(chl4, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
@@ -121,7 +123,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl5 := textview.New(ctx.Get(chl5id))
-	chl5.Painter = &mochi.PaintStyle{BackgroundColor: internal.CyanColor}
+	chl5.Painter = &paint.PaintStyle{BackgroundColor: internal.CyanColor}
 	chl5.String = "Subtitle"
 	chl5.Style.SetAlignment(text.AlignmentCenter)
 	chl5.Style.SetStrikethroughStyle(text.StrikethroughStyleSingle)
@@ -140,7 +142,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl6 := textview.New(ctx.Get(chl6id))
-	chl6.Painter = &mochi.PaintStyle{BackgroundColor: internal.RedColor}
+	chl6.Painter = &paint.PaintStyle{BackgroundColor: internal.RedColor}
 	chl6.String = fmt.Sprintf("Counter: %v", v.counter)
 	chl6.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
@@ -153,7 +155,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl8 := imageview.NewURLImageView(ctx.Get(chl8id))
-	chl8.Painter = &mochi.PaintStyle{BackgroundColor: internal.CyanColor}
+	chl8.Painter = &paint.PaintStyle{BackgroundColor: internal.CyanColor}
 	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl8.ResizeMode = imageview.ResizeModeFit
 	// chl8 := imageview.NewImageView(ctx.Get(chl8id))
@@ -168,7 +170,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl9 := button.New(ctx.Get(chl9id))
-	chl9.Painter = &mochi.PaintStyle{BackgroundColor: internal.WhiteColor}
+	chl9.Painter = &paint.PaintStyle{BackgroundColor: internal.WhiteColor}
 	chl9.Text = "Button"
 	chl9.OnPress = func() {
 		v.Lock()
@@ -185,22 +187,22 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	childLayouter := &table.Layout{}
-	childViews := []mochi.View{}
+	childViews := []view.View{}
 	for i := 0; i < 20; i++ {
 		childView := NewTableCell(ctx.Get(i))
 		childView.String = "TEST TEST"
-		childView.Painter = &mochi.PaintStyle{BackgroundColor: internal.RedColor}
+		childView.Painter = &paint.PaintStyle{BackgroundColor: internal.RedColor}
 		childViews = append(childViews, childView)
 		childLayouter.Add(childView)
 	}
 
 	scrollChild := basicview.New(ctx.Get(scrollChildId))
-	scrollChild.Painter = &mochi.PaintStyle{BackgroundColor: internal.WhiteColor}
+	scrollChild.Painter = &paint.PaintStyle{BackgroundColor: internal.WhiteColor}
 	scrollChild.Layouter = childLayouter
 	scrollChild.Children = childViews
 
 	chl10 := scrollview.New(ctx.Get(scrollId))
-	chl10.Painter = &mochi.PaintStyle{BackgroundColor: internal.CyanColor}
+	chl10.Painter = &paint.PaintStyle{BackgroundColor: internal.CyanColor}
 	chl10.ContentView = scrollChild
 	m.Add(chl10)
 	_ = l.Add(chl10, func(s *constraint.Solver) {
@@ -222,12 +224,12 @@ const (
 )
 
 type TableCell struct {
-	*mochi.Embed
+	*view.Embed
 	String  string
-	Painter mochi.Painter
+	Painter paint.Painter
 }
 
-func NewTableCell(c mochi.Config) *TableCell {
+func NewTableCell(c view.Config) *TableCell {
 	v, ok := c.Prev.(*TableCell)
 	if !ok {
 		v = &TableCell{}
@@ -236,9 +238,9 @@ func NewTableCell(c mochi.Config) *TableCell {
 	return v
 }
 
-func (v *TableCell) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
+func (v *TableCell) Build(ctx *view.BuildContext) *view.ViewModel {
 	l := constraint.New()
-	n := &mochi.ViewModel{}
+	n := &view.ViewModel{}
 	n.Layouter = l
 	n.Painter = v.Painter
 

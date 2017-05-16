@@ -5,11 +5,11 @@ import (
 )
 
 type Layout struct {
-	Guide       mochi.Guide
-	ChildGuides map[mochi.Id]mochi.Guide
+	Guide       layout.Guide
+	ChildGuides map[mochi.Id]layout.Guide
 }
 
-func (l *Layout) Layout(ctx *mochi.LayoutContext) (mochi.Guide, map[mochi.Id]mochi.Guide) {
+func (l *Layout) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
 	return l.Guide, l.ChildGuides
 }
 

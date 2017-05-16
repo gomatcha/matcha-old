@@ -4,7 +4,10 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/overcyn/mochi"
+	// "github.com/overcyn/mochi"
+	// "github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/paint"
+	"github.com/overcyn/mochi/view"
 	"golang.org/x/image/bmp"
 	"image"
 	_ "image/jpeg"
@@ -17,8 +20,8 @@ const (
 )
 
 type URLImageView struct {
-	*mochi.Embed
-	Painter    mochi.Painter
+	*view.Embed
+	Painter    paint.Painter
 	ResizeMode ResizeMode
 	URL        string
 	// Image request
@@ -28,7 +31,7 @@ type URLImageView struct {
 	err    error
 }
 
-func NewURLImageView(c mochi.Config) *URLImageView {
+func NewURLImageView(c view.Config) *URLImageView {
 	v, ok := c.Prev.(*URLImageView)
 	if !ok {
 		v = &URLImageView{}
@@ -37,7 +40,7 @@ func NewURLImageView(c mochi.Config) *URLImageView {
 	return v
 }
 
-func (v *URLImageView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
+func (v *URLImageView) Build(ctx *view.BuildContext) *view.ViewModel {
 	if v.URL != v.url {
 		if v.cancel != nil {
 			v.cancel()
@@ -65,7 +68,7 @@ func (v *URLImageView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 		}(v.url)
 	}
 
-	n := &mochi.ViewModel{}
+	n := &view.ViewModel{}
 	n.Painter = v.Painter
 
 	chl := NewImageView(ctx.Get(urlImageViewId))
@@ -102,15 +105,15 @@ const (
 )
 
 type ImageView struct {
-	*mochi.Embed
-	Painter    mochi.Painter
+	*view.Embed
+	Painter    paint.Painter
 	Image      image.Image
 	ResizeMode ResizeMode
 	image      image.Image
 	bytes      []byte
 }
 
-func NewImageView(c mochi.Config) *ImageView {
+func NewImageView(c view.Config) *ImageView {
 	v, ok := c.Prev.(*ImageView)
 	if !ok {
 		v = &ImageView{}
@@ -119,7 +122,7 @@ func NewImageView(c mochi.Config) *ImageView {
 	return v
 }
 
-func (v *ImageView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
+func (v *ImageView) Build(ctx *view.BuildContext) *view.ViewModel {
 	if v.Image != v.image {
 		v.image = v.Image
 
@@ -131,7 +134,7 @@ func (v *ImageView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 		v.bytes = buf.Bytes()
 	}
 
-	n := &mochi.ViewModel{}
+	n := &view.ViewModel{}
 	n.Painter = v.Painter
 	n.Bridge.Name = "github.com/overcyn/mochi/view/imageview"
 	n.Bridge.State = struct {

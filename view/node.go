@@ -1,27 +1,28 @@
-package mochi
+package view
 
 import (
 	"fmt"
+	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/internal"
+	"github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochibridge"
 	"strings"
 	"sync"
 	"time"
 )
 
-type Id int64
-
 type View interface {
 	Build(*BuildContext) *ViewModel
 	// Lifecyle(*Stage)
-	Id() Id
+	Id() mochi.Id
 	Lock()
 	Unlock()
 }
 
 type Embed struct {
 	mu   *sync.Mutex
-	id   Id
+	id   mochi.Id
 	root *root
 }
 
@@ -29,7 +30,7 @@ func (e *Embed) Build(ctx *BuildContext) *ViewModel {
 	return &ViewModel{}
 }
 
-func (e *Embed) Id() Id {
+func (e *Embed) Id() mochi.Id {
 	return e.id
 }
 
@@ -51,9 +52,9 @@ type Bridge struct {
 }
 
 type ViewModel struct {
-	Children map[Id]View
-	Layouter Layouter
-	Painter  Painter
+	Children map[mochi.Id]View
+	Layouter layout.Layouter
+	Painter  paint.Painter
 	Bridge   Bridge
 
 	// Context map[string] interface{}
@@ -66,20 +67,20 @@ type ViewModel struct {
 
 func (n *ViewModel) Add(v View) {
 	if n.Children == nil {
-		n.Children = map[Id]View{}
+		n.Children = map[mochi.Id]View{}
 	}
 	n.Children[v.Id()] = v
 }
 
 type RenderNode struct {
-	Id           Id
+	Id           mochi.Id
 	BuildId      int64
 	LayoutId     int64
 	PaintId      int64
-	Children     map[Id]*RenderNode
+	Children     map[mochi.Id]*RenderNode
 	Bridge       Bridge
-	LayoutGuide  *Guide
-	PaintOptions PaintStyle
+	LayoutGuide  *layout.Guide
+	PaintOptions paint.PaintStyle
 }
 
 func (n *RenderNode) DebugString() string {
@@ -104,7 +105,7 @@ type ViewController struct {
 	mu         *sync.Mutex
 	root       *root
 	renderNode *RenderNode
-	size       Point
+	size       mochi.Point
 	ticker     *internal.Ticker
 }
 
@@ -137,7 +138,7 @@ func (vc *ViewController) Render() *RenderNode {
 	return rn
 }
 
-func (vc *ViewController) SetSize(p Point) {
+func (vc *ViewController) SetSize(p mochi.Point) {
 	vc.mu.Lock()
 	defer vc.mu.Unlock()
 
@@ -150,7 +151,7 @@ type Config struct {
 }
 
 type viewCacheKey struct {
-	id  Id
+	id  mochi.Id
 	key interface{}
 }
 
@@ -185,12 +186,12 @@ func (f updateFlag) needsPaint() bool {
 type root struct {
 	mu          sync.Mutex
 	node        *node
-	ids         map[viewCacheKey]Id
-	prevIds     map[viewCacheKey]Id
-	nodes       map[Id]*node
-	prevNodes   map[Id]*node
-	maxId       Id
-	updateFlags map[Id]updateFlag
+	ids         map[viewCacheKey]mochi.Id
+	prevIds     map[viewCacheKey]mochi.Id
+	nodes       map[mochi.Id]*node
+	prevNodes   map[mochi.Id]*node
+	maxId       mochi.Id
+	updateFlags map[mochi.Id]updateFlag
 }
 
 func newRoot(f func(Config) View) *root {
@@ -208,18 +209,18 @@ func newRoot(f func(Config) View) *root {
 		root: root,
 	}
 	root.node = node
-	root.updateFlags = map[Id]updateFlag{id: buildFlag}
+	root.updateFlags = map[mochi.Id]updateFlag{id: buildFlag}
 	return root
 }
 
-func (root *root) addFlag(id Id, f updateFlag) {
+func (root *root) addFlag(id mochi.Id, f updateFlag) {
 	root.mu.Lock()
 	defer root.mu.Unlock()
 
 	root.updateFlags[id] |= f
 }
 
-func (root *root) update(size Point) {
+func (root *root) update(size mochi.Point) {
 	root.mu.Lock()
 	defer root.mu.Unlock()
 
@@ -233,12 +234,12 @@ func (root *root) update(size Point) {
 		root.build()
 	}
 	if flag.needsLayout() {
-		root.layout(Pt(0, 0), size)
+		root.layout(mochi.Pt(0, 0), size)
 	}
 	if flag.needsPaint() {
 		root.paint()
 	}
-	root.updateFlags = map[Id]updateFlag{}
+	root.updateFlags = map[mochi.Id]updateFlag{}
 }
 
 func (root *root) renderNode() *RenderNode {
@@ -250,12 +251,12 @@ func (root *root) renderNode() *RenderNode {
 
 func (root *root) build() {
 	root.prevIds = root.ids
-	root.ids = map[viewCacheKey]Id{}
+	root.ids = map[viewCacheKey]mochi.Id{}
 	root.prevNodes = root.nodes
-	root.nodes = map[Id]*node{}
+	root.nodes = map[mochi.Id]*node{}
 	root.node.build()
 
-	keys := map[Id]viewCacheKey{}
+	keys := map[mochi.Id]viewCacheKey{}
 	for k, v := range root.ids {
 		keys[v] = k
 	}
@@ -263,7 +264,7 @@ func (root *root) build() {
 		keys[v] = k
 	}
 
-	ids := map[viewCacheKey]Id{}
+	ids := map[viewCacheKey]mochi.Id{}
 	for k := range root.nodes {
 		ids[keys[k]] = k
 	}
@@ -274,35 +275,35 @@ func (root *root) paint() {
 	root.node.paint()
 }
 
-func (root *root) layout(minSize Point, maxSize Point) {
+func (root *root) layout(minSize mochi.Point, maxSize mochi.Point) {
 	g := root.node.layout(minSize, maxSize)
-	g.Frame = g.Frame.Add(Pt(-g.Frame.Min.X, -g.Frame.Min.Y)) // Move Frame.Min to the origin.
+	g.Frame = g.Frame.Add(mochi.Pt(-g.Frame.Min.X, -g.Frame.Min.Y)) // Move Frame.Min to the origin.
 	root.node.layoutGuide = &g
 }
 
-func (root *root) newId() Id {
+func (root *root) newId() mochi.Id {
 	root.maxId += 1
 	return root.maxId
 }
 
 type node struct {
-	id   Id
+	id   mochi.Id
 	root *root
 	view View
 
 	buildId   int64
 	viewModel *ViewModel
-	children  map[Id]*node
+	children  map[mochi.Id]*node
 
 	layoutId    int64
 	layoutChan  chan struct{}
 	layoutDone  chan struct{}
-	layoutGuide *Guide
+	layoutGuide *layout.Guide
 
 	paintId      int64
 	paintChan    chan struct{}
 	paintDone    chan struct{}
-	paintOptions PaintStyle
+	paintOptions paint.PaintStyle
 }
 
 func (n *node) get(key interface{}) Config {
@@ -333,7 +334,7 @@ func (n *node) renderNode() *RenderNode {
 		BuildId:      n.buildId,
 		LayoutId:     n.layoutId,
 		PaintId:      n.paintId,
-		Children:     map[Id]*RenderNode{},
+		Children:     map[mochi.Id]*RenderNode{},
 		Bridge:       n.viewModel.Bridge,
 		LayoutGuide:  n.layoutGuide,
 		PaintOptions: n.paintOptions,
@@ -352,9 +353,9 @@ func (n *node) build() {
 		viewModel := n.view.Build(&BuildContext{node: n})
 
 		// Diff the old children (n.children) with new children (viewModel.Children).
-		addedIds := []Id{}
-		removedIds := []Id{}
-		unchangedIds := []Id{}
+		addedIds := []mochi.Id{}
+		removedIds := []mochi.Id{}
+		unchangedIds := []mochi.Id{}
 		for id := range n.children {
 			if _, ok := viewModel.Children[id]; !ok {
 				removedIds = append(removedIds, id)
@@ -368,7 +369,7 @@ func (n *node) build() {
 			}
 		}
 
-		children := map[Id]*node{}
+		children := map[mochi.Id]*node{}
 		// Add build contexts for new children.
 		for _, id := range addedIds {
 			var view View
@@ -381,7 +382,7 @@ func (n *node) build() {
 			children[id] = &node{
 				id:       id,
 				view:     view,
-				children: map[Id]*node{},
+				children: map[mochi.Id]*node{},
 				root:     n.root,
 			}
 		}
@@ -464,15 +465,18 @@ func (n *node) build() {
 	}
 }
 
-func (n *node) layout(minSize Point, maxSize Point) Guide {
+func (n *node) layout(minSize mochi.Point, maxSize mochi.Point) layout.Guide {
 	n.layoutId += 1
 
 	// Create the LayoutContext
-	ctx := &LayoutContext{
+	ctx := &layout.LayoutContext{
 		MinSize:  minSize,
 		MaxSize:  maxSize,
-		ChildIds: []Id{},
-		node:     n,
+		ChildIds: []mochi.Id{},
+		LayoutFunc: func(id mochi.Id, minSize, maxSize mochi.Point) layout.Guide {
+			// n :=  // TODO(KD): FIX!!!!!!!!!!
+			return n.children[id].layout(minSize, maxSize)
+		},
 	}
 	for i := range n.children {
 		ctx.ChildIds = append(ctx.ChildIds, i)
@@ -481,10 +485,10 @@ func (n *node) layout(minSize Point, maxSize Point) Guide {
 	// Perform layout
 	layouter := n.viewModel.Layouter
 	if layouter == nil {
-		layouter = &FullLayout{}
+		layouter = &layout.FullLayout{}
 	}
 	g, gs := layouter.Layout(ctx)
-	g = g.fit(ctx)
+	g = g.Fit(ctx)
 
 	// Assign guides to children
 	for k, v := range gs {
@@ -501,7 +505,7 @@ func (n *node) paint() {
 		if p := n.viewModel.Painter; p != nil {
 			n.paintOptions = p.PaintStyle()
 		} else {
-			n.paintOptions = PaintStyle{}
+			n.paintOptions = paint.PaintStyle{}
 		}
 	}
 
