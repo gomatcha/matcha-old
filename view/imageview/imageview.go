@@ -22,11 +22,12 @@ type URLImageView struct {
 	Painter    paint.Painter
 	ResizeMode ResizeMode
 	URL        string
+	stage      view.Stage
 	// Image request
-	url    string
-	cancel context.CancelFunc
-	image  image.Image
-	err    error
+	url        string
+	cancelFunc context.CancelFunc
+	image      image.Image
+	err        error
 }
 
 func NewURLImageView(c view.Config) *URLImageView {
@@ -39,14 +40,36 @@ func NewURLImageView(c view.Config) *URLImageView {
 }
 
 func (v *URLImageView) Build(ctx *view.Context) *view.Model {
-	if v.URL != v.url {
-		if v.cancel != nil {
-			v.cancel()
-		}
+	v.reload()
 
-		c, cancel := context.WithCancel(context.Background())
+	n := &view.Model{}
+	n.Painter = v.Painter
+
+	chl := NewImageView(ctx.Get(urlImageViewId))
+	chl.ResizeMode = v.ResizeMode
+	chl.Image = v.image
+	n.Add(chl)
+
+	return n
+}
+
+func (v *URLImageView) Lifecycle(from, to view.Stage) {
+	v.stage = to
+	v.reload()
+}
+
+func (v *URLImageView) reload() {
+	if v.stage < view.StageMounted {
+		v.cancel()
+		return
+	}
+
+	if v.URL != v.url || v.cancelFunc == nil {
+		v.cancel()
+
+		c, cancelFunc := context.WithCancel(context.Background())
 		v.url = v.URL
-		v.cancel = cancel
+		v.cancelFunc = cancelFunc
 		v.image = nil
 		v.err = nil
 		go func(url string) {
@@ -58,23 +81,20 @@ func (v *URLImageView) Build(ctx *view.Context) *view.Model {
 			select {
 			case <-c.Done():
 			default:
-				v.cancel()
+				v.cancelFunc()
 				v.image = image
 				v.err = err
 				v.Update(nil)
 			}
 		}(v.url)
 	}
+}
 
-	n := &view.Model{}
-	n.Painter = v.Painter
-
-	chl := NewImageView(ctx.Get(urlImageViewId))
-	chl.ResizeMode = v.ResizeMode
-	chl.Image = v.image
-	n.Add(chl)
-
-	return n
+func (v *URLImageView) cancel() {
+	if v.cancelFunc != nil {
+		v.cancelFunc()
+		v.cancelFunc = nil
+	}
 }
 
 func (v *URLImageView) String() string {

@@ -255,9 +255,10 @@ func (root *root) newId() mochi.Id {
 }
 
 type node struct {
-	id   mochi.Id
-	root *root
-	view View
+	id    mochi.Id
+	root  *root
+	view  View
+	stage Stage
 
 	buildId   int64
 	viewModel *Model
@@ -347,9 +348,14 @@ func (n *node) build() {
 					break
 				}
 			}
+
+			// Send lifecycle event to new children.
+			view.Lifecycle(StageDead, StageVisible)
+
 			children[id] = &node{
 				id:       id,
 				view:     view,
+				stage:    StageVisible,
 				children: map[mochi.Id]*node{},
 				root:     n.root,
 			}
@@ -357,6 +363,12 @@ func (n *node) build() {
 		// Reuse old context for unupdated keys.
 		for _, id := range unchangedIds {
 			children[id] = n.children[id]
+		}
+		// Send lifecycle event to removed childern.
+		for _, id := range removedIds {
+			removed := n.children[id]
+			removed.view.Lifecycle(removed.stage, StageDead)
+			removed.stage = StageDead
 		}
 
 		// Mark all children as needing rebuild since we rebuilt.
