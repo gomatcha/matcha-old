@@ -24,8 +24,8 @@ func New(c view.Config) *BasicView {
 	return v
 }
 
-func (v *BasicView) Build(ctx *view.BuildContext) *view.ViewModel {
-	n := &view.ViewModel{
+func (v *BasicView) Build(ctx *view.Context) *view.Model {
+	n := &view.Model{
 		Painter:  v.Painter,
 		Layouter: v.Layouter,
 	}

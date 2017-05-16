@@ -265,7 +265,7 @@ type Solver struct {
 	constraints []constraint
 }
 
-func (s *Solver) solve(sys *System, ctx *layout.LayoutContext) {
+func (s *Solver) solve(sys *System, ctx *layout.Context) {
 	cr := newConstrainedRect()
 
 	for _, i := range s.constraints {
@@ -502,7 +502,7 @@ func (sys *System) MaxGuide() *Guide {
 	return sys.max
 }
 
-func (sys *System) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (sys *System) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	sys.min.mochiGuide = &layout.Guide{
 		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}

@@ -13,7 +13,7 @@ type textViewLayouter struct {
 	formattedText *text.Text
 }
 
-func (l *textViewLayouter) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (l *textViewLayouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	size := textSize(l.formattedText, ctx.MaxSize)
 	g := layout.Guide{Frame: mochi.Rt(0, 0, size.X, size.Y)}
 	return g, nil
@@ -54,7 +54,7 @@ func New(c view.Config) *TextView {
 	return v
 }
 
-func (v *TextView) Build(ctx *view.BuildContext) *view.ViewModel {
+func (v *TextView) Build(ctx *view.Context) *view.Model {
 	ft := v.Text
 	if ft == nil {
 		ft = &text.Text{}
@@ -62,7 +62,7 @@ func (v *TextView) Build(ctx *view.BuildContext) *view.ViewModel {
 		ft.SetStyle(v.Style)
 	}
 
-	n := &view.ViewModel{}
+	n := &view.Model{}
 	n.Layouter = &textViewLayouter{formattedText: ft}
 	n.Painter = v.Painter
 	n.Bridge.Name = "github.com/overcyn/mochi/view/textview"

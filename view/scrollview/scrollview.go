@@ -29,8 +29,8 @@ func New(c view.Config) *ScrollView {
 	return v
 }
 
-func (v *ScrollView) Build(ctx *view.BuildContext) *view.ViewModel {
-	n := &view.ViewModel{}
+func (v *ScrollView) Build(ctx *view.Context) *view.Model {
+	n := &view.Model{}
 	n.Painter = v.Painter
 	n.Layouter = &scrollViewLayouter{}
 
@@ -54,7 +54,7 @@ func (v *ScrollView) Build(ctx *view.BuildContext) *view.ViewModel {
 type scrollViewLayouter struct {
 }
 
-func (l *scrollViewLayouter) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (l *scrollViewLayouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	gs := map[mochi.Id]layout.Guide{}
 	if len(ctx.ChildIds) > 0 {
 		g := ctx.LayoutChild(ctx.ChildIds[0], ctx.MinSize, mochi.Pt(math.Inf(1), math.Inf(1)))

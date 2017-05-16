@@ -5,6 +5,7 @@ import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/internal"
 	"github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/layout/full"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochibridge"
 	"strings"
@@ -13,7 +14,7 @@ import (
 )
 
 type View interface {
-	Build(*BuildContext) *ViewModel
+	Build(*Context) *Model
 	// Lifecyle(*Stage)
 	Id() mochi.Id
 	Lock()
@@ -26,8 +27,8 @@ type Embed struct {
 	root *root
 }
 
-func (e *Embed) Build(ctx *BuildContext) *ViewModel {
-	return &ViewModel{}
+func (e *Embed) Build(ctx *Context) *Model {
+	return &Model{}
 }
 
 func (e *Embed) Id() mochi.Id {
@@ -51,7 +52,7 @@ type Bridge struct {
 	State interface{}
 }
 
-type ViewModel struct {
+type Model struct {
 	Children map[mochi.Id]View
 	Layouter layout.Layouter
 	Painter  paint.Painter
@@ -65,7 +66,7 @@ type ViewModel struct {
 	// LayoutData?
 }
 
-func (n *ViewModel) Add(v View) {
+func (n *Model) Add(v View) {
 	if n.Children == nil {
 		n.Children = map[mochi.Id]View{}
 	}
@@ -80,7 +81,7 @@ type RenderNode struct {
 	Children     map[mochi.Id]*RenderNode
 	Bridge       Bridge
 	LayoutGuide  *layout.Guide
-	PaintOptions paint.PaintStyle
+	PaintOptions paint.Style
 }
 
 func (n *RenderNode) DebugString() string {
@@ -155,11 +156,11 @@ type viewCacheKey struct {
 	key interface{}
 }
 
-type BuildContext struct {
+type Context struct {
 	node *node
 }
 
-func (ctx *BuildContext) Get(key interface{}) Config {
+func (ctx *Context) Get(key interface{}) Config {
 	return ctx.node.get(key)
 }
 
@@ -292,7 +293,7 @@ type node struct {
 	view View
 
 	buildId   int64
-	viewModel *ViewModel
+	viewModel *Model
 	children  map[mochi.Id]*node
 
 	layoutId    int64
@@ -303,7 +304,7 @@ type node struct {
 	paintId      int64
 	paintChan    chan struct{}
 	paintDone    chan struct{}
-	paintOptions paint.PaintStyle
+	paintOptions paint.Style
 }
 
 func (n *node) get(key interface{}) Config {
@@ -350,7 +351,7 @@ func (n *node) build() {
 		n.buildId += 1
 
 		// Generate the new viewModel.
-		viewModel := n.view.Build(&BuildContext{node: n})
+		viewModel := n.view.Build(&Context{node: n})
 
 		// Diff the old children (n.children) with new children (viewModel.Children).
 		addedIds := []mochi.Id{}
@@ -469,7 +470,7 @@ func (n *node) layout(minSize mochi.Point, maxSize mochi.Point) layout.Guide {
 	n.layoutId += 1
 
 	// Create the LayoutContext
-	ctx := &layout.LayoutContext{
+	ctx := &layout.Context{
 		MinSize:  minSize,
 		MaxSize:  maxSize,
 		ChildIds: []mochi.Id{},
@@ -485,7 +486,7 @@ func (n *node) layout(minSize mochi.Point, maxSize mochi.Point) layout.Guide {
 	// Perform layout
 	layouter := n.viewModel.Layouter
 	if layouter == nil {
-		layouter = &layout.FullLayout{}
+		layouter = &full.Layout{}
 	}
 	g, gs := layouter.Layout(ctx)
 	g = g.Fit(ctx)
@@ -505,7 +506,7 @@ func (n *node) paint() {
 		if p := n.viewModel.Painter; p != nil {
 			n.paintOptions = p.PaintStyle()
 		} else {
-			n.paintOptions = paint.PaintStyle{}
+			n.paintOptions = paint.Style{}
 		}
 	}
 

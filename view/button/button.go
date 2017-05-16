@@ -19,7 +19,7 @@ type buttonLayouter struct {
 	formattedText *text.Text
 }
 
-func (l *buttonLayouter) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (l *buttonLayouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	size := textSize(l.formattedText, ctx.MaxSize)
 	g := layout.Guide{Frame: mochi.Rt(0, 0, size.X+padding*2, size.Y+padding*2)}
 	return g, nil
@@ -50,7 +50,7 @@ func New(c view.Config) *Button {
 	return v
 }
 
-func (v *Button) Build(ctx *view.BuildContext) *view.ViewModel {
+func (v *Button) Build(ctx *view.Context) *view.Model {
 	ft := &text.Text{}
 	ft.SetString(v.Text)
 	ft.Style().SetAlignment(text.AlignmentCenter)
@@ -59,7 +59,7 @@ func (v *Button) Build(ctx *view.BuildContext) *view.ViewModel {
 		Size:   20,
 	})
 
-	n := &view.ViewModel{
+	n := &view.Model{
 		Layouter: &buttonLayouter{formattedText: ft},
 		Painter:  v.Painter,
 	}

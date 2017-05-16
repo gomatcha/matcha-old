@@ -25,7 +25,7 @@ func (l *Layout) Add(v view.View) {
 	l.Ids = append(l.Ids, v.Id())
 }
 
-func (l *Layout) Layout(ctx *layout.LayoutContext) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	g := layout.Guide{}
 	gs := map[mochi.Id]layout.Guide{}
 	y := 0.0

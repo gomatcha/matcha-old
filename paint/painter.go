@@ -6,11 +6,11 @@ import (
 )
 
 type Painter interface {
-	PaintStyle() PaintStyle
+	PaintStyle() Style
 	mochi.Notifier
 }
 
-type PaintStyle struct {
+type Style struct {
 	Alpha           float64
 	BackgroundColor color.Color
 	BorderColor     color.Color
@@ -24,20 +24,20 @@ type PaintStyle struct {
 	// Mask
 }
 
-func (p *PaintStyle) PaintStyle() PaintStyle {
+func (p *Style) PaintStyle() Style {
 	return *p
 }
 
-func (p *PaintStyle) Notify() chan struct{} {
+func (p *Style) Notify() chan struct{} {
 	return nil // no-op
 }
 
-func (p *PaintStyle) Unnotify(chan struct{}) {
+func (p *Style) Unnotify(chan struct{}) {
 	// no-op
 }
 
 type AnimatedPaintStyle struct {
-	Style PaintStyle
+	Style Style
 
 	// Alpha           Float64Notifier
 	// BackgroundColor ColorNotifier
@@ -50,7 +50,7 @@ type AnimatedPaintStyle struct {
 	// ShadowColor     ColorNotifier
 }
 
-func (p *AnimatedPaintStyle) PaintStyle() PaintStyle {
+func (p *AnimatedPaintStyle) PaintStyle() Style {
 	return p.Style
 }
 

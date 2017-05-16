@@ -40,7 +40,7 @@ func NewURLImageView(c view.Config) *URLImageView {
 	return v
 }
 
-func (v *URLImageView) Build(ctx *view.BuildContext) *view.ViewModel {
+func (v *URLImageView) Build(ctx *view.Context) *view.Model {
 	if v.URL != v.url {
 		if v.cancel != nil {
 			v.cancel()
@@ -68,7 +68,7 @@ func (v *URLImageView) Build(ctx *view.BuildContext) *view.ViewModel {
 		}(v.url)
 	}
 
-	n := &view.ViewModel{}
+	n := &view.Model{}
 	n.Painter = v.Painter
 
 	chl := NewImageView(ctx.Get(urlImageViewId))
@@ -122,7 +122,7 @@ func NewImageView(c view.Config) *ImageView {
 	return v
 }
 
-func (v *ImageView) Build(ctx *view.BuildContext) *view.ViewModel {
+func (v *ImageView) Build(ctx *view.Context) *view.Model {
 	if v.Image != v.image {
 		v.image = v.Image
 
@@ -134,7 +134,7 @@ func (v *ImageView) Build(ctx *view.BuildContext) *view.ViewModel {
 		v.bytes = buf.Bytes()
 	}
 
-	n := &view.ViewModel{}
+	n := &view.Model{}
 	n.Painter = v.Painter
 	n.Bridge.Name = "github.com/overcyn/mochi/view/imageview"
 	n.Bridge.State = struct {

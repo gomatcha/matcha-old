@@ -68,32 +68,28 @@ func NewNestedView(c view.Config) *NestedView {
 	return v
 }
 
-func (v *NestedView) Build(ctx *view.BuildContext) *view.ViewModel {
-	m := &view.ViewModel{}
+func (v *NestedView) Build(ctx *view.Context) *view.Model {
+	m := &view.Model{}
 
 	l := constraint.New()
 	m.Layouter = l
 
-	p := &paint.PaintStyle{}
+	p := &paint.Style{}
 	p.BackgroundColor = internal.GreenColor
 	m.Painter = p
 
 	chl1 := basicview.New(ctx.Get("red"))
-	// chl1.Painter = &paint.Style{BackgroundColor: internal.RedColor}
-	// chl1.Painter = &paint.AnimatedStyle{BackgroundColor: internal.RedColor}
-	chl1.Painter = &paint.PaintStyle{BackgroundColor: internal.RedColor}
+	chl1.Painter = &paint.Style{BackgroundColor: internal.RedColor}
 	m.Add(chl1)
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
-		// s.WidthEqual(constraint.Const(100))
-		// s.HeightEqual(constraint.Const(100))
 		s.WidthEqual(constraint.Notifier(v.floatTicker))
 		s.HeightEqual(constraint.Notifier(v.floatTicker))
 	})
 
 	chl2 := basicview.New(ctx.Get(chl2id))
-	chl2.Painter = &paint.PaintStyle{BackgroundColor: internal.YellowColor}
+	chl2.Painter = &paint.Style{BackgroundColor: internal.YellowColor}
 	m.Add(chl2)
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
@@ -103,7 +99,7 @@ func (v *NestedView) Build(ctx *view.BuildContext) *view.ViewModel {
 	})
 
 	chl3 := basicview.New(ctx.Get(chl3id))
-	chl3.Painter = &paint.PaintStyle{BackgroundColor: internal.BlueColor}
+	chl3.Painter = &paint.Style{BackgroundColor: internal.BlueColor}
 	m.Add(chl3)
 	g3 := l.Add(chl3, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
@@ -113,7 +109,7 @@ func (v *NestedView) Build(ctx *view.BuildContext) *view.ViewModel {
 	})
 
 	chl4 := basicview.New(ctx.Get(chl4id))
-	chl4.Painter = &paint.PaintStyle{BackgroundColor: internal.MagentaColor}
+	chl4.Painter = &paint.Style{BackgroundColor: internal.MagentaColor}
 	m.Add(chl4)
 	g4 := l.Add(chl4, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
@@ -123,7 +119,7 @@ func (v *NestedView) Build(ctx *view.BuildContext) *view.ViewModel {
 	})
 
 	chl5 := textview.New(ctx.Get(chl5id))
-	chl5.Painter = &paint.PaintStyle{BackgroundColor: internal.CyanColor}
+	chl5.Painter = &paint.Style{BackgroundColor: internal.CyanColor}
 	chl5.String = "Subtitle"
 	chl5.Style.SetAlignment(text.AlignmentCenter)
 	chl5.Style.SetStrikethroughStyle(text.StrikethroughStyleSingle)
@@ -142,7 +138,7 @@ func (v *NestedView) Build(ctx *view.BuildContext) *view.ViewModel {
 	})
 
 	chl6 := textview.New(ctx.Get(chl6id))
-	chl6.Painter = &paint.PaintStyle{BackgroundColor: internal.RedColor}
+	chl6.Painter = &paint.Style{BackgroundColor: internal.RedColor}
 	chl6.String = fmt.Sprintf("Counter: %v", v.counter)
 	chl6.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
@@ -155,7 +151,7 @@ func (v *NestedView) Build(ctx *view.BuildContext) *view.ViewModel {
 	})
 
 	chl8 := imageview.NewURLImageView(ctx.Get(chl8id))
-	chl8.Painter = &paint.PaintStyle{BackgroundColor: internal.CyanColor}
+	chl8.Painter = &paint.Style{BackgroundColor: internal.CyanColor}
 	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl8.ResizeMode = imageview.ResizeModeFit
 	// chl8 := imageview.NewImageView(ctx.Get(chl8id))
@@ -170,7 +166,7 @@ func (v *NestedView) Build(ctx *view.BuildContext) *view.ViewModel {
 	})
 
 	chl9 := button.New(ctx.Get(chl9id))
-	chl9.Painter = &paint.PaintStyle{BackgroundColor: internal.WhiteColor}
+	chl9.Painter = &paint.Style{BackgroundColor: internal.WhiteColor}
 	chl9.Text = "Button"
 	chl9.OnPress = func() {
 		v.Lock()
@@ -191,18 +187,18 @@ func (v *NestedView) Build(ctx *view.BuildContext) *view.ViewModel {
 	for i := 0; i < 20; i++ {
 		childView := NewTableCell(ctx.Get(i))
 		childView.String = "TEST TEST"
-		childView.Painter = &paint.PaintStyle{BackgroundColor: internal.RedColor}
+		childView.Painter = &paint.Style{BackgroundColor: internal.RedColor}
 		childViews = append(childViews, childView)
 		childLayouter.Add(childView)
 	}
 
 	scrollChild := basicview.New(ctx.Get(scrollChildId))
-	scrollChild.Painter = &paint.PaintStyle{BackgroundColor: internal.WhiteColor}
+	scrollChild.Painter = &paint.Style{BackgroundColor: internal.WhiteColor}
 	scrollChild.Layouter = childLayouter
 	scrollChild.Children = childViews
 
 	chl10 := scrollview.New(ctx.Get(scrollId))
-	chl10.Painter = &paint.PaintStyle{BackgroundColor: internal.CyanColor}
+	chl10.Painter = &paint.Style{BackgroundColor: internal.CyanColor}
 	chl10.ContentView = scrollChild
 	m.Add(chl10)
 	_ = l.Add(chl10, func(s *constraint.Solver) {
@@ -238,9 +234,9 @@ func NewTableCell(c view.Config) *TableCell {
 	return v
 }
 
-func (v *TableCell) Build(ctx *view.BuildContext) *view.ViewModel {
+func (v *TableCell) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
-	n := &view.ViewModel{}
+	n := &view.Model{}
 	n.Layouter = l
 	n.Painter = v.Painter
 
