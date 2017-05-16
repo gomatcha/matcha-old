@@ -106,7 +106,7 @@ type ViewController struct {
 	mu         *sync.Mutex
 	root       *root
 	renderNode *RenderNode
-	size       mochi.Point
+	size       layout.Point
 	ticker     *internal.Ticker
 }
 
@@ -139,7 +139,7 @@ func (vc *ViewController) Render() *RenderNode {
 	return rn
 }
 
-func (vc *ViewController) SetSize(p mochi.Point) {
+func (vc *ViewController) SetSize(p layout.Point) {
 	vc.mu.Lock()
 	defer vc.mu.Unlock()
 
@@ -221,7 +221,7 @@ func (root *root) addFlag(id mochi.Id, f updateFlag) {
 	root.updateFlags[id] |= f
 }
 
-func (root *root) update(size mochi.Point) {
+func (root *root) update(size layout.Point) {
 	root.mu.Lock()
 	defer root.mu.Unlock()
 
@@ -235,7 +235,7 @@ func (root *root) update(size mochi.Point) {
 		root.build()
 	}
 	if flag.needsLayout() {
-		root.layout(mochi.Pt(0, 0), size)
+		root.layout(layout.Pt(0, 0), size)
 	}
 	if flag.needsPaint() {
 		root.paint()
@@ -276,9 +276,9 @@ func (root *root) paint() {
 	root.node.paint()
 }
 
-func (root *root) layout(minSize mochi.Point, maxSize mochi.Point) {
+func (root *root) layout(minSize layout.Point, maxSize layout.Point) {
 	g := root.node.layout(minSize, maxSize)
-	g.Frame = g.Frame.Add(mochi.Pt(-g.Frame.Min.X, -g.Frame.Min.Y)) // Move Frame.Min to the origin.
+	g.Frame = g.Frame.Add(layout.Pt(-g.Frame.Min.X, -g.Frame.Min.Y)) // Move Frame.Min to the origin.
 	root.node.layoutGuide = &g
 }
 
@@ -466,7 +466,7 @@ func (n *node) build() {
 	}
 }
 
-func (n *node) layout(minSize mochi.Point, maxSize mochi.Point) layout.Guide {
+func (n *node) layout(minSize layout.Point, maxSize layout.Point) layout.Guide {
 	n.layoutId += 1
 
 	// Create the LayoutContext
@@ -474,7 +474,7 @@ func (n *node) layout(minSize mochi.Point, maxSize mochi.Point) layout.Guide {
 		MinSize:  minSize,
 		MaxSize:  maxSize,
 		ChildIds: []mochi.Id{},
-		LayoutFunc: func(id mochi.Id, minSize, maxSize mochi.Point) layout.Guide {
+		LayoutFunc: func(id mochi.Id, minSize, maxSize layout.Point) layout.Guide {
 			// n :=  // TODO(KD): FIX!!!!!!!!!!
 			return n.children[id].layout(minSize, maxSize)
 		},

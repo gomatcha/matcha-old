@@ -329,12 +329,12 @@ func (s *Solver) solve(sys *System, ctx *layout.Context) {
 		_, widthCR := cr.solveWidth(0)
 		_, heightCR := cr.solveHeight(0)
 
-		g = ctx.LayoutChild(s.id, mochi.Pt(widthCR.width.min, heightCR.height.min), mochi.Pt(widthCR.width.max, heightCR.height.max))
+		g = ctx.LayoutChild(s.id, layout.Pt(widthCR.width.min, heightCR.height.min), layout.Pt(widthCR.width.max, heightCR.height.max))
 		width = g.Width()
 		height = g.Height()
 
 		if width < cr.width.min || height < cr.height.min || width > cr.width.max || height > cr.height.max {
-			fmt.Printf("constraints: child guide is outside of bounds. Min:%v Max:%v Actual:%v", mochi.Pt(cr.width.min, cr.height.min), mochi.Pt(cr.width.max, cr.height.max), mochi.Pt(width, height))
+			fmt.Printf("constraints: child guide is outside of bounds. Min:%v Max:%v Actual:%v", layout.Pt(cr.width.min, cr.height.min), layout.Pt(cr.width.max, cr.height.max), layout.Pt(width, height))
 			width = cr.width.min
 			height = cr.height.min
 		}
@@ -360,7 +360,7 @@ func (s *Solver) solve(sys *System, ctx *layout.Context) {
 	sys.zIndex += 1
 
 	// Update the guide and the system.
-	g.Frame = mochi.Rt(centerX-width/2, centerY-height/2, centerX+width/2, centerY+height/2)
+	g.Frame = layout.Rt(centerX-width/2, centerY-height/2, centerX+width/2, centerY+height/2)
 	if s.id == rootId {
 		sys.Guide.mochiGuide = &g
 	} else {
@@ -504,13 +504,13 @@ func (sys *System) MaxGuide() *Guide {
 
 func (sys *System) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	sys.min.mochiGuide = &layout.Guide{
-		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
+		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
 	sys.max.mochiGuide = &layout.Guide{
-		Frame: mochi.Rt(0, 0, ctx.MaxSize.X, ctx.MaxSize.Y),
+		Frame: layout.Rt(0, 0, ctx.MaxSize.X, ctx.MaxSize.Y),
 	}
 	sys.Guide.mochiGuide = &layout.Guide{
-		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
+		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
 	// TODO(Kevin): reset all guides
 

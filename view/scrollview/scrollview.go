@@ -57,12 +57,12 @@ type scrollViewLayouter struct {
 func (l *scrollViewLayouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	gs := map[mochi.Id]layout.Guide{}
 	if len(ctx.ChildIds) > 0 {
-		g := ctx.LayoutChild(ctx.ChildIds[0], ctx.MinSize, mochi.Pt(math.Inf(1), math.Inf(1)))
-		g.Frame = g.Frame.Add(mochi.Pt(-g.Frame.Min.X, -g.Frame.Min.Y))
+		g := ctx.LayoutChild(ctx.ChildIds[0], ctx.MinSize, layout.Pt(math.Inf(1), math.Inf(1)))
+		g.Frame = g.Frame.Add(layout.Pt(-g.Frame.Min.X, -g.Frame.Min.Y))
 		gs[ctx.ChildIds[0]] = g
 	}
 	return layout.Guide{
-		Frame: mochi.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
+		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}, gs
 }
 

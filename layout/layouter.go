@@ -5,11 +5,10 @@ import (
 )
 
 type Context struct {
-	MinSize    mochi.Point
-	MaxSize    mochi.Point
+	MinSize    Point
+	MaxSize    Point
 	ChildIds   []mochi.Id
-	LayoutFunc func(mochi.Id, mochi.Point, mochi.Point) Guide
-	// node     *node
+	LayoutFunc func(mochi.Id, Point, Point) Guide
 }
 
 type Layouter interface {
@@ -17,13 +16,13 @@ type Layouter interface {
 	mochi.Notifier
 }
 
-func (l *Context) LayoutChild(id mochi.Id, minSize, maxSize mochi.Point) Guide {
+func (l *Context) LayoutChild(id mochi.Id, minSize, maxSize Point) Guide {
 	return l.LayoutFunc(id, minSize, maxSize)
 }
 
 type Guide struct {
-	Frame  mochi.Rect
-	Insets mochi.Insets
+	Frame  Rect
+	Insets Insets
 	ZIndex int
 	// Transform?
 }

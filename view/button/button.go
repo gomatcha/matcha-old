@@ -9,8 +9,8 @@ import (
 	"github.com/overcyn/mochibridge"
 )
 
-func textSize(t *text.Text, max mochi.Point) mochi.Point {
-	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(mochi.Point)
+func textSize(t *text.Text, max layout.Point) layout.Point {
+	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(layout.Point)
 }
 
 const padding = 10.0
@@ -21,7 +21,7 @@ type buttonLayouter struct {
 
 func (l *buttonLayouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	size := textSize(l.formattedText, ctx.MaxSize)
-	g := layout.Guide{Frame: mochi.Rt(0, 0, size.X+padding*2, size.Y+padding*2)}
+	g := layout.Guide{Frame: layout.Rt(0, 0, size.X+padding*2, size.Y+padding*2)}
 	return g, nil
 }
 

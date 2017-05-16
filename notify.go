@@ -5,6 +5,8 @@ import (
 	"sync"
 )
 
+type Id int64
+
 type Notifier interface {
 	Notify() chan struct{}
 	Unnotify(chan struct{})

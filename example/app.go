@@ -5,6 +5,7 @@ import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/animate"
 	"github.com/overcyn/mochi/internal"
+	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/paint"
@@ -31,8 +32,8 @@ func (b *GoRoot) NewViewController(id int) *view.ViewController {
 
 func init() {
 	mochibridge.SetGoRoot(&GoRoot{})
-	mochibridge.RegisterType("mochi.Point", reflect.TypeOf(mochi.Point{}))
-	mochibridge.RegisterType("mochi.Rect", reflect.TypeOf(mochi.Rect{}))
+	mochibridge.RegisterType("layout.Point", reflect.TypeOf(layout.Point{}))
+	mochibridge.RegisterType("layout.Rect", reflect.TypeOf(layout.Rect{}))
 }
 
 const (
@@ -154,9 +155,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	chl8.Painter = &paint.Style{BackgroundColor: internal.CyanColor}
 	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl8.ResizeMode = imageview.ResizeModeFit
-	// chl8 := imageview.NewImageView(ctx.Get(chl8id))
-	// chl8.PaintOptions.BackgroundColor = mochi.CyanColor
-	// chl8.ResizeMode = imageview.ResizeModeFit
 	m.Add(chl8)
 	g8 := l.Add(chl8, func(s *constraint.Solver) {
 		s.BottomEqual(g6.Top())

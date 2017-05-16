@@ -8,7 +8,7 @@ func Notifier(f func(tx *Tx)) mochi.Notifier {
 	return nil
 }
 
-// func InterfaceNotifier(f func(tx *Tx) interface{}) mochi.InterfaceNotifier {
+// func InterfaceNotifier(f func(tx *Tx) interface{}) layout.InterfaceNotifier {
 // 	return nil
 // }
 
@@ -16,7 +16,7 @@ func Notifier(f func(tx *Tx)) mochi.Notifier {
 // 	return nil
 // }
 
-// func IntNotifier(f func(tx *Tx) int) mochi.IntNotifier {
+// func IntNotifier(f func(tx *Tx) int) layout.IntNotifier {
 // 	return nil
 // }
 
@@ -24,7 +24,7 @@ func Notifier(f func(tx *Tx)) mochi.Notifier {
 // 	return nil
 // }
 
-// func Int64Notifier(f func(tx *Tx) int64) mochi.Int64Notifier {
+// func Int64Notifier(f func(tx *Tx) int64) layout.Int64Notifier {
 // 	return nil
 // }
 

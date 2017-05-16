@@ -36,7 +36,7 @@ func (p *Style) Unnotify(chan struct{}) {
 	// no-op
 }
 
-type AnimatedPaintStyle struct {
+type AnimatedStyle struct {
 	Style Style
 
 	// Alpha           Float64Notifier
@@ -50,14 +50,14 @@ type AnimatedPaintStyle struct {
 	// ShadowColor     ColorNotifier
 }
 
-func (p *AnimatedPaintStyle) PaintStyle() Style {
+func (p *AnimatedStyle) PaintStyle() Style {
 	return p.Style
 }
 
-func (p *AnimatedPaintStyle) Notify() chan struct{} {
+func (p *AnimatedStyle) Notify() chan struct{} {
 	return nil // no-op
 }
 
-func (p *AnimatedPaintStyle) Unnotify(chan struct{}) {
+func (p *AnimatedStyle) Unnotify(chan struct{}) {
 	// no-op
 }

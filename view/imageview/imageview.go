@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	// "github.com/overcyn/mochi"
-	// "github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/view"
 	"golang.org/x/image/bmp"

@@ -9,7 +9,7 @@ type Layout struct {
 }
 
 func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
-	g := layout.Guide{Frame: mochi.Rect{Max: ctx.MinSize}}
+	g := layout.Guide{Frame: layout.Rect{Max: ctx.MinSize}}
 	gs := map[mochi.Id]layout.Guide{}
 	for _, id := range ctx.ChildIds {
 		gs[id] = ctx.LayoutChild(id, ctx.MinSize, ctx.MinSize)

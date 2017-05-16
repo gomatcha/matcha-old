@@ -15,7 +15,7 @@ type textViewLayouter struct {
 
 func (l *textViewLayouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	size := textSize(l.formattedText, ctx.MaxSize)
-	g := layout.Guide{Frame: mochi.Rt(0, 0, size.X, size.Y)}
+	g := layout.Guide{Frame: layout.Rt(0, 0, size.X, size.Y)}
 	return g, nil
 }
 
@@ -28,8 +28,8 @@ func (l *textViewLayouter) Unnotify(chan struct{}) {
 	// no-op
 }
 
-func textSize(t *text.Text, max mochi.Point) mochi.Point {
-	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(mochi.Point)
+func textSize(t *text.Text, max layout.Point) layout.Point {
+	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(layout.Point)
 }
 
 type TextView struct {
