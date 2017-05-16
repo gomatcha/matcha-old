@@ -33,9 +33,9 @@ func (l *buttonLayouter) Unnotify(chan struct{}) {
 
 type Button struct {
 	*mochi.Embed
-	Text         string
-	PaintOptions mochi.PaintOptions
-	OnPress      func()
+	Text    string
+	Painter mochi.Painter
+	OnPress func()
 }
 
 func New(c mochi.Config) *Button {
@@ -56,9 +56,10 @@ func (v *Button) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 		Size:   20,
 	})
 
-	n := &mochi.ViewModel{}
-	n.Layouter = &buttonLayouter{formattedText: ft}
-	n.Painter = v.PaintOptions
+	n := &mochi.ViewModel{
+		Layouter: &buttonLayouter{formattedText: ft},
+		Painter:  v.Painter,
+	}
 	n.Bridge.Name = "github.com/overcyn/mochi/view/button"
 	n.Bridge.State = struct {
 		Text    *text.Text

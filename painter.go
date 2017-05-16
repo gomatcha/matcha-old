@@ -3,11 +3,11 @@ package mochi
 import "image/color"
 
 type Painter interface {
-	PaintOptions() PaintOptions
+	PaintStyle() PaintStyle
 	Notifier
 }
 
-type PaintOptions struct {
+type PaintStyle struct {
 	Alpha           float64
 	BackgroundColor color.Color
 	BorderColor     color.Color
@@ -21,7 +21,21 @@ type PaintOptions struct {
 	// Mask
 }
 
+func (p *PaintStyle) PaintStyle() PaintStyle {
+	return *p
+}
+
+func (p *PaintStyle) Notify() chan struct{} {
+	return nil // no-op
+}
+
+func (p *PaintStyle) Unnotify(chan struct{}) {
+	// no-op
+}
+
 type AnimatedPaintStyle struct {
+	Style PaintStyle
+
 	Alpha           Float64Notifier
 	BackgroundColor ColorNotifier
 	BorderColor     ColorNotifier
@@ -33,14 +47,14 @@ type AnimatedPaintStyle struct {
 	ShadowColor     ColorNotifier
 }
 
-func (p PaintOptions) PaintOptions() PaintOptions {
-	return p
+func (p *AnimatedPaintStyle) PaintStyle() PaintStyle {
+	return p.Style
 }
 
-func (p PaintOptions) Notify() chan struct{} {
+func (p *AnimatedPaintStyle) Notify() chan struct{} {
 	return nil // no-op
 }
 
-func (p PaintOptions) Unnotify(chan struct{}) {
+func (p *AnimatedPaintStyle) Unnotify(chan struct{}) {
 	// no-op
 }

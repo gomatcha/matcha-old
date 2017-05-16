@@ -9,7 +9,7 @@ type TextInput struct {
 	*mochi.Embed
 	Text         text.Text
 	Style        text.Style
-	PaintOptions mochi.PaintOptions
+	PaintOptions mochi.PaintStyle
 }
 
 func New(c mochi.Config) *TextInput {

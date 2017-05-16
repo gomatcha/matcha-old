@@ -18,9 +18,9 @@ const (
 
 type URLImageView struct {
 	*mochi.Embed
-	PaintOptions mochi.PaintOptions
-	ResizeMode   ResizeMode
-	URL          string
+	Painter    mochi.Painter
+	ResizeMode ResizeMode
+	URL        string
 	// Image request
 	url    string
 	cancel context.CancelFunc
@@ -66,12 +66,11 @@ func (v *URLImageView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	}
 
 	n := &mochi.ViewModel{}
-	n.Painter = v.PaintOptions
+	n.Painter = v.Painter
 
 	chl := NewImageView(ctx.Get(urlImageViewId))
 	chl.ResizeMode = v.ResizeMode
 	chl.Image = v.image
-	chl.PaintOptions.BackgroundColor = mochi.RedColor
 	n.Add(chl)
 
 	return n
@@ -104,11 +103,11 @@ const (
 
 type ImageView struct {
 	*mochi.Embed
-	PaintOptions mochi.PaintOptions
-	Image        image.Image
-	ResizeMode   ResizeMode
-	image        image.Image
-	bytes        []byte
+	Painter    mochi.Painter
+	Image      image.Image
+	ResizeMode ResizeMode
+	image      image.Image
+	bytes      []byte
 }
 
 func NewImageView(c mochi.Config) *ImageView {
@@ -133,7 +132,7 @@ func (v *ImageView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	}
 
 	n := &mochi.ViewModel{}
-	n.Painter = v.PaintOptions
+	n.Painter = v.Painter
 	n.Bridge.Name = "github.com/overcyn/mochi/view/imageview"
 	n.Bridge.State = struct {
 		Bytes      []byte

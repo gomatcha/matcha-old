@@ -79,7 +79,7 @@ type RenderNode struct {
 	Children     map[Id]*RenderNode
 	Bridge       Bridge
 	LayoutGuide  *Guide
-	PaintOptions PaintOptions
+	PaintOptions PaintStyle
 }
 
 func (n *RenderNode) DebugString() string {
@@ -302,7 +302,7 @@ type node struct {
 	paintId      int64
 	paintChan    chan struct{}
 	paintDone    chan struct{}
-	paintOptions PaintOptions
+	paintOptions PaintStyle
 }
 
 func (n *node) get(key interface{}) Config {
@@ -499,9 +499,9 @@ func (n *node) paint() {
 		n.paintId += 1
 
 		if p := n.viewModel.Painter; p != nil {
-			n.paintOptions = p.PaintOptions()
+			n.paintOptions = p.PaintStyle()
 		} else {
-			n.paintOptions = PaintOptions{}
+			n.paintOptions = PaintStyle{}
 		}
 	}
 

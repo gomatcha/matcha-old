@@ -1,4 +1,4 @@
-package app
+package example
 
 import (
 	"fmt"
@@ -72,14 +72,14 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	l := constraint.New()
 	m.Layouter = l
 
-	p := mochi.PaintOptions{}
+	p := &mochi.PaintStyle{}
 	p.BackgroundColor = mochi.GreenColor
 	m.Painter = p
 
 	chl1 := basicview.New(ctx.Get("red"))
 	// chl1.Painter = &paint.Style{BackgroundColor: mochi.RedColor}
 	// chl1.Painter = &paint.AnimatedStyle{BackgroundColor: mochi.RedColor}
-	chl1.PaintOptions.BackgroundColor = mochi.RedColor
+	chl1.Painter = &mochi.PaintStyle{BackgroundColor: mochi.RedColor}
 	m.Add(chl1)
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
@@ -91,7 +91,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl2 := basicview.New(ctx.Get(chl2id))
-	chl2.PaintOptions.BackgroundColor = mochi.YellowColor
+	chl2.Painter = &mochi.PaintStyle{BackgroundColor: mochi.YellowColor}
 	m.Add(chl2)
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
@@ -101,7 +101,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl3 := basicview.New(ctx.Get(chl3id))
-	chl3.PaintOptions.BackgroundColor = mochi.BlueColor
+	chl3.Painter = &mochi.PaintStyle{BackgroundColor: mochi.BlueColor}
 	m.Add(chl3)
 	g3 := l.Add(chl3, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
@@ -111,7 +111,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl4 := basicview.New(ctx.Get(chl4id))
-	chl4.PaintOptions.BackgroundColor = mochi.MagentaColor
+	chl4.Painter = &mochi.PaintStyle{BackgroundColor: mochi.MagentaColor}
 	m.Add(chl4)
 	g4 := l.Add(chl4, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
@@ -121,7 +121,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl5 := textview.New(ctx.Get(chl5id))
-	chl5.PaintOptions.BackgroundColor = mochi.CyanColor
+	chl5.Painter = &mochi.PaintStyle{BackgroundColor: mochi.CyanColor}
 	chl5.String = "Subtitle"
 	chl5.Style.SetAlignment(text.AlignmentCenter)
 	chl5.Style.SetStrikethroughStyle(text.StrikethroughStyleSingle)
@@ -140,7 +140,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl6 := textview.New(ctx.Get(chl6id))
-	chl6.PaintOptions.BackgroundColor = mochi.RedColor
+	chl6.Painter = &mochi.PaintStyle{BackgroundColor: mochi.RedColor}
 	chl6.String = fmt.Sprintf("Counter: %v", v.counter)
 	chl6.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
@@ -153,7 +153,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl8 := imageview.NewURLImageView(ctx.Get(chl8id))
-	chl8.PaintOptions.BackgroundColor = mochi.CyanColor
+	chl8.Painter = &mochi.PaintStyle{BackgroundColor: mochi.CyanColor}
 	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl8.ResizeMode = imageview.ResizeModeFit
 	// chl8 := imageview.NewImageView(ctx.Get(chl8id))
@@ -168,7 +168,7 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	})
 
 	chl9 := button.New(ctx.Get(chl9id))
-	chl9.PaintOptions.BackgroundColor = mochi.WhiteColor
+	chl9.Painter = &mochi.PaintStyle{BackgroundColor: mochi.WhiteColor}
 	chl9.Text = "Button"
 	chl9.OnPress = func() {
 		v.Lock()
@@ -189,18 +189,18 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	for i := 0; i < 20; i++ {
 		childView := NewTableCell(ctx.Get(i))
 		childView.String = "TEST TEST"
-		childView.PaintOptions.BackgroundColor = mochi.RedColor
+		childView.Painter = &mochi.PaintStyle{BackgroundColor: mochi.RedColor}
 		childViews = append(childViews, childView)
 		childLayouter.Add(childView)
 	}
 
 	scrollChild := basicview.New(ctx.Get(scrollChildId))
-	scrollChild.PaintOptions.BackgroundColor = mochi.WhiteColor
+	scrollChild.Painter = &mochi.PaintStyle{BackgroundColor: mochi.WhiteColor}
 	scrollChild.Layouter = childLayouter
 	scrollChild.Children = childViews
 
 	chl10 := scrollview.New(ctx.Get(scrollId))
-	chl10.PaintOptions.BackgroundColor = mochi.CyanColor
+	chl10.Painter = &mochi.PaintStyle{BackgroundColor: mochi.CyanColor}
 	chl10.ContentView = scrollChild
 	m.Add(chl10)
 	_ = l.Add(chl10, func(s *constraint.Solver) {
@@ -223,8 +223,8 @@ const (
 
 type TableCell struct {
 	*mochi.Embed
-	String       string
-	PaintOptions mochi.PaintOptions
+	String  string
+	Painter mochi.Painter
 }
 
 func NewTableCell(c mochi.Config) *TableCell {
@@ -240,7 +240,7 @@ func (v *TableCell) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	l := constraint.New()
 	n := &mochi.ViewModel{}
 	n.Layouter = l
-	n.Painter = v.PaintOptions
+	n.Painter = v.Painter
 
 	l.Solve(func(s *constraint.Solver) {
 		s.HeightEqual(constraint.Const(50))

@@ -38,7 +38,7 @@ type TextView struct {
 	// String     string
 	// Text       text.Text
 	// Attributes text.Attributes
-	PaintOptions mochi.PaintOptions
+	Painter mochi.Painter
 }
 
 func New(c mochi.Config) *TextView {
@@ -61,7 +61,7 @@ func (v *TextView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 
 	n := &mochi.ViewModel{}
 	n.Layouter = &textViewLayouter{formattedText: ft}
-	n.Painter = v.PaintOptions
+	n.Painter = v.Painter
 	n.Bridge.Name = "github.com/overcyn/mochi/view/textview"
 	n.Bridge.State = struct {
 		Text *text.Text

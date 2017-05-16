@@ -11,7 +11,7 @@ type ScrollView struct {
 	ShowsHorizontalScrollIndicator bool
 	ShowsVerticalScrollIndicator   bool
 	ContentView                    mochi.View
-	PaintOptions                   mochi.PaintOptions
+	Painter                        mochi.Painter
 }
 
 func New(c mochi.Config) *ScrollView {
@@ -28,8 +28,7 @@ func New(c mochi.Config) *ScrollView {
 
 func (v *ScrollView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	n := &mochi.ViewModel{}
-	n.Painter = v.PaintOptions
-
+	n.Painter = v.Painter
 	n.Layouter = &scrollViewLayouter{}
 
 	if v.ContentView != nil {
