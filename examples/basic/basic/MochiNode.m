@@ -13,7 +13,11 @@
 @property (nonatomic, strong) NSDictionary *nodeChildren;
 @property (nonatomic, strong) MochiGoValue *goValue;
 @property (nonatomic, strong) MochiLayoutGuide *guide;
-@property (nonatomic, assign) NSNumber *identifier;
+@property (nonatomic, strong) MochiPaintOptions *paintOptions;
+@property (nonatomic, strong) NSNumber *identifier;
+@property (nonatomic, strong) NSNumber *buildId;
+@property (nonatomic, strong) NSNumber *layoutId;
+@property (nonatomic, strong) NSNumber *paintId;
 @end
 
 @implementation MochiNode
@@ -22,13 +26,25 @@
     if (self = [super init]) {
         self.goValue = value;
         self.identifier = @(value[@"Id"].toLongLong);
-        self.guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
+        self.buildId = @(value[@"BuildId"].toLongLong);
+        self.layoutId = @(value[@"LayoutId"].toLongLong);
+        self.paintId = @(value[@"PaintId"].toLongLong);
     }
     return self;
 }
 
 - (MochiPaintOptions *)paintOptions {
-    return [[MochiPaintOptions alloc] initWithGoValue:self.goValue[@"PaintOptions"]];
+    if (_paintOptions == nil) {
+        _paintOptions = [[MochiPaintOptions alloc] initWithGoValue:self.goValue[@"PaintOptions"]];
+    }
+    return _paintOptions;
+}
+
+- (MochiLayoutGuide *)guide {
+    if (_guide == nil) {
+        _guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
+    }
+    return _guide;
 }
 
 - (NSDictionary<NSNumber *, MochiNode *> *)nodeChildren {

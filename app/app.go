@@ -60,8 +60,8 @@ func NewNestedView(c mochi.Config) *NestedView {
 		v = &NestedView{}
 		v.Embed = c.Embed
 		v.ticker = animate.NewTicker(time.Second * 5)
-		v.floatTicker = animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 150})
-		fmt.Println("Float ticker", v.floatTicker.Value())
+		// v.floatTicker = animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 150})
+		// fmt.Println("Float ticker", v.floatTicker.Value())
 	}
 	return v
 }
@@ -82,8 +82,10 @@ func (v *NestedView) Build(ctx *mochi.BuildContext) *mochi.ViewModel {
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
-		s.WidthEqual(constraint.Notifier(v.floatTicker))
-		s.HeightEqual(constraint.Notifier(v.floatTicker))
+		s.WidthEqual(constraint.Const(100))
+		s.HeightEqual(constraint.Const(100))
+		// s.WidthEqual(constraint.Notifier(v.floatTicker))
+		// s.HeightEqual(constraint.Notifier(v.floatTicker))
 	})
 
 	chl2 := basicview.New(ctx.Get(chl2id))

@@ -73,6 +73,9 @@ func (n *ViewModel) Add(v View) {
 
 type RenderNode struct {
 	Id           Id
+	BuildId      int64
+	LayoutId     int64
+	PaintId      int64
 	Children     map[Id]*RenderNode
 	Bridge       Bridge
 	LayoutGuide  *Guide
@@ -89,7 +92,7 @@ func (n *RenderNode) DebugString() string {
 		all = append(all, lines...)
 	}
 
-	str := fmt.Sprintf("{%p Id:%v Bridge:%v LayoutGuide:%v PaintOptions:%v}", n, n.Id, n.Bridge, n.LayoutGuide, n.PaintOptions)
+	str := fmt.Sprintf("{%p Id:%v BuildId:%v LayoutId:%v PaintId:%v LayoutGuide:%v PaintOptions:%v}", n, n.Id, n.BuildId, n.LayoutId, n.PaintId, n.LayoutGuide, n.PaintOptions)
 	if len(all) > 0 {
 		str += "\n" + strings.Join(all, "\n")
 	}
@@ -224,7 +227,7 @@ func (root *root) update(size Point) {
 	for _, v := range root.updateFlags {
 		flag |= v
 	}
-	fmt.Println("RunLoop", flag.needsBuild(), flag.needsLayout(), flag.needsPaint())
+	// fmt.Println("RunLoop", flag.needsBuild(), flag.needsLayout(), flag.needsPaint())
 
 	if flag.needsBuild() {
 		root.build()
@@ -287,13 +290,17 @@ type node struct {
 	root *root
 	view View
 
-	viewModel    *ViewModel
-	children     map[Id]*node
-	layoutGuide  *Guide
-	paintOptions PaintOptions
+	buildId   int64
+	viewModel *ViewModel
+	children  map[Id]*node
 
-	layoutChan chan struct{}
-	layoutDone chan struct{}
+	layoutId    int64
+	layoutChan  chan struct{}
+	layoutDone  chan struct{}
+	layoutGuide *Guide
+
+	paintId      int64
+	paintOptions PaintOptions
 }
 
 func (n *node) get(key interface{}) Config {
@@ -321,6 +328,9 @@ func (n *node) get(key interface{}) Config {
 func (n *node) renderNode() *RenderNode {
 	rn := &RenderNode{
 		Id:           n.id,
+		BuildId:      n.buildId,
+		LayoutId:     n.layoutId,
+		PaintId:      n.paintId,
 		Children:     map[Id]*RenderNode{},
 		Bridge:       n.viewModel.Bridge,
 		LayoutGuide:  n.layoutGuide,
@@ -334,6 +344,8 @@ func (n *node) renderNode() *RenderNode {
 
 func (n *node) build() {
 	if n.root.updateFlags[n.id].needsBuild() {
+		n.buildId += 1
+
 		// Generate the new viewModel.
 		viewModel := n.view.Build(&BuildContext{node: n})
 
@@ -388,7 +400,6 @@ func (n *node) build() {
 			n.layoutChan = nil
 			n.layoutDone = nil
 		}
-
 		if viewModel.Layouter != nil {
 			layoutChan := viewModel.Layouter.Notify()
 			if layoutChan != nil {
@@ -423,22 +434,9 @@ func (n *node) build() {
 	}
 }
 
-func (n *node) paint() {
-	if n.root.updateFlags[n.id].needsPaint() {
-		if p := n.viewModel.Painter; p != nil {
-			n.paintOptions = p.PaintOptions()
-		} else {
-			n.paintOptions = PaintOptions{}
-		}
-	}
-
-	// Recursively update children
-	for _, v := range n.children {
-		v.paint()
-	}
-}
-
 func (n *node) layout(minSize Point, maxSize Point) Guide {
+	n.layoutId += 1
+
 	// Create the LayoutContext
 	ctx := &LayoutContext{
 		MinSize:  minSize,
@@ -464,6 +462,23 @@ func (n *node) layout(minSize Point, maxSize Point) Guide {
 		n.children[k].layoutGuide = &guide
 	}
 	return g
+}
+
+func (n *node) paint() {
+	if n.root.updateFlags[n.id].needsPaint() {
+		n.paintId += 1
+
+		if p := n.viewModel.Painter; p != nil {
+			n.paintOptions = p.PaintOptions()
+		} else {
+			n.paintOptions = PaintOptions{}
+		}
+	}
+
+	// Recursively update children
+	for _, v := range n.children {
+		v.paint()
+	}
 }
 
 func (n *node) debugString() string {

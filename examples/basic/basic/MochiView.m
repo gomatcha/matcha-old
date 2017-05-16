@@ -14,6 +14,9 @@ MochiView *MochiViewWithNode(MochiNode *node);
 @interface MochiViewConfig : NSObject
 @property (nonatomic, strong) NSDictionary<NSNumber *, UIView *> *childViews;
 @property (nonatomic, strong) MochiNode *node;
+@property (nonatomic, strong) NSNumber *buildId;
+@property (nonatomic, strong) NSNumber *layoutId;
+@property (nonatomic, strong) NSNumber *paintId;
 @end
 
 @implementation MochiViewConfig
@@ -174,62 +177,67 @@ MochiView *MochiViewWithNode(MochiNode *node);
 @end
 
 bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config) {
-    // bool update = ![node.identifier isEqual:config.node.identifier];
-    
-    // Update layout and paint options
-    view.backgroundColor = node.paintOptions.backgroundColor ?: [UIColor clearColor];
-    view.frame = node.guide.frame;
-    
-    // Rebuild children
-    NSMutableArray *addedKeys = [NSMutableArray array];
-    NSMutableArray *removedKeys = [NSMutableArray array];
-    NSMutableArray *unmodifiedKeys = [NSMutableArray array];
-    
-    for (NSNumber *i in config.node.nodeChildren) {
-        MochiNode *child = node.nodeChildren[i];
-        if (child == nil) {
-            [removedKeys addObject:i];
+    if (![node.buildId isEqual:config.node.buildId]) {
+        // Rebuild children
+        NSMutableArray *addedKeys = [NSMutableArray array];
+        NSMutableArray *removedKeys = [NSMutableArray array];
+        NSMutableArray *unmodifiedKeys = [NSMutableArray array];
+        
+        for (NSNumber *i in config.node.nodeChildren) {
+            MochiNode *child = node.nodeChildren[i];
+            if (child == nil) {
+                [removedKeys addObject:i];
+            }
         }
-    }
-    for (NSNumber *i in node.nodeChildren) {
-        MochiNode *prevChild = config.node.nodeChildren[i];
-        if (prevChild == nil) {
-            [addedKeys addObject:i];
-        } else {
-            [unmodifiedKeys addObject:i];
+        for (NSNumber *i in node.nodeChildren) {
+            MochiNode *prevChild = config.node.nodeChildren[i];
+            if (prevChild == nil) {
+                [addedKeys addObject:i];
+            } else {
+                [unmodifiedKeys addObject:i];
+            }
         }
+        
+        NSMutableDictionary *childViews = [NSMutableDictionary dictionary];
+        for (NSNumber *i in removedKeys) {
+            [config.childViews[i] removeFromSuperview];
+        }
+        for (NSNumber *i in addedKeys) {
+            MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);
+            [view addSubview:childView];
+            childViews[i] = childView;
+        }
+        for (NSNumber *i in unmodifiedKeys) {
+            MochiView *childView = (id)config.childViews[i];
+            childViews[i] = childView;
+        }
+        config.childViews = childViews;
+    }
+    if (![node.layoutId isEqual:config.node.layoutId]) {
+        NSArray *sortedKeys = [[config.childViews allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
+            return node.nodeChildren[obj1].guide.zIndex > node.nodeChildren[obj2].guide.zIndex;
+        }];
+        NSArray *subviews = view.subviews;
+        for (NSInteger i = 0; i < sortedKeys.count; i++) {
+            NSNumber *key = sortedKeys[i];
+            UIView *subview = config.childViews[key];
+            if ([subviews indexOfObject:subview] != i) {
+                [view insertSubview:subview atIndex:i];
+            }
+        }
+        view.frame = node.guide.frame;
+    }
+    if (![node.paintId isEqual:config.node.paintId]) {
+        view.backgroundColor = node.paintOptions.backgroundColor ?: [UIColor clearColor];
     }
     
-    NSMutableDictionary *childViews = [NSMutableDictionary dictionary];
-    for (NSNumber *i in removedKeys) {
-        [config.childViews[i] removeFromSuperview];
+    for (NSNumber *i in config.childViews) {
+        ((MochiView *)config.childViews[i]).node = node.nodeChildren[i];
     }
-    for (NSNumber *i in addedKeys) {
-        NSLog(@"KD:%s, added:%@", __FUNCTION__, i);
-        MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);
-        [view addSubview:childView];
-        childViews[i] = childView;
-    }
-    for (NSNumber *i in unmodifiedKeys) {
-        MochiView *childView = (id)config.childViews[i];
-        childView.node = node.nodeChildren[i];
-        childViews[i] = childView;
-    }
-
-    NSArray *sortedKeys = [[childViews allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
-        return node.nodeChildren[obj1].guide.zIndex > node.nodeChildren[obj2].guide.zIndex;
-    }];
-    NSArray *subviews = view.subviews;
-    for (NSInteger i = 0; i < sortedKeys.count; i++) {
-        NSNumber *key = sortedKeys[i];
-        UIView *subview = childViews[key];
-        if ([subviews indexOfObject:subview] != i) {
-            [view insertSubview:subview atIndex:i];
-        }
-    }
-    config.childViews = childViews;
+    
+    bool update = ![node.buildId isEqual:config.node.buildId];
     config.node = node;
-    return YES;
+    return update;
 }
 
 MochiView *MochiViewWithNode(MochiNode *node) {
@@ -246,6 +254,5 @@ MochiView *MochiViewWithNode(MochiNode *node) {
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/scrollview"]) {
         child = (id)[[MochiScrollView alloc] initWithFrame:CGRectZero];
     }
-    child.node = node;
     return child;
 }
