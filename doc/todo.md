@@ -1,15 +1,17 @@
 Prevent duplicate keys.
 
-* Animations
-* Event Handling / Gestures
+* Lifecycle
 * Responder Chain
+* Event Handling / Gestures
+* Thread & locking
+
 * Rotation
 * Accessibility
 * UIView tree updating
-* Thread & locking
 * Debugging
 * LocalStorage / Keychain / UserDefaults
 * Cliboard
+* Animations
 * Video / Sound / Microphone / Accelerometer
 * FlatBuffers
 

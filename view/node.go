@@ -13,40 +13,6 @@ import (
 	"time"
 )
 
-type View interface {
-	Build(*Context) *Model
-	// Lifecyle(*Stage)
-	Id() mochi.Id
-	Lock()
-	Unlock()
-}
-
-type Embed struct {
-	mu   *sync.Mutex
-	id   mochi.Id
-	root *root
-}
-
-func (e *Embed) Build(ctx *Context) *Model {
-	return &Model{}
-}
-
-func (e *Embed) Id() mochi.Id {
-	return e.id
-}
-
-func (e *Embed) Lock() {
-	e.mu.Lock()
-}
-
-func (e *Embed) Unlock() {
-	e.mu.Unlock()
-}
-
-func (e *Embed) Update(key interface{}) {
-	e.root.addFlag(e.id, buildFlag)
-}
-
 type Bridge struct {
 	Name  string
 	State interface{}
