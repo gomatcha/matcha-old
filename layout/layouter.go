@@ -2,7 +2,14 @@ package layout
 
 import (
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochibridge"
+	"reflect"
 )
+
+func init() {
+	mochibridge.RegisterType("layout.Point", reflect.TypeOf(Point{}))
+	mochibridge.RegisterType("layout.Rect", reflect.TypeOf(Rect{}))
+}
 
 type Context struct {
 	MinSize    Point

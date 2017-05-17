@@ -2,15 +2,14 @@ package example
 
 import (
 	"fmt"
-	"reflect"
 	"time"
 
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/animate"
 	"github.com/overcyn/mochi/internal"
-	"github.com/overcyn/mochi/layout"
+	// "github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/layout/constraint"
-	"github.com/overcyn/mochi/layout/table"
+	_ "github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view"
@@ -33,8 +32,6 @@ func (b *GoRoot) NewViewController(id int) *view.ViewController {
 
 func init() {
 	mochibridge.SetGoRoot(&GoRoot{})
-	mochibridge.RegisterType("layout.Point", reflect.TypeOf(layout.Point{}))
-	mochibridge.RegisterType("layout.Rect", reflect.TypeOf(layout.Rect{}))
 }
 
 type NestedView struct {
@@ -168,20 +165,20 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	childLayouter := &table.Layout{}
-	childViews := []view.View{}
-	for i := 0; i < 20; i++ {
-		childView := NewTableCell(ctx.Get(i + 1000))
-		childView.String = "TEST TEST"
-		childView.Painter = &paint.Style{BackgroundColor: internal.RedColor}
-		childViews = append(childViews, childView)
-		childLayouter.Add(childView)
-	}
+	// childLayouter := &table.Layout{}
+	// childViews := []view.View{}
+	// for i := 0; i < 20; i++ {
+	// 	childView := NewTableCell(ctx.Get(i + 1000))
+	// 	childView.String = "TEST TEST"
+	// 	childView.Painter = &paint.Style{BackgroundColor: internal.RedColor}
+	// 	childViews = append(childViews, childView)
+	// 	childLayouter.Add(childView)
+	// }
 
 	scrollChild := basicview.New(ctx.Get(10))
 	scrollChild.Painter = &paint.Style{BackgroundColor: internal.WhiteColor}
-	scrollChild.Layouter = childLayouter
-	scrollChild.Children = childViews
+	// scrollChild.Layouter = childLayouter
+	// scrollChild.Children = childViews
 
 	chl10 := scrollview.New(ctx.Get(11))
 	chl10.Painter = &paint.Style{BackgroundColor: internal.CyanColor}

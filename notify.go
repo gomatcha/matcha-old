@@ -93,11 +93,18 @@ func (n *BatchNotifier) Notify() chan struct{} {
 }
 
 func (n *BatchNotifier) Unnotify(c chan struct{}) {
+	if c == nil {
+		return
+	}
+
 	chans := []chan struct{}{}
 	for _, i := range n.chans {
 		if i != c {
 			chans = append(chans, c)
 		}
+	}
+	if len(chans) != len(n.chans)-1 {
+		panic("Cant unnotify unknown chan")
 	}
 	n.chans = chans
 

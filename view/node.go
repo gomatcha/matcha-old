@@ -415,7 +415,6 @@ func (n *node) build() {
 					for {
 						select {
 						case <-buildChan:
-							fmt.Println("Add flag", id)
 							n.root.addFlag(id, buildFlag)
 							buildChan <- struct{}{}
 						case <-buildDone:
@@ -437,11 +436,13 @@ func (n *node) build() {
 		}
 		if viewModel.Layouter != nil {
 			layoutChan := viewModel.Layouter.Notify()
+			fmt.Println("layoutChan", layoutChan)
 			if layoutChan != nil {
 				layoutDone := make(chan struct{})
 				go func() {
 				loop:
 					for {
+						fmt.Println("blah")
 						select {
 						case <-layoutChan:
 							n.root.addFlag(n.id, layoutFlag)

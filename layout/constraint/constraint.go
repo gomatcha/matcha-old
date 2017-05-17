@@ -528,6 +528,7 @@ func (sys *System) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layou
 }
 
 func (sys *System) Notify() chan struct{} {
+	fmt.Println("notifiers", sys.notifiers)
 	n := mochi.NewBatchNotifier(sys.notifiers...)
 	c := n.Notify()
 	if c != nil {
@@ -541,10 +542,11 @@ func (sys *System) Unnotify(c chan struct{}) {
 		return
 	}
 	n := sys.batchNotifiers[c]
-	if n != nil {
-		n.Unnotify(c)
-		delete(sys.batchNotifiers, c)
+	if n == nil {
+		panic("Cannot unnotify unknown chan")
 	}
+	n.Unnotify(c)
+	delete(sys.batchNotifiers, c)
 }
 
 type _range struct {
