@@ -533,7 +533,6 @@ func (sys *System) Notify() chan struct{} {
 	if c != nil {
 		sys.batchNotifiers[c] = n
 	}
-	fmt.Println("Constraint Notify", n, c, sys.batchNotifiers)
 	return c
 }
 

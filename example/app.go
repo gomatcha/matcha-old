@@ -151,9 +151,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(200))
 	})
 
-	cfg9 := ctx.Get(9)
-	fmt.Println("cfg", cfg9.Embed)
-	chl9 := button.New(cfg9)
+	chl9 := button.New(ctx.Get(9))
 	chl9.Painter = &paint.Style{BackgroundColor: internal.WhiteColor}
 	chl9.Text = "Button"
 	chl9.OnPress = func() {
