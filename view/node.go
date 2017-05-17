@@ -408,9 +408,8 @@ func (n *node) build() {
 		// Watch for build changes
 		if n.buildChan == nil {
 			buildChan := n.view.Notify()
-			var buildDone chan struct{}
 			if buildChan != nil {
-				buildDone = make(chan struct{})
+				buildDone := make(chan struct{})
 				go func(id mochi.Id) {
 				loop:
 					for {
@@ -424,9 +423,9 @@ func (n *node) build() {
 						}
 					}
 				}(n.view.Id())
+				n.buildChan = buildChan
+				n.buildDone = buildDone
 			}
-			n.buildChan = buildChan
-			n.buildDone = buildDone
 		}
 
 		// Watch for layout changes.
