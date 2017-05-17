@@ -127,6 +127,14 @@ func (ctx *Context) Get(key interface{}) Config {
 	return ctx.node.get(key)
 }
 
+func (ctx *Context) Prev(key interface{}) View {
+	return ctx.node.prev(key)
+}
+
+func (ctx *Context) NewId(key interface{}) mochi.Id {
+	return ctx.node.newId(key)
+}
+
 type updateFlag int
 
 const (
@@ -178,8 +186,8 @@ func newRoot(f func(Config) View) *root {
 }
 
 func (root *root) addFlag(id mochi.Id, f updateFlag) {
-	root.mu.Lock()
-	defer root.mu.Unlock()
+	// root.mu.Lock() // TODO(KD):
+	// defer root.mu.Unlock()
 
 	root.updateFlags[id] |= f
 }
@@ -261,6 +269,8 @@ type node struct {
 	stage Stage
 
 	buildId   int64
+	buildChan chan struct{}
+	buildDone chan struct{}
 	viewModel *Model
 	children  map[mochi.Id]*node
 
@@ -273,6 +283,23 @@ type node struct {
 	paintChan    chan struct{}
 	paintDone    chan struct{}
 	paintOptions paint.Style
+}
+
+func (n *node) prev(key interface{}) View {
+	cacheKey := viewCacheKey{key: key, id: n.id}
+	prevId := n.root.prevIds[cacheKey]
+	prevCtx := n.root.prevNodes[prevId]
+	if prevCtx != nil {
+		return prevCtx.view
+	}
+	return nil
+}
+
+func (n *node) newId(key interface{}) mochi.Id {
+	cacheKey := viewCacheKey{key: key, id: n.id}
+	id := n.root.newId()
+	n.root.ids[cacheKey] = id
+	return id
 }
 
 func (n *node) get(key interface{}) Config {
@@ -370,16 +397,36 @@ func (n *node) build() {
 		}
 		// Send lifecycle event to removed childern.
 		for _, id := range removedIds {
-			removed := n.children[id]
-			removed.view.Lifecycle(removed.stage, StageDead)
-			removed.stage = StageDead
-
-			removed.view.Unlock()
+			n.children[id].done()
 		}
 
 		// Mark all children as needing rebuild since we rebuilt.
 		for k := range children {
 			n.root.updateFlags[k] |= buildFlag
+		}
+
+		// Watch for build changes
+		if n.buildChan == nil {
+			buildChan := n.view.Notify()
+			var buildDone chan struct{}
+			if buildChan != nil {
+				buildDone = make(chan struct{})
+				go func(id mochi.Id) {
+				loop:
+					for {
+						select {
+						case <-buildChan:
+							fmt.Println("Add flag", id)
+							n.root.addFlag(id, buildFlag)
+							buildChan <- struct{}{}
+						case <-buildDone:
+							break loop
+						}
+					}
+				}(n.view.Id())
+			}
+			n.buildChan = buildChan
+			n.buildDone = buildDone
 		}
 
 		// Watch for layout changes.
@@ -497,6 +544,29 @@ func (n *node) paint() {
 	// Recursively update children
 	for _, v := range n.children {
 		v.paint()
+	}
+}
+
+func (n *node) done() {
+	n.view.Lifecycle(n.stage, StageDead)
+	n.stage = StageDead
+
+	// if n.buildChan != nil {
+	// 	n.view.Unnotify(n.buildChan)
+	// 	close(n.buildDone)
+	// }
+	// if n.layoutChan != nil {
+	// 	n.viewModel.Layouter.Unnotify(n.layoutChan)
+	// 	close(n.layoutDone)
+	// }
+	// if n.paintChan != nil {
+	// 	n.viewModel.Painter.Unnotify(n.layoutChan)
+	// 	close(n.paintDone)
+	// }
+	n.view.Unlock()
+
+	for _, i := range n.children {
+		i.done()
 	}
 }
 

@@ -37,20 +37,6 @@ func init() {
 	mochibridge.RegisterType("layout.Rect", reflect.TypeOf(layout.Rect{}))
 }
 
-const (
-	chl1id int = 1000 + iota
-	chl2id
-	chl3id
-	chl4id
-	chl5id
-	chl6id
-	chl7id
-	chl8id
-	chl9id
-	scrollId      = "scroll"
-	scrollChildId = "scrollChild"
-)
-
 type NestedView struct {
 	*view.Embed
 	counter     int
@@ -67,7 +53,6 @@ func NewNestedView(c view.Config) *NestedView {
 		v.ticker = animate.NewTicker(time.Second * 5)
 		v.floatTicker = animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 150})
 		v.colorTicker = animate.ColorInterpolate(v.ticker, animate.RGBALerp{Start: internal.RedColor, End: internal.YellowColor})
-		// fmt.Println("Float ticker", v.floatTicker.Value())
 	}
 	return v
 }
@@ -82,7 +67,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	p.BackgroundColor = internal.GreenColor
 	m.Painter = p
 
-	chl1 := basicview.New(ctx.Get("red"))
+	chl1 := basicview.New(ctx.Get(1))
 	chl1.Painter = &paint.AnimatedStyle{BackgroundColor: v.colorTicker}
 	m.Add(chl1)
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
@@ -92,7 +77,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Notifier(v.floatTicker))
 	})
 
-	chl2 := basicview.New(ctx.Get(chl2id))
+	chl2 := basicview.New(ctx.Get(2))
 	chl2.Painter = &paint.Style{BackgroundColor: internal.YellowColor}
 	m.Add(chl2)
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
@@ -102,7 +87,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(300))
 	})
 
-	chl3 := basicview.New(ctx.Get(chl3id))
+	chl3 := basicview.New(ctx.Get(3))
 	chl3.Painter = &paint.Style{BackgroundColor: internal.BlueColor}
 	m.Add(chl3)
 	g3 := l.Add(chl3, func(s *constraint.Solver) {
@@ -112,7 +97,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl4 := basicview.New(ctx.Get(chl4id))
+	chl4 := basicview.New(ctx.Get(4))
 	chl4.Painter = &paint.Style{BackgroundColor: internal.MagentaColor}
 	m.Add(chl4)
 	g4 := l.Add(chl4, func(s *constraint.Solver) {
@@ -122,7 +107,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(50))
 	})
 
-	chl5 := textview.New(ctx.Get(chl5id))
+	chl5 := textview.New(ctx.Get(5))
 	chl5.Painter = &paint.Style{BackgroundColor: internal.CyanColor}
 	chl5.String = "Subtitle"
 	chl5.Style.SetAlignment(text.AlignmentCenter)
@@ -141,7 +126,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	chl6 := textview.New(ctx.Get(chl6id))
+	chl6 := textview.New(ctx.Get(6))
 	chl6.Painter = &paint.Style{BackgroundColor: internal.RedColor}
 	chl6.String = fmt.Sprintf("Counter: %v", v.counter)
 	chl6.Style.SetFont(text.Font{
@@ -154,7 +139,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	chl8 := imageview.NewURLImageView(ctx.Get(chl8id))
+	chl8 := imageview.NewURLImageView(ctx.Get(8))
 	chl8.Painter = &paint.Style{BackgroundColor: internal.CyanColor}
 	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl8.ResizeMode = imageview.ResizeModeFit
@@ -166,7 +151,9 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(200))
 	})
 
-	chl9 := button.New(ctx.Get(chl9id))
+	cfg9 := ctx.Get(9)
+	fmt.Println("cfg", cfg9.Embed)
+	chl9 := button.New(cfg9)
 	chl9.Painter = &paint.Style{BackgroundColor: internal.WhiteColor}
 	chl9.Text = "Button"
 	chl9.OnPress = func() {
@@ -186,19 +173,19 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	childLayouter := &table.Layout{}
 	childViews := []view.View{}
 	for i := 0; i < 20; i++ {
-		childView := NewTableCell(ctx.Get(i))
+		childView := NewTableCell(ctx.Get(i + 1000))
 		childView.String = "TEST TEST"
 		childView.Painter = &paint.Style{BackgroundColor: internal.RedColor}
 		childViews = append(childViews, childView)
 		childLayouter.Add(childView)
 	}
 
-	scrollChild := basicview.New(ctx.Get(scrollChildId))
+	scrollChild := basicview.New(ctx.Get(10))
 	scrollChild.Painter = &paint.Style{BackgroundColor: internal.WhiteColor}
 	scrollChild.Layouter = childLayouter
 	scrollChild.Children = childViews
 
-	chl10 := scrollview.New(ctx.Get(scrollId))
+	chl10 := scrollview.New(ctx.Get(11))
 	chl10.Painter = &paint.Style{BackgroundColor: internal.CyanColor}
 	chl10.ContentView = scrollChild
 	m.Add(chl10)
@@ -215,10 +202,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 	return m
 }
-
-const (
-	textId int = 1000
-)
 
 type TableCell struct {
 	*view.Embed
@@ -245,7 +228,7 @@ func (v *TableCell) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(50))
 	})
 
-	textView := textview.New(ctx.Get(textId))
+	textView := textview.New(ctx.Get(1))
 	textView.String = v.String
 	textView.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
