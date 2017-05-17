@@ -19,17 +19,12 @@ type Bridge struct {
 }
 
 type Model struct {
-	Children map[mochi.Id]View
-	Layouter layout.Layouter
-	Painter  paint.Painter
-	Bridge   Bridge
-
-	// Context map[string] interface{}
-	// Handlers map[interface{}]Handler
-	// Accessibility
-	// Gesture Recognizers
-	// OnAboutToScrollIntoView??
-	// LayoutData?
+	Children    map[mochi.Id]View
+	Layouter    layout.Layouter
+	Painter     paint.Painter
+	Values      map[interface{}]interface{}
+	BridgeName  string
+	BridgeState interface{}
 }
 
 func (n *Model) Add(v View) {
@@ -45,7 +40,8 @@ type RenderNode struct {
 	LayoutId     int64
 	PaintId      int64
 	Children     map[mochi.Id]*RenderNode
-	Bridge       Bridge
+	BridgeName   string
+	BridgeState  interface{}
 	LayoutGuide  *layout.Guide
 	PaintOptions paint.Style
 }
@@ -192,6 +188,10 @@ func (root *root) update(size layout.Point) {
 	root.mu.Lock()
 	defer root.mu.Unlock()
 
+	// lock entire tree
+	root.node.lock()
+	defer root.node.unlock()
+
 	var flag updateFlag
 	for _, v := range root.updateFlags {
 		flag |= v
@@ -304,7 +304,8 @@ func (n *node) renderNode() *RenderNode {
 		LayoutId:     n.layoutId,
 		PaintId:      n.paintId,
 		Children:     map[mochi.Id]*RenderNode{},
-		Bridge:       n.viewModel.Bridge,
+		BridgeName:   n.viewModel.BridgeName,
+		BridgeState:  n.viewModel.BridgeState,
 		LayoutGuide:  n.layoutGuide,
 		PaintOptions: n.paintOptions,
 	}
@@ -349,6 +350,9 @@ func (n *node) build() {
 				}
 			}
 
+			// Lock new child.
+			view.Lock()
+
 			// Send lifecycle event to new children.
 			view.Lifecycle(StageDead, StageVisible)
 
@@ -369,6 +373,8 @@ func (n *node) build() {
 			removed := n.children[id]
 			removed.view.Lifecycle(removed.stage, StageDead)
 			removed.stage = StageDead
+
+			removed.view.Unlock()
 		}
 
 		// Mark all children as needing rebuild since we rebuilt.
@@ -454,7 +460,6 @@ func (n *node) layout(minSize layout.Point, maxSize layout.Point) layout.Guide {
 		MaxSize:  maxSize,
 		ChildIds: []mochi.Id{},
 		LayoutFunc: func(id mochi.Id, minSize, maxSize layout.Point) layout.Guide {
-			// n :=  // TODO(KD): FIX!!!!!!!!!!
 			return n.children[id].layout(minSize, maxSize)
 		},
 	}
@@ -510,4 +515,18 @@ func (n *node) debugString() string {
 		str += "\n" + strings.Join(all, "\n")
 	}
 	return str
+}
+
+func (n *node) lock() {
+	n.view.Lock()
+	for _, i := range n.children {
+		i.lock()
+	}
+}
+
+func (n *node) unlock() {
+	n.view.Unlock()
+	for _, i := range n.children {
+		i.unlock()
+	}
 }

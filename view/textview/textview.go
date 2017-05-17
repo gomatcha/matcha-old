@@ -65,8 +65,8 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 	n := &view.Model{}
 	n.Layouter = &textViewLayouter{formattedText: ft}
 	n.Painter = v.Painter
-	n.Bridge.Name = "github.com/overcyn/mochi/view/textview"
-	n.Bridge.State = struct {
+	n.BridgeName = "github.com/overcyn/mochi/view/textview"
+	n.BridgeState = struct {
 		Text *text.Text
 	}{
 		Text: ft,

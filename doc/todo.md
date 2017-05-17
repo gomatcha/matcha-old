@@ -1,16 +1,14 @@
 Prevent duplicate keys.
 
-
 High:
-* Lifecycle
-* Responder Chain
 * Event Handling / Gestures
-* Thread & locking
+* Navigation View Controllers
 
 Medium:
 * FlatBuffers
 
 Low:
+* Responder Chain
 * Rotation
 * Accessibility
 * Debugging
@@ -19,6 +17,8 @@ Low:
 * Video / Sound / Microphone / Accelerometer
 
 Done:
+* Thread & locking
+* Lifecycle
 * Animations
 * UIView tree updating
 

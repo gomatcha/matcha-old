@@ -38,8 +38,8 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 		n.Add(v.ContentView)
 	}
 
-	n.Bridge.Name = "github.com/overcyn/mochi/view/scrollview"
-	n.Bridge.State = struct {
+	n.BridgeName = "github.com/overcyn/mochi/view/scrollview"
+	n.BridgeState = struct {
 		ScrollEnabled                  bool
 		ShowsHorizontalScrollIndicator bool
 		ShowsVerticalScrollIndicator   bool

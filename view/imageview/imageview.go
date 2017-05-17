@@ -152,15 +152,16 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 		v.bytes = buf.Bytes()
 	}
 
-	n := &view.Model{}
-	n.Painter = v.Painter
-	n.Bridge.Name = "github.com/overcyn/mochi/view/imageview"
-	n.Bridge.State = struct {
-		Bytes      []byte
-		ResizeMode ResizeMode
-	}{
-		Bytes:      v.bytes,
-		ResizeMode: v.ResizeMode,
+	n := &view.Model{
+		Painter:    v.Painter,
+		BridgeName: "github.com/overcyn/mochi/view/imageview",
+		BridgeState: struct {
+			Bytes      []byte
+			ResizeMode ResizeMode
+		}{
+			Bytes:      v.bytes,
+			ResizeMode: v.ResizeMode,
+		},
 	}
 	return n
 }

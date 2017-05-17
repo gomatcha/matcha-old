@@ -60,16 +60,16 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 	})
 
 	n := &view.Model{
-		Layouter: &buttonLayouter{formattedText: ft},
-		Painter:  v.Painter,
-	}
-	n.Bridge.Name = "github.com/overcyn/mochi/view/button"
-	n.Bridge.State = struct {
-		Text    *text.Text
-		OnPress func()
-	}{
-		Text:    ft,
-		OnPress: v.OnPress,
+		Layouter:   &buttonLayouter{formattedText: ft},
+		Painter:    v.Painter,
+		BridgeName: "github.com/overcyn/mochi/view/button",
+		BridgeState: struct {
+			Text    *text.Text
+			OnPress func()
+		}{
+			Text:    ft,
+			OnPress: v.OnPress,
+		},
 	}
 	return n
 }

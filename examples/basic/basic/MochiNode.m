@@ -60,11 +60,11 @@
 }
 
 - (NSString *)bridgeName {
-    return self.goValue[@"Bridge"][@"Name"].toString;
+    return self.goValue[@"BridgeName"].toString;
 }
 
 - (MochiGoValue *)bridgeState {
-    return self.goValue[@"Bridge"][@"State"];
+    return self.goValue[@"BridgeState"];
 }
 
 @end

@@ -25,8 +25,8 @@ func New(c view.Config) *TextInput {
 func (v *TextInput) Build(ctx *view.Context) *view.Model {
 	n := &view.Model{}
 	n.Painter = v.Painter
-	n.Bridge.Name = "github.com/overcyn/mochi/view/textinput TextInput"
-	n.Bridge.State = struct {
+	n.BridgeName = "github.com/overcyn/mochi/view/textinput TextInput"
+	n.BridgeState = struct {
 		Text    *text.Text
 		OnPress func()
 	}{
