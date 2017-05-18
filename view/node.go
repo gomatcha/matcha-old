@@ -2,15 +2,16 @@ package view
 
 import (
 	"fmt"
+	"strings"
+	"sync"
+	"time"
+
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/internal"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/layout/full"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochibridge"
-	"strings"
-	"sync"
-	"time"
 )
 
 type Model struct {

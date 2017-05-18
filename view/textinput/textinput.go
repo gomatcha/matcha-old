@@ -13,11 +13,12 @@ type TextInput struct {
 	Painter paint.Painter
 }
 
-func New(c view.Config) *TextInput {
-	v, ok := c.Prev.(*TextInput)
+func New(ctx *view.Context, key interface{}) *TextInput {
+	v, ok := ctx.Prev(key).(*TextInput)
 	if !ok {
-		v = &TextInput{}
-		v.Embed = c.Embed
+		v = &TextInput{
+			Embed: view.NewEmbed(ctx.NewId(key)),
+		}
 	}
 	return v
 }

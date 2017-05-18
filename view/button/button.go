@@ -41,11 +41,12 @@ type Button struct {
 	OnPress func()
 }
 
-func New(c view.Config) *Button {
-	v, ok := c.Prev.(*Button)
+func New(ctx *view.Context, key interface{}) *Button {
+	v, ok := ctx.Prev(key).(*Button)
 	if !ok {
-		v = &Button{}
-		v.Embed = c.Embed
+		v = &Button{
+			Embed: view.NewEmbed(ctx.NewId(key)),
+		}
 	}
 	return v
 }

@@ -1,7 +1,5 @@
 package store
 
-import ()
-
 type Interface struct {
 	store Store
 	value interface{}

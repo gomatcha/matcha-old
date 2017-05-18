@@ -1,10 +1,11 @@
 package text
 
 import (
-	"golang.org/x/text/unicode/norm"
 	"runtime"
 	"sync"
 	"unicode/utf8"
+
+	"golang.org/x/text/unicode/norm"
 )
 
 type Position struct {

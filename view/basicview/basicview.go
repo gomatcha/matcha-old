@@ -15,11 +15,12 @@ type BasicView struct {
 	Children []view.View
 }
 
-func New(c view.Config) *BasicView {
-	v, ok := c.Prev.(*BasicView)
+func New(ctx *view.Context, key interface{}) *BasicView {
+	v, ok := ctx.Prev(key).(*BasicView)
 	if !ok {
-		v = &BasicView{}
-		v.Embed = c.Embed
+		v = &BasicView{
+			Embed: view.NewEmbed(ctx.NewId(key)),
+		}
 	}
 	return v
 }

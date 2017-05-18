@@ -1,8 +1,9 @@
 package paint
 
 import (
-	"github.com/overcyn/mochi"
 	"image/color"
+
+	"github.com/overcyn/mochi"
 )
 
 type Painter interface {

@@ -1,9 +1,10 @@
 package internal
 
 import (
-	"github.com/overcyn/mochibridge"
 	"os"
 	"runtime/pprof"
+
+	"github.com/overcyn/mochibridge"
 )
 
 func init() {

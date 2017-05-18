@@ -1,8 +1,9 @@
 package store
 
 import (
-	"github.com/overcyn/mochi"
 	"sync"
+
+	"github.com/overcyn/mochi"
 )
 
 type storeNotifier struct {

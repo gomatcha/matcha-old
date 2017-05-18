@@ -2,10 +2,11 @@ package constraint
 
 import (
 	"fmt"
+	"math"
+
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/view"
-	"math"
 )
 
 type comparison int

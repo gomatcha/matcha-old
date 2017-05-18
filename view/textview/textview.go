@@ -44,12 +44,13 @@ type TextView struct {
 	Painter paint.Painter
 }
 
-func New(c view.Config) *TextView {
-	v, ok := c.Prev.(*TextView)
+func New(ctx *view.Context, key interface{}) *TextView {
+	v, ok := ctx.Prev(key).(*TextView)
 	if !ok {
-		v = &TextView{}
-		v.Embed = c.Embed
-		v.Style = &text.Style{}
+		v = &TextView{
+			Embed: view.NewEmbed(ctx.NewId(key)),
+			Style: &text.Style{},
+		}
 	}
 	return v
 }

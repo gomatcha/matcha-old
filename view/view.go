@@ -2,8 +2,9 @@ package view
 
 import (
 	"fmt"
-	"github.com/overcyn/mochi"
 	"sync"
+
+	"github.com/overcyn/mochi"
 )
 
 type View interface {
@@ -19,6 +20,10 @@ type Embed struct {
 	id    mochi.Id
 	root  *root
 	chans []chan struct{}
+}
+
+func NewEmbed(id mochi.Id) *Embed {
+	return &Embed{id: id}
 }
 
 func (e *Embed) Build(ctx *Context) *Model {

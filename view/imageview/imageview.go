@@ -4,17 +4,14 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/view"
-	"golang.org/x/image/bmp"
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
 	"net/http"
-)
 
-const (
-	urlImageViewId int = iota
+	"github.com/overcyn/mochi/paint"
+	"github.com/overcyn/mochi/view"
+	"golang.org/x/image/bmp"
 )
 
 type URLImageView struct {
@@ -30,11 +27,12 @@ type URLImageView struct {
 	err        error
 }
 
-func NewURLImageView(c view.Config) *URLImageView {
-	v, ok := c.Prev.(*URLImageView)
+func NewURLImageView(ctx *view.Context, key interface{}) *URLImageView {
+	v, ok := ctx.Prev(key).(*URLImageView)
 	if !ok {
-		v = &URLImageView{}
-		v.Embed = c.Embed
+		v = &URLImageView{
+			Embed: view.NewEmbed(ctx.NewId(key)),
+		}
 	}
 	return v
 }
@@ -45,7 +43,7 @@ func (v *URLImageView) Build(ctx *view.Context) *view.Model {
 	n := &view.Model{}
 	n.Painter = v.Painter
 
-	chl := NewImageView(ctx.Get(urlImageViewId))
+	chl := NewImageView(ctx, 0)
 	chl.ResizeMode = v.ResizeMode
 	chl.Image = v.image
 	n.Add(chl)
@@ -131,11 +129,12 @@ type ImageView struct {
 	bytes      []byte
 }
 
-func NewImageView(c view.Config) *ImageView {
-	v, ok := c.Prev.(*ImageView)
+func NewImageView(ctx *view.Context, key interface{}) *ImageView {
+	v, ok := ctx.Prev(key).(*ImageView)
 	if !ok {
-		v = &ImageView{}
-		v.Embed = c.Embed
+		v = &ImageView{
+			Embed: view.NewEmbed(ctx.NewId(key)),
+		}
 	}
 	return v
 }

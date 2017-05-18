@@ -1,9 +1,10 @@
 package layout
 
 import (
+	"reflect"
+
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochibridge"
-	"reflect"
 )
 
 func init() {

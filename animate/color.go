@@ -1,8 +1,9 @@
 package animate
 
 import (
-	"github.com/overcyn/mochi"
 	"image/color"
+
+	"github.com/overcyn/mochi"
 )
 
 type ColorInterpolater interface {

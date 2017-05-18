@@ -1,8 +1,9 @@
 package animate
 
 import (
-	"github.com/overcyn/mochi/internal"
 	"time"
+
+	"github.com/overcyn/mochi/internal"
 )
 
 type Ticker struct {

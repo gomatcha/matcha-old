@@ -1,10 +1,11 @@
 package table
 
 import (
+	"math"
+
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/view"
-	"math"
 )
 
 type Direction int

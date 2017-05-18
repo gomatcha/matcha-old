@@ -1,11 +1,12 @@
 package scrollview
 
 import (
+	"math"
+
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/view"
-	"math"
 )
 
 type ScrollView struct {
@@ -17,14 +18,15 @@ type ScrollView struct {
 	Painter                        paint.Painter
 }
 
-func New(c view.Config) *ScrollView {
-	v, ok := c.Prev.(*ScrollView)
+func New(ctx *view.Context, key interface{}) *ScrollView {
+	v, ok := ctx.Prev(key).(*ScrollView)
 	if !ok {
-		v = &ScrollView{}
-		v.Embed = c.Embed
-		v.ShowsHorizontalScrollIndicator = true
-		v.ShowsVerticalScrollIndicator = true
-		v.ScrollEnabled = true
+		v = &ScrollView{
+			Embed: view.NewEmbed(ctx.NewId(key)),
+			ShowsHorizontalScrollIndicator: true,
+			ShowsVerticalScrollIndicator:   true,
+			ScrollEnabled:                  true,
+		}
 	}
 	return v
 }

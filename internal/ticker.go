@@ -1,9 +1,10 @@
 package internal
 
 import (
-	"github.com/overcyn/mochibridge"
 	"sync"
 	"time"
+
+	"github.com/overcyn/mochibridge"
 )
 
 var tickers = struct {

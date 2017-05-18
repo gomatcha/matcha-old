@@ -1,10 +1,11 @@
 package internal
 
 import (
-	"github.com/overcyn/mochi"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/overcyn/mochi"
 )
 
 func TestScreenUpdate(t *testing.T) {
