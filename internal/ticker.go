@@ -6,10 +6,6 @@ import (
 	"time"
 )
 
-func init() {
-	mochibridge.RegisterFunc("github.com/overcyn/mochi/animate screenUpdate", screenUpdate)
-}
-
 var tickers = struct {
 	ts     map[int]*Ticker
 	mu     *sync.Mutex
@@ -18,6 +14,10 @@ var tickers = struct {
 	ts:     map[int]*Ticker{},
 	mu:     &sync.Mutex{},
 	maxKey: 0,
+}
+
+func init() {
+	mochibridge.RegisterFunc("github.com/overcyn/mochi/animate screenUpdate", screenUpdate)
 }
 
 func screenUpdate() {
@@ -31,8 +31,8 @@ func screenUpdate() {
 
 type Ticker struct {
 	key      int
-	mu       *sync.Mutex
-	chans    []chan struct{}
+	mu       sync.Mutex
+	chans    map[chan struct{}]struct{}
 	funcs    []func()
 	timer    *time.Timer
 	start    time.Time
@@ -43,14 +43,10 @@ func NewTicker(duration time.Duration) *Ticker {
 	tickers.mu.Lock()
 	defer tickers.mu.Unlock()
 
-	mu := &sync.Mutex{}
-	mu.Lock()
-	defer mu.Unlock()
-
 	tickers.maxKey += 1
 	t := &Ticker{
 		key:      tickers.maxKey,
-		mu:       mu,
+		chans:    map[chan struct{}]struct{}{},
 		start:    time.Now(),
 		duration: duration,
 	}
@@ -66,7 +62,7 @@ func (t *Ticker) Notify() chan struct{} {
 	defer t.mu.Unlock()
 
 	c := make(chan struct{})
-	t.chans = append(t.chans, c)
+	t.chans[c] = struct{}{}
 	return c
 }
 
@@ -74,15 +70,11 @@ func (t *Ticker) Unnotify(c chan struct{}) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	chans := []chan struct{}{}
-	for _, i := range t.chans {
-		if c != i {
-			chans = append(chans, c)
-		} else {
-			break
-		}
+	_, ok := t.chans[c]
+	if !ok {
+		panic("Unnotify called with unknown chan")
 	}
-	t.chans = chans
+	delete(t.chans, c)
 }
 
 func (t *Ticker) NotifyFunc(f func()) int {
@@ -118,18 +110,13 @@ func (t *Ticker) Stop() {
 
 func (t *Ticker) send() {
 	t.mu.Lock()
-	chans := t.chans
-	funcs := t.funcs
-	t.mu.Unlock()
+	defer t.mu.Unlock()
 
-	for _, i := range chans {
-		select {
-		case i <- struct{}{}:
-			<-i
-		default:
-		}
+	for i := range t.chans {
+		i <- struct{}{}
+		<-i
 	}
-	for _, i := range funcs {
+	for _, i := range t.funcs {
 		i()
 	}
 }

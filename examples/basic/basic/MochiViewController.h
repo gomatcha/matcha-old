@@ -14,7 +14,8 @@
 + (NSPointerArray *)viewControllers;
 + (MochiViewController *)viewControllerWithIdentifier:(NSInteger)identifier;
 + (void)render;
-- (id)initWithName:(NSString *)name;
+
+- (id)initWithMochiValue:(MochiGoValue *)value;
 - (void)render;
 - (void)update:(MochiNode *)node;
 @property (nonatomic, readonly) NSInteger identifier;

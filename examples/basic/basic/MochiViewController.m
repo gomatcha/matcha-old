@@ -44,12 +44,12 @@
     }
 }
 
-- (id)initWithName:(NSString *)name {
+- (id)initWithMochiValue:(MochiGoValue *)value {
     if ((self = [super initWithNibName:nil bundle:nil])) {
-        self.identifier = arc4random_uniform(10000); // TODO(KD): Negative numbers don't pass through correctly?
+        self.identifier = 0;
         [[MochiViewController viewControllers] addPointer:(__bridge void *)self];
         
-        self.goVC = [[[MochiGoBridge sharedBridge] root] call:@"NewViewController" args:@[[[MochiGoValue alloc] initWithInt:self.identifier]]][0];
+        self.goVC = value;
     }
     return self;
 }

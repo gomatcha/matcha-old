@@ -21,8 +21,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [MochiObjcBridge sharedBridge].root = [[MochiRoot alloc] init];
     
+    MochiGoValue *rootVC = [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/examples/animate New"] call:nil args:nil][0];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [[MochiViewController alloc] initWithName:@"blah"];
+    self.window.rootViewController = [[MochiViewController alloc] initWithMochiValue:rootVC];
     [self.window makeKeyAndVisible];
     return YES;
 }

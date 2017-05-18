@@ -13,11 +13,6 @@ import (
 	"time"
 )
 
-type Bridge struct {
-	Name  string
-	State interface{}
-}
-
 type Model struct {
 	Children    map[mochi.Id]View
 	Layouter    layout.Layouter
@@ -80,7 +75,7 @@ func NewViewController(f func(Config) View, id int) *ViewController {
 		id:     id,
 	}
 
-	// start run loop
+	// Start run loop.
 	vc.ticker.NotifyFunc(func() {
 		vc.mu.Lock()
 		defer vc.mu.Unlock()
@@ -186,8 +181,8 @@ func newRoot(f func(Config) View) *root {
 }
 
 func (root *root) addFlag(id mochi.Id, f updateFlag) {
-	// root.mu.Lock() // TODO(KD):
-	// defer root.mu.Unlock()
+	root.mu.Lock()
+	defer root.mu.Unlock()
 
 	root.updateFlags[id] |= f
 }
@@ -196,7 +191,7 @@ func (root *root) update(size layout.Point) {
 	root.mu.Lock()
 	defer root.mu.Unlock()
 
-	// lock entire tree
+	// Lock the entire tree.
 	root.node.lock()
 	defer root.node.unlock()
 
@@ -207,13 +202,13 @@ func (root *root) update(size layout.Point) {
 	// fmt.Println("RunLoop", flag.needsBuild(), flag.needsLayout(), flag.needsPaint())
 
 	if flag.needsBuild() {
-		root.build()
+		root.buildLocked()
 	}
 	if flag.needsLayout() {
-		root.layout(layout.Pt(0, 0), size)
+		root.layoutLocked(layout.Pt(0, 0), size)
 	}
 	if flag.needsPaint() {
-		root.paint()
+		root.paintLocked()
 	}
 	root.updateFlags = map[mochi.Id]updateFlag{}
 }
@@ -225,7 +220,10 @@ func (root *root) renderNode() *RenderNode {
 	return root.node.renderNode()
 }
 
-func (root *root) build() {
+func (root *root) buildLocked() {
+	// prevIds := root.ids
+	// prevNodes := root.nodes
+
 	root.prevIds = root.ids
 	root.ids = map[viewCacheKey]mochi.Id{}
 	root.prevNodes = root.nodes
@@ -247,14 +245,14 @@ func (root *root) build() {
 	root.ids = ids
 }
 
-func (root *root) paint() {
-	root.node.paint()
-}
-
-func (root *root) layout(minSize layout.Point, maxSize layout.Point) {
+func (root *root) layoutLocked(minSize layout.Point, maxSize layout.Point) {
 	g := root.node.layout(minSize, maxSize)
 	g.Frame = g.Frame.Add(layout.Pt(-g.Frame.Min.X, -g.Frame.Min.Y)) // Move Frame.Min to the origin.
 	root.node.layoutGuide = &g
+}
+
+func (root *root) paintLocked() {
+	root.node.paint()
 }
 
 func (root *root) newId() mochi.Id {
@@ -346,6 +344,12 @@ func (n *node) build() {
 	if n.root.updateFlags[n.id].needsBuild() {
 		n.buildId += 1
 
+		// Send lifecycle event to new children.
+		if n.stage == StageDead {
+			n.view.Lifecycle(n.stage, StageVisible)
+			n.stage = StageVisible
+		}
+
 		// Generate the new viewModel.
 		viewModel := n.view.Build(&Context{node: n})
 
@@ -380,13 +384,9 @@ func (n *node) build() {
 			// Lock new child.
 			view.Lock()
 
-			// Send lifecycle event to new children.
-			view.Lifecycle(StageDead, StageVisible)
-
 			children[id] = &node{
 				id:       id,
 				view:     view,
-				stage:    StageVisible,
 				children: map[mochi.Id]*node{},
 				root:     n.root,
 			}
@@ -560,7 +560,7 @@ func (n *node) done() {
 	// 	close(n.layoutDone)
 	// }
 	// if n.paintChan != nil {
-	// 	n.viewModel.Painter.Unnotify(n.layoutChan)
+	// 	n.viewModel.Painter.Unnotify(n.paintChan)
 	// 	close(n.paintDone)
 	// }
 	n.view.Unlock()

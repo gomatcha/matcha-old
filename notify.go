@@ -1,6 +1,7 @@
 package mochi
 
 import (
+	"fmt"
 	"image/color"
 )
 
@@ -64,6 +65,24 @@ type BytesNotifier interface {
 type batchSubscription struct {
 	done chan struct{}
 	c    chan struct{}
+}
+
+func NotifyFunc(n Notifier, f func()) (done chan struct{}) {
+	c := n.Notify()
+	done = make(chan struct{})
+	go func() {
+	loop:
+		for {
+			select {
+			case <-c:
+				f()
+				c <- struct{}{}
+			case <-done:
+				break loop
+			}
+		}
+	}()
+	return done
 }
 
 type BatchNotifier struct {
@@ -152,4 +171,12 @@ func (n *BatchNotifier) resubscribe() {
 			sub.done = done
 		}
 	}
+}
+
+func (n *BatchNotifier) String() string {
+	ns := []Notifier{}
+	for k := range n.notifiers {
+		ns = append(ns, k)
+	}
+	return fmt.Sprintf("&BatchNotifier{%p observing:%v chans:%v}", n, ns, len(n.chans))
 }
