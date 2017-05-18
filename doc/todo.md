@@ -35,3 +35,13 @@ Done:
 * ActionSheet
 * CameraView
 * MapView
+
+
+    <!-- return &view.Model{
+        Children: []View{chl},
+        Layouter: l,
+        Painter:  &paint.Style{BackgroundColor: colornames.Green},
+        Values: map[interface{}]interface{}{
+            touch.Key(): []touch.Recognizer{tap},
+        },
+    } -->

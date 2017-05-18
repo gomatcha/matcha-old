@@ -3,7 +3,7 @@ package touch
 import (
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/paint"
-	_ "github.com/overcyn/mochi/touch"
+	"github.com/overcyn/mochi/touch"
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochibridge"
@@ -33,10 +33,18 @@ func New(c view.Config) *AnimateView {
 }
 
 func (v *AnimateView) Build(ctx *view.Context) *view.Model {
+	tap := touch.NewTapRecognizer(ctx, 1)
+	tap.RecognizedFunc = func(e *touch.TapEvent) {
+		// do something
+	}
+
 	l := constraint.New()
 	m := &view.Model{
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+		Values: map[interface{}]interface{}{
+			touch.Key(): []touch.Recognizer{tap},
+		},
 	}
 
 	chl := basicview.New(ctx, 1)
@@ -47,6 +55,11 @@ func (v *AnimateView) Build(ctx *view.Context) *view.Model {
 		s.LeftEqual(constraint.Const(0))
 		s.WidthEqual(constraint.Const(100))
 		s.HeightEqual(constraint.Const(100))
+	})
+
+	l.Solve(func(s *constraint.Solver) {
+		s.WidthEqual(l.MaxGuide().Width())
+		s.HeightEqual(l.MaxGuide().Height())
 	})
 
 	// r := &touch.Recognizer{}

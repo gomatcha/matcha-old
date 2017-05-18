@@ -2,8 +2,18 @@ package touch
 
 import (
 	"github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/view"
 	"time"
 )
+
+type key struct {
+}
+
+func Key() interface{} {
+	return key{}
+}
+
+// func RecognizerKey() string {
 
 type Recognizer interface {
 }
@@ -16,6 +26,10 @@ type TapEvent struct {
 type TapRecognizer struct {
 	Count          int
 	RecognizedFunc func(e *TapEvent)
+}
+
+func NewTapRecognizer(ctx *view.Context, key interface{}) *TapRecognizer {
+	return nil
 }
 
 type PressEvent struct {
