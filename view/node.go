@@ -115,20 +115,22 @@ type viewCacheKey struct {
 }
 
 type Context struct {
-	node *node
+	node      *node
+	prevIds   map[viewCacheKey]mochi.Id
+	prevNodes map[mochi.Id]*node
 }
 
 func (ctx *Context) Get(key interface{}) Config {
-	return ctx.node.get(key)
+	return ctx.node.get(key, ctx.prevIds, ctx.prevNodes)
 }
 
-func (ctx *Context) Prev(key interface{}) View {
-	return ctx.node.prev(key)
-}
+// func (ctx *Context) Prev(key interface{}) View {
+// 	return ctx.node.prev(key)
+// }
 
-func (ctx *Context) NewId(key interface{}) mochi.Id {
-	return ctx.node.newId(key)
-}
+// func (ctx *Context) NewId(key interface{}) mochi.Id {
+// 	return ctx.node.newId(key)
+// }
 
 type updateFlag int
 
@@ -154,9 +156,7 @@ type root struct {
 	mu          sync.Mutex
 	node        *node
 	ids         map[viewCacheKey]mochi.Id
-	prevIds     map[viewCacheKey]mochi.Id
 	nodes       map[mochi.Id]*node
-	prevNodes   map[mochi.Id]*node
 	maxId       mochi.Id
 	updateFlags map[mochi.Id]updateFlag
 }
@@ -199,7 +199,6 @@ func (root *root) update(size layout.Point) {
 	for _, v := range root.updateFlags {
 		flag |= v
 	}
-	// fmt.Println("RunLoop", flag.needsBuild(), flag.needsLayout(), flag.needsPaint())
 
 	if flag.needsBuild() {
 		root.buildLocked()
@@ -221,20 +220,18 @@ func (root *root) renderNode() *RenderNode {
 }
 
 func (root *root) buildLocked() {
-	// prevIds := root.ids
-	// prevNodes := root.nodes
+	prevIds := root.ids
+	prevNodes := root.nodes
 
-	root.prevIds = root.ids
 	root.ids = map[viewCacheKey]mochi.Id{}
-	root.prevNodes = root.nodes
 	root.nodes = map[mochi.Id]*node{}
-	root.node.build()
+	root.node.build(prevIds, prevNodes)
 
 	keys := map[mochi.Id]viewCacheKey{}
 	for k, v := range root.ids {
 		keys[v] = k
 	}
-	for k, v := range root.prevIds {
+	for k, v := range prevIds {
 		keys[v] = k
 	}
 
@@ -283,29 +280,29 @@ type node struct {
 	paintOptions paint.Style
 }
 
-func (n *node) prev(key interface{}) View {
-	cacheKey := viewCacheKey{key: key, id: n.id}
-	prevId := n.root.prevIds[cacheKey]
-	prevCtx := n.root.prevNodes[prevId]
-	if prevCtx != nil {
-		return prevCtx.view
-	}
-	return nil
-}
+// func (n *node) prev(key interface{}) View {
+// 	cacheKey := viewCacheKey{key: key, id: n.id}
+// 	prevId := n.root.prevIds[cacheKey]
+// 	prevCtx := n.root.prevNodes[prevId]
+// 	if prevCtx != nil {
+// 		return prevCtx.view
+// 	}
+// 	return nil
+// }
 
-func (n *node) newId(key interface{}) mochi.Id {
+// func (n *node) newId(key interface{}) mochi.Id {
+// 	cacheKey := viewCacheKey{key: key, id: n.id}
+// 	id := n.root.newId()
+// 	n.root.ids[cacheKey] = id
+// 	return id
+// }
+
+func (n *node) get(key interface{}, prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*node) Config {
 	cacheKey := viewCacheKey{key: key, id: n.id}
 	id := n.root.newId()
-	n.root.ids[cacheKey] = id
-	return id
-}
 
-func (n *node) get(key interface{}) Config {
-	cacheKey := viewCacheKey{key: key, id: n.id}
-	id := n.root.newId()
-
-	prevId := n.root.prevIds[cacheKey]
-	prevCtx := n.root.prevNodes[prevId]
+	prevId := prevIds[cacheKey]
+	prevCtx := prevNodes[prevId]
 	var prevView View
 	if prevCtx != nil {
 		prevView = prevCtx.view
@@ -340,7 +337,7 @@ func (n *node) renderNode() *RenderNode {
 	return rn
 }
 
-func (n *node) build() {
+func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*node) {
 	if n.root.updateFlags[n.id].needsBuild() {
 		n.buildId += 1
 
@@ -351,7 +348,7 @@ func (n *node) build() {
 		}
 
 		// Generate the new viewModel.
-		viewModel := n.view.Build(&Context{node: n})
+		viewModel := n.view.Build(&Context{node: n, prevIds: prevIds, prevNodes: prevNodes})
 
 		// Diff the old children (n.children) with new children (viewModel.Children).
 		addedIds := []mochi.Id{}
@@ -385,10 +382,9 @@ func (n *node) build() {
 			view.Lock()
 
 			children[id] = &node{
-				id:       id,
-				view:     view,
-				children: map[mochi.Id]*node{},
-				root:     n.root,
+				id:   id,
+				view: view,
+				root: n.root,
 			}
 		}
 		// Reuse old context for unupdated keys.
@@ -491,7 +487,7 @@ func (n *node) build() {
 
 	// Recursively update children.
 	for _, i := range n.children {
-		i.build()
+		i.build(prevIds, prevNodes)
 
 		// Also add to the root
 		n.root.nodes[i.id] = i
