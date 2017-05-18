@@ -121,16 +121,31 @@ type Context struct {
 }
 
 func (ctx *Context) Get(key interface{}) Config {
-	return ctx.node.get(key, ctx.prevIds, ctx.prevNodes)
+	return Config{
+		Prev: ctx.Prev(key),
+		Embed: &Embed{
+			root: ctx.node.root,
+			id:   ctx.NewId(key),
+		},
+	}
 }
 
-// func (ctx *Context) Prev(key interface{}) View {
-// 	return ctx.node.prev(key)
-// }
+func (ctx *Context) Prev(key interface{}) View {
+	cacheKey := viewCacheKey{key: key, id: ctx.node.id}
+	prevId := ctx.prevIds[cacheKey]
+	prevCtx := ctx.prevNodes[prevId]
+	if prevCtx != nil {
+		return prevCtx.view
+	}
+	return nil
+}
 
-// func (ctx *Context) NewId(key interface{}) mochi.Id {
-// 	return ctx.node.newId(key)
-// }
+func (ctx *Context) NewId(key interface{}) mochi.Id {
+	cacheKey := viewCacheKey{key: key, id: ctx.node.id}
+	id := ctx.node.root.newId()
+	ctx.node.root.ids[cacheKey] = id
+	return id
+}
 
 type updateFlag int
 
@@ -166,7 +181,6 @@ func newRoot(f func(Config) View) *root {
 
 	id := root.newId()
 	cfg := Config{Embed: &Embed{
-		mu:   &sync.Mutex{},
 		root: root,
 		id:   id,
 	}}
@@ -278,45 +292,6 @@ type node struct {
 	paintChan    chan struct{}
 	paintDone    chan struct{}
 	paintOptions paint.Style
-}
-
-// func (n *node) prev(key interface{}) View {
-// 	cacheKey := viewCacheKey{key: key, id: n.id}
-// 	prevId := n.root.prevIds[cacheKey]
-// 	prevCtx := n.root.prevNodes[prevId]
-// 	if prevCtx != nil {
-// 		return prevCtx.view
-// 	}
-// 	return nil
-// }
-
-// func (n *node) newId(key interface{}) mochi.Id {
-// 	cacheKey := viewCacheKey{key: key, id: n.id}
-// 	id := n.root.newId()
-// 	n.root.ids[cacheKey] = id
-// 	return id
-// }
-
-func (n *node) get(key interface{}, prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*node) Config {
-	cacheKey := viewCacheKey{key: key, id: n.id}
-	id := n.root.newId()
-
-	prevId := prevIds[cacheKey]
-	prevCtx := prevNodes[prevId]
-	var prevView View
-	if prevCtx != nil {
-		prevView = prevCtx.view
-	}
-
-	n.root.ids[cacheKey] = id
-	return Config{
-		Prev: prevView,
-		Embed: &Embed{
-			mu:   &sync.Mutex{},
-			root: n.root,
-			id:   id,
-		},
-	}
 }
 
 func (n *node) renderNode() *RenderNode {
@@ -545,18 +520,18 @@ func (n *node) done() {
 	n.view.Lifecycle(n.stage, StageDead)
 	n.stage = StageDead
 
-	// if n.buildChan != nil {
-	// 	n.view.Unnotify(n.buildChan)
-	// 	close(n.buildDone)
-	// }
-	// if n.layoutChan != nil {
-	// 	n.viewModel.Layouter.Unnotify(n.layoutChan)
-	// 	close(n.layoutDone)
-	// }
-	// if n.paintChan != nil {
-	// 	n.viewModel.Painter.Unnotify(n.paintChan)
-	// 	close(n.paintDone)
-	// }
+	if n.buildChan != nil {
+		n.view.Unnotify(n.buildChan)
+		close(n.buildDone)
+	}
+	if n.layoutChan != nil {
+		n.viewModel.Layouter.Unnotify(n.layoutChan)
+		close(n.layoutDone)
+	}
+	if n.paintChan != nil {
+		n.viewModel.Painter.Unnotify(n.paintChan)
+		close(n.paintDone)
+	}
 	n.view.Unlock()
 
 	for _, i := range n.children {

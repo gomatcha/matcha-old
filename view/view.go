@@ -15,7 +15,7 @@ type View interface {
 }
 
 type Embed struct {
-	mu    *sync.Mutex
+	mu    sync.Mutex
 	id    mochi.Id
 	root  *root
 	chans []chan struct{}
