@@ -528,7 +528,6 @@ func (sys *System) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layou
 }
 
 func (sys *System) Notify() chan struct{} {
-	fmt.Println("notifiers", sys.notifiers)
 	n := mochi.NewBatchNotifier(sys.notifiers...)
 	c := n.Notify()
 	if c != nil {

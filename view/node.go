@@ -432,13 +432,11 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 		}
 		if viewModel.Layouter != nil {
 			layoutChan := viewModel.Layouter.Notify()
-			fmt.Println("layoutChan", layoutChan)
 			if layoutChan != nil {
 				layoutDone := make(chan struct{})
 				go func() {
 				loop:
 					for {
-						fmt.Println("blah")
 						select {
 						case <-layoutChan:
 							n.root.addFlag(n.id, layoutFlag)

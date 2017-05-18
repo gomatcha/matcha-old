@@ -22,7 +22,7 @@ import (
 )
 
 func init() {
-	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/complex NewViewController", func() *view.ViewController {
+	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/complex New", func() *view.ViewController {
 		return view.NewViewController(func(c view.Config) view.View {
 			return NewNestedView(c)
 		}, 0)

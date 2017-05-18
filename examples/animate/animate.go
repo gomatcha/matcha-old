@@ -39,23 +39,6 @@ func New(c view.Config) *AnimateView {
 		v.ticker = animate.NewTicker(time.Second * 4)
 		v.floatTicker = animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 500})
 		v.colorTicker = animate.ColorInterpolate(v.ticker, animate.RGBALerp{Start: internal.RedColor, End: internal.YellowColor})
-
-		_ = mochi.NotifyFunc(v.ticker, func() {
-			fmt.Println("Ticker update")
-		})
-		v.floatTickerFunc = mochi.NotifyFunc(v.floatTicker, func() {
-			fmt.Println("Float update")
-		})
-		// ticker := mochi.NotifyFunc(v.colorTicker, func() {
-		// 	fmt.Println("Float 2 update")
-		// })
-
-		// time.AfterFunc(time.Second*2, func() {
-		// 	close(ticker)
-		// 	mochi.NotifyFunc(v.colorTicker, func() {
-		// 		fmt.Println("Float 3 update")
-		// 	})
-		// })
 	}
 	return v
 }
@@ -77,35 +60,18 @@ func (v *AnimateView) Build(ctx *view.Context) *view.Model {
 	}
 
 	chl := basicview.New(ctx.Get(1))
-	chl.Painter = &paint.Style{BackgroundColor: internal.BlueColor}
-	// chl.Painter = &paint.AnimatedStyle{BackgroundColor: v.colorTicker}
+	chl.Painter = &paint.AnimatedStyle{BackgroundColor: v.colorTicker}
 	m.Add(chl)
 	l.Add(chl, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
-		// s.WidthEqual(constraint.Notifier(v.floatTicker))
-		// s.HeightEqual(constraint.Notifier(v.floatTicker))
-		s.WidthEqual(constraint.Const(100))
-		s.HeightEqual(constraint.Const(100))
+		s.WidthEqual(constraint.Notifier(v.floatTicker))
+		s.HeightEqual(constraint.Notifier(v.floatTicker))
 	})
 
 	l.Solve(func(s *constraint.Solver) {
 		s.WidthEqual(l.MaxGuide().Width())
 		s.HeightEqual(l.MaxGuide().Height())
 	})
-
-	// if v.floatTickerFunc != nil {
-	// 	close(v.floatTickerFunc)
-	// }
-	// v.floatTickerFunc = mochi.NotifyFunc(v.floatTicker, func() {
-	// 	fmt.Println("Float update")
-	// })
-	if v.constraintFunc != nil {
-		close(v.constraintFunc)
-	}
-	v.constraintFunc = mochi.NotifyFunc(l, func() {
-		fmt.Println("Constraint update")
-	})
-
 	return m
 }
