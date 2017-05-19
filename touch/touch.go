@@ -6,14 +6,26 @@ import (
 	"time"
 )
 
-type key struct {
+func init() {
+	view.RegisterMarshaller(func(m *view.Model) (string, []byte) {
+		value, ok := m.Values[key{}]
+		if !ok {
+			return "", nil
+		}
+		recognizers, ok := value.([]Recognizer)
+		if !ok {
+			panic("Value is not a []Recognizer")
+		}
+		_ = recognizers
+		return "github.com/overcyn/mochi/touch", nil
+	})
 }
+
+type key struct{}
 
 func Key() interface{} {
 	return key{}
 }
-
-// func RecognizerKey() string {
 
 type Recognizer interface {
 }

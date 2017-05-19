@@ -10,8 +10,8 @@ import (
 )
 
 func init() {
-	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/imageview New", func() *view.ViewController {
-		return view.NewViewController(func(c view.Config) view.View {
+	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/imageview New", func() *view.Root {
+		return view.NewRoot(func(c view.Config) view.View {
 			return New(c)
 		}, 0)
 	})

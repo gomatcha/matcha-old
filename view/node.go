@@ -14,20 +14,10 @@ import (
 	"github.com/overcyn/mochibridge"
 )
 
-type Model struct {
-	Children    map[mochi.Id]View
-	Layouter    layout.Layouter
-	Painter     paint.Painter
-	Values      map[interface{}]interface{}
-	BridgeName  string
-	BridgeState interface{}
-}
+var marshallers []func(*Model) (string, []byte)
 
-func (n *Model) Add(v View) {
-	if n.Children == nil {
-		n.Children = map[mochi.Id]View{}
-	}
-	n.Children[v.Id()] = v
+func RegisterMarshaller(f func(*Model) (string, []byte)) {
+	marshallers = append(marshallers, f)
 }
 
 type RenderNode struct {
@@ -38,6 +28,7 @@ type RenderNode struct {
 	Children     map[mochi.Id]*RenderNode
 	BridgeName   string
 	BridgeState  interface{}
+	Values       map[string][]byte
 	LayoutGuide  *layout.Guide
 	PaintOptions paint.Style
 }
@@ -59,7 +50,7 @@ func (n *RenderNode) DebugString() string {
 	return str
 }
 
-type ViewController struct {
+type Root struct {
 	id         int
 	mu         *sync.Mutex
 	root       *root
@@ -68,8 +59,8 @@ type ViewController struct {
 	ticker     *internal.Ticker
 }
 
-func NewViewController(f func(Config) View, id int) *ViewController {
-	vc := &ViewController{
+func NewRoot(f func(Config) View, id int) *Root {
+	vc := &Root{
 		mu:     &sync.Mutex{},
 		root:   newRoot(f),
 		ticker: internal.NewTicker(time.Hour * 99999),
@@ -89,7 +80,7 @@ func NewViewController(f func(Config) View, id int) *ViewController {
 	return vc
 }
 
-func (vc *ViewController) Render() *RenderNode {
+func (vc *Root) Render() *RenderNode {
 	vc.mu.Lock()
 	defer vc.mu.Unlock()
 
@@ -98,7 +89,7 @@ func (vc *ViewController) Render() *RenderNode {
 	return rn
 }
 
-func (vc *ViewController) SetSize(p layout.Point) {
+func (vc *Root) SetSize(p layout.Point) {
 	vc.mu.Lock()
 	defer vc.mu.Unlock()
 
@@ -296,6 +287,14 @@ type node struct {
 }
 
 func (n *node) renderNode() *RenderNode {
+	values := map[string][]byte{}
+	for _, f := range marshallers {
+		key, value := f(n.viewModel)
+		if key != "" {
+			values[key] = value
+		}
+	}
+
 	rn := &RenderNode{
 		Id:           n.id,
 		BuildId:      n.buildId,
@@ -304,6 +303,7 @@ func (n *node) renderNode() *RenderNode {
 		Children:     map[mochi.Id]*RenderNode{},
 		BridgeName:   n.viewModel.BridgeName,
 		BridgeState:  n.viewModel.BridgeState,
+		Values:       values,
 		LayoutGuide:  n.layoutGuide,
 		PaintOptions: n.paintOptions,
 	}

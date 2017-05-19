@@ -5,6 +5,8 @@ import (
 	"sync"
 
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/paint"
 )
 
 type View interface {
@@ -89,4 +91,20 @@ func EntersStage(from, to, s Stage) bool {
 
 func ExitsStage(from, to, s Stage) bool {
 	return from >= s && to < s
+}
+
+type Model struct {
+	Children    map[mochi.Id]View
+	Layouter    layout.Layouter
+	Painter     paint.Painter
+	Values      map[interface{}]interface{}
+	BridgeName  string
+	BridgeState interface{}
+}
+
+func (n *Model) Add(v View) {
+	if n.Children == nil {
+		n.Children = map[mochi.Id]View{}
+	}
+	n.Children[v.Id()] = v
 }
