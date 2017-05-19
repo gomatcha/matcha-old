@@ -11,7 +11,9 @@ import (
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/layout/full"
 	"github.com/overcyn/mochi/paint"
+	"github.com/overcyn/mochi/view/encoding"
 	"github.com/overcyn/mochibridge"
+	"zombiezen.com/go/capnproto2"
 )
 
 var marshallers []func(*Model) (string, []byte)
@@ -225,6 +227,28 @@ func (root *root) renderNode() *RenderNode {
 	return root.node.renderNode()
 }
 
+func (root *root) CapnpEncode() ([]byte, error) {
+	msg, s, err := capnp.NewMessage(capnp.SingleSegment(nil))
+	if err != nil {
+		return nil, err
+	}
+
+	capnpRoot, err := encoding.NewRootRoot(s)
+	if err != nil {
+		return nil, err
+	}
+
+	node, err := (&node{layoutGuide: &layout.Guide{}}).MarshalCapnp(s)
+	if err != nil {
+		return nil, err
+	}
+	if err = capnpRoot.SetNode(node); err != nil {
+		return nil, err
+	}
+
+	return msg.Marshal()
+}
+
 func (root *root) buildLocked() {
 	prevIds := root.ids
 	prevNodes := root.nodes
@@ -311,6 +335,35 @@ func (n *node) renderNode() *RenderNode {
 		rn.Children[k] = v.renderNode()
 	}
 	return rn
+}
+
+func (n *node) MarshalCapnp(s *capnp.Segment) (encoding.Node, error) {
+	node, err := encoding.NewNode(s)
+	if err != nil {
+		return encoding.Node{}, err
+	}
+	node.SetId(int64(n.id))
+	node.SetBuildId(int64(n.buildId))
+	node.SetLayoutId(int64(n.layoutId))
+	node.SetPaintId(int64(n.paintId))
+
+	guide, err := n.layoutGuide.MarshalCapnp(s)
+	if err != nil {
+		return encoding.Node{}, err
+	}
+	if err = node.SetLayoutGuide(guide); err != nil {
+		return encoding.Node{}, err
+	}
+
+	children, err := encoding.NewNode_List(s, int32(len(n.children)))
+	if err != nil {
+		return encoding.Node{}, err
+	}
+	if err = node.SetChildren(children); err != nil {
+		return encoding.Node{}, err
+	}
+
+	return node, nil
 }
 
 func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*node) {

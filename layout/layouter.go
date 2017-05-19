@@ -3,7 +3,10 @@ package layout
 import (
 	"reflect"
 
+	capnp "zombiezen.com/go/capnproto2"
+
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout/encoding"
 	"github.com/overcyn/mochibridge"
 )
 
@@ -33,6 +36,32 @@ type Guide struct {
 	Insets Insets
 	ZIndex int
 	// Transform?
+}
+
+func (g Guide) MarshalCapnp(s *capnp.Segment) (encoding.Guide, error) {
+	guide, err := encoding.NewGuide(s)
+	if err != nil {
+		return encoding.Guide{}, err
+	}
+
+	frame, err := g.Frame.MarshalCapnp(s)
+	if err != nil {
+		return encoding.Guide{}, err
+	}
+	if err = guide.SetFrame(frame); err != nil {
+		return encoding.Guide{}, err
+	}
+
+	insets, err := g.Insets.MarshalCapnp(s)
+	if err != nil {
+		return encoding.Guide{}, err
+	}
+	if err = guide.SetInsets(insets); err != nil {
+		return encoding.Guide{}, err
+	}
+
+	guide.SetZIndex(int64(g.ZIndex))
+	return guide, nil
 }
 
 func (g Guide) Left() float64 {

@@ -1,25 +1,26 @@
 package touch
 
 import (
+	"time"
+
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/view"
-	"time"
 )
 
-func init() {
-	view.RegisterMarshaller(func(m *view.Model) (string, []byte) {
-		value, ok := m.Values[key{}]
-		if !ok {
-			return "", nil
-		}
-		recognizers, ok := value.([]Recognizer)
-		if !ok {
-			panic("Value is not a []Recognizer")
-		}
-		_ = recognizers
-		return "github.com/overcyn/mochi/touch", nil
-	})
-}
+// func init() {
+// 	view.RegisterMarshaller(func(m *view.Model) (string, []byte) {
+// 		value, ok := m.Values[key{}]
+// 		if !ok {
+// 			return "", nil
+// 		}
+// 		recognizers, ok := value.([]Recognizer)
+// 		if !ok {
+// 			panic("Value is not a []Recognizer")
+// 		}
+// 		_ = recognizers
+// 		return "github.com/overcyn/mochi/touch", nil
+// 	})
+// }
 
 type key struct{}
 
