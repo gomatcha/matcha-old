@@ -2,7 +2,7 @@
 
 ## Building Mochi
 
+
     cd $GOPATH/src/github.com/overcyn/mochi/examples/basic
     gomobile bind -target=ios github.com/overcyn/mochi/app
-
-/var/folders/c3/8xb38pfj2kvg1c87nfdq8h140000gn/T/gomobile-work-618387728
+    goimports -w .; and go generate ./...; and go test ./...; and go vet ./...

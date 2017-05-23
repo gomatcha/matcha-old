@@ -1,3 +1,13 @@
+Notify for eventually consistent data.
+Callbacks for synchronous changes.
+
+Locking occurs upwards from the bottom. So callbacks must go upwards to prevent deadlocks.
+
+
+We can skip over locks if Lock has never been called.
+
+http://twistedoakstudios.com/blog/Post8424_deadlocks-in-practice-dont-hold-locks-while-notifying
+https://www.cocoawithlove.com/blog/cwlsignal.html
 https://groups.google.com/forum/m/#!topic/golang-nuts/TesRETRf4KM
 http://blog.ralch.com/tutorial/golang-sharing-libraries/
 https://docs.google.com/document/d/1nr-TQHw_er6GOQRsF6T43GGhFDelrAP0NqSS_00RgZQ/edit#

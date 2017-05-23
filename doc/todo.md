@@ -1,11 +1,13 @@
 Prevent duplicate keys.
+Install Protobuf
 
 High:
 * Event Handling / Gestures
 * Navigation View Controllers
+* Switch to protobufs.
 
 Medium:
-* FlatBuffers
+* Thread & locking. How to prevent deadlocks?
 
 Low:
 * Responder Chain
@@ -17,7 +19,6 @@ Low:
 * Video / Sound / Microphone / Accelerometer
 
 Done:
-* Thread & locking
 * Lifecycle
 * Animations
 * UIView tree updating
@@ -45,3 +46,5 @@ Done:
             touch.Key(): []touch.Recognizer{tap},
         },
     } -->
+    
+We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.

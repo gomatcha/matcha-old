@@ -15,7 +15,6 @@ struct Node {
   layoutGuide @5 :Layout.Guide;
   values @6: Map(Text, AnyPointer);
   
-  
 # Id           mochi.Id
 # BuildId      int64
 # LayoutId     int64

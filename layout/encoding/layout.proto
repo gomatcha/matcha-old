@@ -1,0 +1,27 @@
+syntax = "proto3";
+package layout;
+
+option go_package = "encoding";
+
+message Point {
+  double x = 1;
+  double y = 2;
+}
+
+message Rect {
+  Point min = 1;
+  Point max = 2;
+}
+
+message Insets {
+  double top = 1;
+  double left = 2;
+  double bottom = 3;
+  double right = 4;
+}
+
+message Guide {
+  Rect frame = 1;
+  Insets insets = 2;
+  int64 zIndex = 3;
+}

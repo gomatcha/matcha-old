@@ -13,14 +13,7 @@ import (
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/view/encoding"
 	"github.com/overcyn/mochibridge"
-	"zombiezen.com/go/capnproto2"
 )
-
-var marshallers []func(*Model) (string, []byte)
-
-func RegisterMarshaller(f func(*Model) (string, []byte)) {
-	marshallers = append(marshallers, f)
-}
 
 type RenderNode struct {
 	Id           mochi.Id
@@ -227,26 +220,13 @@ func (root *root) renderNode() *RenderNode {
 	return root.node.renderNode()
 }
 
-func (root *root) CapnpEncode() ([]byte, error) {
-	msg, s, err := capnp.NewMessage(capnp.SingleSegment(nil))
-	if err != nil {
-		return nil, err
-	}
+func (root *root) EncodeProtobuf() *encoding.Root {
+	root.mu.Lock()
+	defer root.mu.Unlock()
 
-	capnpRoot, err := encoding.NewRootRoot(s)
-	if err != nil {
-		return nil, err
+	return &encoding.Root{
+		Node: root.node.EncodeProtobuf(),
 	}
-
-	node, err := (&node{layoutGuide: &layout.Guide{}}).MarshalCapnp(s)
-	if err != nil {
-		return nil, err
-	}
-	if err = capnpRoot.SetNode(node); err != nil {
-		return nil, err
-	}
-
-	return msg.Marshal()
 }
 
 func (root *root) buildLocked() {
@@ -311,14 +291,6 @@ type node struct {
 }
 
 func (n *node) renderNode() *RenderNode {
-	values := map[string][]byte{}
-	for _, f := range marshallers {
-		key, value := f(n.viewModel)
-		if key != "" {
-			values[key] = value
-		}
-	}
-
 	rn := &RenderNode{
 		Id:           n.id,
 		BuildId:      n.buildId,
@@ -327,7 +299,7 @@ func (n *node) renderNode() *RenderNode {
 		Children:     map[mochi.Id]*RenderNode{},
 		BridgeName:   n.viewModel.BridgeName,
 		BridgeState:  n.viewModel.BridgeState,
-		Values:       values,
+		Values:       nil,
 		LayoutGuide:  n.layoutGuide,
 		PaintOptions: n.paintOptions,
 	}
@@ -337,33 +309,20 @@ func (n *node) renderNode() *RenderNode {
 	return rn
 }
 
-func (n *node) MarshalCapnp(s *capnp.Segment) (encoding.Node, error) {
-	node, err := encoding.NewNode(s)
-	if err != nil {
-		return encoding.Node{}, err
-	}
-	node.SetId(int64(n.id))
-	node.SetBuildId(int64(n.buildId))
-	node.SetLayoutId(int64(n.layoutId))
-	node.SetPaintId(int64(n.paintId))
-
-	guide, err := n.layoutGuide.MarshalCapnp(s)
-	if err != nil {
-		return encoding.Node{}, err
-	}
-	if err = node.SetLayoutGuide(guide); err != nil {
-		return encoding.Node{}, err
+func (n *node) EncodeProtobuf() *encoding.Node {
+	children := []*encoding.Node{}
+	for _, v := range n.children {
+		children = append(children, v.EncodeProtobuf())
 	}
 
-	children, err := encoding.NewNode_List(s, int32(len(n.children)))
-	if err != nil {
-		return encoding.Node{}, err
+	return &encoding.Node{
+		Id:          int64(n.id),
+		BuildId:     n.buildId,
+		LayoutId:    n.layoutId,
+		PaintId:     n.paintId,
+		Children:    children,
+		LayoutGuide: n.layoutGuide.EncodeProtobuf(),
 	}
-	if err = node.SetChildren(children); err != nil {
-		return encoding.Node{}, err
-	}
-
-	return node, nil
 }
 
 func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*node) {
