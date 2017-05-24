@@ -1,6 +1,9 @@
 Prevent duplicate keys.
 Install Protobuf
 
+// Comm.SyncNotifier SyncNotify() chan struct{}
+// Comm.Notifier Notify() chan-> struct{}
+
 High:
 * Event Handling / Gestures
 * Navigation View Controllers
@@ -8,6 +11,7 @@ High:
 
 Medium:
 * Thread & locking. How to prevent deadlocks?
+* Lock should go bottom to top
 
 Low:
 * Responder Chain

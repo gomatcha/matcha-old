@@ -1,0 +1,89 @@
+Running main() from gmock_main.cc
+[==========] Running 39 tests from 1 test case.
+[----------] Global test environment set-up.
+[----------] 39 tests from Lite
+[ RUN      ] Lite.AllLite1
+[       OK ] Lite.AllLite1 (8 ms)
+[ RUN      ] Lite.AllLite2
+[       OK ] Lite.AllLite2 (4 ms)
+[ RUN      ] Lite.AllLite3
+[       OK ] Lite.AllLite3 (1 ms)
+[ RUN      ] Lite.AllLite5
+[       OK ] Lite.AllLite5 (0 ms)
+[ RUN      ] Lite.AllLite6
+[       OK ] Lite.AllLite6 (1 ms)
+[ RUN      ] Lite.AllLite7
+[       OK ] Lite.AllLite7 (0 ms)
+[ RUN      ] Lite.AllLite8
+[       OK ] Lite.AllLite8 (0 ms)
+[ RUN      ] Lite.AllLite9
+[       OK ] Lite.AllLite9 (1 ms)
+[ RUN      ] Lite.AllLite10
+[       OK ] Lite.AllLite10 (0 ms)
+[ RUN      ] Lite.AllLite11
+[       OK ] Lite.AllLite11 (0 ms)
+[ RUN      ] Lite.AllLite12
+[       OK ] Lite.AllLite12 (1 ms)
+[ RUN      ] Lite.AllLite13
+[       OK ] Lite.AllLite13 (0 ms)
+[ RUN      ] Lite.AllLite14
+[       OK ] Lite.AllLite14 (0 ms)
+[ RUN      ] Lite.AllLite15
+[       OK ] Lite.AllLite15 (3 ms)
+[ RUN      ] Lite.AllLite16
+[       OK ] Lite.AllLite16 (1 ms)
+[ RUN      ] Lite.AllLite17
+[       OK ] Lite.AllLite17 (0 ms)
+[ RUN      ] Lite.AllLite18
+[       OK ] Lite.AllLite18 (0 ms)
+[ RUN      ] Lite.AllLite19
+[       OK ] Lite.AllLite19 (2 ms)
+[ RUN      ] Lite.AllLite20
+[       OK ] Lite.AllLite20 (0 ms)
+[ RUN      ] Lite.AllLite21
+[       OK ] Lite.AllLite21 (1 ms)
+[ RUN      ] Lite.AllLite22
+[       OK ] Lite.AllLite22 (0 ms)
+[ RUN      ] Lite.AllLite23
+[       OK ] Lite.AllLite23 (1 ms)
+[ RUN      ] Lite.AllLite24
+[       OK ] Lite.AllLite24 (1 ms)
+[ RUN      ] Lite.AllLite25
+[       OK ] Lite.AllLite25 (0 ms)
+[ RUN      ] Lite.AllLite26
+[       OK ] Lite.AllLite26 (1 ms)
+[ RUN      ] Lite.AllLite27
+[       OK ] Lite.AllLite27 (0 ms)
+[ RUN      ] Lite.AllLite28
+[       OK ] Lite.AllLite28 (1 ms)
+[ RUN      ] Lite.AllLite29
+[       OK ] Lite.AllLite29 (1 ms)
+[ RUN      ] Lite.AllLite32
+[       OK ] Lite.AllLite32 (0 ms)
+[ RUN      ] Lite.AllLite33
+[       OK ] Lite.AllLite33 (1 ms)
+[ RUN      ] Lite.AllLite34
+[       OK ] Lite.AllLite34 (0 ms)
+[ RUN      ] Lite.AllLite35
+[       OK ] Lite.AllLite35 (0 ms)
+[ RUN      ] Lite.AllLite36
+[       OK ] Lite.AllLite36 (0 ms)
+[ RUN      ] Lite.AllLite37
+[       OK ] Lite.AllLite37 (1 ms)
+[ RUN      ] Lite.AllLite38
+[       OK ] Lite.AllLite38 (0 ms)
+[ RUN      ] Lite.AllLite39
+[       OK ] Lite.AllLite39 (0 ms)
+[ RUN      ] Lite.AllLite40
+[       OK ] Lite.AllLite40 (0 ms)
+[ RUN      ] Lite.AllLite41
+[       OK ] Lite.AllLite41 (0 ms)
+[ RUN      ] Lite.AllLite42
+PASS
+[       OK ] Lite.AllLite42 (0 ms)
+[----------] 39 tests from Lite (31 ms total)
+
+[----------] Global test environment tear-down
+[==========] 39 tests from 1 test case ran. (31 ms total)
+[  PASSED  ] 39 tests.
+PASS protobuf-lite-test (exit status: 0)

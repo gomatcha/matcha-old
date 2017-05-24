@@ -1,0 +1,7 @@
+framework module "Mochi" {
+	// header "ref.h"
+    header "mochiobjc.h"
+    header "mochigo.h"
+
+    export *
+}

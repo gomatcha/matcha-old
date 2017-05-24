@@ -70,6 +70,14 @@ func NewRoot(f func(Config) View, id int) *Root {
 		vc.root.update(vc.size)
 		rn := vc.root.renderNode()
 		mochibridge.Root().Call("updateId:withRenderNode:", mochibridge.Int64(int64(id)), mochibridge.Interface(rn))
+
+		pb, err := vc.root.MarshalProtobuf()
+		if err != nil {
+			fmt.Println("err", err)
+			return
+		}
+		fmt.Println("pb", pb)
+		mochibridge.Root().Call("updateId:withProtobuf:", mochibridge.Int64(int64(id)), mochibridge.Bytes(pb))
 		// fmt.Println(rn.DebugString())
 	})
 	return vc
@@ -218,6 +226,10 @@ func (root *root) renderNode() *RenderNode {
 	defer root.mu.Unlock()
 
 	return root.node.renderNode()
+}
+
+func (root *root) MarshalProtobuf() ([]byte, error) {
+	return root.EncodeProtobuf().Marshal()
 }
 
 func (root *root) EncodeProtobuf() *encoding.Root {

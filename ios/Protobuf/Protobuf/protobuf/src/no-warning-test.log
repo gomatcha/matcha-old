@@ -1,0 +1,12 @@
+Running main() from gtest_main.cc
+[==========] Running 1 test from 1 test case.
+[----------] Global test environment set-up.
+[----------] 1 test from NoWarningTest
+[ RUN      ] NoWarningTest.Empty
+[       OK ] NoWarningTest.Empty (0 ms)
+[----------] 1 test from NoWarningTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test case ran. (1 ms total)
+[  PASSED  ] 1 test.
+PASS no-warning-test (exit status: 0)
