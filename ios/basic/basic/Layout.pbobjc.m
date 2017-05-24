@@ -19,41 +19,42 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-#pragma mark - LayoutRoot
+#pragma mark - MochiPBLayoutRoot
 
-@implementation LayoutRoot
+@implementation MochiPBLayoutRoot
 
 // No extensions in the file and no imports, so no need to generate
 // +extensionRegistry.
 
 @end
 
-#pragma mark - LayoutRoot_FileDescriptor
+#pragma mark - MochiPBLayoutRoot_FileDescriptor
 
-static GPBFileDescriptor *LayoutRoot_FileDescriptor(void) {
+static GPBFileDescriptor *MochiPBLayoutRoot_FileDescriptor(void) {
   // This is called by +initialize so there is no need to worry
   // about thread safety of the singleton.
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
     descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"layout"
+                                                 objcPrefix:@"MochiPB"
                                                      syntax:GPBFileSyntaxProto3];
   }
   return descriptor;
 }
 
-#pragma mark - Point_Class
+#pragma mark - MochiPBPoint
 
-@implementation Point_Class
+@implementation MochiPBPoint
 
 @dynamic x;
 @dynamic y;
 
-typedef struct Point_Class__storage_ {
+typedef struct MochiPBPoint__storage_ {
   uint32_t _has_storage_[1];
   double x;
   double y;
-} Point_Class__storage_;
+} MochiPBPoint__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -64,31 +65,30 @@ typedef struct Point_Class__storage_ {
       {
         .name = "x",
         .dataTypeSpecific.className = NULL,
-        .number = Point_Class_FieldNumber_X,
+        .number = MochiPBPoint_FieldNumber_X,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(Point_Class__storage_, x),
+        .offset = (uint32_t)offsetof(MochiPBPoint__storage_, x),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeDouble,
       },
       {
         .name = "y",
         .dataTypeSpecific.className = NULL,
-        .number = Point_Class_FieldNumber_Y,
+        .number = MochiPBPoint_FieldNumber_Y,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(Point_Class__storage_, y),
+        .offset = (uint32_t)offsetof(MochiPBPoint__storage_, y),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeDouble,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[Point_Class class]
-                                     rootClass:[LayoutRoot class]
-                                          file:LayoutRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MochiPBPoint class]
+                                     rootClass:[MochiPBLayoutRoot class]
+                                          file:MochiPBLayoutRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(Point_Class__storage_)
+                                   storageSize:sizeof(MochiPBPoint__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
-    [localDescriptor setupMessageClassNameSuffix:@"_Class"];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }
@@ -97,18 +97,18 @@ typedef struct Point_Class__storage_ {
 
 @end
 
-#pragma mark - Rect_Class
+#pragma mark - MochiPBRect
 
-@implementation Rect_Class
+@implementation MochiPBRect
 
 @dynamic hasMin, min;
 @dynamic hasMax, max;
 
-typedef struct Rect_Class__storage_ {
+typedef struct MochiPBRect__storage_ {
   uint32_t _has_storage_[1];
-  Point_Class *min;
-  Point_Class *max;
-} Rect_Class__storage_;
+  MochiPBPoint *min;
+  MochiPBPoint *max;
+} MochiPBRect__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -118,32 +118,31 @@ typedef struct Rect_Class__storage_ {
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "min",
-        .dataTypeSpecific.className = GPBStringifySymbol(Point_Class),
-        .number = Rect_Class_FieldNumber_Min,
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBPoint),
+        .number = MochiPBRect_FieldNumber_Min,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(Rect_Class__storage_, min),
+        .offset = (uint32_t)offsetof(MochiPBRect__storage_, min),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "max",
-        .dataTypeSpecific.className = GPBStringifySymbol(Point_Class),
-        .number = Rect_Class_FieldNumber_Max,
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBPoint),
+        .number = MochiPBRect_FieldNumber_Max,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(Rect_Class__storage_, max),
+        .offset = (uint32_t)offsetof(MochiPBRect__storage_, max),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[Rect_Class class]
-                                     rootClass:[LayoutRoot class]
-                                          file:LayoutRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MochiPBRect class]
+                                     rootClass:[MochiPBLayoutRoot class]
+                                          file:MochiPBLayoutRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(Rect_Class__storage_)
+                                   storageSize:sizeof(MochiPBRect__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
-    [localDescriptor setupMessageClassNameSuffix:@"_Class"];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }
@@ -152,22 +151,22 @@ typedef struct Rect_Class__storage_ {
 
 @end
 
-#pragma mark - Insets
+#pragma mark - MochiPBInsets
 
-@implementation Insets
+@implementation MochiPBInsets
 
 @dynamic top;
 @dynamic left;
 @dynamic bottom;
 @dynamic right;
 
-typedef struct Insets__storage_ {
+typedef struct MochiPBInsets__storage_ {
   uint32_t _has_storage_[1];
   double top;
   double left;
   double bottom;
   double right;
-} Insets__storage_;
+} MochiPBInsets__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -178,47 +177,47 @@ typedef struct Insets__storage_ {
       {
         .name = "top",
         .dataTypeSpecific.className = NULL,
-        .number = Insets_FieldNumber_Top,
+        .number = MochiPBInsets_FieldNumber_Top,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(Insets__storage_, top),
+        .offset = (uint32_t)offsetof(MochiPBInsets__storage_, top),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeDouble,
       },
       {
         .name = "left",
         .dataTypeSpecific.className = NULL,
-        .number = Insets_FieldNumber_Left,
+        .number = MochiPBInsets_FieldNumber_Left,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(Insets__storage_, left),
+        .offset = (uint32_t)offsetof(MochiPBInsets__storage_, left),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeDouble,
       },
       {
         .name = "bottom",
         .dataTypeSpecific.className = NULL,
-        .number = Insets_FieldNumber_Bottom,
+        .number = MochiPBInsets_FieldNumber_Bottom,
         .hasIndex = 2,
-        .offset = (uint32_t)offsetof(Insets__storage_, bottom),
+        .offset = (uint32_t)offsetof(MochiPBInsets__storage_, bottom),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeDouble,
       },
       {
         .name = "right",
         .dataTypeSpecific.className = NULL,
-        .number = Insets_FieldNumber_Right,
+        .number = MochiPBInsets_FieldNumber_Right,
         .hasIndex = 3,
-        .offset = (uint32_t)offsetof(Insets__storage_, right),
+        .offset = (uint32_t)offsetof(MochiPBInsets__storage_, right),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeDouble,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[Insets class]
-                                     rootClass:[LayoutRoot class]
-                                          file:LayoutRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MochiPBInsets class]
+                                     rootClass:[MochiPBLayoutRoot class]
+                                          file:MochiPBLayoutRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(Insets__storage_)
+                                   storageSize:sizeof(MochiPBInsets__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
@@ -228,20 +227,20 @@ typedef struct Insets__storage_ {
 
 @end
 
-#pragma mark - Guide
+#pragma mark - MochiPBGuide
 
-@implementation Guide
+@implementation MochiPBGuide
 
 @dynamic hasFrame, frame;
 @dynamic hasInsets, insets;
 @dynamic zIndex;
 
-typedef struct Guide__storage_ {
+typedef struct MochiPBGuide__storage_ {
   uint32_t _has_storage_[1];
-  Rect_Class *frame;
-  Insets *insets;
+  MochiPBRect *frame;
+  MochiPBInsets *insets;
   int64_t zIndex;
-} Guide__storage_;
+} MochiPBGuide__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -251,39 +250,39 @@ typedef struct Guide__storage_ {
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "frame",
-        .dataTypeSpecific.className = GPBStringifySymbol(Rect_Class),
-        .number = Guide_FieldNumber_Frame,
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBRect),
+        .number = MochiPBGuide_FieldNumber_Frame,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(Guide__storage_, frame),
+        .offset = (uint32_t)offsetof(MochiPBGuide__storage_, frame),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "insets",
-        .dataTypeSpecific.className = GPBStringifySymbol(Insets),
-        .number = Guide_FieldNumber_Insets,
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBInsets),
+        .number = MochiPBGuide_FieldNumber_Insets,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(Guide__storage_, insets),
+        .offset = (uint32_t)offsetof(MochiPBGuide__storage_, insets),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "zIndex",
         .dataTypeSpecific.className = NULL,
-        .number = Guide_FieldNumber_ZIndex,
+        .number = MochiPBGuide_FieldNumber_ZIndex,
         .hasIndex = 2,
-        .offset = (uint32_t)offsetof(Guide__storage_, zIndex),
+        .offset = (uint32_t)offsetof(MochiPBGuide__storage_, zIndex),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[Guide class]
-                                     rootClass:[LayoutRoot class]
-                                          file:LayoutRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MochiPBGuide class]
+                                     rootClass:[MochiPBLayoutRoot class]
+                                          file:MochiPBLayoutRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(Guide__storage_)
+                                   storageSize:sizeof(MochiPBGuide__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =

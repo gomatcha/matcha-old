@@ -27,12 +27,13 @@
 
 CF_EXTERN_C_BEGIN
 
-@class Guide;
-@class Node;
+@class GPBAny;
+@class MochiPBGuide;
+@class MochiPBNode;
 
 NS_ASSUME_NONNULL_BEGIN
 
-#pragma mark - ViewRoot
+#pragma mark - MochiPBViewRoot
 
 /**
  * Exposes the extension registry for this file.
@@ -44,21 +45,23 @@ NS_ASSUME_NONNULL_BEGIN
  * which is a @c GPBExtensionRegistry that includes all the extensions defined by
  * this file and all files that it depends on.
  **/
-@interface ViewRoot : GPBRootObject
+@interface MochiPBViewRoot : GPBRootObject
 @end
 
-#pragma mark - Node
+#pragma mark - MochiPBNode
 
-typedef GPB_ENUM(Node_FieldNumber) {
-  Node_FieldNumber_Id_p = 1,
-  Node_FieldNumber_BuildId = 2,
-  Node_FieldNumber_LayoutId = 3,
-  Node_FieldNumber_PaintId = 4,
-  Node_FieldNumber_ChildrenArray = 5,
-  Node_FieldNumber_LayoutGuide = 6,
+typedef GPB_ENUM(MochiPBNode_FieldNumber) {
+  MochiPBNode_FieldNumber_Id_p = 1,
+  MochiPBNode_FieldNumber_BuildId = 2,
+  MochiPBNode_FieldNumber_LayoutId = 3,
+  MochiPBNode_FieldNumber_PaintId = 4,
+  MochiPBNode_FieldNumber_ChildrenArray = 5,
+  MochiPBNode_FieldNumber_LayoutGuide = 6,
+  MochiPBNode_FieldNumber_BridgeName = 7,
+  MochiPBNode_FieldNumber_BridgeValue = 8,
 };
 
-@interface Node : GPBMessage
+@interface MochiPBNode : GPBMessage
 
 @property(nonatomic, readwrite) int64_t id_p;
 
@@ -68,25 +71,31 @@ typedef GPB_ENUM(Node_FieldNumber) {
 
 @property(nonatomic, readwrite) int64_t paintId;
 
-@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<Node*> *childrenArray;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *bridgeName;
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBAny *bridgeValue;
+/** Test to see if @c bridgeValue has been set. */
+@property(nonatomic, readwrite) BOOL hasBridgeValue;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MochiPBNode*> *childrenArray;
 /** The number of items in @c childrenArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger childrenArray_Count;
 
-@property(nonatomic, readwrite, strong, null_resettable) Guide *layoutGuide;
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBGuide *layoutGuide;
 /** Test to see if @c layoutGuide has been set. */
 @property(nonatomic, readwrite) BOOL hasLayoutGuide;
 
 @end
 
-#pragma mark - Root
+#pragma mark - MochiPBRoot
 
-typedef GPB_ENUM(Root_FieldNumber) {
-  Root_FieldNumber_Node = 1,
+typedef GPB_ENUM(MochiPBRoot_FieldNumber) {
+  MochiPBRoot_FieldNumber_Node = 1,
 };
 
-@interface Root : GPBMessage
+@interface MochiPBRoot : GPBMessage
 
-@property(nonatomic, readwrite, strong, null_resettable) Node *node;
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBNode *node;
 /** Test to see if @c node has been set. */
 @property(nonatomic, readwrite) BOOL hasNode;
 

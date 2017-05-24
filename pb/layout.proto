@@ -2,6 +2,7 @@ syntax = "proto3";
 package layout;
 
 option go_package = "pb";
+option objc_class_prefix = "MochiPB";
 
 message Point {
   double x = 1;

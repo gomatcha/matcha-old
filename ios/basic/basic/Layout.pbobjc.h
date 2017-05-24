@@ -27,13 +27,13 @@
 
 CF_EXTERN_C_BEGIN
 
-@class Insets;
-@class Point_Class;
-@class Rect_Class;
+@class MochiPBInsets;
+@class MochiPBPoint;
+@class MochiPBRect;
 
 NS_ASSUME_NONNULL_BEGIN
 
-#pragma mark - LayoutRoot
+#pragma mark - MochiPBLayoutRoot
 
 /**
  * Exposes the extension registry for this file.
@@ -45,17 +45,17 @@ NS_ASSUME_NONNULL_BEGIN
  * which is a @c GPBExtensionRegistry that includes all the extensions defined by
  * this file and all files that it depends on.
  **/
-@interface LayoutRoot : GPBRootObject
+@interface MochiPBLayoutRoot : GPBRootObject
 @end
 
-#pragma mark - Point_Class
+#pragma mark - MochiPBPoint
 
-typedef GPB_ENUM(Point_Class_FieldNumber) {
-  Point_Class_FieldNumber_X = 1,
-  Point_Class_FieldNumber_Y = 2,
+typedef GPB_ENUM(MochiPBPoint_FieldNumber) {
+  MochiPBPoint_FieldNumber_X = 1,
+  MochiPBPoint_FieldNumber_Y = 2,
 };
 
-@interface Point_Class : GPBMessage
+@interface MochiPBPoint : GPBMessage
 
 @property(nonatomic, readwrite) double x;
 
@@ -63,35 +63,35 @@ typedef GPB_ENUM(Point_Class_FieldNumber) {
 
 @end
 
-#pragma mark - Rect_Class
+#pragma mark - MochiPBRect
 
-typedef GPB_ENUM(Rect_Class_FieldNumber) {
-  Rect_Class_FieldNumber_Min = 1,
-  Rect_Class_FieldNumber_Max = 2,
+typedef GPB_ENUM(MochiPBRect_FieldNumber) {
+  MochiPBRect_FieldNumber_Min = 1,
+  MochiPBRect_FieldNumber_Max = 2,
 };
 
-@interface Rect_Class : GPBMessage
+@interface MochiPBRect : GPBMessage
 
-@property(nonatomic, readwrite, strong, null_resettable) Point_Class *min;
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBPoint *min;
 /** Test to see if @c min has been set. */
 @property(nonatomic, readwrite) BOOL hasMin;
 
-@property(nonatomic, readwrite, strong, null_resettable) Point_Class *max;
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBPoint *max;
 /** Test to see if @c max has been set. */
 @property(nonatomic, readwrite) BOOL hasMax;
 
 @end
 
-#pragma mark - Insets
+#pragma mark - MochiPBInsets
 
-typedef GPB_ENUM(Insets_FieldNumber) {
-  Insets_FieldNumber_Top = 1,
-  Insets_FieldNumber_Left = 2,
-  Insets_FieldNumber_Bottom = 3,
-  Insets_FieldNumber_Right = 4,
+typedef GPB_ENUM(MochiPBInsets_FieldNumber) {
+  MochiPBInsets_FieldNumber_Top = 1,
+  MochiPBInsets_FieldNumber_Left = 2,
+  MochiPBInsets_FieldNumber_Bottom = 3,
+  MochiPBInsets_FieldNumber_Right = 4,
 };
 
-@interface Insets : GPBMessage
+@interface MochiPBInsets : GPBMessage
 
 @property(nonatomic, readwrite) double top;
 
@@ -103,21 +103,21 @@ typedef GPB_ENUM(Insets_FieldNumber) {
 
 @end
 
-#pragma mark - Guide
+#pragma mark - MochiPBGuide
 
-typedef GPB_ENUM(Guide_FieldNumber) {
-  Guide_FieldNumber_Frame = 1,
-  Guide_FieldNumber_Insets = 2,
-  Guide_FieldNumber_ZIndex = 3,
+typedef GPB_ENUM(MochiPBGuide_FieldNumber) {
+  MochiPBGuide_FieldNumber_Frame = 1,
+  MochiPBGuide_FieldNumber_Insets = 2,
+  MochiPBGuide_FieldNumber_ZIndex = 3,
 };
 
-@interface Guide : GPBMessage
+@interface MochiPBGuide : GPBMessage
 
-@property(nonatomic, readwrite, strong, null_resettable) Rect_Class *frame;
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBRect *frame;
 /** Test to see if @c frame has been set. */
 @property(nonatomic, readwrite) BOOL hasFrame;
 
-@property(nonatomic, readwrite, strong, null_resettable) Insets *insets;
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBInsets *insets;
 /** Test to see if @c insets has been set. */
 @property(nonatomic, readwrite) BOOL hasInsets;
 

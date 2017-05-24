@@ -8,6 +8,24 @@
 
 #import "MochiNode.h"
 #import "MochiBridge.h"
+#import "View.pbobjc.h"
+#import "Layout.pbobjc.h"
+#import "View.pbobjc.h"
+
+@interface MochiNodeRoot ()
+@property (nonatomic, strong) MochiNode *node;
+@end
+
+@implementation MochiNodeRoot
+- (id)initWithProtobuf:(MochiPBRoot *)pbroot {
+    if ((self = [super init])) {
+        if (pbroot.node) {
+            self.node = [[MochiNode alloc] initWithProtobuf:pbroot.node];
+        }
+    }
+    return self;
+}
+@end
 
 @interface MochiNode ()
 @property (nonatomic, strong) NSDictionary *nodeChildren;
@@ -18,39 +36,48 @@
 @property (nonatomic, strong) NSNumber *buildId;
 @property (nonatomic, strong) NSNumber *layoutId;
 @property (nonatomic, strong) NSNumber *paintId;
+@property (nonatomic, strong) NSString *bridgeName;
+@property (nonatomic, strong) GPBAny *pbBridgeState;
+@property (nonatomic, strong) MochiGoValue *bridgeState;
 @end
 
 @implementation MochiNode
 
-- (id)initWithProtobuf:(NSData *)data {
-    if (self = [super init]) {
+- (id)initWithProtobuf:(MochiPBNode *)node {
+    if ((self = [super init])) {
+        self.identifier = @(node.id_p);
+        self.buildId = @(node.buildId);
+        self.layoutId = @(node.layoutId);
+        self.paintId = @(node.paintId);
+        self.paintOptions = nil;
+        self.guide = [[MochiLayoutGuide alloc] initWithProtobuf:node.layoutGuide];
+        self.bridgeName = node.bridgeName;
+        self.pbBridgeState = node.bridgeValue;
+        
+        NSMutableDictionary *children = [NSMutableDictionary dictionary];
+        for (MochiPBNode *i in node.childrenArray) {
+            MochiNode *child = [[MochiNode alloc] initWithProtobuf:i];
+            children[child.identifier] = child;
+        }
+        self.nodeChildren = children;
+        
     }
     return self;
 }
 
 - (id)initWithGoValue:(MochiGoValue *)value {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.goValue = value;
         self.identifier = @(value[@"Id"].toLongLong);
         self.buildId = @(value[@"BuildId"].toLongLong);
         self.layoutId = @(value[@"LayoutId"].toLongLong);
         self.paintId = @(value[@"PaintId"].toLongLong);
+        self.paintOptions = [[MochiPaintOptions alloc] initWithGoValue:self.goValue[@"PaintOptions"]];
+        self.guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
+        self.bridgeName = self.goValue[@"BridgeName"].toString;
+        self.bridgeState = self.goValue[@"BridgeState"];
     }
     return self;
-}
-
-- (MochiPaintOptions *)paintOptions {
-    if (_paintOptions == nil) {
-        _paintOptions = [[MochiPaintOptions alloc] initWithGoValue:self.goValue[@"PaintOptions"]];
-    }
-    return _paintOptions;
-}
-
-- (MochiLayoutGuide *)guide {
-    if (_guide == nil) {
-        _guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
-    }
-    return _guide;
 }
 
 - (NSDictionary<NSNumber *, MochiNode *> *)nodeChildren {
@@ -63,14 +90,6 @@
         _nodeChildren = nodeChildren;
     }
     return _nodeChildren;
-}
-
-- (NSString *)bridgeName {
-    return self.goValue[@"BridgeName"].toString;
-}
-
-- (MochiGoValue *)bridgeState {
-    return self.goValue[@"BridgeState"];
 }
 
 @end
@@ -106,6 +125,15 @@
 @end
 
 @implementation MochiLayoutGuide
+
+- (id)initWithProtobuf:(MochiPBGuide *)guide {
+    if (self = [super init]) {
+        self.frame = guide.frame.toCGRect;
+        self.insets = guide.insets.toUIEdgeInsets;
+        self.zIndex = guide.zIndex;
+    }
+    return self;
+}
 
 - (id)initWithGoValue:(MochiGoValue *)value {
     if (value.isNil) {

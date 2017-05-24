@@ -11,6 +11,7 @@
 #import "MochiNode.h"
 #import "MochiViewController.h"
 #import "MochiDeadlockLogger.h"
+#import "View.pbobjc.h"
 
 @interface MochiRoot ()
 @property (nonatomic, strong) CADisplayLink *displayLink;
@@ -22,11 +23,11 @@
 - (id)init {
     if ((self = [super init])) {
         NSLog(@"what");
-        [MochiDeadlockLogger sharedLogger]; // Initialize
+//        [MochiDeadlockLogger sharedLogger]; // Initialize
         
         self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(screenUpdate)];
         [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-        self.displayLink.preferredFramesPerSecond = 2;
+//        self.displayLink.preferredFramesPerSecond = 2;
         self.screenUpdateFunc = [[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/animate screenUpdate"];
     }
     return self;
@@ -46,17 +47,20 @@
 }
 
 - (void)screenUpdate {
-    NSLog(@"udptade");
     [self.screenUpdateFunc call:nil args:nil];
 }
 
 - (void)updateId:(NSInteger)identifier withRenderNode:(MochiGoValue *)renderNode {
-    MochiViewController *vc = [MochiViewController viewControllerWithIdentifier:identifier];
-    [vc update:[[MochiNode alloc] initWithGoValue:renderNode]];
+//    MochiViewController *vc = [MochiViewController viewControllerWithIdentifier:identifier];
+//    [vc update:[[MochiNode alloc] initWithGoValue:renderNode]];
 }
 
 - (void)updateId:(NSInteger)identifier withProtobuf:(NSData *)protobuf {
-    NSLog(@"KD:%s, data:%@", __FUNCTION__, protobuf);
+    MochiPBRoot *pbroot = [[MochiPBRoot alloc] initWithData:protobuf error:nil];
+    MochiNodeRoot *root = [[MochiNodeRoot alloc] initWithProtobuf:pbroot];
+    
+    MochiViewController *vc = [MochiViewController viewControllerWithIdentifier:identifier];
+    [vc update:root.node];
 }
 
 @end

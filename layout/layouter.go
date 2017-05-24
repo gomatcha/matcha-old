@@ -4,7 +4,7 @@ import (
 	"reflect"
 
 	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/layout/encoding"
+	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochibridge"
 )
 
@@ -36,8 +36,8 @@ type Guide struct {
 	// Transform?
 }
 
-func (g Guide) EncodeProtobuf() *encoding.Guide {
-	return &encoding.Guide{
+func (g Guide) EncodeProtobuf() *pb.Guide {
+	return &pb.Guide{
 		Frame:  g.Frame.EncodeProtobuf(),
 		Insets: g.Insets.EncodeProtobuf(),
 		ZIndex: int64(g.ZIndex),

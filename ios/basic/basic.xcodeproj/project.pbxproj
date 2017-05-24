@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 67294E301EC93D9F00910D6E /* MochiDeadlockLogger.m */; };
 		674080C21ED50DB70093D987 /* Protobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 674080C11ED50DB70093D987 /* Protobuf.framework */; };
+		674080C81ED56C880093D987 /* Protobuf.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 674080C11ED50DB70093D987 /* Protobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		674080CB1ED613330093D987 /* Text.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080C91ED613330093D987 /* Text.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67608ABC1E8F966500AE2EC7 /* MochiGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608ABB1E8F966500AE2EC7 /* MochiGuide.m */; };
 		67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608AC61EA8545600AE2EC7 /* MochiRoot.m */; };
 		676EF4CD1E8E341800C1488A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4CC1E8E341800C1488A /* main.m */; };
@@ -25,10 +27,25 @@
 		67D89E341ED507240063A1E2 /* View.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67D89E321ED507240063A1E2 /* View.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		674080C61ED56C690093D987 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				674080C81ED56C880093D987 /* Protobuf.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		67294E2F1EC93D9F00910D6E /* MochiDeadlockLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiDeadlockLogger.h; sourceTree = "<group>"; };
 		67294E301EC93D9F00910D6E /* MochiDeadlockLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiDeadlockLogger.m; sourceTree = "<group>"; };
 		674080C11ED50DB70093D987 /* Protobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Protobuf.framework; path = "../../../../../../../../Library/Developer/Xcode/DerivedData/Mochi-golgwzqwibyynlcwpuxsrmkwyenm/Build/Products/Debug-iphoneos/Protobuf.framework"; sourceTree = "<group>"; };
+		674080C91ED613330093D987 /* Text.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Text.pbobjc.m; sourceTree = "<group>"; };
+		674080CA1ED613330093D987 /* Text.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Text.pbobjc.h; sourceTree = "<group>"; };
 		67608ABA1E8F966500AE2EC7 /* MochiGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiGuide.h; sourceTree = "<group>"; };
 		67608ABB1E8F966500AE2EC7 /* MochiGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiGuide.m; sourceTree = "<group>"; };
 		67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mochi.framework; sourceTree = "<group>"; };
@@ -53,7 +70,6 @@
 		676EF4F91E8F19A500C1488A /* MochiNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiNode.m; sourceTree = "<group>"; };
 		67D89DD01ED4A5EA0063A1E2 /* Layout.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Layout.pbobjc.m; sourceTree = "<group>"; };
 		67D89DD11ED4A5EA0063A1E2 /* Layout.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.pbobjc.h; sourceTree = "<group>"; };
-		67D89E251ED4AF290063A1E2 /* ProtocolBufferFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ProtocolBufferFramework.framework; path = "../../../../../../../../Library/Developer/Xcode/DerivedData/Mochi-golgwzqwibyynlcwpuxsrmkwyenm/Build/Products/Debug-iphoneos/ProtocolBufferFramework.framework"; sourceTree = "<group>"; };
 		67D89E321ED507240063A1E2 /* View.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.pbobjc.m; sourceTree = "<group>"; };
 		67D89E331ED507240063A1E2 /* View.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.pbobjc.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -115,10 +131,12 @@
 		676EF4F11E8ECF4400C1488A /* Mochi */ = {
 			isa = PBXGroup;
 			children = (
-				67D89E321ED507240063A1E2 /* View.pbobjc.m */,
+				674080C91ED613330093D987 /* Text.pbobjc.m */,
+				674080CA1ED613330093D987 /* Text.pbobjc.h */,
 				67D89E331ED507240063A1E2 /* View.pbobjc.h */,
-				67D89DD01ED4A5EA0063A1E2 /* Layout.pbobjc.m */,
+				67D89E321ED507240063A1E2 /* View.pbobjc.m */,
 				67D89DD11ED4A5EA0063A1E2 /* Layout.pbobjc.h */,
+				67D89DD01ED4A5EA0063A1E2 /* Layout.pbobjc.m */,
 				67608AC51EA8545600AE2EC7 /* MochiRoot.h */,
 				67608AC61EA8545600AE2EC7 /* MochiRoot.m */,
 				676EF4F51E8ED68800C1488A /* MochiBridge.h */,
@@ -141,7 +159,6 @@
 			isa = PBXGroup;
 			children = (
 				674080C11ED50DB70093D987 /* Protobuf.framework */,
-				67D89E251ED4AF290063A1E2 /* ProtocolBufferFramework.framework */,
 				67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */,
 			);
 			name = Frameworks;
@@ -157,6 +174,7 @@
 				676EF4C41E8E341800C1488A /* Sources */,
 				676EF4C51E8E341800C1488A /* Frameworks */,
 				676EF4C61E8E341800C1488A /* Resources */,
+				674080C61ED56C690093D987 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -220,6 +238,7 @@
 			files = (
 				67D89DD21ED4A5EA0063A1E2 /* Layout.pbobjc.m in Sources */,
 				67D89E341ED507240063A1E2 /* View.pbobjc.m in Sources */,
+				674080CB1ED613330093D987 /* Text.pbobjc.m in Sources */,
 				67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */,
 				676EF4E41E8E34E300C1488A /* ViewController.m in Sources */,
 				67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */,

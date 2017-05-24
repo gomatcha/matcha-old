@@ -5,6 +5,7 @@ import (
 	"sync"
 	"unicode/utf8"
 
+	"github.com/overcyn/mochi/pb"
 	"golang.org/x/text/unicode/norm"
 )
 
@@ -45,6 +46,13 @@ func New(b []byte) *Text {
 	t.positions = map[int64]int{}
 	t.normalize()
 	return t
+}
+
+func (t *Text) EncodeProtobuf() *pb.Text {
+	return &pb.Text{
+		Text:  t.str,
+		Style: t.style.EncodeProtobuf(),
+	}
 }
 
 func (t *Text) ByteAt(byteIdx int) byte {

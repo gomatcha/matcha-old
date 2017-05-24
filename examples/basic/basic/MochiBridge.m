@@ -13,6 +13,11 @@
     NSArray<MochiGoValue *> *array = [value call:@"RGBA" args:nil];
     return [UIColor colorWithRed:((double)array[0].toUnsignedLongLong)/0xffff green:((double)array[1].toUnsignedLongLong)/0xffff blue:((double)array[2].toUnsignedLongLong)/0xffff alpha:((double)array[3].toUnsignedLongLong)/0xffff];
 }
+
+- (id)initWithProtobuf(MochiPBColor *)value {
+    return [UIColor colorWithRed:((double)value.red)/0xffff green:((double)value.green)/0xffff blue:((double)value.blue)/0xffff alpha:((double)value.alpha)/0xffff];
+}
+
 @end
 
 @implementation MochiGoValue (Mochi)
@@ -223,6 +228,99 @@
     }
     return [[NSAttributedString alloc] initWithString:string attributes:dictionary];
 }
+
+- (id)initWithProtobuf:(MochiPBText *)value {
+    NSString *string = value.text;
+    MochiPBTextStyle *style = value.style;
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    dictionary[NSParagraphStyleAttributeName] = paragraphStyle;
+
+    
+    NSTextAlignment alignment;
+    switch (style.textAlignment) {
+    case 0:
+        alignment = NSTextAlignmentLeft;
+        break;
+    case 1: 
+        alignment = NSTextAlignmentRight;
+        break;
+    case 2:
+        alignment = NSTextAlignmentCenter;
+        break;
+    case 3:
+        alignment = NSTextAlignmentJustified;
+        break;
+    default:
+        alignment = NSTextAlignmentLeft;
+    }
+    paragraphStyle.alignment = alignment;
+    
+    NSUnderlineStyle strikethroughStyle;
+    switch (style.strikethroughStyle) {
+    case 0:
+        strikethroughStyle = NSUnderlineStyleNone;
+        break;
+    case 1: 
+        strikethroughStyle = NSUnderlineStyleSingle;
+        break;
+    case 2:
+        strikethroughStyle = NSUnderlineStyleDouble;
+        break;
+    case 3:
+        strikethroughStyle = NSUnderlineStyleThick;
+        break;
+    case 4:
+        strikethroughStyle = NSUnderlinePatternDot;
+        break;
+    case 5:
+        strikethroughStyle = NSUnderlinePatternDash;
+        break;
+    default:
+        strikethroughStyle = NSUnderlineStyleNone;
+    }
+    dictionary[NSStrikethroughStyleAttributeName] = @(strikethroughStyle);
+    
+    dictionary[NSStrikethroughColorAttributeName] = [[UIColor alloc] initWithProtobuf:style.strikethroughColor];
+    
+    NSUnderlineStyle underlineStyle;
+    switch (style.underlineStyle) {
+    case 0:
+        underlineStyle = NSUnderlineStyleNone;
+        break;
+    case 1: 
+        underlineStyle = NSUnderlineStyleSingle;
+        break;
+    case 2:
+        underlineStyle = NSUnderlineStyleDouble;
+        break;
+    case 3:
+        underlineStyle = NSUnderlineStyleThick;
+        break;
+    case 4:
+        underlineStyle = NSUnderlinePatternDot;
+        break;
+    case 5:
+        underlineStyle = NSUnderlinePatternDash;
+        break;
+    default:
+        underlineStyle = NSUnderlineStyleNone;
+    }
+    dictionary[NSUnderlineStyleAttributeName] = @(underlineStyle);
+    
+    dictionary[NSUnderlineColorAttributeName] = [[UIColor alloc] initWithProtobuf:style.underlineColor];
+    dictionary[NSFontAttributeName] = [[UIFont alloc] initWithProtobuf:style.font];
+    dictionary[NSHyphenationFactorDocumentAttribute] = style.hyphenation;
+    paragraphStyle.lineHeightMultiple = style.lineHeightMultiple;
+    // TODO(KD): AttributeKeyMaxLines
+    dictionary[NSForegroundColorAttributeName] = [[UIColor alloc] initWithProtobuf:style.textColor];
+    // TODO(KD): AttributeKeyTextWrap
+    // TODO(KD): AttributeKeyTruncation
+    // TODO(KD): AttributeKeyTruncationString
+
+    return [[NSAttributedString alloc] initWithString:string attributes:dictionary];
+}
+
 @end
 
 @implementation UIFont (Mochi)
@@ -231,6 +329,17 @@
     attr[UIFontDescriptorFamilyAttribute] = value[@"Family"].toString;
     attr[UIFontDescriptorFaceAttribute] = value[@"Face"].toString;
     attr[UIFontDescriptorSizeAttribute] = @(value[@"Size"].toDouble);
+
+    UIFontDescriptor *desc = [[UIFontDescriptor alloc] initWithFontAttributes:attr];
+    UIFont *font = [UIFont fontWithDescriptor:desc size:0];
+    return font;
+}
+
+- (id)initWithProtobuf(MochiPBFont *)value {
+    NSMutableDictionary *attr = [NSMutableDictionary dictionary];
+    attr[UIFontDescriptorFamilyAttribute] = value.family;
+    attr[UIFontDescriptorFaceAttribute] = value.face;
+    attr[UIFontDescriptorSizeAttribute] = value.size;
 
     UIFontDescriptor *desc = [[UIFontDescriptor alloc] initWithFontAttributes:attr];
     UIFont *font = [UIFont fontWithDescriptor:desc size:0];

@@ -23,6 +23,7 @@
 @property (nonatomic, readonly) NSNumber *buildId;
 @property (nonatomic, readonly) NSNumber *layoutId;
 @property (nonatomic, readonly) NSNumber *paintId;
+@property (nonatomic, readonly) GPBAny *pbBridgeState;
 @end
 
 @interface MochiPaintOptions : NSObject

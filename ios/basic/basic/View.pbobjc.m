@@ -13,6 +13,12 @@
  #import "GPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
+#if GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
+ #import <Protobuf/Any.pbobjc.h>
+#else
+ #import "google/protobuf/Any.pbobjc.h"
+#endif
+
  #import "View.pbobjc.h"
  #import "Layout.pbobjc.h"
 // @@protoc_insertion_point(imports)
@@ -20,49 +26,54 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-#pragma mark - ViewRoot
+#pragma mark - MochiPBViewRoot
 
-@implementation ViewRoot
+@implementation MochiPBViewRoot
 
 // No extensions in the file and none of the imports (direct or indirect)
 // defined extensions, so no need to generate +extensionRegistry.
 
 @end
 
-#pragma mark - ViewRoot_FileDescriptor
+#pragma mark - MochiPBViewRoot_FileDescriptor
 
-static GPBFileDescriptor *ViewRoot_FileDescriptor(void) {
+static GPBFileDescriptor *MochiPBViewRoot_FileDescriptor(void) {
   // This is called by +initialize so there is no need to worry
   // about thread safety of the singleton.
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
     descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"view"
+                                                 objcPrefix:@"MochiPB"
                                                      syntax:GPBFileSyntaxProto3];
   }
   return descriptor;
 }
 
-#pragma mark - Node
+#pragma mark - MochiPBNode
 
-@implementation Node
+@implementation MochiPBNode
 
 @dynamic id_p;
 @dynamic buildId;
 @dynamic layoutId;
 @dynamic paintId;
+@dynamic bridgeName;
+@dynamic hasBridgeValue, bridgeValue;
 @dynamic childrenArray, childrenArray_Count;
 @dynamic hasLayoutGuide, layoutGuide;
 
-typedef struct Node__storage_ {
+typedef struct MochiPBNode__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *childrenArray;
-  Guide *layoutGuide;
+  MochiPBGuide *layoutGuide;
+  NSString *bridgeName;
+  GPBAny *bridgeValue;
   int64_t id_p;
   int64_t buildId;
   int64_t layoutId;
   int64_t paintId;
-} Node__storage_;
+} MochiPBNode__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -73,69 +84,87 @@ typedef struct Node__storage_ {
       {
         .name = "id_p",
         .dataTypeSpecific.className = NULL,
-        .number = Node_FieldNumber_Id_p,
+        .number = MochiPBNode_FieldNumber_Id_p,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(Node__storage_, id_p),
+        .offset = (uint32_t)offsetof(MochiPBNode__storage_, id_p),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "buildId",
         .dataTypeSpecific.className = NULL,
-        .number = Node_FieldNumber_BuildId,
+        .number = MochiPBNode_FieldNumber_BuildId,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(Node__storage_, buildId),
+        .offset = (uint32_t)offsetof(MochiPBNode__storage_, buildId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "layoutId",
         .dataTypeSpecific.className = NULL,
-        .number = Node_FieldNumber_LayoutId,
+        .number = MochiPBNode_FieldNumber_LayoutId,
         .hasIndex = 2,
-        .offset = (uint32_t)offsetof(Node__storage_, layoutId),
+        .offset = (uint32_t)offsetof(MochiPBNode__storage_, layoutId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "paintId",
         .dataTypeSpecific.className = NULL,
-        .number = Node_FieldNumber_PaintId,
+        .number = MochiPBNode_FieldNumber_PaintId,
         .hasIndex = 3,
-        .offset = (uint32_t)offsetof(Node__storage_, paintId),
+        .offset = (uint32_t)offsetof(MochiPBNode__storage_, paintId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "childrenArray",
-        .dataTypeSpecific.className = GPBStringifySymbol(Node),
-        .number = Node_FieldNumber_ChildrenArray,
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBNode),
+        .number = MochiPBNode_FieldNumber_ChildrenArray,
         .hasIndex = GPBNoHasBit,
-        .offset = (uint32_t)offsetof(Node__storage_, childrenArray),
+        .offset = (uint32_t)offsetof(MochiPBNode__storage_, childrenArray),
         .flags = GPBFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "layoutGuide",
-        .dataTypeSpecific.className = GPBStringifySymbol(Guide),
-        .number = Node_FieldNumber_LayoutGuide,
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBGuide),
+        .number = MochiPBNode_FieldNumber_LayoutGuide,
+        .hasIndex = 6,
+        .offset = (uint32_t)offsetof(MochiPBNode__storage_, layoutGuide),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "bridgeName",
+        .dataTypeSpecific.className = NULL,
+        .number = MochiPBNode_FieldNumber_BridgeName,
         .hasIndex = 4,
-        .offset = (uint32_t)offsetof(Node__storage_, layoutGuide),
+        .offset = (uint32_t)offsetof(MochiPBNode__storage_, bridgeName),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "bridgeValue",
+        .dataTypeSpecific.className = GPBStringifySymbol(GPBAny),
+        .number = MochiPBNode_FieldNumber_BridgeValue,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(MochiPBNode__storage_, bridgeValue),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[Node class]
-                                     rootClass:[ViewRoot class]
-                                          file:ViewRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MochiPBNode class]
+                                     rootClass:[MochiPBViewRoot class]
+                                          file:MochiPBViewRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(Node__storage_)
+                                   storageSize:sizeof(MochiPBNode__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\002\007\000\003\010\000\004\007\000\006\013\000";
+        "\006\002\007\000\003\010\000\004\007\000\006\013\000\007\n\000\010\013\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -146,16 +175,16 @@ typedef struct Node__storage_ {
 
 @end
 
-#pragma mark - Root
+#pragma mark - MochiPBRoot
 
-@implementation Root
+@implementation MochiPBRoot
 
 @dynamic hasNode, node;
 
-typedef struct Root__storage_ {
+typedef struct MochiPBRoot__storage_ {
   uint32_t _has_storage_[1];
-  Node *node;
-} Root__storage_;
+  MochiPBNode *node;
+} MochiPBRoot__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -165,21 +194,21 @@ typedef struct Root__storage_ {
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "node",
-        .dataTypeSpecific.className = GPBStringifySymbol(Node),
-        .number = Root_FieldNumber_Node,
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBNode),
+        .number = MochiPBRoot_FieldNumber_Node,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(Root__storage_, node),
+        .offset = (uint32_t)offsetof(MochiPBRoot__storage_, node),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[Root class]
-                                     rootClass:[ViewRoot class]
-                                          file:ViewRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MochiPBRoot class]
+                                     rootClass:[MochiPBViewRoot class]
+                                          file:MochiPBViewRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(Root__storage_)
+                                   storageSize:sizeof(MochiPBRoot__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;

@@ -6,14 +6,27 @@ import (
 	"sync"
 	"time"
 
+	"github.com/gogo/protobuf/proto"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/internal"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/layout/full"
 	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/view/encoding"
+	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochibridge"
 )
+
+var bridgeMu sync.Mutex
+var bridgeMarshaller = map[string]func(interface{}) (proto.Message, error){}
+
+func RegisterBridgeMarshaller(bridgeName string, marshaller func(interface{}) (proto.Message, error)) {
+	bridgeMu.Lock()
+	defer bridgeMu.Unlock()
+
+	bridgeMarshaller[bridgeName] = marshaller
+}
 
 type RenderNode struct {
 	Id           mochi.Id
@@ -68,15 +81,12 @@ func NewRoot(f func(Config) View, id int) *Root {
 		defer vc.mu.Unlock()
 
 		vc.root.update(vc.size)
-		rn := vc.root.renderNode()
-		mochibridge.Root().Call("updateId:withRenderNode:", mochibridge.Int64(int64(id)), mochibridge.Interface(rn))
 
 		pb, err := vc.root.MarshalProtobuf()
 		if err != nil {
 			fmt.Println("err", err)
 			return
 		}
-		fmt.Println("pb", pb)
 		mochibridge.Root().Call("updateId:withProtobuf:", mochibridge.Int64(int64(id)), mochibridge.Bytes(pb))
 		// fmt.Println(rn.DebugString())
 	})
@@ -229,14 +239,14 @@ func (root *root) renderNode() *RenderNode {
 }
 
 func (root *root) MarshalProtobuf() ([]byte, error) {
-	return root.EncodeProtobuf().Marshal()
+	return proto.Marshal(root.EncodeProtobuf())
 }
 
-func (root *root) EncodeProtobuf() *encoding.Root {
+func (root *root) EncodeProtobuf() *pb.Root {
 	root.mu.Lock()
 	defer root.mu.Unlock()
 
-	return &encoding.Root{
+	return &pb.Root{
 		Node: root.node.EncodeProtobuf(),
 	}
 }
@@ -321,19 +331,36 @@ func (n *node) renderNode() *RenderNode {
 	return rn
 }
 
-func (n *node) EncodeProtobuf() *encoding.Node {
-	children := []*encoding.Node{}
+func (n *node) EncodeProtobuf() *pb.Node {
+	children := []*pb.Node{}
 	for _, v := range n.children {
 		children = append(children, v.EncodeProtobuf())
 	}
 
-	return &encoding.Node{
+	bridgeMu.Lock()
+	marshalFunc, ok := bridgeMarshaller[n.viewModel.BridgeName]
+	bridgeMu.Unlock()
+
+	var pbAny *any.Any
+	if ok {
+		bridgeMessage, err := marshalFunc(n.viewModel.BridgeState)
+		if err != nil {
+			a, err := ptypes.MarshalAny(bridgeMessage)
+			if err != nil {
+				pbAny = a
+			}
+		}
+	}
+
+	return &pb.Node{
 		Id:          int64(n.id),
 		BuildId:     n.buildId,
 		LayoutId:    n.layoutId,
 		PaintId:     n.paintId,
 		Children:    children,
 		LayoutGuide: n.layoutGuide.EncodeProtobuf(),
+		BridgeName:  n.viewModel.BridgeName,
+		BridgeValue: pbAny,
 	}
 }
 

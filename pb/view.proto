@@ -1,14 +1,18 @@
 syntax = "proto3";
 package view;
 import "layout.proto";
+import "google/protobuf/any.proto";
 
 option go_package = "pb";
+option objc_class_prefix = "MochiPB";
 
 message Node {
   int64 id = 1;
   int64 buildId = 2;
   int64 layoutId = 3;
   int64 paintId = 4;
+  string bridgeName = 7;
+  google.protobuf.Any bridgeValue = 8;
   repeated Node children = 5;
   layout.Guide layoutGuide = 6;
 }
@@ -16,25 +20,3 @@ message Node {
 message Root {
   Node node = 1;
 }
-
-// struct Node {
-//   id @0 :Int64;
-//   buildId @1 :Int64;
-//   layoutId @2 :Int64;
-//   paintId @3 :Int64;
-//   children @4 :List(Node);
-//   layoutGuide @5 :Layout.Guide;
-//   values @6: Map(Text, AnyPointer);
-  
-// # Id           mochi.Id
-// # BuildId      int64
-// # LayoutId     int64
-// # PaintId      int64
-// # Children     map[mochi.Id]*RenderNode
-// # BridgeName   string
-// # BridgeState  interface{}
-// # Values       map[string][]byte
-
-// # LayoutGuide  *layout.Guide
-// # PaintOptions paint.Style
-// }

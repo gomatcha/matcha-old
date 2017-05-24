@@ -7,6 +7,9 @@
 //
 
 #import "MochiView.h"
+#import "View.pbobjc.h"
+#import "Layout.pbobjc.h"
+#import "Text.pbobjc.h"
 
 bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config);
 MochiView *MochiViewWithNode(MochiNode *node);
@@ -57,12 +60,17 @@ MochiView *MochiViewWithNode(MochiNode *node);
 - (void)setNode:(MochiNode *)value {
     bool update = MochiConfigureViewWithNode(self, value, self.config);
     if (update) {
-        MochiGoValue *state = value.bridgeState;
-        MochiGoValue *formattedText = state[@"Text"];
-        if (!formattedText.isNil) {
-            NSAttributedString *attrString = [[NSAttributedString alloc] initWithGoValue:formattedText];
-            self.attributedText = attrString;
+        GPBAny *state = value.pbBridgeState;
+        MochiPBText *text = (id)[state unpackMessageClass:[MochiPBText class] error:nil];
+        if (text != nil) {
+            NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:text];
         }
+        // MochiGoValue *state = value.bridgeState;
+        // MochiGoValue *formattedText = state[@"Text"];
+        // if (!formattedText.isNil) {
+        //     NSAttributedString *attrString = [[NSAttributedString alloc] initWithGoValue:formattedText];
+        //     self.attributedText = attrString;
+        // }
     }
 }
 
