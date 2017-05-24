@@ -84,6 +84,7 @@
 @end
 
 @implementation NSMapTable (Mochi) 
+
 - (id)objectForKeyedSubscript:(id)key {
     return [self objectForKey:key];
 }
@@ -95,9 +96,11 @@
         [self removeObjectForKey:key];
     }
 }
+
 @end
 
 @implementation NSAttributedString (Mochi)
+
 - (id)initWithGoValue:(MochiGoValue *)value {
     NSString *string = [value call:@"String" args:nil][0].toString;
     MochiGoValue *format = [value call:@"Style" args:nil][0];

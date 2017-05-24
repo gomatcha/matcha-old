@@ -344,9 +344,9 @@ func (n *node) EncodeProtobuf() *pb.Node {
 	var pbAny *any.Any
 	if ok {
 		bridgeMessage, err := marshalFunc(n.viewModel.BridgeState)
-		if err != nil {
+		if err == nil {
 			a, err := ptypes.MarshalAny(bridgeMessage)
-			if err != nil {
+			if err == nil {
 				pbAny = a
 			}
 		}

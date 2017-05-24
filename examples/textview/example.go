@@ -42,12 +42,13 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 	chl.Painter = &paint.Style{BackgroundColor: colornames.Red}
 	chl.String = "Subtitle"
 	chl.Style.SetAlignment(text.AlignmentCenter)
-	chl.Style.SetStrikethroughStyle(text.StrikethroughStyleSingle)
-	chl.Style.SetStrikethroughColor(colornames.Magenta)
+	chl.Style.SetStrikethroughStyle(text.StrikethroughStyleDouble)
+	chl.Style.SetStrikethroughColor(colornames.Blue)
 	chl.Style.SetUnderlineStyle(text.UnderlineStyleDouble)
-	chl.Style.SetUnderlineColor(colornames.Green)
+	chl.Style.SetUnderlineColor(colornames.Blue)
+	chl.Style.SetTextColor(colornames.Yellow)
 	chl.Style.SetFont(text.Font{
-		Family: "American Typewriter",
+		Family: "Helvetica Neue",
 		Face:   "Bold",
 		Size:   20,
 	})

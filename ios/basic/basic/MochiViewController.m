@@ -69,8 +69,8 @@
 }
 
 - (void)render {
-    MochiGoValue *renderNode = [self.goVC call:@"Render" args:nil][0];
-    [self update:[[MochiNode alloc] initWithGoValue:renderNode]];
+    // MochiGoValue *renderNode = [self.goVC call:@"Render" args:nil][0];
+    // [self update:[[MochiNode alloc] initWithGoValue:renderNode]];
 }
 
 - (void)update:(MochiNode *)node {
