@@ -21,6 +21,7 @@
 
  #import "View.pbobjc.h"
  #import "Layout.pbobjc.h"
+ #import "Paint.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -62,6 +63,7 @@ static GPBFileDescriptor *MochiPBViewRoot_FileDescriptor(void) {
 @dynamic hasBridgeValue, bridgeValue;
 @dynamic childrenArray, childrenArray_Count;
 @dynamic hasLayoutGuide, layoutGuide;
+@dynamic hasPaintStyle, paintStyle;
 
 typedef struct MochiPBNode__storage_ {
   uint32_t _has_storage_[1];
@@ -69,6 +71,7 @@ typedef struct MochiPBNode__storage_ {
   MochiPBGuide *layoutGuide;
   NSString *bridgeName;
   GPBAny *bridgeValue;
+  MochiPBPaintStyle *paintStyle;
   int64_t id_p;
   int64_t buildId;
   int64_t layoutId;
@@ -153,6 +156,15 @@ typedef struct MochiPBNode__storage_ {
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
+      {
+        .name = "paintStyle",
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBPaintStyle),
+        .number = MochiPBNode_FieldNumber_PaintStyle,
+        .hasIndex = 7,
+        .offset = (uint32_t)offsetof(MochiPBNode__storage_, paintStyle),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MochiPBNode class]
@@ -164,7 +176,7 @@ typedef struct MochiPBNode__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\006\002\007\000\003\010\000\004\007\000\006\013\000\007\n\000\010\013\000";
+        "\007\002\007\000\003\010\000\004\007\000\006\013\000\007\n\000\010\013\000\t\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

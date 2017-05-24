@@ -30,6 +30,7 @@ CF_EXTERN_C_BEGIN
 @class GPBAny;
 @class MochiPBGuide;
 @class MochiPBNode;
+@class MochiPBPaintStyle;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -59,6 +60,7 @@ typedef GPB_ENUM(MochiPBNode_FieldNumber) {
   MochiPBNode_FieldNumber_LayoutGuide = 6,
   MochiPBNode_FieldNumber_BridgeName = 7,
   MochiPBNode_FieldNumber_BridgeValue = 8,
+  MochiPBNode_FieldNumber_PaintStyle = 9,
 };
 
 @interface MochiPBNode : GPBMessage
@@ -84,6 +86,10 @@ typedef GPB_ENUM(MochiPBNode_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) MochiPBGuide *layoutGuide;
 /** Test to see if @c layoutGuide has been set. */
 @property(nonatomic, readwrite) BOOL hasLayoutGuide;
+
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBPaintStyle *paintStyle;
+/** Test to see if @c paintStyle has been set. */
+@property(nonatomic, readwrite) BOOL hasPaintStyle;
 
 @end
 

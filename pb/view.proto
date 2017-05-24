@@ -1,6 +1,7 @@
 syntax = "proto3";
 package view;
 import "layout.proto";
+import "paint.proto";
 import "google/protobuf/any.proto";
 
 option go_package = "pb";
@@ -15,6 +16,7 @@ message Node {
   google.protobuf.Any bridgeValue = 8;
   repeated Node children = 5;
   layout.Guide layoutGuide = 6;
+  paint.PaintStyle paintStyle = 9;
 }
 
 message Root {

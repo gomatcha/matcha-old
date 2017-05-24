@@ -56,7 +56,7 @@ type Font struct {
 	Size   float64
 }
 
-func (f *Font) EncodeProtobuf() *pb.Font {
+func (f Font) EncodeProtobuf() *pb.Font {
 	return &pb.Font{
 		Family: f.Family,
 		Face:   f.Face,
@@ -145,9 +145,9 @@ func (f *Style) Get(k StyleKey) interface{} {
 	case StyleKeyFont:
 		return nil // TODO(KD): what should the default font be?
 	case StyleKeyHyphenation:
-		return 0
+		return float64(0.0)
 	case StyleKeyLineHeightMultiple:
-		return 1
+		return float64(1.0)
 	case StyleKeyMaxLines:
 		return 0
 	case StyleKeyTextColor:
@@ -202,7 +202,7 @@ func (f *Style) EncodeProtobuf() *pb.TextStyle {
 		StrikethroughColor: pb.ColorEncode(f.Get(StyleKeyStrikethroughColor).(color.Color)),
 		UnderlineStyle:     f.Get(StyleKeyUnderlineStyle).(UnderlineStyle).EncodeProtobuf(),
 		UnderlineColor:     pb.ColorEncode(f.Get(StyleKeyUnderlineColor).(color.Color)),
-		Font:               f.Get(StyleKeyFont).(*Font).EncodeProtobuf(),
+		Font:               f.Get(StyleKeyFont).(Font).EncodeProtobuf(),
 		Hyphenation:        f.Get(StyleKeyHyphenation).(float64),
 		LineHeightMultiple: f.Get(StyleKeyLineHeightMultiple).(float64),
 		MaxLines:           int64(f.Get(StyleKeyMaxLines).(int)),

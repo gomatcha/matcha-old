@@ -36,7 +36,7 @@ static GPBFileDescriptor *MochiPBTextRoot_FileDescriptor(void) {
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
-    descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"view"
+    descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"text"
                                                  objcPrefix:@"MochiPB"
                                                      syntax:GPBFileSyntaxProto3];
   }
@@ -612,7 +612,7 @@ typedef struct MochiPBTextStyle__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\t\001\r\000\002\022\000\003\022\000\004\016\000\005\016\000\010\022\000\t\010\000\n\t\000\r\020\000";
+        "\t\002\r\000\004\022\000\006\022\000\010\016\000\n\016\000\020\022\000\022\010\000\024\t\000\032\020\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

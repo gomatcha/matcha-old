@@ -64,7 +64,7 @@
         self.lastFrame = self.view.frame;
         
         [self.goVC call:@"SetSize" args:@[[[MochiGoValue alloc] initWithCGPoint:CGPointMake(self.view.frame.size.width, self.view.frame.size.height)]]];
-        [self render];
+        // [self render];
     }
 }
 

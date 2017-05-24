@@ -1,4 +1,4 @@
 package pb
 
-//go:generate protoc --go_out=. layout.proto view.proto text.proto
-///go:generate protoc --objc_out=. layout.proto view.proto text.proto
+//go:generate protoc --go_out=. layout.proto text.proto paint.proto view.proto
+///go:generate protoc --objc_out=. layout.proto text.proto paint.proto view.proto

@@ -61,9 +61,12 @@ MochiView *MochiViewWithNode(MochiNode *node);
     bool update = MochiConfigureViewWithNode(self, value, self.config);
     if (update) {
         GPBAny *state = value.pbBridgeState;
-        MochiPBText *text = (id)[state unpackMessageClass:[MochiPBText class] error:nil];
+        NSError *error = nil;
+        MochiPBText *text = (id)[state unpackMessageClass:[MochiPBText class] error:&error];
+        NSLog(@"KD:%s, state:%@ text:%@, error:%@", __FUNCTION__, state, text, error);
         if (text != nil) {
             NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:text];
+            NSLog(@"KD:%s, attrString:%@", __FUNCTION__, attrString);
         }
         // MochiGoValue *state = value.bridgeState;
         // MochiGoValue *formattedText = state[@"Text"];

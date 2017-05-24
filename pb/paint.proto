@@ -1,0 +1,18 @@
+syntax = "proto3";
+package paint;
+import "text.proto";
+
+option go_package = "pb";
+option objc_class_prefix = "MochiPB";
+
+message PaintStyle {
+  double Alpha = 1;
+  text.Color BackgroundColor = 2;
+  text.Color BorderColor = 3;
+  double BorderWidth = 4;
+  double CornerRadius = 5;
+  double ShadowOpacity = 6;
+  double ShadowRadius = 7;
+  double ShadowOffset = 8;
+  text.Color ShadowColor = 9;
+}

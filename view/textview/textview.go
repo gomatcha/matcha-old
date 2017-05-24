@@ -12,10 +12,14 @@ import (
 
 const bridgeName = "github.com/overcyn/mochi/view/textview"
 
+type bridgeState struct {
+	text *text.Text
+}
+
 func init() {
 	view.RegisterBridgeMarshaller(bridgeName, func(state interface{}) (proto.Message, error) {
-		text := state.(*text.Text)
-		return text.EncodeProtobuf(), nil
+		text := state.(bridgeState)
+		return text.text.EncodeProtobuf(), nil
 	})
 }
 
@@ -77,10 +81,8 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 	n.Layouter = &textViewLayouter{formattedText: ft}
 	n.Painter = v.Painter
 	n.BridgeName = bridgeName
-	n.BridgeState = struct {
-		Text *text.Text
-	}{
-		Text: ft,
+	n.BridgeState = bridgeState{
+		text: ft,
 	}
 	return n
 }

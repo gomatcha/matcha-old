@@ -14,6 +14,7 @@
 @class MochiPBNode;
 @class MochiPBRoot;
 @class MochiPBGuide;
+@class MochiPBPaintStyle;
 @class GPBAny;
 
 @interface MochiNodeRoot : NSObject
@@ -37,6 +38,7 @@
 @end
 
 @interface MochiPaintOptions : NSObject
+- (id)initWithProtobuf:(MochiPBPaintStyle *)style;
 - (id)initWithGoValue:(MochiGoValue *)value;
 @property (nonatomic, readonly) UIColor *backgroundColor;
 @end

@@ -1,5 +1,5 @@
 syntax = "proto3";
-package view;
+package text;
 
 option go_package = "pb";
 option objc_class_prefix = "MochiPB";

@@ -225,19 +225,19 @@ typedef GPB_ENUM(MochiPBColor_FieldNumber) {
 #pragma mark - MochiPBTextStyle
 
 typedef GPB_ENUM(MochiPBTextStyle_FieldNumber) {
-  MochiPBTextStyle_FieldNumber_TextAlignment = 1,
-  MochiPBTextStyle_FieldNumber_StrikethroughStyle = 2,
-  MochiPBTextStyle_FieldNumber_StrikethroughColor = 3,
-  MochiPBTextStyle_FieldNumber_UnderlineStyle = 4,
-  MochiPBTextStyle_FieldNumber_UnderlineColor = 5,
-  MochiPBTextStyle_FieldNumber_Font = 6,
-  MochiPBTextStyle_FieldNumber_Hyphenation = 7,
-  MochiPBTextStyle_FieldNumber_LineHeightMultiple = 8,
-  MochiPBTextStyle_FieldNumber_MaxLines = 9,
-  MochiPBTextStyle_FieldNumber_TextColor = 10,
-  MochiPBTextStyle_FieldNumber_Wrap = 11,
-  MochiPBTextStyle_FieldNumber_Truncation = 12,
-  MochiPBTextStyle_FieldNumber_TruncationString = 13,
+  MochiPBTextStyle_FieldNumber_TextAlignment = 2,
+  MochiPBTextStyle_FieldNumber_StrikethroughStyle = 4,
+  MochiPBTextStyle_FieldNumber_StrikethroughColor = 6,
+  MochiPBTextStyle_FieldNumber_UnderlineStyle = 8,
+  MochiPBTextStyle_FieldNumber_UnderlineColor = 10,
+  MochiPBTextStyle_FieldNumber_Font = 12,
+  MochiPBTextStyle_FieldNumber_Hyphenation = 14,
+  MochiPBTextStyle_FieldNumber_LineHeightMultiple = 16,
+  MochiPBTextStyle_FieldNumber_MaxLines = 18,
+  MochiPBTextStyle_FieldNumber_TextColor = 20,
+  MochiPBTextStyle_FieldNumber_Wrap = 22,
+  MochiPBTextStyle_FieldNumber_Truncation = 24,
+  MochiPBTextStyle_FieldNumber_TruncationString = 26,
 };
 
 @interface MochiPBTextStyle : GPBMessage

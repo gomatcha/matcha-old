@@ -4,6 +4,7 @@ import (
 	"image/color"
 
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/pb"
 )
 
 type Painter interface {
@@ -23,6 +24,20 @@ type Style struct {
 	ShadowColor     color.Color
 	// Transform?
 	// Mask
+}
+
+func (s *Style) EncodeProtobuf() *pb.PaintStyle {
+	return &pb.PaintStyle{
+		Alpha:           s.Alpha,
+		BackgroundColor: pb.ColorEncode(s.BackgroundColor),
+		BorderColor:     pb.ColorEncode(s.BorderColor),
+		BorderWidth:     s.BorderWidth,
+		CornerRadius:    s.CornerRadius,
+		ShadowOpacity:   s.ShadowOpacity,
+		ShadowRadius:    s.ShadowRadius,
+		ShadowOffset:    s.ShadowOffset,
+		ShadowColor:     pb.ColorEncode(s.ShadowColor),
+	}
 }
 
 func (s *Style) PaintStyle() Style {

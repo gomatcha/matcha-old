@@ -359,6 +359,7 @@ func (n *node) EncodeProtobuf() *pb.Node {
 		PaintId:     n.paintId,
 		Children:    children,
 		LayoutGuide: n.layoutGuide.EncodeProtobuf(),
+		PaintStyle:  n.paintOptions.EncodeProtobuf(),
 		BridgeName:  n.viewModel.BridgeName,
 		BridgeValue: pbAny,
 	}

@@ -22,12 +22,11 @@
 
 - (id)init {
     if ((self = [super init])) {
-        NSLog(@"what");
 //        [MochiDeadlockLogger sharedLogger]; // Initialize
         
         self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(screenUpdate)];
         [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-//        self.displayLink.preferredFramesPerSecond = 2;
+        self.displayLink.preferredFramesPerSecond = 2;
         self.screenUpdateFunc = [[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/animate screenUpdate"];
     }
     return self;
@@ -61,6 +60,7 @@
     
     MochiViewController *vc = [MochiViewController viewControllerWithIdentifier:identifier];
     [vc update:root.node];
+    NSLog(@"KD:%s, node:%@", __FUNCTION__, root.node);
 }
 
 @end

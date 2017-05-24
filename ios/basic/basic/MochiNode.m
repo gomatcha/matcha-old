@@ -10,7 +10,8 @@
 #import "MochiBridge.h"
 #import "View.pbobjc.h"
 #import "Layout.pbobjc.h"
-#import "View.pbobjc.h"
+#import "Text.pbobjc.h"
+#import "Paint.pbobjc.h"
 
 @interface MochiNodeRoot ()
 @property (nonatomic, strong) MochiNode *node;
@@ -49,7 +50,7 @@
         self.buildId = @(node.buildId);
         self.layoutId = @(node.layoutId);
         self.paintId = @(node.paintId);
-        self.paintOptions = nil;
+        self.paintOptions = [[MochiPaintOptions alloc] initWithProtobuf:node.paintStyle];
         self.guide = [[MochiLayoutGuide alloc] initWithProtobuf:node.layoutGuide];
         self.bridgeName = node.bridgeName;
         self.pbBridgeState = node.bridgeValue;
@@ -60,7 +61,6 @@
             children[child.identifier] = child;
         }
         self.nodeChildren = children;
-        
     }
     return self;
 }
@@ -92,27 +92,36 @@
     return _nodeChildren;
 }
 
+// - (NSString *)description {
+//     return [NSString stringWithFormat:@"<MochiNode id:%@,%@,%@,%@
+// }
+
 @end
 
 @interface MochiPaintOptions ()
 @property (nonatomic, strong) MochiGoValue *goValue;
+@property (nonatomic, strong) UIColor *backgroundColor;
 @end
 
 @implementation MochiPaintOptions
 
-- (id)initWithGoValue:(MochiGoValue *)value {
+- (id)initWithProtobuf:(MochiPBPaintStyle *)style {
     if (self = [super init]) {
-        self.goValue = value;
+        self.backgroundColor = [[UIColor alloc] initWithProtobuf:style.backgroundColor];
     }
     return self;
 }
 
-- (UIColor *)backgroundColor {
-    MochiGoValue *value = self.goValue[@"BackgroundColor"];
-    if (!value.isNil) {
-        return [[UIColor alloc] initWithGoValue:value];
+- (id)initWithGoValue:(MochiGoValue *)value {
+    if (self = [super init]) {
+        self.goValue = value;
+        
+        MochiGoValue *value = self.goValue[@"BackgroundColor"];
+        if (!value.isNil) {
+            self.backgroundColor = [[UIColor alloc] initWithGoValue:value];
+        }
     }
-    return nil;
+    return self;
 }
 
 @end

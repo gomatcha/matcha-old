@@ -11,6 +11,7 @@
 		674080C21ED50DB70093D987 /* Protobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 674080C11ED50DB70093D987 /* Protobuf.framework */; };
 		674080C81ED56C880093D987 /* Protobuf.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 674080C11ED50DB70093D987 /* Protobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		674080CB1ED613330093D987 /* Text.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080C91ED613330093D987 /* Text.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		674080CE1ED6311F0093D987 /* Paint.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080CC1ED6311F0093D987 /* Paint.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67608ABC1E8F966500AE2EC7 /* MochiGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608ABB1E8F966500AE2EC7 /* MochiGuide.m */; };
 		67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608AC61EA8545600AE2EC7 /* MochiRoot.m */; };
 		676EF4CD1E8E341800C1488A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4CC1E8E341800C1488A /* main.m */; };
@@ -46,6 +47,8 @@
 		674080C11ED50DB70093D987 /* Protobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Protobuf.framework; path = "../../../../../../../../Library/Developer/Xcode/DerivedData/Mochi-golgwzqwibyynlcwpuxsrmkwyenm/Build/Products/Debug-iphoneos/Protobuf.framework"; sourceTree = "<group>"; };
 		674080C91ED613330093D987 /* Text.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Text.pbobjc.m; sourceTree = "<group>"; };
 		674080CA1ED613330093D987 /* Text.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Text.pbobjc.h; sourceTree = "<group>"; };
+		674080CC1ED6311F0093D987 /* Paint.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Paint.pbobjc.m; sourceTree = "<group>"; };
+		674080CD1ED6311F0093D987 /* Paint.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Paint.pbobjc.h; sourceTree = "<group>"; };
 		67608ABA1E8F966500AE2EC7 /* MochiGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiGuide.h; sourceTree = "<group>"; };
 		67608ABB1E8F966500AE2EC7 /* MochiGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiGuide.m; sourceTree = "<group>"; };
 		67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mochi.framework; sourceTree = "<group>"; };
@@ -131,6 +134,8 @@
 		676EF4F11E8ECF4400C1488A /* Mochi */ = {
 			isa = PBXGroup;
 			children = (
+				674080CC1ED6311F0093D987 /* Paint.pbobjc.m */,
+				674080CD1ED6311F0093D987 /* Paint.pbobjc.h */,
 				674080C91ED613330093D987 /* Text.pbobjc.m */,
 				674080CA1ED613330093D987 /* Text.pbobjc.h */,
 				67D89E331ED507240063A1E2 /* View.pbobjc.h */,
@@ -237,6 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				67D89DD21ED4A5EA0063A1E2 /* Layout.pbobjc.m in Sources */,
+				674080CE1ED6311F0093D987 /* Paint.pbobjc.m in Sources */,
 				67D89E341ED507240063A1E2 /* View.pbobjc.m in Sources */,
 				674080CB1ED613330093D987 /* Text.pbobjc.m in Sources */,
 				67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */,

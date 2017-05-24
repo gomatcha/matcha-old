@@ -6,20 +6,22 @@ Package pb is a generated protocol buffer package.
 
 It is generated from these files:
 	layout.proto
-	view.proto
 	text.proto
+	paint.proto
+	view.proto
 
 It has these top-level messages:
 	Point
 	Rect
 	Insets
 	Guide
-	Node
-	Root
 	Text
 	Font
 	Color
 	TextStyle
+	PaintStyle
+	Node
+	Root
 */
 package pb
 
