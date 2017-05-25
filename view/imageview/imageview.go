@@ -8,6 +8,7 @@ import (
 	_ "image/png"
 	"net/http"
 
+	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/view"
@@ -39,15 +40,14 @@ func NewURLImageView(ctx *view.Context, key interface{}) *URLImageView {
 func (v *URLImageView) Build(ctx *view.Context) *view.Model {
 	v.reload()
 
-	n := &view.Model{}
-	n.Painter = v.Painter
-
 	chl := NewImageView(ctx, 0)
 	chl.ResizeMode = v.ResizeMode
 	chl.Image = v.image
-	n.Add(chl)
 
-	return n
+	return &view.Model{
+		Children: map[mochi.Id]view.View{chl.Id(): chl},
+		Painter:  v.Painter,
+	}
 }
 
 func (v *URLImageView) Lifecycle(from, to view.Stage) {
@@ -149,7 +149,7 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 		v.pbImage = pb.ImageEncode(v.image)
 	}
 
-	n := &view.Model{
+	return &view.Model{
 		Painter:    v.Painter,
 		NativeName: "github.com/overcyn/mochi/view/imageview",
 		NativeStateProtobuf: &pb.ImageView{
@@ -157,7 +157,6 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 			ResizeMode: v.ResizeMode.EncodeProtobuf(),
 		},
 	}
-	return n
 }
 
 func (v *ImageView) String() string {

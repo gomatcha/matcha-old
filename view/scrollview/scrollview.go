@@ -33,21 +33,22 @@ func New(ctx *view.Context, key interface{}) *ScrollView {
 }
 
 func (v *ScrollView) Build(ctx *view.Context) *view.Model {
-	n := &view.Model{}
-	n.Painter = v.Painter
-	n.Layouter = &scrollViewLayouter{}
-
+	children := map[mochi.Id]view.View{}
 	if v.ContentView != nil {
-		n.Add(v.ContentView)
+		children[v.ContentView.Id()] = v.ContentView
 	}
 
-	n.NativeName = "github.com/overcyn/mochi/view/scrollview"
-	n.NativeStateProtobuf = &pb.ScrollView{
-		ScrollEnabled:                  v.ScrollEnabled,
-		ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
-		ShowsVerticalScrollIndicator:   v.ShowsVerticalScrollIndicator,
+	return &view.Model{
+		Children:   children,
+		Painter:    v.Painter,
+		Layouter:   &scrollViewLayouter{},
+		NativeName: "github.com/overcyn/mochi/view/scrollview",
+		NativeStateProtobuf: &pb.ScrollView{
+			ScrollEnabled:                  v.ScrollEnabled,
+			ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
+			ShowsVerticalScrollIndicator:   v.ShowsVerticalScrollIndicator,
+		},
 	}
-	return n
 }
 
 type scrollViewLayouter struct {

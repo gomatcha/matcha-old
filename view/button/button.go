@@ -98,7 +98,7 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 		Size:   20,
 	})
 
-	n := &view.Model{
+	return &view.Model{
 		Layouter:   &buttonLayouter{formattedText: ft},
 		Painter:    v.Painter,
 		NativeName: "github.com/overcyn/mochi/view/button",
@@ -106,7 +106,6 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 			Text: ft.EncodeProtobuf(),
 		},
 	}
-	return n
 }
 
 func (v *Button) String() string {
