@@ -1,7 +1,6 @@
 package textview
 
 import (
-	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
@@ -9,14 +8,6 @@ import (
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochibridge"
 )
-
-const bridgeName = "github.com/overcyn/mochi/view/textview"
-
-func init() {
-	view.RegisterBridgeMarshaller(bridgeName, func(state interface{}) (proto.Message, error) {
-		return state.(proto.Message), nil
-	})
-}
 
 type textViewLayouter struct {
 	formattedText *text.Text
@@ -75,7 +66,7 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 	n := &view.Model{}
 	n.Layouter = &textViewLayouter{formattedText: ft}
 	n.Painter = v.Painter
-	n.BridgeName = bridgeName
-	n.BridgeState = ft.EncodeProtobuf()
+	n.NativeName = "github.com/overcyn/mochi/view/textview"
+	n.NativeStateProtobuf = ft.EncodeProtobuf()
 	return n
 }

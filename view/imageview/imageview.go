@@ -8,7 +8,6 @@ import (
 	_ "image/png"
 	"net/http"
 
-	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/view"
@@ -111,14 +110,6 @@ func loadImageURL(url string) (image.Image, error) {
 
 // ImageView
 
-const bridgeName = "github.com/overcyn/mochi/view/imageview"
-
-func init() {
-	view.RegisterBridgeMarshaller(bridgeName, func(state interface{}) (proto.Message, error) {
-		return state.(proto.Message), nil
-	})
-}
-
 type ResizeMode int
 
 const (
@@ -160,8 +151,8 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 
 	n := &view.Model{
 		Painter:    v.Painter,
-		BridgeName: "github.com/overcyn/mochi/view/imageview",
-		BridgeState: &pb.ImageView{
+		NativeName: "github.com/overcyn/mochi/view/imageview",
+		NativeStateProtobuf: &pb.ImageView{
 			Image:      v.pbImage,
 			ResizeMode: v.ResizeMode.EncodeProtobuf(),
 		},

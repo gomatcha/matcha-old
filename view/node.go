@@ -18,16 +18,6 @@ import (
 	"github.com/overcyn/mochibridge"
 )
 
-var bridgeMu sync.Mutex
-var bridgeMarshaller = map[string]func(interface{}) (proto.Message, error){}
-
-func RegisterBridgeMarshaller(bridgeName string, marshaller func(interface{}) (proto.Message, error)) {
-	bridgeMu.Lock()
-	defer bridgeMu.Unlock()
-
-	bridgeMarshaller[bridgeName] = marshaller
-}
-
 type RenderNode struct {
 	Id           mochi.Id
 	BuildId      int64
@@ -326,8 +316,8 @@ func (n *node) renderNode() *RenderNode {
 		LayoutId:     n.layoutId,
 		PaintId:      n.paintId,
 		Children:     map[mochi.Id]*RenderNode{},
-		BridgeName:   n.viewModel.BridgeName,
-		BridgeState:  n.viewModel.BridgeState,
+		BridgeName:   n.viewModel.NativeName,
+		BridgeState:  n.viewModel.NativeStateProtobuf,
 		Values:       nil,
 		LayoutGuide:  n.layoutGuide,
 		PaintOptions: n.paintOptions,
@@ -344,19 +334,10 @@ func (n *node) EncodeProtobuf() *pb.Node {
 		children = append(children, v.EncodeProtobuf())
 	}
 
-	bridgeMu.Lock()
-	marshalFunc, ok := bridgeMarshaller[n.viewModel.BridgeName]
-	bridgeMu.Unlock()
-
 	var pbAny *any.Any
-	if ok {
-		bridgeMessage, err := marshalFunc(n.viewModel.BridgeState)
-		if err == nil {
-			a, err := ptypes.MarshalAny(bridgeMessage)
-			if err == nil {
-				pbAny = a
-			}
-		}
+	a, err := ptypes.MarshalAny(n.viewModel.NativeStateProtobuf)
+	if err == nil {
+		pbAny = a
 	}
 
 	return &pb.Node{
@@ -367,7 +348,7 @@ func (n *node) EncodeProtobuf() *pb.Node {
 		Children:    children,
 		LayoutGuide: n.layoutGuide.EncodeProtobuf(),
 		PaintStyle:  n.paintOptions.EncodeProtobuf(),
-		BridgeName:  n.viewModel.BridgeName,
+		BridgeName:  n.viewModel.NativeName,
 		BridgeValue: pbAny,
 	}
 }
