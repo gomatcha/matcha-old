@@ -10,6 +10,7 @@
 #import "View.pbobjc.h"
 #import "Layout.pbobjc.h"
 #import "Text.pbobjc.h"
+#import "Scrollview.pbobjc.h"
 
 bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config);
 MochiView *MochiViewWithNode(MochiNode *node);
@@ -67,12 +68,6 @@ MochiView *MochiViewWithNode(MochiNode *node);
             NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:text];
             self.attributedText = attrString;
         }
-        // MochiGoValue *state = value.bridgeState;
-        // MochiGoValue *formattedText = state[@"Text"];
-        // if (!formattedText.isNil) {
-        //     NSAttributedString *attrString = [[NSAttributedString alloc] initWithGoValue:formattedText];
-        //     self.attributedText = attrString;
-        // }
     }
 }
 
@@ -178,10 +173,14 @@ MochiView *MochiViewWithNode(MochiNode *node);
             self.contentSize = ((UIView *)self.config.childViews.allValues[0]).frame.size;
         }
 
-        MochiGoValue *state = value.bridgeState;
-        self.scrollEnabled = state[@"ScrollEnabled"].toBool;
-        self.showsVerticalScrollIndicator = state[@"ShowsVerticalScrollIndicator"].toBool;
-        self.showsHorizontalScrollIndicator = state[@"ShowsHorizontalScrollIndicator"].toBool;
+        GPBAny *state = value.pbBridgeState;
+        NSError *error = nil;
+        MochiPBScrollView *pbscrollview = (id)[state unpackMessageClass:[MochiPBScrollView class] error:&error];
+        if (pbscrollview != nil) {
+            self.scrollEnabled = pbscrollview.scrollEnabled;
+            self.showsVerticalScrollIndicator = pbscrollview.showsVerticalScrollIndicator;
+            self.showsHorizontalScrollIndicator = pbscrollview.showsHorizontalScrollIndicator;
+        }
     }
 }
 @end

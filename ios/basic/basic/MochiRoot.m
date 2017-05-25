@@ -60,7 +60,6 @@
     
     MochiViewController *vc = [MochiViewController viewControllerWithIdentifier:identifier];
     [vc update:root.node];
-    NSLog(@"KD:%s, node:%@", __FUNCTION__, root.node);
 }
 
 @end

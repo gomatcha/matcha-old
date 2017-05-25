@@ -9,6 +9,7 @@ It is generated from these files:
 	text.proto
 	paint.proto
 	view.proto
+	scrollview.proto
 
 It has these top-level messages:
 	Point
@@ -22,6 +23,7 @@ It has these top-level messages:
 	PaintStyle
 	Node
 	Root
+	ScrollView
 */
 package pb
 

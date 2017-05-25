@@ -3,11 +3,20 @@ package scrollview
 import (
 	"math"
 
+	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/view"
 )
+
+const bridgeName = "github.com/overcyn/mochi/view/scrollview"
+
+func init() {
+	view.RegisterBridgeMarshaller(bridgeName, func(state interface{}) (proto.Message, error) {
+		return state.(protoMessage)
+	})
+}
 
 type ScrollView struct {
 	*view.Embed
@@ -40,15 +49,11 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 		n.Add(v.ContentView)
 	}
 
-	n.BridgeName = "github.com/overcyn/mochi/view/scrollview"
-	n.BridgeState = struct {
-		ScrollEnabled                  bool
-		ShowsHorizontalScrollIndicator bool
-		ShowsVerticalScrollIndicator   bool
-	}{
-		ScrollEnabled:                  v.ScrollEnabled,
-		ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
-		ShowsVerticalScrollIndicator:   v.ShowsVerticalScrollIndicator,
+	n.BridgeName = bridgeName
+	n.BridgeState = &pb.ScrollView{
+		ScrollEnabled:                  v.scrollEnabled,
+		ShowsHorizontalScrollIndicator: v.showsHorizontalScrollIndicator,
+		ShowsVerticalScrollIndicator:   v.showsVerticalScrollIndicator,
 	}
 	return n
 }

@@ -1,0 +1,11 @@
+syntax = "proto3";
+package paint;
+
+option go_package = "pb";
+option objc_class_prefix = "MochiPB";
+
+message ScrollView {
+  bool scrollEnabled = 1;
+  bool showsHorizontalScrollIndicator = 2;
+  bool showsVerticalScrollIndicator = 3;
+}
