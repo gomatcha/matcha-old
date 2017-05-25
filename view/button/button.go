@@ -28,8 +28,6 @@ func init() {
 			return
 		}
 		button.OnPress()
-
-		fmt.Println("Pressed", buttons[mochi.Id(id)])
 	})
 }
 

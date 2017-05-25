@@ -18,43 +18,12 @@ import (
 	"github.com/overcyn/mochibridge"
 )
 
-type RenderNode struct {
-	Id           mochi.Id
-	BuildId      int64
-	LayoutId     int64
-	PaintId      int64
-	Children     map[mochi.Id]*RenderNode
-	BridgeName   string
-	BridgeState  interface{}
-	Values       map[string][]byte
-	LayoutGuide  *layout.Guide
-	PaintOptions paint.Style
-}
-
-func (n *RenderNode) DebugString() string {
-	all := []string{}
-	for _, i := range n.Children {
-		lines := strings.Split(i.DebugString(), "\n")
-		for idx, line := range lines {
-			lines[idx] = "|	" + line
-		}
-		all = append(all, lines...)
-	}
-
-	str := fmt.Sprintf("{%p Id:%v BuildId:%v LayoutId:%v PaintId:%v LayoutGuide:%v PaintOptions:%v}", n, n.Id, n.BuildId, n.LayoutId, n.PaintId, n.LayoutGuide, n.PaintOptions)
-	if len(all) > 0 {
-		str += "\n" + strings.Join(all, "\n")
-	}
-	return str
-}
-
 type Root struct {
-	id         int
-	mu         *sync.Mutex
-	root       *root
-	renderNode *RenderNode
-	size       layout.Point
-	ticker     *internal.Ticker
+	id     int
+	mu     *sync.Mutex
+	root   *root
+	size   layout.Point
+	ticker *internal.Ticker
 }
 
 func NewRoot(f func(Config) View, id int) *Root {
@@ -83,15 +52,6 @@ func NewRoot(f func(Config) View, id int) *Root {
 		mochibridge.Root().Call("updateId:withProtobuf:", mochibridge.Int64(int64(id)), mochibridge.Bytes(pb))
 	})
 	return vc
-}
-
-func (vc *Root) Render() *RenderNode {
-	vc.mu.Lock()
-	defer vc.mu.Unlock()
-
-	vc.root.update(vc.size)
-	rn := vc.root.renderNode()
-	return rn
 }
 
 func (vc *Root) SetSize(p layout.Point) {
@@ -228,13 +188,6 @@ func (root *root) update(size layout.Point) bool {
 	return updated
 }
 
-func (root *root) renderNode() *RenderNode {
-	root.mu.Lock()
-	defer root.mu.Unlock()
-
-	return root.node.renderNode()
-}
-
 func (root *root) MarshalProtobuf() ([]byte, error) {
 	return proto.Marshal(root.EncodeProtobuf())
 }
@@ -307,25 +260,6 @@ type node struct {
 	paintChan    chan struct{}
 	paintDone    chan struct{}
 	paintOptions paint.Style
-}
-
-func (n *node) renderNode() *RenderNode {
-	rn := &RenderNode{
-		Id:           n.id,
-		BuildId:      n.buildId,
-		LayoutId:     n.layoutId,
-		PaintId:      n.paintId,
-		Children:     map[mochi.Id]*RenderNode{},
-		BridgeName:   n.viewModel.NativeName,
-		BridgeState:  n.viewModel.NativeStateProtobuf,
-		Values:       nil,
-		LayoutGuide:  n.layoutGuide,
-		PaintOptions: n.paintOptions,
-	}
-	for k, v := range n.children {
-		rn.Children[k] = v.renderNode()
-	}
-	return rn
 }
 
 func (n *node) EncodeProtobuf() *pb.Node {
