@@ -80,7 +80,10 @@ func NewRoot(f func(Config) View, id int) *Root {
 		vc.mu.Lock()
 		defer vc.mu.Unlock()
 
-		vc.root.update(vc.size)
+		if !vc.root.update(vc.size) {
+			// nothing changed
+			return
+		}
 
 		pb, err := vc.root.MarshalProtobuf()
 		if err != nil {
@@ -88,7 +91,6 @@ func NewRoot(f func(Config) View, id int) *Root {
 			return
 		}
 		mochibridge.Root().Call("updateId:withProtobuf:", mochibridge.Int64(int64(id)), mochibridge.Bytes(pb))
-		// fmt.Println(rn.DebugString())
 	})
 	return vc
 }
@@ -206,7 +208,7 @@ func (root *root) addFlag(id mochi.Id, f updateFlag) {
 	root.updateFlags[id] |= f
 }
 
-func (root *root) update(size layout.Point) {
+func (root *root) update(size layout.Point) bool {
 	root.mu.Lock()
 	defer root.mu.Unlock()
 
@@ -219,16 +221,21 @@ func (root *root) update(size layout.Point) {
 		flag |= v
 	}
 
+	updated := false
 	if flag.needsBuild() {
 		root.buildLocked()
+		updated = true
 	}
 	if flag.needsLayout() {
 		root.layoutLocked(layout.Pt(0, 0), size)
+		updated = true
 	}
 	if flag.needsPaint() {
 		root.paintLocked()
+		updated = true
 	}
 	root.updateFlags = map[mochi.Id]updateFlag{}
+	return updated
 }
 
 func (root *root) renderNode() *RenderNode {

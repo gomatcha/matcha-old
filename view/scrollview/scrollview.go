@@ -7,6 +7,7 @@ import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
+	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/view"
 )
 
@@ -14,7 +15,7 @@ const bridgeName = "github.com/overcyn/mochi/view/scrollview"
 
 func init() {
 	view.RegisterBridgeMarshaller(bridgeName, func(state interface{}) (proto.Message, error) {
-		return state.(protoMessage)
+		return state.(proto.Message), nil
 	})
 }
 
@@ -51,9 +52,9 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 
 	n.BridgeName = bridgeName
 	n.BridgeState = &pb.ScrollView{
-		ScrollEnabled:                  v.scrollEnabled,
-		ShowsHorizontalScrollIndicator: v.showsHorizontalScrollIndicator,
-		ShowsVerticalScrollIndicator:   v.showsVerticalScrollIndicator,
+		ScrollEnabled:                  v.ScrollEnabled,
+		ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
+		ShowsVerticalScrollIndicator:   v.ShowsVerticalScrollIndicator,
 	}
 	return n
 }
