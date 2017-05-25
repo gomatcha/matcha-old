@@ -149,10 +149,8 @@ MochiView *MochiViewWithNode(MochiNode *node);
 }
 
 - (void)onPress {
-    MochiGoValue *onPress = self.config.node.bridgeState[@"OnPress"];
-    if (!onPress.isNil) {
-        [onPress call:nil args:nil];
-    }
+    MochiGoValue *identifier = [[MochiGoValue alloc] initWithLongLong:self.config.node.identifier.longLongValue];
+    [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/view/button OnPress"] call:nil args:@[identifier]];
 }
 
 @end

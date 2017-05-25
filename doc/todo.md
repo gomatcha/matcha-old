@@ -7,7 +7,6 @@ Root background color isn't set.
 High:
 * Event Handling / Gestures
 * Navigation View Controllers
-* Switch to protobufs.
 
 Medium:
 * Thread & locking. How to prevent deadlocks?
@@ -26,6 +25,7 @@ Done:
 * Lifecycle
 * Animations
 * UIView tree updating
+* Switch to protobufs.
 
 * GridView
 * UINavigationController

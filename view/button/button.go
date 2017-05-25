@@ -1,6 +1,9 @@
 package button
 
 import (
+	"fmt"
+	"sync"
+
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
@@ -10,17 +13,39 @@ import (
 	"github.com/overcyn/mochibridge"
 )
 
+func init() {
+	mochibridge.RegisterFunc("github.com/overcyn/mochi/view/button OnPress", func(id int64) {
+		buttonMu.Lock()
+		defer buttonMu.Unlock()
+
+		button := buttons[mochi.Id(id)]
+		if button == nil {
+			return
+		}
+		button.Lock()
+		defer button.Unlock()
+		if button.OnPress == nil {
+			return
+		}
+		button.OnPress()
+
+		fmt.Println("Pressed", buttons[mochi.Id(id)])
+	})
+}
+
+var buttonMu sync.Mutex
+var buttons = map[mochi.Id]*Button{}
+
 func textSize(t *text.Text, max layout.Point) layout.Point {
 	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(layout.Point)
 }
-
-const padding = 10.0
 
 type buttonLayouter struct {
 	formattedText *text.Text
 }
 
 func (l *buttonLayouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
+	const padding = 10.0
 	size := textSize(l.formattedText, ctx.MaxSize)
 	g := layout.Guide{Frame: layout.Rt(0, 0, size.X+padding*2, size.Y+padding*2)}
 	return g, nil
@@ -52,6 +77,20 @@ func New(ctx *view.Context, key interface{}) *Button {
 	return v
 }
 
+func (v *Button) Lifecycle(from, to view.Stage) {
+	if view.EntersStage(from, to, view.StageMounted) {
+		buttonMu.Lock()
+		defer buttonMu.Unlock()
+
+		buttons[v.Id()] = v
+	} else if view.ExitsStage(from, to, view.StageMounted) {
+		buttonMu.Lock()
+		defer buttonMu.Unlock()
+
+		delete(buttons, v.Id())
+	}
+}
+
 func (v *Button) Build(ctx *view.Context) *view.Model {
 	ft := &text.Text{}
 	ft.SetString(v.Text)
@@ -70,4 +109,8 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 		},
 	}
 	return n
+}
+
+func (v *Button) String() string {
+	return fmt.Sprintf("&Button{id:%v text:%v}", v.Id(), v.Text)
 }
