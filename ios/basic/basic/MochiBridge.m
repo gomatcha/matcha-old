@@ -8,6 +8,7 @@
 
 #import "MochiBridge.h"
 #import "Text.pbobjc.h"
+#import "Imageview.pbobjc.h"
 
 @implementation UIColor (Mochi)
 
@@ -326,6 +327,12 @@
     return [[NSAttributedString alloc] initWithString:string attributes:dictionary];
 }
 
+@end
+
+@implementation UIImage (Mochi)
+- (id)initWithProtobuf:(MochiPBImage *)value {
+    return [self initWithData:value.data_p];
+}
 @end
 
 @implementation UIFont (Mochi)

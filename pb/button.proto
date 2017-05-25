@@ -1,0 +1,10 @@
+syntax = "proto3";
+package button;
+import "text.proto";
+
+option go_package = "pb";
+option objc_class_prefix = "MochiPB";
+
+message Button {
+    text.Text text = 1;
+}

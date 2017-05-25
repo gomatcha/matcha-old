@@ -10,6 +10,8 @@ It is generated from these files:
 	paint.proto
 	view.proto
 	scrollview.proto
+	imageview.proto
+	button.proto
 
 It has these top-level messages:
 	Point
@@ -24,6 +26,9 @@ It has these top-level messages:
 	Node
 	Root
 	ScrollView
+	Image
+	ImageView
+	Button
 */
 package pb
 

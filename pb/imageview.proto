@@ -1,0 +1,23 @@
+syntax = "proto3";
+package imageview;
+
+option go_package = "pb";
+option objc_class_prefix = "MochiPB";
+
+message Image {
+    int64 width = 1;
+    int64 height = 2;
+    bytes data = 3;
+}
+
+enum ResizeMode {
+    FIT = 0;
+    FILL = 1;
+    STRETCH = 2;
+    CENTER = 3;
+}
+
+message ImageView {
+    Image image = 1;
+    ResizeMode resizeMode = 2;
+}

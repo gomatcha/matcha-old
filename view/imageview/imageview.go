@@ -1,7 +1,6 @@
 package imageview
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"image"
@@ -9,9 +8,10 @@ import (
 	_ "image/png"
 	"net/http"
 
+	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi/paint"
+	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/view"
-	"golang.org/x/image/bmp"
 )
 
 type URLImageView struct {
@@ -111,6 +111,14 @@ func loadImageURL(url string) (image.Image, error) {
 
 // ImageView
 
+const bridgeName = "github.com/overcyn/mochi/view/imageview"
+
+func init() {
+	view.RegisterBridgeMarshaller(bridgeName, func(state interface{}) (proto.Message, error) {
+		return state.(proto.Message), nil
+	})
+}
+
 type ResizeMode int
 
 const (
@@ -120,12 +128,17 @@ const (
 	ResizeModeCenter
 )
 
+func (m ResizeMode) EncodeProtobuf() pb.ResizeMode {
+	return pb.ResizeMode(m)
+}
+
 type ImageView struct {
 	*view.Embed
 	Painter    paint.Painter
 	Image      image.Image
 	ResizeMode ResizeMode
 	image      image.Image
+	pbImage    *pb.Image
 	bytes      []byte
 }
 
@@ -142,24 +155,15 @@ func NewImageView(ctx *view.Context, key interface{}) *ImageView {
 func (v *ImageView) Build(ctx *view.Context) *view.Model {
 	if v.Image != v.image {
 		v.image = v.Image
-
-		buf := &bytes.Buffer{}
-		err := bmp.Encode(buf, v.image)
-		if err != nil {
-			fmt.Println("ImageView encoding error:", err)
-		}
-		v.bytes = buf.Bytes()
+		v.pbImage = pb.ImageEncode(v.image)
 	}
 
 	n := &view.Model{
 		Painter:    v.Painter,
 		BridgeName: "github.com/overcyn/mochi/view/imageview",
-		BridgeState: struct {
-			Bytes      []byte
-			ResizeMode ResizeMode
-		}{
-			Bytes:      v.bytes,
-			ResizeMode: v.ResizeMode,
+		BridgeState: &pb.ImageView{
+			Image:      v.pbImage,
+			ResizeMode: v.ResizeMode.EncodeProtobuf(),
 		},
 	}
 	return n

@@ -11,6 +11,8 @@
 #import "Layout.pbobjc.h"
 #import "Text.pbobjc.h"
 #import "Scrollview.pbobjc.h"
+#import "Imageview.pbobjc.h"
+#import "Button.pbobjc.h"
 
 bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config);
 MochiView *MochiViewWithNode(MochiNode *node);
@@ -89,25 +91,24 @@ MochiView *MochiViewWithNode(MochiNode *node);
 - (void)setNode:(MochiNode *)value {
     bool update = MochiConfigureViewWithNode(self, value, self.config);
     if (update) {
-        MochiGoValue *state = value.bridgeState;
-        MochiGoValue *imageData = state[@"Bytes"];
-        if (!imageData.isNil) {
-            NSData *data = imageData.toData;
-            UIImage *image = [[UIImage alloc] initWithData:data];
-            self.image = image;
-        } else {
-            self.image = nil;
-        }
+        GPBAny *state = value.pbBridgeState;
+        NSError *error = nil;
+        MochiPBImageView *pbimageview = (id)[state unpackMessageClass:[MochiPBImageView class] error:&error];
         
-        switch (state[@"ResizeMode"].toLongLong) {
-        case 1:
+        self.image = [[UIImage alloc] initWithProtobuf:pbimageview.image];
+        switch (pbimageview.resizeMode) {
+        case MochiPBResizeMode_Fit:
             self.contentMode = UIViewContentModeScaleAspectFit;
-        case 2:
+            break;
+        case MochiPBResizeMode_Fill:
             self.contentMode = UIViewContentModeScaleAspectFill;
-        case 3:
+            break;
+        case MochiPBResizeMode_Stretch:
             self.contentMode = UIViewContentModeScaleToFill;
-        case 4:
+            break;
+        case MochiPBResizeMode_Center:
             self.contentMode = UIViewContentModeCenter;
+            break;
         }
     }
 }
@@ -134,8 +135,11 @@ MochiView *MochiViewWithNode(MochiNode *node);
 - (void)setNode:(MochiNode *)value {
     bool update = MochiConfigureViewWithNode(self, value, self.config);
     if (update) {
-        MochiGoValue *state = value.bridgeState[@"Text"];
-        NSAttributedString *string = [[NSAttributedString alloc] initWithGoValue:state];
+        GPBAny *state = value.pbBridgeState;
+        NSError *error = nil;
+        MochiPBButton *pbbutton = (id)[state unpackMessageClass:[MochiPBButton class] error:&error];
+        
+        NSAttributedString *string = [[NSAttributedString alloc] initWithProtobuf:pbbutton.text];
         [self.button setAttributedTitle:string forState:UIControlStateNormal];
     }
 }

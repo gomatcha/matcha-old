@@ -13,6 +13,8 @@
 		674080CB1ED613330093D987 /* Text.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080C91ED613330093D987 /* Text.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		674080CE1ED6311F0093D987 /* Paint.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080CC1ED6311F0093D987 /* Paint.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		674080D21ED74E6B0093D987 /* Scrollview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080D01ED74E6A0093D987 /* Scrollview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		674080D51ED7568E0093D987 /* Imageview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080D31ED7568D0093D987 /* Imageview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		674080D91ED7748F0093D987 /* Button.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080D71ED7748F0093D987 /* Button.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67608ABC1E8F966500AE2EC7 /* MochiGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608ABB1E8F966500AE2EC7 /* MochiGuide.m */; };
 		67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608AC61EA8545600AE2EC7 /* MochiRoot.m */; };
 		676EF4CD1E8E341800C1488A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4CC1E8E341800C1488A /* main.m */; };
@@ -52,6 +54,10 @@
 		674080CD1ED6311F0093D987 /* Paint.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Paint.pbobjc.h; sourceTree = "<group>"; };
 		674080D01ED74E6A0093D987 /* Scrollview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scrollview.pbobjc.m; sourceTree = "<group>"; };
 		674080D11ED74E6A0093D987 /* Scrollview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scrollview.pbobjc.h; sourceTree = "<group>"; };
+		674080D31ED7568D0093D987 /* Imageview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Imageview.pbobjc.m; sourceTree = "<group>"; };
+		674080D41ED7568D0093D987 /* Imageview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Imageview.pbobjc.h; sourceTree = "<group>"; };
+		674080D71ED7748F0093D987 /* Button.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Button.pbobjc.m; sourceTree = "<group>"; };
+		674080D81ED7748F0093D987 /* Button.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.pbobjc.h; sourceTree = "<group>"; };
 		67608ABA1E8F966500AE2EC7 /* MochiGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiGuide.h; sourceTree = "<group>"; };
 		67608ABB1E8F966500AE2EC7 /* MochiGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiGuide.m; sourceTree = "<group>"; };
 		67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mochi.framework; sourceTree = "<group>"; };
@@ -93,6 +99,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		674080D61ED756AC0093D987 /* Protobuf */ = {
+			isa = PBXGroup;
+			children = (
+				674080D71ED7748F0093D987 /* Button.pbobjc.m */,
+				674080D81ED7748F0093D987 /* Button.pbobjc.h */,
+				674080D31ED7568D0093D987 /* Imageview.pbobjc.m */,
+				674080D41ED7568D0093D987 /* Imageview.pbobjc.h */,
+				674080D01ED74E6A0093D987 /* Scrollview.pbobjc.m */,
+				674080D11ED74E6A0093D987 /* Scrollview.pbobjc.h */,
+				674080CC1ED6311F0093D987 /* Paint.pbobjc.m */,
+				674080CD1ED6311F0093D987 /* Paint.pbobjc.h */,
+				674080C91ED613330093D987 /* Text.pbobjc.m */,
+				674080CA1ED613330093D987 /* Text.pbobjc.h */,
+				67D89E331ED507240063A1E2 /* View.pbobjc.h */,
+				67D89E321ED507240063A1E2 /* View.pbobjc.m */,
+				67D89DD11ED4A5EA0063A1E2 /* Layout.pbobjc.h */,
+				67D89DD01ED4A5EA0063A1E2 /* Layout.pbobjc.m */,
+			);
+			name = Protobuf;
+			sourceTree = "<group>";
+		};
 		676EF4BF1E8E341800C1488A = {
 			isa = PBXGroup;
 			children = (
@@ -137,16 +164,7 @@
 		676EF4F11E8ECF4400C1488A /* Mochi */ = {
 			isa = PBXGroup;
 			children = (
-				674080D01ED74E6A0093D987 /* Scrollview.pbobjc.m */,
-				674080D11ED74E6A0093D987 /* Scrollview.pbobjc.h */,
-				674080CC1ED6311F0093D987 /* Paint.pbobjc.m */,
-				674080CD1ED6311F0093D987 /* Paint.pbobjc.h */,
-				674080C91ED613330093D987 /* Text.pbobjc.m */,
-				674080CA1ED613330093D987 /* Text.pbobjc.h */,
-				67D89E331ED507240063A1E2 /* View.pbobjc.h */,
-				67D89E321ED507240063A1E2 /* View.pbobjc.m */,
-				67D89DD11ED4A5EA0063A1E2 /* Layout.pbobjc.h */,
-				67D89DD01ED4A5EA0063A1E2 /* Layout.pbobjc.m */,
+				674080D61ED756AC0093D987 /* Protobuf */,
 				67608AC51EA8545600AE2EC7 /* MochiRoot.h */,
 				67608AC61EA8545600AE2EC7 /* MochiRoot.m */,
 				676EF4F51E8ED68800C1488A /* MochiBridge.h */,
@@ -251,6 +269,8 @@
 				67D89E341ED507240063A1E2 /* View.pbobjc.m in Sources */,
 				674080CB1ED613330093D987 /* Text.pbobjc.m in Sources */,
 				674080D21ED74E6B0093D987 /* Scrollview.pbobjc.m in Sources */,
+				674080D51ED7568E0093D987 /* Imageview.pbobjc.m in Sources */,
+				674080D91ED7748F0093D987 /* Button.pbobjc.m in Sources */,
 				67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */,
 				676EF4E41E8E34E300C1488A /* ViewController.m in Sources */,
 				67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */,

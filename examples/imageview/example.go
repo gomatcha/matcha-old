@@ -23,10 +23,9 @@ type ImageView struct {
 
 func New(c view.Config) *ImageView {
 	v, ok := c.Prev.(*ImageView)
-	if ok {
-		v = &ImageView{
-			Embed: c.Embed,
-		}
+	if !ok {
+		v = &ImageView{}
+		v.Embed = c.Embed
 	}
 	return v
 }

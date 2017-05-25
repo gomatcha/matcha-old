@@ -1,13 +1,23 @@
 package button
 
 import (
+	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
+	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochibridge"
 )
+
+const bridgeName = "github.com/overcyn/mochi/view/button"
+
+func init() {
+	view.RegisterBridgeMarshaller(bridgeName, func(state interface{}) (proto.Message, error) {
+		return state.(proto.Message), nil
+	})
+}
 
 func textSize(t *text.Text, max layout.Point) layout.Point {
 	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(layout.Point)
@@ -63,13 +73,9 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 	n := &view.Model{
 		Layouter:   &buttonLayouter{formattedText: ft},
 		Painter:    v.Painter,
-		BridgeName: "github.com/overcyn/mochi/view/button",
-		BridgeState: struct {
-			Text    *text.Text
-			OnPress func()
-		}{
-			Text:    ft,
-			OnPress: v.OnPress,
+		BridgeName: bridgeName,
+		BridgeState: &pb.Button{
+			Text: ft.EncodeProtobuf(),
 		},
 	}
 	return n

@@ -27,12 +27,12 @@ func (v *TextInput) Build(ctx *view.Context) *view.Model {
 	n := &view.Model{}
 	n.Painter = v.Painter
 	n.BridgeName = "github.com/overcyn/mochi/view/textinput TextInput"
-	n.BridgeState = struct {
-		Text    *text.Text
-		OnPress func()
-	}{
+	// n.BridgeState = struct {
+	// 	Text    *text.Text
+	// 	OnPress func()
+	// }{
 	// Text:    ft,
 	// OnPress: v.OnPress,
-	}
+	// }
 	return n
 }
