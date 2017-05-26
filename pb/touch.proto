@@ -1,0 +1,19 @@
+syntax = "proto3";
+package touch;
+
+option go_package = "pb";
+option objc_class_prefix = "MochiPB";
+
+message RecognizerList {
+    repeated google.protobuf.Any = 0;
+}
+
+message TapRecognizer {
+    int64 count = 1;
+}
+
+message PressRecognizer {
+}
+
+message PanRecognizer {
+}

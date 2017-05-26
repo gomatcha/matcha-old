@@ -1,9 +1,9 @@
 package touch
 
 import (
+	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/touch"
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochibridge"
@@ -33,23 +33,10 @@ func New(c view.Config) *AnimateView {
 }
 
 func (v *AnimateView) Build(ctx *view.Context) *view.Model {
-	tap := touch.NewTapRecognizer(ctx, 1)
-	tap.RecognizedFunc = func(e *touch.TapEvent) {
-		// do something
-	}
-
 	l := constraint.New()
-	m := &view.Model{
-		Layouter: l,
-		Painter:  &paint.Style{BackgroundColor: colornames.Green},
-		Values: map[interface{}]interface{}{
-			touch.Key(): []touch.Recognizer{tap},
-		},
-	}
 
 	chl := basicview.New(ctx, 1)
 	chl.Painter = &paint.Style{BackgroundColor: colornames.Blue}
-	m.Add(chl)
 	l.Add(chl, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
@@ -62,15 +49,17 @@ func (v *AnimateView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(l.MaxGuide().Height())
 	})
 
-	// r := &touch.Recognizer{}
-	// pan := touch.NewPanRecognizer(ctx, 1)
-	// pan.BeganFunc = func() {
+	// tap := touch.NewTapRecognizer(ctx, 1)
+	// tap.RecognizedFunc = func(e *touch.TapEvent) {
+	// 	// do something
 	// }
-	// pan.CancelledFunc = func() {
-	// }
-	// r.add(pan)
 
-	// v.store.Observe(pan.ChangedNotifier)
-
-	return m
+	return &view.Model{
+		Children: map[mochi.Id]view.View{chl.Id(): chl},
+		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+		Values:   map[interface{}]interface{}{
+		// touch.Key(): []touch.Recognizer{tap},
+		},
+	}
 }

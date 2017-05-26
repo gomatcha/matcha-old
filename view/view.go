@@ -95,10 +95,12 @@ func ExitsStage(from, to, s Stage) bool {
 }
 
 type Model struct {
-	Children            map[mochi.Id]View
-	Layouter            layout.Layouter
-	Painter             paint.Painter
-	Values              map[interface{}]interface{}
+	Children     map[mochi.Id]View
+	Layouter     layout.Layouter
+	Painter      paint.Painter
+	Values       map[interface{}]interface{}
+	NativeValues map[string]proto.Message
+
 	NativeName          string
 	NativeStateProtobuf proto.Message
 }

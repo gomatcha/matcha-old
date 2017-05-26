@@ -9,6 +9,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
+	google_protobuf "github.com/golang/protobuf/ptypes/any"
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/internal"
 	"github.com/overcyn/mochi/layout"
@@ -17,6 +18,16 @@ import (
 	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochibridge"
 )
+
+var valueMarshallersMu sync.Mutex
+var valueMarshallers = map[interface{}]func(interface{}) (string, proto.Message){}
+
+func RegisterValueMarshaller(key interface{}, f func(interface{}) (string, proto.Message)) {
+	valueMarshallersMu.Lock()
+	defer valueMarshallersMu.Unlock()
+
+	valueMarshallers[key] = f
+}
 
 type Root struct {
 	id     int
@@ -95,6 +106,13 @@ func (ctx *Context) Prev(key interface{}) View {
 		return prevCtx.view
 	}
 	return nil
+}
+
+func (ctx *Context) PrevValue(key interface{}) interface{} {
+	if ctx.node.viewModel == nil || ctx.node.viewModel.Values == nil {
+		return nil
+	}
+	return ctx.node.viewModel.Values[key]
 }
 
 func (ctx *Context) NewId(key interface{}) mochi.Id {
@@ -269,9 +287,21 @@ func (n *node) EncodeProtobuf() *pb.Node {
 	}
 
 	var pbAny *any.Any
-	a, err := ptypes.MarshalAny(n.viewModel.NativeStateProtobuf)
-	if err == nil {
+	if a, err := ptypes.MarshalAny(n.viewModel.NativeStateProtobuf); err == nil {
 		pbAny = a
+	}
+
+	valueMarshallersMu.Lock()
+	defer valueMarshallersMu.Unlock()
+	values := map[string]*google_protobuf.Any{}
+	for k, v := range n.viewModel.Values {
+		if f := valueMarshallers[k]; f != nil {
+			if str, msg := f(v); msg != nil {
+				if a, err := ptypes.MarshalAny(n.viewModel.NativeStateProtobuf); err != nil {
+					values[str] = a
+				}
+			}
+		}
 	}
 
 	return &pb.Node{
@@ -284,6 +314,7 @@ func (n *node) EncodeProtobuf() *pb.Node {
 		PaintStyle:  n.paintOptions.EncodeProtobuf(),
 		BridgeName:  n.viewModel.NativeName,
 		BridgeValue: pbAny,
+		Values:      values,
 	}
 }
 

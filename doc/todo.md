@@ -52,3 +52,10 @@ Done:
     } -->
     
 We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
+
+Walk(Visitor, Root)
+Accessibility
+Touch
+Mouse
+Keyboard
+SupportedRotations

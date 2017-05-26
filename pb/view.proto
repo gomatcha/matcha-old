@@ -14,6 +14,7 @@ message Node {
   int64 paintId = 4;
   string bridgeName = 7;
   google.protobuf.Any bridgeValue = 8;
+  map<string, google.protobuf.Any> values = 10;
   repeated Node children = 5;
   layout.Guide layoutGuide = 6;
   paint.PaintStyle paintStyle = 9;
