@@ -19,14 +19,18 @@ import (
 	"github.com/overcyn/mochibridge"
 )
 
-var valueMarshallersMu sync.Mutex
-var valueMarshallers = map[interface{}]func(interface{}) (string, proto.Message){}
+type Visitor interface {
+	Visit(*Model)
+}
 
-func RegisterValueMarshaller(key interface{}, f func(interface{}) (string, proto.Message)) {
-	valueMarshallersMu.Lock()
-	defer valueMarshallersMu.Unlock()
+var vistorsMu sync.Mutex
+var visitors = []Visitor{}
 
-	valueMarshallers[key] = f
+func RegisterVisitor(v Visitor) {
+	vistorsMu.Lock()
+	defer vistorsMu.Unlock()
+
+	visitors = append(visitors)
 }
 
 type Root struct {
@@ -286,21 +290,15 @@ func (n *node) EncodeProtobuf() *pb.Node {
 		children = append(children, v.EncodeProtobuf())
 	}
 
-	var pbAny *any.Any
-	if a, err := ptypes.MarshalAny(n.viewModel.NativeStateProtobuf); err == nil {
-		pbAny = a
+	var nativeViewState *any.Any
+	if a, err := ptypes.MarshalAny(n.viewModel.NativeViewState); err == nil {
+		nativeViewState = a
 	}
 
-	valueMarshallersMu.Lock()
-	defer valueMarshallersMu.Unlock()
-	values := map[string]*google_protobuf.Any{}
-	for k, v := range n.viewModel.Values {
-		if f := valueMarshallers[k]; f != nil {
-			if str, msg := f(v); msg != nil {
-				if a, err := ptypes.MarshalAny(n.viewModel.NativeStateProtobuf); err != nil {
-					values[str] = a
-				}
-			}
+	nativeValues := map[string]*google_protobuf.Any{}
+	for k, v := range n.viewModel.NativeValues {
+		if a, err := ptypes.MarshalAny(v); err != nil {
+			nativeValues[k] = a
 		}
 	}
 
@@ -312,9 +310,9 @@ func (n *node) EncodeProtobuf() *pb.Node {
 		Children:    children,
 		LayoutGuide: n.layoutGuide.EncodeProtobuf(),
 		PaintStyle:  n.paintOptions.EncodeProtobuf(),
-		BridgeName:  n.viewModel.NativeName,
-		BridgeValue: pbAny,
-		Values:      values,
+		BridgeName:  n.viewModel.NativeViewName,
+		BridgeValue: nativeViewState,
+		Values:      nativeValues,
 	}
 }
 

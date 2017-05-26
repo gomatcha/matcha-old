@@ -4,6 +4,7 @@ import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/paint"
+	"github.com/overcyn/mochi/touch"
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochibridge"
@@ -18,21 +19,21 @@ func init() {
 	})
 }
 
-type AnimateView struct {
+type TouchView struct {
 	*view.Embed
 }
 
-func New(c view.Config) *AnimateView {
-	v, ok := c.Prev.(*AnimateView)
+func New(c view.Config) *TouchView {
+	v, ok := c.Prev.(*TouchView)
 	if !ok {
-		v = &AnimateView{
+		v = &TouchView{
 			Embed: c.Embed,
 		}
 	}
 	return v
 }
 
-func (v *AnimateView) Build(ctx *view.Context) *view.Model {
+func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
 	chl := basicview.New(ctx, 1)
@@ -49,17 +50,18 @@ func (v *AnimateView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(l.MaxGuide().Height())
 	})
 
-	// tap := touch.NewTapRecognizer(ctx, 1)
-	// tap.RecognizedFunc = func(e *touch.TapEvent) {
-	// 	// do something
-	// }
+	tap := &touch.TapRecognizer{
+		RecognizedFunc: func(e *touch.TapEvent) {
+			// do something
+		},
+	}
 
 	return &view.Model{
 		Children: map[mochi.Id]view.View{chl.Id(): chl},
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
-		Values:   map[interface{}]interface{}{
-		// touch.Key(): []touch.Recognizer{tap},
+		Values: map[interface{}]interface{}{
+			touch.Key: []touch.Recognizer{tap},
 		},
 	}
 }

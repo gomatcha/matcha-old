@@ -4,36 +4,45 @@ import (
 	"time"
 
 	"github.com/gogo/protobuf/proto"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"github.com/overcyn/mochi/layout"
+	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/view"
 )
 
-// func init() {
-// 	view.RegisterValueMarshaller(Key(), func(a interface{}) (string, proto.Message) {
-// 		rs := a.([]Recognizer)
-// 		return a
-// 	})
-// }
+func init() {
+	view.RegisterVisitor(&visitor{})
+}
 
 type key struct{}
 
-func Key() interface{} {
-	return key{}
+var Key = key{}
+
+type visitor struct {
 }
 
-// type context struct {
-// 	prev []Recognizer
-// }
+func (v *visitor) Visit(m *view.Model) {
+	rs, _ := m.Values[Key].([]Recognizer)
 
-// func newContext(vctx *view.Context) *context {
-// 	prev, _ := ctx.PrevValue(key).([]Recognizer)
-// 	return &context{
-// 		prev: prev,
-// 	}
-// }
+	pbRecognizers := &pb.RecognizerList{}
+	for _, i := range rs {
+		str, msg := i.encodeProtobuf()
+
+		var pbAny *any.Any
+		if a, err := ptypes.MarshalAny(msg); err == nil {
+			pbAny = a
+			continue
+		}
+
+		pbRecognizers.RecognizerNames = append(pbRecognizers.RecognizerNames, str)
+		pbRecognizers.Recognizers = append(pbRecognizers.Recognizers, pbAny)
+	}
+
+	m.NativeValues["github.com/overcyn/mochi/touch"] = pbRecognizers
+}
 
 type Recognizer interface {
-	id() int64
 	encodeProtobuf() (string, proto.Message)
 }
 
@@ -48,26 +57,11 @@ type TapRecognizer struct {
 	RecognizedFunc func(e *TapEvent)
 }
 
-func NewTapRecognizer(ctx *view.Context, key interface{}) *TapRecognizer {
-	return nil
+func (r *TapRecognizer) encodeProtobuf() (string, proto.Message) {
+	return "github.com/overcyn/mochi/touch TapRecognizer", &pb.TapRecognizer{
+		Count: int64(r.Count),
+	}
 }
-
-// 	var r *TapRecognizer
-// 	found := false
-
-// 	prev, _ := ctx.PrevValue(key).([]Recognizer)
-// 	for _, i := range prev {
-// 		if tap, ok := i.(*TapRecognizer); ok && i.key() == key {
-// 			r = tap
-// 			found = true
-// 			break
-// 		}
-// 	}
-// 	if !found {
-// 		r = &TapRecognizer{}
-// 	}
-// 	return r
-// }
 
 type PressEvent struct {
 	Timestamp time.Time

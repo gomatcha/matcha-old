@@ -12,6 +12,7 @@ It is generated from these files:
 	scrollview.proto
 	imageview.proto
 	button.proto
+	touch.proto
 
 It has these top-level messages:
 	Point
@@ -29,6 +30,10 @@ It has these top-level messages:
 	Image
 	ImageView
 	Button
+	RecognizerList
+	TapRecognizer
+	PressRecognizer
+	PanRecognizer
 */
 package pb
 

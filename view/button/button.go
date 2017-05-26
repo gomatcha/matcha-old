@@ -99,10 +99,10 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Layouter:   &buttonLayouter{formattedText: ft},
-		Painter:    v.Painter,
-		NativeName: "github.com/overcyn/mochi/view/button",
-		NativeStateProtobuf: &pb.Button{
+		Layouter:       &buttonLayouter{formattedText: ft},
+		Painter:        v.Painter,
+		NativeViewName: "github.com/overcyn/mochi/view/button",
+		NativeViewState: &pb.Button{
 			Text: ft.EncodeProtobuf(),
 		},
 	}

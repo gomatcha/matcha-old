@@ -39,11 +39,11 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 	}
 
 	return &view.Model{
-		Children:   children,
-		Painter:    v.Painter,
-		Layouter:   &scrollViewLayouter{},
-		NativeName: "github.com/overcyn/mochi/view/scrollview",
-		NativeStateProtobuf: &pb.ScrollView{
+		Children:       children,
+		Painter:        v.Painter,
+		Layouter:       &scrollViewLayouter{},
+		NativeViewName: "github.com/overcyn/mochi/view/scrollview",
+		NativeViewState: &pb.ScrollView{
 			ScrollEnabled:                  v.ScrollEnabled,
 			ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
 			ShowsVerticalScrollIndicator:   v.ShowsVerticalScrollIndicator,

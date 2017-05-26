@@ -150,9 +150,9 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 	}
 
 	return &view.Model{
-		Painter:    v.Painter,
-		NativeName: "github.com/overcyn/mochi/view/imageview",
-		NativeStateProtobuf: &pb.ImageView{
+		Painter:        v.Painter,
+		NativeViewName: "github.com/overcyn/mochi/view/imageview",
+		NativeViewState: &pb.ImageView{
 			Image:      v.pbImage,
 			ResizeMode: v.ResizeMode.EncodeProtobuf(),
 		},

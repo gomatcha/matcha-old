@@ -61,6 +61,7 @@ typedef GPB_ENUM(MochiPBNode_FieldNumber) {
   MochiPBNode_FieldNumber_BridgeName = 7,
   MochiPBNode_FieldNumber_BridgeValue = 8,
   MochiPBNode_FieldNumber_PaintStyle = 9,
+  MochiPBNode_FieldNumber_Values = 10,
 };
 
 @interface MochiPBNode : GPBMessage
@@ -78,6 +79,10 @@ typedef GPB_ENUM(MochiPBNode_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) GPBAny *bridgeValue;
 /** Test to see if @c bridgeValue has been set. */
 @property(nonatomic, readwrite) BOOL hasBridgeValue;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableDictionary<NSString*, GPBAny*> *values;
+/** The number of items in @c values without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger values_Count;
 
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MochiPBNode*> *childrenArray;
 /** The number of items in @c childrenArray without causing the array to be created. */

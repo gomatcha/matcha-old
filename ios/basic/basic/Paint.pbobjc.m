@@ -83,7 +83,7 @@ typedef struct MochiPBPaintStyle__storage_ {
         .number = MochiPBPaintStyle_FieldNumber_Alpha,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(MochiPBPaintStyle__storage_, alpha),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .flags = GPBFieldOptional,
         .dataType = GPBDataTypeDouble,
       },
       {
@@ -169,7 +169,7 @@ typedef struct MochiPBPaintStyle__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\t\001E\000\002O\000\003K\000\004K\000\005L\000\006M\000\007L\000\010L\000\tK\000";
+        "\010\002\017\000\003\013\000\004\013\000\005\014\000\006\r\000\007\014\000\010\014\000\t\013\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

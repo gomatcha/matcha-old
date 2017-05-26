@@ -26,7 +26,7 @@ func New(ctx *view.Context, key interface{}) *TextInput {
 func (v *TextInput) Build(ctx *view.Context) *view.Model {
 	n := &view.Model{}
 	n.Painter = v.Painter
-	n.NativeName = "github.com/overcyn/mochi/view/textinput TextInput"
+	n.NativeViewName = "github.com/overcyn/mochi/view/textinput TextInput"
 	// n.BridgeState = struct {
 	// 	Text    *text.Text
 	// 	OnPress func()

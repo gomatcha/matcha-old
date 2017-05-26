@@ -61,6 +61,7 @@ static GPBFileDescriptor *MochiPBViewRoot_FileDescriptor(void) {
 @dynamic paintId;
 @dynamic bridgeName;
 @dynamic hasBridgeValue, bridgeValue;
+@dynamic values, values_Count;
 @dynamic childrenArray, childrenArray_Count;
 @dynamic hasLayoutGuide, layoutGuide;
 @dynamic hasPaintStyle, paintStyle;
@@ -72,6 +73,7 @@ typedef struct MochiPBNode__storage_ {
   NSString *bridgeName;
   GPBAny *bridgeValue;
   MochiPBPaintStyle *paintStyle;
+  NSMutableDictionary *values;
   int64_t id_p;
   int64_t buildId;
   int64_t layoutId;
@@ -163,6 +165,15 @@ typedef struct MochiPBNode__storage_ {
         .hasIndex = 7,
         .offset = (uint32_t)offsetof(MochiPBNode__storage_, paintStyle),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "values",
+        .dataTypeSpecific.className = GPBStringifySymbol(GPBAny),
+        .number = MochiPBNode_FieldNumber_Values,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(MochiPBNode__storage_, values),
+        .flags = GPBFieldMapKeyString,
         .dataType = GPBDataTypeMessage,
       },
     };

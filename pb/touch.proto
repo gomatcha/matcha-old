@@ -1,11 +1,13 @@
 syntax = "proto3";
 package touch;
+import "google/protobuf/any.proto";
 
 option go_package = "pb";
 option objc_class_prefix = "MochiPB";
 
 message RecognizerList {
-    repeated google.protobuf.Any = 0;
+    repeated google.protobuf.Any recognizers = 1;
+    repeated string recognizerNames = 2;
 }
 
 message TapRecognizer {
