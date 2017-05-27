@@ -112,18 +112,15 @@ func (ctx *Context) Prev(key interface{}) View {
 	return nil
 }
 
-func (ctx *Context) PrevValue(key interface{}) interface{} {
-	if ctx.node.viewModel == nil || ctx.node.viewModel.Values == nil {
-		return nil
-	}
-	return ctx.node.viewModel.Values[key]
-}
-
 func (ctx *Context) NewId(key interface{}) mochi.Id {
 	cacheKey := viewCacheKey{key: key, id: ctx.node.id}
 	id := ctx.node.root.newId()
 	ctx.node.root.ids[cacheKey] = id
 	return id
+}
+
+func (ctx *Context) Id() mochi.Id {
+	return ctx.node.id
 }
 
 type updateFlag int
@@ -229,6 +226,8 @@ func (root *root) buildLocked() {
 
 	root.ids = map[viewCacheKey]mochi.Id{}
 	root.nodes = map[mochi.Id]*node{}
+
+	// Rebuild
 	root.node.build(prevIds, prevNodes)
 
 	keys := map[mochi.Id]viewCacheKey{}

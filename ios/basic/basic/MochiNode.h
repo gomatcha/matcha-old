@@ -28,9 +28,9 @@
 @property (nonatomic, readonly) NSDictionary<NSNumber *, MochiNode *> *nodeChildren;
 @property (nonatomic, readonly) MochiLayoutGuide *guide;
 @property (nonatomic, readonly) MochiPaintOptions *paintOptions;
-@property (nonatomic, readonly) NSString *bridgeName;
-@property (nonatomic, readonly) MochiGoValue *bridgeState;
-@property (nonatomic, readonly) GPBAny *pbBridgeState;
+@property (nonatomic, readonly) NSMutableDictionary<NSString*, GPBAny*> *nativeValues;
+@property (nonatomic, readonly) NSString *nativeViewName;
+@property (nonatomic, readonly) GPBAny *nativeViewState;
 @property (nonatomic, readonly) NSNumber *identifier;
 @property (nonatomic, readonly) NSNumber *buildId;
 @property (nonatomic, readonly) NSNumber *layoutId;

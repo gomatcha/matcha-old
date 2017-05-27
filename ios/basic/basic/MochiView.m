@@ -63,7 +63,7 @@ MochiView *MochiViewWithNode(MochiNode *node);
 - (void)setNode:(MochiNode *)value {
     bool update = MochiConfigureViewWithNode(self, value, self.config);
     if (update) {
-        GPBAny *state = value.pbBridgeState;
+        GPBAny *state = value.nativeViewState;
         NSError *error = nil;
         MochiPBText *text = (id)[state unpackMessageClass:[MochiPBText class] error:&error];
         if (text != nil) {
@@ -91,7 +91,7 @@ MochiView *MochiViewWithNode(MochiNode *node);
 - (void)setNode:(MochiNode *)value {
     bool update = MochiConfigureViewWithNode(self, value, self.config);
     if (update) {
-        GPBAny *state = value.pbBridgeState;
+        GPBAny *state = value.nativeViewState;
         NSError *error = nil;
         MochiPBImageView *pbimageview = (id)[state unpackMessageClass:[MochiPBImageView class] error:&error];
         
@@ -135,7 +135,7 @@ MochiView *MochiViewWithNode(MochiNode *node);
 - (void)setNode:(MochiNode *)value {
     bool update = MochiConfigureViewWithNode(self, value, self.config);
     if (update) {
-        GPBAny *state = value.pbBridgeState;
+        GPBAny *state = value.nativeViewState;
         NSError *error = nil;
         MochiPBButton *pbbutton = (id)[state unpackMessageClass:[MochiPBButton class] error:&error];
         
@@ -175,7 +175,7 @@ MochiView *MochiViewWithNode(MochiNode *node);
             self.contentSize = ((UIView *)self.config.childViews.allValues[0]).frame.size;
         }
 
-        GPBAny *state = value.pbBridgeState;
+        GPBAny *state = value.nativeViewState;
         NSError *error = nil;
         MochiPBScrollView *pbscrollview = (id)[state unpackMessageClass:[MochiPBScrollView class] error:&error];
         if (pbscrollview != nil) {
@@ -252,7 +252,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
 }
 
 MochiView *MochiViewWithNode(MochiNode *node) {
-    NSString *name = node.bridgeName;
+    NSString *name = node.nativeViewName;
     MochiView *child = nil;
     if ([name isEqual:@""]) {
         child = [[MochiView alloc] initWithFrame:CGRectZero];

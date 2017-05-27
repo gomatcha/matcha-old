@@ -37,9 +37,9 @@
 @property (nonatomic, strong) NSNumber *buildId;
 @property (nonatomic, strong) NSNumber *layoutId;
 @property (nonatomic, strong) NSNumber *paintId;
-@property (nonatomic, strong) NSString *bridgeName;
-@property (nonatomic, strong) GPBAny *pbBridgeState;
-@property (nonatomic, strong) MochiGoValue *bridgeState;
+@property (nonatomic, strong) NSString *nativeViewName;
+@property (nonatomic, strong) GPBAny *nativeViewState;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, GPBAny*> *nativeValues;
 @end
 
 @implementation MochiNode
@@ -52,8 +52,9 @@
         self.paintId = @(node.paintId);
         self.paintOptions = [[MochiPaintOptions alloc] initWithProtobuf:node.paintStyle];
         self.guide = [[MochiLayoutGuide alloc] initWithProtobuf:node.layoutGuide];
-        self.bridgeName = node.bridgeName;
-        self.pbBridgeState = node.bridgeValue;
+        self.nativeViewName = node.bridgeName;
+        self.nativeViewState = node.bridgeValue;
+        self.nativeValues = node.values;
         
         NSMutableDictionary *children = [NSMutableDictionary dictionary];
         for (MochiPBNode *i in node.childrenArray) {
@@ -74,8 +75,7 @@
         self.paintId = @(value[@"PaintId"].toLongLong);
         self.paintOptions = [[MochiPaintOptions alloc] initWithGoValue:self.goValue[@"PaintOptions"]];
         self.guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
-        self.bridgeName = self.goValue[@"BridgeName"].toString;
-        self.bridgeState = self.goValue[@"BridgeState"];
+        self.nativeViewName = self.goValue[@"BridgeName"].toString;
     }
     return self;
 }
