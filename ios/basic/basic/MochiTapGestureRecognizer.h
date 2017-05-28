@@ -10,5 +10,7 @@
 #import "Touch.pbobjc.h"
 
 @interface MochiTapGestureRecognizer : UITapGestureRecognizer
-- (id)initWithProtobuf:(GPBAny *)pb;
+- (id)initWithViewId:(int64_t)viewId recognizerId:(int64_t)recognizerId protobuf:(GPBAny *)pb;
+@property (nonatomic, assign) long long viewId;
+@property (nonatomic, assign) long long recognizerId;
 @end

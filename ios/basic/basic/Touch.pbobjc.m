@@ -49,17 +49,80 @@ static GPBFileDescriptor *MochiPBTouchRoot_FileDescriptor(void) {
   return descriptor;
 }
 
+#pragma mark - MochiPBRecognizer
+
+@implementation MochiPBRecognizer
+
+@dynamic id_p;
+@dynamic name;
+@dynamic hasRecognizer, recognizer;
+
+typedef struct MochiPBRecognizer__storage_ {
+  uint32_t _has_storage_[1];
+  NSString *name;
+  GPBAny *recognizer;
+  int64_t id_p;
+} MochiPBRecognizer__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "id_p",
+        .dataTypeSpecific.className = NULL,
+        .number = MochiPBRecognizer_FieldNumber_Id_p,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MochiPBRecognizer__storage_, id_p),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "name",
+        .dataTypeSpecific.className = NULL,
+        .number = MochiPBRecognizer_FieldNumber_Name,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MochiPBRecognizer__storage_, name),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "recognizer",
+        .dataTypeSpecific.className = GPBStringifySymbol(GPBAny),
+        .number = MochiPBRecognizer_FieldNumber_Recognizer,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MochiPBRecognizer__storage_, recognizer),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MochiPBRecognizer class]
+                                     rootClass:[MochiPBTouchRoot class]
+                                          file:MochiPBTouchRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MochiPBRecognizer__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 #pragma mark - MochiPBRecognizerList
 
 @implementation MochiPBRecognizerList
 
 @dynamic recognizersArray, recognizersArray_Count;
-@dynamic recognizerNamesArray, recognizerNamesArray_Count;
 
 typedef struct MochiPBRecognizerList__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *recognizersArray;
-  NSMutableArray *recognizerNamesArray;
 } MochiPBRecognizerList__storage_;
 
 // This method is threadsafe because it is initially called
@@ -70,21 +133,12 @@ typedef struct MochiPBRecognizerList__storage_ {
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "recognizersArray",
-        .dataTypeSpecific.className = GPBStringifySymbol(GPBAny),
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBRecognizer),
         .number = MochiPBRecognizerList_FieldNumber_RecognizersArray,
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(MochiPBRecognizerList__storage_, recognizersArray),
         .flags = GPBFieldRepeated,
         .dataType = GPBDataTypeMessage,
-      },
-      {
-        .name = "recognizerNamesArray",
-        .dataTypeSpecific.className = NULL,
-        .number = MochiPBRecognizerList_FieldNumber_RecognizerNamesArray,
-        .hasIndex = GPBNoHasBit,
-        .offset = (uint32_t)offsetof(MochiPBRecognizerList__storage_, recognizerNamesArray),
-        .flags = (GPBFieldFlags)(GPBFieldRepeated | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
       },
     };
     GPBDescriptor *localDescriptor =
@@ -95,11 +149,6 @@ typedef struct MochiPBRecognizerList__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(MochiPBRecognizerList__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
-#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    static const char *extraTextFormatInfo =
-        "\001\002\000recognizerNames\000";
-    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
-#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }

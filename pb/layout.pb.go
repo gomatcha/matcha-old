@@ -30,6 +30,7 @@ It has these top-level messages:
 	Image
 	ImageView
 	Button
+	Recognizer
 	RecognizerList
 	TapRecognizer
 	PressRecognizer

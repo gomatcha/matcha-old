@@ -7,14 +7,11 @@
 //
 
 #import "MochiView.h"
-#import "View.pbobjc.h"
-#import "Layout.pbobjc.h"
-#import "Text.pbobjc.h"
-#import "Scrollview.pbobjc.h"
-#import "Imageview.pbobjc.h"
-#import "Button.pbobjc.h"
+#import "MochiProtobuf.h"
+#import "MochiTapGestureRecognizer.h"
 
 bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config);
+UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, MochiPBRecognizer *pb);
 MochiView *MochiViewWithNode(MochiNode *node);
 
 @interface MochiViewConfig : NSObject
@@ -223,6 +220,22 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
             childViews[i] = childView;
         }
         config.childViews = childViews;
+        
+        // Update gesture recognizers
+        for (UIGestureRecognizer *i in view.gestureRecognizers) {
+            [view removeGestureRecognizer:i];
+        }
+        GPBAny *any = node.nativeValues[@"github.com/overcyn/mochi/touch"];
+        NSError *error = nil;
+        MochiPBRecognizerList *recognizerList = (id)[any unpackMessageClass:[MochiPBRecognizerList class] error:&error];
+        if (error == nil) {
+            for (MochiPBRecognizer *i in recognizerList.recognizersArray) {
+                UIGestureRecognizer *recognizer = MochiGestureRecognizerWithPB(node.identifier.longLongValue, i);
+                if (recognizer != nil) {
+                    [view addGestureRecognizer:recognizer];
+                }
+            }
+        }
     }
     if (![node.layoutId isEqual:config.node.layoutId]) {
         NSArray *sortedKeys = [[config.childViews allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
@@ -249,6 +262,13 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
     bool update = ![node.buildId isEqual:config.node.buildId];
     config.node = node;
     return update;
+}
+
+UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, MochiPBRecognizer *pb) {
+    if ([pb.name isEqual:@"github.com/overcyn/mochi/touch TapRecognizer"]) {
+        return [[MochiTapGestureRecognizer alloc] initWithViewId:viewId recognizerId:pb.id_p protobuf:pb.recognizer];
+    }
+    return nil;
 }
 
 MochiView *MochiViewWithNode(MochiNode *node) {

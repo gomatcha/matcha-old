@@ -9,7 +9,7 @@ import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/animate"
 	"github.com/overcyn/mochi/layout/constraint"
-	_ "github.com/overcyn/mochi/layout/table"
+	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view"
@@ -160,20 +160,20 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	// childLayouter := &table.Layout{}
-	// childViews := []view.View{}
-	// for i := 0; i < 20; i++ {
-	// 	childView := NewTableCell(ctx.Get(i + 1000))
-	// 	childView.String = "TEST TEST"
-	// 	childView.Painter = &paint.Style{BackgroundColor: colornames.Red}
-	// 	childViews = append(childViews, childView)
-	// 	childLayouter.Add(childView)
-	// }
+	childLayouter := &table.Layout{}
+	childViews := []view.View{}
+	for i := 0; i < 20; i++ {
+		childView := NewTableCell(ctx.Get(i + 1000))
+		childView.String = "TEST TEST"
+		childView.Painter = &paint.Style{BackgroundColor: colornames.Red}
+		childViews = append(childViews, childView)
+		childLayouter.Add(childView)
+	}
 
 	scrollChild := basicview.New(ctx, 9)
 	scrollChild.Painter = &paint.Style{BackgroundColor: colornames.White}
-	// scrollChild.Layouter = childLayouter
-	// scrollChild.Children = childViews
+	scrollChild.Layouter = childLayouter
+	scrollChild.Children = childViews
 
 	chl10 := scrollview.New(ctx, 10)
 	chl10.Painter = &paint.Style{BackgroundColor: colornames.Cyan}

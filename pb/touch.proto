@@ -5,9 +5,14 @@ import "google/protobuf/any.proto";
 option go_package = "pb";
 option objc_class_prefix = "MochiPB";
 
+message Recognizer {
+    int64 id = 1;
+    string name = 2;
+    google.protobuf.Any recognizer = 3;
+}
+
 message RecognizerList {
-    repeated google.protobuf.Any recognizers = 1;
-    repeated string recognizerNames = 2;
+    repeated Recognizer recognizers = 1;
 }
 
 message TapRecognizer {

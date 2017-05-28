@@ -28,6 +28,7 @@
 CF_EXTERN_C_BEGIN
 
 @class GPBAny;
+@class MochiPBRecognizer;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -46,22 +47,37 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MochiPBTouchRoot : GPBRootObject
 @end
 
+#pragma mark - MochiPBRecognizer
+
+typedef GPB_ENUM(MochiPBRecognizer_FieldNumber) {
+  MochiPBRecognizer_FieldNumber_Id_p = 1,
+  MochiPBRecognizer_FieldNumber_Name = 2,
+  MochiPBRecognizer_FieldNumber_Recognizer = 3,
+};
+
+@interface MochiPBRecognizer : GPBMessage
+
+@property(nonatomic, readwrite) int64_t id_p;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *name;
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBAny *recognizer;
+/** Test to see if @c recognizer has been set. */
+@property(nonatomic, readwrite) BOOL hasRecognizer;
+
+@end
+
 #pragma mark - MochiPBRecognizerList
 
 typedef GPB_ENUM(MochiPBRecognizerList_FieldNumber) {
   MochiPBRecognizerList_FieldNumber_RecognizersArray = 1,
-  MochiPBRecognizerList_FieldNumber_RecognizerNamesArray = 2,
 };
 
 @interface MochiPBRecognizerList : GPBMessage
 
-@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<GPBAny*> *recognizersArray;
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MochiPBRecognizer*> *recognizersArray;
 /** The number of items in @c recognizersArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger recognizersArray_Count;
-
-@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *recognizerNamesArray;
-/** The number of items in @c recognizerNamesArray without causing the array to be created. */
-@property(nonatomic, readonly) NSUInteger recognizerNamesArray_Count;
 
 @end
 

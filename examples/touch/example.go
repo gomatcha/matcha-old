@@ -6,7 +6,6 @@ import (
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/touch"
 	"github.com/overcyn/mochi/view"
-	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochibridge"
 	"golang.org/x/image/colornames"
 )
@@ -36,8 +35,7 @@ func New(c view.Config) *TouchView {
 func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	chl := basicview.New(ctx, 1)
-	chl.Painter = &paint.Style{BackgroundColor: colornames.Blue}
+	chl := NewTouchChildView(ctx, 1)
 	l.Add(chl, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
@@ -50,16 +48,37 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(l.MaxGuide().Height())
 	})
 
+	return &view.Model{
+		Children: map[mochi.Id]view.View{chl.Id(): chl},
+		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+	}
+}
+
+type TouchChildView struct {
+	*view.Embed
+}
+
+func NewTouchChildView(ctx *view.Context, key interface{}) *TouchChildView {
+	v, ok := ctx.Prev(key).(*TouchChildView)
+	if !ok {
+		v = &TouchChildView{
+			Embed: view.NewEmbed(ctx.NewId(key)),
+		}
+	}
+	return v
+}
+
+func (v *TouchChildView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
+		Count: 1,
 		RecognizedFunc: func(e *touch.TapEvent) {
 			// do something
 		},
 	}
 
 	return &view.Model{
-		Children: map[mochi.Id]view.View{chl.Id(): chl},
-		Layouter: l,
-		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+		Painter: &paint.Style{BackgroundColor: colornames.Blue},
 		Values: map[interface{}]interface{}{
 			touch.Key: []touch.Recognizer{tap},
 		},

@@ -1,11 +1,11 @@
 package touch
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/pb"
@@ -14,16 +14,14 @@ import (
 )
 
 func init() {
-	// view.RegisterVisitor(&visitor{})
-	mochibridge.RegisterFunc("github.com/overcyn/mochi/touch TapRecognizer.Recognized", func(id int64) {
-
+	view.RegisterMiddleware(&Root{})
+	mochibridge.RegisterFunc("github.com/overcyn/mochi/touch TapRecognizer.Recognized", func(viewId, touchId int64) {
+		fmt.Println("tapRecognized")
 	})
 }
 
-type visitorKey struct{}
 type key struct{}
 
-var VisitorKey = visitorKey{}
 var Key = key{}
 
 type cacheKey struct {
@@ -32,71 +30,82 @@ type cacheKey struct {
 }
 
 type Root struct {
-	prevRecognizers map[int64]Recognizer
-	prevIds         map[cacheKey]int64
-	recognizers     map[int64]Recognizer
-	ids             map[cacheKey]int64
-	maxId           int64
+	prevIds map[mochi.Id]map[int64]Recognizer
+	ids     map[mochi.Id]map[int64]Recognizer
+	maxId   int64
 }
 
 func (r *Root) BeforeBuild() {
-	r.prevRecognizers = r.recognizers
 	r.prevIds = r.ids
-	r.recognizers = map[int64]Recognizer{}
-	r.ids = map[cacheKey]int64{}
+	r.ids = map[mochi.Id]map[int64]Recognizer{}
 }
 
 func (r *Root) Build(id mochi.Id, prev, next *view.Model) {
+	prevIds, _ := r.prevIds[id]
+	ids := map[int64]Recognizer{}
 	rs, _ := next.Values[Key].([]Recognizer)
-	pbRecognizers := &pb.RecognizerList{}
-	for _, i := range rs {
-		str, msg := i.EncodeProtobuf()
 
-		var pbAny *any.Any
-		if a, err := ptypes.MarshalAny(msg); err == nil {
-			pbAny = a
+	// Diff prev and next recognizers
+	for _, i := range rs {
+		found := false
+		for k, v := range prevIds {
+			// Check that the id has not already been used.
+			if _, ok := ids[k]; ok {
+				continue
+			}
+
+			// Check that the recognizers are equal.
+			if !i.Equal(v) {
+				continue
+			}
+
+			ids[k] = i
+			found = true
+		}
+
+		// Generate a new id if we don't have a previous one.
+		if !found {
+			r.maxId += 1
+			ids[r.maxId] = i
+		}
+	}
+
+	if len(ids) == 0 {
+		return
+	}
+
+	// Add new list back to root.
+	r.ids[id] = ids
+
+	// Serialize into protobuf.
+	pbRecognizers := &pb.RecognizerList{}
+	for k, v := range ids {
+		str, msg := v.EncodeProtobuf()
+		pbAny, err := ptypes.MarshalAny(msg)
+		if err != nil {
 			continue
 		}
 
-		pbRecognizers.RecognizerNames = append(pbRecognizers.RecognizerNames, str)
-		pbRecognizers.Recognizers = append(pbRecognizers.Recognizers, pbAny)
+		pbRecognizer := &pb.Recognizer{
+			Id:         k,
+			Name:       str,
+			Recognizer: pbAny,
+		}
+		pbRecognizers.Recognizers = append(pbRecognizers.Recognizers, pbRecognizer)
+	}
 
-		// Add to recognizer list.
-		r.recognizers[i.Id()] = i
+	if next.NativeValues == nil {
+		next.NativeValues = map[string]proto.Message{}
 	}
 	next.NativeValues["github.com/overcyn/mochi/touch"] = pbRecognizers
 }
 
 func (r *Root) AfterBuild() {
-	keys := map[int64]cacheKey{}
-	for k, v := range r.ids {
-		keys[v] = k
-	}
-	for k, v := range r.prevIds {
-		keys[v] = k
-	}
-
-	ids := map[cacheKey]int64{}
-	for k := range r.recognizers {
-		ids[keys[k]] = k
-	}
-	r.ids = ids
-}
-
-func (r *Root) Prev(id mochi.Id, key interface{}) Recognizer {
-	prevId := r.ids[cacheKey{viewId: id, key: key}]
-	return r.recognizers[prevId]
-}
-
-func (r *Root) NewId(id mochi.Id, key interface{}) int64 {
-	r.maxId += 1
-	r.ids[cacheKey{viewId: id, key: key}] = r.maxId
-	return r.maxId
 }
 
 type Recognizer interface {
-	Id() int64
 	EncodeProtobuf() (string, proto.Message)
+	Equal(Recognizer) bool
 }
 
 type TapEvent struct {
@@ -105,26 +114,16 @@ type TapEvent struct {
 }
 
 type TapRecognizer struct {
-	id             int64
 	Count          int
 	RecognizedFunc func(e *TapEvent)
 }
 
-func NewTapRecognizer(ctx *view.Context, key interface{}) *TapRecognizer {
-	// root := ctx.Visitor(VisitorKey).(visitor)
-
-	// r, ok := root.Prev(ctx.Id(), key).(*TapRecognizer)
-	// if !ok {
-	// 	r = &TapRecognizer{
-	// 		id: root.NewId(ctx.Id(), key),
-	// 	}
-	// }
-	// return root
-	return nil
-}
-
-func (r *TapRecognizer) Id() int64 {
-	return r.id
+func (r *TapRecognizer) Equal(a Recognizer) bool {
+	b, ok := a.(*TapRecognizer)
+	if !ok {
+		return false
+	}
+	return r.Count == b.Count
 }
 
 func (r *TapRecognizer) EncodeProtobuf() (string, proto.Message) {

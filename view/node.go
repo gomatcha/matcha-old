@@ -19,18 +19,20 @@ import (
 	"github.com/overcyn/mochibridge"
 )
 
-type Visitor interface {
-	Visit(*Model)
+type Middleware interface {
+	BeforeBuild()
+	Build(mochi.Id, *Model, *Model)
+	AfterBuild()
 }
 
-var vistorsMu sync.Mutex
-var visitors = []Visitor{}
+var middlewaresMu sync.Mutex
+var middlewares = []Middleware{}
 
-func RegisterVisitor(v Visitor) {
-	vistorsMu.Lock()
-	defer vistorsMu.Unlock()
+func RegisterMiddleware(v Middleware) {
+	middlewaresMu.Lock()
+	defer middlewaresMu.Unlock()
 
-	visitors = append(visitors)
+	middlewares = append(middlewares, v)
 }
 
 type Root struct {
@@ -103,6 +105,9 @@ func (ctx *Context) Get(key interface{}) Config {
 }
 
 func (ctx *Context) Prev(key interface{}) View {
+	if ctx == nil {
+		return nil
+	}
 	cacheKey := viewCacheKey{key: key, id: ctx.node.id}
 	prevId := ctx.prevIds[cacheKey]
 	prevCtx := ctx.prevNodes[prevId]
@@ -113,6 +118,9 @@ func (ctx *Context) Prev(key interface{}) View {
 }
 
 func (ctx *Context) NewId(key interface{}) mochi.Id {
+	if ctx == nil {
+		return mochi.Id(1)
+	}
 	cacheKey := viewCacheKey{key: key, id: ctx.node.id}
 	id := ctx.node.root.newId()
 	ctx.node.root.ids[cacheKey] = id
@@ -221,6 +229,13 @@ func (root *root) EncodeProtobuf() *pb.Root {
 }
 
 func (root *root) buildLocked() {
+	// Run before build middlewares.
+	middlewaresMu.Lock()
+	defer middlewaresMu.Unlock()
+	for _, i := range middlewares {
+		i.BeforeBuild()
+	}
+
 	prevIds := root.ids
 	prevNodes := root.nodes
 
@@ -243,6 +258,11 @@ func (root *root) buildLocked() {
 		ids[keys[k]] = k
 	}
 	root.ids = ids
+
+	// Run after build middlewares.
+	for _, i := range middlewares {
+		i.AfterBuild()
+	}
 }
 
 func (root *root) layoutLocked(minSize layout.Point, maxSize layout.Point) {
@@ -296,9 +316,12 @@ func (n *node) EncodeProtobuf() *pb.Node {
 
 	nativeValues := map[string]*google_protobuf.Any{}
 	for k, v := range n.viewModel.NativeValues {
-		if a, err := ptypes.MarshalAny(v); err != nil {
-			nativeValues[k] = a
+		a, err := ptypes.MarshalAny(v)
+		if err != nil {
+			fmt.Println("Error enocding native value: ", err)
+			continue
 		}
+		nativeValues[k] = a
 	}
 
 	return &pb.Node{
@@ -316,6 +339,8 @@ func (n *node) EncodeProtobuf() *pb.Node {
 }
 
 func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*node) {
+	prevViewModel := n.viewModel
+
 	if n.root.updateFlags[n.id].needsBuild() {
 		n.buildId += 1
 
@@ -459,6 +484,11 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 
 		n.children = children
 		n.viewModel = viewModel
+	}
+
+	// Call middleware
+	for _, i := range middlewares {
+		i.Build(n.id, prevViewModel, n.viewModel)
 	}
 
 	// Recursively update children.

@@ -7,10 +7,11 @@
 //
 
 #import "MochiTapGestureRecognizer.h"
+#import <Mochi/mochigo.h>
 
 @implementation MochiTapGestureRecognizer
 
-- (id)initWithProtobuf:(GPBAny *)pb {
+- (id)initWithViewId:(int64_t)viewId recognizerId:(int64_t)recognizerId protobuf:(GPBAny *)pb {
     NSError *error = nil;
     MochiPBTapRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTapRecognizer class] error:&error];
     if (pbTapRecognizer == nil) {
@@ -18,12 +19,16 @@
     }
     if ((self = [super initWithTarget:self action:@selector(action:)])) {
         self.numberOfTapsRequired = pbTapRecognizer.count;
+        self.viewId = viewId;
+        self.recognizerId = recognizerId;
     }
     return self;
 }
 
 - (void)action:(id)sender {
-    NSLog(@"ACTION,%@", self);
+    MochiGoValue *viewId = [[MochiGoValue alloc] initWithLongLong:self.viewId];
+    MochiGoValue *recognizerId = [[MochiGoValue alloc] initWithLongLong:self.recognizerId];
+    [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/touch TapRecognizer.Recognized"] call:nil args:@[viewId, recognizerId]];
 }
 
 @end
