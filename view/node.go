@@ -21,9 +21,7 @@ import (
 )
 
 type Middleware interface {
-	BeforeBuild()
 	Build(*Context, *Model)
-	AfterBuild()
 }
 
 var middlewaresMu sync.Mutex
@@ -127,6 +125,10 @@ func (ctx *Context) Prev(key interface{}) View {
 		return prevCtx.view
 	}
 	return nil
+}
+
+func (ctx *Context) PrevModel() *Model {
+	return ctx.node.model
 }
 
 func (ctx *Context) NewId(key interface{}) mochi.Id {
@@ -243,13 +245,6 @@ func (root *root) EncodeProtobuf() *pb.Root {
 }
 
 func (root *root) buildLocked() {
-	// Run before build middlewares.
-	middlewaresMu.Lock()
-	defer middlewaresMu.Unlock()
-	for _, i := range middlewares {
-		i.BeforeBuild()
-	}
-
 	prevIds := root.ids
 	prevNodes := root.nodes
 
@@ -272,11 +267,6 @@ func (root *root) buildLocked() {
 		ids[keys[k]] = k
 	}
 	root.ids = ids
-
-	// Run after build middlewares.
-	for _, i := range middlewares {
-		i.AfterBuild()
-	}
 }
 
 func (root *root) layoutLocked(minSize layout.Point, maxSize layout.Point) {
@@ -294,11 +284,11 @@ func (root *root) call(funcId int64, viewId int64, args []reflect.Value) []refle
 	defer root.mu.Unlock()
 
 	node, ok := root.nodes[mochi.Id(viewId)]
-	if !ok || node.viewModel == nil {
+	if !ok || node.model == nil {
 		return nil
 	}
 
-	f, ok := node.viewModel.NativeFuncs[funcId]
+	f, ok := node.model.NativeFuncs[funcId]
 	if !ok {
 		return nil
 	}
@@ -325,7 +315,7 @@ type node struct {
 	buildId   int64
 	buildChan chan struct{}
 	buildDone chan struct{}
-	viewModel *Model
+	model     *Model
 	children  map[mochi.Id]*node
 
 	layoutId    int64
@@ -346,12 +336,12 @@ func (n *node) EncodeProtobuf() *pb.Node {
 	}
 
 	var nativeViewState *any.Any
-	if a, err := ptypes.MarshalAny(n.viewModel.NativeViewState); err == nil {
+	if a, err := ptypes.MarshalAny(n.model.NativeViewState); err == nil {
 		nativeViewState = a
 	}
 
 	nativeValues := map[string]*google_protobuf.Any{}
-	for k, v := range n.viewModel.NativeValues {
+	for k, v := range n.model.NativeValues {
 		a, err := ptypes.MarshalAny(v)
 		if err != nil {
 			fmt.Println("Error enocding native value: ", err)
@@ -368,7 +358,7 @@ func (n *node) EncodeProtobuf() *pb.Node {
 		Children:    children,
 		LayoutGuide: n.layoutGuide.EncodeProtobuf(),
 		PaintStyle:  n.paintOptions.EncodeProtobuf(),
-		BridgeName:  n.viewModel.NativeViewName,
+		BridgeName:  n.model.NativeViewName,
 		BridgeValue: nativeViewState,
 		Values:      nativeValues,
 	}
@@ -468,7 +458,7 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 
 		// Watch for layout changes.
 		if n.layoutChan != nil {
-			n.viewModel.Layouter.Unnotify(n.layoutChan)
+			n.model.Layouter.Unnotify(n.layoutChan)
 			close(n.layoutDone)
 			n.layoutChan = nil
 			n.layoutDone = nil
@@ -496,7 +486,7 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 
 		// Watch for paint changes.
 		if n.paintChan != nil {
-			n.viewModel.Painter.Unnotify(n.paintChan)
+			n.model.Painter.Unnotify(n.paintChan)
 			close(n.paintDone)
 			n.paintChan = nil
 			n.paintDone = nil
@@ -523,7 +513,7 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 		}
 
 		n.children = children
-		n.viewModel = viewModel
+		n.model = viewModel
 	}
 
 	// Recursively update children.
@@ -552,7 +542,7 @@ func (n *node) layout(minSize layout.Point, maxSize layout.Point) layout.Guide {
 	}
 
 	// Perform layout
-	layouter := n.viewModel.Layouter
+	layouter := n.model.Layouter
 	if layouter == nil {
 		layouter = &full.Layout{}
 	}
@@ -571,7 +561,7 @@ func (n *node) paint() {
 	if n.root.updateFlags[n.id].needsPaint() {
 		n.paintId += 1
 
-		if p := n.viewModel.Painter; p != nil {
+		if p := n.model.Painter; p != nil {
 			n.paintOptions = p.PaintStyle()
 		} else {
 			n.paintOptions = paint.Style{}
@@ -593,11 +583,11 @@ func (n *node) done() {
 		close(n.buildDone)
 	}
 	if n.layoutChan != nil {
-		n.viewModel.Layouter.Unnotify(n.layoutChan)
+		n.model.Layouter.Unnotify(n.layoutChan)
 		close(n.layoutDone)
 	}
 	if n.paintChan != nil {
-		n.viewModel.Painter.Unnotify(n.paintChan)
+		n.model.Painter.Unnotify(n.paintChan)
 		close(n.paintDone)
 	}
 	n.view.Unlock()
@@ -617,7 +607,7 @@ func (n *node) debugString() string {
 		all = append(all, lines...)
 	}
 
-	str := fmt.Sprintf("{%p Id:%v View:%v Node:%p}", n, n.id, n.view, n.viewModel)
+	str := fmt.Sprintf("{%p Id:%v View:%v Node:%p}", n, n.id, n.view, n.model)
 	if len(all) > 0 {
 		str += "\n" + strings.Join(all, "\n")
 	}

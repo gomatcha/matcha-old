@@ -17,8 +17,10 @@ func init() {
 }
 
 type key struct{}
+type _idKey struct{}
 
 var Key = key{}
+var idKey = _idKey{}
 
 type cacheKey struct {
 	viewId mochi.Id
@@ -26,19 +28,15 @@ type cacheKey struct {
 }
 
 type Root struct {
-	prevIds map[mochi.Id]map[int64]Recognizer
-	ids     map[mochi.Id]map[int64]Recognizer
-	maxId   int64
-}
-
-func (r *Root) BeforeBuild() {
-	r.prevIds = r.ids
-	r.ids = map[mochi.Id]map[int64]Recognizer{}
+	maxId int64
 }
 
 func (r *Root) Build(ctx *view.Context, next *view.Model) {
-	id := ctx.Id()
-	prevIds, _ := r.prevIds[id]
+	var prevIds map[int64]Recognizer
+	if prevModel := ctx.PrevModel(); prevModel != nil && prevModel.Values != nil {
+		prevIds, _ = prevModel.Values[idKey].(map[int64]Recognizer)
+	}
+
 	ids := map[int64]Recognizer{}
 	rs, _ := next.Values[Key].([]Recognizer)
 
@@ -71,8 +69,11 @@ func (r *Root) Build(ctx *view.Context, next *view.Model) {
 		return
 	}
 
-	// Add new list back to root.
-	r.ids[id] = ids
+	// Add new list back to next.
+	if next.Values == nil {
+		next.Values = map[interface{}]interface{}{}
+	}
+	next.Values[idKey] = ids
 
 	// Serialize into protobuf.
 	pbRecognizers := &pb.RecognizerList{}
@@ -106,10 +107,6 @@ func (r *Root) Build(ctx *view.Context, next *view.Model) {
 	for k, v := range allFuncs {
 		next.NativeFuncs[k] = v
 	}
-}
-
-func (r *Root) AfterBuild() {
-	r.prevIds = nil
 }
 
 type Recognizer interface {
