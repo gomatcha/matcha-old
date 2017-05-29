@@ -12,7 +12,4 @@
 
 @interface MochiTapGestureRecognizer : UITapGestureRecognizer
 - (id)initWitViewRoot:(MochiViewRoot *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb;
-@property (nonatomic, assign) int64_t funcId;
-@property (nonatomic, assign) int64_t viewId;
-@property (nonatomic, weak) MochiViewRoot *viewRoot;
 @end

@@ -6,7 +6,6 @@ import (
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view"
-	"github.com/overcyn/mochibridge"
 )
 
 type textViewLayouter struct {
@@ -14,7 +13,7 @@ type textViewLayouter struct {
 }
 
 func (l *textViewLayouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
-	size := textSize(l.formattedText, ctx.MaxSize)
+	size := l.formattedText.Size(layout.Pt(0, 0), ctx.MaxSize)
 	g := layout.Guide{Frame: layout.Rt(0, 0, size.X, size.Y)}
 	return g, nil
 }
@@ -26,10 +25,6 @@ func (l *textViewLayouter) Notify() chan struct{} {
 
 func (l *textViewLayouter) Unnotify(chan struct{}) {
 	// no-op
-}
-
-func textSize(t *text.Text, max layout.Point) layout.Point {
-	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(layout.Point)
 }
 
 type TextView struct {

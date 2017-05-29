@@ -28,6 +28,8 @@
 CF_EXTERN_C_BEGIN
 
 @class GPBAny;
+@class GPBTimestamp;
+@class MochiPBPoint;
 @class MochiPBRecognizer;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -93,6 +95,25 @@ typedef GPB_ENUM(MochiPBTapRecognizer_FieldNumber) {
 @property(nonatomic, readwrite) int64_t count;
 
 @property(nonatomic, readwrite) int64_t recognizedFunc;
+
+@end
+
+#pragma mark - MochiPBTapEvent
+
+typedef GPB_ENUM(MochiPBTapEvent_FieldNumber) {
+  MochiPBTapEvent_FieldNumber_Timestamp = 1,
+  MochiPBTapEvent_FieldNumber_Position = 2,
+};
+
+@interface MochiPBTapEvent : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBTimestamp *timestamp;
+/** Test to see if @c timestamp has been set. */
+@property(nonatomic, readwrite) BOOL hasTimestamp;
+
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBPoint *position;
+/** Test to see if @c position has been set. */
+@property(nonatomic, readwrite) BOOL hasPosition;
 
 @end
 

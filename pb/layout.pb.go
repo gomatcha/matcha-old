@@ -33,6 +33,7 @@ It has these top-level messages:
 	Recognizer
 	RecognizerList
 	TapRecognizer
+	TapEvent
 	PressRecognizer
 	PanRecognizer
 */

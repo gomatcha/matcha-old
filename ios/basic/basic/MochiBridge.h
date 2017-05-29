@@ -49,11 +49,18 @@
 @end
 
 @interface MochiPBRect (Mochi)
+- (id)initWithCGRect:(CGRect)rect;
 @property (nonatomic, readonly) CGRect toCGRect;
 @end
 @interface MochiPBPoint (Mochi)
+- (id)initWithCGPoint:(CGPoint)point;
 @property (nonatomic, readonly) CGPoint toCGPoint;
 @end
 @interface MochiPBInsets (Mochi)
 @property (nonatomic, readonly) UIEdgeInsets toUIEdgeInsets;
+@end
+
+@interface GPBTimestamp (Mochi)
+- (id)initWithDate:(NSDate *)date;
+@property (nonatomic, readonly) NSDate *toDate;
 @end

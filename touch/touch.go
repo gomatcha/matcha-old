@@ -1,6 +1,7 @@
 package touch
 
 import (
+	"fmt"
 	"reflect"
 	"time"
 
@@ -119,9 +120,15 @@ type TapEvent struct {
 	Position  layout.Point
 }
 
+func (e *TapEvent) DecodeProtobuf(pbevent *pb.TapEvent) {
+	t, _ := ptypes.Timestamp(pbevent.Timestamp)
+	e.Timestamp = t
+	e.Position.DecodeProtobuf(pbevent.Position)
+}
+
 type TapRecognizer struct {
 	Count          int
-	RecognizedFunc func()
+	RecognizedFunc func(*TapEvent)
 }
 
 func (r *TapRecognizer) Equal(a Recognizer) bool {
@@ -134,12 +141,27 @@ func (r *TapRecognizer) Equal(a Recognizer) bool {
 
 func (r *TapRecognizer) EncodeProtobuf(ctx *view.Context) (string, proto.Message, map[int64]reflect.Value) {
 	funcId := ctx.NewFuncId()
+	f := r.RecognizedFunc
+	f2 := func(data []byte) {
+		pbevent := &pb.TapEvent{}
+		err := proto.Unmarshal(data, pbevent)
+		if err != nil {
+			fmt.Println("error", err)
+		}
+
+		event := &TapEvent{}
+		event.DecodeProtobuf(pbevent)
+
+		if f != nil {
+			f(event)
+		}
+	}
 
 	return "github.com/overcyn/mochi/touch TapRecognizer", &pb.TapRecognizer{
 			Count:          int64(r.Count),
 			RecognizedFunc: funcId,
 		}, map[int64]reflect.Value{
-			funcId: reflect.ValueOf(r.RecognizedFunc),
+			funcId: reflect.ValueOf(f2),
 		}
 }
 

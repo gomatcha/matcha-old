@@ -15,11 +15,14 @@
 
 #if GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
  #import <Protobuf/Any.pbobjc.h>
+ #import <Protobuf/Timestamp.pbobjc.h>
 #else
  #import "google/protobuf/Any.pbobjc.h"
+ #import "google/protobuf/Timestamp.pbobjc.h"
 #endif
 
  #import "Touch.pbobjc.h"
+ #import "Layout.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -208,6 +211,60 @@ typedef struct MochiPBTapRecognizer__storage_ {
         "\001\002\016\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - MochiPBTapEvent
+
+@implementation MochiPBTapEvent
+
+@dynamic hasTimestamp, timestamp;
+@dynamic hasPosition, position;
+
+typedef struct MochiPBTapEvent__storage_ {
+  uint32_t _has_storage_[1];
+  GPBTimestamp *timestamp;
+  MochiPBPoint *position;
+} MochiPBTapEvent__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "timestamp",
+        .dataTypeSpecific.className = GPBStringifySymbol(GPBTimestamp),
+        .number = MochiPBTapEvent_FieldNumber_Timestamp,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MochiPBTapEvent__storage_, timestamp),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "position",
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBPoint),
+        .number = MochiPBTapEvent_FieldNumber_Position,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MochiPBTapEvent__storage_, position),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MochiPBTapEvent class]
+                                     rootClass:[MochiPBTouchRoot class]
+                                          file:MochiPBTouchRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MochiPBTapEvent__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }

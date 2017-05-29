@@ -5,7 +5,9 @@ import (
 	"sync"
 	"unicode/utf8"
 
+	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/pb"
+	"github.com/overcyn/mochibridge"
 	"golang.org/x/text/unicode/norm"
 )
 
@@ -46,6 +48,10 @@ func New(b []byte) *Text {
 	t.positions = map[int64]int{}
 	t.normalize()
 	return t
+}
+
+func (t *Text) Size(min layout.Point, max layout.Point) layout.Point {
+	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(layout.Point)
 }
 
 func (t *Text) EncodeProtobuf() *pb.Text {

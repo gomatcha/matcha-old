@@ -34,17 +34,13 @@ func init() {
 var buttonMu sync.Mutex
 var buttons = map[mochi.Id]*Button{}
 
-func textSize(t *text.Text, max layout.Point) layout.Point {
-	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(layout.Point)
-}
-
 type buttonLayouter struct {
 	formattedText *text.Text
 }
 
 func (l *buttonLayouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	const padding = 10.0
-	size := textSize(l.formattedText, ctx.MaxSize)
+	size := l.formattedText.Size(layout.Pt(0, 0), ctx.MaxSize)
 	g := layout.Guide{Frame: layout.Rt(0, 0, size.X+padding*2, size.Y+padding*2)}
 	return g, nil
 }

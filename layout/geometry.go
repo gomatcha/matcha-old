@@ -14,11 +14,16 @@ func Rt(x0, y0, x1, y1 float64) Rect {
 	return Rect{Min: Point{X: x0, Y: y0}, Max: Point{X: x1, Y: y1}}
 }
 
-func (r Rect) EncodeProtobuf() *pb.Rect {
+func (r *Rect) EncodeProtobuf() *pb.Rect {
 	return &pb.Rect{
 		Min: r.Min.EncodeProtobuf(),
 		Max: r.Max.EncodeProtobuf(),
 	}
+}
+
+func (r *Rect) DecodeProtobuf(pbrect *pb.Rect) {
+	r.Min.DecodeProtobuf(pbrect.Min)
+	r.Max.DecodeProtobuf(pbrect.Max)
 }
 
 func (r Rect) Add(p Point) Rect {
@@ -43,11 +48,16 @@ func Pt(x, y float64) Point {
 	return Point{X: x, Y: y}
 }
 
-func (p Point) EncodeProtobuf() *pb.Point {
+func (p *Point) EncodeProtobuf() *pb.Point {
 	return &pb.Point{
 		X: p.X,
 		Y: p.Y,
 	}
+}
+
+func (p *Point) DecodeProtobuf(pbpoint *pb.Point) {
+	p.X = pbpoint.X
+	p.Y = pbpoint.Y
 }
 
 type Insets struct {
@@ -61,7 +71,7 @@ func In(top, left, bottom, right float64) Insets {
 	return Insets{Top: top, Left: left, Bottom: bottom, Right: right}
 }
 
-func (in Insets) EncodeProtobuf() *pb.Insets {
+func (in *Insets) EncodeProtobuf() *pb.Insets {
 	return &pb.Insets{
 		Top:    in.Top,
 		Left:   in.Left,

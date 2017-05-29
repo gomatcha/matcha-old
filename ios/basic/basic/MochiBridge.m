@@ -362,19 +362,58 @@
 @end
 
 @implementation MochiPBRect (Mochi)
+
+- (id)initWithCGRect:(CGRect)rect {
+    if ((self = [super init])) {
+        self.min = [[MochiPBPoint alloc] initWithCGPoint:CGPointMake(rect.origin.x, rect.origin.y)];
+        self.max = [[MochiPBPoint alloc] initWithCGPoint:CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height)];
+    }
+    return self;
+}
+
 - (CGRect)toCGRect {
     CGPoint min = self.min.toCGPoint;
     CGPoint max = self.max.toCGPoint;
     return CGRectMake(min.x, min.y, max.x - min.x, max.y - min.y);
 }
+
 @end
 @implementation MochiPBPoint (Mochi)
+
+- (id)initWithCGPoint:(CGPoint)point {
+    if ((self = [super init])) {
+        self.x = point.x;
+        self.y = point.y;
+    }
+    return self;
+}
+
 - (CGPoint)toCGPoint {
     return CGPointMake(self.x, self.y);
 }
+
 @end
 @implementation MochiPBInsets (Mochi)
 - (UIEdgeInsets)toUIEdgeInsets {
     return UIEdgeInsetsMake(self.top, self.left, self.bottom, self.right);
 }
+@end
+
+@implementation GPBTimestamp (Mochi)
+- (id)initWithDate:(NSDate *)date {
+    if ((self = [super init])) {
+        double integral;
+        double fractional = modf([date timeIntervalSince1970], &integral);
+
+        self.seconds = integral;
+        self.nanos = fractional * NSEC_PER_SEC;
+    }
+    return self;
+}
+
+- (NSDate *)toDate {
+    NSTimeInterval interval = (NSTimeInterval)self.seconds + (NSTimeInterval)self.nanos / NSEC_PER_SEC;
+    return [NSDate dateWithTimeIntervalSince1970:interval];
+}
+
 @end

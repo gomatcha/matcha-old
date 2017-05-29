@@ -96,7 +96,7 @@ func NewTouchChildView(ctx *view.Context, key interface{}) *TouchChildView {
 func (v *TouchChildView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
-		RecognizedFunc: func() {
+		RecognizedFunc: func(e *touch.TapEvent) {
 			v.Lock()
 			defer v.Unlock()
 			v.OnTouch()

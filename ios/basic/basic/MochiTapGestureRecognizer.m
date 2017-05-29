@@ -9,6 +9,14 @@
 #import "MochiTapGestureRecognizer.h"
 #import <Mochi/mochigo.h>
 #import "MochiNode.h"
+#import "MochiProtobuf.h"
+#import "MochiBridge.h"
+
+@interface MochiTapGestureRecognizer ()
+@property (nonatomic, assign) int64_t funcId;
+@property (nonatomic, assign) int64_t viewId;
+@property (nonatomic, weak) MochiViewRoot *viewRoot;
+@end
 
 @implementation MochiTapGestureRecognizer
 
@@ -28,7 +36,16 @@
 }
 
 - (void)action:(id)sender {
-    [self.viewRoot call:self.funcId viewId:self.viewId args:nil];
+    CGPoint point = [self locationInView:self.view];
+    
+    MochiPBTapEvent *event = [[MochiPBTapEvent alloc] init];
+    event.position = [[MochiPBPoint alloc] initWithCGPoint:point];
+    event.timestamp = [[GPBTimestamp alloc] initWithDate:[NSDate date]];
+    
+    NSData *data = [event data];
+    MochiGoValue *value = [[MochiGoValue alloc] initWithData:data];
+    
+    [self.viewRoot call:self.funcId viewId:self.viewId args:@[value]];
 }
 
 @end
