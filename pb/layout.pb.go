@@ -19,6 +19,7 @@ It has these top-level messages:
 	Rect
 	Insets
 	Guide
+	SizeFunc
 	Text
 	Font
 	Color

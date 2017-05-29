@@ -1,8 +1,15 @@
 syntax = "proto3";
 package text;
+import "layout.proto";
 
 option go_package = "pb";
 option objc_class_prefix = "MochiPB";
+
+message SizeFunc {
+    Text text = 1;
+    layout.Point minSize = 2;
+    layout.Point maxSize = 3;
+}
 
 message Text {
     TextStyle style = 1;

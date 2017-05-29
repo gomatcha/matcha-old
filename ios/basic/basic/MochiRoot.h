@@ -10,6 +10,6 @@
 @import Mochi;
 
 @interface MochiRoot : NSObject
-- (MochiGoValue *)sizeForAttributedString:(MochiGoValue *)string minSize:(MochiGoValue *)minSize maxSize:(MochiGoValue *)maxSize;
+- (MochiGoValue *)sizeForAttributedString:(NSData *)data;
 - (void)updateId:(NSInteger)identifier withProtobuf:(NSData *)protobuf;
 @end

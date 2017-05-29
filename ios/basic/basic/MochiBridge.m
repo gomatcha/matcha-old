@@ -392,6 +392,18 @@
     return CGPointMake(self.x, self.y);
 }
 
+- (id)initWithCGSize:(CGSize)size {
+    if ((self = [super init])) {
+        self.x = size.width;
+        self.y = size.height;
+    }
+    return self;
+}
+
+- (CGSize)toCGSize {
+    return CGSizeMake(self.x, self.y);
+}
+
 @end
 @implementation MochiPBInsets (Mochi)
 - (UIEdgeInsets)toUIEdgeInsets {

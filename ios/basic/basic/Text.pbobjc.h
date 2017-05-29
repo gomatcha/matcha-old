@@ -29,6 +29,8 @@ CF_EXTERN_C_BEGIN
 
 @class MochiPBColor;
 @class MochiPBFont;
+@class MochiPBPoint;
+@class MochiPBText;
 @class MochiPBTextStyle;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -164,6 +166,30 @@ BOOL MochiPBTruncation_IsValidValue(int32_t value);
  * this file and all files that it depends on.
  **/
 @interface MochiPBTextRoot : GPBRootObject
+@end
+
+#pragma mark - MochiPBSizeFunc
+
+typedef GPB_ENUM(MochiPBSizeFunc_FieldNumber) {
+  MochiPBSizeFunc_FieldNumber_Text = 1,
+  MochiPBSizeFunc_FieldNumber_MinSize = 2,
+  MochiPBSizeFunc_FieldNumber_MaxSize = 3,
+};
+
+@interface MochiPBSizeFunc : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBText *text;
+/** Test to see if @c text has been set. */
+@property(nonatomic, readwrite) BOOL hasText;
+
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBPoint *minSize;
+/** Test to see if @c minSize has been set. */
+@property(nonatomic, readwrite) BOOL hasMinSize;
+
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBPoint *maxSize;
+/** Test to see if @c maxSize has been set. */
+@property(nonatomic, readwrite) BOOL hasMaxSize;
+
 @end
 
 #pragma mark - MochiPBText

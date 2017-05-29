@@ -1,10 +1,12 @@
 package text
 
 import (
+	"fmt"
 	"runtime"
 	"sync"
 	"unicode/utf8"
 
+	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochibridge"
@@ -51,7 +53,24 @@ func New(b []byte) *Text {
 }
 
 func (t *Text) Size(min layout.Point, max layout.Point) layout.Point {
-	return mochibridge.Root().Call("sizeForAttributedString:minSize:maxSize:", mochibridge.Interface(t), nil, mochibridge.Interface(max)).ToInterface().(layout.Point)
+	pbFunc := &pb.SizeFunc{
+		Text:    t.EncodeProtobuf(),
+		MinSize: min.EncodeProtobuf(),
+		MaxSize: max.EncodeProtobuf(),
+	}
+	data, err := proto.Marshal(pbFunc)
+	if err != nil {
+		return layout.Pt(0, 0)
+	}
+
+	pointData := mochibridge.Root().Call("sizeForAttributedString:", mochibridge.Bytes(data)).ToInterface().([]byte)
+	pbpoint := &pb.Point{}
+	err = proto.Unmarshal(pointData, pbpoint)
+	if err != nil {
+		fmt.Println("size decode error", err)
+		return layout.Pt(0, 0)
+	}
+	return layout.Pt(pbpoint.X, pbpoint.Y)
 }
 
 func (t *Text) EncodeProtobuf() *pb.Text {

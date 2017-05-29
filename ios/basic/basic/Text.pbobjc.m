@@ -14,6 +14,7 @@
 #endif
 
  #import "Text.pbobjc.h"
+ #import "Layout.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -23,8 +24,8 @@
 
 @implementation MochiPBTextRoot
 
-// No extensions in the file and no imports, so no need to generate
-// +extensionRegistry.
+// No extensions in the file and none of the imports (direct or indirect)
+// defined extensions, so no need to generate +extensionRegistry.
 
 @end
 
@@ -247,6 +248,76 @@ BOOL MochiPBTruncation_IsValidValue(int32_t value__) {
       return NO;
   }
 }
+
+#pragma mark - MochiPBSizeFunc
+
+@implementation MochiPBSizeFunc
+
+@dynamic hasText, text;
+@dynamic hasMinSize, minSize;
+@dynamic hasMaxSize, maxSize;
+
+typedef struct MochiPBSizeFunc__storage_ {
+  uint32_t _has_storage_[1];
+  MochiPBText *text;
+  MochiPBPoint *minSize;
+  MochiPBPoint *maxSize;
+} MochiPBSizeFunc__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "text",
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBText),
+        .number = MochiPBSizeFunc_FieldNumber_Text,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MochiPBSizeFunc__storage_, text),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "minSize",
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBPoint),
+        .number = MochiPBSizeFunc_FieldNumber_MinSize,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MochiPBSizeFunc__storage_, minSize),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "maxSize",
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBPoint),
+        .number = MochiPBSizeFunc_FieldNumber_MaxSize,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MochiPBSizeFunc__storage_, maxSize),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MochiPBSizeFunc class]
+                                     rootClass:[MochiPBTextRoot class]
+                                          file:MochiPBTextRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MochiPBSizeFunc__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\002\002\007\000\003\007\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
 
 #pragma mark - MochiPBText
 

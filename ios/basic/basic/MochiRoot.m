@@ -11,7 +11,7 @@
 #import "MochiNode.h"
 #import "MochiViewController.h"
 #import "MochiDeadlockLogger.h"
-#import "View.pbobjc.h"
+#import "MochiProtobuf.h"
 
 @interface MochiRoot ()
 @property (nonatomic, strong) CADisplayLink *displayLink;
@@ -26,17 +26,20 @@
         
         self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(screenUpdate)];
         [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-//        self.displayLink.preferredFramesPerSecond = 2;
+//        self.displayLink.preferredFramesPerSecond = 2;
         self.screenUpdateFunc = [[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/animate screenUpdate"];
     }
     return self;
 }
 
-- (MochiGoValue *)sizeForAttributedString:(MochiGoValue *)string minSize:(MochiGoValue *)minSize maxSize:(MochiGoValue *)maxSize {
-    NSAttributedString *attrStr = [[NSAttributedString alloc] initWithGoValue:string];
-    CGRect rect = [attrStr boundingRectWithSize:maxSize.toCGSize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
-    MochiGoValue *value = [[MochiGoValue alloc] initWithCGSize:rect.size];
-    return value;
+- (MochiGoValue *)sizeForAttributedString:(NSData *)protobuf {
+    MochiPBSizeFunc *func = [[MochiPBSizeFunc alloc] initWithData:protobuf error:nil];
+    
+    NSAttributedString *attrStr = [[NSAttributedString alloc] initWithProtobuf:func.text];
+    CGRect rect = [attrStr boundingRectWithSize:func.maxSize.toCGSize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
+    
+    MochiPBPoint *point = [[MochiPBPoint alloc] initWithCGSize:rect.size];
+    return [[MochiGoValue alloc] initWithData:point.data];
 }
 
 - (void)screenUpdate {

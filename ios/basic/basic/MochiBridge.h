@@ -54,7 +54,9 @@
 @end
 @interface MochiPBPoint (Mochi)
 - (id)initWithCGPoint:(CGPoint)point;
+- (id)initWithCGSize:(CGSize)size;
 @property (nonatomic, readonly) CGPoint toCGPoint;
+@property (nonatomic, readonly) CGSize toCGSize;
 @end
 @interface MochiPBInsets (Mochi)
 @property (nonatomic, readonly) UIEdgeInsets toUIEdgeInsets;
