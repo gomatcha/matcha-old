@@ -2,7 +2,6 @@ package touch
 
 import (
 	"reflect"
-	"sync"
 	"time"
 
 	"github.com/gogo/protobuf/proto"
@@ -11,7 +10,6 @@ import (
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/view"
-	"github.com/overcyn/mochibridge"
 )
 
 func init() {
@@ -28,7 +26,6 @@ type cacheKey struct {
 }
 
 type Root struct {
-	mu      sync.Mutex
 	prevIds map[mochi.Id]map[int64]Recognizer
 	ids     map[mochi.Id]map[int64]Recognizer
 	maxId   int64

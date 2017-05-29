@@ -6,8 +6,10 @@ import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/paint"
+	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/touch"
 	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/mochi/view/textview"
 	"github.com/overcyn/mochibridge"
 	"golang.org/x/image/colornames"
 )
@@ -22,27 +24,47 @@ func init() {
 
 type TouchView struct {
 	*view.Embed
+	counter int
 }
 
 func New(c view.Config) *TouchView {
-	v, ok := c.Prev.(*TouchView)
-	if !ok {
-		v = &TouchView{
-			Embed: c.Embed,
-		}
+	if v, ok := c.Prev.(*TouchView); ok {
+		return v
 	}
-	return v
+	return &TouchView{
+		Embed: c.Embed,
+	}
 }
 
 func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	chl := NewTouchChildView(ctx, 1)
-	l.Add(chl, func(s *constraint.Solver) {
+	chl1 := NewTouchChildView(ctx, 1)
+	chl1.OnTouch = func() {
+		v.Lock()
+		defer v.Unlock()
+
+		fmt.Println("On touch")
+		v.counter += 1
+		go v.Update(nil)
+	}
+	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
 		s.WidthEqual(constraint.Const(100))
 		s.HeightEqual(constraint.Const(100))
+	})
+
+	chl2 := textview.New(ctx, 2)
+	chl2.Painter = &paint.Style{BackgroundColor: colornames.Red}
+	chl2.String = fmt.Sprintf("Counter: %v", v.counter)
+	chl2.Style.SetFont(text.Font{
+		Family: "Helvetica Neue",
+		Size:   20,
+	})
+	l.Add(chl2, func(s *constraint.Solver) {
+		s.TopEqual(g1.Bottom())
+		s.LeftEqual(g1.Left())
 	})
 
 	l.Solve(func(s *constraint.Solver) {
@@ -51,7 +73,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Children: map[mochi.Id]view.View{chl.Id(): chl},
+		Children: map[mochi.Id]view.View{chl1.Id(): chl1, chl2.Id(): chl2},
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}
@@ -59,24 +81,25 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 
 type TouchChildView struct {
 	*view.Embed
+	OnTouch func()
 }
 
 func NewTouchChildView(ctx *view.Context, key interface{}) *TouchChildView {
-	v, ok := ctx.Prev(key).(*TouchChildView)
-	if !ok {
-		v = &TouchChildView{
-			Embed: view.NewEmbed(ctx.NewId(key)),
-		}
+	if v, ok := ctx.Prev(key).(*TouchChildView); ok {
+		return v
 	}
-	return v
+	return &TouchChildView{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
 }
 
 func (v *TouchChildView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
 		RecognizedFunc: func() {
-			fmt.Println("touched")
-			// do something
+			v.Lock()
+			defer v.Unlock()
+			v.OnTouch()
 		},
 	}
 

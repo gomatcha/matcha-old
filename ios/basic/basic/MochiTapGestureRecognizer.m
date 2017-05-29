@@ -28,7 +28,6 @@
 }
 
 - (void)action:(id)sender {
-    NSLog(@"blah,%@,%@", @(self.funcId), self.viewRoot);
     [self.viewRoot call:self.funcId viewId:self.viewId args:nil];
 }
 
