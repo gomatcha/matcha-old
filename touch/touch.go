@@ -1,7 +1,8 @@
 package touch
 
 import (
-	"fmt"
+	"reflect"
+	"sync"
 	"time"
 
 	"github.com/gogo/protobuf/proto"
@@ -15,9 +16,6 @@ import (
 
 func init() {
 	view.RegisterMiddleware(&Root{})
-	mochibridge.RegisterFunc("github.com/overcyn/mochi/touch TapRecognizer.Recognized", func(viewId, touchId int64) {
-		fmt.Println("tapRecognized")
-	})
 }
 
 type key struct{}
@@ -30,6 +28,7 @@ type cacheKey struct {
 }
 
 type Root struct {
+	mu      sync.Mutex
 	prevIds map[mochi.Id]map[int64]Recognizer
 	ids     map[mochi.Id]map[int64]Recognizer
 	maxId   int64
@@ -40,7 +39,8 @@ func (r *Root) BeforeBuild() {
 	r.ids = map[mochi.Id]map[int64]Recognizer{}
 }
 
-func (r *Root) Build(id mochi.Id, prev, next *view.Model) {
+func (r *Root) Build(ctx *view.Context, next *view.Model) {
+	id := ctx.Id()
 	prevIds, _ := r.prevIds[id]
 	ids := map[int64]Recognizer{}
 	rs, _ := next.Values[Key].([]Recognizer)
@@ -79,8 +79,9 @@ func (r *Root) Build(id mochi.Id, prev, next *view.Model) {
 
 	// Serialize into protobuf.
 	pbRecognizers := &pb.RecognizerList{}
+	allFuncs := map[int64]reflect.Value{}
 	for k, v := range ids {
-		str, msg := v.EncodeProtobuf()
+		str, msg, funcs := v.EncodeProtobuf(ctx)
 		pbAny, err := ptypes.MarshalAny(msg)
 		if err != nil {
 			continue
@@ -92,19 +93,30 @@ func (r *Root) Build(id mochi.Id, prev, next *view.Model) {
 			Recognizer: pbAny,
 		}
 		pbRecognizers.Recognizers = append(pbRecognizers.Recognizers, pbRecognizer)
+		for k2, v2 := range funcs {
+			allFuncs[k2] = v2
+		}
 	}
 
 	if next.NativeValues == nil {
 		next.NativeValues = map[string]proto.Message{}
 	}
 	next.NativeValues["github.com/overcyn/mochi/touch"] = pbRecognizers
+
+	if next.NativeFuncs == nil {
+		next.NativeFuncs = map[int64]reflect.Value{}
+	}
+	for k, v := range allFuncs {
+		next.NativeFuncs[k] = v
+	}
 }
 
 func (r *Root) AfterBuild() {
+	r.prevIds = nil
 }
 
 type Recognizer interface {
-	EncodeProtobuf() (string, proto.Message)
+	EncodeProtobuf(ctx *view.Context) (string, proto.Message, map[int64]reflect.Value)
 	Equal(Recognizer) bool
 }
 
@@ -115,7 +127,7 @@ type TapEvent struct {
 
 type TapRecognizer struct {
 	Count          int
-	RecognizedFunc func(e *TapEvent)
+	RecognizedFunc func()
 }
 
 func (r *TapRecognizer) Equal(a Recognizer) bool {
@@ -126,10 +138,15 @@ func (r *TapRecognizer) Equal(a Recognizer) bool {
 	return r.Count == b.Count
 }
 
-func (r *TapRecognizer) EncodeProtobuf() (string, proto.Message) {
+func (r *TapRecognizer) EncodeProtobuf(ctx *view.Context) (string, proto.Message, map[int64]reflect.Value) {
+	funcId := ctx.NewFuncId()
+
 	return "github.com/overcyn/mochi/touch TapRecognizer", &pb.TapRecognizer{
-		Count: int64(r.Count),
-	}
+			Count:          int64(r.Count),
+			RecognizedFunc: funcId,
+		}, map[int64]reflect.Value{
+			funcId: reflect.ValueOf(r.RecognizedFunc),
+		}
 }
 
 type PressEvent struct {

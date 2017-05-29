@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Touch.pbobjc.h"
+@class MochiViewRoot;
 
 @interface MochiTapGestureRecognizer : UITapGestureRecognizer
-- (id)initWithViewId:(int64_t)viewId recognizerId:(int64_t)recognizerId protobuf:(GPBAny *)pb;
-@property (nonatomic, assign) long long viewId;
-@property (nonatomic, assign) long long recognizerId;
+- (id)initWitViewRoot:(MochiViewRoot *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb;
+@property (nonatomic, assign) int64_t funcId;
+@property (nonatomic, assign) int64_t viewId;
+@property (nonatomic, weak) MochiViewRoot *viewRoot;
 @end

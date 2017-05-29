@@ -10,9 +10,9 @@
 #import "MochiProtobuf.h"
 #import "MochiTapGestureRecognizer.h"
 
-bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config);
-UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, MochiPBRecognizer *pb);
-MochiView *MochiViewWithNode(MochiNode *node);
+bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config, MochiViewRoot *viewRoot);
+UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, MochiPBRecognizer *pb, MochiViewRoot *viewRoot);
+MochiView *MochiViewWithNode(MochiNode *node, MochiViewRoot *root);
 
 @interface MochiViewConfig : NSObject
 @property (nonatomic, strong) NSDictionary<NSNumber *, UIView *> *childViews;
@@ -31,15 +31,16 @@ MochiView *MochiViewWithNode(MochiNode *node);
 
 @implementation MochiView
 
-- (id)initWithFrame:(CGRect)frame {
-    if ((self = [super initWithFrame:frame])) {
+- (id)initWithViewRoot:(MochiViewRoot *)viewRoot {
+    if ((self = [super initWithFrame:CGRectZero])) {
+        self.viewRoot = viewRoot;
         self.config = [[MochiViewConfig alloc] init];
     }
     return self;
 }
 
 - (void)setNode:(MochiNode *)value {
-    MochiConfigureViewWithNode(self, value, self.config);
+    MochiConfigureViewWithNode(self, value, self.config, self.viewRoot);
 }
 
 @end
@@ -50,15 +51,16 @@ MochiView *MochiViewWithNode(MochiNode *node);
 
 @implementation MochiTextView
 
-- (id)initWithFrame:(CGRect)frame {
-    if ((self = [super initWithFrame:frame])) {
+- (id)initWithViewRoot:(MochiViewRoot *)viewRoot {
+    if ((self = [super initWithFrame:CGRectZero])) {
+        self.viewRoot = viewRoot;
         self.config = [[MochiViewConfig alloc] init];
     }
     return self;
 }
 
 - (void)setNode:(MochiNode *)value {
-    bool update = MochiConfigureViewWithNode(self, value, self.config);
+    bool update = MochiConfigureViewWithNode(self, value, self.config, self.viewRoot);
     if (update) {
         GPBAny *state = value.nativeViewState;
         NSError *error = nil;
@@ -78,15 +80,16 @@ MochiView *MochiViewWithNode(MochiNode *node);
 
 @implementation MochiImageView
 
-- (id)initWithFrame:(CGRect)frame {
-    if ((self = [super initWithFrame:frame])) {
+- (id)initWithViewRoot:(MochiViewRoot *)viewRoot {
+    if ((self = [super initWithFrame:CGRectZero])) {
+        self.viewRoot = viewRoot;
         self.config = [[MochiViewConfig alloc] init];
     }
     return self;
 }
 
 - (void)setNode:(MochiNode *)value {
-    bool update = MochiConfigureViewWithNode(self, value, self.config);
+    bool update = MochiConfigureViewWithNode(self, value, self.config, self.viewRoot);
     if (update) {
         GPBAny *state = value.nativeViewState;
         NSError *error = nil;
@@ -119,8 +122,9 @@ MochiView *MochiViewWithNode(MochiNode *node);
 
 @implementation MochiButton
 
-- (id)initWithFrame:(CGRect)frame {
-    if ((self = [super initWithFrame:frame])) {
+- (id)initWithViewRoot:(MochiViewRoot *)viewRoot {
+    if ((self = [super initWithFrame:CGRectZero])) {
+        self.viewRoot = viewRoot;
         self.config = [[MochiViewConfig alloc] init];
         self.button = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.button addTarget:self action:@selector(onPress) forControlEvents:UIControlEventTouchUpInside];
@@ -130,7 +134,7 @@ MochiView *MochiViewWithNode(MochiNode *node);
 }
 
 - (void)setNode:(MochiNode *)value {
-    bool update = MochiConfigureViewWithNode(self, value, self.config);
+    bool update = MochiConfigureViewWithNode(self, value, self.config, self.viewRoot);
     if (update) {
         GPBAny *state = value.nativeViewState;
         NSError *error = nil;
@@ -158,15 +162,16 @@ MochiView *MochiViewWithNode(MochiNode *node);
 
 @implementation MochiScrollView
 
-- (id)initWithFrame:(CGRect)frame {
-    if ((self = [super initWithFrame:frame])) {
+- (id)initWithViewRoot:(MochiViewRoot *)viewRoot {
+    if ((self = [super initWithFrame:CGRectZero])) {
+        self.viewRoot = viewRoot;
         self.config = [[MochiViewConfig alloc] init];
     }
     return self;
 }
 
 - (void)setNode:(MochiNode *)value {
-    bool update = MochiConfigureViewWithNode(self, value, self.config);
+    bool update = MochiConfigureViewWithNode(self, value, self.config, self.viewRoot);
     if (update) {
         if (self.config.childViews.count > 0) {
             self.contentSize = ((UIView *)self.config.childViews.allValues[0]).frame.size;
@@ -184,7 +189,7 @@ MochiView *MochiViewWithNode(MochiNode *node);
 }
 @end
 
-bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config) {
+bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config, MochiViewRoot *viewRoot) {
     if (![node.buildId isEqual:config.node.buildId]) {
         // Rebuild children
         NSMutableArray *addedKeys = [NSMutableArray array];
@@ -211,7 +216,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
             [config.childViews[i] removeFromSuperview];
         }
         for (NSNumber *i in addedKeys) {
-            MochiView *childView = MochiViewWithNode(node.nodeChildren[i]);
+            MochiView *childView = MochiViewWithNode(node.nodeChildren[i], viewRoot);
             [view addSubview:childView];
             childViews[i] = childView;
         }
@@ -230,7 +235,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
         MochiPBRecognizerList *recognizerList = (id)[any unpackMessageClass:[MochiPBRecognizerList class] error:&error];
         if (error == nil) {
             for (MochiPBRecognizer *i in recognizerList.recognizersArray) {
-                UIGestureRecognizer *recognizer = MochiGestureRecognizerWithPB(node.identifier.longLongValue, i);
+                UIGestureRecognizer *recognizer = MochiGestureRecognizerWithPB(node.identifier.longLongValue, i, viewRoot);
                 if (recognizer != nil) {
                     [view addGestureRecognizer:recognizer];
                 }
@@ -264,26 +269,26 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
     return update;
 }
 
-UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, MochiPBRecognizer *pb) {
+UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, MochiPBRecognizer *pb, MochiViewRoot *viewRoot) {
     if ([pb.name isEqual:@"github.com/overcyn/mochi/touch TapRecognizer"]) {
-        return [[MochiTapGestureRecognizer alloc] initWithViewId:viewId recognizerId:pb.id_p protobuf:pb.recognizer];
+        return [[MochiTapGestureRecognizer alloc] initWitViewRoot:viewRoot viewId:viewId protobuf:pb.recognizer];
     }
     return nil;
 }
 
-MochiView *MochiViewWithNode(MochiNode *node) {
+MochiView *MochiViewWithNode(MochiNode *node, MochiViewRoot *root) {
     NSString *name = node.nativeViewName;
     MochiView *child = nil;
     if ([name isEqual:@""]) {
-        child = [[MochiView alloc] initWithFrame:CGRectZero];
+        child = [[MochiView alloc] initWithViewRoot:root];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/textview"]) {
-        child = (id)[[MochiTextView alloc] initWithFrame:CGRectZero];
+        child = (id)[[MochiTextView alloc] initWithViewRoot:root];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/imageview"]) {
-        child = (id)[[MochiImageView alloc] initWithFrame:CGRectZero];
+        child = (id)[[MochiImageView alloc] initWithViewRoot:root];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/button"]) {
-        child = (id)[[MochiButton alloc] initWithFrame:CGRectZero];
+        child = (id)[[MochiButton alloc] initWithViewRoot:root];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/scrollview"]) {
-        child = (id)[[MochiScrollView alloc] initWithFrame:CGRectZero];
+        child = (id)[[MochiScrollView alloc] initWithViewRoot:root];
     }
     return child;
 }

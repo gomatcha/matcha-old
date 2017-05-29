@@ -13,6 +13,26 @@
 #import "Text.pbobjc.h"
 #import "Paint.pbobjc.h"
 
+@interface MochiViewRoot ()
+@end
+
+@implementation MochiViewRoot
+- (id)initWithGoValue:(MochiGoValue *)value {
+    if ((self = [super init])) {
+        self.value = value;
+    }
+    return self;
+}
+
+- (NSArray<MochiGoValue *> *)call:(int64_t)funcId viewId:(int64_t)viewId args:(NSArray<MochiGoValue *> *)args {
+    MochiGoValue *goValue = [[MochiGoValue alloc] initWithLongLong:funcId];
+    MochiGoValue *goViewId = [[MochiGoValue alloc] initWithLongLong:viewId];
+    MochiGoValue *goArgs = [[MochiGoValue alloc] initWithArray:args];
+    return [self.value call:@"Call" args:@[goValue, goViewId, goArgs]];
+}
+
+@end
+
 @interface MochiNodeRoot ()
 @property (nonatomic, strong) MochiNode *node;
 @end
@@ -66,36 +86,6 @@
     return self;
 }
 
-- (id)initWithGoValue:(MochiGoValue *)value {
-    if ((self = [super init])) {
-        self.goValue = value;
-        self.identifier = @(value[@"Id"].toLongLong);
-        self.buildId = @(value[@"BuildId"].toLongLong);
-        self.layoutId = @(value[@"LayoutId"].toLongLong);
-        self.paintId = @(value[@"PaintId"].toLongLong);
-        self.paintOptions = [[MochiPaintOptions alloc] initWithGoValue:self.goValue[@"PaintOptions"]];
-        self.guide = [[MochiLayoutGuide alloc] initWithGoValue:self.goValue[@"LayoutGuide"]];
-        self.nativeViewName = self.goValue[@"BridgeName"].toString;
-    }
-    return self;
-}
-
-- (NSDictionary<NSNumber *, MochiNode *> *)nodeChildren {
-    if (_nodeChildren == nil) {
-        NSMapTable *children = self.goValue[@"Children"].toMapTable;
-        NSMutableDictionary<NSNumber *, MochiNode *> *nodeChildren = [NSMutableDictionary dictionary];
-        for (MochiGoValue *i in children) {
-            nodeChildren[@(i.toLongLong)] = [[MochiNode alloc] initWithGoValue:children[i]];
-        }
-        _nodeChildren = nodeChildren;
-    }
-    return _nodeChildren;
-}
-
-// - (NSString *)description {
-//     return [NSString stringWithFormat:@"<MochiNode id:%@,%@,%@,%@
-// }
-
 @end
 
 @interface MochiPaintOptions ()
@@ -108,18 +98,6 @@
 - (id)initWithProtobuf:(MochiPBPaintStyle *)style {
     if (self = [super init]) {
         self.backgroundColor = [[UIColor alloc] initWithProtobuf:style.backgroundColor];
-    }
-    return self;
-}
-
-- (id)initWithGoValue:(MochiGoValue *)value {
-    if (self = [super init]) {
-        self.goValue = value;
-        
-        MochiGoValue *value = self.goValue[@"BackgroundColor"];
-        if (!value.isNil) {
-            self.backgroundColor = [[UIColor alloc] initWithGoValue:value];
-        }
     }
     return self;
 }
@@ -140,18 +118,6 @@
         self.frame = guide.frame.toCGRect;
         self.insets = guide.insets.toUIEdgeInsets;
         self.zIndex = guide.zIndex;
-    }
-    return self;
-}
-
-- (id)initWithGoValue:(MochiGoValue *)value {
-    if (value.isNil) {
-        return nil;
-    }
-    if (self = [super init]) {
-        self.frame = value[@"Frame"].toCGRect;
-        self.insets = value[@"Insets"].toUIEdgeInsets;
-        self.zIndex = value[@"ZIndex"].toLongLong;
     }
     return self;
 }

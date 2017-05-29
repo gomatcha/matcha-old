@@ -1,6 +1,8 @@
 package touch
 
 import (
+	"fmt"
+
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/paint"
@@ -72,7 +74,8 @@ func NewTouchChildView(ctx *view.Context, key interface{}) *TouchChildView {
 func (v *TouchChildView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
-		RecognizedFunc: func(e *touch.TapEvent) {
+		RecognizedFunc: func() {
+			fmt.Println("touched")
 			// do something
 		},
 	}

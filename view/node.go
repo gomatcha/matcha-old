@@ -2,6 +2,7 @@ package view
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 	"sync"
 	"time"
@@ -21,7 +22,7 @@ import (
 
 type Middleware interface {
 	BeforeBuild()
-	Build(mochi.Id, *Model, *Model)
+	Build(*Context, *Model)
 	AfterBuild()
 }
 
@@ -71,6 +72,20 @@ func NewRoot(f func(Config) View, id int) *Root {
 	return vc
 }
 
+func (vc *Root) Call(funcId int64, viewId int64, args []reflect.Value) []reflect.Value {
+	vc.mu.Lock()
+	defer vc.mu.Unlock()
+
+	return vc.root.call(funcId, viewId, args)
+}
+
+func Middlewares() []Middleware {
+	middlewaresMu.Lock()
+	defer middlewaresMu.Unlock()
+
+	return middlewares
+}
+
 func (vc *Root) SetSize(p layout.Point) {
 	vc.mu.Lock()
 	defer vc.mu.Unlock()
@@ -105,9 +120,6 @@ func (ctx *Context) Get(key interface{}) Config {
 }
 
 func (ctx *Context) Prev(key interface{}) View {
-	if ctx == nil {
-		return nil
-	}
 	cacheKey := viewCacheKey{key: key, id: ctx.node.id}
 	prevId := ctx.prevIds[cacheKey]
 	prevCtx := ctx.prevNodes[prevId]
@@ -118,13 +130,14 @@ func (ctx *Context) Prev(key interface{}) View {
 }
 
 func (ctx *Context) NewId(key interface{}) mochi.Id {
-	if ctx == nil {
-		return mochi.Id(1)
-	}
 	cacheKey := viewCacheKey{key: key, id: ctx.node.id}
 	id := ctx.node.root.newId()
 	ctx.node.root.ids[cacheKey] = id
 	return id
+}
+
+func (ctx *Context) NewFuncId() int64 {
+	return ctx.node.root.newFuncId()
 }
 
 func (ctx *Context) Id() mochi.Id {
@@ -157,6 +170,7 @@ type root struct {
 	ids         map[viewCacheKey]mochi.Id
 	nodes       map[mochi.Id]*node
 	maxId       mochi.Id
+	maxFuncId   int64
 	updateFlags map[mochi.Id]updateFlag
 }
 
@@ -275,9 +289,31 @@ func (root *root) paintLocked() {
 	root.node.paint()
 }
 
+func (root *root) call(funcId int64, viewId int64, args []reflect.Value) []reflect.Value {
+	root.mu.Lock()
+	defer root.mu.Unlock()
+
+	node, ok := root.nodes[mochi.Id(viewId)]
+	if !ok || node.viewModel == nil {
+		return nil
+	}
+
+	f, ok := node.viewModel.NativeFuncs[funcId]
+	if !ok {
+		return nil
+	}
+
+	return f.Call(args)
+}
+
 func (root *root) newId() mochi.Id {
 	root.maxId += 1
 	return root.maxId
+}
+
+func (root *root) newFuncId() int64 {
+	root.maxFuncId += 1
+	return root.maxFuncId
 }
 
 type node struct {
@@ -339,8 +375,6 @@ func (n *node) EncodeProtobuf() *pb.Node {
 }
 
 func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*node) {
-	prevViewModel := n.viewModel
-
 	if n.root.updateFlags[n.id].needsBuild() {
 		n.buildId += 1
 
@@ -351,7 +385,13 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 		}
 
 		// Generate the new viewModel.
-		viewModel := n.view.Build(&Context{node: n, prevIds: prevIds, prevNodes: prevNodes})
+		ctx := &Context{node: n, prevIds: prevIds, prevNodes: prevNodes}
+		viewModel := n.view.Build(ctx)
+
+		// Call middleware
+		for _, i := range middlewares {
+			i.Build(ctx, viewModel)
+		}
 
 		// Diff the old children (n.children) with new children (viewModel.Children).
 		addedIds := []mochi.Id{}
@@ -484,11 +524,6 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 
 		n.children = children
 		n.viewModel = viewModel
-	}
-
-	// Call middleware
-	for _, i := range middlewares {
-		i.Build(n.id, prevViewModel, n.viewModel)
 	}
 
 	// Recursively update children.

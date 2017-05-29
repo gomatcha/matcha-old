@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "MochiViewController.h"
 #import "MochiRoot.h"
+#import "MochiNode.h"
 @import Mochi;
 
 @interface AppDelegate ()
@@ -21,9 +22,10 @@
     [MochiObjcBridge sharedBridge].root = [[MochiRoot alloc] init];
     
     MochiGoValue *rootVC = [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/examples/touch New"] call:nil args:nil][0];
+    MochiViewRoot *viewRoot = [[MochiViewRoot alloc] initWithGoValue:rootVC];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [[MochiViewController alloc] initWithMochiValue:rootVC];
+    self.window.rootViewController = [[MochiViewController alloc] initWithMochiViewRoot:viewRoot];
     [self.window makeKeyAndVisible];
     return YES;
 }

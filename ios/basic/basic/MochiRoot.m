@@ -39,19 +39,8 @@
     return value;
 }
 
-- (void)rerender {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [MochiViewController render];
-    });
-}
-
 - (void)screenUpdate {
     [self.screenUpdateFunc call:nil args:nil];
-}
-
-- (void)updateId:(NSInteger)identifier withRenderNode:(MochiGoValue *)renderNode {
-//    MochiViewController *vc = [MochiViewController viewControllerWithIdentifier:identifier];
-//    [vc update:[[MochiNode alloc] initWithGoValue:renderNode]];
 }
 
 - (void)updateId:(NSInteger)identifier withProtobuf:(NSData *)protobuf {

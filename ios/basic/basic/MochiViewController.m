@@ -15,6 +15,7 @@
 @property (nonatomic, assign) NSInteger identifier;
 @property (nonatomic, strong) MochiView *mochiView;
 @property (nonatomic, strong) MochiGoValue *goVC;
+@property (nonatomic, strong) MochiViewRoot *viewRoot;
 @property (nonatomic, assign) CGRect lastFrame;
 @end
 
@@ -38,24 +39,18 @@
     return nil;
 }
 
-+ (void)render {
-    for (MochiViewController *i in [MochiViewController viewControllers]) {
-        [i render];
-    }
-}
-
-- (id)initWithMochiValue:(MochiGoValue *)value {
+- (id)initWithMochiViewRoot:(MochiViewRoot *)root {
     if ((self = [super initWithNibName:nil bundle:nil])) {
         self.identifier = 0;
         [[MochiViewController viewControllers] addPointer:(__bridge void *)self];
         
-        self.goVC = value;
+        self.viewRoot = root;
     }
     return self;
 }
 
 - (void)loadView {
-    self.mochiView = [[MochiView alloc] initWithFrame:CGRectZero];
+    self.mochiView = [[MochiView alloc] initWithViewRoot:self.viewRoot];
     self.view = self.mochiView;
 }
 
@@ -63,14 +58,8 @@
     if (!CGRectEqualToRect(self.lastFrame, self.view.frame)) {
         self.lastFrame = self.view.frame;
         
-        [self.goVC call:@"SetSize" args:@[[[MochiGoValue alloc] initWithCGPoint:CGPointMake(self.view.frame.size.width, self.view.frame.size.height)]]];
-        // [self render];
+        [self.viewRoot.value call:@"SetSize" args:@[[[MochiGoValue alloc] initWithCGPoint:CGPointMake(self.view.frame.size.width, self.view.frame.size.height)]]];
     }
-}
-
-- (void)render {
-    // MochiGoValue *renderNode = [self.goVC call:@"Render" args:nil][0];
-    // [self update:[[MochiNode alloc] initWithGoValue:renderNode]];
 }
 
 - (void)update:(MochiNode *)node {

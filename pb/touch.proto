@@ -17,6 +17,7 @@ message RecognizerList {
 
 message TapRecognizer {
     int64 count = 1;
+    int64 recognizedFunc = 2;
 }
 
 message PressRecognizer {

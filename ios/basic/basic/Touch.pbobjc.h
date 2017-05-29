@@ -85,11 +85,14 @@ typedef GPB_ENUM(MochiPBRecognizerList_FieldNumber) {
 
 typedef GPB_ENUM(MochiPBTapRecognizer_FieldNumber) {
   MochiPBTapRecognizer_FieldNumber_Count = 1,
+  MochiPBTapRecognizer_FieldNumber_RecognizedFunc = 2,
 };
 
 @interface MochiPBTapRecognizer : GPBMessage
 
 @property(nonatomic, readwrite) int64_t count;
+
+@property(nonatomic, readwrite) int64_t recognizedFunc;
 
 @end
 

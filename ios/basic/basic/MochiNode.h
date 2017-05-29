@@ -17,6 +17,12 @@
 @class MochiPBPaintStyle;
 @class GPBAny;
 
+@interface MochiViewRoot : NSObject
+- (id)initWithGoValue:(MochiGoValue *)value;
+@property (nonatomic, strong) MochiGoValue *value;
+- (NSArray<MochiGoValue *> *)call:(int64_t)funcId viewId:(int64_t)viewId args:(NSArray<MochiGoValue *> *)args;
+@end
+
 @interface MochiNodeRoot : NSObject
 - (id)initWithProtobuf:(MochiPBRoot *)data;
 @property (nonatomic, readonly) MochiNode *node;
@@ -24,7 +30,6 @@
 
 @interface MochiNode : NSObject
 - (id)initWithProtobuf:(MochiPBNode *)node;
-- (id)initWithGoValue:(MochiGoValue *)value;
 @property (nonatomic, readonly) NSDictionary<NSNumber *, MochiNode *> *nodeChildren;
 @property (nonatomic, readonly) MochiLayoutGuide *guide;
 @property (nonatomic, readonly) MochiPaintOptions *paintOptions;
@@ -39,13 +44,11 @@
 
 @interface MochiPaintOptions : NSObject
 - (id)initWithProtobuf:(MochiPBPaintStyle *)style;
-- (id)initWithGoValue:(MochiGoValue *)value;
 @property (nonatomic, readonly) UIColor *backgroundColor;
 @end
 
 @interface MochiLayoutGuide : NSObject
 - (id)initWithProtobuf:(MochiPBGuide *)guide;
-- (id)initWithGoValue:(MochiGoValue *)value;
 @property (nonatomic, readonly) CGRect frame;
 @property (nonatomic, readonly) UIEdgeInsets insets;
 @property (nonatomic, readonly) NSInteger zIndex;

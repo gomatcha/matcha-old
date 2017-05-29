@@ -162,10 +162,12 @@ typedef struct MochiPBRecognizerList__storage_ {
 @implementation MochiPBTapRecognizer
 
 @dynamic count;
+@dynamic recognizedFunc;
 
 typedef struct MochiPBTapRecognizer__storage_ {
   uint32_t _has_storage_[1];
   int64_t count;
+  int64_t recognizedFunc;
 } MochiPBTapRecognizer__storage_;
 
 // This method is threadsafe because it is initially called
@@ -183,6 +185,15 @@ typedef struct MochiPBTapRecognizer__storage_ {
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeInt64,
       },
+      {
+        .name = "recognizedFunc",
+        .dataTypeSpecific.className = NULL,
+        .number = MochiPBTapRecognizer_FieldNumber_RecognizedFunc,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MochiPBTapRecognizer__storage_, recognizedFunc),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MochiPBTapRecognizer class]
@@ -192,6 +203,11 @@ typedef struct MochiPBTapRecognizer__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(MochiPBTapRecognizer__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\001\002\016\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }

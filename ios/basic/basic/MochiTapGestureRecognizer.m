@@ -8,10 +8,11 @@
 
 #import "MochiTapGestureRecognizer.h"
 #import <Mochi/mochigo.h>
+#import "MochiNode.h"
 
 @implementation MochiTapGestureRecognizer
 
-- (id)initWithViewId:(int64_t)viewId recognizerId:(int64_t)recognizerId protobuf:(GPBAny *)pb {
+- (id)initWitViewRoot:(MochiViewRoot *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb {
     NSError *error = nil;
     MochiPBTapRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTapRecognizer class] error:&error];
     if (pbTapRecognizer == nil) {
@@ -19,16 +20,16 @@
     }
     if ((self = [super initWithTarget:self action:@selector(action:)])) {
         self.numberOfTapsRequired = pbTapRecognizer.count;
+        self.viewRoot = viewRoot;
+        self.funcId = pbTapRecognizer.recognizedFunc;
         self.viewId = viewId;
-        self.recognizerId = recognizerId;
     }
     return self;
 }
 
 - (void)action:(id)sender {
-    MochiGoValue *viewId = [[MochiGoValue alloc] initWithLongLong:self.viewId];
-    MochiGoValue *recognizerId = [[MochiGoValue alloc] initWithLongLong:self.recognizerId];
-    [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/touch TapRecognizer.Recognized"] call:nil args:@[viewId, recognizerId]];
+    NSLog(@"blah,%@,%@", @(self.funcId), self.viewRoot);
+    [self.viewRoot call:self.funcId viewId:self.viewId args:nil];
 }
 
 @end
