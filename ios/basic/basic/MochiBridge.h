@@ -15,7 +15,6 @@
 @class MochiPBImage;
 
 @interface UIColor (Mochi)
-- (id)initWithGoValue:(MochiGoValue *)value;
 - (id)initWithProtobuf:(MochiPBColor *)value;
 @end
 
@@ -35,12 +34,10 @@
 @end
 
 @interface NSAttributedString (Mochi)
-- (id)initWithGoValue:(MochiGoValue *)value;
 - (id)initWithProtobuf:(MochiPBText *)value;
 @end
 
 @interface UIFont (Mochi)
-- (id)initWithGoValue:(MochiGoValue *)value;
 - (id)initWithProtobuf:(MochiPBFont *)value;
 @end
 
