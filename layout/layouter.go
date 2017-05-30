@@ -36,10 +36,10 @@ type Guide struct {
 	// Transform?
 }
 
-func (g Guide) EncodeProtobuf() *pb.Guide {
+func (g Guide) MarshalProtobuf() *pb.Guide {
 	return &pb.Guide{
-		Frame:  g.Frame.EncodeProtobuf(),
-		Insets: g.Insets.EncodeProtobuf(),
+		Frame:  g.Frame.MarshalProtobuf(),
+		Insets: g.Insets.MarshalProtobuf(),
 		ZIndex: int64(g.ZIndex),
 	}
 }

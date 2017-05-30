@@ -112,10 +112,10 @@ type TapEvent struct {
 	Position  layout.Point
 }
 
-func (e *TapEvent) DecodeProtobuf(pbevent *pb.TapEvent) error {
+func (e *TapEvent) UnmarshalProtobuf(pbevent *pb.TapEvent) error {
 	t, _ := ptypes.Timestamp(pbevent.Timestamp)
 	e.Timestamp = t
-	e.Position.DecodeProtobuf(pbevent.Position)
+	e.Position.UnmarshalProtobuf(pbevent.Position)
 	return nil
 }
 
@@ -143,7 +143,7 @@ func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[i
 		}
 
 		event := &TapEvent{}
-		if err := event.DecodeProtobuf(pbevent); err != nil {
+		if err := event.UnmarshalProtobuf(pbevent); err != nil {
 			fmt.Println("error", err)
 			return
 		}

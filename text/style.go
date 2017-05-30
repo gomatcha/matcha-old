@@ -15,7 +15,7 @@ const (
 	AlignmentJustified
 )
 
-func (a Alignment) EncodeProtobuf() pb.TextAlignment {
+func (a Alignment) MarshalProtobuf() pb.TextAlignment {
 	return pb.TextAlignment(a)
 }
 
@@ -30,7 +30,7 @@ const (
 	StrikethroughStyleDashed
 )
 
-func (a StrikethroughStyle) EncodeProtobuf() pb.StrikethroughStyle {
+func (a StrikethroughStyle) MarshalProtobuf() pb.StrikethroughStyle {
 	return pb.StrikethroughStyle(a)
 }
 
@@ -45,7 +45,7 @@ const (
 	UnderlineStyleDashed
 )
 
-func (a UnderlineStyle) EncodeProtobuf() pb.UnderlineStyle {
+func (a UnderlineStyle) MarshalProtobuf() pb.UnderlineStyle {
 	return pb.UnderlineStyle(a)
 }
 
@@ -56,7 +56,7 @@ type Font struct {
 	Size   float64
 }
 
-func (f Font) EncodeProtobuf() *pb.Font {
+func (f Font) MarshalProtobuf() *pb.Font {
 	return &pb.Font{
 		Family: f.Family,
 		Face:   f.Face,
@@ -72,7 +72,7 @@ const (
 	WrapCharacter
 )
 
-func (a Wrap) EncodeProtobuf() pb.TextWrap {
+func (a Wrap) MarshalProtobuf() pb.TextWrap {
 	return pb.TextWrap(a)
 }
 
@@ -85,7 +85,7 @@ const (
 	TruncationEnd
 )
 
-func (a Truncation) EncodeProtobuf() pb.Truncation {
+func (a Truncation) MarshalProtobuf() pb.Truncation {
 	return pb.Truncation(a)
 }
 
@@ -195,20 +195,20 @@ func (f *Style) Update(u *Style) {
 	}
 }
 
-func (f *Style) EncodeProtobuf() *pb.TextStyle {
+func (f *Style) MarshalProtobuf() *pb.TextStyle {
 	return &pb.TextStyle{
-		TextAlignment:      f.Get(StyleKeyAlignment).(Alignment).EncodeProtobuf(),
-		StrikethroughStyle: f.Get(StyleKeyStrikethroughStyle).(StrikethroughStyle).EncodeProtobuf(),
+		TextAlignment:      f.Get(StyleKeyAlignment).(Alignment).MarshalProtobuf(),
+		StrikethroughStyle: f.Get(StyleKeyStrikethroughStyle).(StrikethroughStyle).MarshalProtobuf(),
 		StrikethroughColor: pb.ColorEncode(f.Get(StyleKeyStrikethroughColor).(color.Color)),
-		UnderlineStyle:     f.Get(StyleKeyUnderlineStyle).(UnderlineStyle).EncodeProtobuf(),
+		UnderlineStyle:     f.Get(StyleKeyUnderlineStyle).(UnderlineStyle).MarshalProtobuf(),
 		UnderlineColor:     pb.ColorEncode(f.Get(StyleKeyUnderlineColor).(color.Color)),
-		Font:               f.Get(StyleKeyFont).(Font).EncodeProtobuf(),
+		Font:               f.Get(StyleKeyFont).(Font).MarshalProtobuf(),
 		Hyphenation:        f.Get(StyleKeyHyphenation).(float64),
 		LineHeightMultiple: f.Get(StyleKeyLineHeightMultiple).(float64),
 		MaxLines:           int64(f.Get(StyleKeyMaxLines).(int)),
 		TextColor:          pb.ColorEncode(f.Get(StyleKeyTextColor).(color.Color)),
-		Wrap:               f.Get(StyleKeyWrap).(Wrap).EncodeProtobuf(),
-		Truncation:         f.Get(StyleKeyTruncation).(Truncation).EncodeProtobuf(),
+		Wrap:               f.Get(StyleKeyWrap).(Wrap).MarshalProtobuf(),
+		Truncation:         f.Get(StyleKeyTruncation).(Truncation).MarshalProtobuf(),
 		TruncationString:   f.Get(StyleKeyTruncationString).(string),
 	}
 }

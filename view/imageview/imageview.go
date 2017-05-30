@@ -119,7 +119,7 @@ const (
 	ResizeModeCenter
 )
 
-func (m ResizeMode) EncodeProtobuf() pb.ResizeMode {
+func (m ResizeMode) MarshalProtobuf() pb.ResizeMode {
 	return pb.ResizeMode(m)
 }
 
@@ -154,7 +154,7 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 		NativeViewName: "github.com/overcyn/mochi/view/imageview",
 		NativeViewState: &pb.ImageView{
 			Image:      v.pbImage,
-			ResizeMode: v.ResizeMode.EncodeProtobuf(),
+			ResizeMode: v.ResizeMode.MarshalProtobuf(),
 		},
 	}
 }

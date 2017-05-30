@@ -26,7 +26,7 @@ type Style struct {
 	// Mask
 }
 
-func (s *Style) EncodeProtobuf() *pb.PaintStyle {
+func (s *Style) MarshalProtobuf() *pb.PaintStyle {
 	return &pb.PaintStyle{
 		Transparency:    s.Transparency,
 		BackgroundColor: pb.ColorEncode(s.BackgroundColor),
@@ -34,7 +34,7 @@ func (s *Style) EncodeProtobuf() *pb.PaintStyle {
 		BorderWidth:     s.BorderWidth,
 		CornerRadius:    s.CornerRadius,
 		ShadowRadius:    s.ShadowRadius,
-		ShadowOffset:    s.ShadowOffset.EncodeProtobuf(),
+		ShadowOffset:    s.ShadowOffset.MarshalProtobuf(),
 		ShadowColor:     pb.ColorEncode(s.ShadowColor),
 	}
 }

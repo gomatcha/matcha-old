@@ -232,15 +232,15 @@ func (root *root) update(size layout.Point) bool {
 }
 
 func (root *root) MarshalProtobuf2() ([]byte, error) {
-	return proto.Marshal(root.EncodeProtobuf())
+	return proto.Marshal(root.MarshalProtobuf())
 }
 
-func (root *root) EncodeProtobuf() *pb.Root {
+func (root *root) MarshalProtobuf() *pb.Root {
 	root.mu.Lock()
 	defer root.mu.Unlock()
 
 	return &pb.Root{
-		Node: root.node.EncodeProtobuf(),
+		Node: root.node.MarshalProtobuf(),
 	}
 }
 
@@ -330,10 +330,10 @@ type node struct {
 	paintOptions paint.Style
 }
 
-func (n *node) EncodeProtobuf() *pb.Node {
+func (n *node) MarshalProtobuf() *pb.Node {
 	children := []*pb.Node{}
 	for _, v := range n.children {
-		children = append(children, v.EncodeProtobuf())
+		children = append(children, v.MarshalProtobuf())
 	}
 
 	var nativeViewState *any.Any
@@ -357,8 +357,8 @@ func (n *node) EncodeProtobuf() *pb.Node {
 		LayoutId:    n.layoutId,
 		PaintId:     n.paintId,
 		Children:    children,
-		LayoutGuide: n.layoutGuide.EncodeProtobuf(),
-		PaintStyle:  n.paintOptions.EncodeProtobuf(),
+		LayoutGuide: n.layoutGuide.MarshalProtobuf(),
+		PaintStyle:  n.paintOptions.MarshalProtobuf(),
 		BridgeName:  n.model.NativeViewName,
 		BridgeValue: nativeViewState,
 		Values:      nativeValues,

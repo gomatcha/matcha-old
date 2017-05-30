@@ -54,9 +54,9 @@ func New(b []byte) *Text {
 
 func (t *Text) Size(min layout.Point, max layout.Point) layout.Point {
 	pbFunc := &pb.SizeFunc{
-		Text:    t.EncodeProtobuf(),
-		MinSize: min.EncodeProtobuf(),
-		MaxSize: max.EncodeProtobuf(),
+		Text:    t.MarshalProtobuf(),
+		MinSize: min.MarshalProtobuf(),
+		MaxSize: max.MarshalProtobuf(),
 	}
 	data, err := proto.Marshal(pbFunc)
 	if err != nil {
@@ -73,10 +73,10 @@ func (t *Text) Size(min layout.Point, max layout.Point) layout.Point {
 	return layout.Pt(pbpoint.X, pbpoint.Y)
 }
 
-func (t *Text) EncodeProtobuf() *pb.Text {
+func (t *Text) MarshalProtobuf() *pb.Text {
 	return &pb.Text{
 		Text:  t.str,
-		Style: t.style.EncodeProtobuf(),
+		Style: t.style.MarshalProtobuf(),
 	}
 }
 

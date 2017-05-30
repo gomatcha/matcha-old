@@ -62,6 +62,6 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 		Layouter:        &textViewLayouter{formattedText: ft},
 		Painter:         v.Painter,
 		NativeViewName:  "github.com/overcyn/mochi/view/textview",
-		NativeViewState: ft.EncodeProtobuf(),
+		NativeViewState: ft.MarshalProtobuf(),
 	}
 }

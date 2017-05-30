@@ -99,7 +99,7 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 		Painter:        v.Painter,
 		NativeViewName: "github.com/overcyn/mochi/view/button",
 		NativeViewState: &pbbutton.Button{
-			Text: ft.EncodeProtobuf(),
+			Text: ft.MarshalProtobuf(),
 		},
 	}
 }
