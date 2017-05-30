@@ -28,6 +28,7 @@
 CF_EXTERN_C_BEGIN
 
 @class MochiPBColor;
+@class MochiPBPoint;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -49,12 +50,11 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - MochiPBPaintStyle
 
 typedef GPB_ENUM(MochiPBPaintStyle_FieldNumber) {
-  MochiPBPaintStyle_FieldNumber_Alpha = 1,
+  MochiPBPaintStyle_FieldNumber_Transparency = 1,
   MochiPBPaintStyle_FieldNumber_BackgroundColor = 2,
   MochiPBPaintStyle_FieldNumber_BorderColor = 3,
   MochiPBPaintStyle_FieldNumber_BorderWidth = 4,
   MochiPBPaintStyle_FieldNumber_CornerRadius = 5,
-  MochiPBPaintStyle_FieldNumber_ShadowOpacity = 6,
   MochiPBPaintStyle_FieldNumber_ShadowRadius = 7,
   MochiPBPaintStyle_FieldNumber_ShadowOffset = 8,
   MochiPBPaintStyle_FieldNumber_ShadowColor = 9,
@@ -62,7 +62,7 @@ typedef GPB_ENUM(MochiPBPaintStyle_FieldNumber) {
 
 @interface MochiPBPaintStyle : GPBMessage
 
-@property(nonatomic, readwrite) double alpha;
+@property(nonatomic, readwrite) double transparency;
 
 @property(nonatomic, readwrite, strong, null_resettable) MochiPBColor *backgroundColor;
 /** Test to see if @c backgroundColor has been set. */
@@ -76,11 +76,11 @@ typedef GPB_ENUM(MochiPBPaintStyle_FieldNumber) {
 
 @property(nonatomic, readwrite) double cornerRadius;
 
-@property(nonatomic, readwrite) double shadowOpacity;
-
 @property(nonatomic, readwrite) double shadowRadius;
 
-@property(nonatomic, readwrite) double shadowOffset;
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBPoint *shadowOffset;
+/** Test to see if @c shadowOffset has been set. */
+@property(nonatomic, readwrite) BOOL hasShadowOffset;
 
 @property(nonatomic, readwrite, strong, null_resettable) MochiPBColor *shadowColor;
 /** Test to see if @c shadowColor has been set. */

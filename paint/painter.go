@@ -4,6 +4,7 @@ import (
 	"image/color"
 
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/pb"
 )
 
@@ -13,14 +14,13 @@ type Painter interface {
 }
 
 type Style struct {
-	Alpha           float64
+	Transparency    float64
 	BackgroundColor color.Color
 	BorderColor     color.Color
 	BorderWidth     float64
 	CornerRadius    float64
-	ShadowOpacity   float64
 	ShadowRadius    float64
-	ShadowOffset    float64
+	ShadowOffset    layout.Point
 	ShadowColor     color.Color
 	// Transform?
 	// Mask
@@ -28,14 +28,13 @@ type Style struct {
 
 func (s *Style) EncodeProtobuf() *pb.PaintStyle {
 	return &pb.PaintStyle{
-		Alpha:           s.Alpha,
+		Transparency:    s.Transparency,
 		BackgroundColor: pb.ColorEncode(s.BackgroundColor),
 		BorderColor:     pb.ColorEncode(s.BorderColor),
 		BorderWidth:     s.BorderWidth,
 		CornerRadius:    s.CornerRadius,
-		ShadowOpacity:   s.ShadowOpacity,
 		ShadowRadius:    s.ShadowRadius,
-		ShadowOffset:    s.ShadowOffset,
+		ShadowOffset:    s.ShadowOffset.EncodeProtobuf(),
 		ShadowColor:     pb.ColorEncode(s.ShadowColor),
 	}
 }
@@ -54,23 +53,22 @@ func (s *Style) Unnotify(chan struct{}) {
 
 type AnimatedStyle struct {
 	Style           Style
-	Alpha           mochi.Float64Notifier
+	Transparency    mochi.Float64Notifier
 	BackgroundColor mochi.ColorNotifier
 	BorderColor     mochi.ColorNotifier
 	BorderWidth     mochi.Float64Notifier
 	CornerRadius    mochi.Float64Notifier
-	ShadowOpacity   mochi.Float64Notifier
 	ShadowRadius    mochi.Float64Notifier
-	ShadowOffset    mochi.Float64Notifier
-	ShadowColor     mochi.ColorNotifier
+	// ShadowOffset    mochi.Float64Notifier
+	ShadowColor mochi.ColorNotifier
 
 	batchNotifiers map[chan struct{}]*mochi.BatchNotifier
 }
 
 func (as *AnimatedStyle) PaintStyle() Style {
 	s := as.Style
-	if as.Alpha != nil {
-		s.Alpha = as.Alpha.Value()
+	if as.Transparency != nil {
+		s.Transparency = as.Transparency.Value()
 	}
 	if as.BackgroundColor != nil {
 		s.BackgroundColor = as.BackgroundColor.Value()
@@ -84,15 +82,12 @@ func (as *AnimatedStyle) PaintStyle() Style {
 	if as.CornerRadius != nil {
 		s.CornerRadius = as.CornerRadius.Value()
 	}
-	if as.ShadowOpacity != nil {
-		s.ShadowOpacity = as.ShadowOpacity.Value()
-	}
 	if as.ShadowRadius != nil {
 		s.ShadowRadius = as.ShadowRadius.Value()
 	}
-	if as.ShadowOffset != nil {
-		s.ShadowOffset = as.ShadowOffset.Value()
-	}
+	// if as.ShadowOffset != nil {
+	// 	s.ShadowOffset = as.ShadowOffset.Value()
+	// }
 	if as.ShadowColor != nil {
 		s.ShadowColor = as.ShadowColor.Value()
 	}
@@ -106,8 +101,8 @@ func (as *AnimatedStyle) Notify() chan struct{} {
 	}
 
 	ns := []mochi.Notifier{}
-	if as.Alpha != nil {
-		ns = append(ns, as.Alpha)
+	if as.Transparency != nil {
+		ns = append(ns, as.Transparency)
 	}
 	if as.BackgroundColor != nil {
 		ns = append(ns, as.BackgroundColor)
@@ -121,15 +116,12 @@ func (as *AnimatedStyle) Notify() chan struct{} {
 	if as.CornerRadius != nil {
 		ns = append(ns, as.CornerRadius)
 	}
-	if as.ShadowOpacity != nil {
-		ns = append(ns, as.ShadowOpacity)
-	}
 	if as.ShadowRadius != nil {
 		ns = append(ns, as.ShadowRadius)
 	}
-	if as.ShadowOffset != nil {
-		ns = append(ns, as.ShadowOffset)
-	}
+	// if as.ShadowOffset != nil {
+	// 	ns = append(ns, as.ShadowOffset)
+	// }
 	if as.ShadowColor != nil {
 		ns = append(ns, as.ShadowColor)
 	}

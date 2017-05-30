@@ -15,6 +15,7 @@
 
  #import "Paint.pbobjc.h"
  #import "Text.pbobjc.h"
+ #import "Layout.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -48,27 +49,25 @@ static GPBFileDescriptor *MochiPBPaintRoot_FileDescriptor(void) {
 
 @implementation MochiPBPaintStyle
 
-@dynamic alpha;
+@dynamic transparency;
 @dynamic hasBackgroundColor, backgroundColor;
 @dynamic hasBorderColor, borderColor;
 @dynamic borderWidth;
 @dynamic cornerRadius;
-@dynamic shadowOpacity;
 @dynamic shadowRadius;
-@dynamic shadowOffset;
+@dynamic hasShadowOffset, shadowOffset;
 @dynamic hasShadowColor, shadowColor;
 
 typedef struct MochiPBPaintStyle__storage_ {
   uint32_t _has_storage_[1];
   MochiPBColor *backgroundColor;
   MochiPBColor *borderColor;
+  MochiPBPoint *shadowOffset;
   MochiPBColor *shadowColor;
-  double alpha;
+  double transparency;
   double borderWidth;
   double cornerRadius;
-  double shadowOpacity;
   double shadowRadius;
-  double shadowOffset;
 } MochiPBPaintStyle__storage_;
 
 // This method is threadsafe because it is initially called
@@ -78,11 +77,11 @@ typedef struct MochiPBPaintStyle__storage_ {
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
-        .name = "alpha",
+        .name = "transparency",
         .dataTypeSpecific.className = NULL,
-        .number = MochiPBPaintStyle_FieldNumber_Alpha,
+        .number = MochiPBPaintStyle_FieldNumber_Transparency,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(MochiPBPaintStyle__storage_, alpha),
+        .offset = (uint32_t)offsetof(MochiPBPaintStyle__storage_, transparency),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeDouble,
       },
@@ -123,37 +122,28 @@ typedef struct MochiPBPaintStyle__storage_ {
         .dataType = GPBDataTypeDouble,
       },
       {
-        .name = "shadowOpacity",
-        .dataTypeSpecific.className = NULL,
-        .number = MochiPBPaintStyle_FieldNumber_ShadowOpacity,
-        .hasIndex = 5,
-        .offset = (uint32_t)offsetof(MochiPBPaintStyle__storage_, shadowOpacity),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeDouble,
-      },
-      {
         .name = "shadowRadius",
         .dataTypeSpecific.className = NULL,
         .number = MochiPBPaintStyle_FieldNumber_ShadowRadius,
-        .hasIndex = 6,
+        .hasIndex = 5,
         .offset = (uint32_t)offsetof(MochiPBPaintStyle__storage_, shadowRadius),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeDouble,
       },
       {
         .name = "shadowOffset",
-        .dataTypeSpecific.className = NULL,
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBPoint),
         .number = MochiPBPaintStyle_FieldNumber_ShadowOffset,
-        .hasIndex = 7,
+        .hasIndex = 6,
         .offset = (uint32_t)offsetof(MochiPBPaintStyle__storage_, shadowOffset),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeDouble,
+        .dataType = GPBDataTypeMessage,
       },
       {
         .name = "shadowColor",
         .dataTypeSpecific.className = GPBStringifySymbol(MochiPBColor),
         .number = MochiPBPaintStyle_FieldNumber_ShadowColor,
-        .hasIndex = 8,
+        .hasIndex = 7,
         .offset = (uint32_t)offsetof(MochiPBPaintStyle__storage_, shadowColor),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
@@ -169,7 +159,7 @@ typedef struct MochiPBPaintStyle__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\010\002\017\000\003\013\000\004\013\000\005\014\000\006\r\000\007\014\000\010\014\000\t\013\000";
+        "\007\002\017\000\003\013\000\004\013\000\005\014\000\007\014\000\010\014\000\t\013\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

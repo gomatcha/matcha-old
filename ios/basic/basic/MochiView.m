@@ -257,7 +257,16 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
         view.frame = node.guide.frame;
     }
     if (![node.paintId isEqual:config.node.paintId]) {
-        view.backgroundColor = node.paintOptions.backgroundColor ?: [UIColor clearColor];
+        MochiPaintOptions *paintOptions = node.paintOptions;
+        view.alpha = 1 - paintOptions.transparency;
+        view.backgroundColor = paintOptions.backgroundColor;
+        view.layer.borderColor = paintOptions.borderColor.CGColor;
+        view.layer.borderWidth = paintOptions.borderWidth;
+        view.layer.cornerRadius = paintOptions.cornerRadius;
+        view.layer.shadowRadius = paintOptions.shadowRadius;
+        view.layer.shadowOffset = paintOptions.shadowOffset;
+        view.layer.shadowColor = paintOptions.shadowColor.CGColor;
+        view.layer.shadowOpacity = view.layer.shadowColor == nil ? 0 : 1;
     }
     
     for (NSNumber *i in config.childViews) {

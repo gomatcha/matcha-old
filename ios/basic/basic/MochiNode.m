@@ -89,15 +89,28 @@
 @end
 
 @interface MochiPaintOptions ()
-@property (nonatomic, strong) MochiGoValue *goValue;
+@property (nonatomic, assign) CGFloat transparency;
 @property (nonatomic, strong) UIColor *backgroundColor;
+@property (nonatomic, strong) UIColor *borderColor;
+@property (nonatomic, assign) CGFloat borderWidth;
+@property (nonatomic, assign) CGFloat cornerRadius;
+@property (nonatomic, assign) CGFloat shadowRadius;
+@property (nonatomic, assign) CGSize shadowOffset;
+@property (nonatomic, strong) UIColor *shadowColor;
 @end
 
 @implementation MochiPaintOptions
 
 - (id)initWithProtobuf:(MochiPBPaintStyle *)style {
     if (self = [super init]) {
+        self.transparency = style.transparency;
         self.backgroundColor = [[UIColor alloc] initWithProtobuf:style.backgroundColor];
+        self.borderColor = [[UIColor alloc] initWithProtobuf:style.borderColor];
+        self.borderWidth = style.borderWidth;
+        self.cornerRadius = style.cornerRadius;
+        self.shadowRadius = style.shadowRadius;
+        self.shadowOffset = style.shadowOffset.toCGSize;
+        self.shadowColor = [[UIColor alloc] initWithProtobuf:style.shadowColor];
     }
     return self;
 }

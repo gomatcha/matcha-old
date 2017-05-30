@@ -18,6 +18,9 @@
 }
 
 - (id)initWithProtobuf:(MochiPBColor *)value {
+    if (value == nil) {
+        return nil;
+    }
     return [UIColor colorWithRed:((double)value.red)/0xffff green:((double)value.green)/0xffff blue:((double)value.blue)/0xffff alpha:((double)value.alpha)/0xffff];
 }
 
