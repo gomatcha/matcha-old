@@ -20,6 +20,7 @@ Low:
 * LocalStorage / Keychain / UserDefaults
 * Cliboard
 * Video / Sound / Microphone / Accelerometer
+* Cache layout.
 
 Done:
 * Lifecycle

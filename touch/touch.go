@@ -23,11 +23,6 @@ type _idKey struct{}
 var Key = key{}
 var idKey = _idKey{}
 
-type cacheKey struct {
-	viewId mochi.Id
-	key    interface{}
-}
-
 type Root struct {
 	maxId int64
 }
