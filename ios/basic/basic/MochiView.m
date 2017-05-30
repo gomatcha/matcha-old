@@ -279,7 +279,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
 }
 
 UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, MochiPBRecognizer *pb, MochiViewRoot *viewRoot) {
-    if ([pb.name isEqual:@"github.com/overcyn/mochi/touch TapRecognizer"]) {
+    if ([pb.recognizer.typeURL isEqual:@"type.googleapis.com/mochi.touch.TapRecognizer"]) {
         return [[MochiTapGestureRecognizer alloc] initWitViewRoot:viewRoot viewId:viewId protobuf:pb.recognizer];
     }
     return nil;

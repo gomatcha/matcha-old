@@ -73,7 +73,7 @@ func (r *Root) Build(ctx *view.Context, next *view.Model) {
 	pbRecognizers := &pb.RecognizerList{}
 	allFuncs := map[int64]interface{}{}
 	for k, v := range ids {
-		str, msg, funcs := v.EncodeProtobuf(ctx)
+		msg, funcs := v.EncodeProtobuf(ctx)
 		pbAny, err := ptypes.MarshalAny(msg)
 		if err != nil {
 			continue
@@ -81,7 +81,6 @@ func (r *Root) Build(ctx *view.Context, next *view.Model) {
 
 		pbRecognizer := &pb.Recognizer{
 			Id:         k,
-			Name:       str,
 			Recognizer: pbAny,
 		}
 		pbRecognizers.Recognizers = append(pbRecognizers.Recognizers, pbRecognizer)
@@ -104,7 +103,7 @@ func (r *Root) Build(ctx *view.Context, next *view.Model) {
 }
 
 type Recognizer interface {
-	EncodeProtobuf(ctx *view.Context) (string, proto.Message, map[int64]interface{})
+	EncodeProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{})
 	Equal(Recognizer) bool
 }
 
@@ -136,7 +135,7 @@ func (r *TapRecognizer) Equal(a Recognizer) bool {
 
 // }
 
-func (r *TapRecognizer) EncodeProtobuf(ctx *view.Context) (string, proto.Message, map[int64]interface{}) {
+func (r *TapRecognizer) EncodeProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
 	funcId := ctx.NewFuncId()
 	f := r.RecognizedFunc
 	f2 := func(data []byte) {
@@ -154,7 +153,7 @@ func (r *TapRecognizer) EncodeProtobuf(ctx *view.Context) (string, proto.Message
 		}
 	}
 
-	return "github.com/overcyn/mochi/touch TapRecognizer", &pb.TapRecognizer{
+	return &pb.TapRecognizer{
 			Count:          int64(r.Count),
 			RecognizedFunc: funcId,
 		}, map[int64]interface{}{

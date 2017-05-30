@@ -45,7 +45,7 @@ static GPBFileDescriptor *MochiPBTouchRoot_FileDescriptor(void) {
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
-    descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"touch"
+    descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"mochi.touch"
                                                  objcPrefix:@"MochiPB"
                                                      syntax:GPBFileSyntaxProto3];
   }
