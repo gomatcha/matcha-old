@@ -10,15 +10,17 @@
 		67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 67294E301EC93D9F00910D6E /* MochiDeadlockLogger.m */; };
 		674080C21ED50DB70093D987 /* Protobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 674080C11ED50DB70093D987 /* Protobuf.framework */; };
 		674080C81ED56C880093D987 /* Protobuf.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 674080C11ED50DB70093D987 /* Protobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		674080CB1ED613330093D987 /* Text.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080C91ED613330093D987 /* Text.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		674080CE1ED6311F0093D987 /* Paint.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080CC1ED6311F0093D987 /* Paint.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		674080D21ED74E6B0093D987 /* Scrollview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080D01ED74E6A0093D987 /* Scrollview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		674080D51ED7568E0093D987 /* Imageview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080D31ED7568D0093D987 /* Imageview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		674080D91ED7748F0093D987 /* Button.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080D71ED7748F0093D987 /* Button.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		674080DD1ED8D4800093D987 /* MochiTapGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080DC1ED8D4800093D987 /* MochiTapGestureRecognizer.m */; };
-		674080E01ED8D4A80093D987 /* Touch.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080DE1ED8D4A80093D987 /* Touch.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		674080E31EDA4D480093D987 /* MochiTouchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080E21EDA4D480093D987 /* MochiTouchController.m */; };
 		674080E61EDC7EF80093D987 /* MochiProtobuf.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080E51EDC7EF80093D987 /* MochiProtobuf.m */; };
+		6740812D1EDDE5560093D987 /* Button.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740811E1EDDE5560093D987 /* Button.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6740812E1EDDE5560093D987 /* Imageview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674081201EDDE5560093D987 /* Imageview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6740812F1EDDE5560093D987 /* Layout.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674081221EDDE5560093D987 /* Layout.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		674081301EDDE5560093D987 /* Paint.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674081241EDDE5560093D987 /* Paint.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		674081311EDDE5560093D987 /* Scrollview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674081261EDDE5560093D987 /* Scrollview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		674081321EDDE5560093D987 /* Text.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674081281EDDE5560093D987 /* Text.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		674081331EDDE5560093D987 /* Touch.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740812A1EDDE5560093D987 /* Touch.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		674081341EDDE5560093D987 /* View.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740812C1EDDE5560093D987 /* View.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67608ABC1E8F966500AE2EC7 /* MochiGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608ABB1E8F966500AE2EC7 /* MochiGuide.m */; };
 		67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608AC61EA8545600AE2EC7 /* MochiRoot.m */; };
 		676EF4CD1E8E341800C1488A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4CC1E8E341800C1488A /* main.m */; };
@@ -30,9 +32,7 @@
 		676EF4F41E8ECF5D00C1488A /* MochiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4F31E8ECF5D00C1488A /* MochiView.m */; };
 		676EF4F71E8ED68800C1488A /* MochiBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4F61E8ED68800C1488A /* MochiBridge.m */; };
 		676EF4FA1E8F19A500C1488A /* MochiNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4F91E8F19A500C1488A /* MochiNode.m */; };
-		67D89DD21ED4A5EA0063A1E2 /* Layout.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67D89DD01ED4A5EA0063A1E2 /* Layout.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67D89E211ED4AE1E0063A1E2 /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */; };
-		67D89E341ED507240063A1E2 /* View.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67D89E321ED507240063A1E2 /* View.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,24 +52,28 @@
 		67294E2F1EC93D9F00910D6E /* MochiDeadlockLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiDeadlockLogger.h; sourceTree = "<group>"; };
 		67294E301EC93D9F00910D6E /* MochiDeadlockLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiDeadlockLogger.m; sourceTree = "<group>"; };
 		674080C11ED50DB70093D987 /* Protobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Protobuf.framework; path = "../../../../../../../../Library/Developer/Xcode/DerivedData/Mochi-golgwzqwibyynlcwpuxsrmkwyenm/Build/Products/Debug-iphoneos/Protobuf.framework"; sourceTree = "<group>"; };
-		674080C91ED613330093D987 /* Text.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Text.pbobjc.m; sourceTree = "<group>"; };
-		674080CA1ED613330093D987 /* Text.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Text.pbobjc.h; sourceTree = "<group>"; };
-		674080CC1ED6311F0093D987 /* Paint.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Paint.pbobjc.m; sourceTree = "<group>"; };
-		674080CD1ED6311F0093D987 /* Paint.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Paint.pbobjc.h; sourceTree = "<group>"; };
-		674080D01ED74E6A0093D987 /* Scrollview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scrollview.pbobjc.m; sourceTree = "<group>"; };
-		674080D11ED74E6A0093D987 /* Scrollview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scrollview.pbobjc.h; sourceTree = "<group>"; };
-		674080D31ED7568D0093D987 /* Imageview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Imageview.pbobjc.m; sourceTree = "<group>"; };
-		674080D41ED7568D0093D987 /* Imageview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Imageview.pbobjc.h; sourceTree = "<group>"; };
-		674080D71ED7748F0093D987 /* Button.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Button.pbobjc.m; sourceTree = "<group>"; };
-		674080D81ED7748F0093D987 /* Button.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.pbobjc.h; sourceTree = "<group>"; };
 		674080DB1ED8D4800093D987 /* MochiTapGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiTapGestureRecognizer.h; sourceTree = "<group>"; };
 		674080DC1ED8D4800093D987 /* MochiTapGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiTapGestureRecognizer.m; sourceTree = "<group>"; };
-		674080DE1ED8D4A80093D987 /* Touch.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Touch.pbobjc.m; sourceTree = "<group>"; };
-		674080DF1ED8D4A80093D987 /* Touch.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Touch.pbobjc.h; sourceTree = "<group>"; };
 		674080E11EDA4D480093D987 /* MochiTouchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiTouchController.h; sourceTree = "<group>"; };
 		674080E21EDA4D480093D987 /* MochiTouchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiTouchController.m; sourceTree = "<group>"; };
 		674080E41EDA9F6A0093D987 /* MochiProtobuf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MochiProtobuf.h; sourceTree = "<group>"; };
 		674080E51EDC7EF80093D987 /* MochiProtobuf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiProtobuf.m; sourceTree = "<group>"; };
+		6740811D1EDDE5560093D987 /* Button.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.pbobjc.h; sourceTree = "<group>"; };
+		6740811E1EDDE5560093D987 /* Button.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Button.pbobjc.m; sourceTree = "<group>"; };
+		6740811F1EDDE5560093D987 /* Imageview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Imageview.pbobjc.h; sourceTree = "<group>"; };
+		674081201EDDE5560093D987 /* Imageview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Imageview.pbobjc.m; sourceTree = "<group>"; };
+		674081211EDDE5560093D987 /* Layout.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.pbobjc.h; sourceTree = "<group>"; };
+		674081221EDDE5560093D987 /* Layout.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Layout.pbobjc.m; sourceTree = "<group>"; };
+		674081231EDDE5560093D987 /* Paint.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Paint.pbobjc.h; sourceTree = "<group>"; };
+		674081241EDDE5560093D987 /* Paint.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Paint.pbobjc.m; sourceTree = "<group>"; };
+		674081251EDDE5560093D987 /* Scrollview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scrollview.pbobjc.h; sourceTree = "<group>"; };
+		674081261EDDE5560093D987 /* Scrollview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scrollview.pbobjc.m; sourceTree = "<group>"; };
+		674081271EDDE5560093D987 /* Text.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Text.pbobjc.h; sourceTree = "<group>"; };
+		674081281EDDE5560093D987 /* Text.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Text.pbobjc.m; sourceTree = "<group>"; };
+		674081291EDDE5560093D987 /* Touch.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Touch.pbobjc.h; sourceTree = "<group>"; };
+		6740812A1EDDE5560093D987 /* Touch.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Touch.pbobjc.m; sourceTree = "<group>"; };
+		6740812B1EDDE5560093D987 /* View.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.pbobjc.h; sourceTree = "<group>"; };
+		6740812C1EDDE5560093D987 /* View.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.pbobjc.m; sourceTree = "<group>"; };
 		67608ABA1E8F966500AE2EC7 /* MochiGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiGuide.h; sourceTree = "<group>"; };
 		67608ABB1E8F966500AE2EC7 /* MochiGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiGuide.m; sourceTree = "<group>"; };
 		67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mochi.framework; sourceTree = "<group>"; };
@@ -92,10 +96,6 @@
 		676EF4F61E8ED68800C1488A /* MochiBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiBridge.m; sourceTree = "<group>"; };
 		676EF4F81E8F19A500C1488A /* MochiNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiNode.h; sourceTree = "<group>"; };
 		676EF4F91E8F19A500C1488A /* MochiNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiNode.m; sourceTree = "<group>"; };
-		67D89DD01ED4A5EA0063A1E2 /* Layout.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Layout.pbobjc.m; sourceTree = "<group>"; };
-		67D89DD11ED4A5EA0063A1E2 /* Layout.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.pbobjc.h; sourceTree = "<group>"; };
-		67D89E321ED507240063A1E2 /* View.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.pbobjc.m; sourceTree = "<group>"; };
-		67D89E331ED507240063A1E2 /* View.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.pbobjc.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,31 +111,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		674080D61ED756AC0093D987 /* Protobuf */ = {
-			isa = PBXGroup;
-			children = (
-				674080E41EDA9F6A0093D987 /* MochiProtobuf.h */,
-				674080E51EDC7EF80093D987 /* MochiProtobuf.m */,
-				674080DE1ED8D4A80093D987 /* Touch.pbobjc.m */,
-				674080DF1ED8D4A80093D987 /* Touch.pbobjc.h */,
-				674080D71ED7748F0093D987 /* Button.pbobjc.m */,
-				674080D81ED7748F0093D987 /* Button.pbobjc.h */,
-				674080D31ED7568D0093D987 /* Imageview.pbobjc.m */,
-				674080D41ED7568D0093D987 /* Imageview.pbobjc.h */,
-				674080D01ED74E6A0093D987 /* Scrollview.pbobjc.m */,
-				674080D11ED74E6A0093D987 /* Scrollview.pbobjc.h */,
-				674080CC1ED6311F0093D987 /* Paint.pbobjc.m */,
-				674080CD1ED6311F0093D987 /* Paint.pbobjc.h */,
-				674080C91ED613330093D987 /* Text.pbobjc.m */,
-				674080CA1ED613330093D987 /* Text.pbobjc.h */,
-				67D89E331ED507240063A1E2 /* View.pbobjc.h */,
-				67D89E321ED507240063A1E2 /* View.pbobjc.m */,
-				67D89DD11ED4A5EA0063A1E2 /* Layout.pbobjc.h */,
-				67D89DD01ED4A5EA0063A1E2 /* Layout.pbobjc.m */,
-			);
-			name = Protobuf;
-			sourceTree = "<group>";
-		};
 		674080DA1ED8D41F0093D987 /* Touch */ = {
 			isa = PBXGroup;
 			children = (
@@ -145,6 +120,69 @@
 				674080DC1ED8D4800093D987 /* MochiTapGestureRecognizer.m */,
 			);
 			name = Touch;
+			sourceTree = "<group>";
+		};
+		674081171EDDE5560093D987 /* protobuf */ = {
+			isa = PBXGroup;
+			children = (
+				674081181EDDE5560093D987 /* github.com */,
+			);
+			path = protobuf;
+			sourceTree = "<group>";
+		};
+		674081181EDDE5560093D987 /* github.com */ = {
+			isa = PBXGroup;
+			children = (
+				674081191EDDE5560093D987 /* overcyn */,
+			);
+			path = github.com;
+			sourceTree = "<group>";
+		};
+		674081191EDDE5560093D987 /* overcyn */ = {
+			isa = PBXGroup;
+			children = (
+				6740811A1EDDE5560093D987 /* mochi */,
+			);
+			path = overcyn;
+			sourceTree = "<group>";
+		};
+		6740811A1EDDE5560093D987 /* mochi */ = {
+			isa = PBXGroup;
+			children = (
+				6740811B1EDDE5560093D987 /* pb */,
+			);
+			path = mochi;
+			sourceTree = "<group>";
+		};
+		6740811B1EDDE5560093D987 /* pb */ = {
+			isa = PBXGroup;
+			children = (
+				6740811C1EDDE5560093D987 /* button */,
+				6740811F1EDDE5560093D987 /* Imageview.pbobjc.h */,
+				674081201EDDE5560093D987 /* Imageview.pbobjc.m */,
+				674081211EDDE5560093D987 /* Layout.pbobjc.h */,
+				674081221EDDE5560093D987 /* Layout.pbobjc.m */,
+				674081231EDDE5560093D987 /* Paint.pbobjc.h */,
+				674081241EDDE5560093D987 /* Paint.pbobjc.m */,
+				674081251EDDE5560093D987 /* Scrollview.pbobjc.h */,
+				674081261EDDE5560093D987 /* Scrollview.pbobjc.m */,
+				674081271EDDE5560093D987 /* Text.pbobjc.h */,
+				674081281EDDE5560093D987 /* Text.pbobjc.m */,
+				674081291EDDE5560093D987 /* Touch.pbobjc.h */,
+				6740812A1EDDE5560093D987 /* Touch.pbobjc.m */,
+				6740812B1EDDE5560093D987 /* View.pbobjc.h */,
+				6740812C1EDDE5560093D987 /* View.pbobjc.m */,
+			);
+			path = pb;
+			sourceTree = "<group>";
+		};
+		6740811C1EDDE5560093D987 /* button */ = {
+			isa = PBXGroup;
+			children = (
+				6740811D1EDDE5560093D987 /* Button.pbobjc.h */,
+				6740811E1EDDE5560093D987 /* Button.pbobjc.m */,
+			);
+			path = button;
 			sourceTree = "<group>";
 		};
 		676EF4BF1E8E341800C1488A = {
@@ -191,8 +229,10 @@
 		676EF4F11E8ECF4400C1488A /* Mochi */ = {
 			isa = PBXGroup;
 			children = (
+				674081171EDDE5560093D987 /* protobuf */,
 				674080DA1ED8D41F0093D987 /* Touch */,
-				674080D61ED756AC0093D987 /* Protobuf */,
+				674080E41EDA9F6A0093D987 /* MochiProtobuf.h */,
+				674080E51EDC7EF80093D987 /* MochiProtobuf.m */,
 				67608AC51EA8545600AE2EC7 /* MochiRoot.h */,
 				67608AC61EA8545600AE2EC7 /* MochiRoot.m */,
 				676EF4F51E8ED68800C1488A /* MochiBridge.h */,
@@ -292,24 +332,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67D89DD21ED4A5EA0063A1E2 /* Layout.pbobjc.m in Sources */,
-				674080CE1ED6311F0093D987 /* Paint.pbobjc.m in Sources */,
-				67D89E341ED507240063A1E2 /* View.pbobjc.m in Sources */,
-				674080CB1ED613330093D987 /* Text.pbobjc.m in Sources */,
-				674080D21ED74E6B0093D987 /* Scrollview.pbobjc.m in Sources */,
-				674080D51ED7568E0093D987 /* Imageview.pbobjc.m in Sources */,
-				674080D91ED7748F0093D987 /* Button.pbobjc.m in Sources */,
+				674081321EDDE5560093D987 /* Text.pbobjc.m in Sources */,
+				6740812E1EDDE5560093D987 /* Imageview.pbobjc.m in Sources */,
 				67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */,
 				674080E31EDA4D480093D987 /* MochiTouchController.m in Sources */,
-				674080E01ED8D4A80093D987 /* Touch.pbobjc.m in Sources */,
 				674080DD1ED8D4800093D987 /* MochiTapGestureRecognizer.m in Sources */,
+				674081311EDDE5560093D987 /* Scrollview.pbobjc.m in Sources */,
+				674081301EDDE5560093D987 /* Paint.pbobjc.m in Sources */,
 				676EF4E41E8E34E300C1488A /* ViewController.m in Sources */,
 				67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */,
+				6740812F1EDDE5560093D987 /* Layout.pbobjc.m in Sources */,
 				676EF4D01E8E341900C1488A /* AppDelegate.m in Sources */,
 				676EF4F41E8ECF5D00C1488A /* MochiView.m in Sources */,
 				676EF4FA1E8F19A500C1488A /* MochiNode.m in Sources */,
+				6740812D1EDDE5560093D987 /* Button.pbobjc.m in Sources */,
+				674081331EDDE5560093D987 /* Touch.pbobjc.m in Sources */,
 				676EF4F01E8ECF2700C1488A /* MochiViewController.m in Sources */,
 				67608ABC1E8F966500AE2EC7 /* MochiGuide.m in Sources */,
+				674081341EDDE5560093D987 /* View.pbobjc.m in Sources */,
 				674080E61EDC7EF80093D987 /* MochiProtobuf.m in Sources */,
 				676EF4F71E8ED68800C1488A /* MochiBridge.m in Sources */,
 				676EF4CD1E8E341800C1488A /* main.m in Sources */,
@@ -436,6 +476,7 @@
 					"$(inherited)",
 					"GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1",
 				);
+				HEADER_SEARCH_PATHS = "${SRCROOT}/basic/protobuf";
 				INFOPLIST_FILE = basic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.overcyn.basic;
@@ -455,6 +496,7 @@
 					"$(PROJECT_DIR)/basic",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS=1";
+				HEADER_SEARCH_PATHS = "${SRCROOT}/basic/protobuf";
 				INFOPLIST_FILE = basic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.overcyn.basic;

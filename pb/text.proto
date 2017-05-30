@@ -1,6 +1,6 @@
 syntax = "proto3";
 package text;
-import "layout.proto";
+import "github.com/overcyn/mochi/pb/layout.proto";
 
 option go_package = "pb";
 option objc_class_prefix = "MochiPB";

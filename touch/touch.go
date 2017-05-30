@@ -2,12 +2,10 @@ package touch
 
 import (
 	"fmt"
-	"reflect"
 	"time"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/view"
@@ -73,7 +71,7 @@ func (r *Root) Build(ctx *view.Context, next *view.Model) {
 
 	// Serialize into protobuf.
 	pbRecognizers := &pb.RecognizerList{}
-	allFuncs := map[int64]reflect.Value{}
+	allFuncs := map[int64]interface{}{}
 	for k, v := range ids {
 		str, msg, funcs := v.EncodeProtobuf(ctx)
 		pbAny, err := ptypes.MarshalAny(msg)
@@ -98,7 +96,7 @@ func (r *Root) Build(ctx *view.Context, next *view.Model) {
 	next.NativeValues["github.com/overcyn/mochi/touch"] = pbRecognizers
 
 	if next.NativeFuncs == nil {
-		next.NativeFuncs = map[int64]reflect.Value{}
+		next.NativeFuncs = map[int64]interface{}{}
 	}
 	for k, v := range allFuncs {
 		next.NativeFuncs[k] = v
@@ -106,7 +104,7 @@ func (r *Root) Build(ctx *view.Context, next *view.Model) {
 }
 
 type Recognizer interface {
-	EncodeProtobuf(ctx *view.Context) (string, proto.Message, map[int64]reflect.Value)
+	EncodeProtobuf(ctx *view.Context) (string, proto.Message, map[int64]interface{})
 	Equal(Recognizer) bool
 }
 
@@ -134,7 +132,11 @@ func (r *TapRecognizer) Equal(a Recognizer) bool {
 	return r.Count == b.Count
 }
 
-func (r *TapRecognizer) EncodeProtobuf(ctx *view.Context) (string, proto.Message, map[int64]reflect.Value) {
+// func (r *TapRecognizer) MarshalMochi(e *encode.Encoder) (proto.Message, error) {
+
+// }
+
+func (r *TapRecognizer) EncodeProtobuf(ctx *view.Context) (string, proto.Message, map[int64]interface{}) {
 	funcId := ctx.NewFuncId()
 	f := r.RecognizedFunc
 	f2 := func(data []byte) {
@@ -155,8 +157,8 @@ func (r *TapRecognizer) EncodeProtobuf(ctx *view.Context) (string, proto.Message
 	return "github.com/overcyn/mochi/touch TapRecognizer", &pb.TapRecognizer{
 			Count:          int64(r.Count),
 			RecognizedFunc: funcId,
-		}, map[int64]reflect.Value{
-			funcId: reflect.ValueOf(f2),
+		}, map[int64]interface{}{
+			funcId: f2,
 		}
 }
 
@@ -167,13 +169,20 @@ type PressEvent struct {
 }
 
 type PressRecognizer struct {
-	key           interface{}
 	MinDuration   time.Duration
 	BeganFunc     func(e *PressEvent)
 	EndFunc       func(e *PressEvent)
 	CancelledFunc func(e *PressEvent)
 	ChangedFunc   func(e *PressEvent)
 }
+
+// func (r *PressRecognizer) Equal(a Recognizer) bool {
+// 	b, ok := a.(*PressRecognizer)
+// 	if !ok {
+// 		return false
+// 	}
+// 	return r.MinDuration == b.MinDuration
+// }
 
 type PanEvent struct {
 	Timestamp time.Time

@@ -1,4 +1,7 @@
 package pb
 
-//go:generate protoc --go_out=. layout.proto text.proto paint.proto view.proto scrollview.proto imageview.proto button.proto touch.proto
-// protoc --objc_out=. layout.proto text.proto paint.proto view.proto scrollview.proto imageview.proto button.proto touch.proto
+//go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/mochi/pb/*.proto )"
+//go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/mochi/pb/button/*.proto )"
+
+//go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/mochi/ios/basic/basic/protobuf github.com/overcyn/mochi/pb/*.proto )"
+//go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/mochi/ios/basic/basic/protobuf github.com/overcyn/mochi/pb/button/*.proto )"

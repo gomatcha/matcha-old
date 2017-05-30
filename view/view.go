@@ -2,7 +2,6 @@ package view
 
 import (
 	"fmt"
-	"reflect"
 	"sync"
 
 	"github.com/gogo/protobuf/proto"
@@ -104,7 +103,7 @@ type Model struct {
 	NativeViewName  string
 	NativeViewState proto.Message
 	NativeValues    map[string]proto.Message
-	NativeFuncs     map[int64]reflect.Value
+	NativeFuncs     map[int64]interface{}
 }
 
 func (n *Model) Add(v View) {

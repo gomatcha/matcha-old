@@ -7,7 +7,7 @@ import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/pb"
+	pbbutton "github.com/overcyn/mochi/pb/button"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochibridge"
@@ -98,7 +98,7 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 		Layouter:       &buttonLayouter{formattedText: ft},
 		Painter:        v.Painter,
 		NativeViewName: "github.com/overcyn/mochi/view/button",
-		NativeViewState: &pb.Button{
+		NativeViewState: &pbbutton.Button{
 			Text: ft.EncodeProtobuf(),
 		},
 	}

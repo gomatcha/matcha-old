@@ -138,7 +138,7 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewRoot *root);
     if (update) {
         GPBAny *state = value.nativeViewState;
         NSError *error = nil;
-        MochiPBButton *pbbutton = (id)[state unpackMessageClass:[MochiPBButton class] error:&error];
+        MochiPBButtonButton *pbbutton = (id)[state unpackMessageClass:[MochiPBButtonButton class] error:&error];
         
         NSAttributedString *string = [[NSAttributedString alloc] initWithProtobuf:pbbutton.text];
         [self.button setAttributedTitle:string forState:UIControlStateNormal];

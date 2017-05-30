@@ -292,8 +292,9 @@ func (root *root) call(funcId int64, viewId int64, args []reflect.Value) []refle
 	if !ok {
 		return nil
 	}
+	v := reflect.ValueOf(f)
 
-	return f.Call(args)
+	return v.Call(args)
 }
 
 func (root *root) newId() mochi.Id {
