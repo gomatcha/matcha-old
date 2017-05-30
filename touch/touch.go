@@ -73,7 +73,7 @@ func (r *Root) Build(ctx *view.Context, next *view.Model) {
 	pbRecognizers := &pb.RecognizerList{}
 	allFuncs := map[int64]interface{}{}
 	for k, v := range ids {
-		msg, funcs := v.EncodeProtobuf(ctx)
+		msg, funcs := v.MarshalProtobuf(ctx)
 		pbAny, err := ptypes.MarshalAny(msg)
 		if err != nil {
 			continue
@@ -103,7 +103,7 @@ func (r *Root) Build(ctx *view.Context, next *view.Model) {
 }
 
 type Recognizer interface {
-	EncodeProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{})
+	MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{})
 	Equal(Recognizer) bool
 }
 
@@ -112,10 +112,11 @@ type TapEvent struct {
 	Position  layout.Point
 }
 
-func (e *TapEvent) DecodeProtobuf(pbevent *pb.TapEvent) {
+func (e *TapEvent) DecodeProtobuf(pbevent *pb.TapEvent) error {
 	t, _ := ptypes.Timestamp(pbevent.Timestamp)
 	e.Timestamp = t
 	e.Position.DecodeProtobuf(pbevent.Position)
+	return nil
 }
 
 type TapRecognizer struct {
@@ -131,25 +132,24 @@ func (r *TapRecognizer) Equal(a Recognizer) bool {
 	return r.Count == b.Count
 }
 
-// func (r *TapRecognizer) MarshalMochi(e *encode.Encoder) (proto.Message, error) {
-
-// }
-
-func (r *TapRecognizer) EncodeProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
+func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
 	funcId := ctx.NewFuncId()
-	f := r.RecognizedFunc
-	f2 := func(data []byte) {
+	f := func(data []byte) {
 		pbevent := &pb.TapEvent{}
 		err := proto.Unmarshal(data, pbevent)
 		if err != nil {
 			fmt.Println("error", err)
+			return
 		}
 
 		event := &TapEvent{}
-		event.DecodeProtobuf(pbevent)
+		if err := event.DecodeProtobuf(pbevent); err != nil {
+			fmt.Println("error", err)
+			return
+		}
 
-		if f != nil {
-			f(event)
+		if r.RecognizedFunc != nil {
+			r.RecognizedFunc(event)
 		}
 	}
 
@@ -157,7 +157,7 @@ func (r *TapRecognizer) EncodeProtobuf(ctx *view.Context) (proto.Message, map[in
 			Count:          int64(r.Count),
 			RecognizedFunc: funcId,
 		}, map[int64]interface{}{
-			funcId: f2,
+			funcId: f,
 		}
 }
 
@@ -175,13 +175,20 @@ type PressRecognizer struct {
 	ChangedFunc   func(e *PressEvent)
 }
 
-// func (r *PressRecognizer) Equal(a Recognizer) bool {
-// 	b, ok := a.(*PressRecognizer)
-// 	if !ok {
-// 		return false
-// 	}
-// 	return r.MinDuration == b.MinDuration
-// }
+func (r *PressRecognizer) Equal(a Recognizer) bool {
+	b, ok := a.(*PressRecognizer)
+	if !ok {
+		return false
+	}
+	return r.MinDuration == b.MinDuration
+}
+
+func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
+	// beganId := ctx.NewFuncId()
+	// beganFunc := func(data []byte) {
+	// }
+	return nil, nil
+}
 
 type PanEvent struct {
 	Timestamp time.Time

@@ -53,15 +53,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef GPB_ENUM(MochiPBRecognizer_FieldNumber) {
   MochiPBRecognizer_FieldNumber_Id_p = 1,
-  MochiPBRecognizer_FieldNumber_Name = 2,
   MochiPBRecognizer_FieldNumber_Recognizer = 3,
 };
 
 @interface MochiPBRecognizer : GPBMessage
 
 @property(nonatomic, readwrite) int64_t id_p;
-
-@property(nonatomic, readwrite, copy, null_resettable) NSString *name;
 
 @property(nonatomic, readwrite, strong, null_resettable) GPBAny *recognizer;
 /** Test to see if @c recognizer has been set. */

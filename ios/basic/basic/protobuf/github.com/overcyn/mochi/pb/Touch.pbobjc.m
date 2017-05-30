@@ -57,12 +57,10 @@ static GPBFileDescriptor *MochiPBTouchRoot_FileDescriptor(void) {
 @implementation MochiPBRecognizer
 
 @dynamic id_p;
-@dynamic name;
 @dynamic hasRecognizer, recognizer;
 
 typedef struct MochiPBRecognizer__storage_ {
   uint32_t _has_storage_[1];
-  NSString *name;
   GPBAny *recognizer;
   int64_t id_p;
 } MochiPBRecognizer__storage_;
@@ -83,19 +81,10 @@ typedef struct MochiPBRecognizer__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
-        .name = "name",
-        .dataTypeSpecific.className = NULL,
-        .number = MochiPBRecognizer_FieldNumber_Name,
-        .hasIndex = 1,
-        .offset = (uint32_t)offsetof(MochiPBRecognizer__storage_, name),
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeString,
-      },
-      {
         .name = "recognizer",
         .dataTypeSpecific.className = GPBStringifySymbol(GPBAny),
         .number = MochiPBRecognizer_FieldNumber_Recognizer,
-        .hasIndex = 2,
+        .hasIndex = 1,
         .offset = (uint32_t)offsetof(MochiPBRecognizer__storage_, recognizer),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,

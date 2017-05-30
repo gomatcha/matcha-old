@@ -60,7 +60,7 @@ func NewRoot(f func(Config) View, id int) *Root {
 			return
 		}
 
-		pb, err := vc.root.MarshalProtobuf()
+		pb, err := vc.root.MarshalProtobuf2()
 		if err != nil {
 			fmt.Println("err", err)
 			return
@@ -231,7 +231,7 @@ func (root *root) update(size layout.Point) bool {
 	return updated
 }
 
-func (root *root) MarshalProtobuf() ([]byte, error) {
+func (root *root) MarshalProtobuf2() ([]byte, error) {
 	return proto.Marshal(root.EncodeProtobuf())
 }
 
