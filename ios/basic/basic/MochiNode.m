@@ -7,11 +7,7 @@
 //
 
 #import "MochiNode.h"
-#import "MochiBridge.h"
-#import "View.pbobjc.h"
-#import "Layout.pbobjc.h"
-#import "Text.pbobjc.h"
-#import "Paint.pbobjc.h"
+#import "MochiProtobuf.h"
 
 @interface MochiViewRoot ()
 @end
