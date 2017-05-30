@@ -21,6 +21,7 @@
 		674081321EDDE5560093D987 /* Text.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 674081281EDDE5560093D987 /* Text.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		674081331EDDE5560093D987 /* Touch.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740812A1EDDE5560093D987 /* Touch.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		674081341EDDE5560093D987 /* View.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6740812C1EDDE5560093D987 /* View.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		674081371EDE05E00093D987 /* MochiPressGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 674081361EDE05E00093D987 /* MochiPressGestureRecognizer.m */; };
 		67608ABC1E8F966500AE2EC7 /* MochiGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608ABB1E8F966500AE2EC7 /* MochiGuide.m */; };
 		67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608AC61EA8545600AE2EC7 /* MochiRoot.m */; };
 		676EF4CD1E8E341800C1488A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4CC1E8E341800C1488A /* main.m */; };
@@ -74,6 +75,8 @@
 		6740812A1EDDE5560093D987 /* Touch.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Touch.pbobjc.m; sourceTree = "<group>"; };
 		6740812B1EDDE5560093D987 /* View.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.pbobjc.h; sourceTree = "<group>"; };
 		6740812C1EDDE5560093D987 /* View.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.pbobjc.m; sourceTree = "<group>"; };
+		674081351EDE05E00093D987 /* MochiPressGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiPressGestureRecognizer.h; sourceTree = "<group>"; };
+		674081361EDE05E00093D987 /* MochiPressGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiPressGestureRecognizer.m; sourceTree = "<group>"; };
 		67608ABA1E8F966500AE2EC7 /* MochiGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiGuide.h; sourceTree = "<group>"; };
 		67608ABB1E8F966500AE2EC7 /* MochiGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiGuide.m; sourceTree = "<group>"; };
 		67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mochi.framework; sourceTree = "<group>"; };
@@ -118,6 +121,8 @@
 				674080E21EDA4D480093D987 /* MochiTouchController.m */,
 				674080DB1ED8D4800093D987 /* MochiTapGestureRecognizer.h */,
 				674080DC1ED8D4800093D987 /* MochiTapGestureRecognizer.m */,
+				674081351EDE05E00093D987 /* MochiPressGestureRecognizer.h */,
+				674081361EDE05E00093D987 /* MochiPressGestureRecognizer.m */,
 			);
 			name = Touch;
 			sourceTree = "<group>";
@@ -352,6 +357,7 @@
 				674081341EDDE5560093D987 /* View.pbobjc.m in Sources */,
 				674080E61EDC7EF80093D987 /* MochiProtobuf.m in Sources */,
 				676EF4F71E8ED68800C1488A /* MochiBridge.m in Sources */,
+				674081371EDE05E00093D987 /* MochiPressGestureRecognizer.m in Sources */,
 				676EF4CD1E8E341800C1488A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

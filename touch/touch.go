@@ -161,18 +161,41 @@ func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[i
 		}
 }
 
+type EventKind int
+
+const (
+	EventKindBegan EventKind = iota
+	EventKindChanged
+	EventKindCancelled
+	EventKindEnded
+)
+
 type PressEvent struct {
+	Kind      EventKind
 	Timestamp time.Time
 	Position  layout.Point
 	Duration  time.Duration
 }
 
+func (e *PressEvent) UnmarshalProtobuf(pbevent *pb.PressEvent) error {
+	d, err := ptypes.Duration(pbevent.Duration)
+	if err != nil {
+		return err
+	}
+	t, err := ptypes.Timestamp(pbevent.Timestamp)
+	if err != nil {
+		return err
+	}
+	e.Kind = EventKind(pbevent.Kind)
+	e.Timestamp = t
+	e.Position.UnmarshalProtobuf(pbevent.Position)
+	e.Duration = d
+	return nil
+}
+
 type PressRecognizer struct {
-	MinDuration   time.Duration
-	BeganFunc     func(e *PressEvent)
-	EndFunc       func(e *PressEvent)
-	CancelledFunc func(e *PressEvent)
-	ChangedFunc   func(e *PressEvent)
+	MinDuration time.Duration
+	OnEvent     func(e *PressEvent)
 }
 
 func (r *PressRecognizer) Equal(a Recognizer) bool {
@@ -184,10 +207,31 @@ func (r *PressRecognizer) Equal(a Recognizer) bool {
 }
 
 func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
-	// beganId := ctx.NewFuncId()
-	// beganFunc := func(data []byte) {
-	// }
-	return nil, nil
+	funcId := ctx.NewFuncId()
+	f := func(data []byte) {
+		event := &PressEvent{}
+		pbevent := &pb.PressEvent{}
+		err := proto.Unmarshal(data, pbevent)
+		if err != nil {
+			fmt.Println("error", err)
+			return
+		}
+
+		if err := event.UnmarshalProtobuf(pbevent); err != nil {
+			fmt.Println("error", err)
+			return
+		}
+		if r.OnEvent != nil {
+			r.OnEvent(event)
+		}
+	}
+
+	return &pb.PressRecognizer{
+			MinDuration: ptypes.DurationProto(r.MinDuration),
+			FuncId:      funcId,
+		}, map[int64]interface{}{
+			funcId: f,
+		}
 }
 
 type PanEvent struct {
@@ -198,7 +242,7 @@ type PanEvent struct {
 
 type PanRecognizer struct {
 	key           interface{}
-	BeganFunc     func(e *PanEvent)
+	OnEvent       func(e *PanEvent)
 	EndFunc       func(e *PanEvent)
 	CancelledFunc func(e *PanEvent)
 	ChangedFunc   func(e *PanEvent)

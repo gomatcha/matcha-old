@@ -32,6 +32,7 @@ It has these top-level messages:
 	TapRecognizer
 	TapEvent
 	PressRecognizer
+	PressEvent
 	PanRecognizer
 	Node
 	Root

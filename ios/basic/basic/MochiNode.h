@@ -15,6 +15,7 @@
 @class MochiPBRoot;
 @class MochiPBGuide;
 @class MochiPBPaintStyle;
+@class MochiPBRecognizer;
 @class GPBAny;
 
 @interface MochiViewRoot : NSObject
@@ -40,6 +41,7 @@
 @property (nonatomic, readonly) NSNumber *buildId;
 @property (nonatomic, readonly) NSNumber *layoutId;
 @property (nonatomic, readonly) NSNumber *paintId;
+@property (nonatomic, readonly) NSDictionary<NSNumber *, GPBAny *> *touchRecognizers;
 @end
 
 @interface MochiPaintOptions : NSObject

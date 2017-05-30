@@ -2,6 +2,7 @@ syntax = "proto3";
 package mochi.touch;
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
 import "github.com/overcyn/mochi/pb/layout.proto";
 
 option go_package = "pb";
@@ -26,7 +27,24 @@ message TapEvent {
     layout.Point position = 2;
 }
 
+
+enum EventKind {
+    EVENT_KIND_BEGAN = 0;
+    EVENT_KIND_CHANGED = 1;
+    EVENT_KIND_CANCELLED = 2;
+    EVENT_KIND_ENDED = 3;
+}
+
 message PressRecognizer {
+    google.protobuf.Duration minDuration = 1;
+    int64 funcId = 2;
+}
+
+message PressEvent {
+    google.protobuf.Timestamp timestamp = 1;
+    layout.Point position = 2;
+    EventKind kind = 3;
+    google.protobuf.Duration duration = 4;
 }
 
 message PanRecognizer {

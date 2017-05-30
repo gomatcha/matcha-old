@@ -2,6 +2,7 @@ package touch
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout/constraint"
@@ -24,7 +25,8 @@ func init() {
 
 type TouchView struct {
 	*view.Embed
-	counter int
+	counter      int
+	pressCounter int
 }
 
 func New(c view.Config) *TouchView {
@@ -62,9 +64,37 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 		Family: "Helvetica Neue",
 		Size:   20,
 	})
-	l.Add(chl2, func(s *constraint.Solver) {
+	g2 := l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
 		s.LeftEqual(g1.Left())
+	})
+
+	chl3 := NewPressChildView(ctx, 3)
+	chl3.OnPress = func() {
+		v.Lock()
+		defer v.Unlock()
+
+		fmt.Println("On Press")
+		v.pressCounter += 1
+		go v.Update(nil)
+	}
+	g3 := l.Add(chl3, func(s *constraint.Solver) {
+		s.TopEqual(g2.Bottom())
+		s.LeftEqual(g2.Left())
+		s.WidthEqual(constraint.Const(100))
+		s.HeightEqual(constraint.Const(100))
+	})
+
+	chl4 := textview.New(ctx, 4)
+	chl4.Painter = &paint.Style{BackgroundColor: colornames.Red}
+	chl4.String = fmt.Sprintf("Press: %v", v.pressCounter)
+	chl4.Style.SetFont(text.Font{
+		Family: "Helvetica Neue",
+		Size:   20,
+	})
+	l.Add(chl4, func(s *constraint.Solver) {
+		s.TopEqual(g3.Bottom())
+		s.LeftEqual(g3.Left())
 	})
 
 	l.Solve(func(s *constraint.Solver) {
@@ -73,9 +103,42 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Children: map[mochi.Id]view.View{chl1.Id(): chl1, chl2.Id(): chl2},
+		Children: map[mochi.Id]view.View{chl1.Id(): chl1, chl2.Id(): chl2, chl3.Id(): chl3, chl4.Id(): chl4},
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+	}
+}
+
+type PressChildView struct {
+	*view.Embed
+	OnPress func()
+}
+
+func NewPressChildView(ctx *view.Context, key interface{}) *PressChildView {
+	if v, ok := ctx.Prev(key).(*PressChildView); ok {
+		return v
+	}
+	return &PressChildView{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
+}
+
+func (v *PressChildView) Build(ctx *view.Context) *view.Model {
+	tap := &touch.PressRecognizer{
+		MinDuration: time.Second / 2,
+		OnEvent: func(e *touch.PressEvent) {
+			fmt.Println("what the what")
+			v.Lock()
+			defer v.Unlock()
+			v.OnPress()
+		},
+	}
+
+	return &view.Model{
+		Painter: &paint.Style{BackgroundColor: colornames.Blue},
+		Values: map[interface{}]interface{}{
+			touch.Key: []touch.Recognizer{tap},
+		},
 	}
 }
 

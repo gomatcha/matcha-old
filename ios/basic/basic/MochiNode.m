@@ -56,6 +56,7 @@
 @property (nonatomic, strong) NSString *nativeViewName;
 @property (nonatomic, strong) GPBAny *nativeViewState;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, GPBAny*> *nativeValues;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber *, GPBAny *> *touchRecognizers;
 @end
 
 @implementation MochiNode
@@ -78,6 +79,17 @@
             children[child.identifier] = child;
         }
         self.nodeChildren = children;
+        
+        GPBAny *any = self.nativeValues[@"github.com/overcyn/mochi/touch"];
+        NSError *error = nil;
+        MochiPBRecognizerList *recognizerList = (id)[any unpackMessageClass:[MochiPBRecognizerList class] error:&error];
+        if (error == nil) {
+            NSMutableDictionary *touchRecognizers = [NSMutableDictionary dictionary];
+            for (MochiPBRecognizer *i in recognizerList.recognizersArray) {
+                touchRecognizers[@(i.id_p)] = i.recognizer;
+            }
+            self.touchRecognizers = touchRecognizers;
+        }
     }
     return self;
 }

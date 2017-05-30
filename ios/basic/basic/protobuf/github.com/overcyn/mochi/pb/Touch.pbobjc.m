@@ -16,9 +16,11 @@
 #if GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
  #import <Protobuf/Any.pbobjc.h>
  #import <Protobuf/Timestamp.pbobjc.h>
+ #import <Protobuf/Duration.pbobjc.h>
 #else
  #import "google/protobuf/Any.pbobjc.h"
  #import "google/protobuf/Timestamp.pbobjc.h"
+ #import "google/protobuf/Duration.pbobjc.h"
 #endif
 
  #import "github.com/overcyn/mochi/pb/Touch.pbobjc.h"
@@ -50,6 +52,45 @@ static GPBFileDescriptor *MochiPBTouchRoot_FileDescriptor(void) {
                                                      syntax:GPBFileSyntaxProto3];
   }
   return descriptor;
+}
+
+#pragma mark - Enum MochiPBEventKind
+
+GPBEnumDescriptor *MochiPBEventKind_EnumDescriptor(void) {
+  static GPBEnumDescriptor *descriptor = NULL;
+  if (!descriptor) {
+    static const char *valueNames =
+        "EventKindBegan\000EventKindChanged\000EventKin"
+        "dCancelled\000EventKindEnded\000";
+    static const int32_t values[] = {
+        MochiPBEventKind_EventKindBegan,
+        MochiPBEventKind_EventKindChanged,
+        MochiPBEventKind_EventKindCancelled,
+        MochiPBEventKind_EventKindEnded,
+    };
+    GPBEnumDescriptor *worker =
+        [GPBEnumDescriptor allocDescriptorForName:GPBNSStringifySymbol(MochiPBEventKind)
+                                       valueNames:valueNames
+                                           values:values
+                                            count:(uint32_t)(sizeof(values) / sizeof(int32_t))
+                                     enumVerifier:MochiPBEventKind_IsValidValue];
+    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
+      [worker release];
+    }
+  }
+  return descriptor;
+}
+
+BOOL MochiPBEventKind_IsValidValue(int32_t value__) {
+  switch (value__) {
+    case MochiPBEventKind_EventKindBegan:
+    case MochiPBEventKind_EventKindChanged:
+    case MochiPBEventKind_EventKindCancelled:
+    case MochiPBEventKind_EventKindEnded:
+      return YES;
+    default:
+      return NO;
+  }
 }
 
 #pragma mark - MochiPBRecognizer
@@ -266,9 +307,13 @@ typedef struct MochiPBTapEvent__storage_ {
 
 @implementation MochiPBPressRecognizer
 
+@dynamic hasMinDuration, minDuration;
+@dynamic funcId;
 
 typedef struct MochiPBPressRecognizer__storage_ {
   uint32_t _has_storage_[1];
+  GPBDuration *minDuration;
+  int64_t funcId;
 } MochiPBPressRecognizer__storage_;
 
 // This method is threadsafe because it is initially called
@@ -276,13 +321,114 @@ typedef struct MochiPBPressRecognizer__storage_ {
 + (GPBDescriptor *)descriptor {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "minDuration",
+        .dataTypeSpecific.className = GPBStringifySymbol(GPBDuration),
+        .number = MochiPBPressRecognizer_FieldNumber_MinDuration,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MochiPBPressRecognizer__storage_, minDuration),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "funcId",
+        .dataTypeSpecific.className = NULL,
+        .number = MochiPBPressRecognizer_FieldNumber_FuncId,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MochiPBPressRecognizer__storage_, funcId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MochiPBPressRecognizer class]
                                      rootClass:[MochiPBTouchRoot class]
                                           file:MochiPBTouchRoot_FileDescriptor()
-                                        fields:NULL
-                                    fieldCount:0
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(MochiPBPressRecognizer__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\002\001\013\000\002\006\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - MochiPBPressEvent
+
+@implementation MochiPBPressEvent
+
+@dynamic hasTimestamp, timestamp;
+@dynamic hasPosition, position;
+@dynamic kind;
+@dynamic hasDuration, duration;
+
+typedef struct MochiPBPressEvent__storage_ {
+  uint32_t _has_storage_[1];
+  MochiPBEventKind kind;
+  GPBTimestamp *timestamp;
+  MochiPBPoint *position;
+  GPBDuration *duration;
+} MochiPBPressEvent__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "timestamp",
+        .dataTypeSpecific.className = GPBStringifySymbol(GPBTimestamp),
+        .number = MochiPBPressEvent_FieldNumber_Timestamp,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MochiPBPressEvent__storage_, timestamp),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "position",
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBPoint),
+        .number = MochiPBPressEvent_FieldNumber_Position,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MochiPBPressEvent__storage_, position),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "kind",
+        .dataTypeSpecific.enumDescFunc = MochiPBEventKind_EnumDescriptor,
+        .number = MochiPBPressEvent_FieldNumber_Kind,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MochiPBPressEvent__storage_, kind),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldHasEnumDescriptor),
+        .dataType = GPBDataTypeEnum,
+      },
+      {
+        .name = "duration",
+        .dataTypeSpecific.className = GPBStringifySymbol(GPBDuration),
+        .number = MochiPBPressEvent_FieldNumber_Duration,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(MochiPBPressEvent__storage_, duration),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MochiPBPressEvent class]
+                                     rootClass:[MochiPBTouchRoot class]
+                                          file:MochiPBTouchRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MochiPBPressEvent__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
@@ -291,6 +437,18 @@ typedef struct MochiPBPressRecognizer__storage_ {
 }
 
 @end
+
+int32_t MochiPBPressEvent_Kind_RawValue(MochiPBPressEvent *message) {
+  GPBDescriptor *descriptor = [MochiPBPressEvent descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MochiPBPressEvent_FieldNumber_Kind];
+  return GPBGetMessageInt32Field(message, field);
+}
+
+void SetMochiPBPressEvent_Kind_RawValue(MochiPBPressEvent *message, int32_t value) {
+  GPBDescriptor *descriptor = [MochiPBPressEvent descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MochiPBPressEvent_FieldNumber_Kind];
+  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+}
 
 #pragma mark - MochiPBPanRecognizer
 

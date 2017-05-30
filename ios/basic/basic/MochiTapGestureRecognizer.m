@@ -35,6 +35,15 @@
     return self;
 }
 
+- (void)updateWithProtobuf:(GPBAny *)pb {
+    NSError *error = nil;
+    MochiPBTapRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTapRecognizer class] error:&error];
+    if (pbTapRecognizer == nil) {
+        return;
+    }
+    self.funcId = pbTapRecognizer.recognizedFunc;
+}
+
 - (void)action:(id)sender {
     CGPoint point = [self locationInView:self.view];
     
