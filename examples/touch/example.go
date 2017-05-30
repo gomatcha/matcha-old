@@ -127,7 +127,6 @@ func (v *PressChildView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.PressRecognizer{
 		MinDuration: time.Second / 2,
 		OnEvent: func(e *touch.PressEvent) {
-			fmt.Println("what the what")
 			v.Lock()
 			defer v.Unlock()
 			v.OnPress()

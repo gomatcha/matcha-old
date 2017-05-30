@@ -195,14 +195,10 @@ func newRoot(f func(Config) View) *root {
 }
 
 func (root *root) addFlag(id mochi.Id, f updateFlag) {
-	fmt.Println("addFlag")
 	root.mu.Lock()
-	fmt.Println("addFlag2")
 	defer root.mu.Unlock()
 
-	fmt.Println("addFlag3")
 	root.updateFlags[id] |= f
-	fmt.Println("addFlag4")
 }
 
 func (root *root) update(size layout.Point) bool {
@@ -449,11 +445,8 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 					for {
 						select {
 						case <-buildChan:
-							fmt.Println("buildChan1")
 							n.root.addFlag(id, buildFlag)
-							fmt.Println("buildChan2")
 							buildChan <- struct{}{}
-							fmt.Println("buildChan3")
 						case <-buildDone:
 							break loop
 						}
