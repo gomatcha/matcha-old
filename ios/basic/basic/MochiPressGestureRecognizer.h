@@ -13,4 +13,5 @@
 @interface MochiPressGestureRecognizer : UILongPressGestureRecognizer
 - (id)initWitViewRoot:(MochiViewRoot *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb;
 - (void)updateWithProtobuf:(GPBAny *)pb;
+- (void)disable;
 @end

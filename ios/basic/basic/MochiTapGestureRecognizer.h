@@ -12,5 +12,6 @@
 
 @interface MochiTapGestureRecognizer : UITapGestureRecognizer
 - (id)initWitViewRoot:(MochiViewRoot *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb;
+- (void)disable;
 - (void)updateWithProtobuf:(GPBAny *)pb;
 @end

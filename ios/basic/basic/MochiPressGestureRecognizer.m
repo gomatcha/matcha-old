@@ -15,6 +15,7 @@
 @property (nonatomic, assign) int64_t viewId;
 @property (nonatomic, weak) MochiViewRoot *viewRoot;
 @property (nonatomic, strong) NSDate *startTime;
+@property (nonatomic, assign) BOOL disabled;
 @end
 
 @implementation MochiPressGestureRecognizer
@@ -43,7 +44,15 @@
     self.funcId = pbTapRecognizer.funcId;
 }
 
+- (void)disable {
+    self.disabled = false;
+}
+
 - (void)action:(id)sender {
+    if (self.disabled) {
+        return;
+    }
+    
     CGPoint point = [self locationInView:self.view];
     
     MochiPBPressEvent *event = [[MochiPBPressEvent alloc] init];
@@ -66,9 +75,7 @@
     NSData *data = [event data];
     MochiGoValue *value = [[MochiGoValue alloc] initWithData:data];
     
-    NSLog(@"KD:%s balh", __FUNCTION__);
     [self.viewRoot call:self.funcId viewId:self.viewId args:@[value]];
-    NSLog(@"KD:%s blah2", __FUNCTION__);
 }
 
 

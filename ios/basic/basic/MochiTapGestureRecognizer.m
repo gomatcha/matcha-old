@@ -16,6 +16,7 @@
 @property (nonatomic, assign) int64_t funcId;
 @property (nonatomic, assign) int64_t viewId;
 @property (nonatomic, weak) MochiViewRoot *viewRoot;
+@property (nonatomic, assign) bool disabled;
 @end
 
 @implementation MochiTapGestureRecognizer
@@ -35,6 +36,10 @@
     return self;
 }
 
+- (void)disable {
+    self.disabled = true;
+}
+
 - (void)updateWithProtobuf:(GPBAny *)pb {
     NSError *error = nil;
     MochiPBTapRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTapRecognizer class] error:&error];
@@ -45,6 +50,10 @@
 }
 
 - (void)action:(id)sender {
+    if (self.disabled) {
+        return;
+    }
+    
     CGPoint point = [self locationInView:self.view];
     
     MochiPBTapEvent *event = [[MochiPBTapEvent alloc] init];

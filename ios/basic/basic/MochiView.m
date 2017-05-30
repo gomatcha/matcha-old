@@ -253,7 +253,9 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
             
             NSMutableDictionary *touchRecognizers = [NSMutableDictionary dictionary];
             for (NSNumber *i in removedKeys) {
-                [view removeGestureRecognizer:config.touchRecognizers[i]];
+                UIGestureRecognizer *recognizer = config.touchRecognizers[i];
+                [(id)recognizer disable];
+                [view removeGestureRecognizer:recognizer];
             }
             for (NSNumber *i in addedKeys) {
                 UIGestureRecognizer *recognizer = MochiGestureRecognizerWithPB(node.identifier.longLongValue, node.touchRecognizers[i], viewRoot);
