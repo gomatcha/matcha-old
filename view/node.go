@@ -104,6 +104,7 @@ type Context struct {
 	node      *node
 	prevIds   map[viewCacheKey]mochi.Id
 	prevNodes map[mochi.Id]*node
+	skipBuild map[mochi.Id]struct{}
 }
 
 func (ctx *Context) Prev(key interface{}) View {
@@ -113,10 +114,10 @@ func (ctx *Context) Prev(key interface{}) View {
 	cacheKey := viewCacheKey{key: key, id: ctx.node.id}
 	prevId := ctx.prevIds[cacheKey]
 	prevNode := ctx.prevNodes[prevId]
-	if prevNode != nil {
-		return prevNode.view
+	if prevNode == nil {
+		return nil
 	}
-	return nil
+	return prevNode.view
 }
 
 func (ctx *Context) PrevModel() *Model {
@@ -134,6 +135,15 @@ func (ctx *Context) NewId(key interface{}) mochi.Id {
 
 func (ctx *Context) NewFuncId() int64 {
 	return atomic.AddInt64(&maxFuncId, 1)
+}
+
+func (ctx *Context) SkipBuild(ids []mochi.Id) {
+	if ctx.skipBuild == nil {
+		ctx.skipBuild = map[mochi.Id]struct{}{}
+	}
+	for _, i := range ids {
+		ctx.skipBuild[i] = struct{}{}
+	}
 }
 
 type updateFlag int
@@ -394,19 +404,22 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 				view: view,
 				root: n.root,
 			}
+
+			// Mark as needing rebuild
+			n.root.updateFlags[id] |= buildFlag
 		}
 		// Reuse old context for unupdated keys.
 		for _, id := range unchangedIds {
 			children[id] = n.children[id]
+
+			// Mark as needing rebuild
+			if _, ok := ctx.skipBuild[id]; !ok {
+				n.root.updateFlags[id] |= buildFlag
+			}
 		}
 		// Send lifecycle event to removed childern.
 		for _, id := range removedIds {
 			n.children[id].done()
-		}
-
-		// Mark all children as needing rebuild since we rebuilt.
-		for k := range children {
-			n.root.updateFlags[k] |= buildFlag
 		}
 
 		// Watch for build changes
