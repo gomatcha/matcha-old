@@ -35,6 +35,13 @@ func RegisterMiddleware(v Middleware) {
 	middlewares = append(middlewares, v)
 }
 
+func Middlewares() []Middleware {
+	middlewaresMu.Lock()
+	defer middlewaresMu.Unlock()
+
+	return middlewares
+}
+
 type Root struct {
 	id     int
 	mu     *sync.Mutex
@@ -78,23 +85,11 @@ func (vc *Root) Call(funcId int64, viewId int64, args []reflect.Value) []reflect
 	return vc.root.call(funcId, viewId, args)
 }
 
-func Middlewares() []Middleware {
-	middlewaresMu.Lock()
-	defer middlewaresMu.Unlock()
-
-	return middlewares
-}
-
 func (vc *Root) SetSize(p layout.Point) {
 	vc.mu.Lock()
 	defer vc.mu.Unlock()
 
 	vc.size = p
-}
-
-type Config struct {
-	Prev  View
-	Embed *Embed
 }
 
 type viewCacheKey struct {
@@ -106,16 +101,6 @@ type Context struct {
 	node      *node
 	prevIds   map[viewCacheKey]mochi.Id
 	prevNodes map[mochi.Id]*node
-}
-
-func (ctx *Context) Get(key interface{}) Config {
-	return Config{
-		Prev: ctx.Prev(key),
-		Embed: &Embed{
-			root: ctx.node.root,
-			id:   ctx.NewId(key),
-		},
-	}
 }
 
 func (ctx *Context) Prev(key interface{}) View {

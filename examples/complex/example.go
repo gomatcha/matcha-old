@@ -162,7 +162,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	childLayouter := &table.Layout{}
 	childViews := []view.View{}
 	for i := 0; i < 20; i++ {
-		childView := NewTableCell(ctx.Get(i + 1000))
+		childView := NewTableCell(ctx, i+1000)
 		childView.String = "TEST TEST"
 		childView.Painter = &paint.Style{BackgroundColor: colornames.Red}
 		childViews = append(childViews, childView)
@@ -198,13 +198,13 @@ type TableCell struct {
 	Painter paint.Painter
 }
 
-func NewTableCell(c view.Config) *TableCell {
-	v, ok := c.Prev.(*TableCell)
-	if !ok {
-		v = &TableCell{}
-		v.Embed = c.Embed
+func NewTableCell(ctx *view.Context, key interface{}) *TableCell {
+	if v, ok := ctx.Prev(key).(*TableCell); ok {
+		return v
 	}
-	return v
+	return &TableCell{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
 }
 
 func (v *TableCell) Build(ctx *view.Context) *view.Model {
