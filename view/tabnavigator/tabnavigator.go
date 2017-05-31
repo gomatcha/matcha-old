@@ -3,6 +3,8 @@ package tabnavigator
 import (
 	"image"
 
+	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/store"
 	"github.com/overcyn/mochi/view"
 )
@@ -19,33 +21,63 @@ func New(ctx *view.Context, key interface{}) *TabNavigator {
 		return v
 	}
 	return &TabNavigator{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed:    view.NewEmbed(ctx.NewId(key)),
+		notifier: &mochi.BatchNotifier{},
 	}
 }
 
 func (n *TabNavigator) Build(ctx *view.Context) *view.Model {
-	return &view.Model{}
+	l := constraint.New()
+
+	chls := map[mochi.Id]view.View{}
+	for _, i := range n.views {
+		chls[i.Id()] = i
+		l.Add(i, func(s *constraint.Solver) {
+			s.TopEqual(constraint.Const(0))
+			s.LeftEqual(constraint.Const(0))
+			s.WidthEqual(l.MaxGuide().Width())
+			s.HeightEqual(l.MaxGuide().Height())
+		})
+	}
+
+	l.Solve(func(s *constraint.Solver) {
+		s.WidthEqual(l.MaxGuide().Width())
+		s.HeightEqual(l.MaxGuide().Height())
+	})
+
+	return &view.Model{
+		Children:       chls,
+		Layouter:       l,
+		NativeViewName: "github.com/overcyn/mochi/view/tabnavigator",
+		// NativeViewState: ft.MarshalProtobuf(),
+	}
 }
 
 func (n *TabNavigator) Views() []view.View {
 	return n.views
 }
 
-func (n *TabNavigator) SetViews(vs []view.View, animated bool) {
-	n.views = vs
+func (n *TabNavigator) SetViews(vs []view.View) {
+	// unsubscribe from old views
+	for _, opt := range n.options {
+		n.notifier.Unsubscribe(opt)
+	}
 
-	opts := []TabOptions{}
-	notifers := []mochi.Notifiers{}
-	for _, i := range n.views {
-		opt, ok := i.(*TabOptions)
-		if !ok {
-			opt
+	// subscribe to new views
+	opts := []*TabOptions{}
+	for _, i := range vs {
+		var opt *TabOptions
+		tabber, ok := i.(Tabber)
+		if ok {
+			opt = tabber.TabOptions()
+		} else {
+			opt = &TabOptions{}
 		}
 		opts = append(opts, opt)
-		notifiers := append(notifiers, opt)
+		n.notifier.Subscribe(opt)
 	}
-	n.notifier = mochi.NewBatchNotifier(notifiers)
 	n.options = opts
+	n.views = vs
 }
 
 type TabOptions struct {

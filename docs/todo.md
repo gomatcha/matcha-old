@@ -5,6 +5,8 @@ Root background color isn't set.
 // Comm.Notifier Notify() chan-> struct{}
 // mochi.Id is in the mochi package because view depends on layout. and layout needs to use the Ids
 
+// Why do all views have to expose a Painter object? Is there a better way?
+
 High:
 * Navigation View Controllers
 
