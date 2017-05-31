@@ -15,9 +15,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/table New", func() *view.Root {
-		return view.NewRootOld(func(c view.Config) view.View {
-			return New(c)
-		}, 0)
+		return view.NewRoot(New(nil, nil), 0)
 	})
 }
 
@@ -25,13 +23,13 @@ type TableView struct {
 	*view.Embed
 }
 
-func New(c view.Config) *TableView {
-	v, ok := c.Prev.(*TableView)
-	if !ok {
-		v = &TableView{}
-		v.Embed = c.Embed
+func New(ctx *view.Context, key interface{}) *TableView {
+	if v, ok := ctx.Prev(key).(*TableView); ok {
+		return v
 	}
-	return v
+	return &TableView{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
 }
 
 func (v *TableView) Build(ctx *view.Context) *view.Model {

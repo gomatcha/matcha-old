@@ -11,9 +11,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/imageview New", func() *view.Root {
-		return view.NewRootOld(func(c view.Config) view.View {
-			return New(c)
-		}, 0)
+		return view.NewRoot(New(nil, nil), 0)
 	})
 }
 
@@ -21,13 +19,13 @@ type ImageView struct {
 	*view.Embed
 }
 
-func New(c view.Config) *ImageView {
-	v, ok := c.Prev.(*ImageView)
-	if !ok {
-		v = &ImageView{}
-		v.Embed = c.Embed
+func New(ctx *view.Context, key interface{}) *ImageView {
+	if v, ok := ctx.Prev(key).(*ImageView); ok {
+		return v
 	}
-	return v
+	return &ImageView{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
 }
 
 func (v *ImageView) Build(ctx *view.Context) *view.Model {

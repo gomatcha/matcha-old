@@ -43,10 +43,10 @@ type Root struct {
 	ticker *internal.Ticker
 }
 
-func NewRootOld(f func(Config) View, id int) *Root {
+func NewRoot(v View, id int) *Root {
 	vc := &Root{
 		mu:     &sync.Mutex{},
-		root:   newRoot(f),
+		root:   newRoot(v),
 		ticker: internal.NewTicker(time.Hour * 99999),
 		id:     id,
 	}
@@ -187,20 +187,13 @@ type root struct {
 	updateFlags map[mochi.Id]updateFlag
 }
 
-func newRoot(f func(Config) View) *root {
+func newRoot(v View) *root {
 	root := &root{}
-
-	cfg := Config{Embed: &Embed{
-		root: root,
-		id:   newId(),
-	}}
-	v := f(cfg)
-	node := &node{
+	root.node = &node{
 		id:   v.Id(),
 		view: v,
 		root: root,
 	}
-	root.node = node
 	root.updateFlags = map[mochi.Id]updateFlag{v.Id(): buildFlag}
 	return root
 }

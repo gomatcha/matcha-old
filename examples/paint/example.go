@@ -13,9 +13,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/paint New", func() *view.Root {
-		return view.NewRootOld(func(c view.Config) view.View {
-			return New(c)
-		}, 0)
+		return view.NewRoot(New(nil, nil), 0)
 	})
 }
 
@@ -23,12 +21,12 @@ type PaintView struct {
 	*view.Embed
 }
 
-func New(c view.Config) *PaintView {
-	if v, ok := c.Prev.(*PaintView); ok {
+func New(ctx *view.Context, key interface{}) *PaintView {
+	if v, ok := ctx.Prev(key).(*PaintView); ok {
 		return v
 	}
 	return &PaintView{
-		Embed: c.Embed,
+		Embed: view.NewEmbed(ctx.NewId(key)),
 	}
 }
 

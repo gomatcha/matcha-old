@@ -17,9 +17,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/touch New", func() *view.Root {
-		return view.NewRootOld(func(c view.Config) view.View {
-			return New(c)
-		}, 0)
+		return view.NewRoot(New(nil, nil), 0)
 	})
 }
 
@@ -29,12 +27,12 @@ type TouchView struct {
 	pressCounter int
 }
 
-func New(c view.Config) *TouchView {
-	if v, ok := c.Prev.(*TouchView); ok {
+func New(ctx *view.Context, key interface{}) *TouchView {
+	if v, ok := ctx.Prev(key).(*TouchView); ok {
 		return v
 	}
 	return &TouchView{
-		Embed: c.Embed,
+		Embed: view.NewEmbed(ctx.NewId(key)),
 	}
 }
 

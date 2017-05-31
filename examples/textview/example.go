@@ -12,9 +12,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/textview New", func() *view.Root {
-		return view.NewRootOld(func(c view.Config) view.View {
-			return New(c)
-		}, 0)
+		return view.NewRoot(New(nil, nil), 0)
 	})
 }
 
@@ -22,13 +20,13 @@ type TextView struct {
 	*view.Embed
 }
 
-func New(c view.Config) *TextView {
-	v, ok := c.Prev.(*TextView)
-	if !ok {
-		v = &TextView{}
-		v.Embed = c.Embed
+func New(ctx *view.Context, key interface{}) *TextView {
+	if v, ok := ctx.Prev(key).(*TextView); ok {
+		return v
 	}
-	return v
+	return &TextView{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
 }
 
 func (v *TextView) Build(ctx *view.Context) *view.Model {

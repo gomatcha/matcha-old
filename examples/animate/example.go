@@ -16,9 +16,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/animate New", func() *view.Root {
-		return view.NewRootOld(func(c view.Config) view.View {
-			return New(c)
-		}, 0)
+		return view.NewRoot(New(nil, nil), 0)
 	})
 }
 
@@ -32,16 +30,17 @@ type AnimateView struct {
 	constraintFunc  chan struct{}
 }
 
-func New(c view.Config) *AnimateView {
-	v, ok := c.Prev.(*AnimateView)
-	if !ok {
-		v = &AnimateView{}
-		v.Embed = c.Embed
-		v.ticker = animate.NewTicker(time.Second * 4)
-		v.floatTicker = animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 500})
-		v.colorTicker = animate.ColorInterpolate(v.ticker, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow})
+func New(ctx *view.Context, key interface{}) *AnimateView {
+	if v, ok := ctx.Prev(key).(*AnimateView); ok {
+		return v
 	}
-	return v
+	ticker := animate.NewTicker(time.Second * 4)
+	return &AnimateView{
+		Embed:       view.NewEmbed(ctx.NewId(key)),
+		ticker:      ticker,
+		floatTicker: animate.FloatInterpolate(ticker, animate.FloatLerp{Start: 0, End: 500}),
+		colorTicker: animate.ColorInterpolate(ticker, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow}),
+	}
 }
 
 func (v *AnimateView) Lifecycle(from, to view.Stage) {

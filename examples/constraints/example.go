@@ -11,9 +11,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/constraints New", func() *view.Root {
-		return view.NewRootOld(func(c view.Config) view.View {
-			return New(c)
-		}, 0)
+		return view.NewRoot(New(nil, nil), 0)
 	})
 }
 
@@ -21,13 +19,13 @@ type ConstraintsView struct {
 	*view.Embed
 }
 
-func New(c view.Config) *ConstraintsView {
-	v, ok := c.Prev.(*ConstraintsView)
-	if !ok {
-		v = &ConstraintsView{}
-		v.Embed = c.Embed
+func New(ctx *view.Context, key interface{}) *ConstraintsView {
+	if v, ok := ctx.Prev(key).(*ConstraintsView); ok {
+		return v
 	}
-	return v
+	return &ConstraintsView{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
 }
 
 func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
