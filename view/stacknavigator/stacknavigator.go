@@ -23,15 +23,25 @@ func (n *StackNavigator) Build(ctx *view.Context) *view.Model {
 	return &view.Model{}
 }
 
-func (n *StackNavigator) Set(vs []view.View) {
+func (n *StackNavigator) Views() []view.View {
+	return n.views
+}
 
+func (n *StackNavigator) SetViews(vs []view.View, animated bool) {
+	n.views = vs
+	n.Update()
 }
 
 func (n *StackNavigator) Push(v view.View) {
-
+	n.views = append(n.views, v)
+	n.Update()
 }
 
 func (n *StackNavigator) Pop() {
+	if len(n.views) > 0 {
+		n.views = n.views[:len(n.views)-1]
+		n.Update()
+	}
 }
 
 type StackOptions struct {

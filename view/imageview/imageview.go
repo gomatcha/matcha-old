@@ -81,7 +81,7 @@ func (v *URLImageView) reload() {
 				v.cancelFunc()
 				v.image = image
 				v.err = err
-				v.Update(nil)
+				v.Update()
 			}
 		}(v.url)
 	}

@@ -47,7 +47,7 @@ func (v *AnimateView) Lifecycle(from, to view.Stage) {
 	if view.EntersStage(from, to, view.StageVisible) {
 		time.AfterFunc(time.Second*2, func() {
 			fmt.Println("Update")
-			v.Update(nil)
+			v.Update()
 		})
 	}
 }

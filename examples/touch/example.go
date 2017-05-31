@@ -46,7 +46,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 
 		fmt.Println("On touch")
 		v.counter += 1
-		go v.Update(nil)
+		go v.Update()
 	}
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
@@ -74,7 +74,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 
 		fmt.Println("On Press")
 		v.pressCounter += 1
-		go v.Update(nil)
+		go v.Update()
 	}
 	g3 := l.Add(chl3, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())

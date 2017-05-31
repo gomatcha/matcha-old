@@ -151,7 +151,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 		fmt.Println("On Click")
 		v.counter += 1
-		v.Update(nil)
+		v.Update()
 	}
 	m.Add(chl9)
 	_ = l.Add(chl9, func(s *constraint.Solver) {

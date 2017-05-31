@@ -21,6 +21,10 @@ Low:
 * Video / Sound / Microphone / Accelerometer
 * Cache layout properties
 
+* remove global Middleware list
+* view.Model.Childern should be a list not a map
+
+
 Done:
 * Lifecycle
 * Animations
@@ -41,16 +45,6 @@ Done:
 * ActionSheet
 * CameraView
 * MapView
-
-
-    <!-- return &view.Model{
-        Children: []View{chl},
-        Layouter: l,
-        Painter:  &paint.Style{BackgroundColor: colornames.Green},
-        Values: map[interface{}]interface{}{
-            touch.Key(): []touch.Recognizer{tap},
-        },
-    } -->
     
 We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 

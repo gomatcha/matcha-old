@@ -65,7 +65,7 @@ func (e *Embed) Unnotify(c chan struct{}) {
 	e.chans = chans
 }
 
-func (e *Embed) Update(key interface{}) {
+func (e *Embed) Update() {
 	for _, i := range e.chans {
 		i <- struct{}{}
 		<-i
