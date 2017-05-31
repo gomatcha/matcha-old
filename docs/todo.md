@@ -5,11 +5,10 @@ Root background color isn't set.
 // Comm.Notifier Notify() chan-> struct{}
 
 High:
-* Event Handling / Gestures
 * Navigation View Controllers
 
 Medium:
-* Thread & locking. How to prevent deadlocks?
+* Thread & locking. How to prevent deadlocks? Notifiers should be eventually consistent.
 * Lock should go bottom to top
 
 Low:
@@ -27,6 +26,7 @@ Done:
 * Animations
 * UIView tree updating
 * Switch to protobufs.
+* Event Handling / Gestures
 
 * GridView
 * UINavigationController
@@ -54,7 +54,6 @@ Done:
     
 We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 
-Walk(Visitor, Root)
 Accessibility
 Touch
 Mouse

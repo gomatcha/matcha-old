@@ -17,13 +17,12 @@ type BasicView struct {
 }
 
 func New(ctx *view.Context, key interface{}) *BasicView {
-	v, ok := ctx.Prev(key).(*BasicView)
-	if !ok {
-		v = &BasicView{
-			Embed: view.NewEmbed(ctx.NewId(key)),
-		}
+	if v, ok := ctx.Prev(key).(*BasicView); ok {
+		return v
 	}
-	return v
+	return &BasicView{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
 }
 
 func (v *BasicView) Build(ctx *view.Context) *view.Model {
