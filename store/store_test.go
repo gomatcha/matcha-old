@@ -7,7 +7,7 @@ import (
 func TestStore(t *testing.T) {
 	tx := NewReadTx()
 	s := &Store{}
-	s.Read(0, tx)
+	s.ReadKey(0, tx)
 	tx.Commit()
 }
 
@@ -17,9 +17,9 @@ func TestMultiRead(t *testing.T) {
 	tx3 := NewReadTx()
 
 	s := &Store{}
-	s.Read(0, tx1)
-	s.Read(0, tx2)
-	s.Read(0, tx3)
+	s.ReadKey(0, tx1)
+	s.ReadKey(0, tx2)
+	s.ReadKey(0, tx3)
 
 	tx1.Commit()
 	tx2.Commit()
@@ -31,7 +31,7 @@ func TestNotify(t *testing.T) {
 	n := s.Notifier(0)
 	go func() {
 		tx1 := NewWriteTx()
-		s.Write(0, tx1)
+		s.WriteKey(0, tx1)
 		tx1.Commit()
 	}()
 
@@ -46,11 +46,11 @@ func TestReadWrite(t *testing.T) {
 
 	go func() {
 		tx1 := NewReadTx()
-		s.Read(0, tx1)
+		s.ReadKey(0, tx1)
 		tx1.Commit()
 	}()
 
 	tx2 := NewWriteTx()
-	s.Read(0, tx2)
+	s.ReadKey(0, tx2)
 	tx2.Commit()
 }

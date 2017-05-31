@@ -51,7 +51,7 @@ func (opt *StackOptions) SetTitle(v string) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
-	opt.store.Write(0, tx)
+	opt.store.Write(tx)
 	opt.title = v
 }
 
@@ -59,7 +59,7 @@ func (opt *StackOptions) Title() string {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
-	opt.store.Read(0, tx)
+	opt.store.Read(tx)
 	return opt.title
 }
 
@@ -67,7 +67,7 @@ func (opt *StackOptions) SetBackButtonTitle(v string) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
-	opt.store.Write(0, tx)
+	opt.store.Write(tx)
 	opt.backButtonTitle = v
 }
 
@@ -75,7 +75,7 @@ func (opt *StackOptions) BackButtonTitle() string {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
-	opt.store.Read(0, tx)
+	opt.store.Read(tx)
 	return opt.backButtonTitle
 }
 
@@ -83,7 +83,7 @@ func (opt *StackOptions) SetBackButtonHidden(v bool) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
-	opt.store.Write(0, tx)
+	opt.store.Write(tx)
 	opt.backButtonHidden = v
 }
 
@@ -91,7 +91,7 @@ func (opt *StackOptions) BackButtonHidden() bool {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
-	opt.store.Read(0, tx)
+	opt.store.Read(tx)
 	return opt.backButtonHidden
 }
 
@@ -99,7 +99,7 @@ func (opt *StackOptions) SetTitleView(v view.View) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
-	opt.store.Write(0, tx)
+	opt.store.Write(tx)
 	opt.titleView = v
 }
 
@@ -107,7 +107,7 @@ func (opt *StackOptions) TitleView() view.View {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
-	opt.store.Read(0, tx)
+	opt.store.Read(tx)
 	return opt.titleView
 }
 
@@ -115,7 +115,7 @@ func (opt *StackOptions) SetRightViews(v []view.View) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
-	opt.store.Write(0, tx)
+	opt.store.Write(tx)
 	opt.rightViews = v
 }
 
@@ -123,7 +123,7 @@ func (opt *StackOptions) RightViews() []view.View {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
-	opt.store.Read(0, tx)
+	opt.store.Read(tx)
 	return opt.rightViews
 }
 
@@ -131,7 +131,7 @@ func (opt *StackOptions) SetLeftViews(v []view.View) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
-	opt.store.Write(0, tx)
+	opt.store.Write(tx)
 	opt.leftViews = v
 }
 
@@ -139,16 +139,16 @@ func (opt *StackOptions) LeftViews() []view.View {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
-	opt.store.Read(0, tx)
+	opt.store.Read(tx)
 	return opt.leftViews
 }
 
 func (opt *StackOptions) Notify() chan struct{} {
-	return opt.store.Notifier(0).Notify()
+	return opt.store.Notify()
 }
 
 func (opt *StackOptions) Unnotify(c chan struct{}) {
-	opt.store.Notifier(0).Unnotify(c)
+	opt.store.Unnotify(c)
 }
 
 type Stacker interface {

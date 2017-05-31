@@ -12,11 +12,11 @@ type storeNotifier struct {
 }
 
 func (s *storeNotifier) Notify() chan struct{} {
-	return s.store.notify(s.key)
+	return s.store.NotifyKey(s.key)
 }
 
 func (s *storeNotifier) Unnotify(c chan struct{}) {
-	s.store.unnotify(s.key, c)
+	s.store.UnnotifyKey(s.key, c)
 }
 
 type Store struct {
@@ -31,7 +31,19 @@ type Store struct {
 	chans   map[interface{}][]chan struct{}
 }
 
-func (s *Store) Write(key interface{}, tx *Tx) {
+var rootKeyVar rootKey // TODO(KD): any change to the store should affect this key. And any change to the key should affect all watchers of the store.
+
+type rootKey struct{}
+
+func (s *Store) Write(tx *Tx) {
+	s.WriteKey(rootKeyVar, tx)
+}
+
+func (s *Store) Read(tx *Tx) {
+	s.ReadKey(rootKeyVar, tx)
+}
+
+func (s *Store) WriteKey(key interface{}, tx *Tx) {
 	if tx == nil {
 		panic("Store.Write() called outside of a transaction")
 	}
@@ -43,7 +55,7 @@ func (s *Store) Write(key interface{}, tx *Tx) {
 	tx.writes = append(tx.writes, txAccess{store: s, key: key})
 }
 
-func (s *Store) Read(key interface{}, tx *Tx) {
+func (s *Store) ReadKey(key interface{}, tx *Tx) {
 	if tx == nil {
 		panic("Store.Read() is called outside of a transaction")
 	}
@@ -59,7 +71,15 @@ func (s *Store) Notifier(key interface{}) mochi.Notifier {
 	}
 }
 
-func (s *Store) notify(k interface{}) chan struct{} {
+func (s *Store) Notify() chan struct{} {
+	return s.NotifyKey(rootKeyVar)
+}
+
+func (s *Store) Unnotify(c chan struct{}) {
+	s.UnnotifyKey(rootKeyVar, c)
+}
+
+func (s *Store) NotifyKey(k interface{}) chan struct{} {
 	s.chansMu.Lock()
 	defer s.chansMu.Unlock()
 
@@ -71,7 +91,7 @@ func (s *Store) notify(k interface{}) chan struct{} {
 	return c
 }
 
-func (s *Store) unnotify(k interface{}, c chan struct{}) {
+func (s *Store) UnnotifyKey(k interface{}, c chan struct{}) {
 	s.chansMu.Lock()
 	defer s.chansMu.Unlock()
 

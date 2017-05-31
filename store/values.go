@@ -6,11 +6,11 @@ type Interface struct {
 }
 
 func (s *Interface) Notify() chan struct{} {
-	return s.store.notify(0)
+	return s.store.NotifyKey(0)
 }
 
 func (s *Interface) Unnotify(c chan struct{}) {
-	s.store.unnotify(0, c)
+	s.store.UnnotifyKey(0, c)
 }
 
 func (s *Interface) Value() interface{} {
@@ -22,7 +22,7 @@ func (s *Interface) Get(tx *Tx) interface{} {
 		tx = NewReadTx()
 		defer tx.Commit()
 	}
-	s.store.Read(0, tx)
+	s.store.ReadKey(0, tx)
 	return s.value
 }
 
@@ -31,7 +31,7 @@ func (s *Interface) Set(v interface{}, tx *Tx) {
 		tx = NewWriteTx()
 		defer tx.Commit()
 	}
-	s.store.Write(0, tx)
+	s.store.WriteKey(0, tx)
 	s.value = v
 }
 
@@ -41,11 +41,11 @@ type Bool struct {
 }
 
 func (s *Bool) Notify() chan struct{} {
-	return s.store.notify(0)
+	return s.store.NotifyKey(0)
 }
 
 func (s *Bool) Unnotify(c chan struct{}) {
-	s.store.unnotify(0, c)
+	s.store.UnnotifyKey(0, c)
 }
 
 func (s *Bool) Value() bool {
@@ -57,7 +57,7 @@ func (s *Bool) Get(tx *Tx) bool {
 		tx = NewReadTx()
 		defer tx.Commit()
 	}
-	s.store.Read(0, tx)
+	s.store.ReadKey(0, tx)
 	return s.value
 }
 
@@ -66,7 +66,7 @@ func (s *Bool) Set(v bool, tx *Tx) {
 		tx = NewWriteTx()
 		defer tx.Commit()
 	}
-	s.store.Write(0, tx)
+	s.store.WriteKey(0, tx)
 	s.value = v
 }
 
@@ -81,11 +81,11 @@ type Float64 struct {
 }
 
 func (s *Float64) Notify() chan struct{} {
-	return s.store.notify(0)
+	return s.store.NotifyKey(0)
 }
 
 func (s *Float64) Unnotify(c chan struct{}) {
-	s.store.unnotify(0, c)
+	s.store.UnnotifyKey(0, c)
 }
 
 func (s *Float64) Value() float64 {
@@ -97,7 +97,7 @@ func (s *Float64) Get(tx *Tx) float64 {
 		tx = NewReadTx()
 		defer tx.Commit()
 	}
-	s.store.Read(0, tx)
+	s.store.ReadKey(0, tx)
 	return s.value
 }
 
@@ -106,7 +106,7 @@ func (s *Float64) Set(v float64, tx *Tx) {
 		tx = NewWriteTx()
 		defer tx.Commit()
 	}
-	s.store.Write(0, tx)
+	s.store.WriteKey(0, tx)
 	s.value = v
 }
 
@@ -116,11 +116,11 @@ type String struct {
 }
 
 func (s *String) Notify() chan struct{} {
-	return s.store.notify(0)
+	return s.store.NotifyKey(0)
 }
 
 func (s *String) Unnotify(c chan struct{}) {
-	s.store.unnotify(0, c)
+	s.store.UnnotifyKey(0, c)
 }
 
 func (s *String) Value() string {
@@ -132,7 +132,7 @@ func (s *String) Get(tx *Tx) string {
 		tx = NewReadTx()
 		defer tx.Commit()
 	}
-	s.store.Read(0, tx)
+	s.store.ReadKey(0, tx)
 	return s.value
 }
 
@@ -141,7 +141,7 @@ func (s *String) Set(v string, tx *Tx) {
 		tx = NewWriteTx()
 		defer tx.Commit()
 	}
-	s.store.Write(0, tx)
+	s.store.WriteKey(0, tx)
 	s.value = v
 }
 
