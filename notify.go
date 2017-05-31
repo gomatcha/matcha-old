@@ -1,8 +1,8 @@
 package mochi
 
 import (
-	"fmt"
 	"image/color"
+	"sync"
 )
 
 type Id int64
@@ -62,11 +62,6 @@ type BytesNotifier interface {
 	Value() []byte
 }
 
-type batchSubscription struct {
-	done chan struct{}
-	c    chan struct{}
-}
-
 func NotifyFunc(n Notifier, f func()) (done chan struct{}) {
 	c := n.Notify()
 	done = make(chan struct{})
@@ -85,59 +80,86 @@ func NotifyFunc(n Notifier, f func()) (done chan struct{}) {
 	return done
 }
 
+type batchSubscription struct {
+	notifier Notifier
+	done     chan struct{}
+	c        chan struct{}
+}
+
 type BatchNotifier struct {
-	notifiers map[Notifier]*batchSubscription
-	chans     []chan struct{}
+	mu            sync.Mutex
+	subscriptions []*batchSubscription
+	chans         []chan struct{}
 }
 
-func NewBatchNotifier(n ...Notifier) *BatchNotifier {
-	notifiers := map[Notifier]*batchSubscription{}
-	for _, i := range n {
-		notifiers[i] = &batchSubscription{}
-	}
+func (bn *BatchNotifier) Subscribe(n Notifier) {
+	bn.mu.Lock()
+	defer bn.mu.Unlock()
 
-	return &BatchNotifier{
-		notifiers: notifiers,
-	}
+	bn.subscriptions = append(bn.subscriptions, &batchSubscription{notifier: n})
+	bn.resubscribeLocked()
 }
 
-func (n *BatchNotifier) Notify() chan struct{} {
+func (bn *BatchNotifier) Unsubscribe(n Notifier) {
+	bn.mu.Lock()
+	defer bn.mu.Unlock()
+
+	found := false
+	subs := []*batchSubscription{}
+	for _, sub := range bn.subscriptions {
+		if found || sub.notifier != n {
+			subs = append(subs, sub)
+		} else {
+			if sub.c != nil {
+				n.Unnotify(sub.c)
+				close(sub.done)
+			}
+			found = true
+		}
+	}
+	if !found {
+		panic("Cant unobserve unknown notifier")
+	}
+	bn.subscriptions = subs
+
+	bn.resubscribeLocked()
+}
+
+func (bn *BatchNotifier) Notify() chan struct{} {
+	bn.mu.Lock()
+	defer bn.mu.Unlock()
+
 	c := make(chan struct{})
-	n.chans = append(n.chans, c)
+	bn.chans = append(bn.chans, c)
 
-	if len(n.chans) == 1 {
-		n.resubscribe()
-	}
+	bn.resubscribeLocked()
 	return c
 }
 
-func (n *BatchNotifier) Unnotify(c chan struct{}) {
-	if c == nil {
-		return
-	}
+func (bn *BatchNotifier) Unnotify(c chan struct{}) {
+	bn.mu.Lock()
+	defer bn.mu.Unlock()
 
 	chans := []chan struct{}{}
-	for _, i := range n.chans {
+	for _, i := range bn.chans {
 		if i != c {
 			chans = append(chans, c)
 		}
 	}
-	if len(chans) != len(n.chans)-1 {
+	if len(chans) != len(bn.chans)-1 {
 		panic("Cant unnotify unknown chan")
 	}
-	n.chans = chans
+	bn.chans = chans
 
-	if len(n.chans) == 0 {
-		n.resubscribe()
-	}
+	bn.resubscribeLocked()
 }
 
-func (n *BatchNotifier) resubscribe() {
+func (bn *BatchNotifier) resubscribeLocked() {
 	// If we have no chans, remove all subscribers.
-	if len(n.chans) == 0 {
-		for notifier, sub := range n.notifiers {
+	if len(bn.chans) == 0 {
+		for _, sub := range bn.subscriptions {
 			if sub.c != nil {
-				notifier.Unnotify(sub.c)
+				sub.notifier.Unnotify(sub.c)
 				close(sub.done)
 				sub.c = nil
 				sub.done = nil
@@ -146,9 +168,10 @@ func (n *BatchNotifier) resubscribe() {
 		return
 	}
 
-	for notifier, sub := range n.notifiers {
+	for _, sub := range bn.subscriptions {
+		// Subscribe to any notifier that isn't yet subscribed
 		if sub.c == nil {
-			c := notifier.Notify()
+			c := sub.notifier.Notify()
 			done := make(chan struct{})
 
 			go func() {
@@ -156,11 +179,13 @@ func (n *BatchNotifier) resubscribe() {
 				for {
 					select {
 					case <-c:
-						for _, i := range n.chans {
+						bn.mu.Lock()
+						for _, i := range bn.chans {
 							i <- struct{}{}
 							<-i
 						}
 						c <- struct{}{}
+						bn.mu.Unlock()
 					case <-done:
 						break loop
 					}
@@ -173,10 +198,10 @@ func (n *BatchNotifier) resubscribe() {
 	}
 }
 
-func (n *BatchNotifier) String() string {
-	ns := []Notifier{}
-	for k := range n.notifiers {
-		ns = append(ns, k)
-	}
-	return fmt.Sprintf("&BatchNotifier{%p observing:%v chans:%v}", n, ns, len(n.chans))
-}
+// func (bn *BatchNotifier) String() string {
+// 	ns := []Notifier{}
+// 	for k := range bn.subscriptions {
+// 		ns = append(ns, k)
+// 	}
+// 	return fmt.Sprintf("&BatchNotifier{%p observing:%v chans:%v}", bn, ns, len(bn.chans))
+// }

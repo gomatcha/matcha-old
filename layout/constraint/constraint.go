@@ -531,20 +531,22 @@ func (sys *System) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layou
 // Creates a new batch notifier for the current system state. Notifier anchors that are added after the Notify() call are ignored.
 // This is so we can return nil for the common case, where there are no Notifier anchors.
 func (sys *System) Notify() chan struct{} {
-	n := mochi.NewBatchNotifier(sys.notifiers...)
-	c := n.Notify()
-	if c != nil {
-		sys.batchNotifiers[c] = n
+	if len(sys.notifiers) == 0 {
+		return nil
 	}
+	n := &mochi.BatchNotifier{}
+	for _, i := range sys.notifiers {
+		n.Subscribe(i)
+	}
+
+	c := n.Notify()
+	sys.batchNotifiers[c] = n
 	return c
 }
 
 func (sys *System) Unnotify(c chan struct{}) {
-	if c == nil {
-		return
-	}
-	n := sys.batchNotifiers[c]
-	if n == nil {
+	n, ok := sys.batchNotifiers[c]
+	if !ok {
 		panic("Cannot unnotify unknown chan")
 	}
 	n.Unnotify(c)

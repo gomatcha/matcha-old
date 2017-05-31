@@ -1,8 +1,17 @@
 package tabnavigator
 
+import (
+	"image"
+
+	"github.com/overcyn/mochi/store"
+	"github.com/overcyn/mochi/view"
+)
+
 type TabNavigator struct {
 	*view.Embed
-	views []view.View
+	views    []view.View
+	options  []*TabOptions
+	notifier *mochi.BatchNotifier
 }
 
 func New(ctx *view.Context, key interface{}) *TabNavigator {
@@ -24,7 +33,19 @@ func (n *TabNavigator) Views() []view.View {
 
 func (n *TabNavigator) SetViews(vs []view.View, animated bool) {
 	n.views = vs
-	n.Update()
+
+	opts := []TabOptions{}
+	notifers := []mochi.Notifiers{}
+	for _, i := range n.views {
+		opt, ok := i.(*TabOptions)
+		if !ok {
+			opt
+		}
+		opts = append(opts, opt)
+		notifiers := append(notifiers, opt)
+	}
+	n.notifier = mochi.NewBatchNotifier(notifiers)
+	n.options = opts
 }
 
 type TabOptions struct {

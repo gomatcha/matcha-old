@@ -96,41 +96,38 @@ func (as *AnimatedStyle) PaintStyle() Style {
 }
 
 func (as *AnimatedStyle) Notify() chan struct{} {
+	n := &mochi.BatchNotifier{}
+
+	if as.Transparency != nil {
+		n.Subscribe(as.Transparency)
+	}
+	if as.BackgroundColor != nil {
+		n.Subscribe(as.BackgroundColor)
+	}
+	if as.BorderColor != nil {
+		n.Subscribe(as.BorderColor)
+	}
+	if as.BorderWidth != nil {
+		n.Subscribe(as.BorderWidth)
+	}
+	if as.CornerRadius != nil {
+		n.Subscribe(as.CornerRadius)
+	}
+	if as.ShadowRadius != nil {
+		n.Subscribe(as.ShadowRadius)
+	}
+	// if as.ShadowOffset != nil {
+	// 	n.Subscribe(as.ShadowOffset)
+	// }
+	if as.ShadowColor != nil {
+		n.Subscribe(as.ShadowColor)
+	}
+
+	c := n.Notify()
 	if as.batchNotifiers == nil {
 		as.batchNotifiers = map[chan struct{}]*mochi.BatchNotifier{}
 	}
-
-	ns := []mochi.Notifier{}
-	if as.Transparency != nil {
-		ns = append(ns, as.Transparency)
-	}
-	if as.BackgroundColor != nil {
-		ns = append(ns, as.BackgroundColor)
-	}
-	if as.BorderColor != nil {
-		ns = append(ns, as.BorderColor)
-	}
-	if as.BorderWidth != nil {
-		ns = append(ns, as.BorderWidth)
-	}
-	if as.CornerRadius != nil {
-		ns = append(ns, as.CornerRadius)
-	}
-	if as.ShadowRadius != nil {
-		ns = append(ns, as.ShadowRadius)
-	}
-	// if as.ShadowOffset != nil {
-	// 	ns = append(ns, as.ShadowOffset)
-	// }
-	if as.ShadowColor != nil {
-		ns = append(ns, as.ShadowColor)
-	}
-
-	n := mochi.NewBatchNotifier(ns...)
-	c := n.Notify()
-	if c != nil {
-		as.batchNotifiers[c] = n
-	}
+	as.batchNotifiers[c] = n
 	return c
 }
 
