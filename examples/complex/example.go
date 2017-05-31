@@ -24,7 +24,7 @@ import (
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/complex New", func() *view.Root {
 		return view.NewRoot(func(c view.Config) view.View {
-			return NewNestedView(c)
+			return NewNestedView(nil, nil)
 		}, 0)
 	})
 }
@@ -37,16 +37,17 @@ type NestedView struct {
 	colorTicker mochi.ColorNotifier
 }
 
-func NewNestedView(c view.Config) *NestedView {
-	v, ok := c.Prev.(*NestedView)
-	if !ok {
-		v = &NestedView{}
-		v.Embed = c.Embed
-		v.ticker = animate.NewTicker(time.Second * 5)
-		v.floatTicker = animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 150})
-		v.colorTicker = animate.ColorInterpolate(v.ticker, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow})
+func NewNestedView(ctx *view.Context, key interface{}) *NestedView {
+	if v, ok := ctx.Prev(key).(*NestedView); ok {
+		return v
 	}
-	return v
+	ticker := animate.NewTicker(time.Second * 5)
+	return &NestedView{
+		Embed:       view.NewEmbed(ctx.NewId(key)),
+		ticker:      ticker,
+		floatTicker: animate.FloatInterpolate(ticker, animate.FloatLerp{Start: 0, End: 150}),
+		colorTicker: animate.ColorInterpolate(ticker, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow}),
+	}
 }
 
 func (v *NestedView) Build(ctx *view.Context) *view.Model {
@@ -99,7 +100,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(50))
 	})
 
-	chl5 := textview.New(ctx, 5)
+	chl5 := textview.New(nil, nil) // test no context
 	chl5.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 	chl5.String = "Subtitle"
 	chl5.Style.SetAlignment(text.AlignmentCenter)

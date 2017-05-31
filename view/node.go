@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/gogo/protobuf/proto"
@@ -118,11 +119,14 @@ func (ctx *Context) Get(key interface{}) Config {
 }
 
 func (ctx *Context) Prev(key interface{}) View {
+	if ctx == nil {
+		return nil
+	}
 	cacheKey := viewCacheKey{key: key, id: ctx.node.id}
 	prevId := ctx.prevIds[cacheKey]
-	prevCtx := ctx.prevNodes[prevId]
-	if prevCtx != nil {
-		return prevCtx.view
+	prevNode := ctx.prevNodes[prevId]
+	if prevNode != nil {
+		return prevNode.view
 	}
 	return nil
 }
@@ -132,9 +136,11 @@ func (ctx *Context) PrevModel() *Model {
 }
 
 func (ctx *Context) NewId(key interface{}) mochi.Id {
-	cacheKey := viewCacheKey{key: key, id: ctx.node.id}
-	id := ctx.node.root.newId()
-	ctx.node.root.ids[cacheKey] = id
+	id := newId()
+	if ctx != nil {
+		cacheKey := viewCacheKey{key: key, id: ctx.node.id}
+		ctx.node.root.ids[cacheKey] = id
+	}
 	return id
 }
 
@@ -166,12 +172,17 @@ func (f updateFlag) needsPaint() bool {
 	return f&buildFlag != 0 || f&layoutFlag != 0 || f&paintFlag != 0
 }
 
+var maxId int64
+
+func newId() mochi.Id {
+	return mochi.Id(atomic.AddInt64(&maxId, 1))
+}
+
 type root struct {
 	mu          sync.Mutex
 	node        *node
 	ids         map[viewCacheKey]mochi.Id
 	nodes       map[mochi.Id]*node
-	maxId       mochi.Id
 	maxFuncId   int64
 	updateFlags map[mochi.Id]updateFlag
 }
@@ -179,18 +190,18 @@ type root struct {
 func newRoot(f func(Config) View) *root {
 	root := &root{}
 
-	id := root.newId()
 	cfg := Config{Embed: &Embed{
 		root: root,
-		id:   id,
+		id:   newId(),
 	}}
+	v := f(cfg)
 	node := &node{
-		id:   id,
-		view: f(cfg),
+		id:   v.Id(),
+		view: v,
 		root: root,
 	}
 	root.node = node
-	root.updateFlags = map[mochi.Id]updateFlag{id: buildFlag}
+	root.updateFlags = map[mochi.Id]updateFlag{v.Id(): buildFlag}
 	return root
 }
 
@@ -264,7 +275,10 @@ func (root *root) buildLocked() {
 
 	ids := map[viewCacheKey]mochi.Id{}
 	for k := range root.nodes {
-		ids[keys[k]] = k
+		key, ok := keys[k]
+		if ok {
+			ids[key] = k
+		}
 	}
 	root.ids = ids
 }
@@ -295,11 +309,6 @@ func (root *root) call(funcId int64, viewId int64, args []reflect.Value) []refle
 	v := reflect.ValueOf(f)
 
 	return v.Call(args)
-}
-
-func (root *root) newId() mochi.Id {
-	root.maxId += 1
-	return root.maxId
 }
 
 func (root *root) newFuncId() int64 {
