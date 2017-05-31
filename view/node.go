@@ -21,6 +21,9 @@ import (
 	"github.com/overcyn/mochibridge"
 )
 
+var maxId int64
+var maxFuncId int64
+
 type Middleware interface {
 	Build(*Context, *Model)
 }
@@ -121,7 +124,7 @@ func (ctx *Context) PrevModel() *Model {
 }
 
 func (ctx *Context) NewId(key interface{}) mochi.Id {
-	id := newId()
+	id := mochi.Id(atomic.AddInt64(&maxId, 1))
 	if ctx != nil {
 		cacheKey := viewCacheKey{key: key, id: ctx.node.id}
 		ctx.node.root.ids[cacheKey] = id
@@ -130,11 +133,7 @@ func (ctx *Context) NewId(key interface{}) mochi.Id {
 }
 
 func (ctx *Context) NewFuncId() int64 {
-	return ctx.node.root.newFuncId()
-}
-
-func (ctx *Context) Id() mochi.Id {
-	return ctx.node.id
+	return atomic.AddInt64(&maxFuncId, 1)
 }
 
 type updateFlag int
@@ -157,18 +156,11 @@ func (f updateFlag) needsPaint() bool {
 	return f&buildFlag != 0 || f&layoutFlag != 0 || f&paintFlag != 0
 }
 
-var maxId int64
-
-func newId() mochi.Id {
-	return mochi.Id(atomic.AddInt64(&maxId, 1))
-}
-
 type root struct {
 	mu          sync.Mutex
 	node        *node
 	ids         map[viewCacheKey]mochi.Id
 	nodes       map[mochi.Id]*node
-	maxFuncId   int64
 	updateFlags map[mochi.Id]updateFlag
 }
 
@@ -287,11 +279,6 @@ func (root *root) call(funcId int64, viewId int64, args []reflect.Value) []refle
 	v := reflect.ValueOf(f)
 
 	return v.Call(args)
-}
-
-func (root *root) newFuncId() int64 {
-	root.maxFuncId += 1
-	return root.maxFuncId
 }
 
 type node struct {
