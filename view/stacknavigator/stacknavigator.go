@@ -6,6 +6,7 @@ import (
 
 type StackNavigator struct {
 	*view.Embed
+	Views []view.View
 }
 
 func New(ctx *view.Context, key interface{}) *StackNavigator {
@@ -17,15 +18,13 @@ func New(ctx *view.Context, key interface{}) *StackNavigator {
 	}
 }
 
-func (v *StackNavigator) Build(ctx *view.Context) *view.Model {
-	children := map[mochi.Id]view.View{}
-	for _, i := range v.Children {
-		children[i.Id()] = i
-	}
+func (n *StackNavigator) Build(ctx *view.Context) *view.Model {
+	return &view.Model{}
+}
 
-	return &view.Model{
-		Children: children,
-		Painter:  v.Painter,
-		Layouter: v.Layouter,
-	}
+func (n *StackNavigator) Push(v view.View) {
+
+}
+
+func (n *StackNavigator) Pop() {
 }

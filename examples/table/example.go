@@ -15,7 +15,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/table New", func() *view.Root {
-		return view.NewRoot(func(c view.Config) view.View {
+		return view.NewRootOld(func(c view.Config) view.View {
 			return New(c)
 		}, 0)
 	})

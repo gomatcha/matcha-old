@@ -43,7 +43,7 @@ type Root struct {
 	ticker *internal.Ticker
 }
 
-func NewRoot(f func(Config) View, id int) *Root {
+func NewRootOld(f func(Config) View, id int) *Root {
 	vc := &Root{
 		mu:     &sync.Mutex{},
 		root:   newRoot(f),
