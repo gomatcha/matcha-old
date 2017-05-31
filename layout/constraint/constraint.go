@@ -528,6 +528,8 @@ func (sys *System) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layou
 	return g, gs
 }
 
+// Creates a new batch notifier for the current system state. Notifier anchors that are added after the Notify() call are ignored.
+// This is so we can return nil for the common case, where there are no Notifier anchors.
 func (sys *System) Notify() chan struct{} {
 	n := mochi.NewBatchNotifier(sys.notifiers...)
 	c := n.Notify()

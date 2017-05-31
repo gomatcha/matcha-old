@@ -3,6 +3,7 @@ Root background color isn't set.
 
 // Comm.SyncNotifier SyncNotify() chan struct{}
 // Comm.Notifier Notify() chan-> struct{}
+// mochi.Id is in the mochi package because view depends on layout. and layout needs to use the Ids
 
 High:
 * Navigation View Controllers
