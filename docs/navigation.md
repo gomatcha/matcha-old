@@ -17,6 +17,19 @@ Popovers?
     - Navigation
 - Presented
 
+UIPageViewController
+UISplitViewController
+UITableViewController
+EKEventViewController
+SFSafariViewController
+CNContactViewController
+MCBrowserViewController
+RPPreviewViewController
+SKStoreReviewController
+UIActivityViewController
+GKAchievementViewController
+MPMoviePlayerViewController
+
 self.navigationController > This searches for the closest navigationController above us.
 Alternately. Pass in the navigation controller.
 self.navigation.pop(animated)

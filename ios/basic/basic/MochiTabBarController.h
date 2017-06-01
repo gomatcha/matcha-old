@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+@class MochiViewController;
 
 @interface MochiTabBarController : UITabBarController
+- (id)initWithViewRoot:(MochiViewController *)viewRoot;
+@property (nonatomic, weak) MochiViewController *viewRoot;
 @end

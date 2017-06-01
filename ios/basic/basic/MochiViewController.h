@@ -1,22 +1,15 @@
-//
-//  MochiViewController.h
-//  basic
-//
-//  Created by Kevin Dang on 3/31/17.
-//  Copyright © 2017 Mochi. All rights reserved.
-//
-
-#import <UIKit/UIKit.h>
+@import UIKit;
 @import Mochi;
 @class MochiNode;
 @class MochiViewRoot;
 
-@interface MochiViewController : UIViewController
+@interface MochiViewController : UIViewController // view.Root
 + (NSPointerArray *)viewControllers;
 + (MochiViewController *)viewControllerWithIdentifier:(NSInteger)identifier;
 
-- (id)initWithMochiViewRoot:(MochiViewRoot *)root;
+- (id)initWithGoValue:(MochiGoValue *)value;
 - (void)update:(MochiNode *)node;
+- (NSArray<MochiGoValue *> *)call:(int64_t)funcId viewId:(int64_t)viewId args:(NSArray<MochiGoValue *> *)args;
 @property (nonatomic, readonly) MochiViewRoot *viewRoot;
 @property (nonatomic, readonly) NSInteger identifier;
 @end

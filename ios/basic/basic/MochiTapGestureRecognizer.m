@@ -16,13 +16,13 @@
 @interface MochiTapGestureRecognizer ()
 @property (nonatomic, assign) int64_t funcId;
 @property (nonatomic, assign) int64_t viewId;
-@property (nonatomic, weak) MochiViewRoot *viewRoot;
+@property (nonatomic, weak) MochiViewController *viewController;
 @property (nonatomic, assign) bool disabled;
 @end
 
 @implementation MochiTapGestureRecognizer
 
-- (id)initWitViewRoot:(MochiViewController *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb {
+- (id)initWithMochiVC:(MochiViewController *)viewController viewId:(int64_t)viewId protobuf:(GPBAny *)pb {
     NSError *error = nil;
     MochiPBTapRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTapRecognizer class] error:&error];
     if (pbTapRecognizer == nil) {
@@ -30,7 +30,7 @@
     }
     if ((self = [super initWithTarget:self action:@selector(action:)])) {
         self.numberOfTapsRequired = pbTapRecognizer.count;
-        self.viewRoot = viewRoot.viewRoot;
+        self.viewController = viewController;
         self.funcId = pbTapRecognizer.recognizedFunc;
         self.viewId = viewId;
     }
@@ -64,7 +64,7 @@
     NSData *data = [event data];
     MochiGoValue *value = [[MochiGoValue alloc] initWithData:data];
     
-    [self.viewRoot call:self.funcId viewId:self.viewId args:@[value]];
+    [self.viewController call:self.funcId viewId:self.viewId args:@[value]];
 }
 
 @end

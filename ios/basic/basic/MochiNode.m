@@ -9,26 +9,6 @@
 #import "MochiNode.h"
 #import "MochiProtobuf.h"
 
-@interface MochiViewRoot ()
-@end
-
-@implementation MochiViewRoot
-- (id)initWithGoValue:(MochiGoValue *)value {
-    if ((self = [super init])) {
-        self.value = value;
-    }
-    return self;
-}
-
-- (NSArray<MochiGoValue *> *)call:(int64_t)funcId viewId:(int64_t)viewId args:(NSArray<MochiGoValue *> *)args {
-    MochiGoValue *goValue = [[MochiGoValue alloc] initWithLongLong:funcId];
-    MochiGoValue *goViewId = [[MochiGoValue alloc] initWithLongLong:viewId];
-    MochiGoValue *goArgs = [[MochiGoValue alloc] initWithArray:args];
-    return [self.value call:@"Call" args:@[goValue, goViewId, goArgs]];
-}
-
-@end
-
 @interface MochiNodeRoot ()
 @property (nonatomic, strong) MochiNode *node;
 @end

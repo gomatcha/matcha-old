@@ -10,4 +10,11 @@
 
 @implementation MochiTabBarController
 
+- (id)initWithViewRoot:(MochiViewController *)viewRoot {
+    if ((self = [super init])) {
+        self.viewRoot = viewRoot;
+    }
+    return self;
+}
+
 @end

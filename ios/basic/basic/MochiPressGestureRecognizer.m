@@ -14,14 +14,14 @@
 @interface MochiPressGestureRecognizer ()
 @property (nonatomic, assign) int64_t funcId;
 @property (nonatomic, assign) int64_t viewId;
-@property (nonatomic, weak) MochiViewRoot *viewRoot;
+@property (nonatomic, weak) MochiViewController *viewController;
 @property (nonatomic, strong) NSDate *startTime;
 @property (nonatomic, assign) BOOL disabled;
 @end
 
 @implementation MochiPressGestureRecognizer
 
-- (id)initWitViewRoot:(MochiViewController *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb {
+- (id)initWithMochiVC:(MochiViewController *)viewController viewId:(int64_t)viewId protobuf:(GPBAny *)pb {
     NSError *error = nil;
     MochiPBPressRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBPressRecognizer class] error:&error];
     if (pbTapRecognizer == nil) {
@@ -29,7 +29,7 @@
     }
     if ((self = [super initWithTarget:self action:@selector(action:)])) {
         self.minimumPressDuration = pbTapRecognizer.minDuration.timeInterval;
-        self.viewRoot = viewRoot.viewRoot;
+        self.viewController = viewController;
         self.funcId = pbTapRecognizer.funcId;
         self.viewId = viewId;
     }
@@ -76,7 +76,7 @@
     NSData *data = [event data];
     MochiGoValue *value = [[MochiGoValue alloc] initWithData:data];
     
-    [self.viewRoot call:self.funcId viewId:self.viewId args:@[value]];
+    [self.viewController call:self.funcId viewId:self.viewId args:@[value]];
 }
 
 

@@ -12,7 +12,7 @@
 @class MochiViewController;
 
 @interface MochiTapGestureRecognizer : UITapGestureRecognizer
-- (id)initWitViewRoot:(MochiViewController *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb;
+- (id)initWithMochiVC:(MochiViewController *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb;
 - (void)disable;
 - (void)updateWithProtobuf:(GPBAny *)pb;
 @end

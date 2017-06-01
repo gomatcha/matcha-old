@@ -1,19 +1,8 @@
-//
-//  MochiView.m
-//  basic
-//
-//  Created by Kevin Dang on 3/31/17.
-//  Copyright © 2017 Mochi. All rights reserved.
-//
-
 #import "MochiView.h"
 #import "MochiProtobuf.h"
 #import "MochiTapGestureRecognizer.h"
 #import "MochiPressGestureRecognizer.h"
-
-bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config, MochiViewController *viewRoot);
-UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewController *viewRoot);
-MochiView *MochiViewWithNode(MochiNode *node, MochiViewController *root);
+#import "MochiTabBarController.h"
 
 @interface MochiViewConfig : NSObject
 @property (nonatomic, strong) NSDictionary<NSNumber *, UIView *> *childViews;
@@ -27,15 +16,16 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewController *root);
 @implementation MochiViewConfig
 @end
 
-@interface MochiView ()
+@interface MochiBasicView ()
 @property (nonatomic, strong) MochiViewConfig *config;
 @end
 
-@implementation MochiView
+@implementation MochiBasicView
 
-- (id)initWithViewRoot:(MochiViewController *)viewRoot {
+- (id)initWithViewRoot:(MochiViewController *)viewRoot parentVC:(UIViewController *)parentVC {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewRoot = viewRoot;
+        self.parentVC = parentVC;
         self.config = [[MochiViewConfig alloc] init];
     }
     return self;
@@ -53,9 +43,10 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewController *root);
 
 @implementation MochiTextView
 
-- (id)initWithViewRoot:(MochiViewController *)viewRoot {
+- (id)initWithViewRoot:(MochiViewController *)viewRoot parentVC:(UIViewController *)parentVC {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewRoot = viewRoot;
+        self.parentVC = parentVC;
         self.config = [[MochiViewConfig alloc] init];
     }
     return self;
@@ -82,9 +73,10 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewController *root);
 
 @implementation MochiImageView
 
-- (id)initWithViewRoot:(MochiViewController *)viewRoot {
+- (id)initWithViewRoot:(MochiViewController *)viewRoot parentVC:(UIViewController *)parentVC {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewRoot = viewRoot;
+        self.parentVC = parentVC;
         self.config = [[MochiViewConfig alloc] init];
     }
     return self;
@@ -124,9 +116,10 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewController *root);
 
 @implementation MochiButton
 
-- (id)initWithViewRoot:(MochiViewController *)viewRoot {
+- (id)initWithViewRoot:(MochiViewController *)viewRoot parentVC:(UIViewController *)parentVC {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewRoot = viewRoot;
+        self.parentVC = parentVC;
         self.config = [[MochiViewConfig alloc] init];
         self.button = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.button addTarget:self action:@selector(onPress) forControlEvents:UIControlEventTouchUpInside];
@@ -164,10 +157,11 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewController *root);
 
 @implementation MochiScrollView
 
-- (id)initWithViewRoot:(MochiViewController *)viewRoot {
+- (id)initWithViewRoot:(MochiViewController *)viewRoot parentVC:(UIViewController *)parentVC {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewRoot = viewRoot;
         self.config = [[MochiViewConfig alloc] init];
+        self.parentVC = parentVC;
     }
     return self;
 }
@@ -219,12 +213,12 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
                 [config.childViews[i] removeFromSuperview];
             }
             for (NSNumber *i in addedKeys) {
-                MochiView *childView = MochiViewWithNode(node.nodeChildren[i], viewRoot);
+                MochiBasicView *childView = MochiViewWithNode(node.nodeChildren[i], viewRoot, nil);
                 [view addSubview:childView];
                 childViews[i] = childView;
             }
             for (NSNumber *i in unmodifiedKeys) {
-                MochiView *childView = (id)config.childViews[i];
+                MochiBasicView *childView = (id)config.childViews[i];
                 childViews[i] = childView;
             }
             config.childViews = childViews;
@@ -298,7 +292,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
     }
     
     for (NSNumber *i in config.childViews) {
-        ((MochiView *)config.childViews[i]).node = node.nodeChildren[i];
+        ((MochiBasicView *)config.childViews[i]).node = node.nodeChildren[i];
     }
     
     bool update = ![node.buildId isEqual:config.node.buildId];
@@ -308,26 +302,35 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
 
 UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewController *viewRoot) {
     if ([any.typeURL isEqual:@"type.googleapis.com/mochi.touch.TapRecognizer"]) {
-        return [[MochiTapGestureRecognizer alloc] initWitViewRoot:viewRoot viewId:viewId protobuf:any];
+        return [[MochiTapGestureRecognizer alloc] initWithMochiVC:viewRoot viewId:viewId protobuf:any];
     } else if ([any.typeURL isEqual:@"type.googleapis.com/mochi.touch.PressRecognizer"]) {
-        return [[MochiPressGestureRecognizer alloc] initWitViewRoot:viewRoot viewId:viewId protobuf:any];
+        return [[MochiPressGestureRecognizer alloc] initWithMochiVC:viewRoot viewId:viewId protobuf:any];
     }
     return nil;
 }
 
-MochiView *MochiViewWithNode(MochiNode *node, MochiViewController *root) {
+MochiBasicView *MochiViewWithNode(MochiNode *node, MochiViewController *root, UIViewController *parentVC) {
     NSString *name = node.nativeViewName;
-    MochiView *child = nil;
+    MochiBasicView *child = nil;
     if ([name isEqual:@""]) {
-        child = [[MochiView alloc] initWithViewRoot:root];
+        child = [[MochiBasicView alloc] initWithViewRoot:root parentVC:parentVC];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/textview"]) {
-        child = (id)[[MochiTextView alloc] initWithViewRoot:root];
+        child = (id)[[MochiTextView alloc] initWithViewRoot:root parentVC:parentVC];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/imageview"]) {
-        child = (id)[[MochiImageView alloc] initWithViewRoot:root];
+        child = (id)[[MochiImageView alloc] initWithViewRoot:root parentVC:parentVC];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/button"]) {
-        child = (id)[[MochiButton alloc] initWithViewRoot:root];
+        child = (id)[[MochiButton alloc] initWithViewRoot:root parentVC:parentVC];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/scrollview"]) {
-        child = (id)[[MochiScrollView alloc] initWithViewRoot:root];
+        child = (id)[[MochiScrollView alloc] initWithViewRoot:root parentVC:parentVC];
+    }
+    return child;
+}
+
+UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewController *root) {
+    NSString *name = node.nativeViewName;
+    UIViewController *child = nil;
+    if ([name isEqual:@"github.com/overcyn/mochi/view/tabnavigator"]) {
+        child = [[MochiTabBarController alloc] initWithViewRoot:root];
     }
     return child;
 }
