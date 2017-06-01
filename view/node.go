@@ -46,15 +46,16 @@ func Middlewares() []Middleware {
 }
 
 type Root struct {
-	id     int
+	id     int64
 	mu     *sync.Mutex
 	root   *root
 	size   layout.Point
 	ticker *internal.Ticker
 }
 
-func NewRoot(v View, id int) *Root {
-	vc := &Root{
+func NewRoot(v View) *Root {
+	id := atomic.AddInt64(&maxId, 1)
+	r := &Root{
 		mu:     &sync.Mutex{},
 		root:   newRoot(v),
 		ticker: internal.NewTicker(time.Hour * 99999),
@@ -62,37 +63,44 @@ func NewRoot(v View, id int) *Root {
 	}
 
 	// Start run loop.
-	vc.ticker.NotifyFunc(func() {
-		vc.mu.Lock()
-		defer vc.mu.Unlock()
+	r.ticker.NotifyFunc(func() {
+		r.mu.Lock()
+		defer r.mu.Unlock()
 
-		if !vc.root.update(vc.size) {
+		if !r.root.update(r.size) {
 			// nothing changed
 			return
 		}
 
-		pb, err := vc.root.MarshalProtobuf2()
+		pb, err := r.root.MarshalProtobuf2()
 		if err != nil {
 			fmt.Println("err", err)
 			return
 		}
-		mochibridge.Root().Call("updateId:withProtobuf:", mochibridge.Int64(int64(id)), mochibridge.Bytes(pb))
+		mochibridge.Root().Call("updateId:withProtobuf:", mochibridge.Int64(id), mochibridge.Bytes(pb))
 	})
-	return vc
+	return r
 }
 
-func (vc *Root) Call(funcId int64, viewId int64, args []reflect.Value) []reflect.Value {
-	vc.mu.Lock()
-	defer vc.mu.Unlock()
+func (r *Root) Call(funcId int64, viewId int64, args []reflect.Value) []reflect.Value {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
-	return vc.root.call(funcId, viewId, args)
+	return r.root.call(funcId, viewId, args)
 }
 
-func (vc *Root) SetSize(p layout.Point) {
-	vc.mu.Lock()
-	defer vc.mu.Unlock()
+func (r *Root) Id() int64 {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
-	vc.size = p
+	return r.id
+}
+
+func (r *Root) SetSize(p layout.Point) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	r.size = p
 }
 
 type viewCacheKey struct {

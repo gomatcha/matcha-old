@@ -18,18 +18,18 @@
 @class MochiPBRecognizer;
 @class GPBAny;
 
-@interface MochiViewRoot : NSObject
+@interface MochiViewRoot : NSObject // view.Root
 - (id)initWithGoValue:(MochiGoValue *)value;
 @property (nonatomic, strong) MochiGoValue *value;
 - (NSArray<MochiGoValue *> *)call:(int64_t)funcId viewId:(int64_t)viewId args:(NSArray<MochiGoValue *> *)args;
 @end
 
-@interface MochiNodeRoot : NSObject
+@interface MochiNodeRoot : NSObject // view.root
 - (id)initWithProtobuf:(MochiPBRoot *)data;
 @property (nonatomic, readonly) MochiNode *node;
 @end
 
-@interface MochiNode : NSObject
+@interface MochiNode : NSObject // view.node
 - (id)initWithProtobuf:(MochiPBNode *)node;
 @property (nonatomic, readonly) NSDictionary<NSNumber *, MochiNode *> *nodeChildren;
 @property (nonatomic, readonly) MochiLayoutGuide *guide;

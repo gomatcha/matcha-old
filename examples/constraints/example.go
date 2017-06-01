@@ -11,7 +11,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/constraints New", func() *view.Root {
-		return view.NewRoot(New(nil, nil), 0)
+		return view.NewRoot(New(nil, nil))
 	})
 }
 

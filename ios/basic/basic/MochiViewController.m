@@ -41,7 +41,7 @@
 
 - (id)initWithMochiViewRoot:(MochiViewRoot *)root {
     if ((self = [super initWithNibName:nil bundle:nil])) {
-        self.identifier = 0;
+        self.identifier = [root.value call:@"Id" args:nil][0].toLongLong;
         [[MochiViewController viewControllers] addPointer:(__bridge void *)self];
         
         self.viewRoot = root;
