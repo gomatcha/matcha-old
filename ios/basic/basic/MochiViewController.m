@@ -50,7 +50,7 @@
 }
 
 - (void)loadView {
-    self.mochiView = [[MochiView alloc] initWithViewRoot:self.viewRoot];
+    self.mochiView = [[MochiView alloc] initWithViewRoot:self];
     self.view = self.mochiView;
 }
 

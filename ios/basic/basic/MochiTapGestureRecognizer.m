@@ -11,6 +11,7 @@
 #import "MochiNode.h"
 #import "MochiProtobuf.h"
 #import "MochiBridge.h"
+#import "MochiViewController.h"
 
 @interface MochiTapGestureRecognizer ()
 @property (nonatomic, assign) int64_t funcId;
@@ -21,7 +22,7 @@
 
 @implementation MochiTapGestureRecognizer
 
-- (id)initWitViewRoot:(MochiViewRoot *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb {
+- (id)initWitViewRoot:(MochiViewController *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb {
     NSError *error = nil;
     MochiPBTapRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTapRecognizer class] error:&error];
     if (pbTapRecognizer == nil) {
@@ -29,7 +30,7 @@
     }
     if ((self = [super initWithTarget:self action:@selector(action:)])) {
         self.numberOfTapsRequired = pbTapRecognizer.count;
-        self.viewRoot = viewRoot;
+        self.viewRoot = viewRoot.viewRoot;
         self.funcId = pbTapRecognizer.recognizedFunc;
         self.viewId = viewId;
     }

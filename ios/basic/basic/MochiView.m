@@ -11,9 +11,9 @@
 #import "MochiTapGestureRecognizer.h"
 #import "MochiPressGestureRecognizer.h"
 
-bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config, MochiViewRoot *viewRoot);
-UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewRoot *viewRoot);
-MochiView *MochiViewWithNode(MochiNode *node, MochiViewRoot *root);
+bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config, MochiViewController *viewRoot);
+UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewController *viewRoot);
+MochiView *MochiViewWithNode(MochiNode *node, MochiViewController *root);
 
 @interface MochiViewConfig : NSObject
 @property (nonatomic, strong) NSDictionary<NSNumber *, UIView *> *childViews;
@@ -33,7 +33,7 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewRoot *root);
 
 @implementation MochiView
 
-- (id)initWithViewRoot:(MochiViewRoot *)viewRoot {
+- (id)initWithViewRoot:(MochiViewController *)viewRoot {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewRoot = viewRoot;
         self.config = [[MochiViewConfig alloc] init];
@@ -53,7 +53,7 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewRoot *root);
 
 @implementation MochiTextView
 
-- (id)initWithViewRoot:(MochiViewRoot *)viewRoot {
+- (id)initWithViewRoot:(MochiViewController *)viewRoot {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewRoot = viewRoot;
         self.config = [[MochiViewConfig alloc] init];
@@ -82,7 +82,7 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewRoot *root);
 
 @implementation MochiImageView
 
-- (id)initWithViewRoot:(MochiViewRoot *)viewRoot {
+- (id)initWithViewRoot:(MochiViewController *)viewRoot {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewRoot = viewRoot;
         self.config = [[MochiViewConfig alloc] init];
@@ -124,7 +124,7 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewRoot *root);
 
 @implementation MochiButton
 
-- (id)initWithViewRoot:(MochiViewRoot *)viewRoot {
+- (id)initWithViewRoot:(MochiViewController *)viewRoot {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewRoot = viewRoot;
         self.config = [[MochiViewConfig alloc] init];
@@ -164,7 +164,7 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewRoot *root);
 
 @implementation MochiScrollView
 
-- (id)initWithViewRoot:(MochiViewRoot *)viewRoot {
+- (id)initWithViewRoot:(MochiViewController *)viewRoot {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewRoot = viewRoot;
         self.config = [[MochiViewConfig alloc] init];
@@ -191,7 +191,7 @@ MochiView *MochiViewWithNode(MochiNode *node, MochiViewRoot *root);
 }
 @end
 
-bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config, MochiViewRoot *viewRoot) {
+bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config, MochiViewController *viewRoot) {
     if (![node.buildId isEqual:config.node.buildId]) {
         {
             // Rebuild children
@@ -306,7 +306,7 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
     return update;
 }
 
-UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewRoot *viewRoot) {
+UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewController *viewRoot) {
     if ([any.typeURL isEqual:@"type.googleapis.com/mochi.touch.TapRecognizer"]) {
         return [[MochiTapGestureRecognizer alloc] initWitViewRoot:viewRoot viewId:viewId protobuf:any];
     } else if ([any.typeURL isEqual:@"type.googleapis.com/mochi.touch.PressRecognizer"]) {
@@ -315,7 +315,7 @@ UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, M
     return nil;
 }
 
-MochiView *MochiViewWithNode(MochiNode *node, MochiViewRoot *root) {
+MochiView *MochiViewWithNode(MochiNode *node, MochiViewController *root) {
     NSString *name = node.nativeViewName;
     MochiView *child = nil;
     if ([name isEqual:@""]) {

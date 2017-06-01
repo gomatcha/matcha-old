@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 @class GPBAny;
-@class MochiViewRoot;
+@class MochiViewController;
 
 @interface MochiPressGestureRecognizer : UILongPressGestureRecognizer
-- (id)initWitViewRoot:(MochiViewRoot *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb;
+- (id)initWitViewRoot:(MochiViewController *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb;
 - (void)updateWithProtobuf:(GPBAny *)pb;
 - (void)disable;
 @end

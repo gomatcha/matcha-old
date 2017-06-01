@@ -17,5 +17,6 @@
 
 - (id)initWithMochiViewRoot:(MochiViewRoot *)root;
 - (void)update:(MochiNode *)node;
+@property (nonatomic, readonly) MochiViewRoot *viewRoot;
 @property (nonatomic, readonly) NSInteger identifier;
 @end

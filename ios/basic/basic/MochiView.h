@@ -10,29 +10,30 @@
 #import "MochiBridge.h"
 #import "MochiNode.h"
 @class MochiViewConfig;
+@class MochiViewController;
 
 @interface MochiView : UIView
-- (id)initWithViewRoot:(MochiViewRoot *)viewRoot;
-@property (nonatomic, weak) MochiViewRoot *viewRoot;
+- (id)initWithViewRoot:(MochiViewController *)viewRoot;
+@property (nonatomic, weak) MochiViewController *viewRoot;
 @property (nonatomic, strong) MochiNode *node;
 @end
 
 @interface MochiTextView : UILabel
-- (id)initWithViewRoot:(MochiViewRoot *)viewRoot;
-@property (nonatomic, weak) MochiViewRoot *viewRoot;
+- (id)initWithViewRoot:(MochiViewController *)viewRoot;
+@property (nonatomic, weak) MochiViewController *viewRoot;
 @end
 
 @interface MochiImageView : UIImageView
-- (id)initWithViewRoot:(MochiViewRoot *)viewRoot;
-@property (nonatomic, weak) MochiViewRoot *viewRoot;
+- (id)initWithViewRoot:(MochiViewController *)viewRoot;
+@property (nonatomic, weak) MochiViewController *viewRoot;
 @end
 
 @interface MochiButton : UIView
-- (id)initWithViewRoot:(MochiViewRoot *)viewRoot;
-@property (nonatomic, weak) MochiViewRoot *viewRoot;
+- (id)initWithViewRoot:(MochiViewController *)viewRoot;
+@property (nonatomic, weak) MochiViewController *viewRoot;
 @end
 
 @interface MochiScrollView : UIScrollView
-- (id)initWithViewRoot:(MochiViewRoot *)viewRoot;
-@property (nonatomic, weak) MochiViewRoot *viewRoot;
+- (id)initWithViewRoot:(MochiViewController *)viewRoot;
+@property (nonatomic, weak) MochiViewController *viewRoot;
 @end

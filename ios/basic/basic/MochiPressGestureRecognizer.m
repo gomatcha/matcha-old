@@ -9,6 +9,7 @@
 #import "MochiPressGestureRecognizer.h"
 #import "MochiProtobuf.h"
 #import "MochiNode.h"
+#import "MochiViewController.h"
 
 @interface MochiPressGestureRecognizer ()
 @property (nonatomic, assign) int64_t funcId;
@@ -20,7 +21,7 @@
 
 @implementation MochiPressGestureRecognizer
 
-- (id)initWitViewRoot:(MochiViewRoot *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb {
+- (id)initWitViewRoot:(MochiViewController *)viewRoot viewId:(int64_t)viewId protobuf:(GPBAny *)pb {
     NSError *error = nil;
     MochiPBPressRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBPressRecognizer class] error:&error];
     if (pbTapRecognizer == nil) {
@@ -28,7 +29,7 @@
     }
     if ((self = [super initWithTarget:self action:@selector(action:)])) {
         self.minimumPressDuration = pbTapRecognizer.minDuration.timeInterval;
-        self.viewRoot = viewRoot;
+        self.viewRoot = viewRoot.viewRoot;
         self.funcId = pbTapRecognizer.funcId;
         self.viewId = viewId;
     }
