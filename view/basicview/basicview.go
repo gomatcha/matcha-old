@@ -2,8 +2,7 @@ package basicview
 
 import (
 	"fmt"
-	// "github.com/overcyn/mochi"
-	"github.com/overcyn/mochi"
+
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/view"
@@ -26,13 +25,8 @@ func New(ctx *view.Context, key interface{}) *BasicView {
 }
 
 func (v *BasicView) Build(ctx *view.Context) *view.Model {
-	children := map[mochi.Id]view.View{}
-	for _, i := range v.Children {
-		children[i.Id()] = i
-	}
-
 	return &view.Model{
-		Children: children,
+		Children: v.Children,
 		Painter:  v.Painter,
 		Layouter: v.Layouter,
 	}

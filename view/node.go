@@ -370,24 +370,28 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 		// Generate the new viewModel.
 		ctx := &Context{node: n, prevIds: prevIds, prevNodes: prevNodes}
 		viewModel := n.view.Build(ctx)
+		viewModelChildren := map[mochi.Id]View{} // TODO: Do this without maps.
+		for _, i := range viewModel.Children {
+			viewModelChildren[i.Id()] = i
+		}
 
 		// Call middleware
 		for _, i := range middlewares {
 			i.Build(ctx, viewModel)
 		}
 
-		// Diff the old children (n.children) with new children (viewModel.Children).
+		// Diff the old children (n.children) with new children (viewModelChildren).
 		addedIds := []mochi.Id{}
 		removedIds := []mochi.Id{}
 		unchangedIds := []mochi.Id{}
 		for id := range n.children {
-			if _, ok := viewModel.Children[id]; !ok {
+			if _, ok := viewModelChildren[id]; !ok {
 				removedIds = append(removedIds, id)
 			} else {
 				unchangedIds = append(unchangedIds, id)
 			}
 		}
-		for id := range viewModel.Children {
+		for id := range viewModelChildren {
 			if _, ok := n.children[id]; !ok {
 				addedIds = append(addedIds, id)
 			}
@@ -397,7 +401,7 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 		// Add build contexts for new children.
 		for _, id := range addedIds {
 			var view View
-			for _, i := range viewModel.Children {
+			for _, i := range viewModelChildren {
 				if i.Id() == id {
 					view = i
 					break

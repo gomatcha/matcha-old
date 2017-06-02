@@ -29,9 +29,7 @@ func New(ctx *view.Context, key interface{}) *TabNavigator {
 func (n *TabNavigator) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	chls := map[mochi.Id]view.View{}
 	for _, i := range n.views {
-		chls[i.Id()] = i
 		l.Add(i, func(s *constraint.Solver) {
 			s.TopEqual(constraint.Const(0))
 			s.LeftEqual(constraint.Const(0))
@@ -46,7 +44,7 @@ func (n *TabNavigator) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Children:       chls,
+		Children:       n.views,
 		Layouter:       l,
 		NativeViewName: "github.com/overcyn/mochi/view/tabnavigator",
 		// NativeViewState: ft.MarshalProtobuf(),

@@ -33,9 +33,9 @@ func New(ctx *view.Context, key interface{}) *ScrollView {
 }
 
 func (v *ScrollView) Build(ctx *view.Context) *view.Model {
-	children := map[mochi.Id]view.View{}
+	children := []view.View{}
 	if v.ContentView != nil {
-		children[v.ContentView.Id()] = v.ContentView
+		children = append(children, v.ContentView)
 	}
 
 	return &view.Model{

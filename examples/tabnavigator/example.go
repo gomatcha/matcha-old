@@ -1,7 +1,6 @@
 package tabnavigator
 
 import (
-	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/view"
@@ -58,9 +57,7 @@ func (v *TabView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(l.MaxGuide().Height())
 	})
 	return &view.Model{
-		Children: map[mochi.Id]view.View{
-			tabnav.Id(): tabnav,
-		},
+		Children: []view.View{tabnav},
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}

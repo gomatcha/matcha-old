@@ -334,3 +334,11 @@ UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewControll
     }
     return child;
 }
+
+@implementation MochiViewNode
+
+- (void)setNode:(MochiNode *)node {
+    _node = node;
+}
+
+@end

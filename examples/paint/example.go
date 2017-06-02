@@ -1,7 +1,6 @@
 package paint
 
 import (
-	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/paint"
@@ -84,12 +83,7 @@ func (v *PaintView) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Children: map[mochi.Id]view.View{
-			chl1.Id(): chl1,
-			chl2.Id(): chl2,
-			chl3.Id(): chl3,
-			chl4.Id(): chl4,
-		},
+		Children: []view.View{chl1, chl2, chl3, chl4},
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}

@@ -13,16 +13,21 @@ func WithValues(v view.View, vals map[interface{}]interface{}) view.View {
 
 High:
 * Navigation View Controllers
+* Text Input
 
 Medium:
 * Thread & locking. How to prevent deadlocks? Notifiers should be eventually consistent.
 * Lock should go bottom to top
+* Documentation
+* Examples
+* Rewrite gomobile
 
 Low:
 * Responder Chain
 * Rotation
 * Accessibility
 * Debugging
+* Deadlock detection
 * LocalStorage / Keychain / UserDefaults
 * Cliboard
 * Video / Sound / Microphone / Accelerometer

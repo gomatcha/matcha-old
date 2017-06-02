@@ -95,7 +95,7 @@ func ExitsStage(from, to, s Stage) bool {
 }
 
 type Model struct {
-	Children map[mochi.Id]View
+	Children []View
 	Layouter layout.Layouter
 	Painter  paint.Painter
 	Values   map[interface{}]interface{}
@@ -107,8 +107,5 @@ type Model struct {
 }
 
 func (n *Model) Add(v View) {
-	if n.Children == nil {
-		n.Children = map[mochi.Id]View{}
-	}
-	n.Children[v.Id()] = v
+	n.Children = append(n.Children, v)
 }

@@ -8,7 +8,6 @@ import (
 	_ "image/png"
 	"net/http"
 
-	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/view"
@@ -45,7 +44,7 @@ func (v *URLImageView) Build(ctx *view.Context) *view.Model {
 	chl.Image = v.image
 
 	return &view.Model{
-		Children: map[mochi.Id]view.View{chl.Id(): chl},
+		Children: []view.View{chl},
 		Painter:  v.Painter,
 	}
 }

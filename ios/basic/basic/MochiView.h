@@ -40,3 +40,11 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
 UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewController *viewRoot);
 MochiBasicView *MochiViewWithNode(MochiNode *node, MochiViewController *root, UIViewController *parentVC);
 UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewController *root);
+
+@interface MochiViewNode : NSObject
+@property (nonatomic, strong) UIView *view;
+@property (nonatomic, strong) UIViewController *viewController;
+@property (nonatomic, strong) MochiNode *node;
+@property (nonatomic, weak) MochiViewNode *parent;
+@property (nonatomic, weak) MochiViewController *rootVC;
+@end
