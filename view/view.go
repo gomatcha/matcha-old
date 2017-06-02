@@ -105,7 +105,3 @@ type Model struct {
 	NativeValues    map[string]proto.Message
 	NativeFuncs     map[int64]interface{}
 }
-
-func (n *Model) Add(v View) {
-	n.Children = append(n.Children, v)
-}

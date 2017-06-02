@@ -49,18 +49,14 @@ func NewNestedView(ctx *view.Context, key interface{}) *NestedView {
 }
 
 func (v *NestedView) Build(ctx *view.Context) *view.Model {
-	m := &view.Model{}
-
 	l := constraint.New()
-	m.Layouter = l
-
 	p := &paint.Style{}
 	p.BackgroundColor = colornames.Green
-	m.Painter = p
 
+	chls := []view.View{}
 	chl1 := basicview.New(ctx, 1)
 	chl1.Painter = &paint.AnimatedStyle{BackgroundColor: v.colorTicker}
-	m.Add(chl1)
+	chls = append(chls, chl1)
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
@@ -70,7 +66,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 	chl2 := basicview.New(ctx, 2)
 	chl2.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
-	m.Add(chl2)
+	chls = append(chls, chl2)
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
 		s.LeftEqual(g1.Left())
@@ -80,7 +76,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 	chl3 := basicview.New(ctx, 3)
 	chl3.Painter = &paint.Style{BackgroundColor: colornames.Blue}
-	m.Add(chl3)
+	chls = append(chls, chl3)
 	g3 := l.Add(chl3, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g2.Left())
@@ -90,7 +86,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 	chl4 := basicview.New(ctx, 4)
 	chl4.Painter = &paint.Style{BackgroundColor: colornames.Magenta}
-	m.Add(chl4)
+	chls = append(chls, chl4)
 	g4 := l.Add(chl4, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g3.Right())
@@ -111,7 +107,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		Face:   "Bold",
 		Size:   20,
 	})
-	m.Add(chl5)
+	chls = append(chls, chl5)
 	g5 := l.Add(chl5, func(s *constraint.Solver) {
 		s.BottomEqual(g2.Bottom())
 		s.RightEqual(g2.Right().Add(-15))
@@ -124,7 +120,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		Family: "Helvetica Neue",
 		Size:   20,
 	})
-	m.Add(chl6)
+	chls = append(chls, chl6)
 	g6 := l.Add(chl6, func(s *constraint.Solver) {
 		s.BottomEqual(g5.Top())
 		s.RightEqual(g2.Right().Add(-15))
@@ -134,7 +130,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	chl8.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl8.ResizeMode = imageview.ResizeModeFit
-	m.Add(chl8)
+	chls = append(chls, chl8)
 	g8 := l.Add(chl8, func(s *constraint.Solver) {
 		s.BottomEqual(g6.Top())
 		s.RightEqual(g2.Right().Add(-15))
@@ -153,7 +149,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		v.counter += 1
 		v.Update()
 	}
-	m.Add(chl9)
+	chls = append(chls, chl9)
 	_ = l.Add(chl9, func(s *constraint.Solver) {
 		s.BottomEqual(g8.Top())
 		s.RightEqual(g2.Right().Add(-15))
@@ -177,7 +173,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	chl10 := scrollview.New(ctx, 10)
 	chl10.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 	chl10.ContentView = scrollChild
-	m.Add(chl10)
+	chls = append(chls, chl10)
 	_ = l.Add(chl10, func(s *constraint.Solver) {
 		s.TopEqual(g4.Bottom())
 		s.LeftEqual(g4.Left())
@@ -189,7 +185,11 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.WidthEqual(l.MaxGuide().Width())
 		s.HeightEqual(l.MaxGuide().Height())
 	})
-	return m
+	return &view.Model{
+		Children: chls,
+		Layouter: l,
+		Painter:  p,
+	}
 }
 
 type TableCell struct {
@@ -209,9 +209,6 @@ func NewTableCell(ctx *view.Context, key interface{}) *TableCell {
 
 func (v *TableCell) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
-	n := &view.Model{}
-	n.Layouter = l
-	n.Painter = v.Painter
 
 	l.Solve(func(s *constraint.Solver) {
 		s.HeightEqual(constraint.Const(50))
@@ -223,12 +220,15 @@ func (v *TableCell) Build(ctx *view.Context) *view.Model {
 		Family: "Helvetica Neue",
 		Size:   20,
 	})
-	n.Add(textView)
 	l.Add(textView, func(s *constraint.Solver) {
 		s.LeftEqual(l.Left().Add(10))
 		s.RightEqual(l.Right().Add(-10))
 		s.CenterYEqual(l.CenterY())
 	})
 
-	return n
+	return &view.Model{
+		Children: []view.View{textView},
+		Layouter: l,
+		Painter:  v.Painter,
+	}
 }

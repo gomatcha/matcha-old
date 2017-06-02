@@ -34,10 +34,6 @@ func New(ctx *view.Context, key interface{}) *TableView {
 
 func (v *TableView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
-	m := &view.Model{
-		Layouter: l,
-		Painter:  &paint.Style{BackgroundColor: colornames.Green},
-	}
 
 	childLayouter := &table.Layout{}
 	childViews := []view.View{}
@@ -57,7 +53,6 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 	scrollView := scrollview.New(ctx, 1)
 	scrollView.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 	scrollView.ContentView = scrollChild
-	m.Add(scrollView)
 	_ = l.Add(scrollView, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
@@ -69,7 +64,12 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 		s.WidthEqual(l.MaxGuide().Width())
 		s.HeightEqual(l.MaxGuide().Height())
 	})
-	return m
+	return &view.Model{
+		Children: []view.View{scrollView},
+		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+	}
+
 }
 
 type TableCell struct {
@@ -89,10 +89,6 @@ func NewTableCell(ctx *view.Context, key interface{}) *TableCell {
 
 func (v *TableCell) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
-	n := &view.Model{}
-	n.Layouter = l
-	n.Painter = v.Painter
-
 	l.Solve(func(s *constraint.Solver) {
 		s.HeightEqual(constraint.Const(50))
 	})
@@ -103,12 +99,15 @@ func (v *TableCell) Build(ctx *view.Context) *view.Model {
 		Family: "Helvetica Neue",
 		Size:   20,
 	})
-	n.Add(textView)
 	l.Add(textView, func(s *constraint.Solver) {
 		s.LeftEqual(l.Left().Add(10))
 		s.RightEqual(l.Right().Add(-10))
 		s.CenterYEqual(l.CenterY())
 	})
 
-	return n
+	return &view.Model{
+		Children: []view.View{textView},
+		Layouter: l,
+		Painter:  v.Painter,
+	}
 }

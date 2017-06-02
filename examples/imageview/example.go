@@ -30,16 +30,11 @@ func New(ctx *view.Context, key interface{}) *ImageView {
 
 func (v *ImageView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
-	m := &view.Model{
-		Layouter: l,
-		Painter:  &paint.Style{BackgroundColor: colornames.Green},
-	}
 
 	chl := imageview.NewURLImageView(ctx, 0)
 	chl.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 	chl.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl.ResizeMode = imageview.ResizeModeFit
-	m.Add(chl)
 	l.Add(chl, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(100))
 		s.LeftEqual(constraint.Const(100))
@@ -51,5 +46,9 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 		s.WidthEqual(l.MaxGuide().Width())
 		s.HeightEqual(l.MaxGuide().Height())
 	})
-	return m
+	return &view.Model{
+		Children: []view.View{chl},
+		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+	}
 }

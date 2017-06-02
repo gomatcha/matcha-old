@@ -34,7 +34,6 @@ Low:
 * Cache layout properties
 
 * remove global Middleware list
-* view.Model.Childern should be a list not a map
 
 
 Done:

@@ -54,14 +54,9 @@ func (v *AnimateView) Lifecycle(from, to view.Stage) {
 
 func (v *AnimateView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
-	m := &view.Model{
-		Layouter: l,
-		Painter:  &paint.Style{BackgroundColor: colornames.Green},
-	}
 
 	chl := basicview.New(ctx, 1)
 	chl.Painter = &paint.AnimatedStyle{BackgroundColor: v.colorTicker}
-	m.Add(chl)
 	l.Add(chl, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
@@ -73,5 +68,9 @@ func (v *AnimateView) Build(ctx *view.Context) *view.Model {
 		s.WidthEqual(l.MaxGuide().Width())
 		s.HeightEqual(l.MaxGuide().Height())
 	})
-	return m
+	return &view.Model{
+		Children: []view.View{chl},
+		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+	}
 }
