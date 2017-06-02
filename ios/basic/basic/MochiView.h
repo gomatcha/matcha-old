@@ -24,8 +24,6 @@
 @interface MochiScrollView : UIScrollView <MochiChildView>
 @end
 
-
-bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *config, MochiViewController *viewRoot);
 UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewNode *viewNode);
 UIView<MochiChildView> *MochiViewWithNode(MochiNode *node, MochiViewNode *viewNode);
 UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewController *root);
