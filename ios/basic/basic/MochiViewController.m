@@ -13,9 +13,10 @@
 
 @interface MochiViewController ()
 @property (nonatomic, assign) NSInteger identifier;
-@property (nonatomic, strong) MochiBasicView *mochiView;
+@property (nonatomic, strong) MochiViewNode *viewNode;
 @property (nonatomic, strong) MochiGoValue *goValue;
 @property (nonatomic, assign) CGRect lastFrame;
+@property (nonatomic, assign) BOOL loaded;
 @end
 
 @implementation MochiViewController
@@ -42,13 +43,9 @@
         self.goValue = value;
         self.identifier = [value call:@"Id" args:nil][0].toLongLong;
         [[MochiViewController viewControllers] addPointer:(__bridge void *)self];
+        self.viewNode = [[MochiViewNode alloc] initWithParent:nil rootVC:self];
     }
     return self;
-}
-
-- (void)loadView {
-    self.mochiView = [[MochiBasicView alloc] initWithViewRoot:self parentVC:self];
-    self.view = self.mochiView;
 }
 
 - (void)viewDidLayoutSubviews {
@@ -68,7 +65,11 @@
 
 
 - (void)update:(MochiNode *)node {
-    self.mochiView.node = node;
+    self.viewNode.node = node;
+    if (!self.loaded) {
+        self.loaded = TRUE;
+        self.view = self.viewNode.view;
+    }
 }
 
 @end
