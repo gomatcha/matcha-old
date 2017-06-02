@@ -21,7 +21,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [MochiObjcBridge sharedBridge].root = [[MochiRoot alloc] init];
     
-    MochiGoValue *rootVC = [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/examples/complex New"] call:nil args:nil][0];
+    MochiGoValue *rootVC = [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/examples/touch New"] call:nil args:nil][0];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[MochiViewController alloc] initWithGoValue:rootVC];

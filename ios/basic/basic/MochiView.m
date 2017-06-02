@@ -17,51 +17,47 @@
 @end
 
 @interface MochiBasicView ()
-@property (nonatomic, strong) MochiViewConfig *config;
+@property (nonatomic, weak) MochiViewNode *viewNode;
+@property (nonatomic, strong) MochiNode *node;
 @end
 
 @implementation MochiBasicView
 
-- (id)initWithViewRoot:(MochiViewController *)viewRoot parentVC:(UIViewController *)parentVC {
+- (id)initWithViewNode:(MochiViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
-        self.viewRoot = viewRoot;
-        self.parentVC = parentVC;
-        self.config = [[MochiViewConfig alloc] init];
+        self.viewNode = viewNode;
     }
     return self;
 }
 
 - (void)setNode:(MochiNode *)value {
-    MochiConfigureViewWithNode(self, value, self.config, self.viewRoot);
+    _node = value;
 }
 
 @end
 
 @interface MochiTextView ()
-@property (nonatomic, strong) MochiViewConfig *config;
+@property (nonatomic, weak) MochiViewNode *viewNode;
+@property (nonatomic, strong) MochiNode *node;
 @end
 
 @implementation MochiTextView
 
-- (id)initWithViewRoot:(MochiViewController *)viewRoot parentVC:(UIViewController *)parentVC {
+- (id)initWithViewNode:(MochiViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
-        self.viewRoot = viewRoot;
-        self.parentVC = parentVC;
-        self.config = [[MochiViewConfig alloc] init];
+        self.viewNode = viewNode;
     }
     return self;
 }
 
 - (void)setNode:(MochiNode *)value {
-    bool update = MochiConfigureViewWithNode(self, value, self.config, self.viewRoot);
-    if (update) {
-        GPBAny *state = value.nativeViewState;
-        NSError *error = nil;
-        MochiPBText *text = (id)[state unpackMessageClass:[MochiPBText class] error:&error];
-        if (text != nil) {
-            NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:text];
-            self.attributedText = attrString;
-        }
+    _node = value;
+    GPBAny *state = value.nativeViewState;
+    NSError *error = nil;
+    MochiPBText *text = (id)[state unpackMessageClass:[MochiPBText class] error:&error];
+    if (text != nil) {
+        NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:text];
+        self.attributedText = attrString;
     }
 }
 
@@ -146,35 +142,33 @@
 @end
 
 @interface MochiScrollView ()
-@property (nonatomic, strong) MochiViewConfig *config;
+@property (nonatomic, weak) MochiViewNode *viewNode;
+@property (nonatomic, strong) MochiNode *node;
 @end
 
 @implementation MochiScrollView
 
-- (id)initWithViewRoot:(MochiViewController *)viewRoot parentVC:(UIViewController *)parentVC {
+- (id)initWithViewNode:(MochiViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
-        self.viewRoot = viewRoot;
-        self.config = [[MochiViewConfig alloc] init];
-        self.parentVC = parentVC;
+        self.viewNode = viewNode;
     }
     return self;
 }
 
 - (void)setNode:(MochiNode *)value {
-    bool update = MochiConfigureViewWithNode(self, value, self.config, self.viewRoot);
-    if (update) {
-        if (self.config.childViews.count > 0) {
-            self.contentSize = ((UIView *)self.config.childViews.allValues[0]).frame.size;
-        }
+    _node = value;
 
-        GPBAny *state = value.nativeViewState;
-        NSError *error = nil;
-        MochiPBScrollView *pbscrollview = (id)[state unpackMessageClass:[MochiPBScrollView class] error:&error];
-        if (pbscrollview != nil) {
-            self.scrollEnabled = pbscrollview.scrollEnabled;
-            self.showsVerticalScrollIndicator = pbscrollview.showsVerticalScrollIndicator;
-            self.showsHorizontalScrollIndicator = pbscrollview.showsHorizontalScrollIndicator;
-        }
+    if (self.subviews.count > 0) {
+        self.contentSize = ((UIView *)self.subviews[0]).frame.size;
+    }
+
+    GPBAny *state = value.nativeViewState;
+    NSError *error = nil;
+    MochiPBScrollView *pbscrollview = (id)[state unpackMessageClass:[MochiPBScrollView class] error:&error];
+    if (pbscrollview != nil) {
+        self.scrollEnabled = pbscrollview.scrollEnabled;
+        self.showsVerticalScrollIndicator = pbscrollview.showsVerticalScrollIndicator;
+        self.showsHorizontalScrollIndicator = pbscrollview.showsHorizontalScrollIndicator;
     }
 }
 @end
@@ -219,45 +213,45 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
     //         config.childViews = childViews;
     //     }
     
-    //     // Update gesture recognizers
-    //     {
-    //         NSMutableArray *addedKeys = [NSMutableArray array];
-    //         NSMutableArray *removedKeys = [NSMutableArray array];
-    //         NSMutableArray *unmodifiedKeys = [NSMutableArray array];
+        // // Update gesture recognizers
+        // {
+        //     NSMutableArray *addedKeys = [NSMutableArray array];
+        //     NSMutableArray *removedKeys = [NSMutableArray array];
+        //     NSMutableArray *unmodifiedKeys = [NSMutableArray array];
             
-    //         for (NSNumber *i in config.node.touchRecognizers) {
-    //             GPBAny *child = node.touchRecognizers[i];
-    //             if (child == nil) {
-    //                 [removedKeys addObject:i];
-    //             }
-    //         }
-    //         for (NSNumber *i in node.touchRecognizers) {
-    //             GPBAny *prevChild = config.node.touchRecognizers[i];
-    //             if (prevChild == nil) {
-    //                 [addedKeys addObject:i];
-    //             } else {
-    //                 [unmodifiedKeys addObject:i];
-    //             }
-    //         }
+        //     for (NSNumber *i in config.node.touchRecognizers) {
+        //         GPBAny *child = node.touchRecognizers[i];
+        //         if (child == nil) {
+        //             [removedKeys addObject:i];
+        //         }
+        //     }
+        //     for (NSNumber *i in node.touchRecognizers) {
+        //         GPBAny *prevChild = config.node.touchRecognizers[i];
+        //         if (prevChild == nil) {
+        //             [addedKeys addObject:i];
+        //         } else {
+        //             [unmodifiedKeys addObject:i];
+        //         }
+        //     }
             
-    //         NSMutableDictionary *touchRecognizers = [NSMutableDictionary dictionary];
-    //         for (NSNumber *i in removedKeys) {
-    //             UIGestureRecognizer *recognizer = config.touchRecognizers[i];
-    //             [(id)recognizer disable];
-    //             [view removeGestureRecognizer:recognizer];
-    //         }
-    //         for (NSNumber *i in addedKeys) {
-    //             UIGestureRecognizer *recognizer = MochiGestureRecognizerWithPB(node.identifier.longLongValue, node.touchRecognizers[i], viewRoot);
-    //             [view addGestureRecognizer:recognizer];
-    //             touchRecognizers[i] = recognizer;
-    //         }
-    //         for (NSNumber *i in unmodifiedKeys) {
-    //             UIGestureRecognizer *recognizer = (id)config.touchRecognizers[i];
-    //             [(id)recognizer updateWithProtobuf:node.touchRecognizers[i]];
-    //             touchRecognizers[i] = recognizer;
-    //         }
-    //         config.touchRecognizers = touchRecognizers;
-    //     }
+        //     NSMutableDictionary *touchRecognizers = [NSMutableDictionary dictionary];
+        //     for (NSNumber *i in removedKeys) {
+        //         UIGestureRecognizer *recognizer = config.touchRecognizers[i];
+        //         [(id)recognizer disable];
+        //         [view removeGestureRecognizer:recognizer];
+        //     }
+        //     for (NSNumber *i in addedKeys) {
+        //         UIGestureRecognizer *recognizer = MochiGestureRecognizerWithPB(node.identifier.longLongValue, node.touchRecognizers[i], viewRoot);
+        //         [view addGestureRecognizer:recognizer];
+        //         touchRecognizers[i] = recognizer;
+        //     }
+        //     for (NSNumber *i in unmodifiedKeys) {
+        //         UIGestureRecognizer *recognizer = (id)config.touchRecognizers[i];
+        //         [(id)recognizer updateWithProtobuf:node.touchRecognizers[i]];
+        //         touchRecognizers[i] = recognizer;
+        //     }
+        //     config.touchRecognizers = touchRecognizers;
+        // }
     // }
     // if (![node.layoutId isEqual:config.node.layoutId]) {
     //     NSArray *sortedKeys = [[config.childViews allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
@@ -295,28 +289,28 @@ bool MochiConfigureViewWithNode(UIView *view, MochiNode *node, MochiViewConfig *
     // return update;
 }
 
-UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewController *viewRoot) {
+UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewNode *viewNode) {
     if ([any.typeURL isEqual:@"type.googleapis.com/mochi.touch.TapRecognizer"]) {
-        return [[MochiTapGestureRecognizer alloc] initWithMochiVC:viewRoot viewId:viewId protobuf:any];
+        return [[MochiTapGestureRecognizer alloc] initWithMochiVC:viewNode.rootVC viewId:viewId protobuf:any];
     } else if ([any.typeURL isEqual:@"type.googleapis.com/mochi.touch.PressRecognizer"]) {
-        return [[MochiPressGestureRecognizer alloc] initWithMochiVC:viewRoot viewId:viewId protobuf:any];
+        return [[MochiPressGestureRecognizer alloc] initWithMochiVC:viewNode.rootVC viewId:viewId protobuf:any];
     }
     return nil;
 }
 
-UIView<MochiChildView> *MochiViewWithNode(MochiNode *node, MochiViewController *root, UIViewController *parentVC, MochiViewNode *viewNode) {
+UIView<MochiChildView> *MochiViewWithNode(MochiNode *node, MochiViewNode *viewNode) {
     NSString *name = node.nativeViewName;
-    MochiBasicView *child = nil;
+    UIView<MochiChildView> *child = nil;
     if ([name isEqual:@""]) {
-        child = [[MochiBasicView alloc] initWithViewRoot:root parentVC:parentVC];
+        child = [[MochiBasicView alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/textview"]) {
-        child = (id)[[MochiTextView alloc] initWithViewRoot:root parentVC:parentVC];
+        child = [[MochiTextView alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/imageview"]) {
-        child = (id)[[MochiImageView alloc] initWithViewNode:viewNode];
+        child = [[MochiImageView alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/button"]) {
-        child = (id)[[MochiButton alloc] initWithViewNode:viewNode];
+        child = [[MochiButton alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/scrollview"]) {
-        child = (id)[[MochiScrollView alloc] initWithViewRoot:root parentVC:parentVC];
+        child = [[MochiScrollView alloc] initWithViewNode:viewNode];
     }
     return child;
 }
@@ -344,7 +338,7 @@ UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewControll
     NSAssert(self.node == nil || [self.node.nativeViewName isEqual:node.nativeViewName], @"Node with different name");
     
     if (self.view == nil) {
-        self.view = MochiViewWithNode(node, self.rootVC, nil, self);
+        self.view = MochiViewWithNode(node, self);
     }
     
     // Build children
@@ -404,6 +398,45 @@ UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewControll
         }
     }
     
+    // Update gesture recognizers
+    {
+        NSMutableArray *addedKeys = [NSMutableArray array];
+        NSMutableArray *removedKeys = [NSMutableArray array];
+        NSMutableArray *unmodifiedKeys = [NSMutableArray array];
+        for (NSNumber *i in self.node.touchRecognizers) {
+            GPBAny *child = node.touchRecognizers[i];
+            if (child == nil) {
+                [removedKeys addObject:i];
+            }
+        }
+        for (NSNumber *i in node.touchRecognizers) {
+            GPBAny *prevChild = self.node.touchRecognizers[i];
+            if (prevChild == nil) {
+                [addedKeys addObject:i];
+            } else {
+                [unmodifiedKeys addObject:i];
+            }
+        }
+        
+        NSMutableDictionary *touchRecognizers = [NSMutableDictionary dictionary];
+        for (NSNumber *i in removedKeys) {
+            UIGestureRecognizer *recognizer = self.touchRecognizers[i];
+            [(id)recognizer disable];
+            [self.view removeGestureRecognizer:recognizer];
+        }
+        for (NSNumber *i in addedKeys) {
+            UIGestureRecognizer *recognizer = MochiGestureRecognizerWithPB(node.identifier.longLongValue, node.touchRecognizers[i], self);
+            [self.view addGestureRecognizer:recognizer];
+            touchRecognizers[i] = recognizer;
+        }
+        for (NSNumber *i in unmodifiedKeys) {
+            UIGestureRecognizer *recognizer = self.touchRecognizers[i];
+            [(id)recognizer updateWithProtobuf:node.touchRecognizers[i]];
+            touchRecognizers[i] = recognizer;
+        }
+        self.touchRecognizers = touchRecognizers;
+    }
+
     // Layout subviews
     if (![node.layoutId isEqual:self.node.layoutId]) {
         NSArray *sortedKeys = [[self.children allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
