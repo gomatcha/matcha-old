@@ -50,8 +50,6 @@ func NewNestedView(ctx *view.Context, key interface{}) *NestedView {
 
 func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
-	p := &paint.Style{}
-	p.BackgroundColor = colornames.Green
 
 	chls := []view.View{}
 	chl1 := basicview.New(ctx, 1)
@@ -183,7 +181,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Children: chls,
 		Layouter: l,
-		Painter:  p,
+		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}
 }
 
