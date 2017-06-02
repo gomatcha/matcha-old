@@ -52,10 +52,6 @@ func (v *TabView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(500))
 	})
 
-	l.Solve(func(s *constraint.Solver) {
-		s.WidthEqual(l.MaxGuide().Width())
-		s.HeightEqual(l.MaxGuide().Height())
-	})
 	return &view.Model{
 		Children: []view.View{tabnav},
 		Layouter: l,

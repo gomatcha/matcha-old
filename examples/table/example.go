@@ -60,10 +60,6 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(400))
 	})
 
-	l.Solve(func(s *constraint.Solver) {
-		s.WidthEqual(l.MaxGuide().Width())
-		s.HeightEqual(l.MaxGuide().Height())
-	})
 	return &view.Model{
 		Children: []view.View{scrollView},
 		Layouter: l,

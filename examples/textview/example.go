@@ -51,10 +51,6 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 		s.LeftEqual(constraint.Const(100))
 	})
 
-	l.Solve(func(s *constraint.Solver) {
-		s.WidthEqual(l.MaxGuide().Width())
-		s.HeightEqual(l.MaxGuide().Height())
-	})
 	return &view.Model{
 		Children: []view.View{chl},
 		Layouter: l,

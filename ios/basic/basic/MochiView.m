@@ -337,8 +337,21 @@ UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewControll
 
 @implementation MochiViewNode
 
+- (id)initWithParent:(MochiViewNode *)node rootVC:(MochiViewController *)rootVC {
+    if ((self = [super init])) {
+        self.parent = node;
+        self.rootVC = rootVC; 
+    }
+    return self;
+}
+
 - (void)setNode:(MochiNode *)node {
+    NSAssert(self.node == nil || [self.node.nativeViewName isEqual:node.nativeViewName], @"Node with different name");
     _node = node;
+    
+    if (self.view == nil) {
+        self.view = MochiViewWithNode(self.node, self.rootVC, nil);
+    }
 }
 
 @end

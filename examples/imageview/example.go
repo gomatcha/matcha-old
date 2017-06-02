@@ -42,10 +42,6 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(200))
 	})
 
-	l.Solve(func(s *constraint.Solver) {
-		s.WidthEqual(l.MaxGuide().Width())
-		s.HeightEqual(l.MaxGuide().Height())
-	})
 	return &view.Model{
 		Children: []view.View{chl},
 		Layouter: l,

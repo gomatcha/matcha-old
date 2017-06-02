@@ -1,5 +1,4 @@
 Prevent duplicate keys.
-Root background color isn't set.
 
 // Comm.SyncNotifier SyncNotify() chan struct{}
 // Comm.Notifier Notify() chan-> struct{}

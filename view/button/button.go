@@ -6,7 +6,6 @@ import (
 
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/paint"
 	pbbutton "github.com/overcyn/mochi/pb/button"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view"
@@ -57,7 +56,6 @@ func (l *buttonLayouter) Unnotify(chan struct{}) {
 type Button struct {
 	*view.Embed
 	Text    string
-	Painter paint.Painter
 	OnPress func()
 }
 
@@ -96,7 +94,6 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 
 	return &view.Model{
 		Layouter:       &buttonLayouter{formattedText: ft},
-		Painter:        v.Painter,
 		NativeViewName: "github.com/overcyn/mochi/view/button",
 		NativeViewState: &pbbutton.Button{
 			Text: ft.MarshalProtobuf(),

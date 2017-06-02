@@ -219,7 +219,7 @@ func (root *root) update(size layout.Point) bool {
 		updated = true
 	}
 	if flag.needsLayout() {
-		root.layoutLocked(layout.Pt(0, 0), size)
+		root.layoutLocked(size, size)
 		updated = true
 	}
 	if flag.needsPaint() {

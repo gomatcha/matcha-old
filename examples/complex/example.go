@@ -139,7 +139,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl9 := button.New(ctx, 8)
-	chl9.Painter = &paint.Style{BackgroundColor: colornames.White}
 	chl9.Text = "Button"
 	chl9.OnPress = func() {
 		v.Lock()
@@ -181,10 +180,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(200))
 	})
 
-	l.Solve(func(s *constraint.Solver) {
-		s.WidthEqual(l.MaxGuide().Width())
-		s.HeightEqual(l.MaxGuide().Height())
-	})
 	return &view.Model{
 		Children: chls,
 		Layouter: l,

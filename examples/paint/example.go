@@ -77,11 +77,6 @@ func (v *PaintView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	l.Solve(func(s *constraint.Solver) {
-		s.WidthEqual(l.MaxGuide().Width())
-		s.HeightEqual(l.MaxGuide().Height())
-	})
-
 	return &view.Model{
 		Children: []view.View{chl1, chl2, chl3, chl4},
 		Layouter: l,
