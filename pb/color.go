@@ -22,6 +22,9 @@ func ColorEncode(c color.Color) *Color {
 }
 
 func ImageEncode(img image.Image) *Image {
+	if img == nil {
+		return nil
+	}
 	buf := &bytes.Buffer{}
 	err := bmp.Encode(buf, img)
 	if err != nil {

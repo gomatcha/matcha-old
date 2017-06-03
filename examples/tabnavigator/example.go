@@ -33,18 +33,39 @@ func (v *TabView) Build(ctx *view.Context) *view.Model {
 
 	chl1 := NewTabChildView(ctx, 1)
 	chl1.Painter = &paint.Style{BackgroundColor: colornames.Blue}
+	chl1.TabOptions().SetTitle("Title1")
 
 	chl2 := NewTabChildView(ctx, 2)
 	chl2.Painter = &paint.Style{BackgroundColor: colornames.Red}
+	chl2.TabOptions().SetTitle("Title2")
 
 	chl3 := NewTabChildView(ctx, 3)
 	chl3.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
+	chl3.TabOptions().SetTitle("Title3")
 
 	chl4 := NewTabChildView(ctx, 4)
 	chl4.Painter = &paint.Style{BackgroundColor: colornames.Green}
+	chl4.TabOptions().SetTitle("Title4")
 
 	tabnav := tabnavigator.New(ctx, 100)
-	tabnav.SetViews([]view.View{chl1, chl2, chl3, chl4})
+	tabnav.SetTabs([]tabnavigator.Tab{
+		tabnavigator.Tab{
+			View:    chl1,
+			Options: chl1.TabOptions(),
+		},
+		tabnavigator.Tab{
+			View:    chl2,
+			Options: chl2.TabOptions(),
+		},
+		tabnavigator.Tab{
+			View:    chl3,
+			Options: chl3.TabOptions(),
+		},
+		tabnavigator.Tab{
+			View:    chl4,
+			Options: chl4.TabOptions(),
+		},
+	})
 	l.Add(tabnav, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
@@ -61,7 +82,8 @@ func (v *TabView) Build(ctx *view.Context) *view.Model {
 
 type TabChildView struct {
 	*view.Embed
-	Painter paint.Painter
+	Painter    paint.Painter
+	tabOptions *tabnavigator.Options
 }
 
 func NewTabChildView(ctx *view.Context, key interface{}) *TabChildView {
@@ -69,7 +91,8 @@ func NewTabChildView(ctx *view.Context, key interface{}) *TabChildView {
 		return v
 	}
 	return &TabChildView{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed:      view.NewEmbed(ctx.NewId(key)),
+		tabOptions: &tabnavigator.Options{},
 	}
 }
 
@@ -77,4 +100,8 @@ func (v *TabChildView) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Painter: v.Painter,
 	}
+}
+
+func (v *TabChildView) TabOptions() *tabnavigator.Options {
+	return v.tabOptions
 }

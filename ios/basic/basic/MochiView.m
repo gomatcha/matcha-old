@@ -280,7 +280,7 @@ UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNod
             } else if (child.view) {
                 [self.materializedView addSubview:child.view];
             } else if (child.viewController) {
-//                [self.materializedViewController addChildViewController:child.viewController];
+//                [self.materializedViewController addChildViewController:child.viewController]; // TODO(KD): Why can't I add as a child view controller?
                 [self.materializedView addSubview:child.viewController.view];
             }
         }

@@ -5,14 +5,15 @@ import (
 
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout/constraint"
+	"github.com/overcyn/mochi/pb"
+	tabnavigatorpb "github.com/overcyn/mochi/pb/view/tabnavigator"
 	"github.com/overcyn/mochi/store"
 	"github.com/overcyn/mochi/view"
 )
 
 type TabNavigator struct {
 	*view.Embed
-	views    []view.View
-	options  []*TabOptions
+	tabs     []Tab
 	notifier *mochi.BatchNotifier
 }
 
@@ -29,8 +30,16 @@ func New(ctx *view.Context, key interface{}) *TabNavigator {
 func (n *TabNavigator) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	for _, i := range n.views {
-		l.Add(i, func(s *constraint.Solver) {
+	tabspb := []*tabnavigatorpb.Tab{}
+	views := []view.View{}
+	for _, i := range n.tabs {
+		tabpb, err := i.MarshalProtobuf()
+		if err == nil {
+			tabspb = append(tabspb, tabpb)
+		}
+
+		views = append(views, i.View)
+		l.Add(i.View, func(s *constraint.Solver) {
 			s.TopEqual(constraint.Const(0))
 			s.LeftEqual(constraint.Const(0))
 			s.WidthEqual(l.MaxGuide().Width())
@@ -44,50 +53,56 @@ func (n *TabNavigator) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Children:       n.views,
+		Children:       views,
 		Layouter:       l,
 		NativeViewName: "github.com/overcyn/mochi/view/tabnavigator",
-		// NativeViewState: ft.MarshalProtobuf(),
+		NativeViewState: &tabnavigatorpb.TabNavigator{
+			Tabs: tabspb,
+		},
 	}
 }
 
-func (n *TabNavigator) Views() []view.View {
-	return n.views
+func (n *TabNavigator) Tabs() []Tab {
+	return n.tabs
 }
 
-func (n *TabNavigator) SetViews(vs []view.View) {
+func (n *TabNavigator) SetTabs(tabs []Tab) {
 	// unsubscribe from old views
-	for _, opt := range n.options {
-		n.notifier.Unsubscribe(opt)
+	for _, i := range n.tabs {
+		n.notifier.Unsubscribe(i.Options)
 	}
 
 	// subscribe to new views
-	opts := []*TabOptions{}
-	for _, i := range vs {
-		var opt *TabOptions
-		tabber, ok := i.(Tabber)
-		if ok {
-			opt = tabber.TabOptions()
-		} else {
-			opt = &TabOptions{}
-		}
-		opts = append(opts, opt)
-		n.notifier.Subscribe(opt)
+	for _, i := range tabs {
+		n.notifier.Subscribe(i.Options)
 	}
-	n.options = opts
-	n.views = vs
+	n.tabs = tabs
 }
 
-type TabOptions struct {
-	store store.Store
+type Tab struct {
+	View    view.View
+	Options *Options
+}
 
+func (tab *Tab) MarshalProtobuf() (*tabnavigatorpb.Tab, error) {
+	return &tabnavigatorpb.Tab{
+		Id:           int64(tab.View.Id()),
+		Title:        tab.Options.title,
+		Icon:         pb.ImageEncode(tab.Options.icon),
+		SelectedIcon: pb.ImageEncode(tab.Options.selectedIcon),
+		Badge:        tab.Options.badge,
+	}, nil
+}
+
+type Options struct {
+	store        store.Store
 	title        string
 	icon         image.Image
 	selectedIcon image.Image
 	badge        string
 }
 
-func (opt *TabOptions) SetTitle(v string) {
+func (opt *Options) SetTitle(v string) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
@@ -95,7 +110,7 @@ func (opt *TabOptions) SetTitle(v string) {
 	opt.title = v
 }
 
-func (opt *TabOptions) Title() string {
+func (opt *Options) Title() string {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
@@ -103,7 +118,7 @@ func (opt *TabOptions) Title() string {
 	return opt.title
 }
 
-func (opt *TabOptions) SetIcon(v image.Image) {
+func (opt *Options) SetIcon(v image.Image) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
@@ -111,7 +126,7 @@ func (opt *TabOptions) SetIcon(v image.Image) {
 	opt.icon = v
 }
 
-func (opt *TabOptions) Icon() image.Image {
+func (opt *Options) Icon() image.Image {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
@@ -119,7 +134,7 @@ func (opt *TabOptions) Icon() image.Image {
 	return opt.icon
 }
 
-func (opt *TabOptions) SetSelectedIcon(v image.Image) {
+func (opt *Options) SetSelectedIcon(v image.Image) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
@@ -127,7 +142,7 @@ func (opt *TabOptions) SetSelectedIcon(v image.Image) {
 	opt.selectedIcon = v
 }
 
-func (opt *TabOptions) SelectedIcon() image.Image {
+func (opt *Options) SelectedIcon() image.Image {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
@@ -135,7 +150,7 @@ func (opt *TabOptions) SelectedIcon() image.Image {
 	return opt.selectedIcon
 }
 
-func (opt *TabOptions) SetBadge(v string) {
+func (opt *Options) SetBadge(v string) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
@@ -143,7 +158,7 @@ func (opt *TabOptions) SetBadge(v string) {
 	opt.badge = v
 }
 
-func (opt *TabOptions) Badge() string {
+func (opt *Options) Badge() string {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
@@ -151,15 +166,10 @@ func (opt *TabOptions) Badge() string {
 	return opt.badge
 }
 
-func (opt *TabOptions) Notify() chan struct{} {
+func (opt *Options) Notify() chan struct{} {
 	return opt.store.Notify()
 }
 
-func (opt *TabOptions) Unnotify(c chan struct{}) {
+func (opt *Options) Unnotify(c chan struct{}) {
 	opt.store.Unnotify(c)
-}
-
-type Tabber interface {
-	view.View
-	TabOptions() *TabOptions
 }
