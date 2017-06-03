@@ -23,9 +23,13 @@ func init() {
 
 func screenUpdate() {
 	tickers.mu.Lock()
-	defer tickers.mu.Unlock()
-
+	ts := []*Ticker{}
 	for _, i := range tickers.ts {
+		ts = append(ts, i)
+	}
+	tickers.mu.Unlock()
+
+	for _, i := range ts {
 		i.send()
 	}
 }
