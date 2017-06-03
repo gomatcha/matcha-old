@@ -11,18 +11,6 @@
     return self;
 }
 
-//
-//- (void)setNode:(MochiNode *)value {
-//    _node = value;
-//    GPBAny *state = value.nativeViewState;
-//    NSError *error = nil;
-//    MochiPBButtonButton *pbbutton = (id)[state unpackMessageClass:[MochiPBButtonButton class] error:&error];
-//    
-//    NSAttributedString *string = [[NSAttributedString alloc] initWithProtobuf:pbbutton.text];
-//    [self.button setAttributedTitle:string forState:UIControlStateNormal];
-//}
-
-
 - (void)setMochiChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs {
     GPBAny *state = self.node.nativeViewState;
     NSError *error = nil;

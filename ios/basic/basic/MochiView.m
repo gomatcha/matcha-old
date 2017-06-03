@@ -4,6 +4,7 @@
 #import "MochiPressGestureRecognizer.h"
 #import "MochiTabBarController.h"
 #import "MochiViewController.h"
+#import "MochiStackViewController.h"
 
 @interface MochiBasicView ()
 @property (nonatomic, weak) MochiViewNode *viewNode;
@@ -193,6 +194,8 @@ UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNod
     UIViewController<MochiChildViewController> *child = nil;
     if ([name isEqual:@"github.com/overcyn/mochi/view/tabnavigator"]) {
         child = [[MochiTabBarController alloc] initWithViewNode:viewNode];
+    } else if ([name isEqual:@"github.com/overcyn/mochi/view/stacknavigator"]) {
+        child = [[MochiStackViewController alloc] initWithViewNode:viewNode];
     }
     return child;
 }

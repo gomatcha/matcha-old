@@ -67,15 +67,15 @@ func (n *TabNavigator) Tabs() []Tab {
 }
 
 func (n *TabNavigator) SetTabs(tabs []Tab) {
-	// unsubscribe from old views
-	for _, i := range n.tabs {
-		n.notifier.Unsubscribe(i.Options)
-	}
+	// // unsubscribe from old views
+	// for _, i := range n.tabs {
+	// 	n.notifier.Unsubscribe(i.Options)
+	// }
 
-	// subscribe to new views
-	for _, i := range tabs {
-		n.notifier.Subscribe(i.Options)
-	}
+	// // subscribe to new views
+	// for _, i := range tabs {
+	// 	n.notifier.Subscribe(i.Options)
+	// }
 	n.tabs = tabs
 }
 

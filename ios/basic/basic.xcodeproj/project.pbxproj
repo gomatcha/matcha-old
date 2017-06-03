@@ -34,6 +34,8 @@
 		6778311A1EE299A4009D9D7F /* Touch.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778310D1EE299A4009D9D7F /* Touch.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6778311B1EE299A4009D9D7F /* Tabnavigator.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831111EE299A4009D9D7F /* Tabnavigator.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6778311C1EE299A4009D9D7F /* View.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831131EE299A4009D9D7F /* View.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		677831201EE2B288009D9D7F /* Stacknavigator.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778311F1EE2B288009D9D7F /* Stacknavigator.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		677831231EE2B2C8009D9D7F /* MochiStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831221EE2B2C8009D9D7F /* MochiStackViewController.m */; };
 		67D89E211ED4AE1E0063A1E2 /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */; };
 /* End PBXBuildFile section */
 
@@ -102,6 +104,10 @@
 		677831111EE299A4009D9D7F /* Tabnavigator.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tabnavigator.pbobjc.m; sourceTree = "<group>"; };
 		677831121EE299A4009D9D7F /* View.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.pbobjc.h; sourceTree = "<group>"; };
 		677831131EE299A4009D9D7F /* View.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.pbobjc.m; sourceTree = "<group>"; };
+		6778311E1EE2B288009D9D7F /* Stacknavigator.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stacknavigator.pbobjc.h; sourceTree = "<group>"; };
+		6778311F1EE2B288009D9D7F /* Stacknavigator.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stacknavigator.pbobjc.m; sourceTree = "<group>"; };
+		677831211EE2B2C8009D9D7F /* MochiStackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiStackViewController.h; sourceTree = "<group>"; };
+		677831221EE2B2C8009D9D7F /* MochiStackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiStackViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +206,8 @@
 				676EF4F31E8ECF5D00C1488A /* MochiView.m */,
 				677830F71EDFF2A4009D9D7F /* MochiTabBarController.h */,
 				677830F81EDFF2A4009D9D7F /* MochiTabBarController.m */,
+				677831211EE2B2C8009D9D7F /* MochiStackViewController.h */,
+				677831221EE2B2C8009D9D7F /* MochiStackViewController.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -271,6 +279,7 @@
 		6778310E1EE299A4009D9D7F /* view */ = {
 			isa = PBXGroup;
 			children = (
+				6778311D1EE2B288009D9D7F /* stacknavigator */,
 				6778310F1EE299A4009D9D7F /* tabnavigator */,
 			);
 			path = view;
@@ -283,6 +292,15 @@
 				677831111EE299A4009D9D7F /* Tabnavigator.pbobjc.m */,
 			);
 			path = tabnavigator;
+			sourceTree = "<group>";
+		};
+		6778311D1EE2B288009D9D7F /* stacknavigator */ = {
+			isa = PBXGroup;
+			children = (
+				6778311E1EE2B288009D9D7F /* Stacknavigator.pbobjc.h */,
+				6778311F1EE2B288009D9D7F /* Stacknavigator.pbobjc.m */,
+			);
+			path = stacknavigator;
 			sourceTree = "<group>";
 		};
 		67D89DCD1ED4A2C30063A1E2 /* Frameworks */ = {
@@ -375,7 +393,9 @@
 				674080DD1ED8D4800093D987 /* MochiTapGestureRecognizer.m in Sources */,
 				6778311B1EE299A4009D9D7F /* Tabnavigator.pbobjc.m in Sources */,
 				676EF4E41E8E34E300C1488A /* ViewController.m in Sources */,
+				677831201EE2B288009D9D7F /* Stacknavigator.pbobjc.m in Sources */,
 				67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */,
+				677831231EE2B2C8009D9D7F /* MochiStackViewController.m in Sources */,
 				677831191EE299A4009D9D7F /* Text.pbobjc.m in Sources */,
 				676EF4D01E8E341900C1488A /* AppDelegate.m in Sources */,
 				676EF4F41E8ECF5D00C1488A /* MochiView.m in Sources */,

@@ -1,13 +1,15 @@
 package stacknavigator
 
 import (
+	"github.com/overcyn/mochi/layout/constraint"
+	stacknavigatorpb "github.com/overcyn/mochi/pb/view/stacknavigator"
 	"github.com/overcyn/mochi/store"
 	"github.com/overcyn/mochi/view"
 )
 
 type StackNavigator struct {
 	*view.Embed
-	views []view.View
+	screens []Screen
 }
 
 func New(ctx *view.Context, key interface{}) *StackNavigator {
@@ -20,33 +22,81 @@ func New(ctx *view.Context, key interface{}) *StackNavigator {
 }
 
 func (n *StackNavigator) Build(ctx *view.Context) *view.Model {
-	return &view.Model{}
+	l := constraint.New()
+
+	screenspb := []*stacknavigatorpb.Screen{}
+	views := []view.View{}
+	for _, i := range n.screens {
+		screenpb, err := i.MarshalProtobuf()
+		if err == nil {
+			screenspb = append(screenspb, screenpb)
+		}
+
+		views = append(views, i.View)
+		l.Add(i.View, func(s *constraint.Solver) {
+			s.TopEqual(constraint.Const(0))
+			s.LeftEqual(constraint.Const(0))
+			s.WidthEqual(l.MaxGuide().Width())
+			s.HeightEqual(l.MaxGuide().Height())
+		})
+	}
+
+	l.Solve(func(s *constraint.Solver) {
+		s.WidthEqual(l.MaxGuide().Width())
+		s.HeightEqual(l.MaxGuide().Height())
+	})
+
+	return &view.Model{
+		Children:       views,
+		Layouter:       l,
+		NativeViewName: "github.com/overcyn/mochi/view/stacknavigator",
+		NativeViewState: &stacknavigatorpb.StackNavigator{
+			Screens: screenspb,
+		},
+	}
 }
 
-func (n *StackNavigator) Views() []view.View {
-	return n.views
+func (n *StackNavigator) Screens() []Screen {
+	return n.screens
 }
 
-func (n *StackNavigator) SetViews(vs []view.View, animated bool) {
-	n.views = vs
+func (n *StackNavigator) SetScreens(ss []Screen, animated bool) {
+	n.screens = ss
 	n.Update()
 }
 
-func (n *StackNavigator) Push(v view.View) {
-	n.views = append(n.views, v)
+func (n *StackNavigator) Push(s Screen) {
+	n.screens = append(n.screens, s)
 	n.Update()
 }
 
 func (n *StackNavigator) Pop() {
-	if len(n.views) > 0 {
-		n.views = n.views[:len(n.views)-1]
+	if len(n.screens) > 0 {
+		n.screens = n.screens[:len(n.screens)-1]
 		n.Update()
 	}
 }
 
-type StackOptions struct {
-	store store.Store
+type Screen struct {
+	View    view.View
+	Options *Options
+}
 
+func (s *Screen) MarshalProtobuf() (*stacknavigatorpb.Screen, error) {
+	return &stacknavigatorpb.Screen{
+		Id:    int64(s.View.Id()),
+		Title: s.Options.title,
+		CustomBackButtonTitle: len(s.Options.backButtonTitle) > 0,
+		BackButtonTitle:       s.Options.backButtonTitle,
+		BackButtonHidden:      s.Options.backButtonHidden,
+		// TitleViewId:      s.Options.titleView.Id(),
+		// RightViewIds
+		// LeftViewIds:..
+	}, nil
+}
+
+type Options struct {
+	store            store.Store
 	title            string
 	backButtonTitle  string
 	backButtonHidden bool
@@ -57,7 +107,7 @@ type StackOptions struct {
 	// Bar height?
 }
 
-func (opt *StackOptions) SetTitle(v string) {
+func (opt *Options) SetTitle(v string) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
@@ -65,7 +115,7 @@ func (opt *StackOptions) SetTitle(v string) {
 	opt.title = v
 }
 
-func (opt *StackOptions) Title() string {
+func (opt *Options) Title() string {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
@@ -73,7 +123,7 @@ func (opt *StackOptions) Title() string {
 	return opt.title
 }
 
-func (opt *StackOptions) SetBackButtonTitle(v string) {
+func (opt *Options) SetBackButtonTitle(v string) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
@@ -81,7 +131,7 @@ func (opt *StackOptions) SetBackButtonTitle(v string) {
 	opt.backButtonTitle = v
 }
 
-func (opt *StackOptions) BackButtonTitle() string {
+func (opt *Options) BackButtonTitle() string {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
@@ -89,7 +139,7 @@ func (opt *StackOptions) BackButtonTitle() string {
 	return opt.backButtonTitle
 }
 
-func (opt *StackOptions) SetBackButtonHidden(v bool) {
+func (opt *Options) SetBackButtonHidden(v bool) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
@@ -97,7 +147,7 @@ func (opt *StackOptions) SetBackButtonHidden(v bool) {
 	opt.backButtonHidden = v
 }
 
-func (opt *StackOptions) BackButtonHidden() bool {
+func (opt *Options) BackButtonHidden() bool {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
@@ -105,7 +155,7 @@ func (opt *StackOptions) BackButtonHidden() bool {
 	return opt.backButtonHidden
 }
 
-func (opt *StackOptions) SetTitleView(v view.View) {
+func (opt *Options) SetTitleView(v view.View) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
@@ -113,7 +163,7 @@ func (opt *StackOptions) SetTitleView(v view.View) {
 	opt.titleView = v
 }
 
-func (opt *StackOptions) TitleView() view.View {
+func (opt *Options) TitleView() view.View {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
@@ -121,7 +171,7 @@ func (opt *StackOptions) TitleView() view.View {
 	return opt.titleView
 }
 
-func (opt *StackOptions) SetRightViews(v []view.View) {
+func (opt *Options) SetRightViews(v []view.View) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
@@ -129,7 +179,7 @@ func (opt *StackOptions) SetRightViews(v []view.View) {
 	opt.rightViews = v
 }
 
-func (opt *StackOptions) RightViews() []view.View {
+func (opt *Options) RightViews() []view.View {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
@@ -137,7 +187,7 @@ func (opt *StackOptions) RightViews() []view.View {
 	return opt.rightViews
 }
 
-func (opt *StackOptions) SetLeftViews(v []view.View) {
+func (opt *Options) SetLeftViews(v []view.View) {
 	tx := store.NewWriteTx()
 	defer tx.Commit()
 
@@ -145,7 +195,7 @@ func (opt *StackOptions) SetLeftViews(v []view.View) {
 	opt.leftViews = v
 }
 
-func (opt *StackOptions) LeftViews() []view.View {
+func (opt *Options) LeftViews() []view.View {
 	tx := store.NewReadTx()
 	defer tx.Commit()
 
@@ -153,15 +203,10 @@ func (opt *StackOptions) LeftViews() []view.View {
 	return opt.leftViews
 }
 
-func (opt *StackOptions) Notify() chan struct{} {
+func (opt *Options) Notify() chan struct{} {
 	return opt.store.Notify()
 }
 
-func (opt *StackOptions) Unnotify(c chan struct{}) {
+func (opt *Options) Unnotify(c chan struct{}) {
 	opt.store.Unnotify(c)
-}
-
-type Stacker interface {
-	view.View
-	StackOptions() *StackOptions
 }
