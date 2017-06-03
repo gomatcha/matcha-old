@@ -3,6 +3,7 @@
 #import "MochiTapGestureRecognizer.h"
 #import "MochiPressGestureRecognizer.h"
 #import "MochiTabBarController.h"
+#import "MochiViewController.h"
 
 @interface MochiBasicView ()
 @property (nonatomic, weak) MochiViewNode *viewNode;
@@ -256,13 +257,17 @@ UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNod
     
     if (![node.buildId isEqual:self.node.buildId]) {
         // Update the views with native values
-        for (NSNumber *i in children) {
-            MochiViewNode *child = children[i];
-            if (child.view) {
-                child.view.node = node.nodeChildren[i];
-            } else if (child.viewController) {
-                child.viewController.node = node.nodeChildren[i];
+        if (self.view) {
+            self.view.node = node;
+        } else if (self.viewController) {
+            self.viewController.node = node;
+            
+            NSMutableDictionary<NSNumber *, UIViewController *> *childVCs = [NSMutableDictionary dictionary];
+            for (NSNumber *i in children) {
+                MochiViewNode *child = children[i];
+                childVCs[i] = child.wrappedViewController;
             }
+            self.viewController.mochiChildViewControllers = childVCs;
         }
         
         // Add/remove subviews
@@ -275,7 +280,7 @@ UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNod
             } else if (child.view) {
                 [self.materializedView addSubview:child.view];
             } else if (child.viewController) {
-                [self.materializedViewController addChildViewController:child.viewController];
+//                [self.materializedViewController addChildViewController:child.viewController];
                 [self.materializedView addSubview:child.viewController.view];
             }
         }
@@ -347,8 +352,9 @@ UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNod
                     [self.view insertSubview:subview atIndex:i];
                 }
             }
-            self.view.frame = node.guide.frame;
         }
+        self.materializedView.frame = node.guide.frame;
+        self.materializedView.autoresizingMask = UIViewAutoresizingNone;
     }
     
     // Paint view
@@ -381,6 +387,21 @@ UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNod
     }
     return vc;
 }
+
+- (UIViewController *)wrappedViewController {
+    if (_wrappedViewController) {
+        return _wrappedViewController;
+    }
+    
+    if (self.viewController) {
+        _wrappedViewController = self.viewController;
+        return _wrappedViewController;
+    }
+    _wrappedViewController = [[UIViewController alloc] initWithNibName:nil bundle:nil];
+    _wrappedViewController.view = self.view;
+    return _wrappedViewController;
+}
+
 - (UIView *)materializedView {
     return self.viewController.view ?: self.view;
 }

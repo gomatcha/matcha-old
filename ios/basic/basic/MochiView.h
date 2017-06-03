@@ -13,6 +13,7 @@
 @protocol MochiChildViewController <NSObject>
 - (id)initWithViewNode:(MochiViewNode *)viewNode;
 - (void)setNode:(MochiNode *)node;
+- (void)setMochiChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs;
 @end
 
 @interface MochiBasicView : UIView <MochiChildView>
@@ -44,6 +45,9 @@ UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNod
 @property (nonatomic, strong) MochiNode *node;
 @property (nonatomic, weak) MochiViewNode *parent;
 @property (nonatomic, weak) MochiViewController *rootVC;
+
+@property (nonatomic, strong) UIViewController *wrappedViewController;
 - (UIViewController *)materializedViewController;
+- (UIViewController *)wrappedViewController;
 - (UIView *)materializedView;
 @end

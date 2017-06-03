@@ -10,4 +10,8 @@
     return self;
 }
 
+- (void)setMochiChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs {
+    self.viewControllers = childVCs.allValues;
+}
+
 @end

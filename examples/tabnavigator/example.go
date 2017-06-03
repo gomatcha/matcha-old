@@ -32,10 +32,10 @@ func (v *TabView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
 	chl1 := NewTabChildView(ctx, 1)
-	chl1.Painter = &paint.Style{BackgroundColor: colornames.Red}
+	chl1.Painter = &paint.Style{BackgroundColor: colornames.Blue}
 
 	chl2 := NewTabChildView(ctx, 2)
-	chl2.Painter = &paint.Style{BackgroundColor: colornames.Blue}
+	chl2.Painter = &paint.Style{BackgroundColor: colornames.Red}
 
 	chl3 := NewTabChildView(ctx, 3)
 	chl3.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
