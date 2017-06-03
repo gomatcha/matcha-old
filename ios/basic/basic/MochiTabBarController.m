@@ -1,18 +1,11 @@
-//
-//  MochiTabViewController.m
-//  basic
-//
-//  Created by Kevin Dang on 5/31/17.
-//  Copyright © 2017 Mochi. All rights reserved.
-//
-
 #import "MochiTabBarController.h"
+#import "MochiView.h"
 
 @implementation MochiTabBarController
 
-- (id)initWithViewRoot:(MochiViewController *)viewRoot {
+- (id)initWithViewNode:(MochiViewNode *)viewNode {
     if ((self = [super init])) {
-        self.viewRoot = viewRoot;
+        self.viewNode = viewNode;
     }
     return self;
 }

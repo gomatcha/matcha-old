@@ -187,11 +187,11 @@ UIView<MochiChildView> *MochiViewWithNode(MochiNode *node, MochiViewNode *viewNo
     return child;
 }
 
-UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewController *root) {
+UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNode *node, MochiViewNode *viewNode) {
     NSString *name = node.nativeViewName;
-    UIViewController *child = nil;
+    UIViewController<MochiChildViewController> *child = nil;
     if ([name isEqual:@"github.com/overcyn/mochi/view/tabnavigator"]) {
-        child = [[MochiTabBarController alloc] initWithViewRoot:root];
+        child = [[MochiTabBarController alloc] initWithViewNode:viewNode];
     }
     return child;
 }
@@ -209,8 +209,9 @@ UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewControll
 - (void)setNode:(MochiNode *)node {
     NSAssert(self.node == nil || [self.node.nativeViewName isEqual:node.nativeViewName], @"Node with different name");
     
-    if (self.view == nil) {
+    if (self.view == nil && self.viewController == nil) {
         self.view = MochiViewWithNode(node, self);
+        self.viewController = MochiViewControllerWithNode(node, self);
     }
     
     // Build children
@@ -253,76 +254,101 @@ UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewControll
         child.node = node.nodeChildren[i];
     }
     
-    // Add/remove subviews
-    if (![node.buildId isEqual:self.node.buildId]) {   
+    if (![node.buildId isEqual:self.node.buildId]) {
+        // Update the views with native values
+        for (NSNumber *i in children) {
+            MochiViewNode *child = children[i];
+            if (child.view) {
+                child.view.node = node.nodeChildren[i];
+            } else if (child.viewController) {
+                child.viewController.node = node.nodeChildren[i];
+            }
+        }
+        
+        // Add/remove subviews
         for (NSNumber *i in addedKeys) {
             MochiViewNode *child = children[i];
             child.view.node = node.nodeChildren[i];
-            [self.view addSubview:child.view];
+            
+            if (self.viewController) {
+                // no-op. The view controller will handle this itself.
+            } else if (child.view) {
+                [self.materializedView addSubview:child.view];
+            } else if (child.viewController) {
+                [self.materializedViewController addChildViewController:child.viewController];
+                [self.materializedView addSubview:child.viewController.view];
+            }
         }
         for (NSNumber *i in removedKeys) {
             MochiViewNode *child = self.children[i];
-            [child.view removeFromSuperview];
-        }
-        for (NSNumber *i in unmodifiedKeys) {
-            MochiViewNode *child = children[i];
-            child.view.node = node.nodeChildren[i];
+            if (self.viewController) {
+                // no-op
+            } else if (child.view) {
+                [child.view removeFromSuperview];
+            } else if (child.viewController) {
+                [child.view removeFromSuperview];
+                [child.viewController removeFromParentViewController];
+            }
         }
     }
     
     // Update gesture recognizers
     {
-        NSMutableArray *addedKeys = [NSMutableArray array];
-        NSMutableArray *removedKeys = [NSMutableArray array];
-        NSMutableArray *unmodifiedKeys = [NSMutableArray array];
-        for (NSNumber *i in self.node.touchRecognizers) {
-            GPBAny *child = node.touchRecognizers[i];
-            if (child == nil) {
-                [removedKeys addObject:i];
+        if (self.view) {
+            NSMutableArray *addedKeys = [NSMutableArray array];
+            NSMutableArray *removedKeys = [NSMutableArray array];
+            NSMutableArray *unmodifiedKeys = [NSMutableArray array];
+            for (NSNumber *i in self.node.touchRecognizers) {
+                GPBAny *child = node.touchRecognizers[i];
+                if (child == nil) {
+                    [removedKeys addObject:i];
+                }
             }
-        }
-        for (NSNumber *i in node.touchRecognizers) {
-            GPBAny *prevChild = self.node.touchRecognizers[i];
-            if (prevChild == nil) {
-                [addedKeys addObject:i];
-            } else {
-                [unmodifiedKeys addObject:i];
+            for (NSNumber *i in node.touchRecognizers) {
+                GPBAny *prevChild = self.node.touchRecognizers[i];
+                if (prevChild == nil) {
+                    [addedKeys addObject:i];
+                } else {
+                    [unmodifiedKeys addObject:i];
+                }
             }
+            
+            NSMutableDictionary *touchRecognizers = [NSMutableDictionary dictionary];
+            for (NSNumber *i in removedKeys) {
+                UIGestureRecognizer *recognizer = self.touchRecognizers[i];
+                [(id)recognizer disable];
+                [self.view removeGestureRecognizer:recognizer];
+            }
+            for (NSNumber *i in addedKeys) {
+                UIGestureRecognizer *recognizer = MochiGestureRecognizerWithPB(node.identifier.longLongValue, node.touchRecognizers[i], self);
+                [self.view addGestureRecognizer:recognizer];
+                touchRecognizers[i] = recognizer;
+            }
+            for (NSNumber *i in unmodifiedKeys) {
+                UIGestureRecognizer *recognizer = self.touchRecognizers[i];
+                [(id)recognizer updateWithProtobuf:node.touchRecognizers[i]];
+                touchRecognizers[i] = recognizer;
+            }
+            self.touchRecognizers = touchRecognizers;
         }
-        
-        NSMutableDictionary *touchRecognizers = [NSMutableDictionary dictionary];
-        for (NSNumber *i in removedKeys) {
-            UIGestureRecognizer *recognizer = self.touchRecognizers[i];
-            [(id)recognizer disable];
-            [self.view removeGestureRecognizer:recognizer];
-        }
-        for (NSNumber *i in addedKeys) {
-            UIGestureRecognizer *recognizer = MochiGestureRecognizerWithPB(node.identifier.longLongValue, node.touchRecognizers[i], self);
-            [self.view addGestureRecognizer:recognizer];
-            touchRecognizers[i] = recognizer;
-        }
-        for (NSNumber *i in unmodifiedKeys) {
-            UIGestureRecognizer *recognizer = self.touchRecognizers[i];
-            [(id)recognizer updateWithProtobuf:node.touchRecognizers[i]];
-            touchRecognizers[i] = recognizer;
-        }
-        self.touchRecognizers = touchRecognizers;
     }
 
     // Layout subviews
     if (![node.layoutId isEqual:self.node.layoutId]) {
-        NSArray *sortedKeys = [[self.children allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
-            return node.nodeChildren[obj1].guide.zIndex > node.nodeChildren[obj2].guide.zIndex;
-        }];
-        
-        for (NSInteger i = 0; i < sortedKeys.count; i++) {
-            NSNumber *key = sortedKeys[i];
-            UIView *subview = self.children[key].view;
-            if ([self.view.subviews indexOfObject:subview] != i) {
-                [self.view insertSubview:subview atIndex:i];
+        if (self.view) {
+            NSArray *sortedKeys = [[children allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
+                return node.nodeChildren[obj1].guide.zIndex > node.nodeChildren[obj2].guide.zIndex;
+            }];
+            
+            for (NSInteger i = 0; i < sortedKeys.count; i++) {
+                NSNumber *key = sortedKeys[i];
+                UIView *subview = children[key].view;
+                if ([self.view.subviews indexOfObject:subview] != i) {
+                    [self.view insertSubview:subview atIndex:i];
+                }
             }
+            self.view.frame = node.guide.frame;
         }
-        self.view.frame = node.guide.frame;
     }
     
     // Paint view
@@ -341,6 +367,22 @@ UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewControll
     
     _node = node;
     self.children = children;
+}
+
+- (UIViewController *)materializedViewController {
+    UIViewController *vc = nil;
+    MochiViewNode *viewNode = self;
+    while (vc == nil && viewNode != nil) {
+        viewNode = self.parent;
+        vc = viewNode.viewController;
+    }
+    if (vc == nil) {
+        vc = self.rootVC;
+    }
+    return vc;
+}
+- (UIView *)materializedView {
+    return self.viewController.view ?: self.view;
 }
 
 @end

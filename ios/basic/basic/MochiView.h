@@ -6,6 +6,12 @@
 @class MochiViewNode;
 
 @protocol MochiChildView <NSObject>
+- (id)initWithViewNode:(MochiViewNode *)viewNode;
+- (void)setNode:(MochiNode *)node;
+@end
+
+@protocol MochiChildViewController <NSObject>
+- (id)initWithViewNode:(MochiViewNode *)viewNode;
 - (void)setNode:(MochiNode *)node;
 @end
 
@@ -26,16 +32,18 @@
 
 UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewNode *viewNode);
 UIView<MochiChildView> *MochiViewWithNode(MochiNode *node, MochiViewNode *viewNode);
-UIViewController *MochiViewControllerWithNode(MochiNode *node, MochiViewController *root);
+UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNode *node, MochiViewNode *viewNode);
 
 @interface MochiViewNode : NSObject
 - (id)initWithParent:(MochiViewNode *)node rootVC:(MochiViewController *)rootVC;
 @property (nonatomic, strong) UIView<MochiChildView> *view;
 @property (nonatomic, strong) NSDictionary<NSNumber *, UIGestureRecognizer *> *touchRecognizers;
 
-// @property (nonatomic, strong) UIViewController *viewController;
+@property (nonatomic, strong) UIViewController<MochiChildViewController> *viewController;
 @property (nonatomic, strong) NSDictionary<NSNumber *, MochiViewNode *> *children;
 @property (nonatomic, strong) MochiNode *node;
 @property (nonatomic, weak) MochiViewNode *parent;
 @property (nonatomic, weak) MochiViewController *rootVC;
+- (UIViewController *)materializedViewController;
+- (UIView *)materializedView;
 @end

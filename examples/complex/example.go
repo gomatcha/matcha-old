@@ -124,21 +124,9 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	chl8 := imageview.NewURLImageView(ctx, 7)
-	chl8.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
-	chl8.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
-	chl8.ResizeMode = imageview.ResizeModeFit
-	chls = append(chls, chl8)
-	g8 := l.Add(chl8, func(s *constraint.Solver) {
-		s.BottomEqual(g6.Top())
-		s.RightEqual(g2.Right().Add(-15))
-		s.WidthEqual(constraint.Const(200))
-		s.HeightEqual(constraint.Const(200))
-	})
-
-	chl9 := button.New(ctx, 8)
-	chl9.Text = "Button"
-	chl9.OnPress = func() {
+	chl8 := button.New(ctx, 8)
+	chl8.Text = "Button"
+	chl8.OnPress = func() {
 		v.Lock()
 		defer v.Unlock()
 
@@ -146,11 +134,25 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		v.counter += 1
 		v.Update()
 	}
-	chls = append(chls, chl9)
-	_ = l.Add(chl9, func(s *constraint.Solver) {
-		s.BottomEqual(g8.Top())
+	chls = append(chls, chl8)
+	g8 := l.Add(chl8, func(s *constraint.Solver) {
+		s.BottomEqual(g6.Top())
 		s.RightEqual(g2.Right().Add(-15))
 	})
+
+	if v.counter%2 == 0 {
+		chl9 := imageview.NewURLImageView(ctx, 7)
+		chl9.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
+		chl9.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+		chl9.ResizeMode = imageview.ResizeModeFit
+		chls = append(chls, chl9)
+		_ = l.Add(chl9, func(s *constraint.Solver) {
+			s.BottomEqual(g8.Top())
+			s.RightEqual(g2.Right().Add(-15))
+			s.WidthEqual(constraint.Const(200))
+			s.HeightEqual(constraint.Const(200))
+		})
+	}
 
 	childLayouter := &table.Layout{}
 	childViews := []view.View{}

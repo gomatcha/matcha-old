@@ -1,15 +1,9 @@
-//
-//  MochiTabViewController.h
-//  basic
-//
-//  Created by Kevin Dang on 5/31/17.
-//  Copyright © 2017 Mochi. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
-@class MochiViewController;
+#import "MochiView.h"
+@class MochiViewNode;
 
-@interface MochiTabBarController : UITabBarController
-- (id)initWithViewRoot:(MochiViewController *)viewRoot;
-@property (nonatomic, weak) MochiViewController *viewRoot;
+@interface MochiTabBarController : UITabBarController <MochiChildViewController>
+- (id)initWithViewNode:(MochiViewNode *)viewNode;
+@property (nonatomic, weak) MochiViewNode *viewNode;
+@property (nonatomic, strong) MochiNode *node;
 @end
