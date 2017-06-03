@@ -14,9 +14,9 @@
 - (void)setMochiChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs {
     GPBAny *state = self.node.nativeViewState;
     NSError *error = nil;
-    MochiPBStackNavigatorStackNavigator *pb = (id)[state unpackMessageClass:[MochiPBStackNavigatorStackNavigator class] error:&error];
+    MochiPBStackNavStackNav *pb = (id)[state unpackMessageClass:[MochiPBStackNavStackNav class] error:&error];
     NSMutableArray *viewControllers = [NSMutableArray array];
-    for (MochiPBStackNavigatorScreen *i in pb.screensArray) {
+    for (MochiPBStackNavScreen *i in pb.screensArray) {
         UIViewController *vc = childVCs[@(i.id_p)];
         vc.navigationItem.title = i.title;
         vc.navigationItem.hidesBackButton = i.backButtonHidden;

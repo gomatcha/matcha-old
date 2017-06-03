@@ -4,7 +4,8 @@ import (
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/view"
-	"github.com/overcyn/mochi/view/tabnavigator"
+	"github.com/overcyn/mochi/view/basicview"
+	"github.com/overcyn/mochi/view/tabnav"
 	"github.com/overcyn/mochibridge"
 	"golang.org/x/image/colornames"
 )
@@ -31,70 +32,40 @@ func New(ctx *view.Context, key interface{}) *TabView {
 func (v *TabView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	chl1 := NewTabChildView(ctx, 1)
+	chl1 := basicview.New(ctx, 1)
 	chl1.Painter = &paint.Style{BackgroundColor: colornames.Blue}
-	chl1.TabOptions.SetTitle("Title1")
+	screen1 := &tabnav.Screen{}
+	screen1.SetTitle("title1")
+	screen1.SetView(chl1)
 
-	chl2 := NewTabChildView(ctx, 2)
+	chl2 := basicview.New(ctx, 2)
 	chl2.Painter = &paint.Style{BackgroundColor: colornames.Red}
-	chl2.TabOptions.SetTitle("Title2")
+	screen2 := &tabnav.Screen{}
+	screen2.SetTitle("title2")
+	screen2.SetView(chl2)
 
-	chl3 := NewTabChildView(ctx, 3)
+	chl3 := basicview.New(ctx, 3)
 	chl3.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
-	chl3.TabOptions.SetTitle("Title3")
+	screen3 := &tabnav.Screen{}
+	screen3.SetTitle("title3")
+	screen3.SetView(chl3)
 
-	chl4 := NewTabChildView(ctx, 4)
+	chl4 := basicview.New(ctx, 4)
 	chl4.Painter = &paint.Style{BackgroundColor: colornames.Green}
-	chl4.TabOptions.SetTitle("Title4")
+	screen4 := &tabnav.Screen{}
+	screen4.SetTitle("title4")
+	screen4.SetView(chl4)
 
-	tabnav := tabnavigator.New(ctx, 100)
-	tabnav.SetTabs([]tabnavigator.Tab{
-		tabnavigator.Tab{
-			View:    chl1,
-			Options: &chl1.TabOptions,
-		},
-		tabnavigator.Tab{
-			View:    chl2,
-			Options: &chl2.TabOptions,
-		},
-		tabnavigator.Tab{
-			View:    chl3,
-			Options: &chl3.TabOptions,
-		},
-		tabnavigator.Tab{
-			View:    chl4,
-			Options: &chl4.TabOptions,
-		},
-	})
-	l.Add(tabnav, func(s *constraint.Solver) {
+	tab := tabnav.New(ctx, 100)
+	tab.SetScreens([]*tabnav.Screen{screen1, screen2, screen3, screen4})
+	l.Add(tab, func(s *constraint.Solver) {
 		s.WidthEqual(l.Width())
 		s.HeightEqual(l.Height())
 	})
 
 	return &view.Model{
-		Children: []view.View{tabnav},
+		Children: []view.View{tab},
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
-	}
-}
-
-type TabChildView struct {
-	*view.Embed
-	Painter    paint.Painter
-	TabOptions tabnavigator.Options
-}
-
-func NewTabChildView(ctx *view.Context, key interface{}) *TabChildView {
-	if v, ok := ctx.Prev(key).(*TabChildView); ok {
-		return v
-	}
-	return &TabChildView{
-		Embed: view.NewEmbed(ctx.NewId(key)),
-	}
-}
-
-func (v *TabChildView) Build(ctx *view.Context) *view.Model {
-	return &view.Model{
-		Painter: v.Painter,
 	}
 }

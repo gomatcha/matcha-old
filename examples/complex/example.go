@@ -17,18 +17,81 @@ import (
 	"github.com/overcyn/mochi/view/button"
 	"github.com/overcyn/mochi/view/imageview"
 	"github.com/overcyn/mochi/view/scrollview"
+	"github.com/overcyn/mochi/view/stacknav"
 	"github.com/overcyn/mochi/view/textview"
 	"github.com/overcyn/mochibridge"
 )
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/complex New", func() *view.Root {
-		return view.NewRoot(NewNestedView(nil, nil))
+		return view.NewRoot(NewTabView(nil, nil))
 	})
+}
+
+type TabView struct {
+	*view.Embed
+}
+
+func NewTabView(ctx *view.Context, key interface{}) *TabView {
+	if v, ok := ctx.Prev(key).(*TabView); ok {
+		return v
+	}
+	return &TabView{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
+}
+
+func (v *TabView) Build(ctx *view.Context) *view.Model {
+	l := constraint.New()
+
+	// stack1 := stacknav.New(ctx, 1)
+	// stack1.Push(stacknav.NewScreen(view1, view1.StackOptions))
+
+	// tab1 := tabnav.NewScreen(stack1, &tabnav.Options{})
+
+	// opt1 := &tabnavigator.Options{}
+	// opt1.SetTitle("Tab 1")
+	// // stack1.Push(view1, &view1.StackOptions)
+
+	// stack1.Push(view1.StackScreen)
+	// stack1.Push(stacknavigator.NewScreen(view1, &stacknav.Options{
+	// 	title:
+	// }))
+
+	// view2 := NewNestedView(ctx, 3)
+	// stack2 := stacknavigator.New(ctx, 4)
+	// stack2.Push(stacknavigator.Screen{View: view2, Options: &view2.StackOptions})
+	// opt2 := &tabnavigator.Options{}
+	// opt2.SetTitle("Tab 2")
+
+	// view1 := basicview.New(ctx, 2)
+
+	// stack1 := stacknav.New(ctx, 1)
+	// stack1.Push(view1.StackScreen())
+
+	// tab1 := &tabnav.Screen{}
+	// tab1.SetView(stack1)
+	// tab1.SetIcon(image.Blah)
+	// tab1.SetSelectedIcon(image.Blub)
+	// tab1.SetBadge("badge")
+
+	// tab := tabnav.New(ctx, 100)
+	// tab.SetScreens([]tabnav.Screen{tab1})
+	// l.Add(tabnav, func(s *constraint.Solver) {
+	// 	s.WidthEqual(l.Width())
+	// 	s.HeightEqual(l.Height())
+	// })
+
+	return &view.Model{
+		// Children: []view.View{tabnav},
+		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+	}
 }
 
 type NestedView struct {
 	*view.Embed
+	stackScreen *stacknav.Screen
 	counter     int
 	ticker      *animate.Ticker
 	floatTicker mochi.Float64Notifier

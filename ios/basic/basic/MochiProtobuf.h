@@ -7,7 +7,7 @@
 #import "Button.pbobjc.h"
 #import "Touch.pbobjc.h"
 #import "Paint.pbobjc.h"
-#import "Tabnavigator.pbobjc.h"
+#import "Tabnav.pbobjc.h"
 #import "Stacknavigator.pbobjc.h"
 
 @import Mochi;

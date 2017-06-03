@@ -14,9 +14,9 @@
 - (void)setMochiChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs {
     GPBAny *state = self.node.nativeViewState;
     NSError *error = nil;
-    MochiPBTabNavigatorTabNavigator *pbTabNavigator = (id)[state unpackMessageClass:[MochiPBTabNavigatorTabNavigator class] error:&error];
+    MochiPBTabNavTabNav *pbTabNavigator = (id)[state unpackMessageClass:[MochiPBTabNavTabNav class] error:&error];
     NSMutableArray *viewControllers = [NSMutableArray array];
-    for (MochiPBTabNavigatorTab *i in pbTabNavigator.tabsArray) {
+    for (MochiPBTabNavScreen *i in pbTabNavigator.screensArray) {
         UIViewController *vc = childVCs[@(i.id_p)];
         vc.tabBarItem.title = i.title;
         vc.tabBarItem.badgeValue = i.badge.length == 0 ? nil : i.badge;

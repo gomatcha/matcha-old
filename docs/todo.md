@@ -13,7 +13,6 @@ func WithValues(v view.View, vals map[interface{}]interface{}) view.View {
 }
 
 High:
-* Navigation View Controllers
 * Text Input
 
 Medium:
@@ -43,10 +42,11 @@ Done:
 * UIView tree updating
 * Switch to protobufs.
 * Event Handling / Gestures
-
-* GridView
+* Navigation View Controllers
 * UINavigationController
 * UITabViewController
+
+* GridView
 * Picker
 * ProgressBar
 * SegmentedControl

@@ -192,9 +192,9 @@ UIView<MochiChildView> *MochiViewWithNode(MochiNode *node, MochiViewNode *viewNo
 UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNode *node, MochiViewNode *viewNode) {
     NSString *name = node.nativeViewName;
     UIViewController<MochiChildViewController> *child = nil;
-    if ([name isEqual:@"github.com/overcyn/mochi/view/tabnavigator"]) {
+    if ([name isEqual:@"github.com/overcyn/mochi/view/tabnav"]) {
         child = [[MochiTabBarController alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"github.com/overcyn/mochi/view/stacknavigator"]) {
+    } else if ([name isEqual:@"github.com/overcyn/mochi/view/stacknav"]) {
         child = [[MochiStackViewController alloc] initWithViewNode:viewNode];
     }
     return child;

@@ -1,0 +1,18 @@
+syntax = "proto3";
+package tabnav;
+import "github.com/overcyn/mochi/pb/imageview.proto";
+
+option go_package = "tabnav";
+option objc_class_prefix = "MochiPBTabNav";
+
+message Screen {
+    int64 id = 1;
+    string title = 2;
+    imageview.Image icon = 3;
+    imageview.Image selectedIcon = 4;
+    string badge = 5;
+}
+
+message TabNav {
+    repeated Screen screens = 1;
+}
