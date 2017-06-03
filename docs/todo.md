@@ -21,6 +21,8 @@ Medium:
 * Documentation
 * Examples
 * Rewrite gomobile
+* Cache layout properties
+* Images/ data blobs
 
 Low:
 * Responder Chain
@@ -31,7 +33,6 @@ Low:
 * LocalStorage / Keychain / UserDefaults
 * Cliboard
 * Video / Sound / Microphone / Accelerometer
-* Cache layout properties
 
 * remove global Middleware list
 

@@ -18,6 +18,7 @@ import (
 	"github.com/overcyn/mochi/view/imageview"
 	"github.com/overcyn/mochi/view/scrollview"
 	"github.com/overcyn/mochi/view/stacknav"
+	"github.com/overcyn/mochi/view/tabnav"
 	"github.com/overcyn/mochi/view/textview"
 	"github.com/overcyn/mochibridge"
 )
@@ -44,54 +45,67 @@ func NewTabView(ctx *view.Context, key interface{}) *TabView {
 func (v *TabView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	// stack1 := stacknav.New(ctx, 1)
-	// stack1.Push(stacknav.NewScreen(view1, view1.StackOptions))
+	view1 := NewNestedView(ctx, 2)
 
-	// tab1 := tabnav.NewScreen(stack1, &tabnav.Options{})
+	stackscreen1 := &stacknav.Screen{}
+	stackscreen1.SetView(view1)
+	stackscreen1.SetTitle("stack title")
 
-	// opt1 := &tabnavigator.Options{}
-	// opt1.SetTitle("Tab 1")
-	// // stack1.Push(view1, &view1.StackOptions)
+	stack1 := stacknav.New(ctx, 1)
+	stack1.Push(stackscreen1)
 
-	// stack1.Push(view1.StackScreen)
-	// stack1.Push(stacknavigator.NewScreen(view1, &stacknav.Options{
-	// 	title:
-	// }))
+	tab1 := &tabnav.Screen{}
+	tab1.SetView(stack1)
+	tab1.SetTitle("Tab 1")
 
-	// view2 := NewNestedView(ctx, 3)
-	// stack2 := stacknavigator.New(ctx, 4)
-	// stack2.Push(stacknavigator.Screen{View: view2, Options: &view2.StackOptions})
-	// opt2 := &tabnavigator.Options{}
-	// opt2.SetTitle("Tab 2")
+	view2 := NewTableView(ctx, "view2")
 
-	// view1 := basicview.New(ctx, 2)
+	stackscreen2 := &stacknav.Screen{}
+	stackscreen2.SetView(view2)
+	stackscreen2.SetTitle("Table")
 
-	// stack1 := stacknav.New(ctx, 1)
-	// stack1.Push(view1.StackScreen())
+	stack2 := stacknav.New(ctx, "stack2")
+	stack2.Push(stackscreen2)
 
-	// tab1 := &tabnav.Screen{}
-	// tab1.SetView(stack1)
-	// tab1.SetIcon(image.Blah)
-	// tab1.SetSelectedIcon(image.Blub)
-	// tab1.SetBadge("badge")
+	tab2 := &tabnav.Screen{}
+	tab2.SetView(stack2)
+	tab2.SetTitle("Tab 2")
 
-	// tab := tabnav.New(ctx, 100)
-	// tab.SetScreens([]tabnav.Screen{tab1})
-	// l.Add(tabnav, func(s *constraint.Solver) {
-	// 	s.WidthEqual(l.Width())
-	// 	s.HeightEqual(l.Height())
-	// })
+	tab := tabnav.New(ctx, 100)
+	tab.SetScreens([]*tabnav.Screen{tab1, tab2})
+	l.Add(tab, func(s *constraint.Solver) {
+		s.WidthEqual(l.Width())
+		s.HeightEqual(l.Height())
+	})
 
 	return &view.Model{
-		// Children: []view.View{tabnav},
+		Children: []view.View{tab},
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}
 }
 
+type TableView struct {
+	*view.Embed
+}
+
+func NewTableView(ctx *view.Context, key interface{}) *TableView {
+	if v, ok := ctx.Prev(key).(*TableView); ok {
+		return v
+	}
+	return &TableView{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
+}
+
+func (v *TableView) Build(ctx *view.Context) *view.Model {
+	return &view.Model{
+		Painter: &paint.Style{BackgroundColor: colornames.Blue},
+	}
+}
+
 type NestedView struct {
 	*view.Embed
-	stackScreen *stacknav.Screen
 	counter     int
 	ticker      *animate.Ticker
 	floatTicker mochi.Float64Notifier

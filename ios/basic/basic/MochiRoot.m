@@ -26,7 +26,7 @@
         
         self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(screenUpdate)];
         [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-//        self.displayLink.preferredFramesPerSecond = 2;
+        // self.displayLink.preferredFramesPerSecond = 2;
         self.screenUpdateFunc = [[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/animate screenUpdate"];
     }
     return self;
