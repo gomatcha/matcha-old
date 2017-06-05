@@ -1,7 +1,6 @@
 package view
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/gogo/protobuf/proto"
@@ -23,10 +22,10 @@ type View interface {
 }
 
 type Embed struct {
-	mu    sync.Mutex
-	id    mochi.Id
-	root  *root
-	chans []chan struct{}
+	mu            sync.Mutex
+	id            mochi.Id
+	root          *root
+	batchNotifier mochi.BatchNotifier
 }
 
 func NewEmbed(id mochi.Id) *Embed {
@@ -54,30 +53,23 @@ func (e *Embed) Unlock() {
 }
 
 func (e *Embed) Notify() chan struct{} {
-	c := make(chan struct{})
-	e.chans = append(e.chans, c)
-	return c
+	return e.batchNotifier.Notify()
 }
 
 func (e *Embed) Unnotify(c chan struct{}) {
-	chans := []chan struct{}{}
-	for _, i := range e.chans {
-		if i != c {
-			chans = append(chans, i)
-		}
-	}
-	e.chans = chans
+	e.batchNotifier.Unnotify(c)
+}
+
+func (e *Embed) Subscribe(n mochi.Notifier) {
+	e.batchNotifier.Subscribe(n)
+}
+
+func (e *Embed) Unsubscribe(n mochi.Notifier) {
+	e.batchNotifier.Unsubscribe(n)
 }
 
 func (e *Embed) Update() {
-	for _, i := range e.chans {
-		i <- struct{}{}
-		<-i
-	}
-}
-
-func (e *Embed) String() string {
-	return fmt.Sprintf("&Embed{id:%v}", e.id)
+	e.batchNotifier.Signal()
 }
 
 type Stage int

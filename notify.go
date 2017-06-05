@@ -154,6 +154,16 @@ func (bn *BatchNotifier) Unnotify(c chan struct{}) {
 	bn.resubscribeLocked()
 }
 
+func (bn *BatchNotifier) Signal() {
+	bn.mu.Lock()
+	defer bn.mu.Unlock()
+
+	for _, i := range bn.chans {
+		i <- struct{}{}
+		<-i
+	}
+}
+
 func (bn *BatchNotifier) resubscribeLocked() {
 	// If we have no chans, remove all subscribers.
 	if len(bn.chans) == 0 {

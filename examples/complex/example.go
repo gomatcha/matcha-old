@@ -23,7 +23,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/complex New", func() *view.Root {
-		return view.NewRoot(NewTableView(nil, nil))
+		return view.NewRoot(NewNestedView(nil, nil))
 	})
 }
 
