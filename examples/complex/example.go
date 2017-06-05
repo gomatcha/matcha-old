@@ -17,72 +17,14 @@ import (
 	"github.com/overcyn/mochi/view/button"
 	"github.com/overcyn/mochi/view/imageview"
 	"github.com/overcyn/mochi/view/scrollview"
-	"github.com/overcyn/mochi/view/stacknav"
-	"github.com/overcyn/mochi/view/tabnav"
 	"github.com/overcyn/mochi/view/textview"
 	"github.com/overcyn/mochibridge"
 )
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/complex New", func() *view.Root {
-		return view.NewRoot(NewTabView(nil, nil))
+		return view.NewRoot(NewTableView(nil, nil))
 	})
-}
-
-type TabView struct {
-	*view.Embed
-}
-
-func NewTabView(ctx *view.Context, key interface{}) *TabView {
-	if v, ok := ctx.Prev(key).(*TabView); ok {
-		return v
-	}
-	return &TabView{
-		Embed: view.NewEmbed(ctx.NewId(key)),
-	}
-}
-
-func (v *TabView) Build(ctx *view.Context) *view.Model {
-	l := constraint.New()
-
-	view1 := NewNestedView(ctx, 2)
-
-	stackscreen1 := &stacknav.Screen{}
-	stackscreen1.SetView(view1)
-	stackscreen1.SetTitle("stack title")
-
-	stack1 := stacknav.New(ctx, 1)
-	stack1.Push(stackscreen1)
-
-	tab1 := &tabnav.Screen{}
-	tab1.SetView(stack1)
-	tab1.SetTitle("Tab 1")
-
-	view2 := NewTableView(ctx, "view2")
-
-	stackscreen2 := &stacknav.Screen{}
-	stackscreen2.SetView(view2)
-	stackscreen2.SetTitle("Table")
-
-	stack2 := stacknav.New(ctx, "stack2")
-	stack2.Push(stackscreen2)
-
-	tab2 := &tabnav.Screen{}
-	tab2.SetView(stack2)
-	tab2.SetTitle("Tab 2")
-
-	tab := tabnav.New(ctx, 100)
-	tab.SetScreens([]*tabnav.Screen{tab1, tab2})
-	l.Add(tab, func(s *constraint.Solver) {
-		s.WidthEqual(l.Width())
-		s.HeightEqual(l.Height())
-	})
-
-	return &view.Model{
-		Children: []view.View{tab},
-		Layouter: l,
-		Painter:  &paint.Style{BackgroundColor: colornames.Green},
-	}
 }
 
 type TableView struct {
@@ -99,8 +41,42 @@ func NewTableView(ctx *view.Context, key interface{}) *TableView {
 }
 
 func (v *TableView) Build(ctx *view.Context) *view.Model {
+	l := constraint.New()
+
+	childLayouter := &table.Layout{}
+	childViews := []view.View{}
+	for i := 0; i < 20; i++ {
+		childView := NewTableCell(ctx, i+1000)
+		childView.String = "TEST TEST"
+		// childView.OnClick = func() {
+		// 	v.Lock()
+		// 	defer v.Unlock()
+
+		// 	child := NewTableView(nil, nil)
+		// 	v.Nav.StackNav().Push(child.StackScreen())
+		// }
+
+		childViews = append(childViews, childView)
+		childLayouter.Add(childView)
+	}
+
+	content := basicview.New(ctx, 9)
+	content.Painter = &paint.Style{BackgroundColor: colornames.White}
+	content.Layouter = childLayouter
+	content.Children = childViews
+
+	scroll := scrollview.New(ctx, 10)
+	scroll.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
+	scroll.ContentView = content
+	l.Add(scroll, func(s *constraint.Solver) {
+		s.WidthEqual(l.Width())
+		s.HeightEqual(l.Height())
+	})
+
 	return &view.Model{
-		Painter: &paint.Style{BackgroundColor: colornames.Blue},
+		Children: []view.View{scroll},
+		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}
 }
 

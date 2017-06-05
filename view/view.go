@@ -10,6 +10,10 @@ import (
 	"github.com/overcyn/mochi/paint"
 )
 
+type Screen interface {
+	NewView(*Context, interface{}) View
+}
+
 type View interface {
 	Build(*Context) *Model
 	Lifecycle(from, to Stage)

@@ -1,7 +1,3 @@
-Prevent duplicate keys.
-* Crash in protobuf if view does not have a layout guide.
-* Constraints crash if unconstrained.
-
 // Comm.SyncNotifier SyncNotify() chan struct{}
 // Comm.Notifier Notify() chan-> struct{}
 // mochi.Id is in the mochi package because view depends on layout. and layout needs to use the Ids
@@ -13,14 +9,14 @@ func WithValues(v view.View, vals map[interface{}]interface{}) view.View {
 }
 
 High:
-* Text Input
+* Text Input / Keyboard
+* Routing / Navs
 
 Medium:
-* Thread & locking. How to prevent deadlocks? Notifiers should be eventually consistent.
-* Lock should go bottom to top
+* Thread & locking. How to prevent deadlocks? Notifiers should be eventually consistent. Lock should go bottom to top
 * Documentation
-* Examples
-* Rewrite gomobile
+* Examples. Start rebuild a few apps. Instagram, Settings, Slack
+* Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 * Cache layout properties
 * Images/ data blobs
 
@@ -33,20 +29,7 @@ Low:
 * LocalStorage / Keychain / UserDefaults
 * Cliboard
 * Video / Sound / Microphone / Accelerometer
-
 * remove global Middleware list
-
-
-Done:
-* Lifecycle
-* Animations
-* UIView tree updating
-* Switch to protobufs.
-* Event Handling / Gestures
-* Navigation View Controllers
-* UINavigationController
-* UITabViewController
-
 * GridView
 * Picker
 * ProgressBar
@@ -58,11 +41,18 @@ Done:
 * ActionSheet
 * CameraView
 * MapView
-    
-We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 
-Accessibility
-Touch
-Mouse
-Keyboard
-SupportedRotations
+Bugs:
+* Prevent duplicate keys.
+* Crash in protobuf if view does not have a layout guide.
+* Constraints crash if unconstrained.
+
+Done:
+* Lifecycle
+* Animations
+* UIView tree updating
+* Switch to protobufs.
+* Event Handling / Gestures
+* Navigation View Controllers
+* UINavigationController
+* UITabViewController
