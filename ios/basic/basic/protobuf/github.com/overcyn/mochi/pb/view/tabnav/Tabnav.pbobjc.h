@@ -79,6 +79,7 @@ typedef GPB_ENUM(MochiPBTabNavScreen_FieldNumber) {
 
 typedef GPB_ENUM(MochiPBTabNavTabNav_FieldNumber) {
   MochiPBTabNavTabNav_FieldNumber_ScreensArray = 1,
+  MochiPBTabNavTabNav_FieldNumber_SelectedIndex = 2,
 };
 
 @interface MochiPBTabNavTabNav : GPBMessage
@@ -86,6 +87,20 @@ typedef GPB_ENUM(MochiPBTabNavTabNav_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MochiPBTabNavScreen*> *screensArray;
 /** The number of items in @c screensArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger screensArray_Count;
+
+@property(nonatomic, readwrite) int64_t selectedIndex;
+
+@end
+
+#pragma mark - MochiPBTabNavEvent
+
+typedef GPB_ENUM(MochiPBTabNavEvent_FieldNumber) {
+  MochiPBTabNavEvent_FieldNumber_SelectedIndex = 1,
+};
+
+@interface MochiPBTabNavEvent : GPBMessage
+
+@property(nonatomic, readwrite) int64_t selectedIndex;
 
 @end
 

@@ -192,7 +192,7 @@ UIView<MochiChildView> *MochiViewWithNode(MochiNode *node, MochiViewNode *viewNo
 UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNode *node, MochiViewNode *viewNode) {
     NSString *name = node.nativeViewName;
     UIViewController<MochiChildViewController> *child = nil;
-    if ([name isEqual:@"github.com/overcyn/mochi/view/tabnav"]) {
+    if ([name isEqual:@"github.com/overcyn/mochi/view/tabscreen"]) {
         child = [[MochiTabBarController alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/stacknav"]) {
         child = [[MochiStackViewController alloc] initWithViewNode:viewNode];
@@ -216,6 +216,9 @@ UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNod
     if (self.view == nil && self.viewController == nil) {
         self.view = MochiViewWithNode(node, self);
         self.viewController = MochiViewControllerWithNode(node, self);
+        if (self.view == nil && self.viewController == nil) {
+            NSLog(@"Cannot find corresponding view or view controller for node:%@", node.nativeViewName);
+        }
     }
     
     // Build children

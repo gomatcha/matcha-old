@@ -24,6 +24,7 @@
     }
     
     self.viewControllers = viewControllers;
+    self.selectedIndex = pbTabNavigator.selectedIndex;
 }
 
 @end

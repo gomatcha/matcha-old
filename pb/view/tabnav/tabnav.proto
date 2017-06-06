@@ -15,4 +15,9 @@ message Screen {
 
 message TabNav {
     repeated Screen screens = 1;
+    int64 selectedIndex = 2;
+}
+
+message Event {
+    int64 selectedIndex = 1;
 }

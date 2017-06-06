@@ -8,7 +8,7 @@ import (
 	_ "github.com/overcyn/mochi/examples/paint"
 	_ "github.com/overcyn/mochi/examples/stackview"
 	_ "github.com/overcyn/mochi/examples/table"
-	_ "github.com/overcyn/mochi/examples/tabnavigator"
+	_ "github.com/overcyn/mochi/examples/tabscreen"
 	_ "github.com/overcyn/mochi/examples/textview"
 	_ "github.com/overcyn/mochi/examples/touch"
 )
