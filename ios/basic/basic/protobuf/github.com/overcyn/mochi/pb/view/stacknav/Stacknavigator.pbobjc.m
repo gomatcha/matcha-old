@@ -172,10 +172,12 @@ typedef struct MochiPBStackNavScreen__storage_ {
 @implementation MochiPBStackNavStackNav
 
 @dynamic screensArray, screensArray_Count;
+@dynamic eventFunc;
 
 typedef struct MochiPBStackNavStackNav__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *screensArray;
+  int64_t eventFunc;
 } MochiPBStackNavStackNav__storage_;
 
 // This method is threadsafe because it is initially called
@@ -193,6 +195,15 @@ typedef struct MochiPBStackNavStackNav__storage_ {
         .flags = GPBFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
+      {
+        .name = "eventFunc",
+        .dataTypeSpecific.className = NULL,
+        .number = MochiPBStackNavStackNav_FieldNumber_EventFunc,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MochiPBStackNavStackNav__storage_, eventFunc),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MochiPBStackNavStackNav class]
@@ -201,6 +212,54 @@ typedef struct MochiPBStackNavStackNav__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(MochiPBStackNavStackNav__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\001\t\t\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - MochiPBStackNavStackEvent
+
+@implementation MochiPBStackNavStackEvent
+
+@dynamic idArray, idArray_Count;
+
+typedef struct MochiPBStackNavStackEvent__storage_ {
+  uint32_t _has_storage_[1];
+  GPBInt64Array *idArray;
+} MochiPBStackNavStackEvent__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "idArray",
+        .dataTypeSpecific.className = NULL,
+        .number = MochiPBStackNavStackEvent_FieldNumber_IdArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(MochiPBStackNavStackEvent__storage_, idArray),
+        .flags = (GPBFieldFlags)(GPBFieldRepeated | GPBFieldPacked),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MochiPBStackNavStackEvent class]
+                                     rootClass:[MochiPBStackNavStacknavigatorRoot class]
+                                          file:MochiPBStackNavStacknavigatorRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MochiPBStackNavStackEvent__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;

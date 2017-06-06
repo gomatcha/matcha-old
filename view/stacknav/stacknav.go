@@ -1,6 +1,9 @@
 package stacknav
 
 import (
+	"fmt"
+
+	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/pb/view/stacknav"
 	"github.com/overcyn/mochi/store"
@@ -74,6 +77,24 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	v.screen.Lock()
 	defer v.screen.Unlock()
 
+	funcId := ctx.NewFuncId()
+	f := func(data []byte) {
+		view.MainMu.Lock()
+		defer view.MainMu.Unlock()
+
+		pbevent := &stacknav.StackEvent{}
+		err := proto.Unmarshal(data, pbevent)
+		if err != nil {
+			fmt.Println("error", err)
+			return
+		}
+
+		v.screen.Lock()
+		defer v.screen.Unlock()
+		chl := v.screen.Children()[:len(pbevent.Id)]
+		v.screen.SetChildren(chl...)
+	}
+
 	screenspb := []*stacknav.Screen{}
 	chlds := []view.View{}
 	for idx, i := range v.screen.Children() {
@@ -97,7 +118,11 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		Layouter:       l,
 		NativeViewName: "github.com/overcyn/mochi/view/stacknav",
 		NativeViewState: &stacknav.StackNav{
-			Screens: screenspb,
+			Screens:   screenspb,
+			EventFunc: funcId,
+		},
+		NativeFuncs: map[int64]interface{}{
+			funcId: f,
 		},
 	}
 }

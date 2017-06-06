@@ -1,7 +1,6 @@
 package stackview
 
 import (
-	"fmt"
 	"image/color"
 
 	"github.com/overcyn/mochi/paint"
@@ -36,9 +35,9 @@ func NewApp() *App {
 
 	app.store.AddChild(app.StackScreen().Store(), "set")
 	app.stackScreen.SetChildren(
-		// NewTouchScreen(app, colornames.Blue),
-		// NewTouchScreen(app, colornames.Red),
-		// NewTouchScreen(app, colornames.Yellow),
+		NewTouchScreen(app, colornames.Blue),
+		NewTouchScreen(app, colornames.Red),
+		NewTouchScreen(app, colornames.Yellow),
 		NewTouchScreen(app, colornames.Green),
 	)
 	return app

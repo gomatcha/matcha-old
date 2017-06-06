@@ -10,6 +10,7 @@ import (
 )
 
 type Screen interface {
+	sync.Locker
 	NewView(*Context, interface{}) View
 }
 
@@ -17,6 +18,14 @@ type ScreenFunc func(*Context, interface{}) View
 
 func (f ScreenFunc) NewView(ctx *Context, key interface{}) View {
 	return f(ctx, key)
+}
+
+func (f ScreenFunc) Lock() {
+	// no-op
+}
+
+func (f ScreenFunc) Unlock() {
+	// no-op
 }
 
 type View interface {

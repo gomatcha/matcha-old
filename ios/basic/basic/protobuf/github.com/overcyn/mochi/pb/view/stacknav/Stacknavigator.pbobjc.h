@@ -87,6 +87,7 @@ typedef GPB_ENUM(MochiPBStackNavScreen_FieldNumber) {
 
 typedef GPB_ENUM(MochiPBStackNavStackNav_FieldNumber) {
   MochiPBStackNavStackNav_FieldNumber_ScreensArray = 1,
+  MochiPBStackNavStackNav_FieldNumber_EventFunc = 9,
 };
 
 @interface MochiPBStackNavStackNav : GPBMessage
@@ -94,6 +95,22 @@ typedef GPB_ENUM(MochiPBStackNavStackNav_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MochiPBStackNavScreen*> *screensArray;
 /** The number of items in @c screensArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger screensArray_Count;
+
+@property(nonatomic, readwrite) int64_t eventFunc;
+
+@end
+
+#pragma mark - MochiPBStackNavStackEvent
+
+typedef GPB_ENUM(MochiPBStackNavStackEvent_FieldNumber) {
+  MochiPBStackNavStackEvent_FieldNumber_IdArray = 1,
+};
+
+@interface MochiPBStackNavStackEvent : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBInt64Array *idArray;
+/** The number of items in @c idArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger idArray_Count;
 
 @end
 

@@ -254,7 +254,9 @@ func (root *root) buildLocked() {
 	prevNodes := root.nodes
 
 	root.ids = map[viewCacheKey]mochi.Id{}
-	root.nodes = map[mochi.Id]*node{}
+	root.nodes = map[mochi.Id]*node{
+		root.node.id: root.node,
+	}
 
 	// Rebuild
 	root.node.build(prevIds, prevNodes)

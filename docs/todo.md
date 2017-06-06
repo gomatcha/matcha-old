@@ -11,7 +11,8 @@ func WithValues(v view.View, vals map[interface{}]interface{}) view.View {
 High:
 * Text Input / Keyboard
 * Routing / Navs
-* Thread & locking. How to prevent deadlocks? Notifiers should be eventually consistent. Lock should go bottom to top
+* Thread & locking. Switch to syncnotifier for all things views.
+
 
 Medium:
 * Documentation
