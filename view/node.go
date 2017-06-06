@@ -175,10 +175,12 @@ func (f updateFlag) needsPaint() bool {
 }
 
 type root struct {
-	mu          sync.Mutex
-	node        *node
-	ids         map[viewCacheKey]mochi.Id
-	nodes       map[mochi.Id]*node
+	mu    sync.Mutex
+	node  *node
+	ids   map[viewCacheKey]mochi.Id
+	nodes map[mochi.Id]*node
+
+	flagMu      sync.Mutex
 	updateFlags map[mochi.Id]updateFlag
 }
 
@@ -194,8 +196,8 @@ func newRoot(v View) *root {
 }
 
 func (root *root) addFlag(id mochi.Id, f updateFlag) {
-	root.mu.Lock()
-	defer root.mu.Unlock()
+	root.flagMu.Lock()
+	defer root.flagMu.Unlock()
 
 	root.updateFlags[id] |= f
 }
@@ -203,6 +205,8 @@ func (root *root) addFlag(id mochi.Id, f updateFlag) {
 func (root *root) update(size layout.Point) bool {
 	root.mu.Lock()
 	defer root.mu.Unlock()
+	root.flagMu.Lock()
+	defer root.flagMu.Unlock()
 
 	// Lock the entire tree.
 	root.node.lock()
@@ -442,10 +446,14 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 				go func(id mochi.Id) {
 				loop:
 					for {
+						fmt.Println("BuildChan", buildChan)
 						select {
 						case <-buildChan:
+							fmt.Println("BuildChan2", buildChan)
+							buildChan <- struct{}{} // TODO(KD): should this be synchronous?
+							fmt.Println("BuildChan3", buildChan)
 							n.root.addFlag(id, buildFlag)
-							buildChan <- struct{}{}
+							fmt.Println("BuildChan4", buildChan)
 						case <-buildDone:
 							break loop
 						}

@@ -22,7 +22,7 @@
 
 - (id)init {
     if ((self = [super init])) {
-//        [MochiDeadlockLogger sharedLogger]; // Initialize
+        // [MochiDeadlockLogger sharedLogger]; // Initialize
         
         self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(screenUpdate)];
         [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];

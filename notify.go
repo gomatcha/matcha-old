@@ -1,6 +1,7 @@
 package mochi
 
 import (
+	"fmt"
 	"image/color"
 	"sync"
 )
@@ -189,13 +190,19 @@ func (bn *BatchNotifier) resubscribeLocked() {
 				for {
 					select {
 					case <-c:
+						fmt.Println("send1")
 						bn.mu.Lock()
 						for _, i := range bn.chans {
+							fmt.Println("send2", i)
 							i <- struct{}{}
+							fmt.Println("send3", i)
 							<-i
+							fmt.Println("send4", i)
 						}
 						c <- struct{}{}
+						fmt.Println("send5")
 						bn.mu.Unlock()
+						fmt.Println("send6")
 					case <-done:
 						break loop
 					}

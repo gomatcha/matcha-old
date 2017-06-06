@@ -79,7 +79,7 @@ func (n *TabNav) SetScreens(ss []*Screen) {
 }
 
 type Screen struct {
-	store        store.Store
+	store        store.Store3
 	view         view.View
 	title        string
 	icon         image.Image

@@ -5,34 +5,34 @@ import (
 )
 
 func TestStore(t *testing.T) {
-	tx := NewReadTx()
 	s := &Store{}
-	s.ReadKey(0, tx)
-	tx.Commit()
+	s.Lock()
+	s.ReadKey(0)
+	s.Unlock()
 }
 
-func TestMultiRead(t *testing.T) {
-	tx1 := NewReadTx()
-	tx2 := NewReadTx()
-	tx3 := NewReadTx()
+// func TestMultiRead(t *testing.T) {
+// 	s := &Store{}
+// 	s.RLock()
+// 	s.RLock()
+// 	s.RLock()
 
-	s := &Store{}
-	s.ReadKey(0, tx1)
-	s.ReadKey(0, tx2)
-	s.ReadKey(0, tx3)
+// 	s.ReadKey(0)
+// 	s.ReadKey(0)
+// 	s.ReadKey(0)
 
-	tx1.Commit()
-	tx2.Commit()
-	tx3.Commit()
-}
+// 	s.RUnlock()
+// 	s.RUnlock()
+// 	s.RUnlock()
+// }
 
 func TestNotify(t *testing.T) {
 	s := &Store{}
 	n := s.Notifier(0)
 	go func() {
-		tx1 := NewWriteTx()
-		s.WriteKey(0, tx1)
-		tx1.Commit()
+		s.Lock()
+		s.WriteKey(0)
+		s.Unlock()
 	}()
 
 	c := n.Notify()
@@ -41,16 +41,16 @@ func TestNotify(t *testing.T) {
 	n.Unnotify(c)
 }
 
-func TestReadWrite(t *testing.T) {
-	s := &Store{}
+// func TestReadWrite(t *testing.T) {
+// 	s := &Store{}
 
-	go func() {
-		tx1 := NewReadTx()
-		s.ReadKey(0, tx1)
-		tx1.Commit()
-	}()
+// 	go func() {
+// 		s.RLock()
+// 		s.ReadKey(0)
+// 		s.RUnlock()
+// 	}()
 
-	tx2 := NewWriteTx()
-	s.ReadKey(0, tx2)
-	tx2.Commit()
-}
+// 	s.Lock()
+// 	s.ReadKey(0)
+// 	s.Unlock()
+// }

@@ -11,9 +11,9 @@ func WithValues(v view.View, vals map[interface{}]interface{}) view.View {
 High:
 * Text Input / Keyboard
 * Routing / Navs
+* Thread & locking. How to prevent deadlocks? Notifiers should be eventually consistent. Lock should go bottom to top
 
 Medium:
-* Thread & locking. How to prevent deadlocks? Notifiers should be eventually consistent. Lock should go bottom to top
 * Documentation
 * Examples. Start rebuild a few apps. Instagram, Settings, Slack
 * Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.

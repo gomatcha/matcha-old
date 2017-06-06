@@ -1,7 +1,7 @@
 package store
 
 type Interface struct {
-	store Store
+	store Store3
 	value interface{}
 }
 
@@ -36,7 +36,7 @@ func (s *Interface) Set(v interface{}, tx *Tx) {
 }
 
 type Bool struct {
-	store Store
+	store Store3
 	value bool
 }
 
@@ -76,7 +76,7 @@ func (s *Bool) Set(v bool, tx *Tx) {
 // type Uint64 struct{}
 
 type Float64 struct {
-	store Store
+	store Store3
 	value float64
 }
 
@@ -111,7 +111,7 @@ func (s *Float64) Set(v float64, tx *Tx) {
 }
 
 type String struct {
-	store Store
+	store Store3
 	value string
 }
 

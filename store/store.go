@@ -7,7 +7,7 @@ import (
 )
 
 type storeNotifier struct {
-	store *Store
+	store *Store3
 	key   interface{}
 }
 
@@ -19,7 +19,7 @@ func (s *storeNotifier) Unnotify(c chan struct{}) {
 	s.store.UnnotifyKey(s.key, c)
 }
 
-type Store struct {
+type Store3 struct {
 	writeMu sync.Mutex
 	readMu  sync.RWMutex
 
@@ -35,15 +35,15 @@ var rootKeyVar rootKey // TODO(KD): any change to the store should affect this k
 
 type rootKey struct{}
 
-func (s *Store) Write(tx *Tx) {
+func (s *Store3) Write(tx *Tx) {
 	s.WriteKey(rootKeyVar, tx)
 }
 
-func (s *Store) Read(tx *Tx) {
+func (s *Store3) Read(tx *Tx) {
 	s.ReadKey(rootKeyVar, tx)
 }
 
-func (s *Store) WriteKey(key interface{}, tx *Tx) {
+func (s *Store3) WriteKey(key interface{}, tx *Tx) {
 	if tx == nil {
 		panic("Store.Write() called outside of a transaction")
 	}
@@ -55,7 +55,7 @@ func (s *Store) WriteKey(key interface{}, tx *Tx) {
 	tx.writes = append(tx.writes, txAccess{store: s, key: key})
 }
 
-func (s *Store) ReadKey(key interface{}, tx *Tx) {
+func (s *Store3) ReadKey(key interface{}, tx *Tx) {
 	if tx == nil {
 		panic("Store.Read() is called outside of a transaction")
 	}
@@ -64,22 +64,22 @@ func (s *Store) ReadKey(key interface{}, tx *Tx) {
 	tx.reads = append(tx.reads, txAccess{store: s, key: key})
 }
 
-func (s *Store) Notifier(key interface{}) mochi.Notifier {
+func (s *Store3) Notifier(key interface{}) mochi.Notifier {
 	return &storeNotifier{
 		store: s,
 		key:   key,
 	}
 }
 
-func (s *Store) Notify() chan struct{} {
+func (s *Store3) Notify() chan struct{} {
 	return s.NotifyKey(rootKeyVar)
 }
 
-func (s *Store) Unnotify(c chan struct{}) {
+func (s *Store3) Unnotify(c chan struct{}) {
 	s.UnnotifyKey(rootKeyVar, c)
 }
 
-func (s *Store) NotifyKey(k interface{}) chan struct{} {
+func (s *Store3) NotifyKey(k interface{}) chan struct{} {
 	s.chansMu.Lock()
 	defer s.chansMu.Unlock()
 
@@ -91,7 +91,7 @@ func (s *Store) NotifyKey(k interface{}) chan struct{} {
 	return c
 }
 
-func (s *Store) UnnotifyKey(k interface{}, c chan struct{}) {
+func (s *Store3) UnnotifyKey(k interface{}, c chan struct{}) {
 	s.chansMu.Lock()
 	defer s.chansMu.Unlock()
 
@@ -105,7 +105,7 @@ func (s *Store) UnnotifyKey(k interface{}, c chan struct{}) {
 	s.chans[k] = copy
 }
 
-func (s *Store) lock(tx *Tx) {
+func (s *Store3) lock(tx *Tx) {
 	// If we have not used this store in the transaction, lock the store and set the Tx.
 	if tx.kind == txKindRead {
 		s.txMu.Lock()
@@ -140,7 +140,7 @@ func (s *Store) lock(tx *Tx) {
 	}
 }
 
-func (s *Store) writeCommit1(tx *Tx) {
+func (s *Store3) writeCommit1(tx *Tx) {
 	if tx == nil {
 		panic("Store.writeCommit1() called outside of a transaction")
 	}
@@ -158,7 +158,7 @@ func (s *Store) writeCommit1(tx *Tx) {
 	s.readMu.Unlock()
 }
 
-func (s *Store) writeCommit2(tx *Tx) {
+func (s *Store3) writeCommit2(tx *Tx) {
 	if tx == nil {
 		panic("Store.writeCommit2() called outside of a transaction")
 	}
@@ -169,7 +169,7 @@ func (s *Store) writeCommit2(tx *Tx) {
 	s.writeMu.Unlock()
 }
 
-func (s *Store) readCommit(tx *Tx) {
+func (s *Store3) readCommit(tx *Tx) {
 	if tx == nil {
 		panic("Store.readCommit() called outside of a transaction")
 	}
@@ -195,14 +195,14 @@ const (
 )
 
 type txAccess struct {
-	store *Store
+	store *Store3
 	key   interface{}
 }
 
 type Tx struct {
 	commited bool
 	kind     txKind
-	stores   []*Store
+	stores   []*Store3
 	reads    []txAccess
 	writes   []txAccess
 }

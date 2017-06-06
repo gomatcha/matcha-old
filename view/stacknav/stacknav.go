@@ -12,27 +12,39 @@ type Screen struct {
 	screens []view.Screen
 }
 
+func (s *Screen) Store() *store.Store {
+	return &s.store
+}
+
+func (s *Screen) Lock() {
+	s.store.Lock()
+}
+
+func (s *Screen) Unlock() {
+	s.store.Unlock()
+}
+
 func (s *Screen) NewView(ctx *view.Context, key interface{}) view.View {
 	return New(ctx, key, s)
 }
 
-func (s *Screen) SetChildren(tx *store.Tx, ss ...view.Screen) {
-	s.store.Write(tx)
+func (s *Screen) SetChildren(ss ...view.Screen) {
+	s.store.Write()
 	s.screens = ss
 }
 
-func (s *Screen) Children(tx *store.Tx) []view.Screen {
-	s.store.Read(tx)
+func (s *Screen) Children() []view.Screen {
+	s.store.Read()
 	return s.screens
 }
 
-func (s *Screen) Push(tx *store.Tx, vs view.Screen) {
-	s.store.Write(tx)
+func (s *Screen) Push(vs view.Screen) {
+	s.store.Write()
 	s.screens = append(s.screens, vs)
 }
 
-func (s *Screen) Pop(tx *store.Tx) {
-	s.store.Write(tx)
+func (s *Screen) Pop() {
+	s.store.Write()
 	if len(s.screens) > 0 {
 		s.screens = s.screens[:len(s.screens)-1]
 	}
@@ -59,12 +71,12 @@ func New(ctx *view.Context, key interface{}, s *Screen) *View {
 func (v *View) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	tx := store.NewReadTx()
-	defer tx.Commit()
+	v.screen.Lock()
+	defer v.screen.Unlock()
 
 	screenspb := []*stacknav.Screen{}
 	chlds := []view.View{}
-	for idx, i := range v.screen.Children(tx) {
+	for idx, i := range v.screen.Children() {
 		chld := i.NewView(ctx, idx)
 		screenspb = append(screenspb, &stacknav.Screen{
 			Id:    int64(chld.Id()),
