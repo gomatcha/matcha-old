@@ -202,6 +202,8 @@ func (root *root) addFlag(id mochi.Id, f updateFlag) {
 	root.updateFlags[id] |= f
 }
 
+var MainMu sync.Mutex
+
 func (root *root) update(size layout.Point) bool {
 	root.mu.Lock()
 	defer root.mu.Unlock()
@@ -209,8 +211,8 @@ func (root *root) update(size layout.Point) bool {
 	defer root.flagMu.Unlock()
 
 	// Lock the entire tree.
-	root.node.lock()
-	defer root.node.unlock()
+	MainMu.Lock()
+	defer MainMu.Unlock()
 
 	var flag updateFlag
 	for _, v := range root.updateFlags {
@@ -412,9 +414,6 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 				}
 			}
 
-			// Lock new child.
-			view.Lock()
-
 			children[id] = &node{
 				id:   id,
 				view: view,
@@ -446,14 +445,10 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 				go func(id mochi.Id) {
 				loop:
 					for {
-						fmt.Println("BuildChan", buildChan)
 						select {
 						case <-buildChan:
-							fmt.Println("BuildChan2", buildChan)
 							buildChan <- struct{}{} // TODO(KD): should this be synchronous?
-							fmt.Println("BuildChan3", buildChan)
 							n.root.addFlag(id, buildFlag)
-							fmt.Println("BuildChan4", buildChan)
 						case <-buildDone:
 							break loop
 						}
@@ -598,7 +593,6 @@ func (n *node) done() {
 		n.model.Painter.Unnotify(n.paintChan)
 		close(n.paintDone)
 	}
-	n.view.Unlock()
 
 	for _, i := range n.children {
 		i.done()
@@ -620,18 +614,4 @@ func (n *node) debugString() string {
 		str += "\n" + strings.Join(all, "\n")
 	}
 	return str
-}
-
-func (n *node) lock() {
-	n.view.Lock()
-	for _, i := range n.children {
-		i.lock()
-	}
-}
-
-func (n *node) unlock() {
-	n.view.Unlock()
-	for _, i := range n.children {
-		i.unlock()
-	}
 }

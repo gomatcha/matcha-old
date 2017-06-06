@@ -23,14 +23,12 @@ type View interface {
 	Build(*Context) *Model
 	Lifecycle(from, to Stage)
 	Id() mochi.Id
-	sync.Locker
 	mochi.Notifier
 }
 
 type Embed struct {
 	mu            sync.Mutex
 	id            mochi.Id
-	root          *root
 	batchNotifier mochi.BatchNotifier
 }
 
@@ -48,14 +46,6 @@ func (e *Embed) Id() mochi.Id {
 
 func (e *Embed) Lifecycle(from, to Stage) {
 	// no-op
-}
-
-func (e *Embed) Lock() {
-	e.mu.Lock()
-}
-
-func (e *Embed) Unlock() {
-	e.mu.Unlock()
 }
 
 func (e *Embed) Notify() chan struct{} {

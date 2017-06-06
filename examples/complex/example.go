@@ -180,9 +180,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	chl8 := button.New(ctx, 8)
 	chl8.Text = "Button"
 	chl8.OnPress = func() {
-		v.Lock()
-		defer v.Unlock()
-
 		fmt.Println("On Click")
 		v.counter += 1
 		v.Update()

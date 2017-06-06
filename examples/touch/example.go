@@ -40,9 +40,6 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 
 	chl1 := NewTouchChildView(ctx, 1)
 	chl1.OnTouch = func() {
-		v.Lock()
-		defer v.Unlock()
-
 		fmt.Println("On touch")
 		v.counter += 1
 		go v.Update()
@@ -68,9 +65,6 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 
 	chl3 := NewPressChildView(ctx, 3)
 	chl3.OnPress = func() {
-		v.Lock()
-		defer v.Unlock()
-
 		fmt.Println("On Press")
 		v.pressCounter += 1
 		go v.Update()
@@ -119,8 +113,6 @@ func (v *PressChildView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.PressRecognizer{
 		MinDuration: time.Second / 2,
 		OnEvent: func(e *touch.PressEvent) {
-			v.Lock()
-			defer v.Unlock()
 			v.OnPress()
 		},
 	}
@@ -151,8 +143,6 @@ func (v *TouchChildView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
 		RecognizedFunc: func(e *touch.TapEvent) {
-			v.Lock()
-			defer v.Unlock()
 			v.OnTouch()
 		},
 	}

@@ -21,8 +21,8 @@ func init() {
 		if button == nil {
 			return
 		}
-		button.Lock()
-		defer button.Unlock()
+		view.MainMu.Lock()
+		defer view.MainMu.Unlock()
 		if button.OnPress == nil {
 			return
 		}

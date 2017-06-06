@@ -71,8 +71,8 @@ func (v *URLImageView) reload() {
 		go func(url string) {
 			image, err := loadImageURL(url)
 
-			v.Lock()
-			defer v.Unlock()
+			view.MainMu.Lock()
+			defer view.MainMu.Unlock()
 
 			select {
 			case <-c.Done():

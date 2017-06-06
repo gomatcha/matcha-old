@@ -135,6 +135,9 @@ func (r *TapRecognizer) Equal(a Recognizer) bool {
 func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
+		view.MainMu.Lock()
+		defer view.MainMu.Unlock()
+
 		pbevent := &pb.TapEvent{}
 		err := proto.Unmarshal(data, pbevent)
 		if err != nil {
@@ -209,6 +212,9 @@ func (r *PressRecognizer) Equal(a Recognizer) bool {
 func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
+		view.MainMu.Lock()
+		defer view.MainMu.Unlock()
+
 		event := &PressEvent{}
 		pbevent := &pb.PressEvent{}
 		err := proto.Unmarshal(data, pbevent)

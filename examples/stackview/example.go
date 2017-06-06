@@ -89,14 +89,10 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
 		RecognizedFunc: func(e *touch.TapEvent) {
-			fmt.Println("blah")
 			v.app.Lock()
+			defer v.app.Unlock()
 
-			fmt.Println("blah2")
 			v.app.StackScreen().Push(NewTouchScreen(v.app, colornames.Blue))
-			fmt.Println("blah3")
-			v.app.Unlock()
-			fmt.Println("blah4")
 		},
 	}
 
