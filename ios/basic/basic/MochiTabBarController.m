@@ -1,12 +1,14 @@
 #import "MochiTabBarController.h"
 #import "MochiView.h"
 #import "MochiProtobuf.h"
+#import "MochiViewController.h"
 
 @implementation MochiTabBarController
 
 - (id)initWithViewNode:(MochiViewNode *)viewNode {
     if ((self = [super init])) {
         self.viewNode = viewNode;
+        self.delegate = self;
     }
     return self;
 }
@@ -25,6 +27,17 @@
     
     self.viewControllers = viewControllers;
     self.selectedIndex = pbTabNavigator.selectedIndex;
+    self.funcId = pbTabNavigator.eventFunc;
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    MochiPBTabNavEvent *event = [[MochiPBTabNavEvent alloc] init];
+    event.selectedIndex = tabBarController.selectedIndex;
+    
+    NSData *data = [event data];
+    MochiGoValue *value = [[MochiGoValue alloc] initWithData:data];
+    
+    [self.viewNode.rootVC call:self.funcId viewId:self.node.identifier.longLongValue args:@[value]];
 }
 
 @end

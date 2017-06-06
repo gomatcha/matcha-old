@@ -142,11 +142,13 @@ typedef struct MochiPBTabNavScreen__storage_ {
 
 @dynamic screensArray, screensArray_Count;
 @dynamic selectedIndex;
+@dynamic eventFunc;
 
 typedef struct MochiPBTabNavTabNav__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *screensArray;
   int64_t selectedIndex;
+  int64_t eventFunc;
 } MochiPBTabNavTabNav__storage_;
 
 // This method is threadsafe because it is initially called
@@ -173,6 +175,15 @@ typedef struct MochiPBTabNavTabNav__storage_ {
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
+      {
+        .name = "eventFunc",
+        .dataTypeSpecific.className = NULL,
+        .number = MochiPBTabNavTabNav_FieldNumber_EventFunc,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MochiPBTabNavTabNav__storage_, eventFunc),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MochiPBTabNavTabNav class]
@@ -184,7 +195,7 @@ typedef struct MochiPBTabNavTabNav__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\002\r\000";
+        "\002\002\r\000\003\t\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

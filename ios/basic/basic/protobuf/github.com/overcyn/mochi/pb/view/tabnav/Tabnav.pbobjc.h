@@ -80,6 +80,7 @@ typedef GPB_ENUM(MochiPBTabNavScreen_FieldNumber) {
 typedef GPB_ENUM(MochiPBTabNavTabNav_FieldNumber) {
   MochiPBTabNavTabNav_FieldNumber_ScreensArray = 1,
   MochiPBTabNavTabNav_FieldNumber_SelectedIndex = 2,
+  MochiPBTabNavTabNav_FieldNumber_EventFunc = 3,
 };
 
 @interface MochiPBTabNavTabNav : GPBMessage
@@ -89,6 +90,8 @@ typedef GPB_ENUM(MochiPBTabNavTabNav_FieldNumber) {
 @property(nonatomic, readonly) NSUInteger screensArray_Count;
 
 @property(nonatomic, readwrite) int64_t selectedIndex;
+
+@property(nonatomic, readwrite) int64_t eventFunc;
 
 @end
 
