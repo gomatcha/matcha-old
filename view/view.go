@@ -13,6 +13,12 @@ type Screen interface {
 	NewView(*Context, interface{}) View
 }
 
+type ScreenFunc func(*Context, interface{}) View
+
+func (f ScreenFunc) NewView(ctx *Context, key interface{}) View {
+	return f(ctx, key)
+}
+
 type View interface {
 	Build(*Context) *Model
 	Lifecycle(from, to Stage)

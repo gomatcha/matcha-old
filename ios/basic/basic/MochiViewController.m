@@ -68,7 +68,10 @@
     self.viewNode.node = node;
     if (!self.loaded) {
         self.loaded = TRUE;
-        self.view = self.viewNode.view;
+        UIView *view = self.viewNode.view ?: self.viewNode.viewController.view;
+        [self.view addSubview:view];
+        self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        view.frame = self.view.bounds;
     }
 }
 

@@ -8,7 +8,7 @@ import (
 )
 
 type Screen struct {
-	store   *store.Store
+	store   store.Store
 	screens []view.Screen
 }
 
@@ -16,7 +16,7 @@ func (s *Screen) NewView(ctx *view.Context, key interface{}) view.View {
 	return New(ctx, key, s)
 }
 
-func (s *Screen) SetChildren(tx *store.Tx, ss []view.Screen) {
+func (s *Screen) SetChildren(tx *store.Tx, ss ...view.Screen) {
 	s.store.Write(tx)
 	s.screens = ss
 }
@@ -48,8 +48,10 @@ func New(ctx *view.Context, key interface{}, s *Screen) *View {
 		return v
 	}
 
+	embed := view.NewEmbed(ctx.NewId(key))
+	embed.Subscribe(&s.store)
 	return &View{
-		Embed:  view.NewEmbed(ctx.NewId(key)),
+		Embed:  embed,
 		screen: s,
 	}
 }
