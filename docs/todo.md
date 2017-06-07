@@ -1,12 +1,13 @@
 // Comm.SyncNotifier SyncNotify() chan struct{}
 // Comm.Notifier Notify() chan-> struct{}
 // mochi.Id is in the mochi package because view depends on layout. and layout needs to use the Ids
+// Remove view.model.children, Just get the list of child views from the layouter.
 
 High:
 * Text Input / Keyboard
 * Thread & locking. Switch to syncnotifier for all things views.
 * Native images.
-* Examples. Start rebuild a few apps. Instagram, Settings, Slack
+* Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
 
 Medium:
 * Documentation
