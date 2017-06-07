@@ -23,14 +23,12 @@ func init() {
 }
 
 type App struct {
-	store       store.Store
+	store       store.Store2
 	stackScreen *stackscreen.Screen
 }
 
 func NewApp() *App {
-	app := &App{
-		stackScreen: &stackscreen.Screen{},
-	}
+	app := &App{}
 	app.Lock()
 	defer app.Unlock()
 
@@ -47,7 +45,8 @@ func NewApp() *App {
 	screen3 := NewTouchScreen(app, colornames.Yellow)
 	screen4 := NewTouchScreen(app, colornames.Green)
 
-	app.store.AddChild(app.StackScreen().Store(), "set")
+	app.stackScreen = &stackscreen.Screen{}
+	app.store.Set(0, app.stackScreen.Store())
 	app.stackScreen.SetChildren(
 		stackscreen.WithOptions(screen1, options1),
 		stackscreen.WithOptions(screen2, options2),
@@ -70,7 +69,6 @@ func (app *App) NewView(ctx *view.Context, key interface{}) view.View {
 }
 
 func (app *App) StackScreen() *stackscreen.Screen {
-	app.store.Read()
 	return app.stackScreen
 }
 

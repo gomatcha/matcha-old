@@ -22,7 +22,7 @@ func init() {
 }
 
 type App struct {
-	store     store.Store
+	store     store.Store2
 	tabScreen *tabscreen.Screen
 }
 
@@ -44,11 +44,10 @@ func NewApp() *App {
 	screen3 := NewTouchScreen(app, colornames.Yellow)
 	screen4 := NewTouchScreen(app, colornames.Green)
 
-	tabScreen := &tabscreen.Screen{}
-	app.tabScreen = tabScreen
-	app.store.AddChild(tabScreen.Store(), "set")
-	tabScreen.SetSelectedIndex(1)
-	tabScreen.SetChildren(
+	app.tabScreen = &tabscreen.Screen{}
+	app.store.Set(0, app.tabScreen.Store())
+	app.tabScreen.SetSelectedIndex(1)
+	app.tabScreen.SetChildren(
 		tabscreen.WithOptions(screen1, options1),
 		tabscreen.WithOptions(screen2, options2),
 		screen3,
@@ -70,7 +69,6 @@ func (app *App) NewView(ctx *view.Context, key interface{}) view.View {
 }
 
 func (app *App) TabScreen() *tabscreen.Screen {
-	app.store.Read()
 	return app.tabScreen
 }
 

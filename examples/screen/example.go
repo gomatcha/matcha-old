@@ -23,7 +23,7 @@ func init() {
 }
 
 type App struct {
-	store        store.Store
+	store        store.Store2
 	tabScreen    *tabscreen.Screen
 	stackScreen1 *stackscreen.Screen
 	stackScreen2 *stackscreen.Screen
@@ -32,44 +32,41 @@ type App struct {
 }
 
 func NewApp() *App {
-	app := &App{
-		tabScreen:    &tabscreen.Screen{},
-		stackScreen1: &stackscreen.Screen{},
-		stackScreen2: &stackscreen.Screen{},
-		stackScreen3: &stackscreen.Screen{},
-		stackScreen4: &stackscreen.Screen{},
-	}
+	app := &App{}
 	app.Lock()
 	defer app.Unlock()
 
-	// Storer
-	// NewStore(app.tabScreen, app.stackScreen1, app.stackScreen2, app.stackScreen3, app.stackScreen4)
-	// app.Notify(tabScreen)
-	// app.Notify(substore ...store.Store)
+	app.stackScreen1 = &stackscreen.Screen{}
+	app.store.Set(1, app.stackScreen1.Store())
+	app.stackScreen1.SetChildren(
+		NewTouchScreen(app, colornames.Green),
+	)
 
-	app.store.AddChild(app.tabScreen.Store(), "tabScreen")
-	app.store.AddChild(app.stackScreen1.Store(), "stackScreen1")
-	app.store.AddChild(app.stackScreen2.Store(), "stackScreen2")
-	app.store.AddChild(app.stackScreen3.Store(), "stackScreen3")
-	app.store.AddChild(app.stackScreen4.Store(), "stackScreen4")
+	app.stackScreen2 = &stackscreen.Screen{}
+	app.store.Set(2, app.stackScreen2.Store())
+	app.stackScreen2.SetChildren(
+		NewTouchScreen(app, colornames.Green),
+	)
 
+	app.stackScreen3 = &stackscreen.Screen{}
+	app.store.Set(3, app.stackScreen3.Store())
+	app.stackScreen3.SetChildren(
+		NewTouchScreen(app, colornames.Green),
+	)
+
+	app.stackScreen4 = &stackscreen.Screen{}
+	app.store.Set(4, app.stackScreen4.Store())
+	app.stackScreen4.SetChildren(
+		NewTouchScreen(app, colornames.Green),
+	)
+
+	app.tabScreen = &tabscreen.Screen{}
+	app.store.Set(5, app.tabScreen.Store())
 	app.tabScreen.SetChildren(
 		app.stackScreen1,
 		app.stackScreen2,
 		app.stackScreen3,
 		app.stackScreen4,
-	)
-	app.stackScreen1.SetChildren(
-		NewTouchScreen(app, colornames.Green),
-	)
-	app.stackScreen2.SetChildren(
-		NewTouchScreen(app, colornames.Red),
-	)
-	app.stackScreen3.SetChildren(
-		NewTouchScreen(app, colornames.Yellow),
-	)
-	app.stackScreen4.SetChildren(
-		NewTouchScreen(app, colornames.Purple),
 	)
 	return app
 }

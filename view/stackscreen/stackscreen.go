@@ -11,11 +11,11 @@ import (
 )
 
 type Screen struct {
-	store   store.Store
+	store   store.Store2
 	screens []view.Screen
 }
 
-func (s *Screen) Store() *store.Store {
+func (s *Screen) Store() *store.Store2 {
 	return &s.store
 }
 
@@ -32,7 +32,7 @@ func (s *Screen) NewView(ctx *view.Context, key interface{}) view.View {
 }
 
 func (s *Screen) SetChildren(ss ...view.Screen) {
-	s.store.Write()
+	s.store.Update()
 
 	s.screens = ss
 }
@@ -42,13 +42,13 @@ func (s *Screen) Children() []view.Screen {
 }
 
 func (s *Screen) Push(vs view.Screen) {
-	s.store.Write()
+	s.store.Update()
 
 	s.screens = append(s.screens, vs)
 }
 
 func (s *Screen) Pop() {
-	s.store.Write()
+	s.store.Update()
 
 	if len(s.screens) > 0 {
 		s.screens = s.screens[:len(s.screens)-1]
