@@ -2,9 +2,11 @@ package tabscreen
 
 import (
 	"fmt"
+	"image"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi/layout/constraint"
+	"github.com/overcyn/mochi/pb"
 	tabnavpb "github.com/overcyn/mochi/pb/view/tabnav"
 	"github.com/overcyn/mochi/store"
 	"github.com/overcyn/mochi/view"
@@ -99,9 +101,22 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	chlds := []view.View{}
 	for idx, i := range v.screen.Children() {
 		chld := i.NewView(ctx, idx)
+
+		var options *Options
+		if optionsView, ok := chld.(ChildView); ok {
+			options = optionsView.TabOptions()
+		} else {
+			options = &Options{
+				Title: "Tab Title",
+			}
+		}
+
 		screenspb = append(screenspb, &tabnavpb.Screen{
-			Id:    int64(chld.Id()),
-			Title: "Tab Title",
+			Id:           int64(chld.Id()),
+			Title:        options.Title,
+			Icon:         pb.ImageEncode(options.Icon),
+			SelectedIcon: pb.ImageEncode(options.SelectedIcon),
+			Badge:        options.Badge,
 		})
 
 		chlds = append(chlds, chld)
@@ -128,21 +143,42 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	}
 }
 
-// type Screen struct {
-// 	store        store.Store3
-// 	view         view.View
-// 	title        string
-// 	icon         image.Image
-// 	selectedIcon image.Image
-// 	badge        string
-// }
+type Options struct {
+	Title        string
+	Icon         image.Image
+	SelectedIcon image.Image
+	Badge        string
+}
 
-// func (tab *Screen) MarshalProtobuf() (*tabnavpb.Screen, error) {
-// 	return &tabnavpb.Screen{
-// 		Id:           int64(tab.view.Id()),
-// 		Title:        tab.title,
-// 		Icon:         pb.ImageEncode(tab.icon),
-// 		SelectedIcon: pb.ImageEncode(tab.selectedIcon),
-// 		Badge:        tab.badge,
-// 	}, nil
-// }
+func WithOptions(s view.Screen, opt *Options) view.Screen {
+	return &optionsScreen{
+		Screen:  s,
+		options: opt,
+	}
+}
+
+type optionsScreen struct {
+	view.Screen
+	options *Options
+}
+
+func (s *optionsScreen) NewView(ctx *view.Context, key interface{}) view.View {
+	return &optionsView{
+		View:    s.Screen.NewView(ctx, key),
+		options: s.options,
+	}
+}
+
+type optionsView struct {
+	view.View
+	options *Options
+}
+
+func (v *optionsView) TabOptions() *Options {
+	return v.options
+}
+
+type ChildView interface {
+	view.View
+	TabOptions() *Options
+}

@@ -27,19 +27,32 @@ type App struct {
 }
 
 func NewApp() *App {
-	app := &App{
-		tabScreen: &tabscreen.Screen{},
-	}
+	app := &App{}
 	app.Lock()
 	defer app.Unlock()
 
-	app.store.AddChild(app.TabScreen().Store(), "set")
-	app.tabScreen.SetSelectedIndex(2)
-	app.tabScreen.SetChildren(
-		NewTouchScreen(app, colornames.Blue),
-		NewTouchScreen(app, colornames.Red),
-		NewTouchScreen(app, colornames.Yellow),
-		NewTouchScreen(app, colornames.Green),
+	screen1 := NewTouchScreen(app, colornames.Blue)
+	options1 := &tabscreen.Options{
+		Title: "Title 1",
+	}
+
+	screen2 := NewTouchScreen(app, colornames.Red)
+	options2 := &tabscreen.Options{
+		Title: "Title 2",
+	}
+
+	screen3 := NewTouchScreen(app, colornames.Yellow)
+	screen4 := NewTouchScreen(app, colornames.Green)
+
+	tabScreen := &tabscreen.Screen{}
+	app.tabScreen = tabScreen
+	app.store.AddChild(tabScreen.Store(), "set")
+	tabScreen.SetSelectedIndex(1)
+	tabScreen.SetChildren(
+		tabscreen.WithOptions(screen1, options1),
+		tabscreen.WithOptions(screen2, options2),
+		screen3,
+		screen4,
 	)
 	return app
 }

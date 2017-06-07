@@ -13,7 +13,6 @@ High:
 * Routing / Navs
 * Thread & locking. Switch to syncnotifier for all things views.
 
-
 Medium:
 * Documentation
 * Examples. Start rebuild a few apps. Instagram, Settings, Slack
