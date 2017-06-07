@@ -11,6 +11,7 @@ import (
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/imageview"
+	"github.com/overcyn/mochi/view/scrollview"
 	"github.com/overcyn/mochi/view/stackscreen"
 	"github.com/overcyn/mochi/view/textview"
 	"github.com/overcyn/mochibridge"
@@ -109,10 +110,18 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 	chlds = append(chlds, separator)
 	l.Add(separator)
 
+	scrollChild := basicview.New(ctx, 6)
+	scrollChild.Painter = &paint.Style{BackgroundColor: colornames.White}
+	scrollChild.Layouter = l
+	scrollChild.Children = chlds
+
+	scrollView := scrollview.New(ctx, 5)
+	scrollView.ContentView = scrollChild
+
 	return &view.Model{
-		Children: chlds,
-		Layouter: l,
-		Painter:  &paint.Style{BackgroundColor: colornames.Lightgray},
+		Children: []view.View{scrollView},
+		// Layouter: l,
+		Painter: &paint.Style{BackgroundColor: colornames.Lightgray},
 	}
 }
 
