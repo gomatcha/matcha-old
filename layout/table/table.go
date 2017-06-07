@@ -1,6 +1,7 @@
 package table
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/overcyn/mochi"
@@ -8,18 +9,18 @@ import (
 	"github.com/overcyn/mochi/view"
 )
 
-type Direction int
+// type Direction int
 
-const (
-	DirectionFromTop Direction = iota
-	DirectionFromBottom
-	DirectionFromLeft
-	DirectionFromRight
-)
+// const (
+// 	DirectionFromTop Direction = iota
+// 	DirectionFromBottom
+// 	DirectionFromLeft
+// 	DirectionFromRight
+// )
 
 type Layout struct {
-	Direction Direction // TODO(KD): Direction is ignored.
-	Ids       []mochi.Id
+	// Direction Direction // TODO(KD): Direction is ignored.
+	Ids []mochi.Id
 }
 
 func (l *Layout) Add(v view.View) {
@@ -39,6 +40,7 @@ func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.
 		y += g.Height()
 	}
 	g.Frame = layout.Rt(0, 0, x, y)
+	fmt.Println("Grid frame", g.Frame)
 	return g, gs
 }
 
