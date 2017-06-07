@@ -21,6 +21,7 @@ Medium:
 * Images/ data blobs
 
 Low:
+* Middleware for uitabbaritem and uinavigationitem
 * Responder Chain
 * Rotation
 * Accessibility

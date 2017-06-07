@@ -1,6 +1,7 @@
 package stackscreen
 
 import (
+	"fmt"
 	"image/color"
 
 	"github.com/overcyn/mochi/paint"
@@ -33,12 +34,25 @@ func NewApp() *App {
 	app.Lock()
 	defer app.Unlock()
 
+	screen1 := NewTouchScreen(app, colornames.Blue)
+	options1 := &stackscreen.Options{
+		Title: "Title 1",
+	}
+
+	screen2 := NewTouchScreen(app, colornames.Red)
+	options2 := &stackscreen.Options{
+		Title: "Title 2",
+	}
+
+	screen3 := NewTouchScreen(app, colornames.Yellow)
+	screen4 := NewTouchScreen(app, colornames.Green)
+
 	app.store.AddChild(app.StackScreen().Store(), "set")
 	app.stackScreen.SetChildren(
-		NewTouchScreen(app, colornames.Blue),
-		NewTouchScreen(app, colornames.Red),
-		NewTouchScreen(app, colornames.Yellow),
-		NewTouchScreen(app, colornames.Green),
+		stackscreen.WithOptions(screen1, options1),
+		stackscreen.WithOptions(screen2, options2),
+		screen3,
+		screen4,
 	)
 	return app
 }
@@ -88,6 +102,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
 		RecognizedFunc: func(e *touch.TapEvent) {
+			fmt.Println("recognized")
 			v.app.Lock()
 			defer v.app.Unlock()
 

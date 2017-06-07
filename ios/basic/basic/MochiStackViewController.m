@@ -9,15 +9,29 @@
     if ((self = [super init])) {
         self.viewNode = viewNode;
         self.delegate = self;
+        
+        [self addObserver:self forKeyPath:@"viewControllers" options:0 context:nil];
     }
     return self;
+}
+
+- (void)dealloc {
+    [self removeObserver:self forKeyPath:@"viewControllers"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    NSLog(@"KVO");
 }
 
 - (void)setMochiChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs {
     GPBAny *state = self.node.nativeViewState;
     NSError *error = nil;
+    
     MochiPBStackNavStackNav *pb = (id)[state unpackMessageClass:[MochiPBStackNavStackNav class] error:&error];
     NSMutableArray *viewControllers = [NSMutableArray array];
+    NSMutableDictionary *vcDict = [NSMutableDictionary dictionary];
     for (MochiPBStackNavScreen *i in pb.screensArray) {
         UIViewController *vc = childVCs[@(i.id_p)];
         vc.navigationItem.title = i.title;
@@ -28,12 +42,13 @@
         [viewControllers addObject:vc];
     }
     
-    [self setViewControllers:viewControllers animated:YES];
+    if (self.viewControllers.count == viewControllers.count) {
+        [self setViewControllers:viewControllers animated:NO];
+    } else {
+        [self setViewControllers:viewControllers animated:YES];
+    }
+    self.prev = pb;
     self.funcId = pb.eventFunc;
-}
-
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    [self update];
 }
 
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {

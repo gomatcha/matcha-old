@@ -103,8 +103,8 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		chld := i.NewView(ctx, idx)
 
 		var options *Options
-		if optionsView, ok := chld.(ChildView); ok {
-			options = optionsView.TabOptions()
+		if optionsView, ok := chld.(*optionsView); ok {
+			options = optionsView.options
 		} else {
 			options = &Options{
 				Title: "Tab Title",
@@ -174,11 +174,7 @@ type optionsView struct {
 	options *Options
 }
 
-func (v *optionsView) TabOptions() *Options {
-	return v.options
-}
+// TODO(KD): add middleware to read nativeValues{Key:Options} from view.Model
+type key struct{}
 
-type ChildView interface {
-	view.View
-	TabOptions() *Options
-}
+var Key = key{}
