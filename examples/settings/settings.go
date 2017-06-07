@@ -9,6 +9,7 @@ import (
 	"github.com/overcyn/mochi/store"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/imageview"
 	"github.com/overcyn/mochi/view/stackscreen"
 	"github.com/overcyn/mochi/view/textview"
@@ -103,10 +104,49 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 	chlds = append(chlds, cellularCell)
 	l.Add(cellularCell)
 
+	separator := NewSeparator(ctx, 4)
+	separator.LeftPadding = 25
+	chlds = append(chlds, separator)
+	l.Add(separator)
+
 	return &view.Model{
 		Children: chlds,
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Lightgray},
+	}
+}
+
+type Separator struct {
+	*view.Embed
+	LeftPadding float64
+}
+
+func NewSeparator(ctx *view.Context, key interface{}) *Separator {
+	if v, ok := ctx.Prev(key).(*Separator); ok {
+		return v
+	}
+	return &Separator{Embed: view.NewEmbed(ctx.NewId(key))}
+}
+
+func (v *Separator) Build(ctx *view.Context) *view.Model {
+	l := constraint.New()
+	l.Solve(func(s *constraint.Solver) {
+		s.HeightEqual(constraint.Const(0.5))
+		s.WidthEqual(l.MaxGuide().Width())
+	})
+
+	chl := basicview.New(ctx, 0)
+	chl.Painter = &paint.Style{BackgroundColor: colornames.Gray}
+	l.Add(chl, func(s *constraint.Solver) {
+		s.HeightEqual(l.Height())
+		s.LeftEqual(l.Left().Add(v.LeftPadding))
+		s.RightEqual(l.Right())
+	})
+
+	return &view.Model{
+		Children: []view.View{chl},
+		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: colornames.White},
 	}
 }
 
@@ -155,13 +195,12 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 			Size:   22,
 		})
 		subtitleView.Style.SetTextColor(colornames.Gray)
-		subtitleView.Painter = &paint.Style{BackgroundColor: colornames.Blue}
 		chlds = append(chlds, subtitleView)
 
 		subtitleGuide = l.Add(subtitleView, func(s *constraint.Solver) {
 			s.RightEqual(l.Right().Add(-10))
+			s.LeftGreater(l.Left())
 			s.CenterYEqual(l.CenterY())
-			s.LeftLess(l.Left())
 		})
 	}
 
@@ -172,7 +211,6 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		Face:   "",
 		Size:   22,
 	})
-	titleView.Painter = &paint.Style{BackgroundColor: colornames.Red}
 	chlds = append(chlds, titleView)
 
 	titleGuide := l.Add(titleView, func(s *constraint.Solver) {
