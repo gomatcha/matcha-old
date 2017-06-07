@@ -10,17 +10,18 @@ func WithValues(v view.View, vals map[interface{}]interface{}) view.View {
 
 High:
 * Text Input / Keyboard
-* Routing / Navs
 * Thread & locking. Switch to syncnotifier for all things views.
+* Native images.
+* Examples. Start rebuild a few apps. Instagram, Settings, Slack
 
 Medium:
 * Documentation
-* Examples. Start rebuild a few apps. Instagram, Settings, Slack
 * Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 * Cache layout properties
 * Images/ data blobs
 
 Low:
+* Animations
 * Middleware for uitabbaritem and uinavigationitem
 * Responder Chain
 * Rotation
@@ -42,6 +43,7 @@ Low:
 * ActionSheet
 * CameraView
 * MapView
+* Modal presentation
 
 Bugs:
 * Prevent duplicate keys.
@@ -50,10 +52,10 @@ Bugs:
 
 Done:
 * Lifecycle
-* Animations
 * UIView tree updating
 * Switch to protobufs.
 * Event Handling / Gestures
 * Navigation View Controllers
 * UINavigationController
 * UITabViewController
+* Routing / Navs

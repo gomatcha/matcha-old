@@ -33,7 +33,6 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
 	chl := textview.New(ctx, 5)
-	chl.Painter = &paint.Style{BackgroundColor: colornames.Red}
 	chl.String = "Subtitle"
 	chl.Style.SetAlignment(text.AlignmentCenter)
 	chl.Style.SetStrikethroughStyle(text.StrikethroughStyleDouble)
@@ -46,13 +45,15 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 		Face:   "Bold",
 		Size:   20,
 	})
-	l.Add(chl, func(s *constraint.Solver) {
+	chl2 := view.WithPainter(chl, &paint.Style{BackgroundColor: colornames.Blue})
+
+	l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(100))
 		s.LeftEqual(constraint.Const(100))
 	})
 
 	return &view.Model{
-		Children: []view.View{chl},
+		Children: []view.View{chl2},
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}

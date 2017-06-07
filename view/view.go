@@ -106,3 +106,38 @@ type Model struct {
 	NativeValues    map[string]proto.Message
 	NativeFuncs     map[int64]interface{}
 }
+
+func WithPainter(v View, p paint.Painter) View {
+	return &painterView{View: v, painter: p}
+}
+
+type painterView struct {
+	View
+	painter paint.Painter
+}
+
+func (v *painterView) Build(ctx *Context) *Model {
+	m := v.View.Build(ctx)
+	m.Painter = v.painter
+	return m
+}
+
+func WithValues(v View, vals map[interface{}]interface{}) View {
+	return &valuesView{View: v, values: vals}
+}
+
+type valuesView struct {
+	View
+	values map[interface{}]interface{}
+}
+
+func (v *valuesView) Build(ctx *Context) *Model {
+	m := v.View.Build(ctx)
+	if m.Values == nil {
+		m.Values = map[interface{}]interface{}{}
+	}
+	for k, val := range v.values {
+		m.Values[k] = val
+	}
+	return m
+}
