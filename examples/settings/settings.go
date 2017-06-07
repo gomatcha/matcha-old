@@ -82,33 +82,32 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 	l := &table.Layout{}
 	chlds := []view.View{}
 
-	airplaneCell := NewBasicCell(ctx, 0)
-	airplaneCell.Title = "Airplane Mode"
-	airplaneCell.Subtitle = "Enabled"
-	chlds = append(chlds, airplaneCell)
-	l.Add(airplaneCell)
+	{
+		group := []view.View{}
+		airplaneCell := NewBasicCell(ctx, 0)
+		airplaneCell.Title = "Airplane Mode"
+		airplaneCell.Subtitle = "Enabled"
+		group = append(group, airplaneCell)
 
-	wifiCell := NewBasicCell(ctx, 1)
-	wifiCell.Title = "Wi-Fi"
-	wifiCell.Subtitle = "Home Wifi"
-	chlds = append(chlds, wifiCell)
-	l.Add(wifiCell)
+		wifiCell := NewBasicCell(ctx, 1)
+		wifiCell.Title = "Wi-Fi"
+		wifiCell.Subtitle = "Home Wifi"
+		group = append(group, wifiCell)
 
-	bluetoothCell := NewBasicCell(ctx, 2)
-	bluetoothCell.Title = "Bluetooth"
-	bluetoothCell.Subtitle = "On"
-	chlds = append(chlds, bluetoothCell)
-	l.Add(bluetoothCell)
+		bluetoothCell := NewBasicCell(ctx, 2)
+		bluetoothCell.Title = "Bluetooth"
+		bluetoothCell.Subtitle = "On"
+		group = append(group, bluetoothCell)
 
-	cellularCell := NewBasicCell(ctx, 3)
-	cellularCell.Title = "Cellular"
-	chlds = append(chlds, cellularCell)
-	l.Add(cellularCell)
+		cellularCell := NewBasicCell(ctx, 3)
+		cellularCell.Title = "Cellular"
+		group = append(group, cellularCell)
 
-	separator := NewSeparator(ctx, 4)
-	separator.LeftPadding = 25
-	chlds = append(chlds, separator)
-	l.Add(separator)
+		for _, i := range AddSeparators(ctx, "a", group) {
+			chlds = append(chlds, i)
+			l.Add(i)
+		}
+	}
 
 	scrollChild := basicview.New(ctx, 6)
 	scrollChild.Painter = &paint.Style{BackgroundColor: colornames.White}
@@ -123,6 +122,32 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		// Layouter: l,
 		Painter: &paint.Style{BackgroundColor: colornames.Lightgray},
 	}
+}
+
+type separatorKey struct {
+	index int
+	key   interface{}
+}
+
+func AddSeparators(ctx *view.Context, key interface{}, vs []view.View) []view.View {
+	newViews := []view.View{}
+
+	top := NewSeparator(ctx, separatorKey{-1, key})
+	newViews = append(newViews, top)
+
+	for idx, i := range vs {
+		newViews = append(newViews, i)
+
+		if idx != len(vs)-1 { // Don't add short separator after last view
+			sep := NewSeparator(ctx, separatorKey{idx, key})
+			sep.LeftPadding = 25
+			newViews = append(newViews, sep)
+		}
+	}
+
+	bot := NewSeparator(ctx, separatorKey{-2, key})
+	newViews = append(newViews, bot)
+	return newViews
 }
 
 type Separator struct {
