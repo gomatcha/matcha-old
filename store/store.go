@@ -6,247 +6,324 @@ import (
 	"github.com/overcyn/mochi"
 )
 
-type storeNotifier3 struct {
-	store *Store3
-	key   interface{}
+type storeNotifier2 struct {
+	store *Store2
+	paths [][]int64
 }
 
-func (s *storeNotifier3) Notify() chan struct{} {
-	return s.store.NotifyKey(s.key)
+func (s *storeNotifier2) Notify() chan struct{} {
+	return s.store.notifyPaths(s.paths)
 }
 
-func (s *storeNotifier3) Unnotify(c chan struct{}) {
-	s.store.UnnotifyKey(s.key, c)
+func (s *storeNotifier2) Unnotify(c chan struct{}) {
+	s.store.unnotifyPaths(c)
 }
 
-type Store3 struct {
-	writeMu sync.Mutex
-	readMu  sync.RWMutex
+type Store2 struct {
+	mu        sync.RWMutex
+	locked    bool
+	rlocked   int
+	parent    *Store2
+	parentKey int64
+	children  map[int64]*Store2
 
-	txMu    sync.Mutex
-	readTx  map[*Tx]struct{}
-	writeTx *Tx
+	updated           bool
+	updatedPaths      [][]int64
+	updatedStorePaths [][]int64
 
-	chansMu sync.Mutex
-	chans   map[interface{}][]chan struct{}
+	chansMu   sync.Mutex
+	chans     []chan struct{}
+	pathChans map[chan struct{}][][]int64
 }
 
-var rootKeyVar rootKey // TODO(KD): any change to the store should affect this key. And any change to the key should affect all watchers of the store.
-
-type rootKey struct{}
-
-func (s *Store3) Write(tx *Tx) {
-	s.WriteKey(rootKeyVar, tx)
-}
-
-func (s *Store3) Read(tx *Tx) {
-	s.ReadKey(rootKeyVar, tx)
-}
-
-func (s *Store3) WriteKey(key interface{}, tx *Tx) {
-	if tx == nil {
-		panic("Store.Write() called outside of a transaction")
+func (s *Store2) root() *Store2 {
+	root := s
+	for root.parent != nil {
+		root = root.parent
 	}
-	if tx.kind != txKindWrite {
-		panic("Store.Write() called in readonly transaction")
-	}
-
-	s.lock(tx)
-	tx.writes = append(tx.writes, txAccess{store: s, key: key})
+	return root
 }
 
-func (s *Store3) ReadKey(key interface{}, tx *Tx) {
-	if tx == nil {
-		panic("Store.Read() is called outside of a transaction")
-	}
+func (s *Store2) Set(key int64, chl *Store2) {
+	s.updateStore([]int64{key})
 
-	s.lock(tx)
-	tx.reads = append(tx.reads, txAccess{store: s, key: key})
+	chl.lock()
+	if chl.parent != nil {
+		panic("Store2.Set() child already has parent")
+	}
+	chl.parent = s
+	chl.parentKey = key
+	if s.children == nil {
+		s.children = map[int64]*Store2{}
+	}
+	s.children[key] = chl
 }
 
-func (s *Store3) Notifier(key interface{}) mochi.Notifier {
-	return &storeNotifier3{
+func (s *Store2) Delete(key int64) {
+	s.updateStore([]int64{key})
+
+	chl, ok := s.children[key]
+	if !ok {
+		return
+	}
+	if chl.parent != s {
+		panic("Store2.RemoveChild() child is not parent")
+	}
+	delete(s.children, chl.parentKey)
+	chl.parent = nil
+	chl.parentKey = 0
+	chl.unlock()
+}
+
+func (s *Store2) isLocked() bool {
+	return s.locked
+}
+
+func (s *Store2) isRLocked() bool {
+	return s.rlocked > 0
+}
+
+func (s *Store2) Lock() {
+	s.root().lock()
+}
+
+func (s *Store2) lock() {
+	s.mu.Lock()
+	s.locked = true
+	for _, i := range s.children {
+		i.lock()
+	}
+}
+
+func (s *Store2) Unlock() {
+	s.root().unlock()
+}
+
+func (s *Store2) unlock() {
+	s.mu.Unlock()
+	s.locked = false
+	for _, i := range s.children {
+		i.unlock()
+	}
+
+	// notify any direct listeners for all writes
+	s.chansMu.Lock()
+	defer s.chansMu.Unlock()
+	if s.updated {
+		for _, c := range s.chans {
+			c <- struct{}{}
+			<-c
+		}
+	}
+	s.updated = false
+
+	// notify paths of all writes.
+	for c, paths := range s.pathChans {
+		if matchPaths(s.updatedPaths, paths) {
+			c <- struct{}{}
+			<-c
+		}
+	}
+	s.updatedPaths = nil
+
+	for c, paths := range s.pathChans {
+		if matchPaths2(s.updatedPaths, paths) {
+			c <- struct{}{}
+			<-c
+		}
+	}
+	s.updatedStorePaths = nil
+}
+
+func (s *Store2) RLock() {
+	s.rlock()
+}
+
+func (s *Store2) rlock() {
+	if s.parent != nil {
+		s.parent.rlock()
+	} else {
+		s.mu.RLock()
+		s.rlocked += 1
+	}
+}
+
+func (s *Store2) RUnlock() {
+	s.runlock()
+}
+
+func (s *Store2) runlock() {
+	if s.parent != nil {
+		s.parent.rlock()
+	} else {
+		s.rlocked -= 1
+		s.mu.RUnlock()
+	}
+}
+
+func (s *Store2) Update() {
+	if !s.isLocked() {
+		panic("Update called on unlocked store")
+	}
+
+	// Skip write if already happened
+	if s.updated {
+		return
+	}
+
+	s.updated = true
+	if s.parent != nil {
+		path := []int64{s.parentKey}
+		s.parent.update(path)
+	}
+}
+
+func (s *Store2) update(path []int64) {
+	if !s.isLocked() {
+		panic("Update called on unlocked store")
+	}
+
+	s.updated = true
+	s.updatedPaths = append(s.updatedPaths, path)
+	if s.parent != nil {
+		newPath := append([]int64(nil), path...)
+		s.parent.update(newPath)
+	}
+}
+
+func (s *Store2) updateStore(path []int64) {
+	if !s.isLocked() {
+		panic("Update called on unlocked store")
+	}
+
+	s.updated = true
+	s.updatedPaths = append(s.updatedPaths, path)
+	s.updatedStorePaths = append(s.updatedStorePaths, path)
+	if s.parent != nil {
+		newPath := append([]int64(nil), path...)
+		s.parent.updateStore(newPath)
+	}
+}
+
+func (s *Store2) Notifier(childStores ...*Store2) mochi.Notifier {
+	paths := [][]int64{}
+	for _, i := range childStores {
+		path := s.path(i, nil)
+		if path == nil {
+			panic("Store.Notifier(): Passed store is not a child of the store")
+		}
+		paths = append(paths, path)
+	}
+
+	return &storeNotifier2{
 		store: s,
-		key:   key,
+		paths: paths,
 	}
 }
 
-func (s *Store3) Notify() chan struct{} {
-	return s.NotifyKey(rootKeyVar)
+// Assumes locked
+func (s *Store2) path(child *Store2, curr []int64) []int64 {
+	if s == child {
+		return curr
+	}
+
+	for k, v := range s.children {
+		rlt := v.path(child, append(curr, k))
+		if rlt != nil {
+			return rlt
+		}
+	}
+	return nil
 }
 
-func (s *Store3) Unnotify(c chan struct{}) {
-	s.UnnotifyKey(rootKeyVar, c)
-}
-
-func (s *Store3) NotifyKey(k interface{}) chan struct{} {
+func (s *Store2) Notify() chan struct{} {
 	s.chansMu.Lock()
 	defer s.chansMu.Unlock()
 
 	c := make(chan struct{})
-	if s.chans == nil {
-		s.chans = map[interface{}][]chan struct{}{}
-	}
-	s.chans[k] = append(s.chans[k], c)
+	s.chans = append(s.chans, c)
 	return c
 }
 
-func (s *Store3) UnnotifyKey(k interface{}, c chan struct{}) {
+func (s *Store2) Unnotify(c chan struct{}) {
 	s.chansMu.Lock()
 	defer s.chansMu.Unlock()
 
-	chans := s.chans[k]
 	copy := []chan struct{}{}
-	for _, i := range chans {
+	for _, i := range s.chans {
 		if i != c {
 			copy = append(copy, i)
 		}
 	}
-	s.chans[k] = copy
+	s.chans = copy
 }
 
-func (s *Store3) lock(tx *Tx) {
-	// If we have not used this store in the transaction, lock the store and set the Tx.
-	if tx.kind == txKindRead {
-		s.txMu.Lock()
-		_, contains := s.readTx[tx]
-		s.txMu.Unlock()
+func (s *Store2) notifyPaths(paths [][]int64) chan struct{} {
+	s.chansMu.Lock()
+	defer s.chansMu.Unlock()
 
-		if !contains {
-			s.readMu.RLock()
-			tx.stores = append(tx.stores, s)
-
-			s.txMu.Lock()
-			if s.readTx == nil {
-				s.readTx = map[*Tx]struct{}{}
-			}
-			s.readTx[tx] = struct{}{}
-			s.txMu.Unlock()
-		}
-	} else {
-		s.txMu.Lock()
-		equal := s.writeTx == tx
-		s.txMu.Unlock()
-
-		if !equal {
-			s.writeMu.Lock()
-			s.readMu.Lock()
-			tx.stores = append(tx.stores, s)
-
-			s.txMu.Lock()
-			s.writeTx = tx
-			s.txMu.Unlock()
-		}
+	c := make(chan struct{})
+	if s.pathChans == nil {
+		s.pathChans = map[chan struct{}][][]int64{}
 	}
+	s.pathChans[c] = paths
+	return c
 }
 
-func (s *Store3) writeCommit1(tx *Tx) {
-	if tx == nil {
-		panic("Store.writeCommit1() called outside of a transaction")
-	}
-	if tx.kind != txKindWrite {
-		panic("Store.writeCommit1() called in a readonly transaction")
-	}
+func (s *Store2) unnotifyPaths(c chan struct{}) {
+	s.chansMu.Lock()
+	defer s.chansMu.Unlock()
 
-	s.txMu.Lock()
-	if s.writeTx != tx {
-		panic("Store.commit() called with an unknown transaction")
-	}
-	s.writeTx = nil
-	s.txMu.Unlock()
-
-	s.readMu.Unlock()
+	delete(s.pathChans, c)
 }
 
-func (s *Store3) writeCommit2(tx *Tx) {
-	if tx == nil {
-		panic("Store.writeCommit2() called outside of a transaction")
-	}
-	if tx.kind != txKindWrite {
-		panic("Store.writeCommit2() called in a readonly transaction")
-	}
-
-	s.writeMu.Unlock()
-}
-
-func (s *Store3) readCommit(tx *Tx) {
-	if tx == nil {
-		panic("Store.readCommit() called outside of a transaction")
-	}
-	if tx.kind != txKindRead {
-		panic("Store.readCommit() called in a write transaction")
-	}
-
-	s.txMu.Lock()
-	if _, ok := s.readTx[tx]; !ok {
-		panic("Store.commit() called with an unknown transaction")
-	}
-	delete(s.readTx, tx)
-	s.txMu.Unlock()
-
-	s.readMu.RUnlock()
-}
-
-type txKind int
-
-const (
-	txKindRead txKind = iota
-	txKindWrite
-)
-
-type txAccess struct {
-	store *Store3
-	key   interface{}
-}
-
-type Tx struct {
-	commited bool
-	kind     txKind
-	stores   []*Store3
-	reads    []txAccess
-	writes   []txAccess
-}
-
-func NewReadTx() *Tx {
-	return &Tx{kind: txKindRead}
-}
-
-func NewWriteTx() *Tx {
-	return &Tx{kind: txKindWrite}
-}
-
-func (tx *Tx) Commit() {
-	if tx.commited {
-		panic("Commiting already commited Tx")
-	}
-	tx.commited = true
-
-	if tx.kind == txKindRead {
-		for _, i := range tx.stores {
-			i.readCommit(tx)
-		}
-	} else {
-		for _, i := range tx.stores {
-			i.writeCommit1(tx)
-		}
-
-		// Get chans to update.
-		// TODO(KD): there should be a lock on i.store.chans
-		chans := map[chan struct{}]struct{}{}
-		for _, i := range tx.writes {
-			for _, j := range i.store.chans[i.key] {
-				chans[j] = struct{}{}
+func matchPaths(updatedPaths [][]int64, monitoredPaths [][]int64) bool {
+	for _, i := range updatedPaths {
+		for _, j := range monitoredPaths {
+			if matchPath(i, j) {
+				return true
 			}
 		}
+	}
+	return false
+}
 
-		// Notify chans of update.
-		for c := range chans {
-			c <- struct{}{}
-			<-c
-		}
-
-		for _, i := range tx.stores {
-			i.writeCommit2(tx)
+func matchPath(updatedPath []int64, monitoredPath []int64) bool {
+	if len(monitoredPath) > len(updatedPath) {
+		return false
+	}
+	for i := range monitoredPath {
+		if monitoredPath[i] != updatedPath[i] {
+			return false
 		}
 	}
+	return true
+}
+
+func matchPaths2(updatedPaths [][]int64, monitoredPaths [][]int64) bool {
+	for _, i := range updatedPaths {
+		for _, j := range monitoredPaths {
+			if matchPath(i, j) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func matchPath2(updatedPath []int64, monitoredPath []int64) bool {
+	if len(monitoredPath) > len(updatedPath) {
+		for i := range updatedPath {
+			if monitoredPath[i] != updatedPath[i] {
+				return false
+			}
+		}
+	} else {
+		for i := range monitoredPath {
+			if monitoredPath[i] != updatedPath[i] {
+				return false
+			}
+		}
+	}
+	return true
 }
