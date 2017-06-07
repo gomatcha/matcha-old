@@ -9,20 +9,10 @@
     if ((self = [super init])) {
         self.viewNode = viewNode;
         self.delegate = self;
-        
-        [self addObserver:self forKeyPath:@"viewControllers" options:0 context:nil];
+        MochiConfigureChildViewController(self);
+        self.view.backgroundColor = [UIColor whiteColor];
     }
     return self;
-}
-
-- (void)dealloc {
-    [self removeObserver:self forKeyPath:@"viewControllers"];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context {
-    NSLog(@"KVO");
 }
 
 - (void)setMochiChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs {

@@ -159,6 +159,7 @@
         self.scrollEnabled = pbscrollview.scrollEnabled;
         self.showsVerticalScrollIndicator = pbscrollview.showsVerticalScrollIndicator;
         self.showsHorizontalScrollIndicator = pbscrollview.showsHorizontalScrollIndicator;
+        self.alwaysBounceVertical = true;
     }
 }
 @end
@@ -405,6 +406,7 @@ UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNod
     }
     _wrappedViewController = [[UIViewController alloc] initWithNibName:nil bundle:nil];
     _wrappedViewController.view = self.view;
+    MochiConfigureChildViewController(_wrappedViewController);
     return _wrappedViewController;
 }
 

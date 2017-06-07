@@ -200,7 +200,6 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		subtitleView.String = v.Subtitle
 		subtitleView.Style.SetFont(text.Font{
 			Family: "Helvetica Neue",
-			Face:   "",
 			Size:   22,
 		})
 		subtitleView.Style.SetTextColor(colornames.Gray)
@@ -217,7 +216,6 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	titleView.String = v.Title
 	titleView.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
-		Face:   "",
 		Size:   22,
 	})
 	chlds = append(chlds, titleView)

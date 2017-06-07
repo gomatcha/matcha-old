@@ -9,6 +9,7 @@
     if ((self = [super init])) {
         self.viewNode = viewNode;
         self.delegate = self;
+        MochiConfigureChildViewController(self);
     }
     return self;
 }

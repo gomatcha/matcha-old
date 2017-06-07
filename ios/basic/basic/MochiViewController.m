@@ -76,3 +76,7 @@
 }
 
 @end
+
+void MochiConfigureChildViewController(UIViewController *vc) {
+    vc.edgesForExtendedLayout = UIRectEdgeNone;
+}
