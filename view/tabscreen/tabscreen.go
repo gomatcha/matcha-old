@@ -13,12 +13,12 @@ import (
 )
 
 type Screen struct {
-	store         store.Store2
+	store         store.Store
 	screens       []view.Screen
 	selectedIndex int
 }
 
-func (s *Screen) Store() *store.Store2 {
+func (s *Screen) Store() *store.Store {
 	return &s.store
 }
 

@@ -6,26 +6,26 @@ import (
 	"github.com/overcyn/mochi"
 )
 
-type storeNotifier2 struct {
-	store *Store2
+type storeNotifier struct {
+	store *Store
 	paths [][]int64
 }
 
-func (s *storeNotifier2) Notify() chan struct{} {
+func (s *storeNotifier) Notify() chan struct{} {
 	return s.store.notifyPaths(s.paths)
 }
 
-func (s *storeNotifier2) Unnotify(c chan struct{}) {
+func (s *storeNotifier) Unnotify(c chan struct{}) {
 	s.store.unnotifyPaths(c)
 }
 
-type Store2 struct {
+type Store struct {
 	mu        sync.RWMutex
 	locked    bool
 	rlocked   int
-	parent    *Store2
+	parent    *Store
 	parentKey int64
-	children  map[int64]*Store2
+	children  map[int64]*Store
 
 	updated           bool
 	updatedPaths      [][]int64
@@ -36,7 +36,7 @@ type Store2 struct {
 	pathChans map[chan struct{}][][]int64
 }
 
-func (s *Store2) root() *Store2 {
+func (s *Store) root() *Store {
 	root := s
 	for root.parent != nil {
 		root = root.parent
@@ -44,7 +44,7 @@ func (s *Store2) root() *Store2 {
 	return root
 }
 
-func (s *Store2) Set(key int64, chl *Store2) {
+func (s *Store) Set(key int64, chl *Store) {
 	s.updateStore([]int64{key})
 
 	chl.lock()
@@ -54,12 +54,12 @@ func (s *Store2) Set(key int64, chl *Store2) {
 	chl.parent = s
 	chl.parentKey = key
 	if s.children == nil {
-		s.children = map[int64]*Store2{}
+		s.children = map[int64]*Store{}
 	}
 	s.children[key] = chl
 }
 
-func (s *Store2) Delete(key int64) {
+func (s *Store) Delete(key int64) {
 	s.updateStore([]int64{key})
 
 	chl, ok := s.children[key]
@@ -75,19 +75,19 @@ func (s *Store2) Delete(key int64) {
 	chl.unlock()
 }
 
-func (s *Store2) isLocked() bool {
+func (s *Store) isLocked() bool {
 	return s.locked
 }
 
-func (s *Store2) isRLocked() bool {
+func (s *Store) isRLocked() bool {
 	return s.rlocked > 0
 }
 
-func (s *Store2) Lock() {
+func (s *Store) Lock() {
 	s.root().lock()
 }
 
-func (s *Store2) lock() {
+func (s *Store) lock() {
 	s.mu.Lock()
 	s.locked = true
 	for _, i := range s.children {
@@ -95,11 +95,11 @@ func (s *Store2) lock() {
 	}
 }
 
-func (s *Store2) Unlock() {
+func (s *Store) Unlock() {
 	s.root().unlock()
 }
 
-func (s *Store2) unlock() {
+func (s *Store) unlock() {
 	s.mu.Unlock()
 	s.locked = false
 	for _, i := range s.children {
@@ -135,11 +135,11 @@ func (s *Store2) unlock() {
 	s.updatedStorePaths = nil
 }
 
-func (s *Store2) RLock() {
+func (s *Store) RLock() {
 	s.rlock()
 }
 
-func (s *Store2) rlock() {
+func (s *Store) rlock() {
 	if s.parent != nil {
 		s.parent.rlock()
 	} else {
@@ -148,11 +148,11 @@ func (s *Store2) rlock() {
 	}
 }
 
-func (s *Store2) RUnlock() {
+func (s *Store) RUnlock() {
 	s.runlock()
 }
 
-func (s *Store2) runlock() {
+func (s *Store) runlock() {
 	if s.parent != nil {
 		s.parent.rlock()
 	} else {
@@ -161,7 +161,7 @@ func (s *Store2) runlock() {
 	}
 }
 
-func (s *Store2) Update() {
+func (s *Store) Update() {
 	if !s.isLocked() {
 		panic("Update called on unlocked store")
 	}
@@ -178,7 +178,7 @@ func (s *Store2) Update() {
 	}
 }
 
-func (s *Store2) update(path []int64) {
+func (s *Store) update(path []int64) {
 	if !s.isLocked() {
 		panic("Update called on unlocked store")
 	}
@@ -191,7 +191,7 @@ func (s *Store2) update(path []int64) {
 	}
 }
 
-func (s *Store2) updateStore(path []int64) {
+func (s *Store) updateStore(path []int64) {
 	if !s.isLocked() {
 		panic("Update called on unlocked store")
 	}
@@ -205,7 +205,7 @@ func (s *Store2) updateStore(path []int64) {
 	}
 }
 
-func (s *Store2) Notifier(childStores ...*Store2) mochi.Notifier {
+func (s *Store) Notifier(childStores ...*Store) mochi.Notifier {
 	paths := [][]int64{}
 	for _, i := range childStores {
 		path := s.path(i, nil)
@@ -215,14 +215,14 @@ func (s *Store2) Notifier(childStores ...*Store2) mochi.Notifier {
 		paths = append(paths, path)
 	}
 
-	return &storeNotifier2{
+	return &storeNotifier{
 		store: s,
 		paths: paths,
 	}
 }
 
 // Assumes locked
-func (s *Store2) path(child *Store2, curr []int64) []int64 {
+func (s *Store) path(child *Store, curr []int64) []int64 {
 	if s == child {
 		return curr
 	}
@@ -236,7 +236,7 @@ func (s *Store2) path(child *Store2, curr []int64) []int64 {
 	return nil
 }
 
-func (s *Store2) Notify() chan struct{} {
+func (s *Store) Notify() chan struct{} {
 	s.chansMu.Lock()
 	defer s.chansMu.Unlock()
 
@@ -245,7 +245,7 @@ func (s *Store2) Notify() chan struct{} {
 	return c
 }
 
-func (s *Store2) Unnotify(c chan struct{}) {
+func (s *Store) Unnotify(c chan struct{}) {
 	s.chansMu.Lock()
 	defer s.chansMu.Unlock()
 
@@ -258,7 +258,7 @@ func (s *Store2) Unnotify(c chan struct{}) {
 	s.chans = copy
 }
 
-func (s *Store2) notifyPaths(paths [][]int64) chan struct{} {
+func (s *Store) notifyPaths(paths [][]int64) chan struct{} {
 	s.chansMu.Lock()
 	defer s.chansMu.Unlock()
 
@@ -270,7 +270,7 @@ func (s *Store2) notifyPaths(paths [][]int64) chan struct{} {
 	return c
 }
 
-func (s *Store2) unnotifyPaths(c chan struct{}) {
+func (s *Store) unnotifyPaths(c chan struct{}) {
 	s.chansMu.Lock()
 	defer s.chansMu.Unlock()
 

@@ -23,7 +23,7 @@ func init() {
 }
 
 type App struct {
-	store       store.Store2
+	store       store.Store
 	stackScreen *stackscreen.Screen
 }
 

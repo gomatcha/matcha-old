@@ -53,7 +53,7 @@ func TestMatchPath2(t *testing.T) {
 }
 
 func TestStore(t *testing.T) {
-	s := &Store2{}
+	s := &Store{}
 	s.Lock()
 	s.Update()
 	s.Unlock()
