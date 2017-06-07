@@ -1,7 +1,6 @@
 package table
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/overcyn/mochi"
@@ -40,7 +39,6 @@ func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.
 		y += g.Height()
 	}
 	g.Frame = layout.Rt(0, 0, x, y)
-	fmt.Println("Grid frame", g.Frame)
 	return g, gs
 }
 

@@ -2,6 +2,7 @@ package settings
 
 import (
 	"image"
+	"image/color"
 
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
@@ -81,27 +82,65 @@ func NewRootView(ctx *view.Context, key interface{}, app *App) *RootView {
 func (v *RootView) Build(ctx *view.Context) *view.Model {
 	l := &table.Layout{}
 	chlds := []view.View{}
-
+	{
+		spacer := NewSpacer(ctx, "spacer1")
+		chlds = append(chlds, spacer)
+		l.Add(spacer)
+	}
 	{
 		group := []view.View{}
-		airplaneCell := NewBasicCell(ctx, 0)
-		airplaneCell.Title = "Airplane Mode"
-		airplaneCell.Subtitle = "Enabled"
-		group = append(group, airplaneCell)
+		cell1 := NewBasicCell(ctx, 0)
+		cell1.Title = "Airplane Mode"
+		cell1.Subtitle = "Enabled"
+		group = append(group, cell1)
 
-		wifiCell := NewBasicCell(ctx, 1)
-		wifiCell.Title = "Wi-Fi"
-		wifiCell.Subtitle = "Home Wifi"
-		group = append(group, wifiCell)
+		cell2 := NewBasicCell(ctx, 1)
+		cell2.Title = "Wi-Fi"
+		cell2.Subtitle = "Home Wifi"
+		group = append(group, cell2)
 
-		bluetoothCell := NewBasicCell(ctx, 2)
-		bluetoothCell.Title = "Bluetooth"
-		bluetoothCell.Subtitle = "On"
-		group = append(group, bluetoothCell)
+		cell3 := NewBasicCell(ctx, 2)
+		cell3.Title = "Bluetooth"
+		cell3.Subtitle = "On"
+		group = append(group, cell3)
 
-		cellularCell := NewBasicCell(ctx, 3)
-		cellularCell.Title = "Cellular"
-		group = append(group, cellularCell)
+		cell4 := NewBasicCell(ctx, 3)
+		cell4.Title = "Cellular"
+		group = append(group, cell4)
+
+		cell5 := NewBasicCell(ctx, 4)
+		cell5.Title = "Personal Hotspot"
+		cell5.Subtitle = "Off"
+		group = append(group, cell5)
+
+		cell6 := NewBasicCell(ctx, 5)
+		cell6.Title = "Carrier"
+		cell6.Subtitle = "T-Mobile"
+		group = append(group, cell6)
+
+		for _, i := range AddSeparators(ctx, "a", group) {
+			chlds = append(chlds, i)
+			l.Add(i)
+		}
+	}
+	{
+		spacer := NewSpacer(ctx, "spacer2")
+		chlds = append(chlds, spacer)
+		l.Add(spacer)
+	}
+	{
+		group := []view.View{}
+		cell1 := NewBasicCell(ctx, 10)
+		cell1.Title = "Notifications"
+		group = append(group, cell1)
+
+		cell2 := NewBasicCell(ctx, 11)
+		cell2.Title = "Control Center"
+		group = append(group, cell2)
+
+		cell3 := NewBasicCell(ctx, 12)
+		cell3.Title = "Do Not Disturb"
+		group = append(group, cell3)
 
 		for _, i := range AddSeparators(ctx, "a", group) {
 			chlds = append(chlds, i)
@@ -110,7 +149,6 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 	}
 
 	scrollChild := basicview.New(ctx, 6)
-	scrollChild.Painter = &paint.Style{BackgroundColor: colornames.White}
 	scrollChild.Layouter = l
 	scrollChild.Children = chlds
 
@@ -119,10 +157,17 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 	return &view.Model{
 		Children: []view.View{scrollView},
-		// Layouter: l,
-		Painter: &paint.Style{BackgroundColor: colornames.Lightgray},
+		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}
 }
+
+var (
+	cellColor       = color.Gray{255}
+	separatorColor  = color.Gray{200}
+	backgroundColor = color.Gray{239}
+	subtitleColor   = color.Gray{142}
+	titleColor      = color.Gray{0}
+)
 
 type separatorKey struct {
 	index int
@@ -140,7 +185,7 @@ func AddSeparators(ctx *view.Context, key interface{}, vs []view.View) []view.Vi
 
 		if idx != len(vs)-1 { // Don't add short separator after last view
 			sep := NewSeparator(ctx, separatorKey{idx, key})
-			sep.LeftPadding = 25
+			sep.LeftPadding = 60
 			newViews = append(newViews, sep)
 		}
 	}
@@ -170,7 +215,7 @@ func (v *Separator) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl := basicview.New(ctx, 0)
-	chl.Painter = &paint.Style{BackgroundColor: colornames.Gray}
+	chl.Painter = &paint.Style{BackgroundColor: separatorColor}
 	l.Add(chl, func(s *constraint.Solver) {
 		s.HeightEqual(l.Height())
 		s.LeftEqual(l.Left().Add(v.LeftPadding))
@@ -180,7 +225,35 @@ func (v *Separator) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Children: []view.View{chl},
 		Layouter: l,
-		Painter:  &paint.Style{BackgroundColor: colornames.White},
+		Painter:  &paint.Style{BackgroundColor: cellColor},
+	}
+}
+
+type Spacer struct {
+	*view.Embed
+	Height float64
+}
+
+func NewSpacer(ctx *view.Context, key interface{}) *Spacer {
+	if v, ok := ctx.Prev(key).(*Spacer); ok {
+		return v
+	}
+	return &Spacer{
+		Embed:  view.NewEmbed(ctx.NewId(key)),
+		Height: 35,
+	}
+}
+
+func (v *Spacer) Build(ctx *view.Context) *view.Model {
+	l := constraint.New()
+	l.Solve(func(s *constraint.Solver) {
+		s.HeightEqual(constraint.Const(35))
+		s.WidthEqual(l.MaxGuide().Width())
+	})
+
+	return &view.Model{
+		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}
 }
 
@@ -201,7 +274,7 @@ func NewBasicCell(ctx *view.Context, key interface{}) *BasicCell {
 func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
-		s.HeightEqual(constraint.Const(50))
+		s.HeightEqual(constraint.Const(44))
 		s.WidthEqual(l.MaxGuide().Width())
 	})
 
@@ -210,12 +283,16 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	iconView := imageview.NewImageView(ctx, 0)
 	iconView.Image = v.Icon
 	iconView.ResizeMode = imageview.ResizeModeFill
+	iconView.Painter = &paint.Style{
+		BackgroundColor: colornames.Lightgray,
+		CornerRadius:    5,
+	}
 	chlds = append(chlds, iconView)
 
 	iconGuide := l.Add(iconView, func(s *constraint.Solver) {
-		s.WidthEqual(constraint.Const(20))
-		s.HeightEqual(constraint.Const(20))
-		s.LeftEqual(l.Left().Add(10))
+		s.WidthEqual(constraint.Const(30))
+		s.HeightEqual(constraint.Const(30))
+		s.LeftEqual(l.Left().Add(15))
 		s.CenterYEqual(l.CenterY())
 	})
 
@@ -225,9 +302,9 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		subtitleView.String = v.Subtitle
 		subtitleView.Style.SetFont(text.Font{
 			Family: "Helvetica Neue",
-			Size:   22,
+			Size:   16,
 		})
-		subtitleView.Style.SetTextColor(colornames.Gray)
+		subtitleView.Style.SetTextColor(subtitleColor)
 		chlds = append(chlds, subtitleView)
 
 		subtitleGuide = l.Add(subtitleView, func(s *constraint.Solver) {
@@ -241,12 +318,13 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	titleView.String = v.Title
 	titleView.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
-		Size:   22,
+		Size:   16,
 	})
+	titleView.Style.SetTextColor(titleColor)
 	chlds = append(chlds, titleView)
 
 	titleGuide := l.Add(titleView, func(s *constraint.Solver) {
-		s.LeftEqual(iconGuide.Right().Add(10))
+		s.LeftEqual(iconGuide.Right().Add(15))
 		s.CenterYEqual(l.CenterY())
 		if subtitleGuide != nil {
 			s.RightLess(subtitleGuide.Left())
@@ -259,6 +337,6 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Children: chlds,
 		Layouter: l,
-		Painter:  &paint.Style{BackgroundColor: colornames.White},
+		Painter:  &paint.Style{BackgroundColor: cellColor},
 	}
 }

@@ -16,6 +16,7 @@ Medium:
 * Images/ data blobs
 
 Low:
+* Constraints should force views onto pixel boundries
 * Animations
 * Middleware for uitabbaritem and uinavigationitem
 * Responder Chain
