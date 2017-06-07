@@ -6,16 +6,16 @@ import (
 	"github.com/overcyn/mochi"
 )
 
-type storeNotifier2 struct {
+type storeNotifier struct {
 	store *Store
 	key   interface{}
 }
 
-func (s *storeNotifier2) Notify() chan struct{} {
+func (s *storeNotifier) Notify() chan struct{} {
 	return s.store.NotifyKey(s.key)
 }
 
-func (s *storeNotifier2) Unnotify(c chan struct{}) {
+func (s *storeNotifier) Unnotify(c chan struct{}) {
 	s.store.UnnotifyKey(s.key, c)
 }
 
@@ -195,7 +195,7 @@ func (s *Store) ReadKey(key interface{}) {
 }
 
 func (s *Store) Notifier(key interface{}) mochi.Notifier {
-	return &storeNotifier2{
+	return &storeNotifier{
 		store: s,
 		key:   key,
 	}

@@ -42,6 +42,11 @@ func NewApp() *App {
 	app.Lock()
 	defer app.Unlock()
 
+	// Storer
+	// NewStore(app.tabScreen, app.stackScreen1, app.stackScreen2, app.stackScreen3, app.stackScreen4)
+	// app.Notify(tabScreen)
+	// app.Notify(substore ...store.Store)
+
 	app.store.AddChild(app.tabScreen.Store(), "tabScreen")
 	app.store.AddChild(app.stackScreen1.Store(), "stackScreen1")
 	app.store.AddChild(app.stackScreen2.Store(), "stackScreen2")

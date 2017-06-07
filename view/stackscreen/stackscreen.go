@@ -33,21 +33,23 @@ func (s *Screen) NewView(ctx *view.Context, key interface{}) view.View {
 
 func (s *Screen) SetChildren(ss ...view.Screen) {
 	s.store.Write()
+
 	s.screens = ss
 }
 
 func (s *Screen) Children() []view.Screen {
-	s.store.Read()
 	return s.screens
 }
 
 func (s *Screen) Push(vs view.Screen) {
 	s.store.Write()
+
 	s.screens = append(s.screens, vs)
 }
 
 func (s *Screen) Pop() {
 	s.store.Write()
+
 	if len(s.screens) > 0 {
 		s.screens = s.screens[:len(s.screens)-1]
 	}
