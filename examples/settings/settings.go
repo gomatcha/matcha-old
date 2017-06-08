@@ -145,7 +145,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell3.Title = "Do Not Disturb"
 		group = append(group, cell3)
 
-		for _, i := range AddSeparators(ctx, "a", group) {
+		for _, i := range AddSeparators(ctx, "b", group) {
 			chlds = append(chlds, i)
 			l.Add(i)
 		}
@@ -316,7 +316,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		subtitleView.String = v.Subtitle
 		subtitleView.Style.SetFont(text.Font{
 			Family: "Helvetica Neue",
-			Size:   15,
+			Size:   13,
 		})
 		subtitleView.Style.SetTextColor(subtitleColor)
 		chlds = append(chlds, subtitleView)
@@ -333,7 +333,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	titleView.String = v.Title
 	titleView.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
-		Size:   15,
+		Size:   13,
 	})
 	titleView.Style.SetTextColor(titleColor)
 	chlds = append(chlds, titleView)

@@ -5,17 +5,18 @@
 High:
 * Text Input / Keyboard
 * Thread & locking. Switch to syncnotifier for all things views.
-* Remove view.model.children, Just get the list of child views from the layouter.
-* Native resources.
-* Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
+* Native resources. Ignore asset catalog for now. 
+* Rebuild settings app.
 
 Medium:
 * Documentation
 * Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 * Cache layout properties
 * Images/ data blobs
+* Remove view.model.children, Just get the list of child views from the layouter.
 
 Low:
+* Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
 * Constraints should force views onto pixel boundries
 * Animations
 * Middleware for uitabbaritem and uinavigationitem
@@ -23,6 +24,7 @@ Low:
 * Rotation
 * Accessibility
 * Debugging
+* Asset catalog
 * Deadlock detection
 * LocalStorage / Keychain / UserDefaults
 * Cliboard

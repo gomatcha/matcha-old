@@ -136,6 +136,9 @@ func (ctx *Context) NewId(key interface{}) mochi.Id {
 	id := mochi.Id(atomic.AddInt64(&maxId, 1))
 	if ctx != nil {
 		cacheKey := viewCacheKey{key: key, id: ctx.node.id}
+		if _, ok := ctx.node.root.ids[cacheKey]; ok {
+			fmt.Println("Context.NewId() key has already been used", key)
+		}
 		ctx.node.root.ids[cacheKey] = id
 	}
 	return id

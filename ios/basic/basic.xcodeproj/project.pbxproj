@@ -38,6 +38,10 @@
 		6778312B1EE34715009D9D7F /* Tabnav.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778312A1EE34715009D9D7F /* Tabnav.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6778312E1EE8CE77009D9D7F /* MochiSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778312D1EE8CE76009D9D7F /* MochiSwitchView.m */; };
 		677831361EE8D37A009D9D7F /* Switchview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831351EE8D37A009D9D7F /* Switchview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		677831391EE8E617009D9D7F /* flag-of-fukuoka.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 677831381EE8E617009D9D7F /* flag-of-fukuoka.jpg */; };
+		6778313D1EE90E3A009D9D7F /* TableArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6778313A1EE90E3A009D9D7F /* TableArrow@2x.png */; };
+		6778313E1EE90E3A009D9D7F /* TableArrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6778313B1EE90E3A009D9D7F /* TableArrow@3x.png */; };
+		6778313F1EE90E3A009D9D7F /* TableArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 6778313C1EE90E3A009D9D7F /* TableArrow.png */; };
 		67D89E211ED4AE1E0063A1E2 /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */; };
 /* End PBXBuildFile section */
 
@@ -114,6 +118,10 @@
 		6778312D1EE8CE76009D9D7F /* MochiSwitchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiSwitchView.m; sourceTree = "<group>"; };
 		677831341EE8D37A009D9D7F /* Switchview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Switchview.pbobjc.h; sourceTree = "<group>"; };
 		677831351EE8D37A009D9D7F /* Switchview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Switchview.pbobjc.m; sourceTree = "<group>"; };
+		677831381EE8E617009D9D7F /* flag-of-fukuoka.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "flag-of-fukuoka.jpg"; path = "../../../../../../../../../Desktop/flag-of-fukuoka.jpg"; sourceTree = "<group>"; };
+		6778313A1EE90E3A009D9D7F /* TableArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TableArrow@2x.png"; sourceTree = "<group>"; };
+		6778313B1EE90E3A009D9D7F /* TableArrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TableArrow@3x.png"; sourceTree = "<group>"; };
+		6778313C1EE90E3A009D9D7F /* TableArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TableArrow.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +174,10 @@
 				676EF4CF1E8E341900C1488A /* AppDelegate.m */,
 				676EF4E21E8E34E300C1488A /* ViewController.h */,
 				676EF4E31E8E34E300C1488A /* ViewController.m */,
+				677831381EE8E617009D9D7F /* flag-of-fukuoka.jpg */,
+				6778313C1EE90E3A009D9D7F /* TableArrow.png */,
+				6778313A1EE90E3A009D9D7F /* TableArrow@2x.png */,
+				6778313B1EE90E3A009D9D7F /* TableArrow@3x.png */,
 				676EF4D71E8E341900C1488A /* Assets.xcassets */,
 				676EF4D91E8E341900C1488A /* LaunchScreen.storyboard */,
 				676EF4DC1E8E341900C1488A /* Info.plist */,
@@ -390,8 +402,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6778313E1EE90E3A009D9D7F /* TableArrow@3x.png in Resources */,
 				676EF4DB1E8E341900C1488A /* LaunchScreen.storyboard in Resources */,
+				6778313F1EE90E3A009D9D7F /* TableArrow.png in Resources */,
+				6778313D1EE90E3A009D9D7F /* TableArrow@2x.png in Resources */,
 				676EF4D81E8E341900C1488A /* Assets.xcassets in Resources */,
+				677831391EE8E617009D9D7F /* flag-of-fukuoka.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
