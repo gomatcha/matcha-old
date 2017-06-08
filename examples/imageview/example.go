@@ -3,6 +3,7 @@ package imageview
 import (
 	"fmt"
 	"image"
+	_ "image/jpeg"
 	_ "image/png"
 	"os"
 
@@ -34,8 +35,8 @@ func New(ctx *view.Context, key interface{}) *ImageView {
 	dir, err := env.AssetsDir()
 	fmt.Println("ENV", dir, err)
 
-	file, err := os.Open(dir + "/TableArrow.png")
-	img, str, err := image.Decode(file)
+	file, err := os.Open(dir + "/flag-of-fukuoka.jpg")
+	img, _, err := image.Decode(file)
 
 	return &ImageView{
 		Embed: view.NewEmbed(ctx.NewId(key)),
@@ -59,7 +60,7 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 
 	chl2 := imageview.NewImageView(ctx, 1)
 	chl2.Image = v.image
-	chl2.Painter = &paint.Style{BackgroundColor: colornames.Blue}
+	chl2.Painter = &paint.Style{BackgroundColor: colornames.Red}
 	// chl2.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl2.ResizeMode = imageview.ResizeModeFit
 	l.Add(chl2, func(s *constraint.Solver) {

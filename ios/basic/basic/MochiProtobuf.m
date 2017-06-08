@@ -110,7 +110,8 @@
 
 @implementation UIImage (Mochi)
 - (id)initWithProtobuf:(MochiPBImage *)value {
-    return [self initWithData:value.data_p];
+    CIImage *image = [CIImage imageWithBitmapData:value.data_p bytesPerRow:value.stride size:CGSizeMake(value.width, value.height) format:kCIFormatRGBA8 colorSpace:CGColorSpaceCreateDeviceRGB()];
+    return [self initWithCIImage:image];
 }
 @end
 

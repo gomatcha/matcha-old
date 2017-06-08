@@ -87,6 +87,7 @@ BOOL MochiPBResizeMode_IsValidValue(int32_t value__) {
 
 @dynamic width;
 @dynamic height;
+@dynamic stride;
 @dynamic data_p;
 
 typedef struct MochiPBImage__storage_ {
@@ -94,6 +95,7 @@ typedef struct MochiPBImage__storage_ {
   NSData *data_p;
   int64_t width;
   int64_t height;
+  int64_t stride;
 } MochiPBImage__storage_;
 
 // This method is threadsafe because it is initially called
@@ -124,10 +126,19 @@ typedef struct MochiPBImage__storage_ {
         .name = "data_p",
         .dataTypeSpecific.className = NULL,
         .number = MochiPBImage_FieldNumber_Data_p,
-        .hasIndex = 2,
+        .hasIndex = 3,
         .offset = (uint32_t)offsetof(MochiPBImage__storage_, data_p),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBytes,
+      },
+      {
+        .name = "stride",
+        .dataTypeSpecific.className = NULL,
+        .number = MochiPBImage_FieldNumber_Stride,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MochiPBImage__storage_, stride),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt64,
       },
     };
     GPBDescriptor *localDescriptor =

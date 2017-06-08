@@ -75,6 +75,7 @@ typedef GPB_ENUM(MochiPBImage_FieldNumber) {
   MochiPBImage_FieldNumber_Width = 1,
   MochiPBImage_FieldNumber_Height = 2,
   MochiPBImage_FieldNumber_Data_p = 3,
+  MochiPBImage_FieldNumber_Stride = 4,
 };
 
 @interface MochiPBImage : GPBMessage
@@ -82,6 +83,8 @@ typedef GPB_ENUM(MochiPBImage_FieldNumber) {
 @property(nonatomic, readwrite) int64_t width;
 
 @property(nonatomic, readwrite) int64_t height;
+
+@property(nonatomic, readwrite) int64_t stride;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSData *data_p;
 
