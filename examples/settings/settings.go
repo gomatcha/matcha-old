@@ -14,6 +14,7 @@ import (
 	"github.com/overcyn/mochi/view/imageview"
 	"github.com/overcyn/mochi/view/scrollview"
 	"github.com/overcyn/mochi/view/stackscreen"
+	"github.com/overcyn/mochi/view/switchview"
 	"github.com/overcyn/mochi/view/textview"
 	"github.com/overcyn/mochibridge"
 	"golang.org/x/image/colornames"
@@ -88,10 +89,12 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		l.Add(spacer)
 	}
 	{
+		switchView := switchview.New(ctx, 6)
+
 		group := []view.View{}
 		cell1 := NewBasicCell(ctx, 0)
 		cell1.Title = "Airplane Mode"
-		cell1.Subtitle = "Enabled"
+		cell1.AccessoryView = switchView
 		group = append(group, cell1)
 
 		cell2 := NewBasicCell(ctx, 1)
@@ -259,9 +262,10 @@ func (v *Spacer) Build(ctx *view.Context) *view.Model {
 
 type BasicCell struct {
 	*view.Embed
-	Icon     image.Image
-	Title    string
-	Subtitle string
+	Icon          image.Image
+	Title         string
+	Subtitle      string
+	AccessoryView view.View
 }
 
 func NewBasicCell(ctx *view.Context, key interface{}) *BasicCell {
@@ -296,29 +300,40 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		s.CenterYEqual(l.CenterY())
 	})
 
-	var subtitleGuide *constraint.Guide
+	rightAnchor := l.Right()
+	if v.AccessoryView != nil {
+		chlds = append(chlds, v.AccessoryView)
+		accessoryGuide := l.Add(v.AccessoryView, func(s *constraint.Solver) {
+			s.RightEqual(rightAnchor.Add(-10))
+			s.LeftGreater(l.Left())
+			s.CenterYEqual(l.CenterY())
+		})
+		rightAnchor = accessoryGuide.Left()
+	}
+
 	if len(v.Subtitle) > 0 {
 		subtitleView := textview.New(ctx, 2)
 		subtitleView.String = v.Subtitle
 		subtitleView.Style.SetFont(text.Font{
 			Family: "Helvetica Neue",
-			Size:   16,
+			Size:   15,
 		})
 		subtitleView.Style.SetTextColor(subtitleColor)
 		chlds = append(chlds, subtitleView)
 
-		subtitleGuide = l.Add(subtitleView, func(s *constraint.Solver) {
-			s.RightEqual(l.Right().Add(-10))
+		subtitleGuide := l.Add(subtitleView, func(s *constraint.Solver) {
+			s.RightEqual(rightAnchor.Add(-10))
 			s.LeftGreater(l.Left())
 			s.CenterYEqual(l.CenterY())
 		})
+		rightAnchor = subtitleGuide.Left()
 	}
 
 	titleView := textview.New(ctx, 1)
 	titleView.String = v.Title
 	titleView.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
-		Size:   16,
+		Size:   15,
 	})
 	titleView.Style.SetTextColor(titleColor)
 	chlds = append(chlds, titleView)
@@ -326,11 +341,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	titleGuide := l.Add(titleView, func(s *constraint.Solver) {
 		s.LeftEqual(iconGuide.Right().Add(15))
 		s.CenterYEqual(l.CenterY())
-		if subtitleGuide != nil {
-			s.RightLess(subtitleGuide.Left())
-		} else {
-			s.RightLess(l.Right())
-		}
+		s.RightLess(rightAnchor.Add(-10))
 	})
 	_ = titleGuide
 

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package switchview;
+
+option go_package = "switchview";
+option objc_class_prefix = "MochiPBSwitchView";
+
+message View {
+    bool value = 1;
+    int64 onValueChange = 2;
+}
+
+message Event {
+    bool value = 1;
+}

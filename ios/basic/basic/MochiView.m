@@ -5,6 +5,7 @@
 #import "MochiTabBarController.h"
 #import "MochiViewController.h"
 #import "MochiStackViewController.h"
+#import "MochiSwitchView.h"
 
 @interface MochiBasicView ()
 @property (nonatomic, weak) MochiViewNode *viewNode;
@@ -186,6 +187,8 @@ UIView<MochiChildView> *MochiViewWithNode(MochiNode *node, MochiViewNode *viewNo
         child = [[MochiButton alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/scrollview"]) {
         child = [[MochiScrollView alloc] initWithViewNode:viewNode];
+    } else if ([name isEqual:@"github.com/overcyn/mochi/view/switch"]) {
+        child = [[MochiSwitchView alloc] initWithViewNode:viewNode];
     }
     return child;
 }

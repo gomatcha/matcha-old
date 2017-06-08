@@ -17,6 +17,7 @@ import (
 	"github.com/overcyn/mochi/view/button"
 	"github.com/overcyn/mochi/view/imageview"
 	"github.com/overcyn/mochi/view/scrollview"
+	"github.com/overcyn/mochi/view/switchview"
 	"github.com/overcyn/mochi/view/textview"
 	"github.com/overcyn/mochibridge"
 )
@@ -203,6 +204,15 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 			s.HeightEqual(constraint.Const(200))
 		})
 	}
+	chl11 := switchview.New(ctx, 12)
+	chl11.OnValueChange = func(a *switchview.View) {
+		fmt.Println("switch tapped", a.Value)
+	}
+	chls = append(chls, chl11)
+	_ = l.Add(chl11, func(s *constraint.Solver) {
+		s.LeftEqual(g6.Right())
+		s.TopEqual(g6.Top())
+	})
 
 	childLayouter := &table.Layout{}
 	childViews := []view.View{}
