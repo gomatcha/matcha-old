@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "MochiViewController.h"
-#import "MochiRoot.h"
+#import "MochiObjcBridge.h"
 #import "MochiNode.h"
 @import Mochi;
 

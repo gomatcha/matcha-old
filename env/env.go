@@ -1,5 +1,9 @@
 package env
 
-func ResourceDir() string {
-	return ""
+import (
+	"github.com/overcyn/mochibridge"
+)
+
+func AssetsDir() (string, error) {
+	return mochibridge.Bridge().Call("assetsDir").ToString(), nil
 }

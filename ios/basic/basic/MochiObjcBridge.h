@@ -13,4 +13,5 @@
 - (void)configure;
 - (MochiGoValue *)sizeForAttributedString:(NSData *)data;
 - (void)updateId:(NSInteger)identifier withProtobuf:(NSData *)protobuf;
+- (NSString *)assetsDir;
 @end

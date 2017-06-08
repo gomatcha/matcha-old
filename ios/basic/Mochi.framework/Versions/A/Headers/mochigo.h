@@ -5,8 +5,6 @@
 #include "mochiobjc.h"
 @class MochiGoValue;
 
-GoRef mochiGoRoot();
-
 GoRef mochiGoBool(bool);
 bool mochiGoToBool(GoRef);
 GoRef mochiGoInt(int);
@@ -45,7 +43,6 @@ void mochiGoUntrack(GoRef);
 
 @interface MochiGoBridge : NSObject
 + (MochiGoBridge *)sharedBridge;
-@property (nonatomic, readonly) MochiGoValue *root;
 @end
 
 @interface MochiGoValue : NSObject

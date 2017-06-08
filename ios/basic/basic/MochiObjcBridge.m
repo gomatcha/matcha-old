@@ -6,7 +6,7 @@
 //  Copyright © 2017 Mochi. All rights reserved.
 //
 
-#import "MochiRoot.h"
+#import "MochiObjcBridge.h"
 #import "MochiBridge.h"
 #import "MochiNode.h"
 #import "MochiViewController.h"
@@ -50,6 +50,10 @@
     
     MochiViewController *vc = [MochiViewController viewControllerWithIdentifier:identifier];
     [vc update:root.node];
+}
+
+- (NSString *)assetsDir {
+     return [[NSBundle mainBundle] resourcePath];
 }
 
 @end

@@ -1,6 +1,9 @@
 package imageview
 
 import (
+	"fmt"
+
+	"github.com/overcyn/mochi/env"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/view"
@@ -50,6 +53,9 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 		s.WidthEqual(constraint.Const(200))
 		s.HeightEqual(constraint.Const(200))
 	})
+
+	dir, err := env.AssetsDir()
+	fmt.Println("ENV", dir, err)
 
 	return &view.Model{
 		Children: []view.View{chl, chl2},

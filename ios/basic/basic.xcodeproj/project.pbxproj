@@ -14,7 +14,7 @@
 		674080E31EDA4D480093D987 /* MochiTouchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080E21EDA4D480093D987 /* MochiTouchController.m */; };
 		674080E61EDC7EF80093D987 /* MochiProtobuf.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080E51EDC7EF80093D987 /* MochiProtobuf.m */; };
 		674081371EDE05E00093D987 /* MochiPressGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 674081361EDE05E00093D987 /* MochiPressGestureRecognizer.m */; };
-		67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608AC61EA8545600AE2EC7 /* MochiRoot.m */; };
+		67608AC71EA8545600AE2EC7 /* MochiObjcBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 67608AC61EA8545600AE2EC7 /* MochiObjcBridge.m */; };
 		676EF4CD1E8E341800C1488A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4CC1E8E341800C1488A /* main.m */; };
 		676EF4D01E8E341900C1488A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 676EF4CF1E8E341900C1488A /* AppDelegate.m */; };
 		676EF4D81E8E341900C1488A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 676EF4D71E8E341900C1488A /* Assets.xcassets */; };
@@ -71,8 +71,8 @@
 		674081351EDE05E00093D987 /* MochiPressGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiPressGestureRecognizer.h; sourceTree = "<group>"; };
 		674081361EDE05E00093D987 /* MochiPressGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiPressGestureRecognizer.m; sourceTree = "<group>"; };
 		67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mochi.framework; sourceTree = "<group>"; };
-		67608AC51EA8545600AE2EC7 /* MochiRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiRoot.h; sourceTree = "<group>"; };
-		67608AC61EA8545600AE2EC7 /* MochiRoot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiRoot.m; sourceTree = "<group>"; };
+		67608AC51EA8545600AE2EC7 /* MochiObjcBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiObjcBridge.h; sourceTree = "<group>"; };
+		67608AC61EA8545600AE2EC7 /* MochiObjcBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiObjcBridge.m; sourceTree = "<group>"; };
 		676EF4C81E8E341800C1488A /* basic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = basic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		676EF4CC1E8E341800C1488A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		676EF4CE1E8E341900C1488A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -203,8 +203,8 @@
 				674080DA1ED8D41F0093D987 /* Touch */,
 				674080E41EDA9F6A0093D987 /* MochiProtobuf.h */,
 				674080E51EDC7EF80093D987 /* MochiProtobuf.m */,
-				67608AC51EA8545600AE2EC7 /* MochiRoot.h */,
-				67608AC61EA8545600AE2EC7 /* MochiRoot.m */,
+				67608AC51EA8545600AE2EC7 /* MochiObjcBridge.h */,
+				67608AC61EA8545600AE2EC7 /* MochiObjcBridge.m */,
 				676EF4F51E8ED68800C1488A /* MochiBridge.h */,
 				676EF4F61E8ED68800C1488A /* MochiBridge.m */,
 				676EF4F81E8F19A500C1488A /* MochiNode.h */,
@@ -420,7 +420,7 @@
 			files = (
 				677831151EE299A4009D9D7F /* Imageview.pbobjc.m in Sources */,
 				677831271EE3421B009D9D7F /* Stacknavigator.pbobjc.m in Sources */,
-				67608AC71EA8545600AE2EC7 /* MochiRoot.m in Sources */,
+				67608AC71EA8545600AE2EC7 /* MochiObjcBridge.m in Sources */,
 				6778311C1EE299A4009D9D7F /* View.pbobjc.m in Sources */,
 				674080E31EDA4D480093D987 /* MochiTouchController.m in Sources */,
 				6778311A1EE299A4009D9D7F /* Touch.pbobjc.m in Sources */,
