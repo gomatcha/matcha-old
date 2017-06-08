@@ -19,7 +19,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [MochiObjcBridge sharedBridge].root = [[MochiRoot alloc] init];
+    [[MochiObjcBridge sharedBridge] configure];
     
     NSString *path = [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], @"flag-of-fukuoka.jpg"];
     UIImage *image = [UIImage imageWithContentsOfFile:path];

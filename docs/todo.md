@@ -44,7 +44,6 @@ Low:
 * Modal presentation
 
 Bugs:
-* Prevent duplicate keys.
 * Crash in protobuf if view does not have a layout guide.
 * Constraints crash if unconstrained.
 

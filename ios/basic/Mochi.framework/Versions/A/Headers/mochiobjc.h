@@ -15,10 +15,9 @@ typedef struct CGoBuffer {
 
 @interface MochiObjcBridge : NSObject
 + (MochiObjcBridge *)sharedBridge;
-@property (nonatomic, strong) id root;
 @end
 
-ObjcRef MochiObjcRoot();
+ObjcRef MochiObjcBridge_();
 
 ObjcRef MochiObjcBool(bool v);
 bool MochiObjcToBool(ObjcRef v);

@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 @import Mochi;
 
-@interface MochiRoot : NSObject
+@interface MochiObjcBridge (Extensions)
+- (void)configure;
 - (MochiGoValue *)sizeForAttributedString:(NSData *)data;
 - (void)updateId:(NSInteger)identifier withProtobuf:(NSData *)protobuf;
 @end

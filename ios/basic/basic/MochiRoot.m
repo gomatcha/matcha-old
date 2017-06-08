@@ -13,23 +13,17 @@
 #import "MochiDeadlockLogger.h"
 #import "MochiProtobuf.h"
 
-@interface MochiRoot ()
-@property (nonatomic, strong) CADisplayLink *displayLink;
-@property (nonatomic, strong) MochiGoValue *screenUpdateFunc;
-@end
+@implementation MochiObjcBridge (Extensions)
 
-@implementation MochiRoot
-
-- (id)init {
-    if ((self = [super init])) {
-        // [MochiDeadlockLogger sharedLogger]; // Initialize
-        
-        self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(screenUpdate)];
-        [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-        // self.displayLink.preferredFramesPerSecond = 2;
-        self.screenUpdateFunc = [[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/animate screenUpdate"];
+- (void)configure {
+//    [MochiDeadlockLogger sharedLogger]; // Initialize
+    
+    static CADisplayLink *displayLink = nil;
+    if (displayLink == nil) {
+        displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(screenUpdate)];
+        displayLink.preferredFramesPerSecond = 2;
+        [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     }
-    return self;
 }
 
 - (MochiGoValue *)sizeForAttributedString:(NSData *)protobuf {
@@ -43,7 +37,11 @@
 }
 
 - (void)screenUpdate {
-    [self.screenUpdateFunc call:nil args:nil];
+    static MochiGoValue *updateFunc = nil;
+    if (updateFunc == nil) {
+        updateFunc = [[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/animate screenUpdate"];
+    }
+    [updateFunc call:nil args:nil];
 }
 
 - (void)updateId:(NSInteger)identifier withProtobuf:(NSData *)protobuf {

@@ -23,9 +23,7 @@ func New(ctx *view.Context, key interface{}) *ImageView {
 	if v, ok := ctx.Prev(key).(*ImageView); ok {
 		return v
 	}
-	return &ImageView{
-		Embed: view.NewEmbed(ctx.NewId(key)),
-	}
+	return &ImageView{Embed: view.NewEmbed(ctx.NewId(key))}
 }
 
 func (v *ImageView) Build(ctx *view.Context) *view.Model {

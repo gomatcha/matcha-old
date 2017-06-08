@@ -63,7 +63,7 @@ func (t *Text) Size(min layout.Point, max layout.Point) layout.Point {
 		return layout.Pt(0, 0)
 	}
 
-	pointData := mochibridge.Root().Call("sizeForAttributedString:", mochibridge.Bytes(data)).ToInterface().([]byte)
+	pointData := mochibridge.Bridge().Call("sizeForAttributedString:", mochibridge.Bytes(data)).ToInterface().([]byte)
 	pbpoint := &pb.Point{}
 	err = proto.Unmarshal(pointData, pbpoint)
 	if err != nil {

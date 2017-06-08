@@ -77,7 +77,7 @@ func NewRoot(v View) *Root {
 			fmt.Println("err", err)
 			return
 		}
-		mochibridge.Root().Call("updateId:withProtobuf:", mochibridge.Int64(id), mochibridge.Bytes(pb))
+		mochibridge.Bridge().Call("updateId:withProtobuf:", mochibridge.Int64(id), mochibridge.Bytes(pb))
 	})
 	return r
 }
