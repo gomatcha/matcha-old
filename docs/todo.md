@@ -14,6 +14,7 @@ Medium:
 * Cache layout properties
 * Images/ data blobs
 * Remove view.model.children, Just get the list of child views from the layouter.
+* Auto disable PNGCrush. "Compress PNG Files" and "Remove Text Metadata from PNG Files"
 
 Low:
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack

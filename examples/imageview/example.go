@@ -2,6 +2,9 @@ package imageview
 
 import (
 	"fmt"
+	"image"
+	_ "image/png"
+	"os"
 
 	"github.com/overcyn/mochi/env"
 	"github.com/overcyn/mochi/layout/constraint"
@@ -20,13 +23,24 @@ func init() {
 
 type ImageView struct {
 	*view.Embed
+	image image.Image
 }
 
 func New(ctx *view.Context, key interface{}) *ImageView {
 	if v, ok := ctx.Prev(key).(*ImageView); ok {
 		return v
 	}
-	return &ImageView{Embed: view.NewEmbed(ctx.NewId(key))}
+
+	dir, err := env.AssetsDir()
+	fmt.Println("ENV", dir, err)
+
+	file, err := os.Open(dir + "/TableArrow.png")
+	img, str, err := image.Decode(file)
+
+	return &ImageView{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+		image: img,
+	}
 }
 
 func (v *ImageView) Build(ctx *view.Context) *view.Model {
@@ -43,7 +57,8 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(200))
 	})
 
-	chl2 := imageview.NewURLImageView(ctx, 0)
+	chl2 := imageview.NewImageView(ctx, 1)
+	chl2.Image = v.image
 	chl2.Painter = &paint.Style{BackgroundColor: colornames.Blue}
 	// chl2.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl2.ResizeMode = imageview.ResizeModeFit
@@ -53,9 +68,6 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 		s.WidthEqual(constraint.Const(200))
 		s.HeightEqual(constraint.Const(200))
 	})
-
-	dir, err := env.AssetsDir()
-	fmt.Println("ENV", dir, err)
 
 	return &view.Model{
 		Children: []view.View{chl, chl2},
