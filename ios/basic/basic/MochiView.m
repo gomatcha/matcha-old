@@ -89,6 +89,12 @@
         self.contentMode = UIViewContentModeCenter;
         break;
     }
+    UIColor *tintColor = [[UIColor alloc] initWithProtobuf:pbimageview.tint];
+    if (tintColor) {
+        self.tintColor = tintColor;
+        self.image = [self.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        
+    }
 }
 
 @end

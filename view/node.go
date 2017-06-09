@@ -157,6 +157,10 @@ func (ctx *Context) SkipBuild(ids []mochi.Id) {
 	}
 }
 
+func (ctx *Context) Id() mochi.Id {
+	return ctx.node.id
+}
+
 type updateFlag int
 
 const (

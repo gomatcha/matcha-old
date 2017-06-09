@@ -32,7 +32,17 @@ func (r *Root) Build(ctx *view.Context, next *view.Model) {
 	}
 
 	ids := map[int64]Recognizer{}
-	rs, _ := next.Values[Key].([]Recognizer)
+
+	var rs []Recognizer
+	rs1, ok := next.Values[Key]
+	if ok {
+		rs2, ok := rs1.([]Recognizer)
+		if !ok {
+			fmt.Println("Value for recognizer key is not a []touch.Recognizer")
+		} else {
+			rs = rs2
+		}
+	}
 
 	// Diff prev and next recognizers
 	for _, i := range rs {

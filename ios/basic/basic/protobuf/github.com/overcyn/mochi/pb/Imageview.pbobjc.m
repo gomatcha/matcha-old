@@ -14,6 +14,7 @@
 #endif
 
  #import "github.com/overcyn/mochi/pb/Imageview.pbobjc.h"
+ #import "github.com/overcyn/mochi/pb/Text.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -23,8 +24,8 @@
 
 @implementation MochiPBImageviewRoot
 
-// No extensions in the file and no imports, so no need to generate
-// +extensionRegistry.
+// No extensions in the file and none of the imports (direct or indirect)
+// defined extensions, so no need to generate +extensionRegistry.
 
 @end
 
@@ -163,11 +164,13 @@ typedef struct MochiPBImage__storage_ {
 
 @dynamic hasImage, image;
 @dynamic resizeMode;
+@dynamic hasTint, tint;
 
 typedef struct MochiPBImageView__storage_ {
   uint32_t _has_storage_[1];
   MochiPBResizeMode resizeMode;
   MochiPBImage *image;
+  MochiPBColor *tint;
 } MochiPBImageView__storage_;
 
 // This method is threadsafe because it is initially called
@@ -193,6 +196,15 @@ typedef struct MochiPBImageView__storage_ {
         .offset = (uint32_t)offsetof(MochiPBImageView__storage_, resizeMode),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldHasEnumDescriptor),
         .dataType = GPBDataTypeEnum,
+      },
+      {
+        .name = "tint",
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBColor),
+        .number = MochiPBImageView_FieldNumber_Tint,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MochiPBImageView__storage_, tint),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
       },
     };
     GPBDescriptor *localDescriptor =

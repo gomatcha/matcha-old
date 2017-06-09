@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"path/filepath"
@@ -11,6 +12,7 @@ import (
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/store"
 	"github.com/overcyn/mochi/text"
+	"github.com/overcyn/mochi/touch"
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/imageview"
@@ -104,6 +106,13 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell2.Title = "Wi-Fi"
 		cell2.Subtitle = "Home Wifi"
 		cell2.Chevron = true
+		cell2.OnTap = func() {
+			v.app.Lock()
+			defer v.app.Unlock()
+			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+				return NewWifiView(ctx, key, v.app)
+			}))
+		}
 		group = append(group, cell2)
 
 		cell3 := NewBasicCell(ctx, 2)
@@ -178,8 +187,8 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 var (
 	cellColor       = color.Gray{255}
 	chevronColor    = color.RGBA{199, 199, 204, 255}
-	separatorColor  = color.Gray{200}
-	backgroundColor = color.Gray{239}
+	separatorColor  = color.RGBA{203, 202, 207, 255}
+	backgroundColor = color.RGBA{239, 239, 244, 255}
 	subtitleColor   = color.Gray{142}
 	titleColor      = color.Gray{0}
 )
@@ -279,6 +288,7 @@ type BasicCell struct {
 	Subtitle      string
 	AccessoryView view.View
 	Chevron       bool
+	OnTap         func()
 }
 
 func NewBasicCell(ctx *view.Context, key interface{}) *BasicCell {
@@ -297,33 +307,38 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 
 	chlds := []view.View{}
 
-	iconView := imageview.New(ctx, "icon")
-	iconView.Image = v.Icon
-	iconView.ResizeMode = imageview.ResizeModeFill
-	iconView.Painter = &paint.Style{
-		BackgroundColor: colornames.Lightgray,
-		CornerRadius:    5,
-	}
-	chlds = append(chlds, iconView)
+	leftAnchor := l.Left()
+	if v.Icon != nil {
+		iconView := imageview.New(ctx, "icon")
+		iconView.Image = v.Icon
+		iconView.ResizeMode = imageview.ResizeModeFill
+		iconView.Painter = &paint.Style{
+			BackgroundColor: colornames.Lightgray,
+			CornerRadius:    5,
+		}
+		chlds = append(chlds, iconView)
 
-	iconGuide := l.Add(iconView, func(s *constraint.Solver) {
-		s.WidthEqual(constraint.Const(30))
-		s.HeightEqual(constraint.Const(30))
-		s.LeftEqual(l.Left().Add(15))
-		s.CenterYEqual(l.CenterY())
-	})
+		iconGuide := l.Add(iconView, func(s *constraint.Solver) {
+			s.WidthEqual(constraint.Const(30))
+			s.HeightEqual(constraint.Const(30))
+			s.LeftEqual(l.Left().Add(15))
+			s.CenterYEqual(l.CenterY())
+		})
+		leftAnchor = iconGuide.Right()
+	}
 
 	rightAnchor := l.Right()
 	if v.Chevron {
 		if path, err := env.AssetsDir(); err == nil {
 			chevronView := urlimageview.New(ctx, "chevron")
-			chevronView.Path = filepath.Join(path, "TableArrow.png")
+			chevronView.Path = filepath.Join(path, "TableArrow@2x.png")
 			chevronView.ResizeMode = imageview.ResizeModeCenter
+			chevronView.Tint = chevronColor
 			chlds = append(chlds, chevronView)
 
 			chevronGuide := l.Add(chevronView, func(s *constraint.Solver) {
 				s.RightEqual(rightAnchor.Add(-15))
-				s.LeftGreater(l.Left())
+				s.LeftGreater(leftAnchor)
 				s.CenterYEqual(l.CenterY())
 				s.TopGreater(l.Top())
 				s.BottomLess(l.Bottom())
@@ -336,7 +351,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		chlds = append(chlds, v.AccessoryView)
 		accessoryGuide := l.Add(v.AccessoryView, func(s *constraint.Solver) {
 			s.RightEqual(rightAnchor.Add(-10))
-			s.LeftGreater(l.Left())
+			s.LeftGreater(leftAnchor)
 			s.CenterYEqual(l.CenterY())
 		})
 		rightAnchor = accessoryGuide.Left()
@@ -347,14 +362,14 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		subtitleView.String = v.Subtitle
 		subtitleView.Style.SetFont(text.Font{
 			Family: "Helvetica Neue",
-			Size:   13,
+			Size:   14,
 		})
 		subtitleView.Style.SetTextColor(subtitleColor)
 		chlds = append(chlds, subtitleView)
 
 		subtitleGuide := l.Add(subtitleView, func(s *constraint.Solver) {
 			s.RightEqual(rightAnchor.Add(-10))
-			s.LeftGreater(l.Left())
+			s.LeftGreater(leftAnchor)
 			s.CenterYEqual(l.CenterY())
 		})
 		rightAnchor = subtitleGuide.Left()
@@ -364,21 +379,34 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	titleView.String = v.Title
 	titleView.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
-		Size:   13,
+		Size:   14,
 	})
 	titleView.Style.SetTextColor(titleColor)
 	chlds = append(chlds, titleView)
 
 	titleGuide := l.Add(titleView, func(s *constraint.Solver) {
-		s.LeftEqual(iconGuide.Right().Add(15))
-		s.CenterYEqual(l.CenterY())
+		s.LeftEqual(leftAnchor.Add(15))
 		s.RightLess(rightAnchor.Add(-10))
+		s.CenterYEqual(l.CenterY())
 	})
 	_ = titleGuide
+
+	values := map[interface{}]interface{}{}
+	if v.OnTap != nil {
+		tap := &touch.TapRecognizer{
+			Count: 1,
+			RecognizedFunc: func(e *touch.TapEvent) {
+				fmt.Println("Tap2")
+				v.OnTap()
+			},
+		}
+		values[touch.Key] = []touch.Recognizer{tap}
+	}
 
 	return &view.Model{
 		Children: chlds,
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: cellColor},
+		Values:   values,
 	}
 }

@@ -2,6 +2,7 @@ package imageview
 
 import (
 	"image"
+	"image/color"
 	_ "image/jpeg"
 	_ "image/png"
 
@@ -64,6 +65,7 @@ type View struct {
 	Painter    paint.Painter
 	Image      image.Image
 	ResizeMode ResizeMode
+	Tint       color.Color
 	image      image.Image
 	pbImage    *pb.Image
 	bytes      []byte
@@ -99,6 +101,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		NativeViewState: &pb.ImageView{
 			Image:      v.pbImage,
 			ResizeMode: v.ResizeMode.MarshalProtobuf(),
+			Tint:       pb.ColorEncode(v.Tint),
 		},
 	}
 }

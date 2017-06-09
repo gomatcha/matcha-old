@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"image"
+	"image/color"
 	"net/http"
 	"os"
 
@@ -43,6 +44,7 @@ type View struct {
 	ResizeMode imageview.ResizeMode
 	URL        string
 	Path       string
+	Tint       color.Color
 	stage      view.Stage
 	// Image request
 	url        string
@@ -67,6 +69,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	chl := imageview.New(ctx, 0)
 	chl.ResizeMode = v.ResizeMode
 	chl.Image = v.image
+	chl.Tint = v.Tint
 
 	return &view.Model{
 		Layouter: layouter{},
