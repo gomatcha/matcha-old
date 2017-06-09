@@ -20,12 +20,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[MochiObjcBridge sharedBridge] configure];
-    
-    NSString *path = [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], @"flag-of-fukuoka.jpg"];
-    UIImage *image = [UIImage imageWithContentsOfFile:path];
-    NSLog(@"resource:%@ image:%@", path, image);
-    
-    MochiGoValue *rootVC = [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/examples/imageview New"] call:nil args:nil][0];
+        
+    MochiGoValue *rootVC = [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/examples/settings New"] call:nil args:nil][0];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[MochiViewController alloc] initWithGoValue:rootVC];

@@ -163,6 +163,7 @@
         self.alwaysBounceVertical = true;
     }
 }
+
 @end
 
 UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewNode *viewNode) {
@@ -363,8 +364,12 @@ UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNod
                 }
             }
         }
-        self.materializedView.frame = node.guide.frame;
-        self.materializedView.autoresizingMask = UIViewAutoresizingNone;
+        
+        // let view controllers do their own layout
+        if (self.parent.viewController == nil) {
+            self.materializedView.frame = node.guide.frame;
+            self.materializedView.autoresizingMask = UIViewAutoresizingNone;
+        }
     }
     
     // Paint view

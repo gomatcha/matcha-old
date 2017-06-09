@@ -3,7 +3,9 @@ package settings
 import (
 	"image"
 	"image/color"
+	"path/filepath"
 
+	"github.com/overcyn/mochi/env"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/paint"
@@ -16,6 +18,7 @@ import (
 	"github.com/overcyn/mochi/view/stackscreen"
 	"github.com/overcyn/mochi/view/switchview"
 	"github.com/overcyn/mochi/view/textview"
+	"github.com/overcyn/mochi/view/urlimageview"
 	"github.com/overcyn/mochibridge"
 	"golang.org/x/image/colornames"
 )
@@ -100,25 +103,30 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell2 := NewBasicCell(ctx, 1)
 		cell2.Title = "Wi-Fi"
 		cell2.Subtitle = "Home Wifi"
+		cell2.Chevron = true
 		group = append(group, cell2)
 
 		cell3 := NewBasicCell(ctx, 2)
 		cell3.Title = "Bluetooth"
 		cell3.Subtitle = "On"
+		cell3.Chevron = true
 		group = append(group, cell3)
 
 		cell4 := NewBasicCell(ctx, 3)
 		cell4.Title = "Cellular"
+		cell4.Chevron = true
 		group = append(group, cell4)
 
 		cell5 := NewBasicCell(ctx, 4)
 		cell5.Title = "Personal Hotspot"
 		cell5.Subtitle = "Off"
+		cell5.Chevron = true
 		group = append(group, cell5)
 
 		cell6 := NewBasicCell(ctx, 5)
 		cell6.Title = "Carrier"
 		cell6.Subtitle = "T-Mobile"
+		cell6.Chevron = true
 		group = append(group, cell6)
 
 		for _, i := range AddSeparators(ctx, "a", group) {
@@ -135,14 +143,17 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		group := []view.View{}
 		cell1 := NewBasicCell(ctx, 10)
 		cell1.Title = "Notifications"
+		cell1.Chevron = true
 		group = append(group, cell1)
 
 		cell2 := NewBasicCell(ctx, 11)
 		cell2.Title = "Control Center"
+		cell2.Chevron = true
 		group = append(group, cell2)
 
 		cell3 := NewBasicCell(ctx, 12)
 		cell3.Title = "Do Not Disturb"
+		cell3.Chevron = true
 		group = append(group, cell3)
 
 		for _, i := range AddSeparators(ctx, "b", group) {
@@ -151,11 +162,11 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		}
 	}
 
-	scrollChild := basicview.New(ctx, 6)
+	scrollChild := basicview.New(ctx, -1)
 	scrollChild.Layouter = l
 	scrollChild.Children = chlds
 
-	scrollView := scrollview.New(ctx, 5)
+	scrollView := scrollview.New(ctx, -2)
 	scrollView.ContentView = scrollChild
 
 	return &view.Model{
@@ -166,6 +177,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 var (
 	cellColor       = color.Gray{255}
+	chevronColor    = color.RGBA{199, 199, 204, 255}
 	separatorColor  = color.Gray{200}
 	backgroundColor = color.Gray{239}
 	subtitleColor   = color.Gray{142}
@@ -266,6 +278,7 @@ type BasicCell struct {
 	Title         string
 	Subtitle      string
 	AccessoryView view.View
+	Chevron       bool
 }
 
 func NewBasicCell(ctx *view.Context, key interface{}) *BasicCell {
@@ -284,7 +297,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 
 	chlds := []view.View{}
 
-	iconView := imageview.New(ctx, 0)
+	iconView := imageview.New(ctx, "icon")
 	iconView.Image = v.Icon
 	iconView.ResizeMode = imageview.ResizeModeFill
 	iconView.Painter = &paint.Style{
@@ -301,6 +314,24 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	})
 
 	rightAnchor := l.Right()
+	if v.Chevron {
+		if path, err := env.AssetsDir(); err == nil {
+			chevronView := urlimageview.New(ctx, "chevron")
+			chevronView.Path = filepath.Join(path, "TableArrow.png")
+			chevronView.ResizeMode = imageview.ResizeModeCenter
+			chlds = append(chlds, chevronView)
+
+			chevronGuide := l.Add(chevronView, func(s *constraint.Solver) {
+				s.RightEqual(rightAnchor.Add(-15))
+				s.LeftGreater(l.Left())
+				s.CenterYEqual(l.CenterY())
+				s.TopGreater(l.Top())
+				s.BottomLess(l.Bottom())
+			})
+			rightAnchor = chevronGuide.Left()
+		}
+	}
+
 	if v.AccessoryView != nil {
 		chlds = append(chlds, v.AccessoryView)
 		accessoryGuide := l.Add(v.AccessoryView, func(s *constraint.Solver) {
@@ -312,7 +343,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	}
 
 	if len(v.Subtitle) > 0 {
-		subtitleView := textview.New(ctx, 2)
+		subtitleView := textview.New(ctx, "subtitle")
 		subtitleView.String = v.Subtitle
 		subtitleView.Style.SetFont(text.Font{
 			Family: "Helvetica Neue",
@@ -329,7 +360,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		rightAnchor = subtitleGuide.Left()
 	}
 
-	titleView := textview.New(ctx, 1)
+	titleView := textview.New(ctx, "title")
 	titleView.String = v.Title
 	titleView.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
