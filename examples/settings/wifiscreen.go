@@ -40,7 +40,6 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 
 		cell2 := NewBasicCell(ctx, 1)
 		cell2.Title = "FastMesh Wifi"
-		cell2.Chevron = true
 		group = append(group, cell2)
 
 		for _, i := range AddSeparators(ctx, "a", group) {

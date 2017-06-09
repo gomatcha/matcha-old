@@ -124,7 +124,7 @@ func NewTouchView(ctx *view.Context, key interface{}, app *App) *TouchView {
 func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
-		RecognizedFunc: func(e *touch.TapEvent) {
+		OnRecognize: func(e *touch.TapEvent) {
 			v.app.Lock()
 			defer v.app.Unlock()
 

@@ -130,8 +130,8 @@ func (e *TapEvent) UnmarshalProtobuf(pbevent *pb.TapEvent) error {
 }
 
 type TapRecognizer struct {
-	Count          int
-	RecognizedFunc func(*TapEvent)
+	Count       int
+	OnRecognize func(*TapEvent)
 }
 
 func (r *TapRecognizer) Equal(a Recognizer) bool {
@@ -161,8 +161,8 @@ func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[i
 			return
 		}
 
-		if r.RecognizedFunc != nil {
-			r.RecognizedFunc(event)
+		if r.OnRecognize != nil {
+			r.OnRecognize(event)
 		}
 	}
 
@@ -208,7 +208,7 @@ func (e *PressEvent) UnmarshalProtobuf(pbevent *pb.PressEvent) error {
 
 type PressRecognizer struct {
 	MinDuration time.Duration
-	OnEvent     func(e *PressEvent)
+	OnRecognize func(e *PressEvent)
 }
 
 func (r *PressRecognizer) Equal(a Recognizer) bool {
@@ -237,8 +237,8 @@ func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map
 			fmt.Println("error", err)
 			return
 		}
-		if r.OnEvent != nil {
-			r.OnEvent(event)
+		if r.OnRecognize != nil {
+			r.OnRecognize(event)
 		}
 	}
 
@@ -257,11 +257,11 @@ type PanEvent struct {
 }
 
 type PanRecognizer struct {
-	key           interface{}
-	OnEvent       func(e *PanEvent)
-	EndFunc       func(e *PanEvent)
-	CancelledFunc func(e *PanEvent)
-	ChangedFunc   func(e *PanEvent)
+	key      interface{}
+	OnBegin  func(e *PanEvent)
+	OnEnd    func(e *PanEvent)
+	OnCancel func(e *PanEvent)
+	OnChange func(e *PanEvent)
 }
 
 // type SwipeRecognizer struct {

@@ -395,7 +395,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	if v.OnTap != nil {
 		tap := &touch.TapRecognizer{
 			Count: 1,
-			RecognizedFunc: func(e *touch.TapEvent) {
+			OnRecognize: func(e *touch.TapEvent) {
 				fmt.Println("Tap2")
 				v.OnTap()
 			},

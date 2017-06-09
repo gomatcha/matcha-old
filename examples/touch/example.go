@@ -112,7 +112,7 @@ func NewPressChildView(ctx *view.Context, key interface{}) *PressChildView {
 func (v *PressChildView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.PressRecognizer{
 		MinDuration: time.Second / 2,
-		OnEvent: func(e *touch.PressEvent) {
+		OnRecognize: func(e *touch.PressEvent) {
 			v.OnPress()
 		},
 	}
@@ -142,7 +142,7 @@ func NewTouchChildView(ctx *view.Context, key interface{}) *TouchChildView {
 func (v *TouchChildView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
-		RecognizedFunc: func(e *touch.TapEvent) {
+		OnRecognize: func(e *touch.TapEvent) {
 			v.OnTouch()
 		},
 	}
