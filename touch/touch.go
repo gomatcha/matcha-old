@@ -131,8 +131,8 @@ func (e *TapEvent) UnmarshalProtobuf(pbevent *pb.TapEvent) error {
 }
 
 type TapRecognizer struct {
-	Count       int
-	OnRecognize func(*TapEvent)
+	Count   int
+	OnTouch func(*TapEvent)
 }
 
 func (r *TapRecognizer) Equal(a Recognizer) bool {
@@ -162,8 +162,8 @@ func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[i
 			return
 		}
 
-		if r.OnRecognize != nil {
-			r.OnRecognize(event)
+		if r.OnTouch != nil {
+			r.OnTouch(event)
 		}
 	}
 
@@ -178,10 +178,10 @@ func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[i
 type EventKind int
 
 const (
-	EventKindBegan EventKind = iota
-	EventKindChanged
-	EventKindCancelled
-	EventKindEnded
+	EventKindBegin EventKind = iota
+	EventKindChange
+	EventKindCancel
+	EventKindEnd
 )
 
 type PressEvent struct {
@@ -209,7 +209,7 @@ func (e *PressEvent) UnmarshalProtobuf(pbevent *pb.PressEvent) error {
 
 type PressRecognizer struct {
 	MinDuration time.Duration
-	OnRecognize func(e *PressEvent)
+	OnTouch     func(e *PressEvent)
 }
 
 func (r *PressRecognizer) Equal(a Recognizer) bool {
@@ -238,8 +238,8 @@ func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map
 			fmt.Println("error", err)
 			return
 		}
-		if r.OnRecognize != nil {
-			r.OnRecognize(event)
+		if r.OnTouch != nil {
+			r.OnTouch(event)
 		}
 	}
 
@@ -254,7 +254,7 @@ func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map
 type ButtonEvent struct {
 	Timestamp time.Time
 	Inside    bool
-	kind      EventKind
+	Kind      EventKind
 }
 
 func (e *ButtonEvent) UnmarshalProtobuf(pbevent *touch.ButtonEvent) error {
@@ -264,15 +264,12 @@ func (e *ButtonEvent) UnmarshalProtobuf(pbevent *touch.ButtonEvent) error {
 	}
 	e.Timestamp = t
 	e.Inside = pbevent.Inside
-	e.kind = EventKind(pbevent.Kind)
+	e.Kind = EventKind(pbevent.Kind)
 	return nil
 }
 
 type ButtonRecognizer struct {
-	OnBegin  func(e *ButtonEvent)
-	OnEnd    func(e *ButtonEvent)
-	OnCancel func(e *ButtonEvent)
-	OnChange func(e *ButtonEvent)
+	OnTouch func(e *ButtonEvent)
 }
 
 func (r *ButtonRecognizer) Equal(a Recognizer) bool {
@@ -302,23 +299,8 @@ func (r *ButtonRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, ma
 			return
 		}
 
-		switch event.kind {
-		case EventKindBegan:
-			if r.OnBegin != nil {
-				r.OnBegin(event)
-			}
-		case EventKindChanged:
-			if r.OnChange != nil {
-				r.OnChange(event)
-			}
-		case EventKindCancelled:
-			if r.OnCancel != nil {
-				r.OnCancel(event)
-			}
-		case EventKindEnded:
-			if r.OnEnd != nil {
-				r.OnEnd(event)
-			}
+		if r.OnTouch != nil {
+			r.OnTouch(event)
 		}
 	}
 

@@ -185,12 +185,13 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 }
 
 var (
-	cellColor       = color.Gray{255}
-	chevronColor    = color.RGBA{199, 199, 204, 255}
-	separatorColor  = color.RGBA{203, 202, 207, 255}
-	backgroundColor = color.RGBA{239, 239, 244, 255}
-	subtitleColor   = color.Gray{142}
-	titleColor      = color.Gray{0}
+	cellColor            = color.Gray{255}
+	cellColorHighlighted = color.Gray{217}
+	chevronColor         = color.RGBA{199, 199, 204, 255}
+	separatorColor       = color.RGBA{203, 202, 207, 255}
+	backgroundColor      = color.RGBA{239, 239, 244, 255}
+	subtitleColor        = color.Gray{142}
+	titleColor           = color.Gray{0}
 )
 
 type separatorKey struct {
@@ -289,6 +290,7 @@ type BasicCell struct {
 	AccessoryView view.View
 	Chevron       bool
 	OnTap         func()
+	highlighted   bool
 }
 
 func NewBasicCell(ctx *view.Context, key interface{}) *BasicCell {
@@ -393,20 +395,35 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 
 	values := map[interface{}]interface{}{}
 	if v.OnTap != nil {
-		tap := &touch.TapRecognizer{
-			Count: 1,
-			OnRecognize: func(e *touch.TapEvent) {
-				fmt.Println("Tap2")
-				v.OnTap()
+		tap := &touch.ButtonRecognizer{
+			OnTouch: func(e *touch.ButtonEvent) {
+				switch e.Kind {
+				case touch.EventKindBegin, touch.EventKindChange:
+					v.highlighted = e.Inside
+				case touch.EventKindCancel:
+					v.highlighted = false
+				case touch.EventKindEnd:
+					v.highlighted = false
+					v.OnTap()
+				}
+				v.Update()
 			},
 		}
 		values[touch.Key] = []touch.Recognizer{tap}
 	}
 
+	var color color.Color
+	if v.highlighted {
+		fmt.Println("isHighlighted")
+		color = cellColorHighlighted
+	} else {
+		color = cellColor
+	}
+
 	return &view.Model{
 		Children: chlds,
 		Layouter: l,
-		Painter:  &paint.Style{BackgroundColor: cellColor},
+		Painter:  &paint.Style{BackgroundColor: color},
 		Values:   values,
 	}
 }

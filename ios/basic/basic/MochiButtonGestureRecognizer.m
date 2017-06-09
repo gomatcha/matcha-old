@@ -22,6 +22,7 @@
         self.viewController = viewController;
         self.funcId = pb.onEvent;
         self.viewId = viewId;
+        self.minimumPressDuration = 0;
         self.allowableMovement = 10000;
     }
     return self;
@@ -52,6 +53,7 @@
     MochiPBTouchButtonEvent *event = [[MochiPBTouchButtonEvent alloc] init];
     event.position = [[MochiPBPoint alloc] initWithCGPoint:point];
     event.timestamp = [[GPBTimestamp alloc] initWithDate:[NSDate date]];
+    event.inside = self.inside;
     if (self.state == UIGestureRecognizerStateBegan) {
         event.kind = MochiPBEventKind_EventKindBegan;
         self.startTime = [NSDate date];

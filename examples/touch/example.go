@@ -126,7 +126,7 @@ func NewPressChildView(ctx *view.Context, key interface{}) *PressChildView {
 func (v *PressChildView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.PressRecognizer{
 		MinDuration: time.Second / 2,
-		OnRecognize: func(e *touch.PressEvent) {
+		OnTouch: func(e *touch.PressEvent) {
 			v.OnPress()
 		},
 	}
@@ -156,7 +156,7 @@ func NewTouchChildView(ctx *view.Context, key interface{}) *TouchChildView {
 func (v *TouchChildView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
-		OnRecognize: func(e *touch.TapEvent) {
+		OnTouch: func(e *touch.TapEvent) {
 			v.OnTouch()
 		},
 	}
@@ -185,17 +185,8 @@ func NewButtonChildView(ctx *view.Context, key interface{}) *ButtonChildView {
 
 func (v *ButtonChildView) Build(ctx *view.Context) *view.Model {
 	button := &touch.ButtonRecognizer{
-		OnBegin: func(e *touch.ButtonEvent) {
-			fmt.Println("On Begin")
-		},
-		OnEnd: func(e *touch.ButtonEvent) {
-			fmt.Println("On End")
-		},
-		OnCancel: func(e *touch.ButtonEvent) {
-			fmt.Println("On Cancel")
-		},
-		OnChange: func(e *touch.ButtonEvent) {
-			fmt.Println("On Change")
+		OnTouch: func(e *touch.ButtonEvent) {
+			fmt.Println("On Touch:%v", e.Kind)
 		},
 	}
 
