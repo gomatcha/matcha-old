@@ -115,24 +115,24 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		}
 		group = append(group, cell2)
 
-		cell3 := NewBasicCell(ctx, 2)
+		cell3 := NewBasicCell(ctx, "bluetooth")
 		cell3.Title = "Bluetooth"
 		cell3.Subtitle = "On"
 		cell3.Chevron = true
 		group = append(group, cell3)
 
-		cell4 := NewBasicCell(ctx, 3)
+		cell4 := NewBasicCell(ctx, "cellular")
 		cell4.Title = "Cellular"
 		cell4.Chevron = true
 		group = append(group, cell4)
 
-		cell5 := NewBasicCell(ctx, 4)
+		cell5 := NewBasicCell(ctx, "hotspot")
 		cell5.Title = "Personal Hotspot"
 		cell5.Subtitle = "Off"
 		cell5.Chevron = true
 		group = append(group, cell5)
 
-		cell6 := NewBasicCell(ctx, 5)
+		cell6 := NewBasicCell(ctx, "carrier")
 		cell6.Title = "Carrier"
 		cell6.Subtitle = "T-Mobile"
 		cell6.Chevron = true
@@ -150,17 +150,17 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 	}
 	{
 		group := []view.View{}
-		cell1 := NewBasicCell(ctx, 10)
+		cell1 := NewBasicCell(ctx, "notifications")
 		cell1.Title = "Notifications"
 		cell1.Chevron = true
 		group = append(group, cell1)
 
-		cell2 := NewBasicCell(ctx, 11)
+		cell2 := NewBasicCell(ctx, "controlcenter")
 		cell2.Title = "Control Center"
 		cell2.Chevron = true
 		group = append(group, cell2)
 
-		cell3 := NewBasicCell(ctx, 12)
+		cell3 := NewBasicCell(ctx, "donotdisturb")
 		cell3.Title = "Do Not Disturb"
 		cell3.Chevron = true
 		group = append(group, cell3)

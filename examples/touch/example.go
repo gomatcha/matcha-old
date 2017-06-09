@@ -83,13 +83,27 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 		Family: "Helvetica Neue",
 		Size:   20,
 	})
-	l.Add(chl4, func(s *constraint.Solver) {
+	g4 := l.Add(chl4, func(s *constraint.Solver) {
 		s.TopEqual(g3.Bottom())
 		s.LeftEqual(g3.Left())
 	})
 
+	chl5 := NewButtonChildView(ctx, 5)
+	chl5.OnTouch = func() {
+		fmt.Println("On touch")
+		v.counter += 1
+		go v.Update()
+	}
+	g5 := l.Add(chl5, func(s *constraint.Solver) {
+		s.TopEqual(g4.Bottom())
+		s.LeftEqual(g4.Left())
+		s.WidthEqual(constraint.Const(100))
+		s.HeightEqual(constraint.Const(100))
+	})
+	_ = g5
+
 	return &view.Model{
-		Children: []view.View{chl1, chl2, chl3, chl4},
+		Children: []view.View{chl1, chl2, chl3, chl4, chl5},
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}
@@ -151,6 +165,44 @@ func (v *TouchChildView) Build(ctx *view.Context) *view.Model {
 		Painter: &paint.Style{BackgroundColor: colornames.Blue},
 		Values: map[interface{}]interface{}{
 			touch.Key: []touch.Recognizer{tap},
+		},
+	}
+}
+
+type ButtonChildView struct {
+	*view.Embed
+	OnTouch func()
+}
+
+func NewButtonChildView(ctx *view.Context, key interface{}) *ButtonChildView {
+	if v, ok := ctx.Prev(key).(*ButtonChildView); ok {
+		return v
+	}
+	return &ButtonChildView{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
+}
+
+func (v *ButtonChildView) Build(ctx *view.Context) *view.Model {
+	button := &touch.ButtonRecognizer{
+		OnBegin: func(e *touch.ButtonEvent) {
+			fmt.Println("On Begin")
+		},
+		OnEnd: func(e *touch.ButtonEvent) {
+			fmt.Println("On End")
+		},
+		OnCancel: func(e *touch.ButtonEvent) {
+			fmt.Println("On Cancel")
+		},
+		OnChange: func(e *touch.ButtonEvent) {
+			fmt.Println("On Change")
+		},
+	}
+
+	return &view.Model{
+		Painter: &paint.Style{BackgroundColor: colornames.Blue},
+		Values: map[interface{}]interface{}{
+			touch.Key: []touch.Recognizer{button},
 		},
 	}
 }

@@ -1,0 +1,19 @@
+syntax = "proto3";
+package touch;
+import "google/protobuf/timestamp.proto";
+import "github.com/overcyn/mochi/pb/layout.proto";
+import "github.com/overcyn/mochi/pb/touch.proto";
+
+
+option go_package = "touch";
+option objc_class_prefix = "MochiPBTouch";
+
+message ButtonRecognizer {
+    int64 onEvent = 1;
+}
+
+message ButtonEvent {
+    google.protobuf.Timestamp timestamp = 1;
+    bool inside = 3;
+    mochi.touch.EventKind kind = 4;
+}

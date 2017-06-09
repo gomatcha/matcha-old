@@ -8,6 +8,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/pb"
+	"github.com/overcyn/mochi/pb/touch"
 	"github.com/overcyn/mochi/view"
 )
 
@@ -250,19 +251,97 @@ func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map
 		}
 }
 
-type PanEvent struct {
+type ButtonEvent struct {
 	Timestamp time.Time
-	Position  layout.Point
-	Velocity  layout.Point
+	Inside    bool
+	kind      EventKind
 }
 
-type PanRecognizer struct {
-	key      interface{}
-	OnBegin  func(e *PanEvent)
-	OnEnd    func(e *PanEvent)
-	OnCancel func(e *PanEvent)
-	OnChange func(e *PanEvent)
+func (e *ButtonEvent) UnmarshalProtobuf(pbevent *touch.ButtonEvent) error {
+	t, err := ptypes.Timestamp(pbevent.Timestamp)
+	if err != nil {
+		return err
+	}
+	e.Timestamp = t
+	e.Inside = pbevent.Inside
+	e.kind = EventKind(pbevent.Kind)
+	return nil
 }
+
+type ButtonRecognizer struct {
+	OnBegin  func(e *ButtonEvent)
+	OnEnd    func(e *ButtonEvent)
+	OnCancel func(e *ButtonEvent)
+	OnChange func(e *ButtonEvent)
+}
+
+func (r *ButtonRecognizer) Equal(a Recognizer) bool {
+	_, ok := a.(*ButtonRecognizer)
+	if !ok {
+		return false
+	}
+	return true
+}
+
+func (r *ButtonRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
+	funcId := ctx.NewFuncId()
+	f := func(data []byte) {
+		view.MainMu.Lock()
+		defer view.MainMu.Unlock()
+
+		event := &ButtonEvent{}
+		pbevent := &touch.ButtonEvent{}
+		err := proto.Unmarshal(data, pbevent)
+		if err != nil {
+			fmt.Println("error", err)
+			return
+		}
+
+		if err := event.UnmarshalProtobuf(pbevent); err != nil {
+			fmt.Println("error", err)
+			return
+		}
+
+		switch event.kind {
+		case EventKindBegan:
+			if r.OnBegin != nil {
+				r.OnBegin(event)
+			}
+		case EventKindChanged:
+			if r.OnChange != nil {
+				r.OnChange(event)
+			}
+		case EventKindCancelled:
+			if r.OnCancel != nil {
+				r.OnCancel(event)
+			}
+		case EventKindEnded:
+			if r.OnEnd != nil {
+				r.OnEnd(event)
+			}
+		}
+	}
+
+	return &touch.ButtonRecognizer{
+			OnEvent: funcId,
+		}, map[int64]interface{}{
+			funcId: f,
+		}
+}
+
+// type PanEvent struct {
+// 	Timestamp time.Time
+// 	Position  layout.Point
+// 	Velocity  layout.Point
+// }
+
+// type PanRecognizer struct {
+// 	key      interface{}
+// 	OnBegin  func(e *PanEvent)
+// 	OnEnd    func(e *PanEvent)
+// 	OnCancel func(e *PanEvent)
+// 	OnChange func(e *PanEvent)
+// }
 
 // type SwipeRecognizer struct {
 // }

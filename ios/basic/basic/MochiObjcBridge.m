@@ -21,7 +21,7 @@
     static CADisplayLink *displayLink = nil;
     if (displayLink == nil) {
         displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(screenUpdate)];
-        displayLink.preferredFramesPerSecond = 2;
+//        displayLink.preferredFramesPerSecond = 2;
         [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     }
 }

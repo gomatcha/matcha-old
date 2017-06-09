@@ -10,6 +10,7 @@
 #import "Tabnav.pbobjc.h"
 #import "Stacknavigator.pbobjc.h"
 #import "Switchview.pbobjc.h"
+#import "Touch2.pbobjc.h"
 
 @import Mochi;
 

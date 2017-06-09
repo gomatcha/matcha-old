@@ -79,5 +79,4 @@
     [self.viewController call:self.funcId viewId:self.viewId args:@[value]];
 }
 
-
 @end
