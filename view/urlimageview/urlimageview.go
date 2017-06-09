@@ -37,7 +37,7 @@ func (l layouter) Unnotify(chan struct{}) {
 	// no-op
 }
 
-type URLImageView struct {
+type View struct {
 	*view.Embed
 	Painter    paint.Painter
 	ResizeMode imageview.ResizeMode
@@ -52,16 +52,16 @@ type URLImageView struct {
 	err        error
 }
 
-func New(ctx *view.Context, key interface{}) *URLImageView {
-	if v, ok := ctx.Prev(key).(*URLImageView); ok {
+func New(ctx *view.Context, key interface{}) *View {
+	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
 	}
-	return &URLImageView{
+	return &View{
 		Embed: view.NewEmbed(ctx.NewId(key)),
 	}
 }
 
-func (v *URLImageView) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) *view.Model {
 	v.reload()
 
 	chl := imageview.New(ctx, 0)
@@ -75,12 +75,12 @@ func (v *URLImageView) Build(ctx *view.Context) *view.Model {
 	}
 }
 
-func (v *URLImageView) Lifecycle(from, to view.Stage) {
+func (v *View) Lifecycle(from, to view.Stage) {
 	v.stage = to
 	v.reload()
 }
 
-func (v *URLImageView) reload() {
+func (v *View) reload() {
 	if v.stage < view.StageMounted {
 		v.cancel()
 		return
@@ -113,7 +113,7 @@ func (v *URLImageView) reload() {
 	}
 }
 
-func (v *URLImageView) cancel() {
+func (v *View) cancel() {
 	if v.cancelFunc != nil {
 		v.cancelFunc()
 		v.cancelFunc = nil
