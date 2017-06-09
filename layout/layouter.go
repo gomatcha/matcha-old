@@ -78,10 +78,10 @@ func (g Guide) Fit(ctx *Context) Guide {
 		g.Frame.Max.Y = ctx.MinSize.Y - g.Frame.Min.Y
 	}
 	if g.Width() > ctx.MaxSize.X {
-		g.Frame.Max.X = ctx.MaxSize.X - g.Frame.Max.X
+		g.Frame.Max.X = ctx.MaxSize.X - g.Frame.Min.X
 	}
 	if g.Height() > ctx.MaxSize.Y {
-		g.Frame.Max.Y = ctx.MaxSize.Y - g.Frame.Max.Y
+		g.Frame.Max.Y = ctx.MaxSize.Y - g.Frame.Min.Y
 	}
 	return g
 }

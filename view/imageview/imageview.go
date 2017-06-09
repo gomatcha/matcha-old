@@ -1,113 +1,16 @@
 package imageview
 
 import (
-	"context"
-	"fmt"
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
-	"net/http"
 
+	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/view"
 )
-
-type URLImageView struct {
-	*view.Embed
-	Painter    paint.Painter
-	ResizeMode ResizeMode
-	URL        string
-	stage      view.Stage
-	// Image request
-	url        string
-	cancelFunc context.CancelFunc
-	image      image.Image
-	err        error
-}
-
-func NewURLImageView(ctx *view.Context, key interface{}) *URLImageView {
-	v, ok := ctx.Prev(key).(*URLImageView)
-	if !ok {
-		v = &URLImageView{
-			Embed: view.NewEmbed(ctx.NewId(key)),
-		}
-	}
-	return v
-}
-
-func (v *URLImageView) Build(ctx *view.Context) *view.Model {
-	v.reload()
-
-	chl := NewImageView(ctx, 0)
-	chl.ResizeMode = v.ResizeMode
-	chl.Image = v.image
-
-	return &view.Model{
-		Children: []view.View{chl},
-		Painter:  v.Painter,
-	}
-}
-
-func (v *URLImageView) Lifecycle(from, to view.Stage) {
-	v.stage = to
-	v.reload()
-}
-
-func (v *URLImageView) reload() {
-	if v.stage < view.StageMounted {
-		v.cancel()
-		return
-	}
-
-	if v.URL != v.url || v.cancelFunc == nil {
-		v.cancel()
-
-		c, cancelFunc := context.WithCancel(context.Background())
-		v.url = v.URL
-		v.cancelFunc = cancelFunc
-		v.image = nil
-		v.err = nil
-		go func(url string) {
-			image, err := loadImageURL(url)
-
-			view.MainMu.Lock()
-			defer view.MainMu.Unlock()
-
-			select {
-			case <-c.Done():
-			default:
-				v.cancelFunc()
-				v.image = image
-				v.err = err
-				v.Update()
-			}
-		}(v.url)
-	}
-}
-
-func (v *URLImageView) cancel() {
-	if v.cancelFunc != nil {
-		v.cancelFunc()
-		v.cancelFunc = nil
-	}
-}
-
-func (v *URLImageView) String() string {
-	return fmt.Sprintf("&URLImageView{%p URL:%v}", v, v.URL)
-}
-
-func loadImageURL(url string) (image.Image, error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	img, _, err := image.Decode(resp.Body)
-	return img, err
-}
-
-// ImageView
 
 type ResizeMode int
 
@@ -122,7 +25,41 @@ func (m ResizeMode) MarshalProtobuf() pb.ResizeMode {
 	return pb.ResizeMode(m)
 }
 
-type ImageView struct {
+type layouter struct {
+	bounds     image.Rectangle
+	resizeMode ResizeMode
+}
+
+func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
+	g := layout.Guide{Frame: layout.Rect{Max: ctx.MaxSize}}
+	switch l.resizeMode {
+	case ResizeModeFit:
+		imgRatio := float64(l.bounds.Dx()) / float64(l.bounds.Dy())
+		maxRatio := ctx.MaxSize.X / ctx.MaxSize.Y
+		if imgRatio > maxRatio {
+			g.Frame.Max = layout.Pt(ctx.MaxSize.X, ctx.MaxSize.X/imgRatio)
+		} else {
+			g.Frame.Max = layout.Pt(ctx.MaxSize.Y/imgRatio, ctx.MaxSize.Y)
+		}
+	case ResizeModeFill:
+		fallthrough
+	case ResizeModeStretch:
+		g.Frame.Max = ctx.MaxSize
+	case ResizeModeCenter:
+		g.Frame.Max = layout.Pt(float64(l.bounds.Dx()), float64(l.bounds.Dy()))
+	}
+	return g, nil
+}
+
+func (l *layouter) Notify() chan struct{} {
+	return nil // no-op
+}
+
+func (l *layouter) Unnotify(chan struct{}) {
+	// no-op
+}
+
+type View struct {
 	*view.Embed
 	Painter    paint.Painter
 	Image      image.Image
@@ -132,23 +69,31 @@ type ImageView struct {
 	bytes      []byte
 }
 
-func NewImageView(ctx *view.Context, key interface{}) *ImageView {
-	v, ok := ctx.Prev(key).(*ImageView)
-	if !ok {
-		v = &ImageView{
-			Embed: view.NewEmbed(ctx.NewId(key)),
-		}
+func New(ctx *view.Context, key interface{}) *View {
+	if v, ok := ctx.Prev(key).(*View); ok {
+		return v
 	}
-	return v
+	return &View{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
 }
 
-func (v *ImageView) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) *view.Model {
 	if v.Image != v.image {
 		v.image = v.Image
 		v.pbImage = pb.ImageEncode(v.image)
 	}
 
+	// Default to Center if we don't have an image
+	bounds := image.Rect(0, 0, 0, 0)
+	resizeMode := ResizeModeCenter
+	if v.image != nil {
+		bounds = v.image.Bounds()
+		resizeMode = v.ResizeMode
+	}
+
 	return &view.Model{
+		Layouter:       &layouter{bounds: bounds, resizeMode: resizeMode},
 		Painter:        v.Painter,
 		NativeViewName: "github.com/overcyn/mochi/view/imageview",
 		NativeViewState: &pb.ImageView{
@@ -156,8 +101,4 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 			ResizeMode: v.ResizeMode.MarshalProtobuf(),
 		},
 	}
-}
-
-func (v *ImageView) String() string {
-	return fmt.Sprintf("&ImageView{%p}", v)
 }

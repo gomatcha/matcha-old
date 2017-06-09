@@ -14,7 +14,6 @@ Medium:
 * Cache layout properties
 * Images/ data blobs
 * Remove view.model.children, Just get the list of child views from the layouter.
-* Auto disable PNGCrush. "Compress PNG Files" and "Remove Text Metadata from PNG Files"
 
 Low:
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
@@ -47,6 +46,7 @@ Low:
 Bugs:
 * Crash in protobuf if view does not have a layout guide.
 * Constraints crash if unconstrained.
+* Auto disable PNGCrush. "Compress PNG Files" and "Remove Text Metadata from PNG Files"
 
 Done:
 * Lifecycle

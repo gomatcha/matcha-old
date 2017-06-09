@@ -19,6 +19,7 @@ import (
 	"github.com/overcyn/mochi/view/scrollview"
 	"github.com/overcyn/mochi/view/switchview"
 	"github.com/overcyn/mochi/view/textview"
+	"github.com/overcyn/mochi/view/urlimageview"
 	"github.com/overcyn/mochibridge"
 )
 
@@ -192,7 +193,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	if v.counter%2 == 0 {
-		chl9 := imageview.NewURLImageView(ctx, 7)
+		chl9 := urlimageview.New(ctx, 7)
 		chl9.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 		chl9.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 		chl9.ResizeMode = imageview.ResizeModeFit

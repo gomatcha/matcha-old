@@ -284,7 +284,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 
 	chlds := []view.View{}
 
-	iconView := imageview.NewImageView(ctx, 0)
+	iconView := imageview.New(ctx, 0)
 	iconView.Image = v.Icon
 	iconView.ResizeMode = imageview.ResizeModeFill
 	iconView.Painter = &paint.Style{
