@@ -54,6 +54,7 @@ func NewApp() *App {
 	app.stackScreen = &stackscreen.Screen{}
 	app.store.Set(0, app.stackScreen.Store())
 	app.stackScreen.SetChildren(rootScreen2)
+
 	return app
 }
 
@@ -87,10 +88,8 @@ func NewRootView(ctx *view.Context, key interface{}, app *App) *RootView {
 
 func (v *RootView) Build(ctx *view.Context) *view.Model {
 	l := &table.Layout{}
-	chlds := []view.View{}
 	{
 		spacer := NewSpacer(ctx, "spacer1")
-		chlds = append(chlds, spacer)
 		l.Add(spacer)
 	}
 	{
@@ -100,80 +99,100 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell1 := NewBasicCell(ctx, 0)
 		cell1.Title = "Airplane Mode"
 		cell1.AccessoryView = switchView
+		cell1.HasIcon = true
 		group = append(group, cell1)
 
 		cell2 := NewBasicCell(ctx, 1)
 		cell2.Title = "Wi-Fi"
 		cell2.Subtitle = "Home Wifi"
+		cell2.HasIcon = true
 		cell2.Chevron = true
 		cell2.OnTap = func() {
 			v.app.Lock()
 			defer v.app.Unlock()
 			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
-				return NewWifiView(ctx, key, v.app)
+				return nil
 			}))
 		}
 		group = append(group, cell2)
 
 		cell3 := NewBasicCell(ctx, "bluetooth")
+		cell3.HasIcon = true
 		cell3.Title = "Bluetooth"
 		cell3.Subtitle = "On"
 		cell3.Chevron = true
+		cell3.OnTap = func() {
+			v.app.Lock()
+			defer v.app.Unlock()
+			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+				return NewBluetoothView(ctx, key, v.app)
+			}))
+		}
 		group = append(group, cell3)
 
 		cell4 := NewBasicCell(ctx, "cellular")
+		cell4.HasIcon = true
 		cell4.Title = "Cellular"
 		cell4.Chevron = true
+		cell4.OnTap = func() {
+			v.app.Lock()
+			defer v.app.Unlock()
+			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+				return NewCellularView(ctx, key, v.app)
+			}))
+		}
 		group = append(group, cell4)
 
 		cell5 := NewBasicCell(ctx, "hotspot")
+		cell5.HasIcon = true
 		cell5.Title = "Personal Hotspot"
 		cell5.Subtitle = "Off"
 		cell5.Chevron = true
 		group = append(group, cell5)
 
 		cell6 := NewBasicCell(ctx, "carrier")
+		cell6.HasIcon = true
 		cell6.Title = "Carrier"
 		cell6.Subtitle = "T-Mobile"
 		cell6.Chevron = true
 		group = append(group, cell6)
 
 		for _, i := range AddSeparators(ctx, "a", group) {
-			chlds = append(chlds, i)
 			l.Add(i)
 		}
 	}
 	{
 		spacer := NewSpacer(ctx, "spacer2")
-		chlds = append(chlds, spacer)
 		l.Add(spacer)
 	}
 	{
 		group := []view.View{}
 		cell1 := NewBasicCell(ctx, "notifications")
+		cell1.HasIcon = true
 		cell1.Title = "Notifications"
 		cell1.Chevron = true
 		group = append(group, cell1)
 
 		cell2 := NewBasicCell(ctx, "controlcenter")
+		cell2.HasIcon = true
 		cell2.Title = "Control Center"
 		cell2.Chevron = true
 		group = append(group, cell2)
 
 		cell3 := NewBasicCell(ctx, "donotdisturb")
+		cell3.HasIcon = true
 		cell3.Title = "Do Not Disturb"
 		cell3.Chevron = true
 		group = append(group, cell3)
 
 		for _, i := range AddSeparators(ctx, "b", group) {
-			chlds = append(chlds, i)
 			l.Add(i)
 		}
 	}
 
 	scrollChild := basicview.New(ctx, -1)
 	scrollChild.Layouter = l
-	scrollChild.Children = chlds
+	scrollChild.Children = l.Views()
 
 	scrollView := scrollview.New(ctx, -2)
 	scrollView.ContentView = scrollChild
@@ -284,6 +303,7 @@ func (v *Spacer) Build(ctx *view.Context) *view.Model {
 
 type BasicCell struct {
 	*view.Embed
+	HasIcon       bool
 	Icon          image.Image
 	Title         string
 	Subtitle      string
@@ -310,7 +330,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	chlds := []view.View{}
 
 	leftAnchor := l.Left()
-	if v.Icon != nil {
+	if v.HasIcon {
 		iconView := imageview.New(ctx, "icon")
 		iconView.Image = v.Icon
 		iconView.ResizeMode = imageview.ResizeModeFill

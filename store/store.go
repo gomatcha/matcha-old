@@ -44,6 +44,13 @@ func (s *Store) root() *Store {
 	return root
 }
 
+func (s *Store) Add(key int64) (*Store, error) {
+	// TODO(KD): check if the key already exists.
+	chl := &Store{}
+	s.Set(key, chl)
+	return chl, nil
+}
+
 func (s *Store) Set(key int64, chl *Store) {
 	s.updateStore([]int64{key})
 

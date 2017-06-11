@@ -1,7 +1,6 @@
 syntax = "proto3";
 package touch;
 import "google/protobuf/timestamp.proto";
-import "github.com/overcyn/mochi/pb/layout.proto";
 import "github.com/overcyn/mochi/pb/touch.proto";
 
 

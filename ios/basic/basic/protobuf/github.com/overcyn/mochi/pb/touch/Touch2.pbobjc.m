@@ -20,7 +20,6 @@
 #endif
 
  #import "github.com/overcyn/mochi/pb/touch/Touch2.pbobjc.h"
- #import "github.com/overcyn/mochi/pb/Layout.pbobjc.h"
  #import "github.com/overcyn/mochi/pb/Touch.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
@@ -104,7 +103,6 @@ typedef struct MochiPBTouchButtonRecognizer__storage_ {
 @implementation MochiPBTouchButtonEvent
 
 @dynamic hasTimestamp, timestamp;
-@dynamic hasPosition, position;
 @dynamic inside;
 @dynamic kind;
 
@@ -112,7 +110,6 @@ typedef struct MochiPBTouchButtonEvent__storage_ {
   uint32_t _has_storage_[1];
   MochiPBEventKind kind;
   GPBTimestamp *timestamp;
-  MochiPBPoint *position;
 } MochiPBTouchButtonEvent__storage_;
 
 // This method is threadsafe because it is initially called
@@ -131,20 +128,11 @@ typedef struct MochiPBTouchButtonEvent__storage_ {
         .dataType = GPBDataTypeMessage,
       },
       {
-        .name = "position",
-        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBPoint),
-        .number = MochiPBTouchButtonEvent_FieldNumber_Position,
-        .hasIndex = 1,
-        .offset = (uint32_t)offsetof(MochiPBTouchButtonEvent__storage_, position),
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeMessage,
-      },
-      {
         .name = "inside",
         .dataTypeSpecific.className = NULL,
         .number = MochiPBTouchButtonEvent_FieldNumber_Inside,
-        .hasIndex = 2,
-        .offset = 3,  // Stored in _has_storage_ to save space.
+        .hasIndex = 1,
+        .offset = 2,  // Stored in _has_storage_ to save space.
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBool,
       },
@@ -152,7 +140,7 @@ typedef struct MochiPBTouchButtonEvent__storage_ {
         .name = "kind",
         .dataTypeSpecific.enumDescFunc = MochiPBEventKind_EnumDescriptor,
         .number = MochiPBTouchButtonEvent_FieldNumber_Kind,
-        .hasIndex = 4,
+        .hasIndex = 3,
         .offset = (uint32_t)offsetof(MochiPBTouchButtonEvent__storage_, kind),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldHasEnumDescriptor),
         .dataType = GPBDataTypeEnum,

@@ -28,7 +28,6 @@
 CF_EXTERN_C_BEGIN
 
 @class GPBTimestamp;
-@class MochiPBPoint;
 GPB_ENUM_FWD_DECLARE(MochiPBEventKind);
 
 NS_ASSUME_NONNULL_BEGIN
@@ -64,7 +63,6 @@ typedef GPB_ENUM(MochiPBTouchButtonRecognizer_FieldNumber) {
 
 typedef GPB_ENUM(MochiPBTouchButtonEvent_FieldNumber) {
   MochiPBTouchButtonEvent_FieldNumber_Timestamp = 1,
-  MochiPBTouchButtonEvent_FieldNumber_Position = 2,
   MochiPBTouchButtonEvent_FieldNumber_Inside = 3,
   MochiPBTouchButtonEvent_FieldNumber_Kind = 4,
 };
@@ -74,10 +72,6 @@ typedef GPB_ENUM(MochiPBTouchButtonEvent_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) GPBTimestamp *timestamp;
 /** Test to see if @c timestamp has been set. */
 @property(nonatomic, readwrite) BOOL hasTimestamp;
-
-@property(nonatomic, readwrite, strong, null_resettable) MochiPBPoint *position;
-/** Test to see if @c position has been set. */
-@property(nonatomic, readwrite) BOOL hasPosition;
 
 @property(nonatomic, readwrite) BOOL inside;
 

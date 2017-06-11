@@ -51,7 +51,6 @@
     self.inside = CGRectContainsPoint(self.view.bounds, point);
     
     MochiPBTouchButtonEvent *event = [[MochiPBTouchButtonEvent alloc] init];
-    event.position = [[MochiPBPoint alloc] initWithCGPoint:point];
     event.timestamp = [[GPBTimestamp alloc] initWithDate:[NSDate date]];
     event.inside = self.inside;
     if (self.state == UIGestureRecognizerStateBegan) {

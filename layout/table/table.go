@@ -19,11 +19,17 @@ import (
 
 type Layout struct {
 	// Direction Direction // TODO(KD): Direction is ignored.
-	Ids []mochi.Id
+	ids   []mochi.Id
+	views []view.View
+}
+
+func (l *Layout) Views() []view.View {
+	return l.views
 }
 
 func (l *Layout) Add(v view.View) {
-	l.Ids = append(l.Ids, v.Id())
+	l.ids = append(l.ids, v.Id())
+	l.views = append(l.views, v)
 }
 
 func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
@@ -31,7 +37,7 @@ func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.
 	gs := map[mochi.Id]layout.Guide{}
 	y := 0.0
 	x := ctx.MinSize.X
-	for i, id := range l.Ids {
+	for i, id := range l.ids {
 		g := ctx.LayoutChild(id, layout.Pt(x, 0), layout.Pt(x, math.Inf(1)))
 		g.Frame = layout.Rt(0, y, g.Width(), y+g.Height())
 		g.ZIndex = i
