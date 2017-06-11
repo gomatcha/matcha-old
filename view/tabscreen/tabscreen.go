@@ -96,7 +96,6 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	}
 
 	screenspb := []*tabnavpb.Screen{}
-	chlds := []view.View{}
 	for idx, i := range v.screen.Children() {
 		chld := i.NewView(ctx, idx)
 
@@ -117,7 +116,6 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 			Badge:        options.Badge,
 		})
 
-		chlds = append(chlds, chld)
 		l.Add(chld, func(s *constraint.Solver) {
 			s.TopEqual(constraint.Const(0))
 			s.LeftEqual(constraint.Const(0))
@@ -127,7 +125,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	}
 
 	return &view.Model{
-		Children:       chlds,
+		Children:       l.Views(),
 		Layouter:       l,
 		NativeViewName: "github.com/overcyn/mochi/view/tabscreen",
 		NativeViewState: &tabnavpb.TabNav{

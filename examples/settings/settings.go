@@ -267,7 +267,7 @@ func (v *Separator) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Children: []view.View{chl},
+		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: cellColor},
 	}
@@ -327,8 +327,6 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		s.WidthEqual(l.MaxGuide().Width())
 	})
 
-	chlds := []view.View{}
-
 	leftAnchor := l.Left()
 	if v.HasIcon {
 		iconView := imageview.New(ctx, "icon")
@@ -338,7 +336,6 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 			BackgroundColor: colornames.Lightgray,
 			CornerRadius:    5,
 		}
-		chlds = append(chlds, iconView)
 
 		iconGuide := l.Add(iconView, func(s *constraint.Solver) {
 			s.WidthEqual(constraint.Const(30))
@@ -356,7 +353,6 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 			chevronView.Path = filepath.Join(path, "TableArrow@2x.png")
 			chevronView.ResizeMode = imageview.ResizeModeCenter
 			chevronView.Tint = chevronColor
-			chlds = append(chlds, chevronView)
 
 			chevronGuide := l.Add(chevronView, func(s *constraint.Solver) {
 				s.RightEqual(rightAnchor.Add(-15))
@@ -370,7 +366,6 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	}
 
 	if v.AccessoryView != nil {
-		chlds = append(chlds, v.AccessoryView)
 		accessoryGuide := l.Add(v.AccessoryView, func(s *constraint.Solver) {
 			s.RightEqual(rightAnchor.Add(-10))
 			s.LeftGreater(leftAnchor)
@@ -387,7 +382,6 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 			Size:   14,
 		})
 		subtitleView.Style.SetTextColor(subtitleColor)
-		chlds = append(chlds, subtitleView)
 
 		subtitleGuide := l.Add(subtitleView, func(s *constraint.Solver) {
 			s.RightEqual(rightAnchor.Add(-10))
@@ -404,7 +398,6 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		Size:   14,
 	})
 	titleView.Style.SetTextColor(titleColor)
-	chlds = append(chlds, titleView)
 
 	titleGuide := l.Add(titleView, func(s *constraint.Solver) {
 		s.LeftEqual(leftAnchor.Add(15))
@@ -441,7 +434,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 	}
 
 	return &view.Model{
-		Children: chlds,
+		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: color},
 		Values:   values,

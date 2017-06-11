@@ -226,6 +226,7 @@ func (g *Guide) Add(view view.View, solveFunc func(*Solver)) *Guide {
 	}
 	g.children[id] = chl
 	g.system.solvers = append(g.system.solvers, s)
+	g.system.views = append(g.system.views, view)
 
 	// Add any new notifier anchors to our notifier list.
 	for _, i := range s.constraints {
@@ -485,6 +486,7 @@ type Layout struct {
 	zIndex         int
 	notifiers      []mochi.Notifier
 	batchNotifiers map[chan struct{}]*mochi.BatchNotifier
+	views          []view.View
 }
 
 func New() *Layout {
@@ -494,6 +496,10 @@ func New() *Layout {
 	sys.max = &Guide{id: maxId, system: sys, children: map[mochi.Id]*Guide{}}
 	sys.batchNotifiers = map[chan struct{}]*mochi.BatchNotifier{}
 	return sys
+}
+
+func (l *Layout) Views() []view.View {
+	return l.views
 }
 
 func (sys *Layout) MinGuide() *Guide {

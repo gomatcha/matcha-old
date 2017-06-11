@@ -68,7 +68,7 @@ func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Children: []view.View{chl1, chl2, chl3, chl4},
+		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}

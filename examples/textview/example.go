@@ -53,7 +53,7 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Children: []view.View{chl2},
+		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}

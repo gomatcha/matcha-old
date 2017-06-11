@@ -61,7 +61,7 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 	// })
 
 	return &view.Model{
-		Children: []view.View{chl},
+		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}

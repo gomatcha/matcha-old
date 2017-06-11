@@ -103,7 +103,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	_ = g5
 
 	return &view.Model{
-		Children: []view.View{chl1, chl2, chl3, chl4, chl5},
+		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}

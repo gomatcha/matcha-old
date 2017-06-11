@@ -46,7 +46,6 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
 	childLayouter := &table.Layout{}
-	childViews := []view.View{}
 	for i := 0; i < 20; i++ {
 		childView := NewTableCell(ctx, i+1000)
 		childView.String = "TEST TEST"
@@ -58,14 +57,13 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 		// 	v.Nav.StackNav().Push(child.StackScreen())
 		// }
 
-		childViews = append(childViews, childView)
 		childLayouter.Add(childView)
 	}
 
 	content := basicview.New(ctx, 9)
 	content.Painter = &paint.Style{BackgroundColor: colornames.White}
 	content.Layouter = childLayouter
-	content.Children = childViews
+	content.Children = childLayouter.Views()
 
 	scroll := scrollview.New(ctx, 10)
 	scroll.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
@@ -216,19 +214,17 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	childLayouter := &table.Layout{}
-	childViews := []view.View{}
 	for i := 0; i < 20; i++ {
 		childView := NewTableCell(ctx, i+1000)
 		childView.String = "TEST TEST"
 		childView.Painter = &paint.Style{BackgroundColor: colornames.Red}
-		childViews = append(childViews, childView)
 		childLayouter.Add(childView)
 	}
 
 	scrollChild := basicview.New(ctx, 9)
 	scrollChild.Painter = &paint.Style{BackgroundColor: colornames.White}
 	scrollChild.Layouter = childLayouter
-	scrollChild.Children = childViews
+	scrollChild.Children = childLayouter.Views()
 
 	chl10 := scrollview.New(ctx, 10)
 	chl10.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
@@ -283,7 +279,7 @@ func (v *TableCell) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Children: []view.View{textView},
+		Children: l.Views(),
 		Layouter: l,
 		Painter:  v.Painter,
 	}
