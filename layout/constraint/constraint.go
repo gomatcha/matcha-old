@@ -87,7 +87,7 @@ func (a *Anchor) Multiply(v float64) *Anchor {
 }
 
 type anchor interface {
-	value(*System) float64
+	value(*Layout) float64
 }
 
 type multiplierAnchor struct {
@@ -95,7 +95,7 @@ type multiplierAnchor struct {
 	underlying anchor
 }
 
-func (a multiplierAnchor) value(sys *System) float64 {
+func (a multiplierAnchor) value(sys *Layout) float64 {
 	return a.underlying.value(sys) * a.multiplier
 }
 
@@ -104,13 +104,13 @@ type offsetAnchor struct {
 	underlying anchor
 }
 
-func (a offsetAnchor) value(sys *System) float64 {
+func (a offsetAnchor) value(sys *Layout) float64 {
 	return a.underlying.value(sys) + a.offset
 }
 
 type constAnchor float64
 
-func (a constAnchor) value(sys *System) float64 {
+func (a constAnchor) value(sys *Layout) float64 {
 	return float64(a)
 }
 
@@ -118,7 +118,7 @@ type notifierAnchor struct {
 	n mochi.Float64Notifier
 }
 
-func (a notifierAnchor) value(sys *System) float64 {
+func (a notifierAnchor) value(sys *Layout) float64 {
 	return a.n.Value()
 }
 
@@ -127,7 +127,7 @@ type guideAnchor struct {
 	attribute attribute
 }
 
-func (a guideAnchor) value(sys *System) float64 {
+func (a guideAnchor) value(sys *Layout) float64 {
 	var g layout.Guide
 	switch a.guide.id {
 	case rootId:
@@ -175,7 +175,7 @@ func Notifier(n mochi.Float64Notifier) *Anchor {
 
 type Guide struct {
 	id         mochi.Id
-	system     *System
+	system     *Layout
 	children   map[mochi.Id]*Guide
 	mochiGuide *layout.Guide
 }
@@ -266,7 +266,7 @@ type Solver struct {
 	constraints []constraint
 }
 
-func (s *Solver) solve(sys *System, ctx *layout.Context) {
+func (s *Solver) solve(sys *Layout, ctx *layout.Context) {
 	cr := newConstrainedRect()
 
 	for _, i := range s.constraints {
@@ -477,7 +477,7 @@ const (
 	maxId
 )
 
-type System struct {
+type Layout struct {
 	*Guide
 	min            *Guide
 	max            *Guide
@@ -487,8 +487,8 @@ type System struct {
 	batchNotifiers map[chan struct{}]*mochi.BatchNotifier
 }
 
-func New() *System {
-	sys := &System{}
+func New() *Layout {
+	sys := &Layout{}
 	sys.Guide = &Guide{id: rootId, system: sys, children: map[mochi.Id]*Guide{}}
 	sys.min = &Guide{id: minId, system: sys, children: map[mochi.Id]*Guide{}}
 	sys.max = &Guide{id: maxId, system: sys, children: map[mochi.Id]*Guide{}}
@@ -496,15 +496,15 @@ func New() *System {
 	return sys
 }
 
-func (sys *System) MinGuide() *Guide {
+func (sys *Layout) MinGuide() *Guide {
 	return sys.min
 }
 
-func (sys *System) MaxGuide() *Guide {
+func (sys *Layout) MaxGuide() *Guide {
 	return sys.max
 }
 
-func (sys *System) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (sys *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	sys.min.mochiGuide = &layout.Guide{
 		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
@@ -530,7 +530,7 @@ func (sys *System) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layou
 
 // Creates a new batch notifier for the current system state. Notifier anchors that are added after the Notify() call are ignored.
 // This is so we can return nil for the common case, where there are no Notifier anchors.
-func (sys *System) Notify() chan struct{} {
+func (sys *Layout) Notify() chan struct{} {
 	if len(sys.notifiers) == 0 {
 		return nil
 	}
@@ -544,7 +544,7 @@ func (sys *System) Notify() chan struct{} {
 	return c
 }
 
-func (sys *System) Unnotify(c chan struct{}) {
+func (sys *Layout) Unnotify(c chan struct{}) {
 	n, ok := sys.batchNotifiers[c]
 	if !ok {
 		panic("Cannot unnotify unknown chan")
