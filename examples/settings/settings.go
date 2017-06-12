@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"path/filepath"
@@ -429,7 +428,6 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 
 	var color color.Color
 	if v.highlighted {
-		fmt.Println("isHighlighted")
 		color = cellColorHighlighted
 	} else {
 		color = cellColor

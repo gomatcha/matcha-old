@@ -174,7 +174,6 @@
 @end
 
 UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewNode *viewNode) {
-    NSLog(@"KD:%s, %@", __FUNCTION__, any.typeURL);
     if ([any.typeURL isEqual:@"type.googleapis.com/mochi.touch.TapRecognizer"]) {
         return [[MochiTapGestureRecognizer alloc] initWithMochiVC:viewNode.rootVC viewId:viewId protobuf:any];
     } else if ([any.typeURL isEqual:@"type.googleapis.com/mochi.touch.PressRecognizer"]) {
