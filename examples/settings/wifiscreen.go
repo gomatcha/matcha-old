@@ -146,6 +146,13 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 	}
 	{
 		switchView := switchview.New(ctx, 6)
+		switchView.Value = v.wifiStore.Enabled()
+		switchView.OnValueChange = func(sv *switchview.View) {
+			v.wifiStore.Lock()
+			defer v.wifiStore.Unlock()
+
+			v.wifiStore.SetEnabled(sv.Value)
+		}
 
 		group := []view.View{}
 		cell1 := NewBasicCell(ctx, 0)
@@ -154,7 +161,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		group = append(group, cell1)
 
 		currentSSID := v.wifiStore.CurrentNetworkSSID()
-		if currentSSID != "" {
+		if currentSSID != "" && v.wifiStore.Enabled() {
 			var currentNetwork *WifiNetwork
 			for _, i := range v.wifiStore.Networks() {
 				if i.SSID() == currentSSID {
@@ -173,55 +180,58 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 			l.Add(i)
 		}
 	}
-	{
-		spacer := NewSpacer(ctx, "spacer2")
-		chlds = append(chlds, spacer)
-		l.Add(spacer)
-	}
-	{
-		group := []view.View{}
 
-		for _, i := range v.wifiStore.Networks() {
-			if i.SSID() != v.wifiStore.CurrentNetworkSSID() {
-				ssid := i.SSID()
-				cell := NewBasicCell(ctx, "network"+i.SSID())
-				cell.Title = i.SSID()
-				cell.OnTap = func() {
-					v.wifiStore.Lock()
-					defer v.wifiStore.Unlock()
+	if v.wifiStore.Enabled() {
+		{
+			spacer := NewSpacer(ctx, "spacer2")
+			chlds = append(chlds, spacer)
+			l.Add(spacer)
+		}
+		{
+			group := []view.View{}
 
-					v.wifiStore.SetCurrentNetworkSSID(ssid)
+			for _, i := range v.wifiStore.Networks() {
+				if i.SSID() != v.wifiStore.CurrentNetworkSSID() {
+					ssid := i.SSID()
+					cell := NewBasicCell(ctx, "network"+i.SSID())
+					cell.Title = i.SSID()
+					cell.OnTap = func() {
+						v.wifiStore.Lock()
+						defer v.wifiStore.Unlock()
+
+						v.wifiStore.SetCurrentNetworkSSID(ssid)
+					}
+					group = append(group, cell)
 				}
-				group = append(group, cell)
+			}
+
+			cell6 := NewBasicCell(ctx, "other")
+			cell6.Title = "Other..."
+			group = append(group, cell6)
+
+			for _, i := range AddSeparators(ctx, "b", group) {
+				chlds = append(chlds, i)
+				l.Add(i)
 			}
 		}
-
-		cell6 := NewBasicCell(ctx, "other")
-		cell6.Title = "Other..."
-		group = append(group, cell6)
-
-		for _, i := range AddSeparators(ctx, "b", group) {
-			chlds = append(chlds, i)
-			l.Add(i)
+		{
+			spacer := NewSpacer(ctx, "spacer3")
+			chlds = append(chlds, spacer)
+			l.Add(spacer)
 		}
-	}
-	{
-		spacer := NewSpacer(ctx, "spacer3")
-		chlds = append(chlds, spacer)
-		l.Add(spacer)
-	}
-	{
-		group := []view.View{}
+		{
+			group := []view.View{}
 
-		switchView := switchview.New(ctx, 10)
-		cell1 := NewBasicCell(ctx, 11)
-		cell1.Title = "Ask to Join Networks"
-		cell1.AccessoryView = switchView
-		group = append(group, cell1)
+			switchView := switchview.New(ctx, 10)
+			cell1 := NewBasicCell(ctx, 11)
+			cell1.Title = "Ask to Join Networks"
+			cell1.AccessoryView = switchView
+			group = append(group, cell1)
 
-		for _, i := range AddSeparators(ctx, "c", group) {
-			chlds = append(chlds, i)
-			l.Add(i)
+			for _, i := range AddSeparators(ctx, "c", group) {
+				chlds = append(chlds, i)
+				l.Add(i)
+			}
 		}
 	}
 
