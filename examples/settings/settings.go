@@ -4,6 +4,7 @@ import (
 	"image"
 	"image/color"
 	"path/filepath"
+	"strings"
 
 	"github.com/overcyn/mochi/env"
 	"github.com/overcyn/mochi/layout/constraint"
@@ -34,15 +35,15 @@ func init() {
 }
 
 type App struct {
-	store          store.Store
+	store.Storer
+	store          *store.AsyncStore
 	stackScreen    *stackscreen.Screen
 	wifiController *WifiController
 }
 
 func NewApp() *App {
-	app := &App{}
-	app.Lock()
-	defer app.Unlock()
+	st := &store.AsyncStore{}
+	app := &App{Storer: st, store: st}
 
 	rootScreen := view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
 		return NewRootView(ctx, key, app)
@@ -52,19 +53,24 @@ func NewApp() *App {
 	})
 
 	app.stackScreen = &stackscreen.Screen{}
-	app.store.Set(0, app.stackScreen.Store())
+	app.stackScreen.Lock()
 	app.stackScreen.SetChildren(rootScreen2)
+	app.stackScreen.Unlock()
+
 	app.wifiController = NewWifiStore()
+	app.store.Set("wifi", app.wifiController)
 
 	return app
 }
 
 func (app *App) Lock() {
-	app.store.Lock()
+	app.Storer.Lock()
+	app.stackScreen.Lock()
 }
 
 func (app *App) Unlock() {
-	app.store.Unlock()
+	app.Storer.Unlock()
+	app.stackScreen.Unlock()
 }
 
 func (app *App) NewView(ctx *view.Context, key interface{}) view.View {
@@ -212,6 +218,7 @@ var (
 	backgroundColor      = color.RGBA{239, 239, 244, 255}
 	subtitleColor        = color.Gray{142}
 	titleColor           = color.Gray{0}
+	spacerTitleColor     = color.Gray{102}
 )
 
 type separatorKey struct {
@@ -292,11 +299,58 @@ func NewSpacer(ctx *view.Context, key interface{}) *Spacer {
 func (v *Spacer) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
-		s.HeightEqual(constraint.Const(35))
+		s.HeightEqual(constraint.Const(v.Height))
 		s.WidthEqual(l.MaxGuide().Width())
 	})
 
 	return &view.Model{
+		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: backgroundColor},
+	}
+}
+
+type SpacerHeader struct {
+	*view.Embed
+	Height float64
+	Title  string
+}
+
+func NewSpacerHeader(ctx *view.Context, key interface{}) *SpacerHeader {
+	if v, ok := ctx.Prev(key).(*SpacerHeader); ok {
+		return v
+	}
+	return &SpacerHeader{
+		Embed:  view.NewEmbed(ctx.NewId(key)),
+		Height: 50,
+	}
+}
+
+func (v *SpacerHeader) Build(ctx *view.Context) *view.Model {
+	l := constraint.New()
+	l.Solve(func(s *constraint.Solver) {
+		s.HeightEqual(constraint.Const(v.Height))
+		s.WidthEqual(l.MaxGuide().Width())
+	})
+
+	titleView := textview.New(ctx, "title")
+	titleView.String = strings.ToTitle(v.Title)
+	titleView.Style.SetFont(text.Font{
+		Family: "Helvetica Neue",
+		Size:   13,
+	})
+	titleView.Style.SetTextColor(spacerTitleColor)
+	// titleView.Painter = &paint.Style{BackgroundColor: colornames.Red}
+
+	titleGuide := l.Add(titleView, func(s *constraint.Solver) {
+		s.LeftEqual(l.Left().Add(15))
+		s.RightEqual(l.Right().Add(-15))
+		s.BottomEqual(l.Bottom().Add(-10))
+		s.TopGreater(l.Top())
+	})
+	_ = titleGuide
+
+	return &view.Model{
+		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}

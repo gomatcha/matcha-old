@@ -183,7 +183,11 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 
 	if v.wifiStore.Enabled() {
 		{
-			spacer := NewSpacer(ctx, "spacer2")
+			// spacer := NewSpacer(ctx, "spacer2")
+			// chlds = append(chlds, spacer)
+			// l.Add(spacer)
+			spacer := NewSpacerHeader(ctx, "spacer2")
+			spacer.Title = "Choose a Network..."
 			chlds = append(chlds, spacer)
 			l.Add(spacer)
 		}
