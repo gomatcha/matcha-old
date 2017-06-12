@@ -50,6 +50,7 @@
     if (text != nil) {
         NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:text];
         self.attributedText = attrString;
+        self.numberOfLines = 0;
     }
 }
 

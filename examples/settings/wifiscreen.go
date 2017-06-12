@@ -138,10 +138,8 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 	defer v.wifiStore.Unlock()
 
 	l := &table.Layout{}
-	chlds := []view.View{}
 	{
 		spacer := NewSpacer(ctx, "spacer1")
-		chlds = append(chlds, spacer)
 		l.Add(spacer)
 	}
 	{
@@ -176,19 +174,14 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		}
 
 		for _, i := range AddSeparators(ctx, "a", group) {
-			chlds = append(chlds, i)
 			l.Add(i)
 		}
 	}
 
 	if v.wifiStore.Enabled() {
 		{
-			// spacer := NewSpacer(ctx, "spacer2")
-			// chlds = append(chlds, spacer)
-			// l.Add(spacer)
 			spacer := NewSpacerHeader(ctx, "spacer2")
 			spacer.Title = "Choose a Network..."
-			chlds = append(chlds, spacer)
 			l.Add(spacer)
 		}
 		{
@@ -214,13 +207,11 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 			group = append(group, cell6)
 
 			for _, i := range AddSeparators(ctx, "b", group) {
-				chlds = append(chlds, i)
 				l.Add(i)
 			}
 		}
 		{
 			spacer := NewSpacer(ctx, "spacer3")
-			chlds = append(chlds, spacer)
 			l.Add(spacer)
 		}
 		{
@@ -233,15 +224,19 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 			group = append(group, cell1)
 
 			for _, i := range AddSeparators(ctx, "c", group) {
-				chlds = append(chlds, i)
 				l.Add(i)
 			}
+		}
+		{
+			spacer := NewSpacerDescription(ctx, "spacerDescr")
+			spacer.Description = "Known networks will be joined automatically. If no known networks are available, you will have to manually join a network."
+			l.Add(spacer)
 		}
 	}
 
 	scrollChild := basicview.New(ctx, -1)
 	scrollChild.Layouter = l
-	scrollChild.Children = chlds
+	scrollChild.Children = l.Views()
 
 	scrollView := scrollview.New(ctx, -2)
 	scrollView.ContentView = scrollChild

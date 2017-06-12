@@ -369,6 +369,52 @@ func (v *SpacerHeader) Build(ctx *view.Context) *view.Model {
 	}
 }
 
+type SpacerDescription struct {
+	*view.Embed
+	Description string
+}
+
+func NewSpacerDescription(ctx *view.Context, key interface{}) *SpacerDescription {
+	if v, ok := ctx.Prev(key).(*SpacerDescription); ok {
+		return v
+	}
+	return &SpacerDescription{Embed: view.NewEmbed(ctx.NewId(key))}
+}
+
+func (v *SpacerDescription) Build(ctx *view.Context) *view.Model {
+	l := constraint.New()
+	l.Solve(func(s *constraint.Solver) {
+		s.HeightEqual(constraint.Const(0))
+		s.WidthEqual(l.MaxGuide().Width())
+	})
+
+	titleView := textview.New(ctx, "title")
+	titleView.String = v.Description
+	titleView.Style.SetFont(text.Font{
+		Family: "Helvetica Neue",
+		Size:   13,
+	})
+	titleView.Style.SetTextColor(spacerTitleColor)
+
+	titleGuide := l.Add(titleView, func(s *constraint.Solver) {
+		s.LeftEqual(l.Left().Add(15))
+		s.RightEqual(l.Right().Add(-15))
+		s.TopGreater(l.Top().Add(15))
+		s.HeightGreater(constraint.Const(0))
+	})
+
+	l.Solve(func(s *constraint.Solver) {
+		s.HeightEqual(titleGuide.Height().Add(30))
+		s.WidthEqual(l.MaxGuide().Width())
+	})
+
+	return &view.Model{
+		Children: l.Views(),
+		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: backgroundColor},
+	}
+}
+
 type BasicCell struct {
 	*view.Embed
 	HasIcon       bool

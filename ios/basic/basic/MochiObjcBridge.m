@@ -32,7 +32,7 @@
     NSAttributedString *attrStr = [[NSAttributedString alloc] initWithProtobuf:func.text];
     CGRect rect = [attrStr boundingRectWithSize:func.maxSize.toCGSize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
     
-    MochiPBPoint *point = [[MochiPBPoint alloc] initWithCGSize:rect.size];
+    MochiPBPoint *point = [[MochiPBPoint alloc] initWithCGSize:CGSizeMake(ceil(rect.size.width), ceil(rect.size.height))];
     return [[MochiGoValue alloc] initWithData:point.data];
 }
 
