@@ -13,7 +13,6 @@ Medium:
 * Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 * Cache layout properties
 * Images/ data blobs
-* Remove view.model.children, Just get the list of child views from the layouter.
 
 Low:
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack

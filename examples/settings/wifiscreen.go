@@ -1,6 +1,5 @@
 package settings
 
-/*
 import (
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/paint"
@@ -12,27 +11,33 @@ import (
 )
 
 type WifiController struct {
-	// store.Storer
-	store          *store.Store
-	enabled        bool
-	networks       map[int64]*WifiNetwork
-	currentNetwork int
+	store.Storer
+	store              *store.AsyncStore
+	enabled            bool
+	networks           []*WifiNetwork
+	currentNetworkSSID string
 }
 
 func NewWifiStore() *WifiController {
-	return nil
-	// st := &store.Store{}
-	// s := &WifiController{Storer: st, store: st}
-	// s.SetEnabled(true)
+	st := &store.AsyncStore{}
+	s := &WifiController{Storer: st, store: st}
+	s.SetEnabled(true)
 
-	// net1 := s.AddNetwork(1)
-	// net1.SetId(1)
-	// net1.SetName("XfinityWifi")
+	n1 := NewWifiNetwork()
+	n1.SetSSID("XfinityWifi")
 
-	// net2 := s.AddNetwork(2)
-	// net2.SetId(2)
-	// net2.SetName("Bluestone")
-	// return s
+	n2 := NewWifiNetwork()
+	n2.SetSSID("Bluestone")
+
+	n3 := NewWifiNetwork()
+	n3.SetSSID("Starbucks")
+
+	n4 := NewWifiNetwork()
+	n4.SetSSID("FastMesh Wifi")
+
+	s.SetNetworks([]*WifiNetwork{n1, n2, n3, n4})
+	s.SetCurrentNetworkSSID(n4.SSID())
+	return s
 }
 
 func (s *WifiController) SetEnabled(v bool) {
@@ -44,72 +49,51 @@ func (s *WifiController) Enabled() bool {
 	return s.enabled
 }
 
-func (s *WifiController) AddNetwork(id int64) (*WifiNetwork, error) {
-	st, err := s.store.Add(id)
-	if err != nil {
-		return err
+func (s *WifiController) SetNetworks(ns []*WifiNetwork) {
+	s.store.Update()
+
+	for _, i := range s.networks {
+		s.store.Delete(i.SSID())
 	}
-	return NewWifiNetwork(st), nil
+	for _, i := range ns {
+		s.store.Set(i.SSID(), i)
+	}
+	s.networks = ns
 }
 
-func (s *WifiController) RemoveNetwork(id int64) error {
-}
-
-// func (s *WifiController) SetNetworks(ns map[int64]*WifiNetwork) {
-// 	s.store.Update()
-// 	for k, _ := range s.networks {
-// 		s.store.Delete(k)
-// 	}
-
-// 	for k, v := range ns {
-// 		s.store.Set(k, v.Store())
-// 	}
-// 	s.networks = ns
-// }
-
-func (s *WifiController) Networks() map[int64]*WifiNetwork {
+func (s *WifiController) Networks() []*WifiNetwork {
 	return s.networks
 }
 
-func (s *WifiController) SetCurrentNetwork(v int) {
-	s.currentNetwork = v
+func (s *WifiController) SetCurrentNetworkSSID(v string) {
+	s.currentNetworkSSID = v
 	s.store.Update()
 }
 
-func (s *WifiController) CurrentNetwork() int {
-	return s.currentNetwork
+func (s *WifiController) CurrentNetworkSSID() string {
+	return s.currentNetworkSSID
 }
 
 type WifiNetwork struct {
-	// store.Storer
-	store  *store.Store
-	id     int64
-	name   string
+	store.Storer
+	store  *store.AsyncStore
+	ssid   string
 	locked bool
 	signal int
 }
 
 func NewWifiNetwork() *WifiNetwork {
-	st := &store.Store{}
-	return &WifiController{Storer: st, store: st}
+	st := &store.AsyncStore{}
+	return &WifiNetwork{Storer: st, store: st}
 }
 
-func (n *WifiNetwork) SetId(v int64) {
-	n.id = v
+func (n *WifiNetwork) SetSSID(v string) {
+	n.ssid = v
 	n.store.Update()
 }
 
-func (n *WifiNetwork) Id() int64 {
-	return n.id
-}
-
-func (n *WifiNetwork) SetName(v string) {
-	n.name = v
-	n.store.Update()
-}
-
-func (n *WifiNetwork) Name() string {
-	return n.name
+func (n *WifiNetwork) SSID() string {
+	return n.ssid
 }
 
 func (n *WifiNetwork) SetLocked(v bool) {
@@ -145,7 +129,7 @@ func NewWifiView(ctx *view.Context, key interface{}, app *App, wifiStore *WifiCo
 		app:       app,
 		wifiStore: wifiStore,
 	}
-	v.Subscribe(wifiStore.Store())
+	v.Subscribe(wifiStore)
 	return v
 }
 
@@ -169,9 +153,20 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		cell1.AccessoryView = switchView
 		group = append(group, cell1)
 
-		cell2 := NewBasicCell(ctx, 1)
-		cell2.Title = "FastMesh Wifi"
-		group = append(group, cell2)
+		currentSSID := v.wifiStore.CurrentNetworkSSID()
+		if currentSSID != "" {
+			var currentNetwork *WifiNetwork
+			for _, i := range v.wifiStore.Networks() {
+				if i.SSID() == currentSSID {
+					currentNetwork = i
+					break
+				}
+			}
+
+			cell2 := NewBasicCell(ctx, 1)
+			cell2.Title = currentNetwork.SSID()
+			group = append(group, cell2)
+		}
 
 		for _, i := range AddSeparators(ctx, "a", group) {
 			chlds = append(chlds, i)
@@ -186,10 +181,19 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 	{
 		group := []view.View{}
 
-		for _, v := range v.wifiStore.Networks() {
-			cell := NewBasicCell(ctx, "network"+v.Name())
-			cell.Title = v.Name()
-			group = append(group, cell)
+		for _, i := range v.wifiStore.Networks() {
+			if i.SSID() != v.wifiStore.CurrentNetworkSSID() {
+				ssid := i.SSID()
+				cell := NewBasicCell(ctx, "network"+i.SSID())
+				cell.Title = i.SSID()
+				cell.OnTap = func() {
+					v.wifiStore.Lock()
+					defer v.wifiStore.Unlock()
+
+					v.wifiStore.SetCurrentNetworkSSID(ssid)
+				}
+				group = append(group, cell)
+			}
 		}
 
 		cell6 := NewBasicCell(ctx, "other")
@@ -233,4 +237,3 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}
 }
-*/

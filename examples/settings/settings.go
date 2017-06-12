@@ -35,8 +35,9 @@ func init() {
 }
 
 type App struct {
-	store       store.Store
-	stackScreen *stackscreen.Screen
+	store          store.Store
+	stackScreen    *stackscreen.Screen
+	wifiController *WifiController
 }
 
 func NewApp() *App {
@@ -54,6 +55,7 @@ func NewApp() *App {
 	app.stackScreen = &stackscreen.Screen{}
 	app.store.Set(0, app.stackScreen.Store())
 	app.stackScreen.SetChildren(rootScreen2)
+	app.wifiController = NewWifiStore()
 
 	return app
 }
@@ -111,7 +113,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 			v.app.Lock()
 			defer v.app.Unlock()
 			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
-				return nil
+				return NewWifiView(ctx, key, v.app, v.app.wifiController)
 			}))
 		}
 		group = append(group, cell2)

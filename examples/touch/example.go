@@ -186,7 +186,7 @@ func NewButtonChildView(ctx *view.Context, key interface{}) *ButtonChildView {
 func (v *ButtonChildView) Build(ctx *view.Context) *view.Model {
 	button := &touch.ButtonRecognizer{
 		OnTouch: func(e *touch.ButtonEvent) {
-			fmt.Println("On Touch:%v", e.Kind)
+			fmt.Println("On Touch:s", e.Kind)
 		},
 	}
 

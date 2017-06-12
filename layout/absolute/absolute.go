@@ -22,14 +22,14 @@ func (l *Layout) SetGuide(g layout.Guide) {
 
 func (l *Layout) Add(v view.View, g layout.Guide) {
 	if l.childGuides == nil {
-		l.childGuides = map[Mochi.Id]layout.Guide{}
+		l.childGuides = map[mochi.Id]layout.Guide{}
 	}
 	l.childGuides[v.Id()] = g
-	l.views = append(l.Views, v)
+	l.views = append(l.views, v)
 }
 
 func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
-	return l.Guide, l.ChildGuides
+	return l.guide, l.childGuides
 }
 
 func (l *Layout) Notify() chan struct{} {
