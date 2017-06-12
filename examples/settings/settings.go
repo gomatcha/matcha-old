@@ -81,6 +81,10 @@ func (app *App) StackScreen() *stackscreen.Screen {
 	return app.stackScreen
 }
 
+func (app *App) WifiController() *WifiController {
+	return app.wifiController
+}
+
 type RootView struct {
 	*view.Embed
 	app *App
@@ -90,10 +94,15 @@ func NewRootView(ctx *view.Context, key interface{}, app *App) *RootView {
 	if v, ok := ctx.Prev(key).(*RootView); ok {
 		return v
 	}
-	return &RootView{Embed: view.NewEmbed(ctx.NewId(key)), app: app}
+	v := &RootView{Embed: view.NewEmbed(ctx.NewId(key)), app: app}
+	v.Subscribe(app.WifiController())
+	return v
 }
 
 func (v *RootView) Build(ctx *view.Context) *view.Model {
+	v.app.Lock()
+	defer v.app.Unlock()
+
 	l := &table.Layout{}
 	{
 		spacer := NewSpacer(ctx, "spacer1")
@@ -111,7 +120,11 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 		cell2 := NewBasicCell(ctx, 1)
 		cell2.Title = "Wi-Fi"
-		cell2.Subtitle = "Home Wifi"
+		if v.app.WifiController().Enabled() {
+			cell2.Subtitle = v.app.WifiController().CurrentNetworkSSID()
+		} else {
+			cell2.Subtitle = ""
+		}
 		cell2.HasIcon = true
 		cell2.Chevron = true
 		cell2.OnTap = func() {
