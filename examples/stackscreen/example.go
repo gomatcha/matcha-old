@@ -33,12 +33,12 @@ func NewApp() *App {
 	defer app.Unlock()
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
-	options1 := &stackscreen.Options{
+	options1 := &stackscreen.StackBar{
 		Title: "Title 1",
 	}
 
 	screen2 := NewTouchScreen(app, colornames.Red)
-	options2 := &stackscreen.Options{
+	options2 := &stackscreen.StackBar{
 		Title: "Title 2",
 	}
 

@@ -4,7 +4,7 @@
 
 High:
 * Text Input / Keyboard
-* Thread & locking. Switch to syncnotifier for all things views.
+* Thread & locking. Switch to closures for notifiers
 * Native resources. Ignore asset catalog for now. 
 * Rebuild settings app.
 

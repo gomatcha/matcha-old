@@ -48,13 +48,10 @@ func NewApp() *App {
 	rootScreen := view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
 		return NewRootView(ctx, key, app)
 	})
-	rootScreen2 := stackscreen.WithOptions(rootScreen, &stackscreen.Options{
-		Title: "Settings",
-	})
 
 	app.stackScreen = &stackscreen.Screen{}
 	app.stackScreen.Lock()
-	app.stackScreen.SetChildren(rootScreen2)
+	app.stackScreen.SetChildren(rootScreen)
 	app.stackScreen.Unlock()
 
 	app.wifiController = NewWifiStore()
@@ -221,6 +218,10 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}
+}
+
+func (v *RootView) StackBar(ctx *view.Context) *stackscreen.StackBar {
+	return &stackscreen.StackBar{Title: "Settings"}
 }
 
 var (

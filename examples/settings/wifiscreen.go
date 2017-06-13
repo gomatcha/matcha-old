@@ -7,6 +7,7 @@ import (
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/scrollview"
+	"github.com/overcyn/mochi/view/stackscreen"
 	"github.com/overcyn/mochi/view/switchview"
 )
 
@@ -245,4 +246,8 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}
+}
+
+func (v *WifiView) StackBar(ctx *view.Context) *stackscreen.StackBar {
+	return &stackscreen.StackBar{Title: "Wi-Fi"}
 }

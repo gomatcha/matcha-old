@@ -106,21 +106,19 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	for idx, i := range v.screen.Children() {
 		chld := i.NewView(ctx, idx)
 
-		var options *Options
-		if optionsView, ok := chld.(*optionsView); ok {
-			options = optionsView.options
+		var bar *StackBar
+		if childView, ok := chld.(ChildView); ok {
+			bar = childView.StackBar(ctx)
 		} else {
-			options = &Options{
-				Title: "Stack Title",
-			}
+			bar = &StackBar{}
 		}
 
 		screenspb = append(screenspb, &stacknav.Screen{
 			Id:    int64(chld.Id()),
-			Title: options.Title,
-			CustomBackButtonTitle: len(options.BackButtonTitle) > 0,
-			BackButtonTitle:       options.BackButtonTitle,
-			BackButtonHidden:      options.BackButtonHidden,
+			Title: bar.Title,
+			CustomBackButtonTitle: len(bar.BackButtonTitle) > 0,
+			BackButtonTitle:       bar.BackButtonTitle,
+			BackButtonHidden:      bar.BackButtonHidden,
 		})
 
 		l.Add(chld, func(s *constraint.Solver) {
@@ -145,23 +143,23 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	}
 }
 
-// TODO(KD): add middleware to read nativeValues{Key:Options} from view.Model
-type key struct{}
+type ChildView interface {
+	view.View
+	StackBar(*view.Context) *StackBar
+}
 
-var Key = key{}
-
-type Options struct {
+type StackBar struct {
 	Title            string
 	BackButtonTitle  string
 	BackButtonHidden bool
-	// TitleView        view.View
-	// RightViews       []view.View
-	// LeftViews        []view.View
-	// BarHidden        bool
+	TitleView        view.View
+	RightViews       []view.View
+	LeftViews        []view.View
+	BarHidden        bool
 	// Bar height?
 }
 
-func WithOptions(s view.Screen, opt *Options) view.Screen {
+func WithOptions(s view.Screen, opt *StackBar) view.Screen {
 	return &optionsScreen{
 		Screen:  s,
 		options: opt,
@@ -170,7 +168,7 @@ func WithOptions(s view.Screen, opt *Options) view.Screen {
 
 type optionsScreen struct {
 	view.Screen
-	options *Options
+	options *StackBar
 }
 
 func (s *optionsScreen) NewView(ctx *view.Context, key interface{}) view.View {
@@ -182,5 +180,5 @@ func (s *optionsScreen) NewView(ctx *view.Context, key interface{}) view.View {
 
 type optionsView struct {
 	view.View
-	options *Options
+	options *StackBar
 }
