@@ -5,6 +5,7 @@ import (
 	"math"
 
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/view"
 )
@@ -485,7 +486,7 @@ type Layout struct {
 	solvers        []*Solver
 	zIndex         int
 	notifiers      []mochi.Notifier
-	batchNotifiers map[chan struct{}]*mochi.BatchNotifier
+	batchNotifiers map[chan struct{}]*comm.BatchNotifier
 	views          []view.View
 }
 
@@ -494,7 +495,7 @@ func New() *Layout {
 	sys.Guide = &Guide{id: rootId, system: sys, children: map[mochi.Id]*Guide{}}
 	sys.min = &Guide{id: minId, system: sys, children: map[mochi.Id]*Guide{}}
 	sys.max = &Guide{id: maxId, system: sys, children: map[mochi.Id]*Guide{}}
-	sys.batchNotifiers = map[chan struct{}]*mochi.BatchNotifier{}
+	sys.batchNotifiers = map[chan struct{}]*comm.BatchNotifier{}
 	return sys
 }
 
@@ -540,7 +541,7 @@ func (sys *Layout) Notify() chan struct{} {
 	if len(sys.notifiers) == 0 {
 		return nil
 	}
-	n := &mochi.BatchNotifier{}
+	n := &comm.BatchNotifier{}
 	for _, i := range sys.notifiers {
 		n.Subscribe(i)
 	}

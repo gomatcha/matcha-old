@@ -5,6 +5,7 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
 )
@@ -38,7 +39,7 @@ type View interface {
 type Embed struct {
 	mu            sync.Mutex
 	id            mochi.Id
-	batchNotifier mochi.BatchNotifier
+	batchNotifier comm.BatchNotifier
 }
 
 func NewEmbed(id mochi.Id) *Embed {

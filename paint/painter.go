@@ -4,6 +4,7 @@ import (
 	"image/color"
 
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/pb"
 )
@@ -62,7 +63,7 @@ type AnimatedStyle struct {
 	// ShadowOffset    mochi.Float64Notifier
 	ShadowColor mochi.ColorNotifier
 
-	batchNotifiers map[chan struct{}]*mochi.BatchNotifier
+	batchNotifiers map[chan struct{}]*comm.BatchNotifier
 }
 
 func (as *AnimatedStyle) PaintStyle() Style {
@@ -96,7 +97,7 @@ func (as *AnimatedStyle) PaintStyle() Style {
 }
 
 func (as *AnimatedStyle) Notify() chan struct{} {
-	n := &mochi.BatchNotifier{}
+	n := &comm.BatchNotifier{}
 
 	if as.Transparency != nil {
 		n.Subscribe(as.Transparency)
@@ -125,7 +126,7 @@ func (as *AnimatedStyle) Notify() chan struct{} {
 
 	c := n.Notify()
 	if as.batchNotifiers == nil {
-		as.batchNotifiers = map[chan struct{}]*mochi.BatchNotifier{}
+		as.batchNotifiers = map[chan struct{}]*comm.BatchNotifier{}
 	}
 	as.batchNotifiers[c] = n
 	return c
