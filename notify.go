@@ -207,11 +207,3 @@ func (bn *BatchNotifier) resubscribeLocked() {
 		}
 	}
 }
-
-// func (bn *BatchNotifier) String() string {
-// 	ns := []Notifier{}
-// 	for k := range bn.subscriptions {
-// 		ns = append(ns, k)
-// 	}
-// 	return fmt.Sprintf("&BatchNotifier{%p observing:%v chans:%v}", bn, ns, len(bn.chans))
-// }

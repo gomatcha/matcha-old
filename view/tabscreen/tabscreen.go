@@ -5,22 +5,22 @@ import (
 	"image"
 
 	"github.com/gogo/protobuf/proto"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/pb"
 	tabnavpb "github.com/overcyn/mochi/pb/view/tabnav"
-	"github.com/overcyn/mochi/store"
 	"github.com/overcyn/mochi/view"
 )
 
 type Screen struct {
-	store.Storer
-	store         *store.AsyncStore
+	comm.Storer
+	store         *comm.AsyncStore
 	screens       []view.Screen
 	selectedIndex int
 }
 
 func NewScreen() *Screen {
-	st := &store.AsyncStore{}
+	st := &comm.AsyncStore{}
 	return &Screen{Storer: st, store: st}
 }
 

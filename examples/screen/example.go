@@ -3,8 +3,8 @@ package screen
 import (
 	"image/color"
 
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/store"
 	"github.com/overcyn/mochi/touch"
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochi/view/stackscreen"
@@ -23,7 +23,7 @@ func init() {
 }
 
 type App struct {
-	store        *store.AsyncStore
+	store        *comm.AsyncStore
 	tabScreen    *tabscreen.Screen
 	stackScreen1 *stackscreen.Screen
 	stackScreen2 *stackscreen.Screen

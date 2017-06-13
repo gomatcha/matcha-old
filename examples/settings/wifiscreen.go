@@ -1,9 +1,9 @@
 package settings
 
 import (
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/store"
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/scrollview"
@@ -12,15 +12,15 @@ import (
 )
 
 type WifiController struct {
-	store.Storer
-	store              *store.AsyncStore
+	comm.Storer
+	store              *comm.AsyncStore
 	enabled            bool
 	networks           []*WifiNetwork
 	currentNetworkSSID string
 }
 
 func NewWifiStore() *WifiController {
-	st := &store.AsyncStore{}
+	st := &comm.AsyncStore{}
 	s := &WifiController{Storer: st, store: st}
 	s.SetEnabled(true)
 
@@ -76,15 +76,15 @@ func (s *WifiController) CurrentNetworkSSID() string {
 }
 
 type WifiNetwork struct {
-	store.Storer
-	store  *store.AsyncStore
+	comm.Storer
+	store  *comm.AsyncStore
 	ssid   string
 	locked bool
 	signal int
 }
 
 func NewWifiNetwork() *WifiNetwork {
-	st := &store.AsyncStore{}
+	st := &comm.AsyncStore{}
 	return &WifiNetwork{Storer: st, store: st}
 }
 

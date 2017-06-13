@@ -1,4 +1,4 @@
-package store
+package comm
 
 // type Interface struct {
 // 	store Store

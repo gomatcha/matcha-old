@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/env"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/store"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/touch"
 	"github.com/overcyn/mochi/view"
@@ -35,14 +35,14 @@ func init() {
 }
 
 type App struct {
-	store.Storer
-	store          *store.AsyncStore
+	comm.Storer
+	store          *comm.AsyncStore
 	stackScreen    *stackscreen.Screen
 	wifiController *WifiController
 }
 
 func NewApp() *App {
-	st := &store.AsyncStore{}
+	st := &comm.AsyncStore{}
 	app := &App{Storer: st, store: st}
 
 	rootScreen := view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
