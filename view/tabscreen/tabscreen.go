@@ -13,21 +13,15 @@ import (
 )
 
 type Screen struct {
-	store         store.Store
+	store.Storer
+	store         *store.AsyncStore
 	screens       []view.Screen
 	selectedIndex int
 }
 
-func (s *Screen) Store() *store.Store {
-	return &s.store
-}
-
-func (s *Screen) Lock() {
-	s.store.Lock()
-}
-
-func (s *Screen) Unlock() {
-	s.store.Unlock()
+func NewScreen() *Screen {
+	st := &store.AsyncStore{}
+	return &Screen{Storer: st, store: st}
 }
 
 func (s *Screen) NewView(ctx *view.Context, key interface{}) view.View {
@@ -65,7 +59,7 @@ func NewView(ctx *view.Context, key interface{}, s *Screen) *View {
 	}
 
 	embed := view.NewEmbed(ctx.NewId(key))
-	embed.Subscribe(&s.store)
+	embed.Subscribe(s)
 	return &View{
 		Embed:  embed,
 		screen: s,
@@ -99,21 +93,21 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	for idx, i := range v.screen.Children() {
 		chld := i.NewView(ctx, idx)
 
-		var options *Options
-		if optionsView, ok := chld.(*optionsView); ok {
-			options = optionsView.options
+		var button *TabButton
+		if childView, ok := chld.(ChildView); ok {
+			button = childView.TabButton(ctx)
 		} else {
-			options = &Options{
-				Title: "Tab Title",
+			button = &TabButton{
+				Title: "Title",
 			}
 		}
 
 		screenspb = append(screenspb, &tabnavpb.Screen{
 			Id:           int64(chld.Id()),
-			Title:        options.Title,
-			Icon:         pb.ImageEncode(options.Icon),
-			SelectedIcon: pb.ImageEncode(options.SelectedIcon),
-			Badge:        options.Badge,
+			Title:        button.Title,
+			Icon:         pb.ImageEncode(button.Icon),
+			SelectedIcon: pb.ImageEncode(button.SelectedIcon),
+			Badge:        button.Badge,
 		})
 
 		l.Add(chld, func(s *constraint.Solver) {
@@ -139,38 +133,42 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	}
 }
 
-type Options struct {
+type ChildView interface {
+	view.View
+	TabButton(*view.Context) *TabButton
+}
+
+type TabButton struct {
 	Title        string
 	Icon         image.Image
 	SelectedIcon image.Image
 	Badge        string
 }
 
-func WithOptions(s view.Screen, opt *Options) view.Screen {
-	return &optionsScreen{
-		Screen:  s,
-		options: opt,
+func WithTabButton(s view.Screen, button *TabButton) view.Screen {
+	return &tabButtonScreen{
+		Screen: s,
+		button: button,
 	}
 }
 
-type optionsScreen struct {
+type tabButtonScreen struct {
 	view.Screen
-	options *Options
+	button *TabButton
 }
 
-func (s *optionsScreen) NewView(ctx *view.Context, key interface{}) view.View {
-	return &optionsView{
-		View:    s.Screen.NewView(ctx, key),
-		options: s.options,
+func (s *tabButtonScreen) NewView(ctx *view.Context, key interface{}) view.View {
+	return &tabButtonView{
+		View:   s.Screen.NewView(ctx, key),
+		button: s.button,
 	}
 }
 
-type optionsView struct {
+type tabButtonView struct {
 	view.View
-	options *Options
+	button *TabButton
 }
 
-// TODO(KD): add middleware to read nativeValues{Key:Options} from view.Model
-type key struct{}
-
-var Key = key{}
+func (v *tabButtonView) TabButton(*view.Context) *TabButton {
+	return v.button
+}

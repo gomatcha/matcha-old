@@ -49,25 +49,14 @@ func NewApp() *App {
 		return NewRootView(ctx, key, app)
 	})
 
-	app.stackScreen = &stackscreen.Screen{}
-	app.stackScreen.Lock()
+	app.stackScreen = stackscreen.NewScreen()
+	app.store.Set("stackScreen", app.stackScreen)
 	app.stackScreen.SetChildren(rootScreen)
-	app.stackScreen.Unlock()
 
 	app.wifiController = NewWifiStore()
 	app.store.Set("wifi", app.wifiController)
 
 	return app
-}
-
-func (app *App) Lock() {
-	app.Storer.Lock()
-	app.stackScreen.Lock()
-}
-
-func (app *App) Unlock() {
-	app.Storer.Unlock()
-	app.stackScreen.Unlock()
 }
 
 func (app *App) NewView(ctx *view.Context, key interface{}) view.View {

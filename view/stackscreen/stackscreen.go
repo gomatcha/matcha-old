@@ -11,20 +11,17 @@ import (
 )
 
 type Screen struct {
-	store   store.Store
+	store.Storer
+	store   *store.AsyncStore
 	screens []view.Screen
 }
 
-func (s *Screen) Store() *store.Store {
-	return &s.store
-}
-
-func (s *Screen) Lock() {
-	s.store.Lock()
-}
-
-func (s *Screen) Unlock() {
-	s.store.Unlock()
+func NewScreen() *Screen {
+	st := &store.AsyncStore{}
+	return &Screen{
+		Storer: st,
+		store:  st,
+	}
 }
 
 func (s *Screen) NewView(ctx *view.Context, key interface{}) view.View {
@@ -66,7 +63,7 @@ func New(ctx *view.Context, key interface{}, s *Screen) *View {
 	}
 
 	embed := view.NewEmbed(ctx.NewId(key))
-	embed.Subscribe(&s.store)
+	embed.Subscribe(s)
 	return &View{
 		Embed:  embed,
 		screen: s,
@@ -92,14 +89,14 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		}
 
 		// Don't update the view for this
-		v.Embed.Unsubscribe(&v.screen.store)
+		v.Embed.Unsubscribe(v.screen)
 
 		v.screen.Lock()
 		chl := v.screen.Children()[:len(pbevent.Id)]
 		v.screen.SetChildren(chl...)
 		v.screen.Unlock()
 
-		v.Embed.Subscribe(&v.screen.store)
+		v.Embed.Subscribe(v.screen)
 	}
 
 	screenspb := []*stacknav.Screen{}
@@ -110,7 +107,9 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		if childView, ok := chld.(ChildView); ok {
 			bar = childView.StackBar(ctx)
 		} else {
-			bar = &StackBar{}
+			bar = &StackBar{
+				Title: "Title",
+			}
 		}
 
 		screenspb = append(screenspb, &stacknav.Screen{
@@ -159,26 +158,30 @@ type StackBar struct {
 	// Bar height?
 }
 
-func WithOptions(s view.Screen, opt *StackBar) view.Screen {
-	return &optionsScreen{
-		Screen:  s,
-		options: opt,
+func WithStackBar(s view.Screen, bar *StackBar) view.Screen {
+	return &stackScreen{
+		Screen:   s,
+		stackBar: bar,
 	}
 }
 
-type optionsScreen struct {
+type stackScreen struct {
 	view.Screen
-	options *StackBar
+	stackBar *StackBar
 }
 
-func (s *optionsScreen) NewView(ctx *view.Context, key interface{}) view.View {
-	return &optionsView{
-		View:    s.Screen.NewView(ctx, key),
-		options: s.options,
+func (s *stackScreen) NewView(ctx *view.Context, key interface{}) view.View {
+	return &stackView{
+		View:     s.Screen.NewView(ctx, key),
+		stackBar: s.stackBar,
 	}
 }
 
-type optionsView struct {
+type stackView struct {
 	view.View
-	options *StackBar
+	stackBar *StackBar
+}
+
+func (s *stackView) StackBar(*view.Context) *StackBar {
+	return s.stackBar
 }

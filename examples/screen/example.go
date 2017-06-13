@@ -23,7 +23,7 @@ func init() {
 }
 
 type App struct {
-	store        store.Store
+	store        *store.AsyncStore
 	tabScreen    *tabscreen.Screen
 	stackScreen1 *stackscreen.Screen
 	stackScreen2 *stackscreen.Screen
@@ -36,32 +36,32 @@ func NewApp() *App {
 	app.Lock()
 	defer app.Unlock()
 
-	app.stackScreen1 = &stackscreen.Screen{}
-	app.store.Set(1, app.stackScreen1.Store())
+	app.stackScreen1 = stackscreen.NewScreen()
+	app.store.Set("1", app.stackScreen1)
 	app.stackScreen1.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.stackScreen2 = &stackscreen.Screen{}
-	app.store.Set(2, app.stackScreen2.Store())
+	app.stackScreen2 = stackscreen.NewScreen()
+	app.store.Set("2", app.stackScreen2)
 	app.stackScreen2.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.stackScreen3 = &stackscreen.Screen{}
-	app.store.Set(3, app.stackScreen3.Store())
+	app.stackScreen3 = stackscreen.NewScreen()
+	app.store.Set("3", app.stackScreen3)
 	app.stackScreen3.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.stackScreen4 = &stackscreen.Screen{}
-	app.store.Set(4, app.stackScreen4.Store())
+	app.stackScreen4 = stackscreen.NewScreen()
+	app.store.Set("4", app.stackScreen4)
 	app.stackScreen4.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.tabScreen = &tabscreen.Screen{}
-	app.store.Set(5, app.tabScreen.Store())
+	app.tabScreen = tabscreen.NewScreen()
+	app.store.Set("5", app.tabScreen)
 	app.tabScreen.SetChildren(
 		app.stackScreen1,
 		app.stackScreen2,

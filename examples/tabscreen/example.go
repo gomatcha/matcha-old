@@ -22,7 +22,7 @@ func init() {
 }
 
 type App struct {
-	store     store.Store
+	store     *store.AsyncStore
 	tabScreen *tabscreen.Screen
 }
 
@@ -32,24 +32,24 @@ func NewApp() *App {
 	defer app.Unlock()
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
-	options1 := &tabscreen.Options{
+	options1 := &tabscreen.TabButton{
 		Title: "Title 1",
 	}
 
 	screen2 := NewTouchScreen(app, colornames.Red)
-	options2 := &tabscreen.Options{
+	options2 := &tabscreen.TabButton{
 		Title: "Title 2",
 	}
 
 	screen3 := NewTouchScreen(app, colornames.Yellow)
 	screen4 := NewTouchScreen(app, colornames.Green)
 
-	app.tabScreen = &tabscreen.Screen{}
-	app.store.Set(0, app.tabScreen.Store())
+	app.tabScreen = tabscreen.NewScreen()
+	app.store.Set("0", app.tabScreen)
 	app.tabScreen.SetSelectedIndex(1)
 	app.tabScreen.SetChildren(
-		tabscreen.WithOptions(screen1, options1),
-		tabscreen.WithOptions(screen2, options2),
+		tabscreen.WithTabButton(screen1, options1),
+		tabscreen.WithTabButton(screen2, options2),
 		screen3,
 		screen4,
 	)
