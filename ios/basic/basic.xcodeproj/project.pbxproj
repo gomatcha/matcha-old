@@ -44,6 +44,7 @@
 		677831421EEABBC6009D9D7F /* MochiButtonGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831411EEABBC6009D9D7F /* MochiButtonGestureRecognizer.m */; };
 		677831461EEABBD8009D9D7F /* Touch2.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831451EEABBD8009D9D7F /* Touch2.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6778314A1EF0B785009D9D7F /* Resource.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831491EF0B785009D9D7F /* Resource.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6778314D1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer2.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778314C1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer2.m */; };
 		67D89E211ED4AE1E0063A1E2 /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */; };
 /* End PBXBuildFile section */
 
@@ -129,6 +130,8 @@
 		677831451EEABBD8009D9D7F /* Touch2.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Touch2.pbobjc.m; sourceTree = "<group>"; };
 		677831481EF0B785009D9D7F /* Resource.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Resource.pbobjc.h; sourceTree = "<group>"; };
 		677831491EF0B785009D9D7F /* Resource.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Resource.pbobjc.m; sourceTree = "<group>"; };
+		6778314B1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiButtonGestureRecognizer2.h; sourceTree = "<group>"; };
+		6778314C1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiButtonGestureRecognizer2.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +158,8 @@
 				674081361EDE05E00093D987 /* MochiPressGestureRecognizer.m */,
 				677831401EEABBC6009D9D7F /* MochiButtonGestureRecognizer.h */,
 				677831411EEABBC6009D9D7F /* MochiButtonGestureRecognizer.m */,
+				6778314B1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer2.h */,
+				6778314C1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer2.m */,
 			);
 			name = Touch;
 			sourceTree = "<group>";
@@ -461,6 +466,7 @@
 				677831191EE299A4009D9D7F /* Text.pbobjc.m in Sources */,
 				676EF4D01E8E341900C1488A /* AppDelegate.m in Sources */,
 				676EF4F41E8ECF5D00C1488A /* MochiView.m in Sources */,
+				6778314D1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer2.m in Sources */,
 				676EF4FA1E8F19A500C1488A /* MochiNode.m in Sources */,
 				676EF4F01E8ECF2700C1488A /* MochiViewController.m in Sources */,
 				677831181EE299A4009D9D7F /* Scrollview.pbobjc.m in Sources */,

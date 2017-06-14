@@ -55,6 +55,7 @@ static GPBFileDescriptor *MochiPBTouchTouch2Root_FileDescriptor(void) {
 @implementation MochiPBTouchButtonRecognizer
 
 @dynamic onEvent;
+@dynamic ignoresScroll;
 
 typedef struct MochiPBTouchButtonRecognizer__storage_ {
   uint32_t _has_storage_[1];
@@ -76,6 +77,15 @@ typedef struct MochiPBTouchButtonRecognizer__storage_ {
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
+      {
+        .name = "ignoresScroll",
+        .dataTypeSpecific.className = NULL,
+        .number = MochiPBTouchButtonRecognizer_FieldNumber_IgnoresScroll,
+        .hasIndex = 1,
+        .offset = 2,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeBool,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MochiPBTouchButtonRecognizer class]
@@ -87,7 +97,7 @@ typedef struct MochiPBTouchButtonRecognizer__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\001\007\000";
+        "\002\001\007\000\002\r\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

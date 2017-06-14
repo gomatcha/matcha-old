@@ -178,10 +178,14 @@ func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[i
 type EventKind int
 
 const (
-	EventKindBegin EventKind = iota
-	EventKindChange
-	EventKindCancel
-	EventKindEnd
+	EventKindPossible EventKind = iota
+	EventKindChanged
+	EventKindCancelled
+	EventKindRecognized
+
+	// EventKindPossible // discrete events
+	// EventKindRecognized
+	// EventKindFailed
 )
 
 type PressEvent struct {
@@ -269,7 +273,8 @@ func (e *ButtonEvent) UnmarshalProtobuf(pbevent *touch.ButtonEvent) error {
 }
 
 type ButtonRecognizer struct {
-	OnTouch func(e *ButtonEvent)
+	OnTouch       func(e *ButtonEvent)
+	IgnoresScroll bool
 }
 
 func (r *ButtonRecognizer) Equal(a Recognizer) bool {
@@ -305,7 +310,8 @@ func (r *ButtonRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, ma
 	}
 
 	return &touch.ButtonRecognizer{
-			OnEvent: funcId,
+			OnEvent:       funcId,
+			IgnoresScroll: r.IgnoresScroll,
 		}, map[int64]interface{}{
 			funcId: f,
 		}

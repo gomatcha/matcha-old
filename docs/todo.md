@@ -1,4 +1,7 @@
-// Comm.SyncNotifier SyncNotify() chan struct{}
+<!-- type Notifier interface {
+    int64 Notify() func()
+    Unnotify(int64)
+} -->
 // mochi.Id is in the mochi package because view depends on layout. and layout needs to use the Ids
 
 High:
@@ -40,6 +43,7 @@ Low:
 * CameraView
 * MapView
 * Modal presentation
+* More Touch Recognizers: Pan, Swipe, Pinch, EdgePan, Rotation
 
 Bugs:
 * Crash in protobuf if view does not have a layout guide.

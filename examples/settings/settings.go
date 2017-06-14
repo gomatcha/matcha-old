@@ -517,11 +517,11 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		tap := &touch.ButtonRecognizer{
 			OnTouch: func(e *touch.ButtonEvent) {
 				switch e.Kind {
-				case touch.EventKindBegin, touch.EventKindChange:
+				case touch.EventKindPossible:
 					v.highlighted = e.Inside
-				case touch.EventKindCancel:
+				case touch.EventKindCancelled:
 					v.highlighted = false
-				case touch.EventKindEnd:
+				case touch.EventKindRecognized:
 					v.highlighted = false
 					v.OnTap()
 				}

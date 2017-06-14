@@ -1,12 +1,13 @@
 #import "MochiButtonGestureRecognizer.h"
 
-@interface MochiButtonGestureRecognizer ()
+@interface MochiButtonGestureRecognizer () <UIGestureRecognizerDelegate>
 @property (nonatomic, assign) int64_t funcId;
 @property (nonatomic, assign) int64_t viewId;
 @property (nonatomic, weak) MochiViewController *viewController;
 @property (nonatomic, strong) NSDate *startTime;
 @property (nonatomic, assign) BOOL disabled;
 @property (nonatomic, assign) BOOL inside;
+@property (nonatomic, assign) BOOL ignoresScroll;
 @end
 
 
@@ -19,11 +20,13 @@
         return nil;
     }
     if ((self = [super initWithTarget:self action:@selector(action:)])) {
+        self.delegate = self;
         self.viewController = viewController;
         self.funcId = pb.onEvent;
         self.viewId = viewId;
         self.minimumPressDuration = 0;
         self.allowableMovement = 10000;
+        self.ignoresScroll = pb.ignoresScroll;
     }
     return self;
 }
@@ -75,5 +78,21 @@
     
     [self.viewController call:self.funcId viewId:self.viewId args:@[value]];
 }
+
+#pragma mark - UIGestureRecognizerDelegate
+//
+//- (BOOL)canBePreventedByGestureRecognizer:(UIGestureRecognizer *)preventingGestureRecognizer {
+//    NSLog(@"%@",preventingGestureRecognizer);
+//    return [preventingGestureRecognizer.view isKindOfClass:UIScrollView.class];
+//}
+//}
+
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+//    return [otherGestureRecognizer.view isKindOfClass:UIScrollView.class];
+//}
+
+//- (BOOL)gestureRecognizer:(UIPanGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UISwipeGestureRecognizer *)otherGestureRecognizer {
+//    return YES;
+//}
 
 @end

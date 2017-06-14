@@ -51,11 +51,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef GPB_ENUM(MochiPBTouchButtonRecognizer_FieldNumber) {
   MochiPBTouchButtonRecognizer_FieldNumber_OnEvent = 1,
+  MochiPBTouchButtonRecognizer_FieldNumber_IgnoresScroll = 2,
 };
 
 @interface MochiPBTouchButtonRecognizer : GPBMessage
 
 @property(nonatomic, readwrite) int64_t onEvent;
+
+@property(nonatomic, readwrite) BOOL ignoresScroll;
 
 @end
 

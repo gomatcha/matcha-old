@@ -9,6 +9,7 @@ option objc_class_prefix = "MochiPBTouch";
 
 message ButtonRecognizer {
     int64 onEvent = 1;
+    bool ignoresScroll = 2;
 }
 
 message ButtonEvent {
