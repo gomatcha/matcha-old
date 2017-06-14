@@ -402,6 +402,9 @@ UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNod
         self.view.layer.shadowOffset = paintOptions.shadowOffset;
         self.view.layer.shadowColor = paintOptions.shadowColor.CGColor;
         self.view.layer.shadowOpacity = paintOptions.shadowColor == nil ? 0 : 1;
+        if (paintOptions.cornerRadius != 0) {
+            self.view.clipsToBounds = YES; // TODO(KD): Be better about this...
+        }
     }
     
     _node = node;

@@ -3,7 +3,6 @@
 
 High:
 * Text Input / Keyboard
-* Native resources. Ignore asset catalog for now. 
 * Rebuild settings app.
 
 Medium:
@@ -12,6 +11,7 @@ Medium:
 * Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 * Cache layout properties
 * faster transferring of Images/ data blobs
+* Collect native resources into assets.
 
 Low:
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack

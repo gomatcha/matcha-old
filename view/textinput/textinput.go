@@ -6,27 +6,27 @@ import (
 	"github.com/overcyn/mochi/view"
 )
 
-type TextInput struct {
+type View struct {
 	*view.Embed
-	Text    text.Text
+	String  string
 	Style   text.Style
+	Text    text.Text
 	Painter paint.Painter
 }
 
-func New(ctx *view.Context, key interface{}) *TextInput {
-	v, ok := ctx.Prev(key).(*TextInput)
-	if !ok {
-		v = &TextInput{
-			Embed: view.NewEmbed(ctx.NewId(key)),
-		}
+func New(ctx *view.Context, key interface{}) *View {
+	if v, ok := ctx.Prev(key).(*View); !ok {
+		return v
 	}
-	return v
+	return &View{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
 }
 
-func (v *TextInput) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) *view.Model {
 	n := &view.Model{}
 	n.Painter = v.Painter
-	n.NativeViewName = "github.com/overcyn/mochi/view/textinput TextInput"
+	n.NativeViewName = "github.com/overcyn/mochi/view/textinput"
 	// n.BridgeState = struct {
 	// 	Text    *text.Text
 	// 	OnPress func()
