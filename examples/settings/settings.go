@@ -193,7 +193,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 		cell3 := NewBasicCell(ctx, "donotdisturb")
 		cell3.HasIcon = true
-		cell3.Icon = env.MustLoad("Hotspot")
+		cell3.Icon = env.MustLoad("DoNotDisturb")
 		cell3.Title = "Do Not Disturb"
 		cell3.Chevron = true
 		group = append(group, cell3)
