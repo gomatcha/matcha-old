@@ -54,14 +54,14 @@ func (s *Style) Unnotify(chan struct{}) {
 
 type AnimatedStyle struct {
 	Style           Style
-	Transparency    mochi.Float64Notifier
-	BackgroundColor mochi.ColorNotifier
-	BorderColor     mochi.ColorNotifier
-	BorderWidth     mochi.Float64Notifier
-	CornerRadius    mochi.Float64Notifier
-	ShadowRadius    mochi.Float64Notifier
-	// ShadowOffset    mochi.Float64Notifier
-	ShadowColor mochi.ColorNotifier
+	Transparency    comm.Float64Notifier
+	BackgroundColor comm.ColorNotifier
+	BorderColor     comm.ColorNotifier
+	BorderWidth     comm.Float64Notifier
+	CornerRadius    comm.Float64Notifier
+	ShadowRadius    comm.Float64Notifier
+	// ShadowOffset    comm.Float64Notifier
+	ShadowColor comm.ColorNotifier
 
 	batchNotifiers map[chan struct{}]*comm.BatchNotifier
 }

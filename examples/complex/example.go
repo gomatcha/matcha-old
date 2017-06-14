@@ -6,8 +6,8 @@ import (
 
 	"golang.org/x/image/colornames"
 
-	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/animate"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/paint"
@@ -84,8 +84,8 @@ type NestedView struct {
 	*view.Embed
 	counter     int
 	ticker      *animate.Ticker
-	floatTicker mochi.Float64Notifier
-	colorTicker mochi.ColorNotifier
+	floatTicker comm.Float64Notifier
+	colorTicker comm.ColorNotifier
 }
 
 func NewNestedView(ctx *view.Context, key interface{}) *NestedView {

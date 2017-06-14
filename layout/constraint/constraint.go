@@ -116,7 +116,7 @@ func (a constAnchor) value(sys *Layout) float64 {
 }
 
 type notifierAnchor struct {
-	n mochi.Float64Notifier
+	n comm.Float64Notifier
 }
 
 func (a notifierAnchor) value(sys *Layout) float64 {
@@ -170,7 +170,7 @@ func Const(f float64) *Anchor {
 	return &Anchor{constAnchor(f)}
 }
 
-func Notifier(n mochi.Float64Notifier) *Anchor {
+func Notifier(n comm.Float64Notifier) *Anchor {
 	return &Anchor{notifierAnchor{n}}
 }
 

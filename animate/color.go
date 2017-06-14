@@ -3,14 +3,14 @@ package animate
 import (
 	"image/color"
 
-	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/comm"
 )
 
 type ColorInterpolater interface {
 	Interpolate(float64) color.Color
 }
 
-func ColorInterpolate(w mochi.Float64Notifier, l ColorInterpolater) mochi.ColorNotifier {
+func ColorInterpolate(w comm.Float64Notifier, l ColorInterpolater) comm.ColorNotifier {
 	return &colorInterpolater{
 		watcher:      w,
 		interpolater: l,
@@ -18,7 +18,7 @@ func ColorInterpolate(w mochi.Float64Notifier, l ColorInterpolater) mochi.ColorN
 }
 
 type colorInterpolater struct {
-	watcher      mochi.Float64Notifier
+	watcher      comm.Float64Notifier
 	interpolater ColorInterpolater
 }
 

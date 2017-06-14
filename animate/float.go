@@ -1,14 +1,12 @@
 package animate
 
-import (
-	"github.com/overcyn/mochi"
-)
+import "github.com/overcyn/mochi/comm"
 
 type FloatInterpolater interface {
 	Interpolate(float64) float64
 }
 
-func FloatInterpolate(w mochi.Float64Notifier, l FloatInterpolater) mochi.Float64Notifier {
+func FloatInterpolate(w comm.Float64Notifier, l FloatInterpolater) comm.Float64Notifier {
 	return &floatInterpolater{
 		watcher:      w,
 		interpolater: l,
@@ -16,7 +14,7 @@ func FloatInterpolate(w mochi.Float64Notifier, l FloatInterpolater) mochi.Float6
 }
 
 type floatInterpolater struct {
-	watcher      mochi.Float64Notifier
+	watcher      comm.Float64Notifier
 	interpolater FloatInterpolater
 }
 

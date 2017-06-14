@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/animate"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/view"
@@ -23,8 +23,8 @@ func init() {
 type AnimateView struct {
 	*view.Embed
 	ticker      *animate.Ticker
-	floatTicker mochi.Float64Notifier
-	colorTicker mochi.ColorNotifier
+	floatTicker comm.Float64Notifier
+	colorTicker comm.ColorNotifier
 
 	floatTickerFunc chan struct{}
 	constraintFunc  chan struct{}
