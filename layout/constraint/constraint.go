@@ -485,7 +485,7 @@ type Layout struct {
 	max            *Guide
 	solvers        []*Solver
 	zIndex         int
-	notifiers      []mochi.Notifier
+	notifiers      []comm.Notifier
 	batchNotifiers map[chan struct{}]*comm.BatchNotifier
 	views          []view.View
 }
@@ -538,26 +538,27 @@ func (sys *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layou
 // Creates a new batch notifier for the current system state. Notifier anchors that are added after the Notify() call are ignored.
 // This is so we can return nil for the common case, where there are no Notifier anchors.
 func (sys *Layout) Notify() chan struct{} {
-	if len(sys.notifiers) == 0 {
-		return nil
-	}
-	n := &comm.BatchNotifier{}
-	for _, i := range sys.notifiers {
-		n.Subscribe(i)
-	}
+	// if len(sys.notifiers) == 0 {
+	// 	return nil
+	// }
+	// n := &comm.BatchNotifier{}
+	// for _, i := range sys.notifiers {
+	// 	n.Subscribe(i)
+	// }
 
-	c := n.Notify()
-	sys.batchNotifiers[c] = n
-	return c
+	// c := n.Notify()
+	// sys.batchNotifiers[c] = n
+	// return c
+	return nil
 }
 
 func (sys *Layout) Unnotify(c chan struct{}) {
-	n, ok := sys.batchNotifiers[c]
-	if !ok {
-		panic("Cannot unnotify unknown chan")
-	}
-	n.Unnotify(c)
-	delete(sys.batchNotifiers, c)
+	// n, ok := sys.batchNotifiers[c]
+	// if !ok {
+	// 	panic("Cannot unnotify unknown chan")
+	// }
+	// n.Unnotify(c)
+	// delete(sys.batchNotifiers, c)
 }
 
 type _range struct {

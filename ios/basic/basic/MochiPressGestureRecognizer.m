@@ -60,14 +60,14 @@
     event.position = [[MochiPBPoint alloc] initWithCGPoint:point];
     event.timestamp = [[GPBTimestamp alloc] initWithDate:[NSDate date]];
     if (self.state == UIGestureRecognizerStateBegan) {
-        event.kind = MochiPBEventKind_EventKindBegan;
+        event.kind = MochiPBEventKind_EventKindChanged;
         self.startTime = [NSDate date];
     } else if (self.state == UIGestureRecognizerStateChanged) {
         event.kind = MochiPBEventKind_EventKindChanged;
     } else if (self.state == UIGestureRecognizerStateEnded) {
-        event.kind = MochiPBEventKind_EventKindEnded;
+        event.kind = MochiPBEventKind_EventKindRecognized;
     } else if (self.state == UIGestureRecognizerStateCancelled) {
-        event.kind = MochiPBEventKind_EventKindCancelled;
+        event.kind = MochiPBEventKind_EventKindFailed;
     } else {
         return;
     }

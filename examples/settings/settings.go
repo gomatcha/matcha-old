@@ -519,7 +519,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 				switch e.Kind {
 				case touch.EventKindPossible:
 					v.highlighted = e.Inside
-				case touch.EventKindCancelled:
+				case touch.EventKindFailed:
 					v.highlighted = false
 				case touch.EventKindRecognized:
 					v.highlighted = false

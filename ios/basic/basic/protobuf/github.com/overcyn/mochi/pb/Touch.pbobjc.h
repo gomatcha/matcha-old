@@ -44,10 +44,10 @@ typedef GPB_ENUM(MochiPBEventKind) {
    * of the field.
    **/
   MochiPBEventKind_GPBUnrecognizedEnumeratorValue = kGPBUnrecognizedEnumeratorValue,
-  MochiPBEventKind_EventKindBegan = 0,
+  MochiPBEventKind_EventKindPossible = 0,
   MochiPBEventKind_EventKindChanged = 1,
-  MochiPBEventKind_EventKindCancelled = 2,
-  MochiPBEventKind_EventKindEnded = 3,
+  MochiPBEventKind_EventKindFailed = 2,
+  MochiPBEventKind_EventKindRecognized = 3,
 };
 
 GPBEnumDescriptor *MochiPBEventKind_EnumDescriptor(void);

@@ -93,10 +93,11 @@ func NewNestedView(ctx *view.Context, key interface{}) *NestedView {
 		return v
 	}
 	ticker := animate.NewTicker(time.Second * 5)
+	floatTicker := animate.FloatInterpolate(ticker, animate.FloatLerp{Start: 0, End: 150})
 	return &NestedView{
 		Embed:       view.NewEmbed(ctx.NewId(key)),
 		ticker:      ticker,
-		floatTicker: animate.FloatInterpolate(ticker, animate.FloatLerp{Start: 0, End: 150}),
+		floatTicker: floatTicker,
 		colorTicker: animate.ColorInterpolate(ticker, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow}),
 	}
 }

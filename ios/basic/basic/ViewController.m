@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "MochiButtonGestureRecognizer2.h"
+#import "MochiButtonGestureRecognizer.h"
 
 @interface ViewController ()
 
@@ -24,7 +24,7 @@
         subview.autoresizingMask = UIViewAutoresizingNone;
         [self.view addSubview:subview];
         
-        MochiButtonGestureRecognizer2 *recognizer = [[MochiButtonGestureRecognizer2 alloc] initWithTarget:self action:@selector(action:)];
+        MochiButtonGestureRecognizer *recognizer = [[MochiButtonGestureRecognizer alloc] initWithTarget:self action:@selector(action:)];
         [subview addGestureRecognizer:recognizer];
     }
     return self;
@@ -40,7 +40,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)action:(MochiButtonGestureRecognizer2 *)recognizer {
+- (void)action:(MochiButtonGestureRecognizer *)recognizer {
     NSLog(@"action,%@,%@",recognizer,@(recognizer.state));
 }
 

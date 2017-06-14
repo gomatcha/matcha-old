@@ -344,10 +344,10 @@ type node struct {
 	layoutDone  chan struct{}
 	layoutGuide *layout.Guide
 
-	paintId      int64
-	paintChan    chan struct{}
-	paintDone    chan struct{}
-	paintOptions paint.Style
+	paintId       int64
+	paintNotify   bool
+	paintNotifyId int64
+	paintOptions  paint.Style
 }
 
 func (n *node) MarshalProtobuf() *pb.Node {
@@ -510,31 +510,15 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 		}
 
 		// Watch for paint changes.
-		if n.paintChan != nil {
-			n.model.Painter.Unnotify(n.paintChan)
-			close(n.paintDone)
-			n.paintChan = nil
-			n.paintDone = nil
+		if n.paintNotify {
+			n.model.Painter.Unnotify(n.paintNotifyId)
+			n.paintNotify = false
 		}
 		if viewModel.Painter != nil {
-			paintChan := viewModel.Painter.Notify()
-			if paintChan != nil {
-				paintDone := make(chan struct{})
-				go func() {
-				loop:
-					for {
-						select {
-						case <-paintChan:
-							n.root.addFlag(n.id, paintFlag)
-							paintChan <- struct{}{}
-						case <-paintDone:
-							break loop
-						}
-					}
-				}()
-				n.paintChan = paintChan
-				n.paintDone = paintDone
-			}
+			n.paintNotifyId = viewModel.Painter.Notify(func() {
+				n.root.addFlag(n.id, paintFlag)
+			})
+			n.paintNotify = true
 		}
 
 		n.children = children
@@ -611,9 +595,8 @@ func (n *node) done() {
 		n.model.Layouter.Unnotify(n.layoutChan)
 		close(n.layoutDone)
 	}
-	if n.paintChan != nil {
-		n.model.Painter.Unnotify(n.paintChan)
-		close(n.paintDone)
+	if n.paintNotify {
+		n.model.Painter.Unnotify(n.paintId)
 	}
 
 	for _, i := range n.children {

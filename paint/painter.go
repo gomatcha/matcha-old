@@ -3,7 +3,6 @@ package paint
 import (
 	"image/color"
 
-	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/pb"
@@ -11,7 +10,7 @@ import (
 
 type Painter interface {
 	PaintStyle() Style
-	mochi.Notifier
+	comm.Notifier
 }
 
 type Style struct {
@@ -44,12 +43,17 @@ func (s *Style) PaintStyle() Style {
 	return *s
 }
 
-func (s *Style) Notify() chan struct{} {
-	return nil // no-op
+func (s *Style) Notify(func()) int64 {
+	return 0 // no-op
 }
 
-func (s *Style) Unnotify(chan struct{}) {
+func (s *Style) Unnotify(id int64) {
 	// no-op
+}
+
+type notifier struct {
+	notifier *comm.BatchNotifier2
+	id       int64
 }
 
 type AnimatedStyle struct {
@@ -63,7 +67,8 @@ type AnimatedStyle struct {
 	// ShadowOffset    comm.Float64Notifier
 	ShadowColor comm.ColorNotifier
 
-	batchNotifiers map[chan struct{}]*comm.BatchNotifier
+	maxId          int64
+	batchNotifiers map[int64]notifier
 }
 
 func (as *AnimatedStyle) PaintStyle() Style {
@@ -96,8 +101,8 @@ func (as *AnimatedStyle) PaintStyle() Style {
 	return s
 }
 
-func (as *AnimatedStyle) Notify() chan struct{} {
-	n := &comm.BatchNotifier{}
+func (as *AnimatedStyle) Notify(f func()) int64 {
+	n := &comm.BatchNotifier2{}
 
 	if as.Transparency != nil {
 		n.Subscribe(as.Transparency)
@@ -124,21 +129,21 @@ func (as *AnimatedStyle) Notify() chan struct{} {
 		n.Subscribe(as.ShadowColor)
 	}
 
-	c := n.Notify()
+	as.maxId += 1
 	if as.batchNotifiers == nil {
-		as.batchNotifiers = map[chan struct{}]*comm.BatchNotifier{}
+		as.batchNotifiers = map[int64]notifier{}
 	}
-	as.batchNotifiers[c] = n
-	return c
+	as.batchNotifiers[as.maxId] = notifier{
+		notifier: n,
+		id:       n.Notify(func() { f() }),
+	}
+	return as.maxId
 }
 
-func (as *AnimatedStyle) Unnotify(c chan struct{}) {
-	if c == nil {
-		return
-	}
-	n := as.batchNotifiers[c]
-	if n != nil {
-		n.Unnotify(c)
-		delete(as.batchNotifiers, c)
+func (as *AnimatedStyle) Unnotify(id int64) {
+	n, ok := as.batchNotifiers[id]
+	if ok {
+		n.notifier.Unnotify(n.id)
+		delete(as.batchNotifiers, id)
 	}
 }

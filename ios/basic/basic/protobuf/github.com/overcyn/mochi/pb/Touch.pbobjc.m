@@ -60,13 +60,13 @@ GPBEnumDescriptor *MochiPBEventKind_EnumDescriptor(void) {
   static GPBEnumDescriptor *descriptor = NULL;
   if (!descriptor) {
     static const char *valueNames =
-        "EventKindBegan\000EventKindChanged\000EventKin"
-        "dCancelled\000EventKindEnded\000";
+        "EventKindPossible\000EventKindChanged\000Event"
+        "KindFailed\000EventKindRecognized\000";
     static const int32_t values[] = {
-        MochiPBEventKind_EventKindBegan,
+        MochiPBEventKind_EventKindPossible,
         MochiPBEventKind_EventKindChanged,
-        MochiPBEventKind_EventKindCancelled,
-        MochiPBEventKind_EventKindEnded,
+        MochiPBEventKind_EventKindFailed,
+        MochiPBEventKind_EventKindRecognized,
     };
     GPBEnumDescriptor *worker =
         [GPBEnumDescriptor allocDescriptorForName:GPBNSStringifySymbol(MochiPBEventKind)
@@ -83,10 +83,10 @@ GPBEnumDescriptor *MochiPBEventKind_EnumDescriptor(void) {
 
 BOOL MochiPBEventKind_IsValidValue(int32_t value__) {
   switch (value__) {
-    case MochiPBEventKind_EventKindBegan:
+    case MochiPBEventKind_EventKindPossible:
     case MochiPBEventKind_EventKindChanged:
-    case MochiPBEventKind_EventKindCancelled:
-    case MochiPBEventKind_EventKindEnded:
+    case MochiPBEventKind_EventKindFailed:
+    case MochiPBEventKind_EventKindRecognized:
       return YES;
     default:
       return NO;

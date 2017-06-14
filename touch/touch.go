@@ -180,7 +180,7 @@ type EventKind int
 const (
 	EventKindPossible EventKind = iota
 	EventKindChanged
-	EventKindCancelled
+	EventKindFailed
 	EventKindRecognized
 
 	// EventKindPossible // discrete events

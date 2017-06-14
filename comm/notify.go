@@ -2,56 +2,59 @@ package comm
 
 import (
 	"image/color"
-
-	"github.com/overcyn/mochi"
 )
 
+type Notifier interface {
+	Notify(func()) int64
+	Unnotify(int64)
+}
+
 type ColorNotifier interface {
-	mochi.Notifier
+	Notifier
 	Value() color.Color
 }
 
 type InterfaceNotifier interface {
-	mochi.Notifier
+	Notifier
 	Value() interface{}
 }
 
 type BoolNotifier interface {
-	mochi.Notifier
+	Notifier
 	Value() bool
 }
 
 type IntNotifier interface {
-	mochi.Notifier
+	Notifier
 	Value() int
 }
 
 type UintNotifier interface {
-	mochi.Notifier
+	Notifier
 	Value() uint
 }
 
 type Int64Notifier interface {
-	mochi.Notifier
+	Notifier
 	Value() int64
 }
 
 type Uint64Notifier interface {
-	mochi.Notifier
+	Notifier
 	Value() uint64
 }
 
 type Float64Notifier interface {
-	mochi.Notifier
+	Notifier
 	Value() float64
 }
 
 type StringNotifier interface {
-	mochi.Notifier
+	Notifier
 	Value() string
 }
 
 type BytesNotifier interface {
-	mochi.Notifier
+	Notifier
 	Value() []byte
 }

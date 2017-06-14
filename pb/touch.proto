@@ -29,10 +29,10 @@ message TapEvent {
 
 
 enum EventKind {
-    EVENT_KIND_BEGAN = 0;
+    EVENT_KIND_POSSIBLE = 0;
     EVENT_KIND_CHANGED = 1;
-    EVENT_KIND_CANCELLED = 2;
-    EVENT_KIND_ENDED = 3;
+    EVENT_KIND_FAILED = 2;
+    EVENT_KIND_RECOGNIZED = 3;
 }
 
 message PressRecognizer {

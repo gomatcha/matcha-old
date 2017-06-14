@@ -62,11 +62,11 @@
     event.timestamp = [[GPBTimestamp alloc] initWithDate:[NSDate date]];
     event.inside = self.inside;
     if (self.state == UIGestureRecognizerStatePossible && self.inside != prevInside) { // Only update if inside has changed
-        event.kind = MochiPBEventKind_EventKindBegan;
+        event.kind = MochiPBEventKind_EventKindPossible;
     } else if (self.state == UIGestureRecognizerStateRecognized) {
-        event.kind = MochiPBEventKind_EventKindCancelled;
+        event.kind = MochiPBEventKind_EventKindRecognized;
     } else if (self.state == UIGestureRecognizerStateFailed) {
-        event.kind = MochiPBEventKind_EventKindEnded;
+        event.kind = MochiPBEventKind_EventKindFailed;
     } else {
         return;
     }

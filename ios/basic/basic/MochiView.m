@@ -6,7 +6,7 @@
 #import "MochiViewController.h"
 #import "MochiStackViewController.h"
 #import "MochiSwitchView.h"
-#import "MochiButtonGestureRecognizer2.h"
+#import "MochiButtonGestureRecognizer.h"
 
 @interface MochiBasicView ()
 @property (nonatomic, weak) MochiViewNode *viewNode;
@@ -188,7 +188,7 @@ UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, M
     } else if ([any.typeURL isEqual:@"type.googleapis.com/mochi.touch.PressRecognizer"]) {
         return [[MochiPressGestureRecognizer alloc] initWithMochiVC:viewNode.rootVC viewId:viewId protobuf:any];
     } else if ([any.typeURL isEqual:@"type.googleapis.com/touch.ButtonRecognizer"]) {
-        return [[MochiButtonGestureRecognizer2 alloc] initWithMochiVC:viewNode.rootVC viewId:viewId protobuf:any];
+        return [[MochiButtonGestureRecognizer alloc] initWithMochiVC:viewNode.rootVC viewId:viewId protobuf:any];
     }
     return nil;
 }

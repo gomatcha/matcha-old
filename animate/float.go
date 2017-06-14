@@ -18,12 +18,12 @@ type floatInterpolater struct {
 	interpolater FloatInterpolater
 }
 
-func (w *floatInterpolater) Notify() chan struct{} {
-	return w.watcher.Notify()
+func (w *floatInterpolater) Notify(f func()) int64 {
+	return w.watcher.Notify(f)
 }
 
-func (w *floatInterpolater) Unnotify(c chan struct{}) {
-	w.watcher.Unnotify(c)
+func (w *floatInterpolater) Unnotify(id int64) {
+	w.watcher.Unnotify(id)
 }
 
 func (w *floatInterpolater) Value() float64 {

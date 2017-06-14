@@ -16,12 +16,12 @@ func NewTicker(duration time.Duration) *Ticker {
 	}
 }
 
-func (t *Ticker) Notify() chan struct{} {
-	return t.ticker.Notify()
+func (t *Ticker) Notify(f func()) int64 {
+	return int64(t.ticker.NotifyFunc(f))
 }
 
-func (t *Ticker) Unnotify(c chan struct{}) {
-	t.ticker.Unnotify(c)
+func (t *Ticker) Unnotify(id int64) {
+	t.ticker.UnnotifyFunc(int(id))
 }
 
 func (t *Ticker) Value() float64 {

@@ -22,12 +22,12 @@ type colorInterpolater struct {
 	interpolater ColorInterpolater
 }
 
-func (w *colorInterpolater) Notify() chan struct{} {
-	return w.watcher.Notify()
+func (w *colorInterpolater) Notify(f func()) int64 {
+	return w.watcher.Notify(f)
 }
 
-func (w *colorInterpolater) Unnotify(c chan struct{}) {
-	w.watcher.Unnotify(c)
+func (w *colorInterpolater) Unnotify(id int64) {
+	w.watcher.Unnotify(id)
 }
 
 func (w *colorInterpolater) Value() color.Color {

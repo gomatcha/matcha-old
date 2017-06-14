@@ -83,7 +83,7 @@ func (m *ButtonEvent) GetKind() mochi_touch.EventKind {
 	if m != nil {
 		return m.Kind
 	}
-	return mochi_touch.EventKind_EVENT_KIND_BEGAN
+	return mochi_touch.EventKind_EVENT_KIND_POSSIBLE
 }
 
 func init() {
