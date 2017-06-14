@@ -11,6 +11,7 @@
 #import "Stacknavigator.pbobjc.h"
 #import "Switchview.pbobjc.h"
 #import "Touch2.pbobjc.h"
+#import "Resource.pbobjc.h"
 
 @import Mochi;
 

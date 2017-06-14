@@ -76,7 +76,13 @@
     NSError *error = nil;
     MochiPBImageView *pbimageview = (id)[state unpackMessageClass:[MochiPBImageView class] error:&error];
     
-    self.image = [[UIImage alloc] initWithProtobuf:pbimageview.image];
+    UIImage *image = nil;
+    if (pbimageview.hasImage) {
+        image = [[UIImage alloc] initWithProtobuf:pbimageview.image];
+    } else if (pbimageview.hasResource) {
+        image = [UIImage imageNamed:pbimageview.resource.path];
+    }
+    
     switch (pbimageview.resizeMode) {
     case MochiPBResizeMode_Fit:
         self.contentMode = UIViewContentModeScaleAspectFit;
@@ -91,11 +97,13 @@
         self.contentMode = UIViewContentModeCenter;
         break;
     }
-    UIColor *tintColor = [[UIColor alloc] initWithProtobuf:pbimageview.tint];
-    if (tintColor) {
-        self.tintColor = tintColor;
-        self.image = [self.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        
+    if (pbimageview.hasTint) {
+        self.tintColor = [[UIColor alloc] initWithProtobuf:pbimageview.tint];
+        image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
+    
+    if (![self.image isEqual:image]) {
+        self.image = image;
     }
 }
 

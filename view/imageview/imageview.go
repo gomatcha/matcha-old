@@ -68,7 +68,6 @@ type View struct {
 	Tint       color.Color
 	image      image.Image
 	pbImage    *pb.Image
-	bytes      []byte
 }
 
 func New(ctx *view.Context, key interface{}) *View {

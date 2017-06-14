@@ -6,6 +6,7 @@ package pb
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/mochi/pb/view/stacknav/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/mochi/pb/view/switchview/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/mochi/pb/touch/*.proto )"
+//go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/mochi/pb/env/*.proto )"
 
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/mochi/ios/basic/basic/protobuf github.com/overcyn/mochi/pb/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/mochi/ios/basic/basic/protobuf github.com/overcyn/mochi/pb/button/*.proto )"
@@ -13,3 +14,4 @@ package pb
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/mochi/ios/basic/basic/protobuf github.com/overcyn/mochi/pb/view/stacknav/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/mochi/ios/basic/basic/protobuf github.com/overcyn/mochi/pb/view/switchview/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/mochi/ios/basic/basic/protobuf github.com/overcyn/mochi/pb/touch/*.proto )"
+//go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/mochi/ios/basic/basic/protobuf github.com/overcyn/mochi/pb/env/*.proto )"

@@ -56,4 +56,11 @@
      return [[NSBundle mainBundle] resourcePath];
 }
 
+- (MochiGoValue *)sizeForResource:(NSString *)path {
+    UIImage *image = [UIImage imageNamed:path];
+    
+    MochiPBPoint *point = [[MochiPBPoint alloc] initWithCGSize:CGSizeMake(ceil(image.size.width / image.scale), ceil(image.size.height / image.scale))];
+    return [[MochiGoValue alloc] initWithData:point.data];
+}
+
 @end

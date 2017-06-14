@@ -151,7 +151,7 @@ type StackBar struct {
 	Title            string
 	BackButtonTitle  string
 	BackButtonHidden bool
-	TitleView        view.View
+	TitleView        view.View // TODO(KD):
 	RightViews       []view.View
 	LeftViews        []view.View
 	BarHidden        bool

@@ -38,12 +38,12 @@
 		6778312B1EE34715009D9D7F /* Tabnav.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778312A1EE34715009D9D7F /* Tabnav.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6778312E1EE8CE77009D9D7F /* MochiSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778312D1EE8CE76009D9D7F /* MochiSwitchView.m */; };
 		677831361EE8D37A009D9D7F /* Switchview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831351EE8D37A009D9D7F /* Switchview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		677831391EE8E617009D9D7F /* flag-of-fukuoka.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 677831381EE8E617009D9D7F /* flag-of-fukuoka.jpg */; };
 		6778313D1EE90E3A009D9D7F /* TableArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6778313A1EE90E3A009D9D7F /* TableArrow@2x.png */; };
 		6778313E1EE90E3A009D9D7F /* TableArrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6778313B1EE90E3A009D9D7F /* TableArrow@3x.png */; };
 		6778313F1EE90E3A009D9D7F /* TableArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 6778313C1EE90E3A009D9D7F /* TableArrow.png */; };
 		677831421EEABBC6009D9D7F /* MochiButtonGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831411EEABBC6009D9D7F /* MochiButtonGestureRecognizer.m */; };
 		677831461EEABBD8009D9D7F /* Touch2.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831451EEABBD8009D9D7F /* Touch2.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6778314A1EF0B785009D9D7F /* Resource.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831491EF0B785009D9D7F /* Resource.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67D89E211ED4AE1E0063A1E2 /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */; };
 /* End PBXBuildFile section */
 
@@ -120,7 +120,6 @@
 		6778312D1EE8CE76009D9D7F /* MochiSwitchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiSwitchView.m; sourceTree = "<group>"; };
 		677831341EE8D37A009D9D7F /* Switchview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Switchview.pbobjc.h; sourceTree = "<group>"; };
 		677831351EE8D37A009D9D7F /* Switchview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Switchview.pbobjc.m; sourceTree = "<group>"; };
-		677831381EE8E617009D9D7F /* flag-of-fukuoka.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "flag-of-fukuoka.jpg"; path = "../../../../../../../../../Desktop/flag-of-fukuoka.jpg"; sourceTree = "<group>"; };
 		6778313A1EE90E3A009D9D7F /* TableArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TableArrow@2x.png"; sourceTree = "<group>"; };
 		6778313B1EE90E3A009D9D7F /* TableArrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TableArrow@3x.png"; sourceTree = "<group>"; };
 		6778313C1EE90E3A009D9D7F /* TableArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TableArrow.png; sourceTree = "<group>"; };
@@ -128,6 +127,8 @@
 		677831411EEABBC6009D9D7F /* MochiButtonGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiButtonGestureRecognizer.m; sourceTree = "<group>"; };
 		677831441EEABBD8009D9D7F /* Touch2.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Touch2.pbobjc.h; sourceTree = "<group>"; };
 		677831451EEABBD8009D9D7F /* Touch2.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Touch2.pbobjc.m; sourceTree = "<group>"; };
+		677831481EF0B785009D9D7F /* Resource.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Resource.pbobjc.h; sourceTree = "<group>"; };
+		677831491EF0B785009D9D7F /* Resource.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Resource.pbobjc.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,7 +183,6 @@
 				676EF4CF1E8E341900C1488A /* AppDelegate.m */,
 				676EF4E21E8E34E300C1488A /* ViewController.h */,
 				676EF4E31E8E34E300C1488A /* ViewController.m */,
-				677831381EE8E617009D9D7F /* flag-of-fukuoka.jpg */,
 				6778313C1EE90E3A009D9D7F /* TableArrow.png */,
 				6778313A1EE90E3A009D9D7F /* TableArrow@2x.png */,
 				6778313B1EE90E3A009D9D7F /* TableArrow@3x.png */,
@@ -275,6 +275,7 @@
 		677830FE1EE299A4009D9D7F /* pb */ = {
 			isa = PBXGroup;
 			children = (
+				677831471EF0B785009D9D7F /* env */,
 				677831431EEABBD8009D9D7F /* touch */,
 				677830FF1EE299A4009D9D7F /* button */,
 				677831021EE299A4009D9D7F /* Imageview.pbobjc.h */,
@@ -351,6 +352,15 @@
 			path = touch;
 			sourceTree = "<group>";
 		};
+		677831471EF0B785009D9D7F /* env */ = {
+			isa = PBXGroup;
+			children = (
+				677831481EF0B785009D9D7F /* Resource.pbobjc.h */,
+				677831491EF0B785009D9D7F /* Resource.pbobjc.m */,
+			);
+			path = env;
+			sourceTree = "<group>";
+		};
 		67D89DCD1ED4A2C30063A1E2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -425,7 +435,6 @@
 				6778313F1EE90E3A009D9D7F /* TableArrow.png in Resources */,
 				6778313D1EE90E3A009D9D7F /* TableArrow@2x.png in Resources */,
 				676EF4D81E8E341900C1488A /* Assets.xcassets in Resources */,
-				677831391EE8E617009D9D7F /* flag-of-fukuoka.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,6 +455,7 @@
 				677831141EE299A4009D9D7F /* Button.pbobjc.m in Sources */,
 				674080DD1ED8D4800093D987 /* MochiTapGestureRecognizer.m in Sources */,
 				676EF4E41E8E34E300C1488A /* ViewController.m in Sources */,
+				6778314A1EF0B785009D9D7F /* Resource.pbobjc.m in Sources */,
 				67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */,
 				677831231EE2B2C8009D9D7F /* MochiStackViewController.m in Sources */,
 				677831191EE299A4009D9D7F /* Text.pbobjc.m in Sources */,

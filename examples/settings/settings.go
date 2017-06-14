@@ -1,9 +1,7 @@
 package settings
 
 import (
-	"image"
 	"image/color"
-	"path/filepath"
 	"strings"
 
 	"github.com/overcyn/mochi/comm"
@@ -16,11 +14,11 @@ import (
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochi/view/basicview"
 	"github.com/overcyn/mochi/view/imageview"
+	"github.com/overcyn/mochi/view/resimageview"
 	"github.com/overcyn/mochi/view/scrollview"
 	"github.com/overcyn/mochi/view/stackscreen"
 	"github.com/overcyn/mochi/view/switchview"
 	"github.com/overcyn/mochi/view/textview"
-	"github.com/overcyn/mochi/view/urlimageview"
 	"github.com/overcyn/mochibridge"
 	"golang.org/x/image/colornames"
 )
@@ -100,6 +98,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		group := []view.View{}
 		cell1 := NewBasicCell(ctx, 0)
 		cell1.Title = "Airplane Mode"
+		cell1.Icon = env.MustLoad("Airplane")
 		cell1.AccessoryView = switchView
 		cell1.HasIcon = true
 		group = append(group, cell1)
@@ -112,6 +111,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 			cell2.Subtitle = ""
 		}
 		cell2.HasIcon = true
+		cell2.Icon = env.MustLoad("Wifi")
 		cell2.Chevron = true
 		cell2.OnTap = func() {
 			v.app.Lock()
@@ -124,6 +124,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 		cell3 := NewBasicCell(ctx, "bluetooth")
 		cell3.HasIcon = true
+		cell3.Icon = env.MustLoad("Bluetooth")
 		cell3.Title = "Bluetooth"
 		cell3.Subtitle = "On"
 		cell3.Chevron = true
@@ -138,6 +139,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 		cell4 := NewBasicCell(ctx, "cellular")
 		cell4.HasIcon = true
+		cell4.Icon = env.MustLoad("Cellular")
 		cell4.Title = "Cellular"
 		cell4.Chevron = true
 		cell4.OnTap = func() {
@@ -151,6 +153,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 		cell5 := NewBasicCell(ctx, "hotspot")
 		cell5.HasIcon = true
+		cell5.Icon = env.MustLoad("Hotspot")
 		cell5.Title = "Personal Hotspot"
 		cell5.Subtitle = "Off"
 		cell5.Chevron = true
@@ -158,6 +161,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 		cell6 := NewBasicCell(ctx, "carrier")
 		cell6.HasIcon = true
+		cell6.Icon = env.MustLoad("Carrier")
 		cell6.Title = "Carrier"
 		cell6.Subtitle = "T-Mobile"
 		cell6.Chevron = true
@@ -175,18 +179,21 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		group := []view.View{}
 		cell1 := NewBasicCell(ctx, "notifications")
 		cell1.HasIcon = true
+		cell1.Icon = env.MustLoad("Notifications")
 		cell1.Title = "Notifications"
 		cell1.Chevron = true
 		group = append(group, cell1)
 
 		cell2 := NewBasicCell(ctx, "controlcenter")
 		cell2.HasIcon = true
+		cell2.Icon = env.MustLoad("ControlCenter")
 		cell2.Title = "Control Center"
 		cell2.Chevron = true
 		group = append(group, cell2)
 
 		cell3 := NewBasicCell(ctx, "donotdisturb")
 		cell3.HasIcon = true
+		cell3.Icon = env.MustLoad("Hotspot")
 		cell3.Title = "Do Not Disturb"
 		cell3.Chevron = true
 		group = append(group, cell3)
@@ -408,7 +415,7 @@ func (v *SpacerDescription) Build(ctx *view.Context) *view.Model {
 type BasicCell struct {
 	*view.Embed
 	HasIcon       bool
-	Icon          image.Image
+	Icon          *env.Resource
 	Title         string
 	Subtitle      string
 	AccessoryView view.View
@@ -433,8 +440,8 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 
 	leftAnchor := l.Left()
 	if v.HasIcon {
-		iconView := imageview.New(ctx, "icon")
-		iconView.Image = v.Icon
+		iconView := resimageview.New(ctx, "icon")
+		iconView.Resource = v.Icon
 		iconView.ResizeMode = imageview.ResizeModeFill
 		iconView.Painter = &paint.Style{
 			BackgroundColor: colornames.Lightgray,
@@ -452,21 +459,19 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 
 	rightAnchor := l.Right()
 	if v.Chevron {
-		if path, err := env.AssetsDir(); err == nil {
-			chevronView := urlimageview.New(ctx, "chevron")
-			chevronView.Path = filepath.Join(path, "TableArrow@2x.png")
-			chevronView.ResizeMode = imageview.ResizeModeCenter
-			chevronView.Tint = chevronColor
+		chevronView := resimageview.New(ctx, "chevron")
+		chevronView.Resource = env.MustLoad("TableArrow")
+		chevronView.ResizeMode = imageview.ResizeModeCenter
+		chevronView.Tint = chevronColor
 
-			chevronGuide := l.Add(chevronView, func(s *constraint.Solver) {
-				s.RightEqual(rightAnchor.Add(-15))
-				s.LeftGreater(leftAnchor)
-				s.CenterYEqual(l.CenterY())
-				s.TopGreater(l.Top())
-				s.BottomLess(l.Bottom())
-			})
-			rightAnchor = chevronGuide.Left()
-		}
+		chevronGuide := l.Add(chevronView, func(s *constraint.Solver) {
+			s.RightEqual(rightAnchor.Add(-15))
+			s.LeftGreater(leftAnchor)
+			s.CenterYEqual(l.CenterY())
+			s.TopGreater(l.Top())
+			s.BottomLess(l.Bottom())
+		})
+		rightAnchor = chevronGuide.Left()
 	}
 
 	if v.AccessoryView != nil {

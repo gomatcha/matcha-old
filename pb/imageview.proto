@@ -1,6 +1,7 @@
 syntax = "proto3";
 package imageview;
 import "github.com/overcyn/mochi/pb/text.proto";
+import "github.com/overcyn/mochi/pb/env/resource.proto";
 
 option go_package = "pb";
 option objc_class_prefix = "MochiPB";
@@ -21,6 +22,7 @@ enum ResizeMode {
 
 message ImageView {
     Image image = 1;
+    env.Resource resource = 4;
     ResizeMode resizeMode = 2;
     text.Color tint = 3;
 }

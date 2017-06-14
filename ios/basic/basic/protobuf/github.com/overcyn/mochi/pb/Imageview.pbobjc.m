@@ -15,6 +15,7 @@
 
  #import "github.com/overcyn/mochi/pb/Imageview.pbobjc.h"
  #import "github.com/overcyn/mochi/pb/Text.pbobjc.h"
+ #import "github.com/overcyn/mochi/pb/env/Resource.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -163,6 +164,7 @@ typedef struct MochiPBImage__storage_ {
 @implementation MochiPBImageView
 
 @dynamic hasImage, image;
+@dynamic hasResource, resource;
 @dynamic resizeMode;
 @dynamic hasTint, tint;
 
@@ -171,6 +173,7 @@ typedef struct MochiPBImageView__storage_ {
   MochiPBResizeMode resizeMode;
   MochiPBImage *image;
   MochiPBColor *tint;
+  MochiPBEnvResource *resource;
 } MochiPBImageView__storage_;
 
 // This method is threadsafe because it is initially called
@@ -192,7 +195,7 @@ typedef struct MochiPBImageView__storage_ {
         .name = "resizeMode",
         .dataTypeSpecific.enumDescFunc = MochiPBResizeMode_EnumDescriptor,
         .number = MochiPBImageView_FieldNumber_ResizeMode,
-        .hasIndex = 1,
+        .hasIndex = 2,
         .offset = (uint32_t)offsetof(MochiPBImageView__storage_, resizeMode),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldHasEnumDescriptor),
         .dataType = GPBDataTypeEnum,
@@ -201,8 +204,17 @@ typedef struct MochiPBImageView__storage_ {
         .name = "tint",
         .dataTypeSpecific.className = GPBStringifySymbol(MochiPBColor),
         .number = MochiPBImageView_FieldNumber_Tint,
-        .hasIndex = 2,
+        .hasIndex = 3,
         .offset = (uint32_t)offsetof(MochiPBImageView__storage_, tint),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "resource",
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBEnvResource),
+        .number = MochiPBImageView_FieldNumber_Resource,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MochiPBImageView__storage_, resource),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
       },

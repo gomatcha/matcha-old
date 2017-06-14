@@ -28,6 +28,7 @@
 CF_EXTERN_C_BEGIN
 
 @class MochiPBColor;
+@class MochiPBEnvResource;
 @class MochiPBImage;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -97,6 +98,7 @@ typedef GPB_ENUM(MochiPBImageView_FieldNumber) {
   MochiPBImageView_FieldNumber_Image = 1,
   MochiPBImageView_FieldNumber_ResizeMode = 2,
   MochiPBImageView_FieldNumber_Tint = 3,
+  MochiPBImageView_FieldNumber_Resource = 4,
 };
 
 @interface MochiPBImageView : GPBMessage
@@ -104,6 +106,10 @@ typedef GPB_ENUM(MochiPBImageView_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) MochiPBImage *image;
 /** Test to see if @c image has been set. */
 @property(nonatomic, readwrite) BOOL hasImage;
+
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBEnvResource *resource;
+/** Test to see if @c resource has been set. */
+@property(nonatomic, readwrite) BOOL hasResource;
 
 @property(nonatomic, readwrite) MochiPBResizeMode resizeMode;
 
