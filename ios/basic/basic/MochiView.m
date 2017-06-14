@@ -6,7 +6,6 @@
 #import "MochiViewController.h"
 #import "MochiStackViewController.h"
 #import "MochiSwitchView.h"
-#import "MochiButtonGestureRecognizer.h"
 #import "MochiButtonGestureRecognizer2.h"
 
 @interface MochiBasicView ()
