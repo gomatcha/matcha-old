@@ -104,10 +104,8 @@ func NewNestedView(ctx *view.Context, key interface{}) *NestedView {
 func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	chls := []view.View{}
 	chl1 := basicview.New(ctx, 1)
 	chl1.Painter = &paint.AnimatedStyle{BackgroundColor: v.colorTicker}
-	chls = append(chls, chl1)
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
@@ -117,7 +115,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 	chl2 := basicview.New(ctx, 2)
 	chl2.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
-	chls = append(chls, chl2)
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
 		s.LeftEqual(g1.Left())
@@ -127,7 +124,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 	chl3 := basicview.New(ctx, 3)
 	chl3.Painter = &paint.Style{BackgroundColor: colornames.Blue}
-	chls = append(chls, chl3)
 	g3 := l.Add(chl3, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g2.Left())
@@ -137,7 +133,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 	chl4 := basicview.New(ctx, 4)
 	chl4.Painter = &paint.Style{BackgroundColor: colornames.Magenta}
-	chls = append(chls, chl4)
 	g4 := l.Add(chl4, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g3.Right())
@@ -146,7 +141,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl5 := textview.New(nil, nil) // test no context
-	chl5.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 	chl5.String = "Subtitle"
 	chl5.Style.SetAlignment(text.AlignmentCenter)
 	chl5.Style.SetStrikethroughStyle(text.StrikethroughStyleSingle)
@@ -158,21 +152,21 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		Face:   "Bold",
 		Size:   20,
 	})
-	chls = append(chls, chl5)
-	g5 := l.Add(chl5, func(s *constraint.Solver) {
+	chl5p := view.WithPainter(chl5, &paint.Style{BackgroundColor: colornames.Cyan})
+
+	g5 := l.Add(chl5p, func(s *constraint.Solver) {
 		s.BottomEqual(g2.Bottom())
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
 	chl6 := textview.New(ctx, 6)
-	chl6.Painter = &paint.Style{BackgroundColor: colornames.Red}
 	chl6.String = fmt.Sprintf("Counter: %v", v.counter)
 	chl6.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
 		Size:   20,
 	})
-	chls = append(chls, chl6)
-	g6 := l.Add(chl6, func(s *constraint.Solver) {
+	chl6p := view.WithPainter(chl6, &paint.Style{BackgroundColor: colornames.Red})
+	g6 := l.Add(chl6p, func(s *constraint.Solver) {
 		s.BottomEqual(g5.Top())
 		s.RightEqual(g2.Right().Add(-15))
 	})
@@ -184,7 +178,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		v.counter += 1
 		v.Update()
 	}
-	chls = append(chls, chl8)
 	g8 := l.Add(chl8, func(s *constraint.Solver) {
 		s.BottomEqual(g6.Top())
 		s.RightEqual(g2.Right().Add(-15))
@@ -192,11 +185,11 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 	if v.counter%2 == 0 {
 		chl9 := urlimageview.New(ctx, 7)
-		chl9.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 		chl9.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 		chl9.ResizeMode = imageview.ResizeModeFit
-		chls = append(chls, chl9)
-		_ = l.Add(chl9, func(s *constraint.Solver) {
+		pChl9 := view.WithPainter(chl9, &paint.Style{BackgroundColor: colornames.Cyan})
+
+		_ = l.Add(pChl9, func(s *constraint.Solver) {
 			s.BottomEqual(g8.Top())
 			s.RightEqual(g2.Right().Add(-15))
 			s.WidthEqual(constraint.Const(200))
@@ -207,7 +200,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	chl11.OnValueChange = func(a *switchview.View) {
 		fmt.Println("switch tapped", a.Value)
 	}
-	chls = append(chls, chl11)
 	_ = l.Add(chl11, func(s *constraint.Solver) {
 		s.LeftEqual(g6.Right())
 		s.TopEqual(g6.Top())
@@ -229,7 +221,6 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	chl10 := scrollview.New(ctx, 10)
 	chl10.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 	chl10.ContentView = scrollChild
-	chls = append(chls, chl10)
 	_ = l.Add(chl10, func(s *constraint.Solver) {
 		s.TopEqual(g4.Bottom())
 		s.LeftEqual(g4.Left())
@@ -238,7 +229,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Children: chls,
+		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}

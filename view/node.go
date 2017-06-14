@@ -125,6 +125,19 @@ func (ctx *Context) Prev(key interface{}) View {
 	if prevNode == nil {
 		return nil
 	}
+
+	v := prevNode.view
+	for {
+		if pv, ok := v.(*painterView); ok {
+			v = pv.View
+			continue
+		} else if vv, ok := v.(*valuesView); ok {
+			v = vv.View
+			continue
+		}
+		break
+	}
+
 	return prevNode.view
 }
 

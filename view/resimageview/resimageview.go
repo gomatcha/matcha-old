@@ -7,7 +7,6 @@ import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/env"
 	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/pb"
 	pbenv "github.com/overcyn/mochi/pb/env"
 	"github.com/overcyn/mochi/view"
@@ -50,7 +49,6 @@ func (l *layouter) Unnotify(chan struct{}) {
 
 type View struct {
 	*view.Embed
-	Painter    paint.Painter
 	Resource   *env.Resource
 	ResizeMode imageview.ResizeMode
 	Tint       color.Color
@@ -79,7 +77,6 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 	return &view.Model{
 		Layouter:       &layouter{bounds: bounds, resizeMode: resizeMode},
-		Painter:        v.Painter,
 		NativeViewName: "github.com/overcyn/mochi/view/imageview",
 		NativeViewState: &pb.ImageView{
 			Resource:   resPb,

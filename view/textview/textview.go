@@ -3,7 +3,6 @@ package textview
 import (
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view"
 )
@@ -32,11 +31,6 @@ type TextView struct {
 	String string
 	Style  *text.Style
 	Text   *text.Text
-
-	// String     string
-	// Text       text.Text
-	// Attributes text.Attributes
-	Painter paint.Painter
 }
 
 func New(ctx *view.Context, key interface{}) *TextView {
@@ -60,7 +54,6 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 
 	return &view.Model{
 		Layouter:        &textViewLayouter{formattedText: ft},
-		Painter:         v.Painter,
 		NativeViewName:  "github.com/overcyn/mochi/view/textview",
 		NativeViewState: ft.MarshalProtobuf(),
 	}

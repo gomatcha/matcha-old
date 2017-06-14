@@ -52,7 +52,6 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl2 := textview.New(ctx, 2)
-	chl2.Painter = &paint.Style{BackgroundColor: colornames.Red}
 	chl2.String = fmt.Sprintf("Counter: %v", v.counter)
 	chl2.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
@@ -77,7 +76,6 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl4 := textview.New(ctx, 4)
-	chl4.Painter = &paint.Style{BackgroundColor: colornames.Red}
 	chl4.String = fmt.Sprintf("Press: %v", v.pressCounter)
 	chl4.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",

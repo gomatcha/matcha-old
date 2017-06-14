@@ -10,7 +10,6 @@ import (
 
 	"github.com/overcyn/mochi"
 	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/view"
 	"github.com/overcyn/mochi/view/imageview"
 )
@@ -40,7 +39,6 @@ func (l layouter) Unnotify(chan struct{}) {
 
 type View struct {
 	*view.Embed
-	Painter    paint.Painter
 	ResizeMode imageview.ResizeMode
 	URL        string
 	Path       string
@@ -74,7 +72,6 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Layouter: layouter{},
 		Children: []view.View{chl},
-		Painter:  v.Painter,
 	}
 }
 

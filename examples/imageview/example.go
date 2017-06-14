@@ -39,7 +39,6 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
 	chl := urlimageview.New(ctx, 0)
-	chl.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 	chl.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	chl.ResizeMode = imageview.ResizeModeStretch
 	l.Add(chl, func(s *constraint.Solver) {
@@ -50,7 +49,6 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl2 := resimageview.New(ctx, 1)
-	chl2.Painter = &paint.Style{BackgroundColor: colornames.Red}
 	chl2.Resource = env.MustLoad("TableArrow")
 	chl2.ResizeMode = imageview.ResizeModeFit
 	l.Add(chl2, func(s *constraint.Solver) {

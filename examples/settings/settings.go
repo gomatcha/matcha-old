@@ -443,12 +443,9 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		iconView := resimageview.New(ctx, "icon")
 		iconView.Resource = v.Icon
 		iconView.ResizeMode = imageview.ResizeModeFill
-		iconView.Painter = &paint.Style{
-			BackgroundColor: colornames.Lightgray,
-			CornerRadius:    5,
-		}
+		pIconView := view.WithPainter(iconView, &paint.Style{BackgroundColor: colornames.Lightgray, CornerRadius: 5})
 
-		iconGuide := l.Add(iconView, func(s *constraint.Solver) {
+		iconGuide := l.Add(pIconView, func(s *constraint.Solver) {
 			s.WidthEqual(constraint.Const(30))
 			s.HeightEqual(constraint.Const(30))
 			s.LeftEqual(l.Left().Add(15))
