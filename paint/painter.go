@@ -43,17 +43,17 @@ func (s *Style) PaintStyle() Style {
 	return *s
 }
 
-func (s *Style) Notify(func()) int64 {
+func (s *Style) Notify(func()) comm.Id {
 	return 0 // no-op
 }
 
-func (s *Style) Unnotify(id int64) {
+func (s *Style) Unnotify(id comm.Id) {
 	// no-op
 }
 
 type notifier struct {
 	notifier *comm.BatchNotifier2
-	id       int64
+	id       comm.Id
 }
 
 type AnimatedStyle struct {
@@ -67,8 +67,8 @@ type AnimatedStyle struct {
 	// ShadowOffset    comm.Float64Notifier
 	ShadowColor comm.ColorNotifier
 
-	maxId          int64
-	batchNotifiers map[int64]notifier
+	maxId          comm.Id
+	batchNotifiers map[comm.Id]notifier
 }
 
 func (as *AnimatedStyle) PaintStyle() Style {
@@ -101,7 +101,7 @@ func (as *AnimatedStyle) PaintStyle() Style {
 	return s
 }
 
-func (as *AnimatedStyle) Notify(f func()) int64 {
+func (as *AnimatedStyle) Notify(f func()) comm.Id {
 	n := &comm.BatchNotifier2{}
 
 	if as.Transparency != nil {
@@ -131,16 +131,16 @@ func (as *AnimatedStyle) Notify(f func()) int64 {
 
 	as.maxId += 1
 	if as.batchNotifiers == nil {
-		as.batchNotifiers = map[int64]notifier{}
+		as.batchNotifiers = map[comm.Id]notifier{}
 	}
 	as.batchNotifiers[as.maxId] = notifier{
 		notifier: n,
-		id:       n.Notify(func() { f() }),
+		id:       n.Notify(f),
 	}
 	return as.maxId
 }
 
-func (as *AnimatedStyle) Unnotify(id int64) {
+func (as *AnimatedStyle) Unnotify(id comm.Id) {
 	n, ok := as.batchNotifiers[id]
 	if ok {
 		n.notifier.Unnotify(n.id)

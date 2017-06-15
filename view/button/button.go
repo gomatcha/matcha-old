@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout"
 	pbbutton "github.com/overcyn/mochi/pb/button"
 	"github.com/overcyn/mochi/text"
@@ -33,23 +34,22 @@ func init() {
 var buttonMu sync.Mutex
 var buttons = map[mochi.Id]*Button{}
 
-type buttonLayouter struct {
+type layouter struct {
 	formattedText *text.Text
 }
 
-func (l *buttonLayouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	const padding = 10.0
 	size := l.formattedText.Size(layout.Pt(0, 0), ctx.MaxSize)
 	g := layout.Guide{Frame: layout.Rt(0, 0, size.X+padding*2, size.Y+padding*2)}
 	return g, nil
 }
 
-func (l *buttonLayouter) Notify() chan struct{} {
-	// no-op
-	return nil
+func (l *layouter) Notify(f func()) comm.Id {
+	return 0 // no-op
 }
 
-func (l *buttonLayouter) Unnotify(chan struct{}) {
+func (l *layouter) Unnotify(id comm.Id) {
 	// no-op
 }
 
@@ -93,7 +93,7 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 	})
 
 	return &view.Model{
-		Layouter:       &buttonLayouter{formattedText: ft},
+		Layouter:       &layouter{formattedText: ft},
 		NativeViewName: "github.com/overcyn/mochi/view/button",
 		NativeViewState: &pbbutton.Button{
 			Text: ft.MarshalProtobuf(),

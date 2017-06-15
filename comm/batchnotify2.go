@@ -22,9 +22,9 @@ import "sync"
 
 type BatchNotifier2 struct {
 	mu    sync.Mutex
-	subs  map[Notifier]int64
-	funcs map[int64]func()
-	maxId int64
+	subs  map[Notifier]Id
+	funcs map[Id]func()
+	maxId Id
 }
 
 func (bn *BatchNotifier2) Subscribe(n Notifier) {
@@ -40,7 +40,7 @@ func (bn *BatchNotifier2) Subscribe(n Notifier) {
 		}
 	})
 	if bn.subs == nil {
-		bn.subs = map[Notifier]int64{}
+		bn.subs = map[Notifier]Id{}
 	}
 	bn.subs[n] = id
 }
@@ -57,24 +57,24 @@ func (bn *BatchNotifier2) Unsubscribe(n Notifier) {
 	delete(bn.subs, n)
 }
 
-func (bn *BatchNotifier2) Notify(f func()) int64 {
+func (bn *BatchNotifier2) Notify(f func()) Id {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
 	if bn.funcs == nil {
-		bn.funcs = map[int64]func(){}
+		bn.funcs = map[Id]func(){}
 	}
 	bn.maxId += 1
 	bn.funcs[bn.maxId] = f
 	return bn.maxId
 }
 
-func (bn *BatchNotifier2) Unnotify(id int64) {
+func (bn *BatchNotifier2) Unnotify(id Id) {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
 	if bn.funcs == nil {
-		bn.funcs = map[int64]func(){}
+		bn.funcs = map[Id]func(){}
 	}
 	delete(bn.funcs, id)
 }

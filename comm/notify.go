@@ -4,9 +4,11 @@ import (
 	"image/color"
 )
 
+type Id int64
+
 type Notifier interface {
-	Notify(func()) int64
-	Unnotify(int64)
+	Notify(func()) Id
+	Unnotify(Id)
 }
 
 type ColorNotifier interface {

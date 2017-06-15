@@ -486,7 +486,8 @@ type Layout struct {
 	solvers        []*Solver
 	zIndex         int
 	notifiers      []comm.Notifier
-	batchNotifiers map[chan struct{}]*comm.BatchNotifier
+	batchNotifiers map[comm.Id]notifier
+	maxId          comm.Id
 	views          []view.View
 }
 
@@ -495,7 +496,7 @@ func New() *Layout {
 	sys.Guide = &Guide{id: rootId, system: sys, children: map[mochi.Id]*Guide{}}
 	sys.min = &Guide{id: minId, system: sys, children: map[mochi.Id]*Guide{}}
 	sys.max = &Guide{id: maxId, system: sys, children: map[mochi.Id]*Guide{}}
-	sys.batchNotifiers = map[chan struct{}]*comm.BatchNotifier{}
+	sys.batchNotifiers = map[comm.Id]notifier{}
 	return sys
 }
 
@@ -535,30 +536,35 @@ func (sys *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layou
 	return g, gs
 }
 
-// Creates a new batch notifier for the current system state. Notifier anchors that are added after the Notify() call are ignored.
-// This is so we can return nil for the common case, where there are no Notifier anchors.
-func (sys *Layout) Notify() chan struct{} {
-	// if len(sys.notifiers) == 0 {
-	// 	return nil
-	// }
-	// n := &comm.BatchNotifier{}
-	// for _, i := range sys.notifiers {
-	// 	n.Subscribe(i)
-	// }
-
-	// c := n.Notify()
-	// sys.batchNotifiers[c] = n
-	// return c
-	return nil
+type notifier struct {
+	notifier *comm.BatchNotifier2
+	id       comm.Id
 }
 
-func (sys *Layout) Unnotify(c chan struct{}) {
-	// n, ok := sys.batchNotifiers[c]
-	// if !ok {
-	// 	panic("Cannot unnotify unknown chan")
-	// }
-	// n.Unnotify(c)
-	// delete(sys.batchNotifiers, c)
+func (l *Layout) Notify(f func()) comm.Id {
+	if len(l.notifiers) == 0 {
+		return 0
+	}
+
+	n := &comm.BatchNotifier2{}
+	for _, i := range l.notifiers {
+		n.Subscribe(i)
+	}
+
+	l.maxId += 1
+	l.batchNotifiers[l.maxId] = notifier{
+		notifier: n,
+		id:       n.Notify(f),
+	}
+	return l.maxId
+}
+
+func (l *Layout) Unnotify(id comm.Id) {
+	n, ok := l.batchNotifiers[id]
+	if ok {
+		n.notifier.Unnotify(n.id)
+		delete(l.batchNotifiers, id)
+	}
 }
 
 type _range struct {

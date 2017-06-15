@@ -13,6 +13,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	google_protobuf "github.com/golang/protobuf/ptypes/any"
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/internal"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/layout/full"
@@ -339,14 +340,14 @@ type node struct {
 	model     *Model
 	children  map[mochi.Id]*node
 
-	layoutId    int64
-	layoutChan  chan struct{}
-	layoutDone  chan struct{}
-	layoutGuide *layout.Guide
+	layoutId       int64
+	layoutNotify   bool
+	layoutNotifyId comm.Id
+	layoutGuide    *layout.Guide
 
 	paintId       int64
 	paintNotify   bool
-	paintNotifyId int64
+	paintNotifyId comm.Id
 	paintOptions  paint.Style
 }
 
@@ -482,31 +483,15 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 		}
 
 		// Watch for layout changes.
-		if n.layoutChan != nil {
-			n.model.Layouter.Unnotify(n.layoutChan)
-			close(n.layoutDone)
-			n.layoutChan = nil
-			n.layoutDone = nil
+		if n.layoutNotify {
+			n.model.Layouter.Unnotify(n.layoutNotifyId)
+			n.layoutNotify = false
 		}
 		if viewModel.Layouter != nil {
-			layoutChan := viewModel.Layouter.Notify()
-			if layoutChan != nil {
-				layoutDone := make(chan struct{})
-				go func() {
-				loop:
-					for {
-						select {
-						case <-layoutChan:
-							n.root.addFlag(n.id, layoutFlag)
-							layoutChan <- struct{}{}
-						case <-layoutDone:
-							break loop
-						}
-					}
-				}()
-				n.layoutChan = layoutChan
-				n.layoutDone = layoutDone
-			}
+			n.layoutNotifyId = viewModel.Layouter.Notify(func() {
+				n.root.addFlag(n.id, layoutFlag)
+			})
+			n.layoutNotify = true
 		}
 
 		// Watch for paint changes.
@@ -591,12 +576,11 @@ func (n *node) done() {
 		n.view.Unnotify(n.buildChan)
 		close(n.buildDone)
 	}
-	if n.layoutChan != nil {
-		n.model.Layouter.Unnotify(n.layoutChan)
-		close(n.layoutDone)
+	if n.layoutNotify {
+		n.model.Layouter.Unnotify(n.layoutNotifyId)
 	}
 	if n.paintNotify {
-		n.model.Painter.Unnotify(n.paintId)
+		n.model.Painter.Unnotify(n.paintNotifyId)
 	}
 
 	for _, i := range n.children {

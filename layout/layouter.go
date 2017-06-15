@@ -4,6 +4,7 @@ import (
 	"reflect"
 
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochibridge"
 )
@@ -22,7 +23,7 @@ type Context struct {
 
 type Layouter interface {
 	Layout(ctx *Context) (Guide, map[mochi.Id]Guide)
-	mochi.Notifier
+	comm.Notifier
 }
 
 func (l *Context) LayoutChild(id mochi.Id, minSize, maxSize Point) Guide {

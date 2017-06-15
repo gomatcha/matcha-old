@@ -7,6 +7,7 @@ import (
 	_ "image/png"
 
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/view"
@@ -51,11 +52,11 @@ func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layou
 	return g, nil
 }
 
-func (l *layouter) Notify() chan struct{} {
-	return nil // no-op
+func (l *layouter) Notify(f func()) comm.Id {
+	return 0 // no-op
 }
 
-func (l *layouter) Unnotify(chan struct{}) {
+func (l *layouter) Unnotify(id comm.Id) {
 	// no-op
 }
 

@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/pb"
@@ -49,7 +50,7 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Children: children,
 		Painter:  v.Painter,
-		Layouter: &scrollViewLayouter{
+		Layouter: &layouter{
 			Directions: v.Directions,
 		},
 		NativeViewName: "github.com/overcyn/mochi/view/scrollview",
@@ -61,11 +62,11 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 	}
 }
 
-type scrollViewLayouter struct {
+type layouter struct {
 	Directions Direction
 }
 
-func (l *scrollViewLayouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	gs := map[mochi.Id]layout.Guide{}
 	if len(ctx.ChildIds) > 0 {
 		minSize := ctx.MinSize
@@ -85,11 +86,10 @@ func (l *scrollViewLayouter) Layout(ctx *layout.Context) (layout.Guide, map[moch
 	}, gs
 }
 
-func (l *scrollViewLayouter) Notify() chan struct{} {
-	// no-op
-	return nil
+func (l *layouter) Notify(f func()) comm.Id {
+	return 0 // no-op
 }
 
-func (l *scrollViewLayouter) Unnotify(c chan struct{}) {
+func (l *layouter) Unnotify(id comm.Id) {
 	// no-op
 }

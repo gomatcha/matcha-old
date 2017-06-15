@@ -3,6 +3,7 @@ package animate
 import (
 	"time"
 
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/internal"
 )
 
@@ -16,11 +17,11 @@ func NewTicker(duration time.Duration) *Ticker {
 	}
 }
 
-func (t *Ticker) Notify(f func()) int64 {
-	return int64(t.ticker.NotifyFunc(f))
+func (t *Ticker) Notify(f func()) comm.Id {
+	return comm.Id(t.ticker.NotifyFunc(f))
 }
 
-func (t *Ticker) Unnotify(id int64) {
+func (t *Ticker) Unnotify(id comm.Id) {
 	t.ticker.UnnotifyFunc(int(id))
 }
 

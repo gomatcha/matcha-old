@@ -2,6 +2,7 @@ package absolute
 
 import (
 	"github.com/overcyn/mochi"
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout"
 	"github.com/overcyn/mochi/view"
 )
@@ -32,11 +33,10 @@ func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.
 	return l.guide, l.childGuides
 }
 
-func (l *Layout) Notify() chan struct{} {
-	// no-op
-	return nil
+func (l *Layout) Notify(f func()) comm.Id {
+	return 0 // no-op
 }
 
-func (l *Layout) Unnotify(chan struct{}) {
+func (l *Layout) Unnotify(id comm.Id) {
 	// no-op
 }

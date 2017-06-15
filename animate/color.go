@@ -22,11 +22,11 @@ type colorInterpolater struct {
 	interpolater ColorInterpolater
 }
 
-func (w *colorInterpolater) Notify(f func()) int64 {
+func (w *colorInterpolater) Notify(f func()) comm.Id {
 	return w.watcher.Notify(f)
 }
 
-func (w *colorInterpolater) Unnotify(id int64) {
+func (w *colorInterpolater) Unnotify(id comm.Id) {
 	w.watcher.Unnotify(id)
 }
 
