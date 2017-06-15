@@ -9,11 +9,11 @@ import (
 )
 
 type layouter struct {
-	formattedText *text.Text
+	styledText *text.StyledText
 }
 
 func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
-	size := l.formattedText.Size(layout.Pt(0, 0), ctx.MaxSize)
+	size := l.styledText.Size(layout.Pt(0, 0), ctx.MaxSize)
 	g := layout.Guide{Frame: layout.Rt(0, 0, size.X, size.Y)}
 	return g, nil
 }
@@ -28,9 +28,9 @@ func (l *layouter) Unnotify(id comm.Id) {
 
 type TextView struct {
 	*view.Embed
-	String string
-	Style  *text.Style
-	Text   *text.Text
+	String     string
+	Style      *text.Style
+	StyledText *text.StyledText
 }
 
 func New(ctx *view.Context, key interface{}) *TextView {
@@ -45,16 +45,15 @@ func New(ctx *view.Context, key interface{}) *TextView {
 }
 
 func (v *TextView) Build(ctx *view.Context) *view.Model {
-	ft := v.Text
-	if ft == nil {
-		ft = &text.Text{}
-		ft.SetString(v.String)
-		ft.SetStyle(v.Style)
+	st := v.StyledText
+	if st == nil {
+		st = text.NewStyledText(text.New([]byte(v.String)))
+		st.Set(v.Style, 0, 0)
 	}
 
 	return &view.Model{
-		Layouter:        &layouter{formattedText: ft},
+		Layouter:        &layouter{styledText: st},
 		NativeViewName:  "github.com/overcyn/mochi/view/textview",
-		NativeViewState: ft.MarshalProtobuf(),
+		NativeViewState: st.MarshalProtobuf(),
 	}
 }

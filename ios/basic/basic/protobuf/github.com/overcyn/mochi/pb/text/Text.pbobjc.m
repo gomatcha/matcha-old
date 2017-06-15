@@ -260,7 +260,7 @@ BOOL MochiPBTruncation_IsValidValue(int32_t value__) {
 
 typedef struct MochiPBSizeFunc__storage_ {
   uint32_t _has_storage_[1];
-  MochiPBText *text;
+  MochiPBStyledText *text;
   MochiPBPoint *minSize;
   MochiPBPoint *maxSize;
 } MochiPBSizeFunc__storage_;
@@ -273,7 +273,7 @@ typedef struct MochiPBSizeFunc__storage_ {
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "text",
-        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBText),
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBStyledText),
         .number = MochiPBSizeFunc_FieldNumber_Text,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(MochiPBSizeFunc__storage_, text),
@@ -365,6 +365,60 @@ typedef struct MochiPBText__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(MochiPBText__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - MochiPBStyledText
+
+@implementation MochiPBStyledText
+
+@dynamic hasStyle, style;
+@dynamic hasText, text;
+
+typedef struct MochiPBStyledText__storage_ {
+  uint32_t _has_storage_[1];
+  MochiPBTextStyle *style;
+  MochiPBText *text;
+} MochiPBStyledText__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "style",
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBTextStyle),
+        .number = MochiPBStyledText_FieldNumber_Style,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MochiPBStyledText__storage_, style),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "text",
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBText),
+        .number = MochiPBStyledText_FieldNumber_Text,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MochiPBStyledText__storage_, text),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MochiPBStyledText class]
+                                     rootClass:[MochiPBTextRoot class]
+                                          file:MochiPBTextRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MochiPBStyledText__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;

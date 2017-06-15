@@ -1,17 +1,9 @@
 package text
 
 import (
-	"fmt"
-	"runtime"
 	"sync"
-	"unicode/utf8"
 
-	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/mochi/layout"
-	pb2 "github.com/overcyn/mochi/pb"
 	pb "github.com/overcyn/mochi/pb/text"
-	"github.com/overcyn/mochibridge"
-	"golang.org/x/text/unicode/norm"
 )
 
 type Position struct {
@@ -41,43 +33,21 @@ type Text struct {
 	positionMaxId int64
 	positionMu    *sync.Mutex
 	//
-	str   string
-	style *Style
+	str string
 }
 
 func New(b []byte) *Text {
 	t := &Text{}
-	t.bytes = b
-	t.positions = map[int64]int{}
-	t.normalize()
+	// t.bytes = b
+	// t.positions = map[int64]int{}
+	// t.normalize()
+	t.str = string(b)
 	return t
-}
-
-func (t *Text) Size(min layout.Point, max layout.Point) layout.Point {
-	pbFunc := &pb.SizeFunc{
-		Text:    t.MarshalProtobuf(),
-		MinSize: min.MarshalProtobuf(),
-		MaxSize: max.MarshalProtobuf(),
-	}
-	data, err := proto.Marshal(pbFunc)
-	if err != nil {
-		return layout.Pt(0, 0)
-	}
-
-	pointData := mochibridge.Bridge().Call("sizeForAttributedString:", mochibridge.Bytes(data)).ToInterface().([]byte)
-	pbpoint := &pb2.Point{}
-	err = proto.Unmarshal(pointData, pbpoint)
-	if err != nil {
-		fmt.Println("size decode error", err)
-		return layout.Pt(0, 0)
-	}
-	return layout.Pt(pbpoint.X, pbpoint.Y)
 }
 
 func (t *Text) MarshalProtobuf() *pb.Text {
 	return &pb.Text{
-		Text:  t.str,
-		Style: t.style.MarshalProtobuf(),
+		Text: t.str,
 	}
 }
 
@@ -185,78 +155,67 @@ func (t *Text) MarshalProtobuf() *pb.Text {
 // 	return t.glyphCount
 // }
 
-func (t *Text) ReplaceRange(minByteIdx, maxByteIdx int, new string) {
-}
+// func (t *Text) ReplaceRange(minByteIdx, maxByteIdx int, new string) {
+// }
 
-func (t *Text) Position(byteIdx int) *Position {
-	t.positionMu.Lock()
-	defer t.positionMu.Unlock()
+// func (t *Text) Position(byteIdx int) *Position {
+// 	t.positionMu.Lock()
+// 	defer t.positionMu.Unlock()
 
-	t.positionMaxId += 1
-	t.positions[t.positionMaxId] = byteIdx
+// 	t.positionMaxId += 1
+// 	t.positions[t.positionMaxId] = byteIdx
 
-	p := &Position{
-		id:   t.positionMaxId,
-		text: t,
-	}
-	runtime.SetFinalizer(p, func(final *Position) {
-		text := final.text
-		text.positionMu.Lock()
-		defer text.positionMu.Unlock()
-		delete(text.positions, final.id)
-	})
-	return p
-}
+// 	p := &Position{
+// 		id:   t.positionMaxId,
+// 		text: t,
+// 	}
+// 	runtime.SetFinalizer(p, func(final *Position) {
+// 		text := final.text
+// 		text.positionMu.Lock()
+// 		defer text.positionMu.Unlock()
+// 		delete(text.positions, final.id)
+// 	})
+// 	return p
+// }
 
-func (t *Text) normalize() {
-	runeCount := 0
-	glyphCount := 0
-	isRune := make([]bool, 0, len(t.bytes))
-	isGlyph := make([]bool, 0, len(t.bytes))
-	bytes := make([]byte, 0, len(t.bytes))
+// func (t *Text) normalize() {
+// 	runeCount := 0
+// 	glyphCount := 0
+// 	isRune := make([]bool, 0, len(t.bytes))
+// 	isGlyph := make([]bool, 0, len(t.bytes))
+// 	bytes := make([]byte, 0, len(t.bytes))
 
-	var iter norm.Iter
-	iter.Init(norm.NFD, t.bytes)
-	for !iter.Done() {
-		glyph := iter.Next()
-		rc := utf8.RuneCount(glyph)
-		bytes = append(bytes, glyph...)
+// 	var iter norm.Iter
+// 	iter.Init(norm.NFD, t.bytes)
+// 	for !iter.Done() {
+// 		glyph := iter.Next()
+// 		rc := utf8.RuneCount(glyph)
+// 		bytes = append(bytes, glyph...)
 
-		for i := range glyph {
-			isGlyph = append(isGlyph, i == 0)
-		}
-		for i := 0; i < rc; i++ {
-			isRune = append(isGlyph, i == 0)
-		}
+// 		for i := range glyph {
+// 			isGlyph = append(isGlyph, i == 0)
+// 		}
+// 		for i := 0; i < rc; i++ {
+// 			isRune = append(isGlyph, i == 0)
+// 		}
 
-		runeCount += rc
-		glyphCount += 1
-	}
-	t.glyphCount = glyphCount
-	t.runeCount = runeCount
-	t.isGlyph = isGlyph
-	t.isRune = isRune
-	t.bytes = bytes
-}
+// 		runeCount += rc
+// 		glyphCount += 1
+// 	}
+// 	t.glyphCount = glyphCount
+// 	t.runeCount = runeCount
+// 	t.isGlyph = isGlyph
+// 	t.isRune = isRune
+// 	t.bytes = bytes
+// }
 
-func (t *Text) String() string {
-	if t != nil {
-		return t.str
-	}
-	return ""
-}
+// func (t *Text) String() string {
+// 	if t != nil {
+// 		return t.str
+// 	}
+// 	return ""
+// }
 
-func (t *Text) SetString(text string) {
-	t.str = text
-}
-
-func (t *Text) Style() *Style {
-	if t.style == nil {
-		t.style = &Style{}
-	}
-	return t.style
-}
-
-func (t *Text) SetStyle(f *Style) {
-	t.style = f
-}
+// func (t *Text) SetString(text string) {
+// 	t.str = text
+// }

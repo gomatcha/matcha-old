@@ -35,12 +35,12 @@ var buttonMu sync.Mutex
 var buttons = map[mochi.Id]*Button{}
 
 type layouter struct {
-	formattedText *text.Text
+	styledText *text.StyledText
 }
 
 func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
 	const padding = 10.0
-	size := l.formattedText.Size(layout.Pt(0, 0), ctx.MaxSize)
+	size := l.styledText.Size(layout.Pt(0, 0), ctx.MaxSize)
 	g := layout.Guide{Frame: layout.Rt(0, 0, size.X+padding*2, size.Y+padding*2)}
 	return g, nil
 }
@@ -84,19 +84,22 @@ func (v *Button) Lifecycle(from, to view.Stage) {
 }
 
 func (v *Button) Build(ctx *view.Context) *view.Model {
-	ft := &text.Text{}
-	ft.SetString(v.Text)
-	ft.Style().SetAlignment(text.AlignmentCenter)
-	ft.Style().SetFont(text.Font{
+	t := text.New([]byte(v.Text))
+	st := text.NewStyledText(t)
+
+	style := &text.Style{}
+	style.SetAlignment(text.AlignmentCenter)
+	style.SetFont(text.Font{
 		Family: "Helvetica Neue",
 		Size:   20,
 	})
+	st.Set(style, 0, 0)
 
 	return &view.Model{
-		Layouter:       &layouter{formattedText: ft},
+		Layouter:       &layouter{styledText: st},
 		NativeViewName: "github.com/overcyn/mochi/view/button",
 		NativeViewState: &pbbutton.Button{
-			Text: ft.MarshalProtobuf(),
+			Text: t.MarshalProtobuf(),
 		},
 	}
 }

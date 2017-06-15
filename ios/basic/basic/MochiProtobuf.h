@@ -21,7 +21,7 @@
 @end
 
 @interface NSAttributedString (Mochi)
-- (id)initWithProtobuf:(MochiPBText *)value;
+- (id)initWithProtobuf:(MochiPBStyledText *)value;
 @end
 
 @interface UIFont (Mochi)

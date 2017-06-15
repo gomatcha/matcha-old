@@ -14,8 +14,8 @@
 
 @implementation NSAttributedString (Mochi)
 
-- (id)initWithProtobuf:(MochiPBText *)value {
-    NSString *string = value.text;
+- (id)initWithProtobuf:(MochiPBStyledText *)value {
+    NSString *string = value.text.text;
     MochiPBTextStyle *style = value.style;
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];

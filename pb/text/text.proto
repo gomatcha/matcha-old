@@ -7,14 +7,18 @@ option go_package = "text";
 option objc_class_prefix = "MochiPB";
 
 message SizeFunc {
-    Text text = 1;
+    StyledText text = 1;
     layout.Point minSize = 2;
     layout.Point maxSize = 3;
 }
 
 message Text {
+    string text = 1;
+}
+
+message StyledText {
     TextStyle style = 1;
-    string text = 2;
+    Text text = 2;
 }
 
 message Font {

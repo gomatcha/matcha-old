@@ -46,7 +46,7 @@
     _node = value;
     GPBAny *state = value.nativeViewState;
     NSError *error = nil;
-    MochiPBText *text = (id)[state unpackMessageClass:[MochiPBText class] error:&error];
+    MochiPBStyledText *text = (id)[state unpackMessageClass:[MochiPBStyledText class] error:&error];
     if (text != nil) {
         NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:text];
         self.attributedText = attrString;

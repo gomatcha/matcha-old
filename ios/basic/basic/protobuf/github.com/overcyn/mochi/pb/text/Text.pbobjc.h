@@ -30,6 +30,7 @@ CF_EXTERN_C_BEGIN
 @class MochiPBColor;
 @class MochiPBFont;
 @class MochiPBPoint;
+@class MochiPBStyledText;
 @class MochiPBText;
 @class MochiPBTextStyle;
 
@@ -178,7 +179,7 @@ typedef GPB_ENUM(MochiPBSizeFunc_FieldNumber) {
 
 @interface MochiPBSizeFunc : GPBMessage
 
-@property(nonatomic, readwrite, strong, null_resettable) MochiPBText *text;
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBStyledText *text;
 /** Test to see if @c text has been set. */
 @property(nonatomic, readwrite) BOOL hasText;
 
@@ -206,6 +207,25 @@ typedef GPB_ENUM(MochiPBText_FieldNumber) {
 @property(nonatomic, readwrite) BOOL hasStyle;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *text;
+
+@end
+
+#pragma mark - MochiPBStyledText
+
+typedef GPB_ENUM(MochiPBStyledText_FieldNumber) {
+  MochiPBStyledText_FieldNumber_Style = 1,
+  MochiPBStyledText_FieldNumber_Text = 2,
+};
+
+@interface MochiPBStyledText : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBTextStyle *style;
+/** Test to see if @c style has been set. */
+@property(nonatomic, readwrite) BOOL hasStyle;
+
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBText *text;
+/** Test to see if @c text has been set. */
+@property(nonatomic, readwrite) BOOL hasText;
 
 @end
 
