@@ -52,7 +52,7 @@ func (st *StyledText) Size(min layout.Point, max layout.Point) layout.Point {
 	pbpoint := &pb.Point{}
 	err = proto.Unmarshal(pointData, pbpoint)
 	if err != nil {
-		fmt.Println("size decode error", err)
+		fmt.Println("StyledText.Size(): Decode error", err)
 		return layout.Pt(0, 0)
 	}
 	return layout.Pt(pbpoint.X, pbpoint.Y)

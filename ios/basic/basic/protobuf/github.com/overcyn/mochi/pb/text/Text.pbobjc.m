@@ -324,12 +324,10 @@ typedef struct MochiPBSizeFunc__storage_ {
 
 @implementation MochiPBText
 
-@dynamic hasStyle, style;
 @dynamic text;
 
 typedef struct MochiPBText__storage_ {
   uint32_t _has_storage_[1];
-  MochiPBTextStyle *style;
   NSString *text;
 } MochiPBText__storage_;
 
@@ -340,19 +338,10 @@ typedef struct MochiPBText__storage_ {
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
-        .name = "style",
-        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBTextStyle),
-        .number = MochiPBText_FieldNumber_Style,
-        .hasIndex = 0,
-        .offset = (uint32_t)offsetof(MochiPBText__storage_, style),
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeMessage,
-      },
-      {
         .name = "text",
         .dataTypeSpecific.className = NULL,
         .number = MochiPBText_FieldNumber_Text,
-        .hasIndex = 1,
+        .hasIndex = 0,
         .offset = (uint32_t)offsetof(MochiPBText__storage_, text),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,

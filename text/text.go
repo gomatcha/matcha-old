@@ -32,22 +32,19 @@ type Text struct {
 	positions     map[int64]int
 	positionMaxId int64
 	positionMu    *sync.Mutex
-	//
-	str string
 }
 
-func New(b []byte) *Text {
+func New(b string) *Text {
 	t := &Text{}
-	// t.bytes = b
+	t.bytes = []byte(b)
 	// t.positions = map[int64]int{}
 	// t.normalize()
-	t.str = string(b)
 	return t
 }
 
 func (t *Text) MarshalProtobuf() *pb.Text {
 	return &pb.Text{
-		Text: t.str,
+		Text: string(t.bytes),
 	}
 }
 

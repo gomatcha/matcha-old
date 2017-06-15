@@ -84,15 +84,16 @@ func (v *Button) Lifecycle(from, to view.Stage) {
 }
 
 func (v *Button) Build(ctx *view.Context) *view.Model {
-	t := text.New([]byte(v.Text))
-	st := text.NewStyledText(t)
-
 	style := &text.Style{}
 	style.SetAlignment(text.AlignmentCenter)
 	style.SetFont(text.Font{
 		Family: "Helvetica Neue",
 		Size:   20,
 	})
+
+	t := text.New(v.Text)
+
+	st := text.NewStyledText(t)
 	st.Set(style, 0, 0)
 
 	return &view.Model{

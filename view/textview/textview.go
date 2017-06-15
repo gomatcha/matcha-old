@@ -47,7 +47,7 @@ func New(ctx *view.Context, key interface{}) *TextView {
 func (v *TextView) Build(ctx *view.Context) *view.Model {
 	st := v.StyledText
 	if st == nil {
-		st = text.NewStyledText(text.New([]byte(v.String)))
+		st = text.NewStyledText(text.New(v.String))
 		st.Set(v.Style, 0, 0)
 	}
 

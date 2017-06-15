@@ -196,15 +196,10 @@ typedef GPB_ENUM(MochiPBSizeFunc_FieldNumber) {
 #pragma mark - MochiPBText
 
 typedef GPB_ENUM(MochiPBText_FieldNumber) {
-  MochiPBText_FieldNumber_Style = 1,
-  MochiPBText_FieldNumber_Text = 2,
+  MochiPBText_FieldNumber_Text = 1,
 };
 
 @interface MochiPBText : GPBMessage
-
-@property(nonatomic, readwrite, strong, null_resettable) MochiPBTextStyle *style;
-/** Test to see if @c style has been set. */
-@property(nonatomic, readwrite) BOOL hasStyle;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *text;
 
