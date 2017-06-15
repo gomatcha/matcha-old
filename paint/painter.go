@@ -1,6 +1,7 @@
 package paint
 
 import (
+	"image"
 	"image/color"
 
 	"github.com/overcyn/mochi/comm"
@@ -9,6 +10,7 @@ import (
 )
 
 type Painter interface {
+	Paint(*image.RGBA) // does nothing atm
 	PaintStyle() Style
 	comm.Notifier
 }
@@ -37,6 +39,9 @@ func (s *Style) MarshalProtobuf() *pb.PaintStyle {
 		ShadowOffset:    s.ShadowOffset.MarshalProtobuf(),
 		ShadowColor:     pb.ColorEncode(s.ShadowColor),
 	}
+}
+
+func (s *Style) Paint(img *image.RGBA) {
 }
 
 func (s *Style) PaintStyle() Style {
@@ -69,6 +74,9 @@ type AnimatedStyle struct {
 
 	maxId          comm.Id
 	batchNotifiers map[comm.Id]notifier
+}
+
+func (as *AnimatedStyle) Paint(img *image.RGBA) {
 }
 
 func (as *AnimatedStyle) PaintStyle() Style {
