@@ -2,15 +2,13 @@ package comm
 
 import (
 	"sync"
-
-	"github.com/overcyn/mochi"
 )
 
 type Storer interface {
 	sync.Locker
-	mochi.Notifier
+	Notifier
 	Stores() map[string]Storer
-	StoreNotifier(string) mochi.Notifier
+	StoreNotifier(string) Notifier
 }
 
 type asyncStoreNotifier struct {
@@ -18,31 +16,39 @@ type asyncStoreNotifier struct {
 	key   string
 }
 
-func (s *asyncStoreNotifier) Notify() chan struct{} {
-	s.store.chansMu.Lock()
-	defer s.store.chansMu.Unlock()
+func (s *asyncStoreNotifier) Notify(f func()) Id {
+	s.store.funcsMu.Lock()
+	defer s.store.funcsMu.Unlock()
 
-	c := make(chan struct{})
-	if s.store.keyChans == nil {
-		s.store.keyChans = map[string][]chan struct{}{}
+	if s.store.keyFuncs == nil {
+		s.store.keyFuncs = map[string]map[Id]func(){}
 	}
-	chans := s.store.keyChans[s.key]
-	chans = append(chans, c)
-	s.store.keyChans[s.key] = chans
-	return c
+
+	funcs := s.store.keyFuncs[s.key]
+	if funcs == nil {
+		funcs = map[Id]func(){}
+		s.store.keyFuncs[s.key] = funcs
+	}
+
+	s.store.maxId += 1
+	funcs[s.store.maxId] = f
+	return s.store.maxId
 }
 
-func (s *asyncStoreNotifier) Unnotify(c chan struct{}) {
-	s.store.chansMu.Lock()
-	defer s.store.chansMu.Unlock()
+func (s *asyncStoreNotifier) Unnotify(id Id) {
+	s.store.funcsMu.Lock()
+	defer s.store.funcsMu.Unlock()
 
-	chans := []chan struct{}{}
-	for _, i := range s.store.chans {
-		if i != c {
-			chans = append(chans, i)
-		}
+	if s.store.keyFuncs == nil {
+		panic("Unknown id")
 	}
-	s.store.chans = chans
+
+	funcs := s.store.keyFuncs[s.key]
+	if funcs == nil {
+		panic("Unknown id")
+	}
+
+	delete(funcs, id)
 }
 
 type AsyncStore struct {
@@ -53,9 +59,10 @@ type AsyncStore struct {
 	updated     bool
 	updatedKeys []string
 
-	chansMu  sync.Mutex
-	chans    []chan struct{}
-	keyChans map[string][]chan struct{}
+	funcsMu  sync.Mutex
+	funcs    map[Id]func()
+	keyFuncs map[string]map[Id]func()
+	maxId    Id
 }
 
 func (s *AsyncStore) Set(key string, chl Storer) {
@@ -71,7 +78,7 @@ func (s *AsyncStore) Delete(key string) {
 	s.updatedKeys = append(s.updatedKeys, key)
 }
 
-func (s *AsyncStore) StoreNotifier(key string) mochi.Notifier {
+func (s *AsyncStore) StoreNotifier(key string) Notifier {
 	return &asyncStoreNotifier{store: s, key: key}
 }
 
@@ -91,19 +98,17 @@ func (s *AsyncStore) Lock() {
 
 func (s *AsyncStore) Unlock() {
 	go func(updated bool, updatedKeys []string) {
-		s.chansMu.Lock()
-		defer s.chansMu.Unlock()
+		s.funcsMu.Lock()
+		defer s.funcsMu.Unlock()
 
 		if updated {
-			for _, i := range s.chans {
-				i <- struct{}{}
-				<-i
+			for _, i := range s.funcs {
+				i()
 			}
 		}
 		for _, i := range updatedKeys {
-			for _, j := range s.keyChans[i] {
-				j <- struct{}{}
-				<-j
+			for _, j := range s.keyFuncs[i] {
+				j()
 			}
 		}
 	}(s.updated, s.updatedKeys)
@@ -117,26 +122,28 @@ func (s *AsyncStore) Unlock() {
 	s.mu.Unlock()
 }
 
-func (s *AsyncStore) Notify() chan struct{} {
-	s.chansMu.Lock()
-	defer s.chansMu.Unlock()
+func (s *AsyncStore) Notify(f func()) Id {
+	s.funcsMu.Lock()
+	defer s.funcsMu.Unlock()
 
-	c := make(chan struct{})
-	s.chans = append(s.chans, c)
-	return c
+	if s.funcs == nil {
+		s.funcs = map[Id]func(){}
+	}
+
+	s.maxId += 1
+	s.funcs[s.maxId] = f
+	return s.maxId
 }
 
-func (s *AsyncStore) Unnotify(c chan struct{}) {
-	s.chansMu.Lock()
-	defer s.chansMu.Unlock()
+func (s *AsyncStore) Unnotify(id Id) {
+	s.funcsMu.Lock()
+	defer s.funcsMu.Unlock()
 
-	chans := []chan struct{}{}
-	for _, i := range s.chans {
-		if i != c {
-			chans = append(chans, i)
-		}
+	if s.funcs == nil {
+		panic("store.Unnotify(): Unknown id")
 	}
-	s.chans = chans
+
+	delete(s.funcs, id)
 }
 
 func (s *AsyncStore) Update() {

@@ -1,135 +1,75 @@
 package comm
 
 import (
+	"fmt"
 	"sync"
-
-	"github.com/overcyn/mochi"
 )
 
-type batchSubscription struct {
-	notifier mochi.Notifier
-	done     chan struct{}
-	c        chan struct{}
-}
-
 type BatchNotifier struct {
-	mu            sync.Mutex
-	subscriptions []*batchSubscription
-	chans         []chan struct{}
+	mu    sync.Mutex
+	subs  map[Notifier]Id
+	funcs map[Id]func()
+	maxId Id
 }
 
-func (bn *BatchNotifier) Subscribe(n mochi.Notifier) {
+func (bn *BatchNotifier) Subscribe(n Notifier) {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
-	bn.subscriptions = append(bn.subscriptions, &batchSubscription{notifier: n})
-	bn.resubscribeLocked()
-}
+	id := n.Notify(func() {
+		bn.mu.Lock()
+		defer bn.mu.Unlock()
 
-func (bn *BatchNotifier) Unsubscribe(n mochi.Notifier) {
-	bn.mu.Lock()
-	defer bn.mu.Unlock()
-
-	found := false
-	subs := []*batchSubscription{}
-	for _, sub := range bn.subscriptions {
-		if found || sub.notifier != n {
-			subs = append(subs, sub)
-		} else {
-			if sub.c != nil {
-				n.Unnotify(sub.c)
-				close(sub.done)
-			}
-			found = true
+		for _, f := range bn.funcs {
+			f()
 		}
+	})
+	if bn.subs == nil {
+		bn.subs = map[Notifier]Id{}
 	}
-	if !found {
-		panic("Cant unobserve unknown notifier")
-	}
-	bn.subscriptions = subs
-
-	bn.resubscribeLocked()
+	bn.subs[n] = id
 }
 
-func (bn *BatchNotifier) Notify() chan struct{} {
+func (bn *BatchNotifier) Unsubscribe(n Notifier) {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
-	c := make(chan struct{})
-	bn.chans = append(bn.chans, c)
-
-	bn.resubscribeLocked()
-	return c
-}
-
-func (bn *BatchNotifier) Unnotify(c chan struct{}) {
-	bn.mu.Lock()
-	defer bn.mu.Unlock()
-
-	chans := []chan struct{}{}
-	for _, i := range bn.chans {
-		if i != c {
-			chans = append(chans, c)
-		}
-	}
-	if len(chans) != len(bn.chans)-1 {
-		panic("Cant unnotify unknown chan")
-	}
-	bn.chans = chans
-
-	bn.resubscribeLocked()
-}
-
-func (bn *BatchNotifier) Signal() {
-	bn.mu.Lock()
-	defer bn.mu.Unlock()
-
-	for _, i := range bn.chans {
-		i <- struct{}{}
-		<-i
-	}
-}
-
-func (bn *BatchNotifier) resubscribeLocked() {
-	// If we have no chans, remove all subscribers.
-	if len(bn.chans) == 0 {
-		for _, sub := range bn.subscriptions {
-			if sub.c != nil {
-				sub.notifier.Unnotify(sub.c)
-				close(sub.done)
-				sub.c = nil
-				sub.done = nil
-			}
-		}
+	id, ok := bn.subs[n]
+	if !ok {
 		return
 	}
+	n.Unnotify(id)
+	delete(bn.subs, n)
+}
 
-	for _, sub := range bn.subscriptions {
-		// Subscribe to any notifier that isn't yet subscribed
-		if sub.c == nil {
-			c := sub.notifier.Notify()
-			done := make(chan struct{})
+func (bn *BatchNotifier) Notify(f func()) Id {
+	bn.mu.Lock()
+	defer bn.mu.Unlock()
 
-			go func() {
-			loop:
-				for {
-					select {
-					case <-c:
-						bn.mu.Lock()
-						for _, i := range bn.chans {
-							i <- struct{}{}
-							<-i
-						}
-						c <- struct{}{}
-						bn.mu.Unlock()
-					case <-done:
-						break loop
-					}
-				}
-			}()
+	if bn.funcs == nil {
+		bn.funcs = map[Id]func(){}
+	}
+	bn.maxId += 1
+	bn.funcs[bn.maxId] = f
+	return bn.maxId
+}
 
-			sub.c = c
-			sub.done = done
-		}
+func (bn *BatchNotifier) Unnotify(id Id) {
+	bn.mu.Lock()
+	defer bn.mu.Unlock()
+
+	if bn.funcs == nil {
+		bn.funcs = map[Id]func(){}
+	}
+	delete(bn.funcs, id)
+}
+
+func (bn *BatchNotifier) Update() {
+	bn.mu.Lock()
+	defer bn.mu.Unlock()
+
+	fmt.Println("Update", bn.funcs)
+	for _, f := range bn.funcs {
+		f()
 	}
 }

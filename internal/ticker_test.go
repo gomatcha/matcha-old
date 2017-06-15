@@ -1,47 +1,44 @@
 package internal
 
 import (
-	"sync"
 	"testing"
 	"time"
-
-	"github.com/overcyn/mochi"
 )
 
-func TestScreenUpdate(t *testing.T) {
-	mu := sync.Mutex{}
-	count := 0
+// func TestScreenUpdate(t *testing.T) {
+// 	mu := sync.Mutex{}
+// 	count := 0
 
-	ticker := NewTicker(time.Second / 20)
-	done := mochi.NotifyFunc(ticker, func() {
-		mu.Lock()
-		defer mu.Unlock()
-		count += 1
-	})
+// 	ticker := NewTicker(time.Second / 20)
+// 	done := mochi.NotifyFunc(ticker, func() {
+// 		mu.Lock()
+// 		defer mu.Unlock()
+// 		count += 1
+// 	})
 
-	screenUpdate()
-	screenUpdate()
-	screenUpdate()
+// 	screenUpdate()
+// 	screenUpdate()
+// 	screenUpdate()
 
-	mu.Lock()
-	if count != 3 {
-		t.Error("Ticker did not trigger")
-	}
-	mu.Unlock()
+// 	mu.Lock()
+// 	if count != 3 {
+// 		t.Error("Ticker did not trigger")
+// 	}
+// 	mu.Unlock()
 
-	<-time.After(time.Second / 10)
+// 	<-time.After(time.Second / 10)
 
-	screenUpdate()
-	screenUpdate()
-	screenUpdate()
+// 	screenUpdate()
+// 	screenUpdate()
+// 	screenUpdate()
 
-	if count != 3 {
-		t.Error("Ticker not stopped")
-	}
+// 	if count != 3 {
+// 		t.Error("Ticker not stopped")
+// 	}
 
-	ticker.Stop()
-	close(done)
-}
+// 	ticker.Stop()
+// 	close(done)
+// }
 
 func TestTickerNotify(t *testing.T) {
 	ticker := NewTicker(time.Second * 10)

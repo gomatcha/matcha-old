@@ -334,11 +334,11 @@ type node struct {
 	view  View
 	stage Stage
 
-	buildId   int64
-	buildChan chan struct{}
-	buildDone chan struct{}
-	model     *Model
-	children  map[mochi.Id]*node
+	buildId       int64
+	buildNotify   bool
+	buildNotifyId comm.Id
+	model         *Model
+	children      map[mochi.Id]*node
 
 	layoutId       int64
 	layoutNotify   bool
@@ -460,26 +460,12 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 			n.children[id].done()
 		}
 
-		// Watch for build changes
-		if n.buildChan == nil {
-			buildChan := n.view.Notify()
-			if buildChan != nil {
-				buildDone := make(chan struct{})
-				go func(id mochi.Id) {
-				loop:
-					for {
-						select {
-						case <-buildChan:
-							buildChan <- struct{}{} // TODO(KD): should this be synchronous?
-							n.root.addFlag(id, buildFlag)
-						case <-buildDone:
-							break loop
-						}
-					}
-				}(n.view.Id())
-				n.buildChan = buildChan
-				n.buildDone = buildDone
-			}
+		// Watch for build changes, if we haven't
+		if !n.buildNotify {
+			n.buildNotifyId = n.view.Notify(func() {
+				n.root.addFlag(n.id, buildFlag)
+			})
+			n.buildNotify = true
 		}
 
 		// Watch for layout changes.
@@ -572,9 +558,8 @@ func (n *node) done() {
 	n.view.Lifecycle(n.stage, StageDead)
 	n.stage = StageDead
 
-	if n.buildChan != nil {
-		n.view.Unnotify(n.buildChan)
-		close(n.buildDone)
+	if n.buildNotify {
+		n.view.Unnotify(n.buildNotifyId)
 	}
 	if n.layoutNotify {
 		n.model.Layouter.Unnotify(n.layoutNotifyId)

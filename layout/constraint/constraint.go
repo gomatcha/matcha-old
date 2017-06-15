@@ -537,7 +537,7 @@ func (sys *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layou
 }
 
 type notifier struct {
-	notifier *comm.BatchNotifier2
+	notifier *comm.BatchNotifier
 	id       comm.Id
 }
 
@@ -546,7 +546,7 @@ func (l *Layout) Notify(f func()) comm.Id {
 		return 0
 	}
 
-	n := &comm.BatchNotifier2{}
+	n := &comm.BatchNotifier{}
 	for _, i := range l.notifiers {
 		n.Subscribe(i)
 	}

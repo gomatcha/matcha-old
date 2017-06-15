@@ -33,7 +33,7 @@ type View interface {
 	Build(*Context) *Model
 	Lifecycle(from, to Stage)
 	Id() mochi.Id
-	mochi.Notifier
+	comm.Notifier
 }
 
 type Embed struct {
@@ -58,24 +58,24 @@ func (e *Embed) Lifecycle(from, to Stage) {
 	// no-op
 }
 
-func (e *Embed) Notify() chan struct{} {
-	return e.batchNotifier.Notify()
+func (e *Embed) Notify(f func()) comm.Id {
+	return e.batchNotifier.Notify(f)
 }
 
-func (e *Embed) Unnotify(c chan struct{}) {
-	e.batchNotifier.Unnotify(c)
+func (e *Embed) Unnotify(id comm.Id) {
+	e.batchNotifier.Unnotify(id)
 }
 
-func (e *Embed) Subscribe(n mochi.Notifier) {
+func (e *Embed) Subscribe(n comm.Notifier) {
 	e.batchNotifier.Subscribe(n)
 }
 
-func (e *Embed) Unsubscribe(n mochi.Notifier) {
+func (e *Embed) Unsubscribe(n comm.Notifier) {
 	e.batchNotifier.Unsubscribe(n)
 }
 
 func (e *Embed) Update() {
-	e.batchNotifier.Signal()
+	e.batchNotifier.Update()
 }
 
 type Stage int

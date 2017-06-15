@@ -52,7 +52,7 @@ func (s *Style) Unnotify(id comm.Id) {
 }
 
 type notifier struct {
-	notifier *comm.BatchNotifier2
+	notifier *comm.BatchNotifier
 	id       comm.Id
 }
 
@@ -102,7 +102,7 @@ func (as *AnimatedStyle) PaintStyle() Style {
 }
 
 func (as *AnimatedStyle) Notify(f func()) comm.Id {
-	n := &comm.BatchNotifier2{}
+	n := &comm.BatchNotifier{}
 
 	if as.Transparency != nil {
 		n.Subscribe(as.Transparency)
