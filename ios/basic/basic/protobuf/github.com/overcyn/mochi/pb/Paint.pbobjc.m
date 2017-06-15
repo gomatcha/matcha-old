@@ -14,7 +14,7 @@
 #endif
 
  #import "github.com/overcyn/mochi/pb/Paint.pbobjc.h"
- #import "github.com/overcyn/mochi/pb/Text.pbobjc.h"
+ #import "github.com/overcyn/mochi/pb/Color.pbobjc.h"
  #import "github.com/overcyn/mochi/pb/Layout.pbobjc.h"
 // @@protoc_insertion_point(imports)
 

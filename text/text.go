@@ -8,7 +8,8 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/pb"
+	pb2 "github.com/overcyn/mochi/pb"
+	pb "github.com/overcyn/mochi/pb/text"
 	"github.com/overcyn/mochibridge"
 	"golang.org/x/text/unicode/norm"
 )
@@ -64,7 +65,7 @@ func (t *Text) Size(min layout.Point, max layout.Point) layout.Point {
 	}
 
 	pointData := mochibridge.Bridge().Call("sizeForAttributedString:", mochibridge.Bytes(data)).ToInterface().([]byte)
-	pbpoint := &pb.Point{}
+	pbpoint := &pb2.Point{}
 	err = proto.Unmarshal(pointData, pbpoint)
 	if err != nil {
 		fmt.Println("size decode error", err)
@@ -80,109 +81,109 @@ func (t *Text) MarshalProtobuf() *pb.Text {
 	}
 }
 
-func (t *Text) ByteAt(byteIdx int) byte {
-	return t.bytes[byteIdx]
-}
+// func (t *Text) ByteAt(byteIdx int) byte {
+// 	return t.bytes[byteIdx]
+// }
 
-func (t *Text) RuneAt(byteIdx int) rune {
-	// Start at the position and look backwards until we find the start of the rune
-	var runeStart int = -1
-	for i := byteIdx; i >= 0; i -= 1 {
-		isRune := t.isRune[i]
-		if isRune {
-			runeStart = i
-			break
-		}
-	}
+// func (t *Text) RuneAt(byteIdx int) rune {
+// 	// Start at the position and look backwards until we find the start of the rune
+// 	var runeStart int = -1
+// 	for i := byteIdx; i >= 0; i -= 1 {
+// 		isRune := t.isRune[i]
+// 		if isRune {
+// 			runeStart = i
+// 			break
+// 		}
+// 	}
 
-	if runeStart == -1 {
-		panic("RuneAt: Couldn't find rune start")
-	}
+// 	if runeStart == -1 {
+// 		panic("RuneAt: Couldn't find rune start")
+// 	}
 
-	bytes := []byte{t.bytes[runeStart]}
-	// Add bytes until next rune
-	for i := runeStart + 1; i < len(bytes); i++ {
-		if t.isRune[i] {
-			break
-		}
-		bytes = append(bytes, t.bytes[i])
-	}
-	return []rune(string(bytes))[0]
-}
+// 	bytes := []byte{t.bytes[runeStart]}
+// 	// Add bytes until next rune
+// 	for i := runeStart + 1; i < len(bytes); i++ {
+// 		if t.isRune[i] {
+// 			break
+// 		}
+// 		bytes = append(bytes, t.bytes[i])
+// 	}
+// 	return []rune(string(bytes))[0]
+// }
 
-func (t *Text) GlyphAt(byteIdx int) string {
-	// Start at the position and look backwards until we find the start of the glyph
-	var glyphStart int = -1
-	for i := byteIdx; i >= 0; i -= 1 {
-		isGlyph := t.isGlyph[i]
-		if isGlyph {
-			glyphStart = i
-			break
-		}
-	}
+// func (t *Text) GlyphAt(byteIdx int) string {
+// 	// Start at the position and look backwards until we find the start of the glyph
+// 	var glyphStart int = -1
+// 	for i := byteIdx; i >= 0; i -= 1 {
+// 		isGlyph := t.isGlyph[i]
+// 		if isGlyph {
+// 			glyphStart = i
+// 			break
+// 		}
+// 	}
 
-	if glyphStart == -1 {
-		panic("GlyphAt: Couldn't find glyph start")
-	}
+// 	if glyphStart == -1 {
+// 		panic("GlyphAt: Couldn't find glyph start")
+// 	}
 
-	bytes := []byte{t.bytes[glyphStart]}
-	// Add bytes until next glyph
-	for i := glyphStart + 1; i < len(bytes); i++ {
-		if t.isGlyph[i] {
-			break
-		}
-		bytes = append(bytes, t.bytes[i])
-	}
-	return string(bytes)
-}
+// 	bytes := []byte{t.bytes[glyphStart]}
+// 	// Add bytes until next glyph
+// 	for i := glyphStart + 1; i < len(bytes); i++ {
+// 		if t.isGlyph[i] {
+// 			break
+// 		}
+// 		bytes = append(bytes, t.bytes[i])
+// 	}
+// 	return string(bytes)
+// }
 
-func (t *Text) ByteIndex(byteIdx int) int {
-	return 0
-}
+// func (t *Text) ByteIndex(byteIdx int) int {
+// 	return 0
+// }
 
-func (t *Text) RuneIndex(runeIdx int) int {
-	return 0
-}
+// func (t *Text) RuneIndex(runeIdx int) int {
+// 	return 0
+// }
 
-func (t *Text) GlyphIndex(glyphIdx int) int {
-	return 0
-}
+// func (t *Text) GlyphIndex(glyphIdx int) int {
+// 	return 0
+// }
 
-func (t *Text) ByteNextIndex(byteIdx int) int {
-	return byteIdx + 1
-}
+// func (t *Text) ByteNextIndex(byteIdx int) int {
+// 	return byteIdx + 1
+// }
 
-func (t *Text) RuneNextIndex(byteIdx int) int {
-	return 0
-}
+// func (t *Text) RuneNextIndex(byteIdx int) int {
+// 	return 0
+// }
 
-func (t *Text) GlyphNextIndex(byteIdx int) int {
-	return 0
-}
+// func (t *Text) GlyphNextIndex(byteIdx int) int {
+// 	return 0
+// }
 
-func (t *Text) BytePrevIndex(byteIdx int) int {
-	return byteIdx - 1
-}
+// func (t *Text) BytePrevIndex(byteIdx int) int {
+// 	return byteIdx - 1
+// }
 
-func (t *Text) RunePrevIndex(byteIdx int) int {
-	return 0
-}
+// func (t *Text) RunePrevIndex(byteIdx int) int {
+// 	return 0
+// }
 
-func (t *Text) GlyphPrevIndex(byteIdx int) int {
-	return 0
-}
+// func (t *Text) GlyphPrevIndex(byteIdx int) int {
+// 	return 0
+// }
 
-func (t *Text) ByteCount() int {
-	return len(t.str)
-}
+// func (t *Text) ByteCount() int {
+// 	return len(t.str)
+// }
 
-func (t *Text) RuneCount() int {
-	return t.runeCount
-}
+// func (t *Text) RuneCount() int {
+// 	return t.runeCount
+// }
 
-func (t *Text) GlyphCount() int {
-	return t.glyphCount
-}
+// func (t *Text) GlyphCount() int {
+// 	return t.glyphCount
+// }
 
 func (t *Text) ReplaceRange(minByteIdx, maxByteIdx int, new string) {
 }

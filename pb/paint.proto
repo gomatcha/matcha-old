@@ -1,6 +1,6 @@
 syntax = "proto3";
 package paint;
-import "github.com/overcyn/mochi/pb/text.proto";
+import "github.com/overcyn/mochi/pb/color.proto";
 import "github.com/overcyn/mochi/pb/layout.proto";
 
 option go_package = "pb";
@@ -8,11 +8,11 @@ option objc_class_prefix = "MochiPB";
 
 message PaintStyle {
   double transparency = 1;
-  text.Color backgroundColor = 2;
-  text.Color borderColor = 3;
+  mochi.Color backgroundColor = 2;
+  mochi.Color borderColor = 3;
   double borderWidth = 4;
   double cornerRadius = 5;
   double shadowRadius = 7;
   layout.Point shadowOffset = 8;
-  text.Color shadowColor = 9;
+  mochi.Color shadowColor = 9;
 }

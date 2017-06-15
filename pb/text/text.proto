@@ -1,8 +1,9 @@
 syntax = "proto3";
-package text;
+package mochi.text;
 import "github.com/overcyn/mochi/pb/layout.proto";
+import "github.com/overcyn/mochi/pb/color.proto";
 
-option go_package = "pb";
+option go_package = "text";
 option objc_class_prefix = "MochiPB";
 
 message SizeFunc {
@@ -20,13 +21,6 @@ message Font {
     string family = 1;
     string face = 2;
     double size = 3;
-}
-
-message Color {
-    uint32 red = 1;
-    uint32 blue = 2;
-    uint32 green = 3;
-    uint32 alpha = 4;
 }
 
 enum TextAlignment {
@@ -70,14 +64,14 @@ enum Truncation {
 message TextStyle {
     TextAlignment textAlignment = 2;
     StrikethroughStyle strikethroughStyle = 4;
-    Color strikethroughColor = 6;
+    mochi.Color strikethroughColor = 6;
     UnderlineStyle underlineStyle = 8;
-    Color underlineColor = 10;
+    mochi.Color underlineColor = 10;
     Font font = 12;
     double hyphenation = 14;
     double lineHeightMultiple = 16;
     int64 maxLines = 18;
-    Color textColor = 20;
+    mochi.Color textColor = 20;
     TextWrap wrap = 22;
     Truncation truncation = 24;
     string truncationString = 26;

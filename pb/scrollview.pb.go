@@ -21,7 +21,7 @@ type ScrollView struct {
 func (m *ScrollView) Reset()                    { *m = ScrollView{} }
 func (m *ScrollView) String() string            { return proto.CompactTextString(m) }
 func (*ScrollView) ProtoMessage()               {}
-func (*ScrollView) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
+func (*ScrollView) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0} }
 
 func (m *ScrollView) GetScrollEnabled() bool {
 	if m != nil {
@@ -48,9 +48,9 @@ func init() {
 	proto.RegisterType((*ScrollView)(nil), "paint.ScrollView")
 }
 
-func init() { proto.RegisterFile("github.com/overcyn/mochi/pb/scrollview.proto", fileDescriptor3) }
+func init() { proto.RegisterFile("github.com/overcyn/mochi/pb/scrollview.proto", fileDescriptor4) }
 
-var fileDescriptor3 = []byte{
+var fileDescriptor4 = []byte{
 	// 187 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x49, 0xcf, 0x2c, 0xc9,
 	0x28, 0x4d, 0xd2, 0x4b, 0xce, 0xcf, 0xd5, 0xcf, 0x2f, 0x4b, 0x2d, 0x4a, 0xae, 0xcc, 0xd3, 0xcf,

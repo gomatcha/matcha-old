@@ -14,7 +14,7 @@
 #endif
 
  #import "github.com/overcyn/mochi/pb/button/Button.pbobjc.h"
- #import "github.com/overcyn/mochi/pb/Text.pbobjc.h"
+ #import "github.com/overcyn/mochi/pb/text/Text.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push

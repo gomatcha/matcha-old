@@ -30,7 +30,6 @@
 		677831161EE299A4009D9D7F /* Layout.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831051EE299A4009D9D7F /* Layout.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		677831171EE299A4009D9D7F /* Paint.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831071EE299A4009D9D7F /* Paint.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		677831181EE299A4009D9D7F /* Scrollview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831091EE299A4009D9D7F /* Scrollview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		677831191EE299A4009D9D7F /* Text.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778310B1EE299A4009D9D7F /* Text.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6778311A1EE299A4009D9D7F /* Touch.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778310D1EE299A4009D9D7F /* Touch.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6778311C1EE299A4009D9D7F /* View.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831131EE299A4009D9D7F /* View.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		677831231EE2B2C8009D9D7F /* MochiStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831221EE2B2C8009D9D7F /* MochiStackViewController.m */; };
@@ -44,6 +43,8 @@
 		677831461EEABBD8009D9D7F /* Touch2.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831451EEABBD8009D9D7F /* Touch2.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6778314A1EF0B785009D9D7F /* Resource.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831491EF0B785009D9D7F /* Resource.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6778314D1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778314C1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer.m */; };
+		677831501EF345DE009D9D7F /* Color.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778314E1EF345DE009D9D7F /* Color.pbobjc.m */; };
+		677831541EF345E6009D9D7F /* Text.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831531EF345E6009D9D7F /* Text.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67D89E211ED4AE1E0063A1E2 /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */; };
 /* End PBXBuildFile section */
 
@@ -104,8 +105,6 @@
 		677831071EE299A4009D9D7F /* Paint.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Paint.pbobjc.m; sourceTree = "<group>"; };
 		677831081EE299A4009D9D7F /* Scrollview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scrollview.pbobjc.h; sourceTree = "<group>"; };
 		677831091EE299A4009D9D7F /* Scrollview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scrollview.pbobjc.m; sourceTree = "<group>"; };
-		6778310A1EE299A4009D9D7F /* Text.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Text.pbobjc.h; sourceTree = "<group>"; };
-		6778310B1EE299A4009D9D7F /* Text.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Text.pbobjc.m; sourceTree = "<group>"; };
 		6778310C1EE299A4009D9D7F /* Touch.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Touch.pbobjc.h; sourceTree = "<group>"; };
 		6778310D1EE299A4009D9D7F /* Touch.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Touch.pbobjc.m; sourceTree = "<group>"; };
 		677831121EE299A4009D9D7F /* View.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.pbobjc.h; sourceTree = "<group>"; };
@@ -129,6 +128,10 @@
 		677831491EF0B785009D9D7F /* Resource.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Resource.pbobjc.m; sourceTree = "<group>"; };
 		6778314B1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiButtonGestureRecognizer.h; sourceTree = "<group>"; };
 		6778314C1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiButtonGestureRecognizer.m; sourceTree = "<group>"; };
+		6778314E1EF345DE009D9D7F /* Color.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Color.pbobjc.m; sourceTree = "<group>"; };
+		6778314F1EF345DE009D9D7F /* Color.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.pbobjc.h; sourceTree = "<group>"; };
+		677831521EF345E6009D9D7F /* Text.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Text.pbobjc.h; sourceTree = "<group>"; };
+		677831531EF345E6009D9D7F /* Text.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Text.pbobjc.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +278,9 @@
 		677830FE1EE299A4009D9D7F /* pb */ = {
 			isa = PBXGroup;
 			children = (
+				677831511EF345E6009D9D7F /* text */,
+				6778314E1EF345DE009D9D7F /* Color.pbobjc.m */,
+				6778314F1EF345DE009D9D7F /* Color.pbobjc.h */,
 				677831471EF0B785009D9D7F /* env */,
 				677831431EEABBD8009D9D7F /* touch */,
 				677830FF1EE299A4009D9D7F /* button */,
@@ -286,8 +292,6 @@
 				677831071EE299A4009D9D7F /* Paint.pbobjc.m */,
 				677831081EE299A4009D9D7F /* Scrollview.pbobjc.h */,
 				677831091EE299A4009D9D7F /* Scrollview.pbobjc.m */,
-				6778310A1EE299A4009D9D7F /* Text.pbobjc.h */,
-				6778310B1EE299A4009D9D7F /* Text.pbobjc.m */,
 				6778310C1EE299A4009D9D7F /* Touch.pbobjc.h */,
 				6778310D1EE299A4009D9D7F /* Touch.pbobjc.m */,
 				6778310E1EE299A4009D9D7F /* view */,
@@ -359,6 +363,15 @@
 				677831491EF0B785009D9D7F /* Resource.pbobjc.m */,
 			);
 			path = env;
+			sourceTree = "<group>";
+		};
+		677831511EF345E6009D9D7F /* text */ = {
+			isa = PBXGroup;
+			children = (
+				677831521EF345E6009D9D7F /* Text.pbobjc.h */,
+				677831531EF345E6009D9D7F /* Text.pbobjc.m */,
+			);
+			path = text;
 			sourceTree = "<group>";
 		};
 		67D89DCD1ED4A2C30063A1E2 /* Frameworks */ = {
@@ -458,10 +471,11 @@
 				6778314A1EF0B785009D9D7F /* Resource.pbobjc.m in Sources */,
 				67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */,
 				677831231EE2B2C8009D9D7F /* MochiStackViewController.m in Sources */,
-				677831191EE299A4009D9D7F /* Text.pbobjc.m in Sources */,
+				677831541EF345E6009D9D7F /* Text.pbobjc.m in Sources */,
 				676EF4D01E8E341900C1488A /* AppDelegate.m in Sources */,
 				676EF4F41E8ECF5D00C1488A /* MochiView.m in Sources */,
 				6778314D1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer.m in Sources */,
+				677831501EF345DE009D9D7F /* Color.pbobjc.m in Sources */,
 				676EF4FA1E8F19A500C1488A /* MochiNode.m in Sources */,
 				676EF4F01E8ECF2700C1488A /* MochiViewController.m in Sources */,
 				677831181EE299A4009D9D7F /* Scrollview.pbobjc.m in Sources */,

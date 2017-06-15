@@ -1,0 +1,12 @@
+syntax = "proto3";
+package mochi;
+
+option go_package = "pb";
+option objc_class_prefix = "MochiPB";
+
+message Color {
+    uint32 red = 1;
+    uint32 blue = 2;
+    uint32 green = 3;
+    uint32 alpha = 4;
+}

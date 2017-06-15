@@ -3,7 +3,8 @@ package text
 import (
 	"image/color"
 
-	"github.com/overcyn/mochi/pb"
+	pb2 "github.com/overcyn/mochi/pb"
+	pb "github.com/overcyn/mochi/pb/text"
 )
 
 type Alignment int
@@ -199,14 +200,14 @@ func (f *Style) MarshalProtobuf() *pb.TextStyle {
 	return &pb.TextStyle{
 		TextAlignment:      f.Get(StyleKeyAlignment).(Alignment).MarshalProtobuf(),
 		StrikethroughStyle: f.Get(StyleKeyStrikethroughStyle).(StrikethroughStyle).MarshalProtobuf(),
-		StrikethroughColor: pb.ColorEncode(f.Get(StyleKeyStrikethroughColor).(color.Color)),
+		StrikethroughColor: pb2.ColorEncode(f.Get(StyleKeyStrikethroughColor).(color.Color)),
 		UnderlineStyle:     f.Get(StyleKeyUnderlineStyle).(UnderlineStyle).MarshalProtobuf(),
-		UnderlineColor:     pb.ColorEncode(f.Get(StyleKeyUnderlineColor).(color.Color)),
+		UnderlineColor:     pb2.ColorEncode(f.Get(StyleKeyUnderlineColor).(color.Color)),
 		Font:               f.Get(StyleKeyFont).(Font).MarshalProtobuf(),
 		Hyphenation:        f.Get(StyleKeyHyphenation).(float64),
 		LineHeightMultiple: f.Get(StyleKeyLineHeightMultiple).(float64),
 		MaxLines:           int64(f.Get(StyleKeyMaxLines).(int)),
-		TextColor:          pb.ColorEncode(f.Get(StyleKeyTextColor).(color.Color)),
+		TextColor:          pb2.ColorEncode(f.Get(StyleKeyTextColor).(color.Color)),
 		Wrap:               f.Get(StyleKeyWrap).(Wrap).MarshalProtobuf(),
 		Truncation:         f.Get(StyleKeyTruncation).(Truncation).MarshalProtobuf(),
 		TruncationString:   f.Get(StyleKeyTruncationString).(string),

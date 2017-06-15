@@ -20,7 +20,7 @@ type Point struct {
 func (m *Point) Reset()                    { *m = Point{} }
 func (m *Point) String() string            { return proto.CompactTextString(m) }
 func (*Point) ProtoMessage()               {}
-func (*Point) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
+func (*Point) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
 
 func (m *Point) GetX() float64 {
 	if m != nil {
@@ -44,7 +44,7 @@ type Rect struct {
 func (m *Rect) Reset()                    { *m = Rect{} }
 func (m *Rect) String() string            { return proto.CompactTextString(m) }
 func (*Rect) ProtoMessage()               {}
-func (*Rect) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{1} }
+func (*Rect) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1} }
 
 func (m *Rect) GetMin() *Point {
 	if m != nil {
@@ -70,7 +70,7 @@ type Insets struct {
 func (m *Insets) Reset()                    { *m = Insets{} }
 func (m *Insets) String() string            { return proto.CompactTextString(m) }
 func (*Insets) ProtoMessage()               {}
-func (*Insets) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{2} }
+func (*Insets) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{2} }
 
 func (m *Insets) GetTop() float64 {
 	if m != nil {
@@ -109,7 +109,7 @@ type Guide struct {
 func (m *Guide) Reset()                    { *m = Guide{} }
 func (m *Guide) String() string            { return proto.CompactTextString(m) }
 func (*Guide) ProtoMessage()               {}
-func (*Guide) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{3} }
+func (*Guide) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{3} }
 
 func (m *Guide) GetFrame() *Rect {
 	if m != nil {
@@ -139,9 +139,9 @@ func init() {
 	proto.RegisterType((*Guide)(nil), "layout.Guide")
 }
 
-func init() { proto.RegisterFile("github.com/overcyn/mochi/pb/layout.proto", fileDescriptor1) }
+func init() { proto.RegisterFile("github.com/overcyn/mochi/pb/layout.proto", fileDescriptor2) }
 
-var fileDescriptor1 = []byte{
+var fileDescriptor2 = []byte{
 	// 267 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x90, 0xcf, 0x4a, 0xc3, 0x40,
 	0x10, 0xc6, 0xc9, 0x5f, 0x61, 0xac, 0x45, 0x06, 0x91, 0xdc, 0x94, 0x08, 0xd2, 0x53, 0x02, 0xfa,
