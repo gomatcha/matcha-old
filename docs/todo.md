@@ -1,7 +1,3 @@
-<!-- type Notifier interface {
-    int64 Notify() func()
-    Unnotify(int64)
-} -->
 // mochi.Id is in the mochi package because view depends on layout. and layout needs to use the Ids
 
 High:
@@ -9,7 +5,6 @@ High:
 * Rebuild settings app.
 
 Medium:
-* Thread & locking. Switch to closures for notifiers
 * Documentation
 * Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 * Cache layout properties
@@ -50,6 +45,7 @@ Bugs:
 * crash if constraint layouter adds a view that is not in the Children slice
 * Constraints crash if unconstrained.
 * Auto disable PNGCrush. "Compress PNG Files" and "Remove Text Metadata from PNG Files"
+* Should we panic if user tries to unnotify with an unknown comm.Id
 
 Done:
 * Lifecycle
@@ -60,3 +56,4 @@ Done:
 * UINavigationController
 * UITabViewController
 * Routing / Navs
+* Thread & locking. Switch to closures for notifiers

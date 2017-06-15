@@ -1,7 +1,6 @@
 package comm
 
 import (
-	"fmt"
 	"sync"
 )
 
@@ -68,7 +67,6 @@ func (bn *BatchNotifier) Update() {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
-	fmt.Println("Update", bn.funcs)
 	for _, f := range bn.funcs {
 		f()
 	}

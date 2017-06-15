@@ -22,14 +22,17 @@ func init() {
 }
 
 type App struct {
+	comm.Storer
 	store     *comm.AsyncStore
 	tabScreen *tabscreen.Screen
 }
 
 func NewApp() *App {
-	app := &App{}
-	app.Lock()
-	defer app.Unlock()
+	st := &comm.AsyncStore{}
+	app := &App{
+		Storer: st,
+		store:  st,
+	}
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
 	options1 := &tabscreen.TabButton{
@@ -54,14 +57,6 @@ func NewApp() *App {
 		screen4,
 	)
 	return app
-}
-
-func (app *App) Lock() {
-	app.store.Lock()
-}
-
-func (app *App) Unlock() {
-	app.store.Unlock()
 }
 
 func (app *App) NewView(ctx *view.Context, key interface{}) view.View {
