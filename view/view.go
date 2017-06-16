@@ -103,14 +103,14 @@ const (
 	StageVisible
 )
 
-// EntersStage returns true if start<s and end>=s.
-func EntersStage(start, end, s Stage) bool {
-	return start < s && end >= s
+// EntersStage returns true if from<s and to>=s.
+func EntersStage(from, to, s Stage) bool {
+	return from < s && to >= s
 }
 
-// ExitsStage returns true if start>=s and end<s.
-func ExitsStage(start, end, s Stage) bool {
-	return start >= s && end < s
+// ExitsStage returns true if from>=s and to<s.
+func ExitsStage(from, to, s Stage) bool {
+	return from >= s && to < s
 }
 
 // Model describes the view and its children.

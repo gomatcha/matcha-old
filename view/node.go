@@ -27,6 +27,7 @@ var MainMu sync.Mutex
 var maxId int64
 var maxFuncId int64
 
+// Middleware is called on the result of View.Build(*context).
 type Middleware interface {
 	Build(*Context, *Model)
 }
@@ -34,6 +35,7 @@ type Middleware interface {
 var middlewaresMu sync.Mutex
 var middlewares = []Middleware{}
 
+// RegisterMiddleware adds v to the list of default middleware that Root starts with.
 func RegisterMiddleware(v Middleware) {
 	middlewaresMu.Lock()
 	defer middlewaresMu.Unlock()
@@ -49,22 +51,23 @@ func defaultMiddlewares() []Middleware {
 }
 
 type Root struct {
-	id     int64
+	id     comm.Id
 	root   *root
 	size   layout.Point
 	ticker *internal.Ticker
 }
 
+// NewRoot initializes a Root with screen s.
 func NewRoot(s Screen) *Root {
 	r := &Root{
 		root: newRoot(s),
-		id:   atomic.AddInt64(&maxId, 1),
+		id:   comm.Id(atomic.AddInt64(&maxId, 1)),
 	}
-	r.Start()
+	r.start()
 	return r
 }
 
-func (r *Root) Start() {
+func (r *Root) start() {
 	MainMu.Lock()
 	defer MainMu.Unlock()
 
@@ -88,7 +91,7 @@ func (r *Root) Start() {
 			fmt.Println("err", err)
 			return
 		}
-		mochibridge.Bridge().Call("updateId:withProtobuf:", mochibridge.Int64(id), mochibridge.Bytes(pb))
+		mochibridge.Bridge().Call("updateId:withProtobuf:", mochibridge.Int64(int64(id)), mochibridge.Bytes(pb))
 	})
 }
 
@@ -109,13 +112,15 @@ func (r *Root) Call(funcId int64, viewId int64, args []reflect.Value) []reflect.
 	return r.root.call(funcId, viewId, args)
 }
 
-func (r *Root) Id() int64 {
+// Id returns the unique identifier for r.
+func (r *Root) Id() comm.Id {
 	MainMu.Lock()
 	defer MainMu.Unlock()
 
 	return r.id
 }
 
+// Size returns the size of r.
 func (r *Root) Size() layout.Point {
 	MainMu.Lock()
 	defer MainMu.Unlock()
@@ -123,6 +128,7 @@ func (r *Root) Size() layout.Point {
 	return r.size
 }
 
+// SetSize sets the size of r.
 func (r *Root) SetSize(p layout.Point) {
 	MainMu.Lock()
 	defer MainMu.Unlock()
@@ -130,6 +136,7 @@ func (r *Root) SetSize(p layout.Point) {
 	r.size = p
 }
 
+// Middlewares returns the Middleware that are applied to r's views.
 func (r *Root) Middlewares() []Middleware {
 	MainMu.Lock()
 	defer MainMu.Unlock()
@@ -137,6 +144,7 @@ func (r *Root) Middlewares() []Middleware {
 	return r.root.middlewares
 }
 
+// SetMiddlewares sets the list of Middleware applied to all of r's views.
 func (r *Root) SetMiddlewares(rs []Middleware) {
 	MainMu.Lock()
 	defer MainMu.Unlock()
@@ -149,6 +157,7 @@ type viewCacheKey struct {
 	key interface{}
 }
 
+// Context specifies the supporting context for building a View.
 type Context struct {
 	node      *node
 	prevIds   map[viewCacheKey]mochi.Id
@@ -156,6 +165,7 @@ type Context struct {
 	skipBuild map[mochi.Id]struct{}
 }
 
+// Prev returns the view returned by the last call to Build with the given key.
 func (ctx *Context) Prev(key interface{}) View {
 	if ctx == nil {
 		return nil
@@ -182,10 +192,12 @@ func (ctx *Context) Prev(key interface{}) View {
 	return prevNode.view
 }
 
+// PrevModel returns the last result of View.Build().
 func (ctx *Context) PrevModel() *Model {
 	return ctx.node.model
 }
 
+// NewId generates a new identifier for a given key.
 func (ctx *Context) NewId(key interface{}) mochi.Id {
 	id := mochi.Id(atomic.AddInt64(&maxId, 1))
 	if ctx != nil {
