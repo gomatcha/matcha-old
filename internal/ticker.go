@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochibridge"
 )
 
@@ -30,15 +31,15 @@ func screenUpdate() {
 	tickers.mu.Unlock()
 
 	for _, i := range ts {
-		i.send()
+		i.update()
 	}
 }
 
 type Ticker struct {
 	key      int
 	mu       sync.Mutex
-	chans    map[chan struct{}]struct{}
-	funcs    []func()
+	funcs    map[comm.Id]func()
+	maxId    comm.Id
 	timer    *time.Timer
 	start    time.Time
 	duration time.Duration
@@ -51,7 +52,7 @@ func NewTicker(duration time.Duration) *Ticker {
 	tickers.maxKey += 1
 	t := &Ticker{
 		key:      tickers.maxKey,
-		chans:    map[chan struct{}]struct{}{},
+		funcs:    map[comm.Id]func(){},
 		start:    time.Now(),
 		duration: duration,
 	}
@@ -62,36 +63,20 @@ func NewTicker(duration time.Duration) *Ticker {
 	return t
 }
 
-func (t *Ticker) Notify() chan struct{} {
+func (t *Ticker) Notify(f func()) comm.Id {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	c := make(chan struct{})
-	t.chans[c] = struct{}{}
-	return c
+	t.maxId += 1
+	t.funcs[t.maxId] = f
+	return t.maxId
 }
 
-func (t *Ticker) Unnotify(c chan struct{}) {
+func (t *Ticker) Unnotify(key comm.Id) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	_, ok := t.chans[c]
-	if !ok {
-		panic("Unnotify called with unknown chan")
-	}
-	delete(t.chans, c)
-}
-
-func (t *Ticker) NotifyFunc(f func()) int {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	t.funcs = append(t.funcs, f)
-	return 0
-}
-
-func (t *Ticker) UnnotifyFunc(key int) {
-	// TODO(KD):
+	delete(t.funcs, key)
 }
 
 func (t *Ticker) Value() float64 {
@@ -113,15 +98,11 @@ func (t *Ticker) Stop() {
 	delete(tickers.ts, t.key)
 }
 
-func (t *Ticker) send() {
+func (t *Ticker) update() {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	for i := range t.chans {
-		i <- struct{}{}
-		<-i
-	}
-	for _, i := range t.funcs {
-		i()
+	for _, f := range t.funcs {
+		f()
 	}
 }

@@ -56,15 +56,25 @@ type Root struct {
 }
 
 func NewRoot(s Screen) *Root {
-	id := atomic.AddInt64(&maxId, 1)
 	r := &Root{
-		root:   newRoot(s),
-		ticker: internal.NewTicker(time.Hour * 99999),
-		id:     id,
+		root: newRoot(s),
+		id:   atomic.AddInt64(&maxId, 1),
+	}
+	r.Start()
+	return r
+}
+
+func (r *Root) Start() {
+	MainMu.Lock()
+	defer MainMu.Unlock()
+
+	if r.ticker != nil {
+		return
 	}
 
-	// Start run loop.
-	r.ticker.NotifyFunc(func() {
+	id := r.id
+	r.ticker = internal.NewTicker(time.Hour * 99999)
+	_ = r.ticker.Notify(func() {
 		MainMu.Lock()
 		defer MainMu.Unlock()
 
@@ -80,7 +90,16 @@ func NewRoot(s Screen) *Root {
 		}
 		mochibridge.Bridge().Call("updateId:withProtobuf:", mochibridge.Int64(id), mochibridge.Bytes(pb))
 	})
-	return r
+}
+
+func (r *Root) Stop() {
+	MainMu.Lock()
+	defer MainMu.Unlock()
+
+	if r.ticker == nil {
+		return
+	}
+	r.ticker.Stop()
 }
 
 func (r *Root) Call(funcId int64, viewId int64, args []reflect.Value) []reflect.Value {

@@ -18,11 +18,11 @@ func NewTicker(duration time.Duration) *Ticker {
 }
 
 func (t *Ticker) Notify(f func()) comm.Id {
-	return comm.Id(t.ticker.NotifyFunc(f))
+	return t.ticker.Notify(f)
 }
 
 func (t *Ticker) Unnotify(id comm.Id) {
-	t.ticker.UnnotifyFunc(int(id))
+	t.ticker.Unnotify(id)
 }
 
 func (t *Ticker) Value() float64 {
