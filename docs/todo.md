@@ -40,6 +40,7 @@ Low:
 * MapView
 * Modal presentation
 * More Touch Recognizers: Pan, Swipe, Pinch, EdgePan, Rotation
+* Add preload, and prepreload stages
 
 Bugs:
 * Crash in protobuf if view does not have a layout guide.
