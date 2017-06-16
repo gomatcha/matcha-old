@@ -78,9 +78,6 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
-		view.MainMu.Lock()
-		defer view.MainMu.Unlock()
-
 		pbevent := &stacknav.StackEvent{}
 		err := proto.Unmarshal(data, pbevent)
 		if err != nil {

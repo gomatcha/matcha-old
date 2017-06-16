@@ -22,6 +22,8 @@ import (
 	"github.com/overcyn/mochibridge"
 )
 
+var MainMu sync.Mutex
+
 var maxId int64
 var maxFuncId int64
 
@@ -39,7 +41,7 @@ func RegisterMiddleware(v Middleware) {
 	middlewares = append(middlewares, v)
 }
 
-func Middlewares() []Middleware {
+func defaultMiddlewares() []Middleware {
 	middlewaresMu.Lock()
 	defer middlewaresMu.Unlock()
 
@@ -48,7 +50,6 @@ func Middlewares() []Middleware {
 
 type Root struct {
 	id     int64
-	mu     *sync.Mutex
 	root   *root
 	size   layout.Point
 	ticker *internal.Ticker
@@ -57,7 +58,6 @@ type Root struct {
 func NewRoot(s Screen) *Root {
 	id := atomic.AddInt64(&maxId, 1)
 	r := &Root{
-		mu:     &sync.Mutex{},
 		root:   newRoot(s),
 		ticker: internal.NewTicker(time.Hour * 99999),
 		id:     id,
@@ -65,8 +65,8 @@ func NewRoot(s Screen) *Root {
 
 	// Start run loop.
 	r.ticker.NotifyFunc(func() {
-		r.mu.Lock()
-		defer r.mu.Unlock()
+		MainMu.Lock()
+		defer MainMu.Unlock()
 
 		if !r.root.update(r.size) {
 			// nothing changed
@@ -84,24 +84,45 @@ func NewRoot(s Screen) *Root {
 }
 
 func (r *Root) Call(funcId int64, viewId int64, args []reflect.Value) []reflect.Value {
-	r.mu.Lock()
-	defer r.mu.Unlock()
+	MainMu.Lock()
+	defer MainMu.Unlock()
 
 	return r.root.call(funcId, viewId, args)
 }
 
 func (r *Root) Id() int64 {
-	r.mu.Lock()
-	defer r.mu.Unlock()
+	MainMu.Lock()
+	defer MainMu.Unlock()
 
 	return r.id
 }
 
+func (r *Root) Size() layout.Point {
+	MainMu.Lock()
+	defer MainMu.Unlock()
+
+	return r.size
+}
+
 func (r *Root) SetSize(p layout.Point) {
-	r.mu.Lock()
-	defer r.mu.Unlock()
+	MainMu.Lock()
+	defer MainMu.Unlock()
 
 	r.size = p
+}
+
+func (r *Root) Middlewares() []Middleware {
+	MainMu.Lock()
+	defer MainMu.Unlock()
+
+	return r.root.middlewares
+}
+
+func (r *Root) SetMiddlewares(rs []Middleware) {
+	MainMu.Lock()
+	defer MainMu.Unlock()
+
+	r.root.middlewares = rs
 }
 
 type viewCacheKey struct {
@@ -196,10 +217,10 @@ func (f updateFlag) needsPaint() bool {
 }
 
 type root struct {
-	mu    sync.Mutex
-	node  *node
-	ids   map[viewCacheKey]mochi.Id
-	nodes map[mochi.Id]*node
+	node        *node
+	ids         map[viewCacheKey]mochi.Id
+	nodes       map[mochi.Id]*node
+	middlewares []Middleware
 
 	flagMu      sync.Mutex
 	updateFlags map[mochi.Id]updateFlag
@@ -218,6 +239,7 @@ func newRoot(s Screen) *root {
 		root: root,
 	}
 	root.updateFlags = map[mochi.Id]updateFlag{v.Id(): buildFlag}
+	root.middlewares = defaultMiddlewares()
 	return root
 }
 
@@ -228,17 +250,9 @@ func (root *root) addFlag(id mochi.Id, f updateFlag) {
 	root.updateFlags[id] |= f
 }
 
-var MainMu sync.Mutex
-
 func (root *root) update(size layout.Point) bool {
-	root.mu.Lock()
-	defer root.mu.Unlock()
 	root.flagMu.Lock()
 	defer root.flagMu.Unlock()
-
-	// Lock the entire tree.
-	MainMu.Lock()
-	defer MainMu.Unlock()
 
 	var flag updateFlag
 	for _, v := range root.updateFlags {
@@ -247,15 +261,15 @@ func (root *root) update(size layout.Point) bool {
 
 	updated := false
 	if flag.needsBuild() {
-		root.buildLocked()
+		root.build()
 		updated = true
 	}
 	if flag.needsLayout() {
-		root.layoutLocked(size, size)
+		root.layout(size, size)
 		updated = true
 	}
 	if flag.needsPaint() {
-		root.paintLocked()
+		root.paint()
 		updated = true
 	}
 	root.updateFlags = map[mochi.Id]updateFlag{}
@@ -267,15 +281,12 @@ func (root *root) MarshalProtobuf2() ([]byte, error) {
 }
 
 func (root *root) MarshalProtobuf() *pb.Root {
-	root.mu.Lock()
-	defer root.mu.Unlock()
-
 	return &pb.Root{
 		Node: root.node.MarshalProtobuf(),
 	}
 }
 
-func (root *root) buildLocked() {
+func (root *root) build() {
 	prevIds := root.ids
 	prevNodes := root.nodes
 
@@ -305,20 +316,17 @@ func (root *root) buildLocked() {
 	root.ids = ids
 }
 
-func (root *root) layoutLocked(minSize layout.Point, maxSize layout.Point) {
+func (root *root) layout(minSize layout.Point, maxSize layout.Point) {
 	g := root.node.layout(minSize, maxSize)
 	g.Frame = g.Frame.Add(layout.Pt(-g.Frame.Min.X, -g.Frame.Min.Y)) // Move Frame.Min to the origin.
 	root.node.layoutGuide = &g
 }
 
-func (root *root) paintLocked() {
+func (root *root) paint() {
 	root.node.paint()
 }
 
 func (root *root) call(funcId int64, viewId int64, args []reflect.Value) []reflect.Value {
-	root.mu.Lock()
-	defer root.mu.Unlock()
-
 	node, ok := root.nodes[mochi.Id(viewId)]
 	if !ok || node.model == nil {
 		return nil
@@ -410,7 +418,7 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 		}
 
 		// Call middleware
-		for _, i := range middlewares {
+		for _, i := range n.root.middlewares {
 			i.Build(ctx, viewModel)
 		}
 

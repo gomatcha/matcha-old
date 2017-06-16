@@ -35,9 +35,6 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
-		view.MainMu.Lock()
-		defer view.MainMu.Unlock()
-
 		event := &switchview.Event{}
 		err := proto.Unmarshal(data, event)
 		if err != nil {
