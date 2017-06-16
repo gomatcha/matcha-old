@@ -100,7 +100,7 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 		Layouter:       &layouter{styledText: st},
 		NativeViewName: "github.com/overcyn/mochi/view/button",
 		NativeViewState: &pbbutton.Button{
-			Text: t.MarshalProtobuf(),
+			StyledText: st.MarshalProtobuf(),
 		},
 	}
 }

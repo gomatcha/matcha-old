@@ -133,7 +133,7 @@
     NSError *error = nil;
     MochiPBButtonButton *pbbutton = (id)[state unpackMessageClass:[MochiPBButtonButton class] error:&error];
     
-    NSAttributedString *string = [[NSAttributedString alloc] initWithProtobuf:pbbutton.text];
+    NSAttributedString *string = [[NSAttributedString alloc] initWithProtobuf:pbbutton.styledText];
     [self.button setAttributedTitle:string forState:UIControlStateNormal];
 }
 

@@ -48,11 +48,11 @@ static GPBFileDescriptor *MochiPBButtonButtonRoot_FileDescriptor(void) {
 
 @implementation MochiPBButtonButton
 
-@dynamic hasText, text;
+@dynamic hasStyledText, styledText;
 
 typedef struct MochiPBButtonButton__storage_ {
   uint32_t _has_storage_[1];
-  MochiPBText *text;
+  MochiPBStyledText *styledText;
 } MochiPBButtonButton__storage_;
 
 // This method is threadsafe because it is initially called
@@ -62,12 +62,12 @@ typedef struct MochiPBButtonButton__storage_ {
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
-        .name = "text",
-        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBText),
-        .number = MochiPBButtonButton_FieldNumber_Text,
+        .name = "styledText",
+        .dataTypeSpecific.className = GPBStringifySymbol(MochiPBStyledText),
+        .number = MochiPBButtonButton_FieldNumber_StyledText,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(MochiPBButtonButton__storage_, text),
-        .flags = GPBFieldOptional,
+        .offset = (uint32_t)offsetof(MochiPBButtonButton__storage_, styledText),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
     };
@@ -79,6 +79,11 @@ typedef struct MochiPBButtonButton__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(MochiPBButtonButton__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\001\001\n\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }

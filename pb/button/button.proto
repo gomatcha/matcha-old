@@ -6,5 +6,5 @@ option go_package = "button";
 option objc_class_prefix = "MochiPBButton";
 
 message Button {
-    mochi.text.Text text = 1;
+    mochi.text.StyledText styledText = 1;
 }

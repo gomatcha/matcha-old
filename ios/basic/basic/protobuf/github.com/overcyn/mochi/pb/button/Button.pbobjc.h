@@ -27,7 +27,7 @@
 
 CF_EXTERN_C_BEGIN
 
-@class MochiPBText;
+@class MochiPBStyledText;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -49,14 +49,14 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - MochiPBButtonButton
 
 typedef GPB_ENUM(MochiPBButtonButton_FieldNumber) {
-  MochiPBButtonButton_FieldNumber_Text = 1,
+  MochiPBButtonButton_FieldNumber_StyledText = 1,
 };
 
 @interface MochiPBButtonButton : GPBMessage
 
-@property(nonatomic, readwrite, strong, null_resettable) MochiPBText *text;
-/** Test to see if @c text has been set. */
-@property(nonatomic, readwrite) BOOL hasText;
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBStyledText *styledText;
+/** Test to see if @c styledText has been set. */
+@property(nonatomic, readwrite) BOOL hasStyledText;
 
 @end
 
