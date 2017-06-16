@@ -177,6 +177,9 @@ func (ctx *Context) prev(key string, prefix string) View {
 	if ctx.parent != nil {
 		return ctx.parent.prev(key, ctx.prefix+"|"+prefix)
 	}
+	if ctx.node == nil {
+		return nil
+	}
 	if prefix != "" {
 		key = prefix + "|" + key
 	}
@@ -208,6 +211,9 @@ func (ctx *Context) PrevModel() *Model {
 	if ctx.parent != nil {
 		return ctx.PrevModel()
 	}
+	if ctx.node == nil {
+		return nil
+	}
 	return ctx.node.model
 }
 
@@ -225,7 +231,7 @@ func (ctx *Context) newId(key string, prefix string) mochi.Id {
 	}
 
 	id := mochi.Id(atomic.AddInt64(&maxId, 1))
-	if ctx != nil {
+	if ctx.node != nil {
 		cacheKey := viewCacheKey{key: key, id: ctx.node.id}
 		if _, ok := ctx.node.root.ids[cacheKey]; ok {
 			fmt.Println("Context.NewId(): key has already been used", key)
@@ -260,6 +266,9 @@ func (ctx *Context) WithPrefix(key string) *Context {
 func (ctx *Context) Id() mochi.Id {
 	if ctx.parent != nil {
 		return ctx.parent.Id()
+	}
+	if ctx.node == nil {
+		return 0
 	}
 	return ctx.node.id
 }
@@ -298,7 +307,7 @@ func newRoot(s Screen) *root {
 	s.Lock()
 	defer s.Unlock()
 
-	v := s.View(nil, "root")
+	v := s.View(&Context{}, "root")
 
 	root := &root{}
 	root.node = &node{
