@@ -50,7 +50,6 @@ func (a UnderlineStyle) MarshalProtobuf() pb.UnderlineStyle {
 	return pb.UnderlineStyle(a)
 }
 
-// TODO(KD): Rethink how to do this.
 type Font struct {
 	Family string
 	Face   string

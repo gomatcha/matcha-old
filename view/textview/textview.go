@@ -26,25 +26,24 @@ func (l *layouter) Unnotify(id comm.Id) {
 	// no-op
 }
 
-type TextView struct {
+type View struct {
 	*view.Embed
 	String     string
 	Style      *text.Style
 	StyledText *text.StyledText
 }
 
-func New(ctx *view.Context, key interface{}) *TextView {
-	v, ok := ctx.Prev(key).(*TextView)
-	if !ok {
-		v = &TextView{
-			Embed: view.NewEmbed(ctx.NewId(key)),
-			Style: &text.Style{},
-		}
+func New(ctx *view.Context, key interface{}) *View {
+	if v, ok := ctx.Prev(key).(*View); ok {
+		return v
 	}
-	return v
+	return &View{
+		Embed: view.NewEmbed(ctx.NewId(key)),
+		Style: &text.Style{},
+	}
 }
 
-func (v *TextView) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) *view.Model {
 	st := v.StyledText
 	if st == nil {
 		st = text.NewStyledText(text.New(v.String))

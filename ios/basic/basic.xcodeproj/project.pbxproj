@@ -45,6 +45,8 @@
 		6778314D1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778314C1EF0EC4A009D9D7F /* MochiButtonGestureRecognizer.m */; };
 		677831501EF345DE009D9D7F /* Color.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778314E1EF345DE009D9D7F /* Color.pbobjc.m */; };
 		677831541EF345E6009D9D7F /* Text.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831531EF345E6009D9D7F /* Text.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		677831581EF37A0F009D9D7F /* Textinput.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 677831571EF37A0F009D9D7F /* Textinput.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6778315B1EF37F59009D9D7F /* MochiTextInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 6778315A1EF37F59009D9D7F /* MochiTextInput.m */; };
 		67D89E211ED4AE1E0063A1E2 /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67608AC31EA7EB5E00AE2EC7 /* Mochi.framework */; };
 /* End PBXBuildFile section */
 
@@ -132,6 +134,10 @@
 		6778314F1EF345DE009D9D7F /* Color.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.pbobjc.h; sourceTree = "<group>"; };
 		677831521EF345E6009D9D7F /* Text.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Text.pbobjc.h; sourceTree = "<group>"; };
 		677831531EF345E6009D9D7F /* Text.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Text.pbobjc.m; sourceTree = "<group>"; };
+		677831561EF37A0F009D9D7F /* Textinput.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Textinput.pbobjc.h; sourceTree = "<group>"; };
+		677831571EF37A0F009D9D7F /* Textinput.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Textinput.pbobjc.m; sourceTree = "<group>"; };
+		677831591EF37F59009D9D7F /* MochiTextInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiTextInput.h; sourceTree = "<group>"; };
+		6778315A1EF37F59009D9D7F /* MochiTextInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiTextInput.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,6 +241,8 @@
 				676EF4F31E8ECF5D00C1488A /* MochiView.m */,
 				6778312C1EE8CE76009D9D7F /* MochiSwitchView.h */,
 				6778312D1EE8CE76009D9D7F /* MochiSwitchView.m */,
+				677831591EF37F59009D9D7F /* MochiTextInput.h */,
+				6778315A1EF37F59009D9D7F /* MochiTextInput.m */,
 				677830F71EDFF2A4009D9D7F /* MochiTabBarController.h */,
 				677830F81EDFF2A4009D9D7F /* MochiTabBarController.m */,
 				677831211EE2B2C8009D9D7F /* MochiStackViewController.h */,
@@ -313,6 +321,7 @@
 		6778310E1EE299A4009D9D7F /* view */ = {
 			isa = PBXGroup;
 			children = (
+				677831551EF37A0F009D9D7F /* textinput */,
 				677831331EE8D37A009D9D7F /* switchview */,
 				677831281EE34715009D9D7F /* tabnav */,
 				677831241EE3421B009D9D7F /* stacknav */,
@@ -372,6 +381,15 @@
 				677831531EF345E6009D9D7F /* Text.pbobjc.m */,
 			);
 			path = text;
+			sourceTree = "<group>";
+		};
+		677831551EF37A0F009D9D7F /* textinput */ = {
+			isa = PBXGroup;
+			children = (
+				677831561EF37A0F009D9D7F /* Textinput.pbobjc.h */,
+				677831571EF37A0F009D9D7F /* Textinput.pbobjc.m */,
+			);
+			path = textinput;
 			sourceTree = "<group>";
 		};
 		67D89DCD1ED4A2C30063A1E2 /* Frameworks */ = {
@@ -458,6 +476,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				677831581EF37A0F009D9D7F /* Textinput.pbobjc.m in Sources */,
 				677831151EE299A4009D9D7F /* Imageview.pbobjc.m in Sources */,
 				677831271EE3421B009D9D7F /* Stacknavigator.pbobjc.m in Sources */,
 				67608AC71EA8545600AE2EC7 /* MochiObjcBridge.m in Sources */,
@@ -468,6 +487,7 @@
 				677831141EE299A4009D9D7F /* Button.pbobjc.m in Sources */,
 				674080DD1ED8D4800093D987 /* MochiTapGestureRecognizer.m in Sources */,
 				676EF4E41E8E34E300C1488A /* ViewController.m in Sources */,
+				6778315B1EF37F59009D9D7F /* MochiTextInput.m in Sources */,
 				6778314A1EF0B785009D9D7F /* Resource.pbobjc.m in Sources */,
 				67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */,
 				677831231EE2B2C8009D9D7F /* MochiStackViewController.m in Sources */,

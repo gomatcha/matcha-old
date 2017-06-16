@@ -10,12 +10,13 @@ Medium:
 * Cache layout properties
 * faster transferring of Images/ data blobs
 * Collect native resources into assets.
+* UINavigation item button. uitabbar item image
+* uitabbaritem and uinavigationitem should observer their children, so they can update their button/bar
 
 Low:
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
 * Constraints should force views onto pixel boundries
 * Animations
-* uitabbaritem and uinavigationitem should observer their children, so they can update their button/bar
 * Responder Chain
 * Rotation
 * Accessibility

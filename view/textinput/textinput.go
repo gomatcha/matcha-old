@@ -5,11 +5,16 @@ import (
 	"github.com/overcyn/mochi/view"
 )
 
+// View mutates it's Text and StyledText fields in place.
 type View struct {
 	*view.Embed
-	String string
-	Style  text.Style
-	Text   text.Text
+	Text       *text.Text
+	Style      *text.Style
+	StyledText *text.StyledText
+	// Cursor position?
+	// Keyboard visibility?
+
+	OnChange func(*View)
 }
 
 func New(ctx *view.Context, key interface{}) *View {
@@ -22,7 +27,14 @@ func New(ctx *view.Context, key interface{}) *View {
 }
 
 func (v *View) Build(ctx *view.Context) *view.Model {
+	st := v.StyledText
+	if st == nil {
+		st = text.NewStyledText(v.Text)
+		st.Set(v.Style, 0, 0)
+	}
+
 	return &view.Model{
-		NativeViewName: "github.com/overcyn/mochi/view/textinput",
+		NativeViewName:  "github.com/overcyn/mochi/view/textinput",
+		NativeViewState: st.MarshalProtobuf(),
 	}
 }

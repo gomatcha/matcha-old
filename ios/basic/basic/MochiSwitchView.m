@@ -20,8 +20,8 @@
     MochiPBSwitchViewView *view = (id)[state unpackMessageClass:[MochiPBSwitchViewView class] error:&error];
     if (view != nil) {
         self.on = view.value;
+        self.funcId = view.onValueChange;
     }
-    self.funcId = view.onValueChange;
 }
 
 - (void)onChange:(id)sender {

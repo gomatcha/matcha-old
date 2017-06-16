@@ -1,0 +1,14 @@
+syntax = "proto3";
+package mochi.view.textinput;
+import "github.com/overcyn/mochi/pb/text/text.proto";
+
+option go_package = "textinput";
+option objc_class_prefix = "MochiPBTextInput";
+
+message View {
+    mochi.text.StyledText styledText = 1;
+}
+
+message Event {
+    mochi.text.StyledText styledText = 1;
+}

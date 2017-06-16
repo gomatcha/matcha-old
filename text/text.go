@@ -1,9 +1,10 @@
 package text
 
 import (
-	"golang.org/x/text/unicode/norm"
 	"runtime"
 	"sync"
+
+	"golang.org/x/text/unicode/norm"
 
 	pb "github.com/overcyn/mochi/pb/text"
 )
@@ -13,7 +14,7 @@ type Position struct {
 	text *Text
 }
 
-// -1 if the position has been removed
+// -1 if the position has been removed.
 func (p *Position) Index() int {
 	p.text.positionMu.Lock()
 	defer p.text.positionMu.Unlock()
@@ -50,10 +51,12 @@ func (t *Text) MarshalProtobuf() *pb.Text {
 	}
 }
 
+// Panics if idx is out of range.
 func (t *Text) ByteAt(byteIdx int) byte {
 	return t.bytes[byteIdx]
 }
 
+// Panics if idx is out of range.
 func (t *Text) RuneAt(byteIdx int) rune {
 	// Start at the position and look backwards until we find the start of the rune
 	var runeStart int = -1
@@ -80,6 +83,7 @@ func (t *Text) RuneAt(byteIdx int) rune {
 	return []rune(string(bytes))[0]
 }
 
+// Panics if idx is out of range.
 func (t *Text) GlyphAt(byteIdx int) string {
 	// Start at the position and look backwards until we find the start of the glyph
 	var glyphStart int = -1
@@ -106,40 +110,74 @@ func (t *Text) GlyphAt(byteIdx int) string {
 	return string(bytes)
 }
 
-func (t *Text) ByteIndex(byteIdx int) int {
-	return 0
-}
+// func (t *Text) ByteIndex(byteIdx int) int {
+// 	return 0
+// }
 
-func (t *Text) RuneIndex(runeIdx int) int {
-	return 0
-}
+// func (t *Text) RuneIndex(runeIdx int) int {
+// 	return 0
+// }
 
-func (t *Text) GlyphIndex(glyphIdx int) int {
-	return 0
-}
+// func (t *Text) GlyphIndex(glyphIdx int) int {
+// 	return 0
+// }
 
+// Returns -1 if out of range.
 func (t *Text) ByteNextIndex(byteIdx int) int {
-	return byteIdx + 1
+	idx := byteIdx + 1
+	if idx >= len(t.bytes) {
+		return -1
+	}
+	return idx
 }
 
+// Returns -1 if out of range.
 func (t *Text) RuneNextIndex(byteIdx int) int {
-	return 0
+	for i := byteIdx + 1; i < len(t.bytes); i += 1 {
+		if t.isRune[i] {
+			return i
+		}
+	}
+	return -1
 }
 
+// Returns -1 if out of range.
 func (t *Text) GlyphNextIndex(byteIdx int) int {
-	return 0
+	for i := byteIdx + 1; i < len(t.bytes); i += 1 {
+		if t.isGlyph[i] {
+			return i
+		}
+	}
+	return -1
 }
 
+// Returns -1 if out of range.
 func (t *Text) BytePrevIndex(byteIdx int) int {
-	return byteIdx - 1
+	idx := byteIdx - 1
+	if idx < 0 {
+		return -1
+	}
+	return idx
 }
 
+// Returns -1 if out of range.
 func (t *Text) RunePrevIndex(byteIdx int) int {
-	return 0
+	for i := byteIdx - 1; i >= 0; i -= 1 {
+		if t.isRune[i] {
+			return i
+		}
+	}
+	return -1
 }
 
+// Returns -1 if out of range.
 func (t *Text) GlyphPrevIndex(byteIdx int) int {
-	return 0
+	for i := byteIdx - 1; i >= 0; i -= 1 {
+		if t.isGlyph[i] {
+			return i
+		}
+	}
+	return -1
 }
 
 func (t *Text) ByteCount() int {
@@ -154,8 +192,12 @@ func (t *Text) GlyphCount() int {
 	return t.glyphCount
 }
 
-// func (t *Text) ReplaceRange(minByteIdx, maxByteIdx int, new string) {
-// }
+// panics if minByteIdx or maxByteIdx is out of range.
+func (t *Text) Replace(minByteIdx, maxByteIdx int, new string) {
+	if maxByteIdx > minByteIdx || minByteIdx < 0 || maxByteIdx > len(t.bytes) {
+		panic("Index out of range")
+	}
+}
 
 func (t *Text) Position(byteIdx int) *Position {
 	t.positionMu.Lock()
@@ -209,13 +251,6 @@ func (t *Text) normalize() {
 	t.bytes = bytes
 }
 
-// func (t *Text) String() string {
-// 	if t != nil {
-// 		return t.str
-// 	}
-// 	return ""
-// }
-
-// func (t *Text) SetString(text string) {
-// 	t.str = text
-// }
+func (t *Text) String() string {
+	return string(t.bytes)
+}
