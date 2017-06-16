@@ -12,12 +12,12 @@ import (
 
 type Screen interface {
 	sync.Locker
-	NewView(*Context, interface{}) View
+	View(*Context, interface{}) View
 }
 
 type ScreenFunc func(*Context, interface{}) View
 
-func (f ScreenFunc) NewView(ctx *Context, key interface{}) View {
+func (f ScreenFunc) View(ctx *Context, key interface{}) View {
 	return f(ctx, key)
 }
 

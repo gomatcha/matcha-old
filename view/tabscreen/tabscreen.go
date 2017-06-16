@@ -91,7 +91,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 	screenspb := []*tabnavpb.Screen{}
 	for idx, i := range v.screen.Children() {
-		chld := i.NewView(ctx, idx)
+		chld := i.View(ctx, idx)
 
 		var button *TabButton
 		if childView, ok := chld.(ChildView); ok {
@@ -157,9 +157,9 @@ type tabButtonScreen struct {
 	button *TabButton
 }
 
-func (s *tabButtonScreen) NewView(ctx *view.Context, key interface{}) view.View {
+func (s *tabButtonScreen) View(ctx *view.Context, key interface{}) view.View {
 	return &tabButtonView{
-		View:   s.Screen.NewView(ctx, key),
+		View:   s.Screen.View(ctx, key),
 		button: s.button,
 	}
 }

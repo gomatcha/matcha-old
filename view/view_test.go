@@ -4,45 +4,45 @@ import "testing"
 
 func TestStage(t *testing.T) {
 	test := []struct {
-		from, to, test Stage
+		from, to, test int
 		enter, exit    bool
 	}{
-		{StageDead, StageDead, StagePrepreload, false, false},
-		{StageDead, StageMounted, StagePrepreload, false, false},
-		{StageDead, StagePrepreload, StagePrepreload, true, false},
-		{StageDead, StagePreload, StagePrepreload, true, false},
-		{StageDead, StageVisible, StagePrepreload, true, false},
+		{1, 1, 3, false, false},
+		{1, 2, 3, false, false},
+		{1, 3, 3, true, false},
+		{1, 4, 3, true, false},
+		{1, 5, 3, true, false},
 
-		{StageMounted, StageDead, StagePrepreload, false, false},
-		{StageMounted, StageMounted, StagePrepreload, false, false},
-		{StageMounted, StagePrepreload, StagePrepreload, true, false},
-		{StageMounted, StagePreload, StagePrepreload, true, false},
-		{StageMounted, StageVisible, StagePrepreload, true, false},
+		{2, 1, 3, false, false},
+		{2, 2, 3, false, false},
+		{2, 3, 3, true, false},
+		{2, 4, 3, true, false},
+		{2, 5, 3, true, false},
 
-		{StagePrepreload, StageDead, StagePrepreload, false, true},
-		{StagePrepreload, StageMounted, StagePrepreload, false, true},
-		{StagePrepreload, StagePrepreload, StagePrepreload, false, false},
-		{StagePrepreload, StagePreload, StagePrepreload, false, false},
-		{StagePrepreload, StageVisible, StagePrepreload, false, false},
+		{3, 1, 3, false, true},
+		{3, 2, 3, false, true},
+		{3, 3, 3, false, false},
+		{3, 4, 3, false, false},
+		{3, 5, 3, false, false},
 
-		{StagePreload, StageDead, StagePrepreload, false, true},
-		{StagePreload, StageMounted, StagePrepreload, false, true},
-		{StagePreload, StagePrepreload, StagePrepreload, false, false},
-		{StagePreload, StagePreload, StagePrepreload, false, false},
-		{StagePreload, StageVisible, StagePrepreload, false, false},
+		{4, 1, 3, false, true},
+		{4, 2, 3, false, true},
+		{4, 3, 3, false, false},
+		{4, 4, 3, false, false},
+		{4, 5, 3, false, false},
 
-		{StageVisible, StageDead, StagePrepreload, false, true},
-		{StageVisible, StageMounted, StagePrepreload, false, true},
-		{StageVisible, StagePrepreload, StagePrepreload, false, false},
-		{StageVisible, StagePreload, StagePrepreload, false, false},
-		{StageVisible, StageVisible, StagePrepreload, false, false},
+		{5, 1, 3, false, true},
+		{5, 2, 3, false, true},
+		{5, 3, 3, false, false},
+		{5, 4, 3, false, false},
+		{5, 5, 3, false, false},
 	}
 
 	for _, i := range test {
-		if EntersStage(i.from, i.to, i.test) != i.enter {
+		if EntersStage(Stage(i.from), Stage(i.to), Stage(i.test)) != i.enter {
 			t.Error("enter", i.from, i.to, i.test)
 		}
-		if ExitsStage(i.from, i.to, i.test) != i.exit {
+		if ExitsStage(Stage(i.from), Stage(i.to), Stage(i.test)) != i.exit {
 			t.Error("exit", i.from, i.to, i.test)
 		}
 	}

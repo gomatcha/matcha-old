@@ -58,7 +58,7 @@ func NewApp() *App {
 }
 
 func (app *App) NewView(ctx *view.Context, key interface{}) view.View {
-	return app.StackScreen().NewView(ctx, key)
+	return app.StackScreen().View(ctx, key)
 }
 
 func (app *App) StackScreen() *stackscreen.Screen {
