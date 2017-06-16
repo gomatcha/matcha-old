@@ -140,10 +140,12 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 
 	l := &table.Layout{}
 	{
-		spacer := NewSpacer(ctx, "spacer1")
+		ctx := ctx.WithPrefix("1")
+		group := []view.View{}
+
+		spacer := NewSpacer(ctx, "spacer")
 		l.Add(spacer)
-	}
-	{
+
 		switchView := switchview.New(ctx, "switch")
 		switchView.Value = v.wifiStore.Enabled()
 		switchView.OnValueChange = func(sv *switchview.View) {
@@ -153,7 +155,6 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 			v.wifiStore.SetEnabled(sv.Value)
 		}
 
-		group := []view.View{}
 		cell1 := NewBasicCell(ctx, "wifi")
 		cell1.Title = "Wi-Fi"
 		cell1.AccessoryView = switchView
@@ -174,19 +175,19 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 			group = append(group, cell2)
 		}
 
-		for _, i := range AddSeparators(ctx, "a", group) {
+		for _, i := range AddSeparators(ctx, group) {
 			l.Add(i)
 		}
 	}
 
 	if v.wifiStore.Enabled() {
 		{
-			spacer := NewSpacerHeader(ctx, "spacer2")
+			ctx := ctx.WithPrefix("2")
+			group := []view.View{}
+
+			spacer := NewSpacerHeader(ctx, "spacer")
 			spacer.Title = "Choose a Network..."
 			l.Add(spacer)
-		}
-		{
-			group := []view.View{}
 
 			for _, i := range v.wifiStore.Networks() {
 				if i.SSID() != v.wifiStore.CurrentNetworkSSID() {
@@ -203,28 +204,28 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 				}
 			}
 
-			cell6 := NewBasicCell(ctx, "other")
-			cell6.Title = "Other..."
-			group = append(group, cell6)
+			cell1 := NewBasicCell(ctx, "other")
+			cell1.Title = "Other..."
+			group = append(group, cell1)
 
-			for _, i := range AddSeparators(ctx, "b", group) {
+			for _, i := range AddSeparators(ctx, group) {
 				l.Add(i)
 			}
 		}
 		{
-			spacer := NewSpacer(ctx, "spacer3")
-			l.Add(spacer)
-		}
-		{
+			ctx := ctx.WithPrefix("3")
 			group := []view.View{}
 
-			switchView := switchview.New(ctx, "join-switch")
+			spacer := NewSpacer(ctx, "spacer")
+			l.Add(spacer)
+
+			switchView := switchview.New(ctx, "switch")
 			cell1 := NewBasicCell(ctx, "join")
 			cell1.Title = "Ask to Join Networks"
 			cell1.AccessoryView = switchView
 			group = append(group, cell1)
 
-			for _, i := range AddSeparators(ctx, "c", group) {
+			for _, i := range AddSeparators(ctx, group) {
 				l.Add(i)
 			}
 		}

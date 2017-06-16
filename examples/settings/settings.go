@@ -87,21 +87,21 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 	l := &table.Layout{}
 	{
-		spacer := NewSpacer(ctx, "spacer1")
-		l.Add(spacer)
-	}
-	{
-		switchView := switchview.New(ctx, "6")
-
+		ctx := ctx.WithPrefix("1")
 		group := []view.View{}
-		cell1 := NewBasicCell(ctx, "0")
+
+		spacer := NewSpacer(ctx, "spacer")
+		l.Add(spacer)
+
+		switchView := switchview.New(ctx, "switch")
+		cell1 := NewBasicCell(ctx, "airplane")
 		cell1.Title = "Airplane Mode"
 		cell1.Icon = env.MustLoad("Airplane")
 		cell1.AccessoryView = switchView
 		cell1.HasIcon = true
 		group = append(group, cell1)
 
-		cell2 := NewBasicCell(ctx, "1")
+		cell2 := NewBasicCell(ctx, "wifi")
 		cell2.Title = "Wi-Fi"
 		if v.app.WifiController().Enabled() {
 			cell2.Subtitle = v.app.WifiController().CurrentNetworkSSID()
@@ -165,16 +165,17 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell6.Chevron = true
 		group = append(group, cell6)
 
-		for _, i := range AddSeparators(ctx, "a", group) {
+		for _, i := range AddSeparators(ctx, group) {
 			l.Add(i)
 		}
 	}
 	{
-		spacer := NewSpacer(ctx, "spacer2")
-		l.Add(spacer)
-	}
-	{
+		ctx := ctx.WithPrefix("2")
 		group := []view.View{}
+
+		spacer := NewSpacer(ctx, "spacer")
+		l.Add(spacer)
+
 		cell1 := NewBasicCell(ctx, "notifications")
 		cell1.HasIcon = true
 		cell1.Icon = env.MustLoad("Notifications")
@@ -196,7 +197,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell3.Chevron = true
 		group = append(group, cell3)
 
-		for _, i := range AddSeparators(ctx, "b", group) {
+		for _, i := range AddSeparators(ctx, group) {
 			l.Add(i)
 		}
 	}
@@ -229,23 +230,24 @@ var (
 	spacerTitleColor     = color.Gray{102}
 )
 
-func AddSeparators(ctx *view.Context, key string, vs []view.View) []view.View {
+func AddSeparators(ctx *view.Context, vs []view.View) []view.View {
+	ctx.WithPrefix("sep")
 	newViews := []view.View{}
 
-	top := NewSeparator(ctx, key+"top")
+	top := NewSeparator(ctx, "top")
 	newViews = append(newViews, top)
 
 	for idx, i := range vs {
 		newViews = append(newViews, i)
 
 		if idx != len(vs)-1 { // Don't add short separator after last view
-			sep := NewSeparator(ctx, key+strconv.Itoa(idx))
+			sep := NewSeparator(ctx, strconv.Itoa(idx))
 			sep.LeftPadding = 60
 			newViews = append(newViews, sep)
 		}
 	}
 
-	bot := NewSeparator(ctx, key+"bottom")
+	bot := NewSeparator(ctx, "bottom")
 	newViews = append(newViews, bot)
 	return newViews
 }
