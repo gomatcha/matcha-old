@@ -227,7 +227,7 @@ func (t *Text) normalize() {
 	bytes := make([]byte, 0, len(t.bytes))
 
 	var iter norm.Iter
-	iter.Init(norm.NFD, t.bytes)
+	iter.InitString(norm.NFD, string(t.bytes))
 	for !iter.Done() {
 		glyph := iter.Next()
 		bytes = append(bytes, glyph...)

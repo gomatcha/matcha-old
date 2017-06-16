@@ -241,10 +241,12 @@ func (ctx *Context) newId(key string, prefix string) mochi.Id {
 	return id
 }
 
+// NewFuncId generates a new func identifier for serialization.
 func (ctx *Context) NewFuncId() int64 {
 	return atomic.AddInt64(&maxFuncId, 1)
 }
 
+// SkipBuild marks the child ids as not needing to be rebuilt.
 func (ctx *Context) SkipBuild(ids []mochi.Id) {
 	if ctx.parent != nil {
 		ctx.parent.SkipBuild(ids)
@@ -259,10 +261,12 @@ func (ctx *Context) SkipBuild(ids []mochi.Id) {
 	}
 }
 
+// WithPrefix returns a new Context. Calls to this Prev and NewId on this context will be prepended with key.
 func (ctx *Context) WithPrefix(key string) *Context {
 	return &Context{prefix: key, parent: ctx}
 }
 
+// Id returns the identifier associated with the build context.
 func (ctx *Context) Id() mochi.Id {
 	if ctx.parent != nil {
 		return ctx.parent.Id()
