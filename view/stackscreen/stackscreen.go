@@ -25,8 +25,8 @@ func NewScreen() *Screen {
 	}
 }
 
-func (s *Screen) View(ctx *view.Context, key string) view.View {
-	return New(ctx, key, s)
+func (s *Screen) View(ctx *view.Context) view.View {
+	return New(ctx, "", s)
 }
 
 func (s *Screen) SetChildren(ss ...view.Screen) {
@@ -99,7 +99,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 	screenspb := []*stacknav.Screen{}
 	for idx, i := range v.screen.Children() {
-		chld := i.View(ctx, strconv.Itoa(idx))
+		chld := i.View(ctx.WithPrefix(strconv.Itoa(idx)))
 
 		var bar *StackBar
 		if childView, ok := chld.(ChildView); ok {
@@ -168,9 +168,9 @@ type stackScreen struct {
 	stackBar *StackBar
 }
 
-func (s *stackScreen) View(ctx *view.Context, key string) view.View {
+func (s *stackScreen) View(ctx *view.Context) view.View {
 	return &stackView{
-		View:     s.Screen.View(ctx, key),
+		View:     s.Screen.View(ctx),
 		stackBar: s.stackBar,
 	}
 }

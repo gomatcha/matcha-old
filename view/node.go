@@ -307,7 +307,7 @@ func newRoot(s Screen) *root {
 	s.Lock()
 	defer s.Unlock()
 
-	v := s.View(&Context{}, "root")
+	v := s.View(&Context{})
 
 	root := &root{}
 	root.node = &node{

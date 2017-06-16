@@ -12,15 +12,15 @@ import (
 
 type Screen interface {
 	sync.Locker
-	View(*Context, string) View
+	View(*Context) View
 }
 
 // ScreenFunc is an adapter to allow the use of ordinary functions as a Screen.
-type ScreenFunc func(*Context, string) View
+type ScreenFunc func(*Context) View
 
 // View calls f(ctx, key).
-func (f ScreenFunc) View(ctx *Context, key string) View {
-	return f(ctx, key)
+func (f ScreenFunc) View(ctx *Context) View {
+	return f(ctx)
 }
 
 // Lock is a no-op.

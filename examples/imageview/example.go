@@ -17,8 +17,8 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/imageview New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
-			return New(ctx, key)
+		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
+			return New(ctx, "")
 		}))
 	})
 }

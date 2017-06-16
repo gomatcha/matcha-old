@@ -26,8 +26,8 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/complex New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
-			return NewNestedView(ctx, key)
+		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
+			return NewNestedView(ctx, "")
 		}))
 	})
 }

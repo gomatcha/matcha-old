@@ -52,8 +52,8 @@ func NewApp() *App {
 	return app
 }
 
-func (app *App) View(ctx *view.Context, key string) view.View {
-	return app.StackScreen().View(ctx, key)
+func (app *App) View(ctx *view.Context) view.View {
+	return app.StackScreen().View(ctx)
 }
 
 func (app *App) StackScreen() *stackscreen.Screen {
@@ -61,8 +61,8 @@ func (app *App) StackScreen() *stackscreen.Screen {
 }
 
 func NewTouchScreen(app *App, c color.Color) view.Screen {
-	return view.ScreenFunc(func(ctx *view.Context, key string) view.View {
-		chl := NewTouchView(ctx, key, app)
+	return view.ScreenFunc(func(ctx *view.Context) view.View {
+		chl := NewTouchView(ctx, "", app)
 		chl.Color = c
 		return chl
 	})

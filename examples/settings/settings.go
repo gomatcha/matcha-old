@@ -41,8 +41,8 @@ func NewApp() *App {
 	st := &comm.AsyncStore{}
 	app := &App{Storer: st, store: st}
 
-	rootScreen := view.ScreenFunc(func(ctx *view.Context, key string) view.View {
-		return NewRootView(ctx, key, app)
+	rootScreen := view.ScreenFunc(func(ctx *view.Context) view.View {
+		return NewRootView(ctx, "", app)
 	})
 
 	app.stackScreen = stackscreen.NewScreen()
@@ -55,8 +55,8 @@ func NewApp() *App {
 	return app
 }
 
-func (app *App) View(ctx *view.Context, key string) view.View {
-	return app.StackScreen().View(ctx, key)
+func (app *App) View(ctx *view.Context) view.View {
+	return app.StackScreen().View(ctx)
 }
 
 func (app *App) StackScreen() *stackscreen.Screen {
@@ -114,8 +114,8 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell2.OnTap = func() {
 			v.app.Lock()
 			defer v.app.Unlock()
-			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
-				return NewWifiView(ctx, key, v.app, v.app.wifiController)
+			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
+				return NewWifiView(ctx, "", v.app, v.app.wifiController)
 			}))
 		}
 		group = append(group, cell2)
@@ -129,8 +129,8 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell3.OnTap = func() {
 			v.app.Lock()
 			defer v.app.Unlock()
-			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
-				return NewBluetoothView(ctx, key, v.app)
+			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
+				return NewBluetoothView(ctx, "", v.app)
 			}))
 		}
 		group = append(group, cell3)
@@ -143,8 +143,8 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell4.OnTap = func() {
 			v.app.Lock()
 			defer v.app.Unlock()
-			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
-				return NewCellularView(ctx, key, v.app)
+			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
+				return NewCellularView(ctx, "", v.app)
 			}))
 		}
 		group = append(group, cell4)

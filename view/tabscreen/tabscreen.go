@@ -25,8 +25,8 @@ func NewScreen() *Screen {
 	return &Screen{Storer: st, store: st}
 }
 
-func (s *Screen) NewView(ctx *view.Context, key string) view.View {
-	return NewView(ctx, key, s)
+func (s *Screen) View(ctx *view.Context) view.View {
+	return NewView(ctx, "", s)
 }
 
 func (s *Screen) SetChildren(ss ...view.Screen) {
@@ -89,7 +89,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 	screenspb := []*tabnavpb.Screen{}
 	for idx, i := range v.screen.Children() {
-		chld := i.View(ctx, strconv.Itoa(idx))
+		chld := i.View(ctx.WithPrefix(strconv.Itoa(idx)))
 
 		var button *TabButton
 		if childView, ok := chld.(ChildView); ok {
@@ -155,9 +155,9 @@ type tabButtonScreen struct {
 	button *TabButton
 }
 
-func (s *tabButtonScreen) View(ctx *view.Context, key string) view.View {
+func (s *tabButtonScreen) View(ctx *view.Context) view.View {
 	return &tabButtonView{
-		View:   s.Screen.View(ctx, key),
+		View:   s.Screen.View(ctx),
 		button: s.button,
 	}
 }
