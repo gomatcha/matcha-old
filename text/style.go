@@ -90,93 +90,93 @@ func (a Truncation) MarshalProtobuf() pb.Truncation {
 	return pb.Truncation(a)
 }
 
-type StyleKey int
+type styleKey int
 
 const (
-	StyleKeyAlignment StyleKey = iota
-	StyleKeyStrikethroughStyle
-	StyleKeyStrikethroughColor
-	StyleKeyUnderlineStyle
-	StyleKeyUnderlineColor
-	StyleKeyFont
-	StyleKeyHyphenation
-	StyleKeyLineHeightMultiple
-	StyleKeyMaxLines
-	StyleKeyTextColor
-	StyleKeyWrap
-	StyleKeyTruncation
-	StyleKeyTruncationString
+	styleKeyAlignment styleKey = iota
+	styleKeyStrikethroughStyle
+	styleKeyStrikethroughColor
+	styleKeyUnderlineStyle
+	styleKeyUnderlineColor
+	styleKeyFont
+	styleKeyHyphenation
+	styleKeyLineHeightMultiple
+	styleKeyMaxLines
+	styleKeyTextColor
+	styleKeyWrap
+	styleKeyTruncation
+	styleKeyTruncationString
 )
 
 type Style struct {
-	attributes map[StyleKey]interface{}
-	cleared    map[StyleKey]bool
+	attributes map[styleKey]interface{}
+	cleared    map[styleKey]bool
 }
 
-func (f *Style) Map() map[StyleKey]interface{} {
+func (f *Style) map_() map[styleKey]interface{} {
 	return f.attributes
 }
 
-func (f *Style) Clear(k StyleKey) {
+func (f *Style) clear(k styleKey) {
 	if f.cleared == nil || f.attributes == nil {
-		f.attributes = map[StyleKey]interface{}{}
-		f.cleared = map[StyleKey]bool{}
+		f.attributes = map[styleKey]interface{}{}
+		f.cleared = map[styleKey]bool{}
 	}
 
 	delete(f.attributes, k)
 	f.cleared[k] = true
 }
 
-func (f *Style) Get(k StyleKey) interface{} {
+func (f *Style) get(k styleKey) interface{} {
 	v, ok := f.attributes[k]
 	if ok {
 		return v
 	}
 	switch k {
-	case StyleKeyAlignment:
+	case styleKeyAlignment:
 		return AlignmentLeft
-	case StyleKeyStrikethroughStyle:
+	case styleKeyStrikethroughStyle:
 		return StrikethroughStyleNone
-	case StyleKeyStrikethroughColor:
+	case styleKeyStrikethroughColor:
 		return color.Gray{0}
-	case StyleKeyUnderlineStyle:
+	case styleKeyUnderlineStyle:
 		return UnderlineStyleNone
-	case StyleKeyUnderlineColor:
+	case styleKeyUnderlineColor:
 		return color.Gray{0}
-	case StyleKeyFont:
+	case styleKeyFont:
 		return nil // TODO(KD): what should the default font be?
-	case StyleKeyHyphenation:
+	case styleKeyHyphenation:
 		return float64(0.0)
-	case StyleKeyLineHeightMultiple:
+	case styleKeyLineHeightMultiple:
 		return float64(1.0)
-	case StyleKeyMaxLines:
+	case styleKeyMaxLines:
 		return 0
-	case StyleKeyTextColor:
+	case styleKeyTextColor:
 		return color.Gray{0}
-	case StyleKeyWrap:
+	case styleKeyWrap:
 		return WrapWord
-	case StyleKeyTruncation:
+	case styleKeyTruncation:
 		return TruncationNone
-	case StyleKeyTruncationString:
+	case styleKeyTruncationString:
 		return "…"
 	}
 	return nil
 }
 
-func (f *Style) Set(k StyleKey, v interface{}) {
+func (f *Style) set(k styleKey, v interface{}) {
 	if f.cleared == nil || f.attributes == nil {
-		f.attributes = map[StyleKey]interface{}{}
-		f.cleared = map[StyleKey]bool{}
+		f.attributes = map[styleKey]interface{}{}
+		f.cleared = map[styleKey]bool{}
 	}
 
 	f.attributes[k] = v
 	delete(f.cleared, k)
 }
 
-func (f *Style) Copy() *Style {
+func (f *Style) copy() *Style {
 	c := &Style{
-		attributes: map[StyleKey]interface{}{},
-		cleared:    map[StyleKey]bool{},
+		attributes: map[styleKey]interface{}{},
+		cleared:    map[styleKey]bool{},
 	}
 	for k, v := range f.attributes {
 		c.attributes[k] = v
@@ -198,174 +198,174 @@ func (f *Style) Update(u *Style) {
 
 func (f *Style) MarshalProtobuf() *pb.TextStyle {
 	return &pb.TextStyle{
-		TextAlignment:      f.Get(StyleKeyAlignment).(Alignment).MarshalProtobuf(),
-		StrikethroughStyle: f.Get(StyleKeyStrikethroughStyle).(StrikethroughStyle).MarshalProtobuf(),
-		StrikethroughColor: pb2.ColorEncode(f.Get(StyleKeyStrikethroughColor).(color.Color)),
-		UnderlineStyle:     f.Get(StyleKeyUnderlineStyle).(UnderlineStyle).MarshalProtobuf(),
-		UnderlineColor:     pb2.ColorEncode(f.Get(StyleKeyUnderlineColor).(color.Color)),
-		Font:               f.Get(StyleKeyFont).(Font).MarshalProtobuf(),
-		Hyphenation:        f.Get(StyleKeyHyphenation).(float64),
-		LineHeightMultiple: f.Get(StyleKeyLineHeightMultiple).(float64),
-		MaxLines:           int64(f.Get(StyleKeyMaxLines).(int)),
-		TextColor:          pb2.ColorEncode(f.Get(StyleKeyTextColor).(color.Color)),
-		Wrap:               f.Get(StyleKeyWrap).(Wrap).MarshalProtobuf(),
-		Truncation:         f.Get(StyleKeyTruncation).(Truncation).MarshalProtobuf(),
-		TruncationString:   f.Get(StyleKeyTruncationString).(string),
+		TextAlignment:      f.get(styleKeyAlignment).(Alignment).MarshalProtobuf(),
+		StrikethroughStyle: f.get(styleKeyStrikethroughStyle).(StrikethroughStyle).MarshalProtobuf(),
+		StrikethroughColor: pb2.ColorEncode(f.get(styleKeyStrikethroughColor).(color.Color)),
+		UnderlineStyle:     f.get(styleKeyUnderlineStyle).(UnderlineStyle).MarshalProtobuf(),
+		UnderlineColor:     pb2.ColorEncode(f.get(styleKeyUnderlineColor).(color.Color)),
+		Font:               f.get(styleKeyFont).(Font).MarshalProtobuf(),
+		Hyphenation:        f.get(styleKeyHyphenation).(float64),
+		LineHeightMultiple: f.get(styleKeyLineHeightMultiple).(float64),
+		MaxLines:           int64(f.get(styleKeyMaxLines).(int)),
+		TextColor:          pb2.ColorEncode(f.get(styleKeyTextColor).(color.Color)),
+		Wrap:               f.get(styleKeyWrap).(Wrap).MarshalProtobuf(),
+		Truncation:         f.get(styleKeyTruncation).(Truncation).MarshalProtobuf(),
+		TruncationString:   f.get(styleKeyTruncationString).(string),
 	}
 }
 
 func (f *Style) Alignment() Alignment {
-	return f.Get(StyleKeyAlignment).(Alignment)
+	return f.get(styleKeyAlignment).(Alignment)
 }
 
 func (f *Style) SetAlignment(v Alignment) {
-	f.Set(StyleKeyAlignment, v)
+	f.set(styleKeyAlignment, v)
 }
 
 func (f *Style) DeleteAlignment() {
-	f.Clear(StyleKeyAlignment)
+	f.clear(styleKeyAlignment)
 }
 
 func (f *Style) StrikethroughStyle() StrikethroughStyle {
-	return f.Get(StyleKeyStrikethroughStyle).(StrikethroughStyle)
+	return f.get(styleKeyStrikethroughStyle).(StrikethroughStyle)
 }
 
 func (f *Style) SetStrikethroughStyle(v StrikethroughStyle) {
-	f.Set(StyleKeyStrikethroughStyle, v)
+	f.set(styleKeyStrikethroughStyle, v)
 }
 
 func (f *Style) ClearStrikethroughStyle() {
-	f.Clear(StyleKeyStrikethroughStyle)
+	f.clear(styleKeyStrikethroughStyle)
 }
 
 func (f *Style) StrikethroughColor() color.Color {
-	return f.Get(StyleKeyStrikethroughColor).(color.Color)
+	return f.get(styleKeyStrikethroughColor).(color.Color)
 }
 
 func (f *Style) SetStrikethroughColor(v color.Color) {
-	f.Set(StyleKeyStrikethroughColor, v)
+	f.set(styleKeyStrikethroughColor, v)
 }
 
 func (f *Style) ClearStrikethroughColor() {
-	f.Clear(StyleKeyStrikethroughColor)
+	f.clear(styleKeyStrikethroughColor)
 }
 
 func (f *Style) UnderlineStyle() UnderlineStyle {
-	return f.Get(StyleKeyUnderlineStyle).(UnderlineStyle)
+	return f.get(styleKeyUnderlineStyle).(UnderlineStyle)
 }
 
 func (f *Style) SetUnderlineStyle(v UnderlineStyle) {
-	f.Set(StyleKeyUnderlineStyle, v)
+	f.set(styleKeyUnderlineStyle, v)
 }
 
 func (f *Style) ClearUnderlineStyle() {
-	f.Clear(StyleKeyUnderlineStyle)
+	f.clear(styleKeyUnderlineStyle)
 }
 
 func (f *Style) UnderlineColor() color.Color {
-	return f.Get(StyleKeyUnderlineColor).(color.Color)
+	return f.get(styleKeyUnderlineColor).(color.Color)
 }
 
 func (f *Style) SetUnderlineColor(v color.Color) {
-	f.Set(StyleKeyUnderlineColor, v)
+	f.set(styleKeyUnderlineColor, v)
 }
 
 func (f *Style) ClearUnderlineColor() {
-	f.Clear(StyleKeyUnderlineColor)
+	f.clear(styleKeyUnderlineColor)
 }
 
 func (f *Style) Font() Font {
-	return f.Get(StyleKeyFont).(Font)
+	return f.get(styleKeyFont).(Font)
 }
 
 func (f *Style) SetFont(v Font) {
-	f.Set(StyleKeyFont, v)
+	f.set(styleKeyFont, v)
 }
 
 func (f *Style) ClearFont() {
-	f.Clear(StyleKeyFont)
+	f.clear(styleKeyFont)
 }
 
 func (f *Style) Hyphenation() float64 {
-	return f.Get(StyleKeyHyphenation).(float64)
+	return f.get(styleKeyHyphenation).(float64)
 }
 
 func (f *Style) SetHyphenation(v float64) {
-	f.Set(StyleKeyHyphenation, v)
+	f.set(styleKeyHyphenation, v)
 }
 
 func (f *Style) ClearHyphenation() {
-	f.Clear(StyleKeyHyphenation)
+	f.clear(styleKeyHyphenation)
 }
 
 func (f *Style) LineHeightMultiple() float64 {
-	return f.Get(StyleKeyLineHeightMultiple).(float64)
+	return f.get(styleKeyLineHeightMultiple).(float64)
 }
 
 func (f *Style) SetLineHeightMultiple(v float64) {
-	f.Set(StyleKeyLineHeightMultiple, v)
+	f.set(styleKeyLineHeightMultiple, v)
 }
 
 func (f *Style) ClearLineHeightMultiple() {
-	f.Clear(StyleKeyLineHeightMultiple)
+	f.clear(styleKeyLineHeightMultiple)
 }
 
 func (f *Style) MaxLines() int {
-	return f.Get(StyleKeyMaxLines).(int)
+	return f.get(styleKeyMaxLines).(int)
 }
 
 func (f *Style) SetMaxLines(v int) {
-	f.Set(StyleKeyMaxLines, v)
+	f.set(styleKeyMaxLines, v)
 }
 
 func (f *Style) ClearMaxLines() {
-	f.Clear(StyleKeyMaxLines)
+	f.clear(styleKeyMaxLines)
 }
 
 func (f *Style) TextColor() color.Color {
-	return f.Get(StyleKeyTextColor).(color.Color)
+	return f.get(styleKeyTextColor).(color.Color)
 }
 
 func (f *Style) SetTextColor(v color.Color) {
-	f.Set(StyleKeyTextColor, v)
+	f.set(styleKeyTextColor, v)
 }
 
 func (f *Style) ClearTextColor() {
-	f.Clear(StyleKeyTextColor)
+	f.clear(styleKeyTextColor)
 }
 
 func (f *Style) Wrap() Wrap {
-	return f.Get(StyleKeyWrap).(Wrap)
+	return f.get(styleKeyWrap).(Wrap)
 }
 
 func (f *Style) SetWrap(v Wrap) {
-	f.Set(StyleKeyWrap, v)
+	f.set(styleKeyWrap, v)
 }
 
 func (f *Style) ClearWrap() {
-	f.Clear(StyleKeyWrap)
+	f.clear(styleKeyWrap)
 }
 
 func (f *Style) Truncation() Truncation {
-	return f.Get(StyleKeyTruncation).(Truncation)
+	return f.get(styleKeyTruncation).(Truncation)
 }
 
 func (f *Style) SetTruncation(v Truncation) {
-	f.Set(StyleKeyTruncation, v)
+	f.set(styleKeyTruncation, v)
 }
 
 func (f *Style) ClearTruncation() {
-	f.Clear(StyleKeyTruncation)
+	f.clear(styleKeyTruncation)
 }
 
 func (f *Style) TruncationString() string {
-	return f.Get(StyleKeyTruncationString).(string)
+	return f.get(styleKeyTruncationString).(string)
 }
 
 func (f *Style) SetTruncationString(v string) {
-	f.Set(StyleKeyTruncationString, v)
+	f.set(styleKeyTruncationString, v)
 }
 
 func (f *Style) ClearTruncationString() {
-	f.Clear(StyleKeyTruncationString)
+	f.clear(styleKeyTruncationString)
 }
