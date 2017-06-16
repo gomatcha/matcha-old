@@ -2,6 +2,7 @@ package example
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"golang.org/x/image/colornames"
@@ -25,7 +26,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/complex New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
 			return NewNestedView(ctx, key)
 		}))
 	})
@@ -35,7 +36,7 @@ type TableView struct {
 	*view.Embed
 }
 
-func NewTableView(ctx *view.Context, key interface{}) *TableView {
+func NewTableView(ctx *view.Context, key string) *TableView {
 	if v, ok := ctx.Prev(key).(*TableView); ok {
 		return v
 	}
@@ -49,7 +50,7 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 
 	childLayouter := &table.Layout{}
 	for i := 0; i < 20; i++ {
-		childView := NewTableCell(ctx, i+1000)
+		childView := NewTableCell(ctx, strconv.Itoa(i))
 		childView.String = "TEST TEST"
 		// childView.OnClick = func() {
 		// 	v.Lock()
@@ -62,12 +63,12 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 		childLayouter.Add(childView)
 	}
 
-	content := basicview.New(ctx, 9)
+	content := basicview.New(ctx, "content")
 	content.Painter = &paint.Style{BackgroundColor: colornames.White}
 	content.Layouter = childLayouter
 	content.Children = childLayouter.Views()
 
-	scroll := scrollview.New(ctx, 10)
+	scroll := scrollview.New(ctx, "scroll")
 	scroll.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 	scroll.ContentView = content
 	l.Add(scroll, func(s *constraint.Solver) {
@@ -90,7 +91,7 @@ type NestedView struct {
 	colorTicker comm.ColorNotifier
 }
 
-func NewNestedView(ctx *view.Context, key interface{}) *NestedView {
+func NewNestedView(ctx *view.Context, key string) *NestedView {
 	if v, ok := ctx.Prev(key).(*NestedView); ok {
 		return v
 	}
@@ -107,7 +108,7 @@ func NewNestedView(ctx *view.Context, key interface{}) *NestedView {
 func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	chl1 := basicview.New(ctx, 1)
+	chl1 := basicview.New(ctx, "1")
 	chl1.Painter = &paint.AnimatedStyle{BackgroundColor: v.colorTicker}
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
@@ -116,7 +117,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Notifier(v.floatTicker))
 	})
 
-	chl2 := basicview.New(ctx, 2)
+	chl2 := basicview.New(ctx, "2")
 	chl2.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
@@ -125,7 +126,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(300))
 	})
 
-	chl3 := basicview.New(ctx, 3)
+	chl3 := basicview.New(ctx, "3")
 	chl3.Painter = &paint.Style{BackgroundColor: colornames.Blue}
 	g3 := l.Add(chl3, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
@@ -134,7 +135,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl4 := basicview.New(ctx, 4)
+	chl4 := basicview.New(ctx, "4")
 	chl4.Painter = &paint.Style{BackgroundColor: colornames.Magenta}
 	g4 := l.Add(chl4, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
@@ -143,7 +144,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(50))
 	})
 
-	chl5 := textview.New(nil, nil) // test no context
+	chl5 := textview.New(ctx, "a")
 	chl5.String = "Subtitle"
 	chl5.Style.SetAlignment(text.AlignmentCenter)
 	chl5.Style.SetStrikethroughStyle(text.StrikethroughStyleSingle)
@@ -162,7 +163,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	chl6 := textview.New(ctx, 6)
+	chl6 := textview.New(ctx, "6")
 	chl6.String = fmt.Sprintf("Counter: %v", v.counter)
 	chl6.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
@@ -174,7 +175,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.RightEqual(g2.Right().Add(-15))
 	})
 
-	chl8 := button.New(ctx, 8)
+	chl8 := button.New(ctx, "8")
 	chl8.Text = "Button"
 	chl8.OnPress = func() {
 		fmt.Println("On Click")
@@ -187,7 +188,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	if v.counter%2 == 0 {
-		chl9 := urlimageview.New(ctx, 7)
+		chl9 := urlimageview.New(ctx, "7")
 		chl9.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 		chl9.ResizeMode = imageview.ResizeModeFit
 		pChl9 := view.WithPainter(chl9, &paint.Style{BackgroundColor: colornames.Cyan})
@@ -199,7 +200,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 			s.HeightEqual(constraint.Const(200))
 		})
 	}
-	chl11 := switchview.New(ctx, 12)
+	chl11 := switchview.New(ctx, "12")
 	chl11.OnValueChange = func(a *switchview.View) {
 		fmt.Println("switch tapped", a.Value)
 	}
@@ -210,18 +211,18 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 	childLayouter := &table.Layout{}
 	for i := 0; i < 20; i++ {
-		childView := NewTableCell(ctx, i+1000)
+		childView := NewTableCell(ctx, "a"+strconv.Itoa(1000))
 		childView.String = "TEST TEST"
 		childView.Painter = &paint.Style{BackgroundColor: colornames.Red}
 		childLayouter.Add(childView)
 	}
 
-	scrollChild := basicview.New(ctx, 9)
+	scrollChild := basicview.New(ctx, "9")
 	scrollChild.Painter = &paint.Style{BackgroundColor: colornames.White}
 	scrollChild.Layouter = childLayouter
 	scrollChild.Children = childLayouter.Views()
 
-	chl10 := scrollview.New(ctx, 10)
+	chl10 := scrollview.New(ctx, "10")
 	chl10.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 	chl10.ContentView = scrollChild
 	_ = l.Add(chl10, func(s *constraint.Solver) {
@@ -244,7 +245,7 @@ type TableCell struct {
 	Painter paint.Painter
 }
 
-func NewTableCell(ctx *view.Context, key interface{}) *TableCell {
+func NewTableCell(ctx *view.Context, key string) *TableCell {
 	if v, ok := ctx.Prev(key).(*TableCell); ok {
 		return v
 	}
@@ -260,7 +261,7 @@ func (v *TableCell) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(50))
 	})
 
-	textView := textview.New(ctx, 1)
+	textView := textview.New(ctx, "1")
 	textView.String = v.String
 	textView.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",

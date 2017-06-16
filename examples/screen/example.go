@@ -82,12 +82,12 @@ func (app *App) CurrentStackScreen() *stackscreen.Screen {
 	return nil
 }
 
-func (app *App) View(ctx *view.Context, key interface{}) view.View {
+func (app *App) View(ctx *view.Context, key string) view.View {
 	return app.tabScreen.NewView(ctx, key)
 }
 
 func NewTouchScreen(app *App, c color.Color) view.Screen {
-	return view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+	return view.ScreenFunc(func(ctx *view.Context, key string) view.View {
 		chl := NewTouchView(ctx, key, app)
 		chl.Color = c
 		return chl
@@ -100,7 +100,7 @@ type TouchView struct {
 	Color color.Color
 }
 
-func NewTouchView(ctx *view.Context, key interface{}, app *App) *TouchView {
+func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
 	if v, ok := ctx.Prev(key).(*TouchView); ok {
 		return v
 	}

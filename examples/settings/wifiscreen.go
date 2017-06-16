@@ -121,7 +121,7 @@ type WifiView struct {
 	wifiStore *WifiController
 }
 
-func NewWifiView(ctx *view.Context, key interface{}, app *App, wifiStore *WifiController) *WifiView {
+func NewWifiView(ctx *view.Context, key string, app *App, wifiStore *WifiController) *WifiView {
 	if v, ok := ctx.Prev(key).(*WifiView); ok {
 		return v
 	}
@@ -144,7 +144,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		l.Add(spacer)
 	}
 	{
-		switchView := switchview.New(ctx, 6)
+		switchView := switchview.New(ctx, "switch")
 		switchView.Value = v.wifiStore.Enabled()
 		switchView.OnValueChange = func(sv *switchview.View) {
 			v.wifiStore.Lock()
@@ -154,7 +154,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		}
 
 		group := []view.View{}
-		cell1 := NewBasicCell(ctx, 0)
+		cell1 := NewBasicCell(ctx, "wifi")
 		cell1.Title = "Wi-Fi"
 		cell1.AccessoryView = switchView
 		group = append(group, cell1)
@@ -169,7 +169,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 				}
 			}
 
-			cell2 := NewBasicCell(ctx, 1)
+			cell2 := NewBasicCell(ctx, "current")
 			cell2.Title = currentNetwork.SSID()
 			group = append(group, cell2)
 		}
@@ -218,8 +218,8 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		{
 			group := []view.View{}
 
-			switchView := switchview.New(ctx, 10)
-			cell1 := NewBasicCell(ctx, 11)
+			switchView := switchview.New(ctx, "join-switch")
+			cell1 := NewBasicCell(ctx, "join")
 			cell1.Title = "Ask to Join Networks"
 			cell1.AccessoryView = switchView
 			group = append(group, cell1)
@@ -235,11 +235,11 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		}
 	}
 
-	scrollChild := basicview.New(ctx, -1)
+	scrollChild := basicview.New(ctx, "scrollChild")
 	scrollChild.Layouter = l
 	scrollChild.Children = l.Views()
 
-	scrollView := scrollview.New(ctx, -2)
+	scrollView := scrollview.New(ctx, "scroll")
 	scrollView.ContentView = scrollChild
 
 	return &view.Model{

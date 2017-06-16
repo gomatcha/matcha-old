@@ -11,7 +11,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/constraints New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
 			return New(ctx, key)
 		}))
 	})
@@ -21,7 +21,7 @@ type ConstraintsView struct {
 	*view.Embed
 }
 
-func New(ctx *view.Context, key interface{}) *ConstraintsView {
+func New(ctx *view.Context, key string) *ConstraintsView {
 	if v, ok := ctx.Prev(key).(*ConstraintsView); ok {
 		return v
 	}
@@ -33,7 +33,7 @@ func New(ctx *view.Context, key interface{}) *ConstraintsView {
 func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	chl1 := basicview.New(ctx, 1)
+	chl1 := basicview.New(ctx, "1")
 	chl1.Painter = &paint.Style{BackgroundColor: colornames.Blue}
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
@@ -42,7 +42,7 @@ func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl2 := basicview.New(ctx, 2)
+	chl2 := basicview.New(ctx, "2")
 	chl2.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
@@ -51,7 +51,7 @@ func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(300))
 	})
 
-	chl3 := basicview.New(ctx, 3)
+	chl3 := basicview.New(ctx, "3")
 	chl3.Painter = &paint.Style{BackgroundColor: colornames.Blue}
 	g3 := l.Add(chl3, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
@@ -60,7 +60,7 @@ func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl4 := basicview.New(ctx, 4)
+	chl4 := basicview.New(ctx, "4")
 	chl4.Painter = &paint.Style{BackgroundColor: colornames.Magenta}
 	_ = l.Add(chl4, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())

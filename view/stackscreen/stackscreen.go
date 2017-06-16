@@ -2,6 +2,7 @@ package stackscreen
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi/comm"
@@ -24,7 +25,7 @@ func NewScreen() *Screen {
 	}
 }
 
-func (s *Screen) View(ctx *view.Context, key interface{}) view.View {
+func (s *Screen) View(ctx *view.Context, key string) view.View {
 	return New(ctx, key, s)
 }
 
@@ -57,7 +58,7 @@ type View struct {
 	screen *Screen
 }
 
-func New(ctx *view.Context, key interface{}, s *Screen) *View {
+func New(ctx *view.Context, key string, s *Screen) *View {
 	if v, ok := ctx.Prev(key).(*View); ok && v.screen == s {
 		return v
 	}
@@ -98,7 +99,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 	screenspb := []*stacknav.Screen{}
 	for idx, i := range v.screen.Children() {
-		chld := i.View(ctx, idx)
+		chld := i.View(ctx, strconv.Itoa(idx))
 
 		var bar *StackBar
 		if childView, ok := chld.(ChildView); ok {
@@ -167,7 +168,7 @@ type stackScreen struct {
 	stackBar *StackBar
 }
 
-func (s *stackScreen) View(ctx *view.Context, key interface{}) view.View {
+func (s *stackScreen) View(ctx *view.Context, key string) view.View {
 	return &stackView{
 		View:     s.Screen.View(ctx, key),
 		stackBar: s.stackBar,

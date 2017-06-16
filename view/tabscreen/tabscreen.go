@@ -3,6 +3,7 @@ package tabscreen
 import (
 	"fmt"
 	"image"
+	"strconv"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/mochi/comm"
@@ -24,7 +25,7 @@ func NewScreen() *Screen {
 	return &Screen{Storer: st, store: st}
 }
 
-func (s *Screen) NewView(ctx *view.Context, key interface{}) view.View {
+func (s *Screen) NewView(ctx *view.Context, key string) view.View {
 	return NewView(ctx, key, s)
 }
 
@@ -53,7 +54,7 @@ type View struct {
 	screen *Screen
 }
 
-func NewView(ctx *view.Context, key interface{}, s *Screen) *View {
+func NewView(ctx *view.Context, key string, s *Screen) *View {
 	if v, ok := ctx.Prev(key).(*View); ok && v.screen == s {
 		return v
 	}
@@ -88,7 +89,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 	screenspb := []*tabnavpb.Screen{}
 	for idx, i := range v.screen.Children() {
-		chld := i.View(ctx, idx)
+		chld := i.View(ctx, strconv.Itoa(idx))
 
 		var button *TabButton
 		if childView, ok := chld.(ChildView); ok {
@@ -154,7 +155,7 @@ type tabButtonScreen struct {
 	button *TabButton
 }
 
-func (s *tabButtonScreen) View(ctx *view.Context, key interface{}) view.View {
+func (s *tabButtonScreen) View(ctx *view.Context, key string) view.View {
 	return &tabButtonView{
 		View:   s.Screen.View(ctx, key),
 		button: s.button,

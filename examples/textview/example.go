@@ -12,7 +12,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/textview New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
 			return New(ctx, key)
 		}))
 	})
@@ -22,7 +22,7 @@ type TextView struct {
 	*view.Embed
 }
 
-func New(ctx *view.Context, key interface{}) *TextView {
+func New(ctx *view.Context, key string) *TextView {
 	if v, ok := ctx.Prev(key).(*TextView); ok {
 		return v
 	}
@@ -34,7 +34,7 @@ func New(ctx *view.Context, key interface{}) *TextView {
 func (v *TextView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	chl := textview.New(ctx, 5)
+	chl := textview.New(ctx, "a")
 	chl.String = "Subtitle"
 	chl.Style.SetAlignment(text.AlignmentCenter)
 	chl.Style.SetStrikethroughStyle(text.StrikethroughStyleDouble)

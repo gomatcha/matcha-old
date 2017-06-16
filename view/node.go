@@ -154,11 +154,14 @@ func (r *Root) SetMiddlewares(rs []Middleware) {
 
 type viewCacheKey struct {
 	id  mochi.Id
-	key interface{}
+	key string
 }
 
 // Context specifies the supporting context for building a View.
 type Context struct {
+	prefix string
+	parent *Context
+
 	node      *node
 	prevIds   map[viewCacheKey]mochi.Id
 	prevNodes map[mochi.Id]*node
@@ -166,10 +169,18 @@ type Context struct {
 }
 
 // Prev returns the view returned by the last call to Build with the given key.
-func (ctx *Context) Prev(key interface{}) View {
-	if ctx == nil {
-		return nil
+func (ctx *Context) Prev(key string) View {
+	return ctx.prev(key, "")
+}
+
+func (ctx *Context) prev(key string, prefix string) View {
+	if ctx.parent != nil {
+		return ctx.parent.prev(key, ctx.prefix+"|"+prefix)
 	}
+	if prefix != "" {
+		key = prefix + "|" + key
+	}
+
 	cacheKey := viewCacheKey{key: key, id: ctx.node.id}
 	prevId := ctx.prevIds[cacheKey]
 	prevNode := ctx.prevNodes[prevId]
@@ -194,11 +205,25 @@ func (ctx *Context) Prev(key interface{}) View {
 
 // PrevModel returns the last result of View.Build().
 func (ctx *Context) PrevModel() *Model {
+	if ctx.parent != nil {
+		return ctx.PrevModel()
+	}
 	return ctx.node.model
 }
 
 // NewId generates a new identifier for a given key.
-func (ctx *Context) NewId(key interface{}) mochi.Id {
+func (ctx *Context) NewId(key string) mochi.Id {
+	return ctx.newId(key, "")
+}
+
+func (ctx *Context) newId(key string, prefix string) mochi.Id {
+	if ctx.parent != nil {
+		return ctx.parent.newId(key, ctx.prefix+"|"+prefix)
+	}
+	if prefix != "" {
+		key = prefix + "|" + key
+	}
+
 	id := mochi.Id(atomic.AddInt64(&maxId, 1))
 	if ctx != nil {
 		cacheKey := viewCacheKey{key: key, id: ctx.node.id}
@@ -215,6 +240,11 @@ func (ctx *Context) NewFuncId() int64 {
 }
 
 func (ctx *Context) SkipBuild(ids []mochi.Id) {
+	if ctx.parent != nil {
+		ctx.parent.SkipBuild(ids)
+		return
+	}
+
 	if ctx.skipBuild == nil {
 		ctx.skipBuild = map[mochi.Id]struct{}{}
 	}
@@ -223,7 +253,14 @@ func (ctx *Context) SkipBuild(ids []mochi.Id) {
 	}
 }
 
+func (ctx *Context) WithPrefix(key string) *Context {
+	return &Context{prefix: key, parent: ctx}
+}
+
 func (ctx *Context) Id() mochi.Id {
+	if ctx.parent != nil {
+		return ctx.parent.Id()
+	}
 	return ctx.node.id
 }
 

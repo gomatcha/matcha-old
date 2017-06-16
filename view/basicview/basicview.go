@@ -15,7 +15,7 @@ type BasicView struct {
 	Children []view.View
 }
 
-func New(ctx *view.Context, key interface{}) *BasicView {
+func New(ctx *view.Context, key string) *BasicView {
 	if v, ok := ctx.Prev(key).(*BasicView); ok {
 		return v
 	}

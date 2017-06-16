@@ -17,7 +17,7 @@ type View struct {
 	OnChange func(*View)
 }
 
-func New(ctx *view.Context, key interface{}) *View {
+func New(ctx *view.Context, key string) *View {
 	if v, ok := ctx.Prev(key).(*View); !ok {
 		return v
 	}

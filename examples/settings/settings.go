@@ -2,6 +2,7 @@ package settings
 
 import (
 	"image/color"
+	"strconv"
 	"strings"
 
 	"github.com/overcyn/mochi/comm"
@@ -40,7 +41,7 @@ func NewApp() *App {
 	st := &comm.AsyncStore{}
 	app := &App{Storer: st, store: st}
 
-	rootScreen := view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+	rootScreen := view.ScreenFunc(func(ctx *view.Context, key string) view.View {
 		return NewRootView(ctx, key, app)
 	})
 
@@ -54,7 +55,7 @@ func NewApp() *App {
 	return app
 }
 
-func (app *App) View(ctx *view.Context, key interface{}) view.View {
+func (app *App) View(ctx *view.Context, key string) view.View {
 	return app.StackScreen().View(ctx, key)
 }
 
@@ -71,7 +72,7 @@ type RootView struct {
 	app *App
 }
 
-func NewRootView(ctx *view.Context, key interface{}, app *App) *RootView {
+func NewRootView(ctx *view.Context, key string, app *App) *RootView {
 	if v, ok := ctx.Prev(key).(*RootView); ok {
 		return v
 	}
@@ -90,17 +91,17 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		l.Add(spacer)
 	}
 	{
-		switchView := switchview.New(ctx, 6)
+		switchView := switchview.New(ctx, "6")
 
 		group := []view.View{}
-		cell1 := NewBasicCell(ctx, 0)
+		cell1 := NewBasicCell(ctx, "0")
 		cell1.Title = "Airplane Mode"
 		cell1.Icon = env.MustLoad("Airplane")
 		cell1.AccessoryView = switchView
 		cell1.HasIcon = true
 		group = append(group, cell1)
 
-		cell2 := NewBasicCell(ctx, 1)
+		cell2 := NewBasicCell(ctx, "1")
 		cell2.Title = "Wi-Fi"
 		if v.app.WifiController().Enabled() {
 			cell2.Subtitle = v.app.WifiController().CurrentNetworkSSID()
@@ -113,7 +114,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell2.OnTap = func() {
 			v.app.Lock()
 			defer v.app.Unlock()
-			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
 				return NewWifiView(ctx, key, v.app, v.app.wifiController)
 			}))
 		}
@@ -128,7 +129,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell3.OnTap = func() {
 			v.app.Lock()
 			defer v.app.Unlock()
-			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
 				return NewBluetoothView(ctx, key, v.app)
 			}))
 		}
@@ -142,7 +143,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell4.OnTap = func() {
 			v.app.Lock()
 			defer v.app.Unlock()
-			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
 				return NewCellularView(ctx, key, v.app)
 			}))
 		}
@@ -200,11 +201,11 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		}
 	}
 
-	scrollChild := basicview.New(ctx, -1)
+	scrollChild := basicview.New(ctx, "scrollChild")
 	scrollChild.Layouter = l
 	scrollChild.Children = l.Views()
 
-	scrollView := scrollview.New(ctx, -2)
+	scrollView := scrollview.New(ctx, "scrollView")
 	scrollView.ContentView = scrollChild
 
 	return &view.Model{
@@ -228,28 +229,23 @@ var (
 	spacerTitleColor     = color.Gray{102}
 )
 
-type separatorKey struct {
-	index int
-	key   interface{}
-}
-
-func AddSeparators(ctx *view.Context, key interface{}, vs []view.View) []view.View {
+func AddSeparators(ctx *view.Context, key string, vs []view.View) []view.View {
 	newViews := []view.View{}
 
-	top := NewSeparator(ctx, separatorKey{-1, key})
+	top := NewSeparator(ctx, key+"top")
 	newViews = append(newViews, top)
 
 	for idx, i := range vs {
 		newViews = append(newViews, i)
 
 		if idx != len(vs)-1 { // Don't add short separator after last view
-			sep := NewSeparator(ctx, separatorKey{idx, key})
+			sep := NewSeparator(ctx, key+strconv.Itoa(idx))
 			sep.LeftPadding = 60
 			newViews = append(newViews, sep)
 		}
 	}
 
-	bot := NewSeparator(ctx, separatorKey{-2, key})
+	bot := NewSeparator(ctx, key+"bottom")
 	newViews = append(newViews, bot)
 	return newViews
 }
@@ -259,7 +255,7 @@ type Separator struct {
 	LeftPadding float64
 }
 
-func NewSeparator(ctx *view.Context, key interface{}) *Separator {
+func NewSeparator(ctx *view.Context, key string) *Separator {
 	if v, ok := ctx.Prev(key).(*Separator); ok {
 		return v
 	}
@@ -273,7 +269,7 @@ func (v *Separator) Build(ctx *view.Context) *view.Model {
 		s.WidthEqual(l.MaxGuide().Width())
 	})
 
-	chl := basicview.New(ctx, 0)
+	chl := basicview.New(ctx, "child")
 	chl.Painter = &paint.Style{BackgroundColor: separatorColor}
 	l.Add(chl, func(s *constraint.Solver) {
 		s.HeightEqual(l.Height())
@@ -293,7 +289,7 @@ type Spacer struct {
 	Height float64
 }
 
-func NewSpacer(ctx *view.Context, key interface{}) *Spacer {
+func NewSpacer(ctx *view.Context, key string) *Spacer {
 	if v, ok := ctx.Prev(key).(*Spacer); ok {
 		return v
 	}
@@ -322,7 +318,7 @@ type SpacerHeader struct {
 	Title  string
 }
 
-func NewSpacerHeader(ctx *view.Context, key interface{}) *SpacerHeader {
+func NewSpacerHeader(ctx *view.Context, key string) *SpacerHeader {
 	if v, ok := ctx.Prev(key).(*SpacerHeader); ok {
 		return v
 	}
@@ -368,7 +364,7 @@ type SpacerDescription struct {
 	Description string
 }
 
-func NewSpacerDescription(ctx *view.Context, key interface{}) *SpacerDescription {
+func NewSpacerDescription(ctx *view.Context, key string) *SpacerDescription {
 	if v, ok := ctx.Prev(key).(*SpacerDescription); ok {
 		return v
 	}
@@ -421,7 +417,7 @@ type BasicCell struct {
 	highlighted   bool
 }
 
-func NewBasicCell(ctx *view.Context, key interface{}) *BasicCell {
+func NewBasicCell(ctx *view.Context, key string) *BasicCell {
 	if v, ok := ctx.Prev(key).(*BasicCell); ok {
 		return v
 	}

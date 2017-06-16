@@ -1,6 +1,8 @@
 package example
 
 import (
+	"strconv"
+
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/paint"
@@ -15,7 +17,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/table New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
 			return New(ctx, key)
 		}))
 	})
@@ -25,7 +27,7 @@ type TableView struct {
 	*view.Embed
 }
 
-func New(ctx *view.Context, key interface{}) *TableView {
+func New(ctx *view.Context, key string) *TableView {
 	if v, ok := ctx.Prev(key).(*TableView); ok {
 		return v
 	}
@@ -39,18 +41,18 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 
 	childLayouter := &table.Layout{}
 	for i := 0; i < 20; i++ {
-		childView := NewTableCell(ctx, i+1000)
+		childView := NewTableCell(ctx, strconv.Itoa(i))
 		childView.String = "TEST TEST"
 		childView.Painter = &paint.Style{BackgroundColor: colornames.Red}
 		childLayouter.Add(childView)
 	}
 
-	scrollChild := basicview.New(ctx, 0)
+	scrollChild := basicview.New(ctx, "a")
 	scrollChild.Painter = &paint.Style{BackgroundColor: colornames.White}
 	scrollChild.Layouter = childLayouter
 	scrollChild.Children = childLayouter.Views()
 
-	scrollView := scrollview.New(ctx, 1)
+	scrollView := scrollview.New(ctx, "b")
 	scrollView.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
 	scrollView.ContentView = scrollChild
 	_ = l.Add(scrollView, func(s *constraint.Solver) {
@@ -74,7 +76,7 @@ type TableCell struct {
 	Painter paint.Painter
 }
 
-func NewTableCell(ctx *view.Context, key interface{}) *TableCell {
+func NewTableCell(ctx *view.Context, key string) *TableCell {
 	if v, ok := ctx.Prev(key).(*TableCell); ok {
 		return v
 	}
@@ -89,7 +91,7 @@ func (v *TableCell) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(50))
 	})
 
-	textView := textview.New(ctx, 1)
+	textView := textview.New(ctx, "a")
 	textView.String = v.String
 	textView.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",

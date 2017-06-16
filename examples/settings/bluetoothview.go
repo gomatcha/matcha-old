@@ -13,7 +13,7 @@ type BluetoothView struct {
 	app *App
 }
 
-func NewBluetoothView(ctx *view.Context, key interface{}, app *App) *BluetoothView {
+func NewBluetoothView(ctx *view.Context, key string, app *App) *BluetoothView {
 	if v, ok := ctx.Prev(key).(*BluetoothView); ok {
 		return v
 	}
@@ -24,11 +24,11 @@ func (v *BluetoothView) Build(ctx *view.Context) *view.Model {
 	l := &table.Layout{}
 	chlds := []view.View{}
 
-	scrollChild := basicview.New(ctx, -1)
+	scrollChild := basicview.New(ctx, "a")
 	scrollChild.Layouter = l
 	scrollChild.Children = chlds
 
-	scrollView := scrollview.New(ctx, -2)
+	scrollView := scrollview.New(ctx, "b")
 	scrollView.ContentView = scrollChild
 
 	return &view.Model{

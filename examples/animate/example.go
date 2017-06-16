@@ -16,7 +16,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/animate New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
 			return New(ctx, key)
 		}))
 	})
@@ -32,7 +32,7 @@ type AnimateView struct {
 	constraintFunc  chan struct{}
 }
 
-func New(ctx *view.Context, key interface{}) *AnimateView {
+func New(ctx *view.Context, key string) *AnimateView {
 	if v, ok := ctx.Prev(key).(*AnimateView); ok {
 		return v
 	}
@@ -57,7 +57,7 @@ func (v *AnimateView) Lifecycle(from, to view.Stage) {
 func (v *AnimateView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	chl := basicview.New(ctx, 1)
+	chl := basicview.New(ctx, "")
 	chl.Painter = &paint.AnimatedStyle{BackgroundColor: v.colorTicker}
 	l.Add(chl, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))

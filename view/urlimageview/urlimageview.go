@@ -52,7 +52,7 @@ type View struct {
 	err        error
 }
 
-func New(ctx *view.Context, key interface{}) *View {
+func New(ctx *view.Context, key string) *View {
 	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
 	}
@@ -64,7 +64,7 @@ func New(ctx *view.Context, key interface{}) *View {
 func (v *View) Build(ctx *view.Context) *view.Model {
 	v.reload()
 
-	chl := imageview.New(ctx, 0)
+	chl := imageview.New(ctx, "")
 	chl.ResizeMode = v.ResizeMode
 	chl.Image = v.image
 	chl.Tint = v.Tint

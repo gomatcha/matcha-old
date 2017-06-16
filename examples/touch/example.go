@@ -16,7 +16,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/touch New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key string) view.View {
 			return New(ctx, key)
 		}))
 	})
@@ -28,7 +28,7 @@ type TouchView struct {
 	pressCounter int
 }
 
-func New(ctx *view.Context, key interface{}) *TouchView {
+func New(ctx *view.Context, key string) *TouchView {
 	if v, ok := ctx.Prev(key).(*TouchView); ok {
 		return v
 	}
@@ -40,7 +40,7 @@ func New(ctx *view.Context, key interface{}) *TouchView {
 func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	chl1 := NewTouchChildView(ctx, 1)
+	chl1 := NewTouchChildView(ctx, "1")
 	chl1.OnTouch = func() {
 		fmt.Println("On touch")
 		v.counter += 1
@@ -53,7 +53,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl2 := textview.New(ctx, 2)
+	chl2 := textview.New(ctx, "2")
 	chl2.String = fmt.Sprintf("Counter: %v", v.counter)
 	chl2.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
@@ -64,7 +64,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 		s.LeftEqual(g1.Left())
 	})
 
-	chl3 := NewPressChildView(ctx, 3)
+	chl3 := NewPressChildView(ctx, "3")
 	chl3.OnPress = func() {
 		fmt.Println("On Press")
 		v.pressCounter += 1
@@ -77,7 +77,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	chl4 := textview.New(ctx, 4)
+	chl4 := textview.New(ctx, "4")
 	chl4.String = fmt.Sprintf("Press: %v", v.pressCounter)
 	chl4.Style.SetFont(text.Font{
 		Family: "Helvetica Neue",
@@ -88,7 +88,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 		s.LeftEqual(g3.Left())
 	})
 
-	chl5 := NewButtonChildView(ctx, 5)
+	chl5 := NewButtonChildView(ctx, "5")
 	chl5.OnTouch = func() {
 		fmt.Println("On touch")
 		v.counter += 1
@@ -114,7 +114,7 @@ type PressChildView struct {
 	OnPress func()
 }
 
-func NewPressChildView(ctx *view.Context, key interface{}) *PressChildView {
+func NewPressChildView(ctx *view.Context, key string) *PressChildView {
 	if v, ok := ctx.Prev(key).(*PressChildView); ok {
 		return v
 	}
@@ -144,7 +144,7 @@ type TouchChildView struct {
 	OnTouch func()
 }
 
-func NewTouchChildView(ctx *view.Context, key interface{}) *TouchChildView {
+func NewTouchChildView(ctx *view.Context, key string) *TouchChildView {
 	if v, ok := ctx.Prev(key).(*TouchChildView); ok {
 		return v
 	}
@@ -174,7 +174,7 @@ type ButtonChildView struct {
 	OnTouch func()
 }
 
-func NewButtonChildView(ctx *view.Context, key interface{}) *ButtonChildView {
+func NewButtonChildView(ctx *view.Context, key string) *ButtonChildView {
 	if v, ok := ctx.Prev(key).(*ButtonChildView); ok {
 		return v
 	}

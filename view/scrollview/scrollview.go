@@ -28,7 +28,7 @@ type ScrollView struct {
 	Painter                        paint.Painter
 }
 
-func New(ctx *view.Context, key interface{}) *ScrollView {
+func New(ctx *view.Context, key string) *ScrollView {
 	if v, ok := ctx.Prev(key).(*ScrollView); ok {
 		return v
 	}
