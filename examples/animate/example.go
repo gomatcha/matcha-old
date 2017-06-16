@@ -16,7 +16,9 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/animate New", func() *view.Root {
-		return view.NewRoot(New(nil, nil))
+		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context, key interface{}) view.View {
+			return New(ctx, key)
+		}))
 	})
 }
 

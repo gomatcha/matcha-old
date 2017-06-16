@@ -15,16 +15,20 @@ type Screen interface {
 	View(*Context, interface{}) View
 }
 
+// ScreenFunc is an adapter to allow the use of ordinary functions as a Screen.
 type ScreenFunc func(*Context, interface{}) View
 
+// View calls f(ctx, key).
 func (f ScreenFunc) View(ctx *Context, key interface{}) View {
 	return f(ctx, key)
 }
 
+// Lock is a no-op.
 func (f ScreenFunc) Lock() {
 	// no-op
 }
 
+// Unlock is a no-op.
 func (f ScreenFunc) Unlock() {
 	// no-op
 }

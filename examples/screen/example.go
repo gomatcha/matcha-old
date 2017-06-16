@@ -15,14 +15,12 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/screen New", func() *view.Root {
-		app := NewApp()
-		app.Lock()
-		defer app.Unlock()
-		return view.NewRoot(app.NewView(nil, nil))
+		return view.NewRoot(NewApp())
 	})
 }
 
 type App struct {
+	comm.Storer
 	store        *comm.AsyncStore
 	tabScreen    *tabscreen.Screen
 	stackScreen1 *stackscreen.Screen
@@ -32,9 +30,8 @@ type App struct {
 }
 
 func NewApp() *App {
-	app := &App{}
-	app.Lock()
-	defer app.Unlock()
+	st := &comm.AsyncStore{}
+	app := &App{Storer: st, store: st}
 
 	app.stackScreen1 = stackscreen.NewScreen()
 	app.store.Set("1", app.stackScreen1)
@@ -71,14 +68,6 @@ func NewApp() *App {
 	return app
 }
 
-func (app *App) Lock() {
-	app.store.Lock()
-}
-
-func (app *App) Unlock() {
-	app.store.Unlock()
-}
-
 func (app *App) CurrentStackScreen() *stackscreen.Screen {
 	switch app.tabScreen.SelectedIndex() {
 	case 0:
@@ -93,7 +82,7 @@ func (app *App) CurrentStackScreen() *stackscreen.Screen {
 	return nil
 }
 
-func (app *App) NewView(ctx *view.Context, key interface{}) view.View {
+func (app *App) View(ctx *view.Context, key interface{}) view.View {
 	return app.tabScreen.NewView(ctx, key)
 }
 

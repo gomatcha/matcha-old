@@ -14,10 +14,7 @@ import (
 
 func init() {
 	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/tabscreen New", func() *view.Root {
-		app := NewApp()
-		app.Lock()
-		defer app.Unlock()
-		return view.NewRoot(app.NewView(nil, nil))
+		return view.NewRoot(NewApp())
 	})
 }
 
@@ -59,7 +56,7 @@ func NewApp() *App {
 	return app
 }
 
-func (app *App) NewView(ctx *view.Context, key interface{}) view.View {
+func (app *App) View(ctx *view.Context, key interface{}) view.View {
 	return app.TabScreen().NewView(ctx, key)
 }
 

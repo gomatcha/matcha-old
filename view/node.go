@@ -54,11 +54,11 @@ type Root struct {
 	ticker *internal.Ticker
 }
 
-func NewRoot(v View) *Root {
+func NewRoot(s Screen) *Root {
 	id := atomic.AddInt64(&maxId, 1)
 	r := &Root{
 		mu:     &sync.Mutex{},
-		root:   newRoot(v),
+		root:   newRoot(s),
 		ticker: internal.NewTicker(time.Hour * 99999),
 		id:     id,
 	}
@@ -205,7 +205,12 @@ type root struct {
 	updateFlags map[mochi.Id]updateFlag
 }
 
-func newRoot(v View) *root {
+func newRoot(s Screen) *root {
+	s.Lock()
+	defer s.Unlock()
+
+	v := s.View(nil, "root")
+
 	root := &root{}
 	root.node = &node{
 		id:   v.Id(),
