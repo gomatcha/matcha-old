@@ -28,11 +28,24 @@
 
 - (id)initWithProtobuf:(MatchaPBStyledText *)value {
     NSString *string = value.text.text;
-    MatchaPBTextStyle *style = value.style;
+    NSDictionary *attributes = [NSAttributedString attributesWithProtobuf:value.style];
+    return [[NSAttributedString alloc] initWithString:string attributes:attributes];
+}
+
+- (MatchaPBStyledText *)protobuf {
+    MatchaPBText *text = [[MatchaPBText alloc] init];
+    text.text = self.string;
+    
+    MatchaPBStyledText *styledText = [[MatchaPBStyledText alloc] init];
+    styledText.text = text;
+    styledText.style = [NSAttributedString protobufWithAttributes:[self attributesAtIndex:0 effectiveRange:NULL]];
+    return styledText;
+}
+
++ (NSDictionary *)attributesWithProtobuf:(MatchaPBTextStyle *)style {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     dictionary[NSParagraphStyleAttributeName] = paragraphStyle;
-    
     
     NSTextAlignment alignment;
     switch (style.textAlignment) {
@@ -114,8 +127,113 @@
     // TODO(KD): AttributeKeyTextWrap
     // TODO(KD): AttributeKeyTruncation
     // TODO(KD): AttributeKeyTruncationString
+    return dictionary;
+}
+
++ (MatchaPBTextStyle *)protobufWithAttributes:(NSDictionary *)dictionary {
+    MatchaPBTextStyle *style = [[MatchaPBTextStyle alloc] init];
     
-    return [[NSAttributedString alloc] initWithString:string attributes:dictionary];
+    NSMutableParagraphStyle *paragraphStyle = dictionary[NSParagraphStyleAttributeName];
+    if (paragraphStyle) {
+        int alignment;
+        switch (paragraphStyle.alignment) {
+        case NSTextAlignmentLeft:
+            alignment = 0;
+            break;
+        case NSTextAlignmentRight:
+            alignment = 1;
+            break;
+        case NSTextAlignmentCenter:
+            alignment = 2;
+            break;
+        case NSTextAlignmentJustified:
+            alignment = 3;
+            break;
+        default:
+            alignment = 0;
+        }
+        style.textAlignment = alignment;
+    }
+    
+    if (dictionary[NSStrikethroughStyleAttributeName]) {
+        int strikethroughStyle;
+        switch (((NSNumber *)dictionary[NSStrikethroughStyleAttributeName]).integerValue) {
+        case NSUnderlineStyleNone:
+            strikethroughStyle = 0;
+            break;
+        case NSUnderlineStyleSingle:
+            strikethroughStyle = 1;
+            break;
+        case NSUnderlineStyleDouble:
+            strikethroughStyle = 2;
+            break;
+        case NSUnderlineStyleThick:
+            strikethroughStyle = 3;
+            break;
+        case NSUnderlinePatternDot:
+            strikethroughStyle = 4;
+            break;
+        case NSUnderlinePatternDash:
+            strikethroughStyle = 5;
+            break;
+        default:
+            strikethroughStyle = 0;
+        }
+        style.strikethroughStyle = strikethroughStyle;
+    }
+    
+    if (dictionary[NSStrikethroughColorAttributeName]) {
+        style.strikethroughColor = ((UIColor *)dictionary[NSStrikethroughColorAttributeName]).protobuf;
+    }
+    
+    if (dictionary[NSUnderlineStyleAttributeName]) {
+        int strikethroughStyle;
+        switch (((NSNumber *)dictionary[NSUnderlineStyleAttributeName]).integerValue) {
+        case NSUnderlineStyleNone:
+            strikethroughStyle = 0;
+            break;
+        case NSUnderlineStyleSingle:
+            strikethroughStyle = 1;
+            break;
+        case NSUnderlineStyleDouble:
+            strikethroughStyle = 2;
+            break;
+        case NSUnderlineStyleThick:
+            strikethroughStyle = 3;
+            break;
+        case NSUnderlinePatternDot:
+            strikethroughStyle = 4;
+            break;
+        case NSUnderlinePatternDash:
+            strikethroughStyle = 5;
+            break;
+        default:
+            strikethroughStyle = 0;
+        }
+        style.underlineStyle = strikethroughStyle;
+    }
+    
+    if (dictionary[NSUnderlineColorAttributeName]) {
+        style.underlineColor = ((UIColor *)dictionary[NSUnderlineColorAttributeName]).protobuf;
+    }
+    
+    if (dictionary[NSFontAttributeName]) {
+        style.font = ((UIFont *)dictionary[NSFontAttributeName]).protobuf;
+    }
+    
+    if (dictionary[NSHyphenationFactorDocumentAttribute]) {
+        style.hyphenation = ((NSNumber *)dictionary[NSHyphenationFactorDocumentAttribute]).integerValue;
+    }
+    
+    style.lineHeightMultiple = paragraphStyle.lineHeightMultiple;
+    // TODO(KD): AttributeKeyMaxLines
+    if (dictionary[NSForegroundColorAttributeName]) {
+        style.textColor = ((UIColor *)dictionary[NSForegroundColorAttributeName]).protobuf;
+    }  
+    // TODO(KD): AttributeKeyTextWrap
+    // TODO(KD): AttributeKeyTruncation
+    // TODO(KD): AttributeKeyTruncationString
+    return style;
 }
 
 @end

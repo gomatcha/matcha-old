@@ -1,6 +1,9 @@
 package textinput
 
 import (
+	"fmt"
+
+	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/matcha/pb/view/textinput"
 	"github.com/overcyn/matcha/text"
 	"github.com/overcyn/matcha/view"
@@ -35,7 +38,16 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	}
 
 	funcId := ctx.NewFuncId()
-	f := func() {
+	f := func(data []byte) {
+		pbevent := &textinput.Event{}
+		err := proto.Unmarshal(data, pbevent)
+		if err != nil {
+			fmt.Println("error", err)
+			return
+		}
+
+		fmt.Println("pbevent", pbevent.StyledText.Text)
+
 		if v.OnChange != nil {
 			v.OnChange(v)
 		}

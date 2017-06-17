@@ -20,14 +20,12 @@
 
     self.funcId = view.onUpdate;
     NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:view.styledText];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        self.attributedText = attrString;
-    });
+    self.attributedText = attrString;
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
     MatchaPBTextInputEvent *event = [[MatchaPBTextInputEvent alloc] init];
-    // event.value = self.attributedString;
+    event.styledText = self.attributedText.protobuf;
     
     NSData *data = [event data];
     MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:data];
