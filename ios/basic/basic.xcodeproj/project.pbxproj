@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		67294E311EC93DA000910D6E /* MochiDeadlockLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 67294E301EC93D9F00910D6E /* MochiDeadlockLogger.m */; };
+		67349E751EF526AB00E07354 /* MochiScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349E741EF526AB00E07354 /* MochiScrollView.m */; };
+		67349E781EF5270900E07354 /* MochiButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349E771EF5270900E07354 /* MochiButton.m */; };
 		674080C21ED50DB70093D987 /* Protobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 674080C11ED50DB70093D987 /* Protobuf.framework */; };
 		674080C81ED56C880093D987 /* Protobuf.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 674080C11ED50DB70093D987 /* Protobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		674080DD1ED8D4800093D987 /* MochiTapGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080DC1ED8D4800093D987 /* MochiTapGestureRecognizer.m */; };
@@ -65,6 +67,10 @@
 /* Begin PBXFileReference section */
 		67294E2F1EC93D9F00910D6E /* MochiDeadlockLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiDeadlockLogger.h; sourceTree = "<group>"; };
 		67294E301EC93D9F00910D6E /* MochiDeadlockLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiDeadlockLogger.m; sourceTree = "<group>"; };
+		67349E731EF526AB00E07354 /* MochiScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiScrollView.h; sourceTree = "<group>"; };
+		67349E741EF526AB00E07354 /* MochiScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiScrollView.m; sourceTree = "<group>"; };
+		67349E761EF5270900E07354 /* MochiButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiButton.h; sourceTree = "<group>"; };
+		67349E771EF5270900E07354 /* MochiButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiButton.m; sourceTree = "<group>"; };
 		674080C11ED50DB70093D987 /* Protobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Protobuf.framework; path = "../../../../../../../../Library/Developer/Xcode/DerivedData/Mochi-golgwzqwibyynlcwpuxsrmkwyenm/Build/Products/Debug-iphoneos/Protobuf.framework"; sourceTree = "<group>"; };
 		674080DB1ED8D4800093D987 /* MochiTapGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochiTapGestureRecognizer.h; sourceTree = "<group>"; };
 		674080DC1ED8D4800093D987 /* MochiTapGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochiTapGestureRecognizer.m; sourceTree = "<group>"; };
@@ -236,6 +242,8 @@
 				676EF4EF1E8ECF2700C1488A /* MochiViewController.m */,
 				676EF4F21E8ECF5D00C1488A /* MochiView.h */,
 				676EF4F31E8ECF5D00C1488A /* MochiView.m */,
+				67349E731EF526AB00E07354 /* MochiScrollView.h */,
+				67349E741EF526AB00E07354 /* MochiScrollView.m */,
 				6778312C1EE8CE76009D9D7F /* MochiSwitchView.h */,
 				6778312D1EE8CE76009D9D7F /* MochiSwitchView.m */,
 				677831591EF37F59009D9D7F /* MochiTextInput.h */,
@@ -244,6 +252,8 @@
 				677830F81EDFF2A4009D9D7F /* MochiTabBarController.m */,
 				677831211EE2B2C8009D9D7F /* MochiStackViewController.h */,
 				677831221EE2B2C8009D9D7F /* MochiStackViewController.m */,
+				67349E761EF5270900E07354 /* MochiButton.h */,
+				67349E771EF5270900E07354 /* MochiButton.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -479,6 +489,7 @@
 				674080E31EDA4D480093D987 /* MochiTouchController.m in Sources */,
 				6778312B1EE34715009D9D7F /* Tabnav.pbobjc.m in Sources */,
 				677831141EE299A4009D9D7F /* Button.pbobjc.m in Sources */,
+				67349E751EF526AB00E07354 /* MochiScrollView.m in Sources */,
 				674080DD1ED8D4800093D987 /* MochiTapGestureRecognizer.m in Sources */,
 				676EF4E41E8E34E300C1488A /* ViewController.m in Sources */,
 				6778315B1EF37F59009D9D7F /* MochiTextInput.m in Sources */,
@@ -498,6 +509,7 @@
 				6778312E1EE8CE77009D9D7F /* MochiSwitchView.m in Sources */,
 				677831161EE299A4009D9D7F /* Layout.pbobjc.m in Sources */,
 				676EF4F71E8ED68800C1488A /* MochiBridge.m in Sources */,
+				67349E781EF5270900E07354 /* MochiButton.m in Sources */,
 				677831461EEABBD8009D9D7F /* Touch2.pbobjc.m in Sources */,
 				677830F91EDFF2A4009D9D7F /* MochiTabBarController.m in Sources */,
 				674081371EDE05E00093D987 /* MochiPressGestureRecognizer.m in Sources */,

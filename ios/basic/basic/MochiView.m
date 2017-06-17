@@ -8,6 +8,8 @@
 #import "MochiSwitchView.h"
 #import "MochiButtonGestureRecognizer.h"
 #import "MochiTextInput.h"
+#import "MochiScrollView.h"
+#import "MochiButton.h"
 
 @interface MochiBasicView ()
 @property (nonatomic, weak) MochiViewNode *viewNode;
@@ -105,80 +107,6 @@
     
     if (![self.image isEqual:image]) {
         self.image = image;
-    }
-}
-
-@end
-
-@interface MochiButton ()
-@property (nonatomic, strong) UIButton *button;
-@property (nonatomic, weak) MochiViewNode *viewNode;
-@property (nonatomic, strong) MochiNode *node;
-@property (nonatomic, assign) int64_t funcId;
-@end
-
-@implementation MochiButton
-
-- (id)initWithViewNode:(MochiViewNode *)viewNode {
-    if ((self = [super initWithFrame:CGRectZero])) {
-        self.viewNode = viewNode;
-        self.button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.button addTarget:self action:@selector(onPress) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.button];
-    }
-    return self;
-}
-
-- (void)setNode:(MochiNode *)value {
-    _node = value;
-    GPBAny *state = value.nativeViewState;
-    NSError *error = nil;
-    MochiPBButtonButton *pbbutton = (id)[state unpackMessageClass:[MochiPBButtonButton class] error:&error];
-    
-    NSAttributedString *string = [[NSAttributedString alloc] initWithProtobuf:pbbutton.styledText];
-    [self.button setAttributedTitle:string forState:UIControlStateNormal];
-    self.funcId = pbbutton.onPress;
-}
-
-- (void)layoutSubviews {
-    self.button.frame = self.bounds;
-}
-
-- (void)onPress {
-    [self.viewNode.rootVC call:self.funcId viewId:self.node.identifier.longLongValue args:@[]];
-}
-
-@end
-
-@interface MochiScrollView ()
-@property (nonatomic, weak) MochiViewNode *viewNode;
-@property (nonatomic, strong) MochiNode *node;
-@end
-
-@implementation MochiScrollView
-
-- (id)initWithViewNode:(MochiViewNode *)viewNode {
-    if ((self = [super initWithFrame:CGRectZero])) {
-        self.viewNode = viewNode;
-    }
-    return self;
-}
-
-- (void)setNode:(MochiNode *)value {
-    _node = value;
-
-    if (self.subviews.count > 0) {
-        self.contentSize = ((UIView *)self.subviews[0]).frame.size;
-    }
-
-    GPBAny *state = value.nativeViewState;
-    NSError *error = nil;
-    MochiPBScrollView *pbscrollview = (id)[state unpackMessageClass:[MochiPBScrollView class] error:&error];
-    if (pbscrollview != nil) {
-        self.scrollEnabled = pbscrollview.scrollEnabled;
-        self.showsVerticalScrollIndicator = pbscrollview.showsVerticalScrollIndicator;
-        self.showsHorizontalScrollIndicator = pbscrollview.showsHorizontalScrollIndicator;
-        self.alwaysBounceVertical = true;
     }
 }
 

@@ -25,12 +25,6 @@
 @interface MochiImageView : UIImageView <MochiChildView>
 @end
 
-@interface MochiButton : UIView <MochiChildView>
-@end
-
-@interface MochiScrollView : UIScrollView <MochiChildView>
-@end
-
 UIGestureRecognizer *MochiGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MochiViewNode *viewNode);
 UIView<MochiChildView> *MochiViewWithNode(MochiNode *node, MochiViewNode *viewNode);
 UIViewController<MochiChildViewController> *MochiViewControllerWithNode(MochiNode *node, MochiViewNode *viewNode);
