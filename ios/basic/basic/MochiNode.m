@@ -62,10 +62,10 @@
         
         GPBAny *any = self.nativeValues[@"github.com/overcyn/mochi/touch"];
         NSError *error = nil;
-        MochiPBRecognizerList *recognizerList = (id)[any unpackMessageClass:[MochiPBRecognizerList class] error:&error];
+        MochiPBTouchRecognizerList *recognizerList = (id)[any unpackMessageClass:[MochiPBTouchRecognizerList class] error:&error];
         if (error == nil) {
             NSMutableDictionary *touchRecognizers = [NSMutableDictionary dictionary];
-            for (MochiPBRecognizer *i in recognizerList.recognizersArray) {
+            for (MochiPBTouchRecognizer *i in recognizerList.recognizersArray) {
                 touchRecognizers[@(i.id_p)] = i.recognizer;
             }
             self.touchRecognizers = touchRecognizers;

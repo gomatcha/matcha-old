@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Touch.pbobjc.h"
+#import "MochiProtobuf.h"
 @class MochiViewRoot;
 @class MochiViewController;
 

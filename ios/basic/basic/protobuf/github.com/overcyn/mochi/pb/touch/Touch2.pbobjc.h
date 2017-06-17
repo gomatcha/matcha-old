@@ -27,10 +27,36 @@
 
 CF_EXTERN_C_BEGIN
 
+@class GPBAny;
+@class GPBDuration;
 @class GPBTimestamp;
-GPB_ENUM_FWD_DECLARE(MochiPBEventKind);
+@class MochiPBPoint;
+@class MochiPBTouchRecognizer;
 
 NS_ASSUME_NONNULL_BEGIN
+
+#pragma mark - Enum MochiPBTouchEventKind
+
+typedef GPB_ENUM(MochiPBTouchEventKind) {
+  /**
+   * Value used if any message's field encounters a value that is not defined
+   * by this enum. The message will also have C functions to get/set the rawValue
+   * of the field.
+   **/
+  MochiPBTouchEventKind_GPBUnrecognizedEnumeratorValue = kGPBUnrecognizedEnumeratorValue,
+  MochiPBTouchEventKind_EventKindPossible = 0,
+  MochiPBTouchEventKind_EventKindChanged = 1,
+  MochiPBTouchEventKind_EventKindFailed = 2,
+  MochiPBTouchEventKind_EventKindRecognized = 3,
+};
+
+GPBEnumDescriptor *MochiPBTouchEventKind_EnumDescriptor(void);
+
+/**
+ * Checks to see if the given value is defined by the enum or was not known at
+ * the time this source was generated.
+ **/
+BOOL MochiPBTouchEventKind_IsValidValue(int32_t value);
 
 #pragma mark - MochiPBTouchTouch2Root
 
@@ -45,6 +71,37 @@ NS_ASSUME_NONNULL_BEGIN
  * this file and all files that it depends on.
  **/
 @interface MochiPBTouchTouch2Root : GPBRootObject
+@end
+
+#pragma mark - MochiPBTouchRecognizer
+
+typedef GPB_ENUM(MochiPBTouchRecognizer_FieldNumber) {
+  MochiPBTouchRecognizer_FieldNumber_Id_p = 1,
+  MochiPBTouchRecognizer_FieldNumber_Recognizer = 3,
+};
+
+@interface MochiPBTouchRecognizer : GPBMessage
+
+@property(nonatomic, readwrite) int64_t id_p;
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBAny *recognizer;
+/** Test to see if @c recognizer has been set. */
+@property(nonatomic, readwrite) BOOL hasRecognizer;
+
+@end
+
+#pragma mark - MochiPBTouchRecognizerList
+
+typedef GPB_ENUM(MochiPBTouchRecognizerList_FieldNumber) {
+  MochiPBTouchRecognizerList_FieldNumber_RecognizersArray = 1,
+};
+
+@interface MochiPBTouchRecognizerList : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MochiPBTouchRecognizer*> *recognizersArray;
+/** The number of items in @c recognizersArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger recognizersArray_Count;
+
 @end
 
 #pragma mark - MochiPBTouchButtonRecognizer
@@ -78,7 +135,7 @@ typedef GPB_ENUM(MochiPBTouchButtonEvent_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL inside;
 
-@property(nonatomic, readwrite) enum MochiPBEventKind kind;
+@property(nonatomic, readwrite) MochiPBTouchEventKind kind;
 
 @end
 
@@ -93,6 +150,96 @@ int32_t MochiPBTouchButtonEvent_Kind_RawValue(MochiPBTouchButtonEvent *message);
  * was generated.
  **/
 void SetMochiPBTouchButtonEvent_Kind_RawValue(MochiPBTouchButtonEvent *message, int32_t value);
+
+#pragma mark - MochiPBTouchTapRecognizer
+
+typedef GPB_ENUM(MochiPBTouchTapRecognizer_FieldNumber) {
+  MochiPBTouchTapRecognizer_FieldNumber_Count = 1,
+  MochiPBTouchTapRecognizer_FieldNumber_RecognizedFunc = 2,
+};
+
+@interface MochiPBTouchTapRecognizer : GPBMessage
+
+@property(nonatomic, readwrite) int64_t count;
+
+@property(nonatomic, readwrite) int64_t recognizedFunc;
+
+@end
+
+#pragma mark - MochiPBTouchTapEvent
+
+typedef GPB_ENUM(MochiPBTouchTapEvent_FieldNumber) {
+  MochiPBTouchTapEvent_FieldNumber_Timestamp = 1,
+  MochiPBTouchTapEvent_FieldNumber_Position = 2,
+};
+
+@interface MochiPBTouchTapEvent : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBTimestamp *timestamp;
+/** Test to see if @c timestamp has been set. */
+@property(nonatomic, readwrite) BOOL hasTimestamp;
+
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBPoint *position;
+/** Test to see if @c position has been set. */
+@property(nonatomic, readwrite) BOOL hasPosition;
+
+@end
+
+#pragma mark - MochiPBTouchPressRecognizer
+
+typedef GPB_ENUM(MochiPBTouchPressRecognizer_FieldNumber) {
+  MochiPBTouchPressRecognizer_FieldNumber_MinDuration = 1,
+  MochiPBTouchPressRecognizer_FieldNumber_FuncId = 2,
+};
+
+@interface MochiPBTouchPressRecognizer : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBDuration *minDuration;
+/** Test to see if @c minDuration has been set. */
+@property(nonatomic, readwrite) BOOL hasMinDuration;
+
+@property(nonatomic, readwrite) int64_t funcId;
+
+@end
+
+#pragma mark - MochiPBTouchPressEvent
+
+typedef GPB_ENUM(MochiPBTouchPressEvent_FieldNumber) {
+  MochiPBTouchPressEvent_FieldNumber_Timestamp = 1,
+  MochiPBTouchPressEvent_FieldNumber_Position = 2,
+  MochiPBTouchPressEvent_FieldNumber_Kind = 3,
+  MochiPBTouchPressEvent_FieldNumber_Duration = 4,
+};
+
+@interface MochiPBTouchPressEvent : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBTimestamp *timestamp;
+/** Test to see if @c timestamp has been set. */
+@property(nonatomic, readwrite) BOOL hasTimestamp;
+
+@property(nonatomic, readwrite, strong, null_resettable) MochiPBPoint *position;
+/** Test to see if @c position has been set. */
+@property(nonatomic, readwrite) BOOL hasPosition;
+
+@property(nonatomic, readwrite) MochiPBTouchEventKind kind;
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBDuration *duration;
+/** Test to see if @c duration has been set. */
+@property(nonatomic, readwrite) BOOL hasDuration;
+
+@end
+
+/**
+ * Fetches the raw value of a @c MochiPBTouchPressEvent's @c kind property, even
+ * if the value was not defined by the enum at the time the code was generated.
+ **/
+int32_t MochiPBTouchPressEvent_Kind_RawValue(MochiPBTouchPressEvent *message);
+/**
+ * Sets the raw value of an @c MochiPBTouchPressEvent's @c kind property, allowing
+ * it to be set to a value that was not defined by the enum at the time the code
+ * was generated.
+ **/
+void SetMochiPBTouchPressEvent_Kind_RawValue(MochiPBTouchPressEvent *message, int32_t value);
 
 NS_ASSUME_NONNULL_END
 

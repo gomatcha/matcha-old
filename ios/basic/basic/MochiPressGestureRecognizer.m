@@ -23,10 +23,7 @@
 
 - (id)initWithMochiVC:(MochiViewController *)viewController viewId:(int64_t)viewId protobuf:(GPBAny *)pb {
     NSError *error = nil;
-    MochiPBPressRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBPressRecognizer class] error:&error];
-    if (pbTapRecognizer == nil) {
-        return nil;
-    }
+    MochiPBTouchPressRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTouchPressRecognizer class] error:&error];
     if ((self = [super initWithTarget:self action:@selector(action:)])) {
         self.minimumPressDuration = pbTapRecognizer.minDuration.timeInterval;
         self.viewController = viewController;
@@ -38,7 +35,7 @@
 
 - (void)updateWithProtobuf:(GPBAny *)pb {
     NSError *error = nil;
-    MochiPBPressRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBPressRecognizer class] error:&error];
+    MochiPBTouchPressRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTouchPressRecognizer class] error:&error];
     if (pbTapRecognizer == nil) {
         return;
     }
@@ -56,18 +53,18 @@
     
     CGPoint point = [self locationInView:self.view];
     
-    MochiPBPressEvent *event = [[MochiPBPressEvent alloc] init];
+    MochiPBTouchPressEvent *event = [[MochiPBTouchPressEvent alloc] init];
     event.position = [[MochiPBPoint alloc] initWithCGPoint:point];
     event.timestamp = [[GPBTimestamp alloc] initWithDate:[NSDate date]];
     if (self.state == UIGestureRecognizerStateBegan) {
-        event.kind = MochiPBEventKind_EventKindChanged;
+        event.kind = MochiPBTouchEventKind_EventKindChanged;
         self.startTime = [NSDate date];
     } else if (self.state == UIGestureRecognizerStateChanged) {
-        event.kind = MochiPBEventKind_EventKindChanged;
+        event.kind = MochiPBTouchEventKind_EventKindChanged;
     } else if (self.state == UIGestureRecognizerStateEnded) {
-        event.kind = MochiPBEventKind_EventKindRecognized;
+        event.kind = MochiPBTouchEventKind_EventKindRecognized;
     } else if (self.state == UIGestureRecognizerStateCancelled) {
-        event.kind = MochiPBEventKind_EventKindFailed;
+        event.kind = MochiPBTouchEventKind_EventKindFailed;
     } else {
         return;
     }

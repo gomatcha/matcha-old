@@ -10,7 +10,6 @@ It is generated from these files:
 	github.com/overcyn/mochi/pb/layout.proto
 	github.com/overcyn/mochi/pb/paint.proto
 	github.com/overcyn/mochi/pb/scrollview.proto
-	github.com/overcyn/mochi/pb/touch.proto
 	github.com/overcyn/mochi/pb/view.proto
 
 It has these top-level messages:
@@ -23,13 +22,6 @@ It has these top-level messages:
 	Guide
 	PaintStyle
 	ScrollView
-	Recognizer
-	RecognizerList
-	TapRecognizer
-	TapEvent
-	PressRecognizer
-	PressEvent
-	PanRecognizer
 	Node
 	Root
 */

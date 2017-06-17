@@ -7,7 +7,6 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/pb"
 	"github.com/overcyn/mochi/pb/touch"
 	"github.com/overcyn/mochi/view"
 )
@@ -81,7 +80,7 @@ func (r *Middleware) Build(ctx *view.Context, next *view.Model) {
 	next.Values[idKey] = ids
 
 	// Serialize into protobuf.
-	pbRecognizers := &pb.RecognizerList{}
+	pbRecognizers := &touch.RecognizerList{}
 	allFuncs := map[int64]interface{}{}
 	for k, v := range ids {
 		msg, funcs := v.MarshalProtobuf(ctx)
@@ -90,7 +89,7 @@ func (r *Middleware) Build(ctx *view.Context, next *view.Model) {
 			continue
 		}
 
-		pbRecognizer := &pb.Recognizer{
+		pbRecognizer := &touch.Recognizer{
 			Id:         k,
 			Recognizer: pbAny,
 		}
@@ -123,7 +122,7 @@ type TapEvent struct {
 	Position  layout.Point
 }
 
-func (e *TapEvent) UnmarshalProtobuf(pbevent *pb.TapEvent) error {
+func (e *TapEvent) UnmarshalProtobuf(pbevent *touch.TapEvent) error {
 	t, _ := ptypes.Timestamp(pbevent.Timestamp)
 	e.Timestamp = t
 	e.Position.UnmarshalProtobuf(pbevent.Position)
@@ -146,7 +145,7 @@ func (r *TapRecognizer) Equal(a Recognizer) bool {
 func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
-		pbevent := &pb.TapEvent{}
+		pbevent := &touch.TapEvent{}
 		err := proto.Unmarshal(data, pbevent)
 		if err != nil {
 			fmt.Println("error", err)
@@ -164,7 +163,7 @@ func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[i
 		}
 	}
 
-	return &pb.TapRecognizer{
+	return &touch.TapRecognizer{
 			Count:          int64(r.Count),
 			RecognizedFunc: funcId,
 		}, map[int64]interface{}{
@@ -192,7 +191,7 @@ type PressEvent struct {
 	Duration  time.Duration
 }
 
-func (e *PressEvent) UnmarshalProtobuf(pbevent *pb.PressEvent) error {
+func (e *PressEvent) UnmarshalProtobuf(pbevent *touch.PressEvent) error {
 	d, err := ptypes.Duration(pbevent.Duration)
 	if err != nil {
 		return err
@@ -225,7 +224,7 @@ func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
 		event := &PressEvent{}
-		pbevent := &pb.PressEvent{}
+		pbevent := &touch.PressEvent{}
 		err := proto.Unmarshal(data, pbevent)
 		if err != nil {
 			fmt.Println("error", err)
@@ -241,7 +240,7 @@ func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map
 		}
 	}
 
-	return &pb.PressRecognizer{
+	return &touch.PressRecognizer{
 			MinDuration: ptypes.DurationProto(r.MinDuration),
 			FuncId:      funcId,
 		}, map[int64]interface{}{

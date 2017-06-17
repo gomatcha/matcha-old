@@ -24,7 +24,7 @@
 
 - (id)initWithMochiVC:(MochiViewController *)viewController viewId:(int64_t)viewId protobuf:(GPBAny *)pb {
     NSError *error = nil;
-    MochiPBTapRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTapRecognizer class] error:&error];
+    MochiPBTouchTapRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTouchTapRecognizer class] error:&error];
     if (pbTapRecognizer == nil) {
         return nil;
     }
@@ -43,7 +43,7 @@
 
 - (void)updateWithProtobuf:(GPBAny *)pb {
     NSError *error = nil;
-    MochiPBTapRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTapRecognizer class] error:&error];
+    MochiPBTouchTapRecognizer *pbTapRecognizer = (id)[pb unpackMessageClass:[MochiPBTouchTapRecognizer class] error:&error];
     if (pbTapRecognizer == nil) {
         return;
     }
@@ -57,7 +57,7 @@
     
     CGPoint point = [self locationInView:self.view];
     
-    MochiPBTapEvent *event = [[MochiPBTapEvent alloc] init];
+    MochiPBTouchTapEvent *event = [[MochiPBTouchTapEvent alloc] init];
     event.position = [[MochiPBPoint alloc] initWithCGPoint:point];
     event.timestamp = [[GPBTimestamp alloc] initWithDate:[NSDate date]];
     

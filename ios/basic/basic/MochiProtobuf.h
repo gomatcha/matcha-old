@@ -5,7 +5,6 @@
 #import "Scrollview.pbobjc.h"
 #import "Imageview.pbobjc.h"
 #import "Button.pbobjc.h"
-#import "Touch.pbobjc.h"
 #import "Paint.pbobjc.h"
 #import "Tabnav.pbobjc.h"
 #import "Stacknavigator.pbobjc.h"
