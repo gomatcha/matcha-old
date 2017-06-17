@@ -21,6 +21,7 @@ func init() {
 
 type TextView struct {
 	*view.Embed
+	text *text.Text
 }
 
 func New(ctx *view.Context, key string) *TextView {
@@ -28,6 +29,7 @@ func New(ctx *view.Context, key string) *TextView {
 		return v
 	}
 	return &TextView{
+		text:  text.New("blah"),
 		Embed: view.NewEmbed(ctx.NewId(key)),
 	}
 }
@@ -48,21 +50,30 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 		Face:   "Bold",
 		Size:   20,
 	})
-	chl2 := view.WithPainter(chl, &paint.Style{BackgroundColor: colornames.Blue})
-
-	l.Add(chl2, func(s *constraint.Solver) {
+	chlP := view.WithPainter(chl, &paint.Style{BackgroundColor: colornames.Blue})
+	chlG := l.Add(chlP, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(100))
 		s.LeftEqual(constraint.Const(100))
 	})
 
 	input := textinput.New(ctx, "input")
-	input.Text = text.New("blah")
+	input.Text = v.text
+	input.OnChange = func(input *textinput.View) {
+		v.Update()
+	}
 	inputP := view.WithPainter(input, &paint.Style{BackgroundColor: colornames.Yellow})
 	l.Add(inputP, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(200))
 		s.LeftEqual(constraint.Const(100))
 		s.WidthEqual(constraint.Const(200))
-		s.HeightEqual(constraint.Const(200))
+		s.HeightEqual(constraint.Const(100))
+	})
+
+	reverse := textview.New(ctx, "reverse")
+	reverse.String = Reverse(v.text.String())
+	l.Add(reverse, func(s *constraint.Solver) {
+		s.TopEqual(chlG.Bottom())
+		s.LeftEqual(chlG.Left())
 	})
 
 	return &view.Model{
@@ -70,4 +81,12 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 	}
+}
+
+func Reverse(s string) string {
+	runes := []rune(s)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
 }

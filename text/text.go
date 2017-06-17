@@ -54,6 +54,12 @@ func (t *Text) MarshalProtobuf() *pb.Text {
 	}
 }
 
+func (t *Text) UnmarshalProtobuf(pbtext *pb.Text) error {
+	t.bytes = []byte(pbtext.Text)
+	t.normalize()
+	return nil
+}
+
 // Panics if idx is out of range.
 func (t *Text) ByteAt(byteIdx int) byte {
 	return t.bytes[byteIdx]

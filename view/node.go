@@ -203,7 +203,7 @@ func (ctx *Context) prev(key string, prefix string) View {
 		break
 	}
 
-	return prevNode.view
+	return v
 }
 
 // PrevModel returns the last result of View.Build().

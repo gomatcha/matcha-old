@@ -9,12 +9,14 @@ import (
 	"github.com/overcyn/matcha/view"
 )
 
-// View mutates it's Text and StyledText fields in place.
+// View mutates the Text and StyledText fields in place.
 type View struct {
 	*view.Embed
-	Text       *text.Text
-	Style      *text.Style
-	StyledText *text.StyledText
+	Text  *text.Text
+	Style *text.Style
+
+	// TODO(KD):
+	// StyledText *text.StyledText
 	// Cursor position?
 	// Keyboard visibility?
 
@@ -26,16 +28,19 @@ func New(ctx *view.Context, key string) *View {
 		return v
 	}
 	return &View{
+		Text:  text.New(""),
 		Embed: view.NewEmbed(ctx.NewId(key)),
 	}
 }
 
 func (v *View) Build(ctx *view.Context) *view.Model {
-	st := v.StyledText
+	// st := v.StyledText
+	var st *text.StyledText
 	if st == nil {
 		st = text.NewStyledText(v.Text)
 		st.Set(v.Style, 0, 0)
 	}
+	fmt.Println("st", st)
 
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
@@ -46,8 +51,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 			return
 		}
 
-		fmt.Println("pbevent", pbevent.StyledText.Text)
-
+		_ = v.Text.UnmarshalProtobuf(pbevent.StyledText.Text)
 		if v.OnChange != nil {
 			v.OnChange(v)
 		}
