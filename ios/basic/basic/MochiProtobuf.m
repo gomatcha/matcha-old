@@ -10,6 +10,18 @@
     return [UIColor colorWithRed:((double)value.red)/0xffff green:((double)value.green)/0xffff blue:((double)value.blue)/0xffff alpha:((double)value.alpha)/0xffff];
 }
 
+- (MochiPBColor *)protobuf {
+    CGFloat red, green, blue, alpha;
+    [self getRed:&red green:&green blue:&blue alpha:&alpha];
+    
+    MochiPBColor *color = [[MochiPBColor alloc] init];
+    color.red = red*0xffff;
+    color.green = green*0xffff;
+    color.blue = blue*0xffff;
+    color.alpha = alpha*0xffff;
+    return color;
+}
+
 @end
 
 @implementation NSAttributedString (Mochi)
@@ -109,10 +121,12 @@
 @end
 
 @implementation UIImage (Mochi)
+
 - (id)initWithProtobuf:(MochiPBImage *)value {
     CIImage *image = [CIImage imageWithBitmapData:value.data_p bytesPerRow:value.stride size:CGSizeMake(value.width, value.height) format:kCIFormatRGBA8 colorSpace:CGColorSpaceCreateDeviceRGB()];
     return [self initWithCIImage:image];
 }
+
 @end
 
 @implementation UIFont (Mochi)
@@ -125,6 +139,16 @@
     
     UIFontDescriptor *desc = [[UIFontDescriptor alloc] initWithFontAttributes:attr];
     UIFont *font = [UIFont fontWithDescriptor:desc size:0];
+    return font;
+}
+
+- (MochiPBFont *)protobuf {
+    NSDictionary *attr = self.fontDescriptor.fontAttributes;
+    
+    MochiPBFont *font = [[MochiPBFont alloc] init];
+    font.family = attr[UIFontDescriptorFamilyAttribute];
+    font.face = attr[UIFontDescriptorFaceAttribute];
+    font.size = ((NSNumber *)attr[UIFontDescriptorSizeAttribute]).doubleValue;
     return font;
 }
 

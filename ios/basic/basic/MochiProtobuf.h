@@ -19,6 +19,7 @@
 
 @interface UIColor (Mochi)
 - (id)initWithProtobuf:(MochiPBColor *)value;
+- (MochiPBColor *)protobuf;
 @end
 
 @interface NSAttributedString (Mochi)
@@ -27,6 +28,7 @@
 
 @interface UIFont (Mochi)
 - (id)initWithProtobuf:(MochiPBFont *)value;
+- (MochiPBFont *)protobuf;
 @end
 
 @interface UIImage (Mochi)
