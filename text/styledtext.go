@@ -59,6 +59,9 @@ func (st *StyledText) Size(min layout.Point, max layout.Point) layout.Point {
 }
 
 func (st *StyledText) MarshalProtobuf() *text.StyledText {
+	if st == nil {
+		return nil
+	}
 	return &text.StyledText{
 		Text:  st.text.MarshalProtobuf(),
 		Style: st.style.MarshalProtobuf(),

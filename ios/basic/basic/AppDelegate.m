@@ -21,8 +21,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[MochiObjcBridge sharedBridge] configure];
-        
-    MochiGoValue *rootVC = [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/examples/settings New"] call:nil args:nil][0];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHeightDidChange:) name:UIKeyboardDidChangeFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+    
+    MochiGoValue *rootVC = [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/examples/textview New"] call:nil args:nil][0];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[MochiViewController alloc] initWithGoValue:rootVC];
@@ -30,6 +34,16 @@
     return YES;
 }
 
+- (void)keyboardHeightDidChange:(NSNotification *)note {
+    NSLog(@"%@",note);
+}
+
+- (void)keyboardDidShow:(NSNotification *)note {
+    NSLog(@"%@", note);
+}
+- (void)keyboardDidHide:(NSNotification *)note {
+    NSLog(@"%@", note);
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

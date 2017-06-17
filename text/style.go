@@ -143,7 +143,10 @@ func (f *Style) get(k styleKey) interface{} {
 	case styleKeyUnderlineColor:
 		return color.Gray{0}
 	case styleKeyFont:
-		return nil // TODO(KD): what should the default font be?
+		return Font{
+			Family: "Helvetica Neue",
+			Size:   14,
+		}
 	case styleKeyHyphenation:
 		return float64(0.0)
 	case styleKeyLineHeightMultiple:
@@ -196,6 +199,10 @@ func (f *Style) Update(u *Style) {
 }
 
 func (f *Style) MarshalProtobuf() *pb.TextStyle {
+	if f == nil {
+		f = &Style{}
+	}
+
 	return &pb.TextStyle{
 		TextAlignment:      f.get(styleKeyAlignment).(Alignment).MarshalProtobuf(),
 		StrikethroughStyle: f.get(styleKeyStrikethroughStyle).(StrikethroughStyle).MarshalProtobuf(),

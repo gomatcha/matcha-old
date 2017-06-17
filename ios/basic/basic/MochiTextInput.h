@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 #import "MochiView.h"
 
-@interface MochiTextInput : UIView <MochiChildView>
+@interface MochiTextInput : UITextView <MochiChildView, UITextViewDelegate>
 
 // Private
 @property (nonatomic, weak) MochiViewNode *viewNode;

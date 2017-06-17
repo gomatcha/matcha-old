@@ -49,10 +49,12 @@ static GPBFileDescriptor *MochiPBTextInputTextinputRoot_FileDescriptor(void) {
 @implementation MochiPBTextInputView
 
 @dynamic hasStyledText, styledText;
+@dynamic onUpdate;
 
 typedef struct MochiPBTextInputView__storage_ {
   uint32_t _has_storage_[1];
   MochiPBStyledText *styledText;
+  int64_t onUpdate;
 } MochiPBTextInputView__storage_;
 
 // This method is threadsafe because it is initially called
@@ -70,6 +72,15 @@ typedef struct MochiPBTextInputView__storage_ {
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
+      {
+        .name = "onUpdate",
+        .dataTypeSpecific.className = NULL,
+        .number = MochiPBTextInputView_FieldNumber_OnUpdate,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MochiPBTextInputView__storage_, onUpdate),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MochiPBTextInputView class]
@@ -81,7 +92,7 @@ typedef struct MochiPBTextInputView__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\001\n\000";
+        "\002\001\n\000\002\010\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

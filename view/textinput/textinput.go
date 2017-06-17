@@ -1,6 +1,7 @@
 package textinput
 
 import (
+	"github.com/overcyn/mochi/pb/view/textinput"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view"
 )
@@ -18,7 +19,7 @@ type View struct {
 }
 
 func New(ctx *view.Context, key string) *View {
-	if v, ok := ctx.Prev(key).(*View); !ok {
+	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
 	}
 	return &View{
@@ -33,8 +34,21 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		st.Set(v.Style, 0, 0)
 	}
 
+	funcId := ctx.NewFuncId()
+	f := func() {
+		if v.OnChange != nil {
+			v.OnChange(v)
+		}
+	}
+
 	return &view.Model{
-		NativeViewName:  "github.com/overcyn/mochi/view/textinput",
-		NativeViewState: st.MarshalProtobuf(),
+		NativeViewName: "github.com/overcyn/mochi/view/textinput",
+		NativeViewState: &textinput.View{
+			StyledText: st.MarshalProtobuf(),
+			OnUpdate:   funcId,
+		},
+		NativeFuncs: map[int64]interface{}{
+			funcId: f,
+		},
 	}
 }

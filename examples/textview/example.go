@@ -5,6 +5,7 @@ import (
 	"github.com/overcyn/mochi/paint"
 	"github.com/overcyn/mochi/text"
 	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/mochi/view/textinput"
 	"github.com/overcyn/mochi/view/textview"
 	"github.com/overcyn/mochibridge"
 	"golang.org/x/image/colornames"
@@ -52,6 +53,16 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 	l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(100))
 		s.LeftEqual(constraint.Const(100))
+	})
+
+	input := textinput.New(ctx, "input")
+	input.Text = text.New("blah")
+	inputP := view.WithPainter(input, &paint.Style{BackgroundColor: colornames.Yellow})
+	l.Add(inputP, func(s *constraint.Solver) {
+		s.TopEqual(constraint.Const(200))
+		s.LeftEqual(constraint.Const(100))
+		s.WidthEqual(constraint.Const(200))
+		s.HeightEqual(constraint.Const(200))
 	})
 
 	return &view.Model{

@@ -8,7 +8,6 @@ import (
 	"golang.org/x/image/colornames"
 
 	"github.com/overcyn/mochi/animate"
-	"github.com/overcyn/mochi/comm"
 	"github.com/overcyn/mochi/layout/constraint"
 	"github.com/overcyn/mochi/layout/table"
 	"github.com/overcyn/mochi/paint"
@@ -32,89 +31,35 @@ func init() {
 	})
 }
 
-type TableView struct {
-	*view.Embed
-}
-
-func NewTableView(ctx *view.Context, key string) *TableView {
-	if v, ok := ctx.Prev(key).(*TableView); ok {
-		return v
-	}
-	return &TableView{
-		Embed: view.NewEmbed(ctx.NewId(key)),
-	}
-}
-
-func (v *TableView) Build(ctx *view.Context) *view.Model {
-	l := constraint.New()
-
-	childLayouter := &table.Layout{}
-	for i := 0; i < 20; i++ {
-		childView := NewTableCell(ctx, strconv.Itoa(i))
-		childView.String = "TEST TEST"
-		// childView.OnClick = func() {
-		// 	v.Lock()
-		// 	defer v.Unlock()
-
-		// 	child := NewTableView(nil, nil)
-		// 	v.Nav.StackNav().Push(child.StackScreen())
-		// }
-
-		childLayouter.Add(childView)
-	}
-
-	content := basicview.New(ctx, "content")
-	content.Painter = &paint.Style{BackgroundColor: colornames.White}
-	content.Layouter = childLayouter
-	content.Children = childLayouter.Views()
-
-	scroll := scrollview.New(ctx, "scroll")
-	scroll.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
-	scroll.ContentView = content
-	l.Add(scroll, func(s *constraint.Solver) {
-		s.WidthEqual(l.Width())
-		s.HeightEqual(l.Height())
-	})
-
-	return &view.Model{
-		Children: []view.View{scroll},
-		Layouter: l,
-		Painter:  &paint.Style{BackgroundColor: colornames.Green},
-	}
-}
-
 type NestedView struct {
 	*view.Embed
-	counter     int
-	ticker      *animate.Ticker
-	floatTicker comm.Float64Notifier
-	colorTicker comm.ColorNotifier
+	counter int
+	ticker  *animate.Ticker
 }
 
 func NewNestedView(ctx *view.Context, key string) *NestedView {
 	if v, ok := ctx.Prev(key).(*NestedView); ok {
 		return v
 	}
-	ticker := animate.NewTicker(time.Second * 5)
-	floatTicker := animate.FloatInterpolate(ticker, animate.FloatLerp{Start: 0, End: 150})
 	return &NestedView{
-		Embed:       view.NewEmbed(ctx.NewId(key)),
-		ticker:      ticker,
-		floatTicker: floatTicker,
-		colorTicker: animate.ColorInterpolate(ticker, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow}),
+		Embed:  view.NewEmbed(ctx.NewId(key)),
+		ticker: animate.NewTicker(time.Second * 5),
 	}
 }
 
 func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
+	value := animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 150})
+	color := animate.ColorInterpolate(v.ticker, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow})
+
 	chl1 := basicview.New(ctx, "1")
-	chl1.Painter = &paint.AnimatedStyle{BackgroundColor: v.colorTicker}
+	chl1.Painter = &paint.AnimatedStyle{BackgroundColor: color}
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
-		s.WidthEqual(constraint.Notifier(v.floatTicker))
-		s.HeightEqual(constraint.Notifier(v.floatTicker))
+		s.WidthEqual(constraint.Notifier(value))
+		s.HeightEqual(constraint.Notifier(value))
 	})
 
 	chl2 := basicview.New(ctx, "2")
@@ -177,7 +122,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 	chl8 := button.New(ctx, "8")
 	chl8.Text = "Button"
-	chl8.OnPress = func() {
+	chl8.OnPress = func(b *button.Button) {
 		fmt.Println("On Click")
 		v.counter += 1
 		v.Update()
@@ -211,7 +156,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 	childLayouter := &table.Layout{}
 	for i := 0; i < 20; i++ {
-		childView := NewTableCell(ctx, "a"+strconv.Itoa(1000))
+		childView := NewTableCell(ctx, "a"+strconv.Itoa(i))
 		childView.String = "TEST TEST"
 		childView.Painter = &paint.Style{BackgroundColor: colornames.Red}
 		childLayouter.Add(childView)

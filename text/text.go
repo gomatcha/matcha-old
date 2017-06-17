@@ -46,6 +46,9 @@ func New(b string) *Text {
 }
 
 func (t *Text) MarshalProtobuf() *pb.Text {
+	if t == nil {
+		return nil
+	}
 	return &pb.Text{
 		Text: string(t.bytes),
 	}

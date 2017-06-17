@@ -50,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef GPB_ENUM(MochiPBTextInputView_FieldNumber) {
   MochiPBTextInputView_FieldNumber_StyledText = 1,
+  MochiPBTextInputView_FieldNumber_OnUpdate = 2,
 };
 
 @interface MochiPBTextInputView : GPBMessage
@@ -57,6 +58,8 @@ typedef GPB_ENUM(MochiPBTextInputView_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) MochiPBStyledText *styledText;
 /** Test to see if @c styledText has been set. */
 @property(nonatomic, readwrite) BOOL hasStyledText;
+
+@property(nonatomic, readwrite) int64_t onUpdate;
 
 @end
 

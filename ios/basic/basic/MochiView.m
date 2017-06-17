@@ -7,6 +7,7 @@
 #import "MochiStackViewController.h"
 #import "MochiSwitchView.h"
 #import "MochiButtonGestureRecognizer.h"
+#import "MochiTextInput.h"
 
 @interface MochiBasicView ()
 @property (nonatomic, weak) MochiViewNode *viewNode;
@@ -113,6 +114,7 @@
 @property (nonatomic, strong) UIButton *button;
 @property (nonatomic, weak) MochiViewNode *viewNode;
 @property (nonatomic, strong) MochiNode *node;
+@property (nonatomic, assign) int64_t funcId;
 @end
 
 @implementation MochiButton
@@ -135,6 +137,7 @@
     
     NSAttributedString *string = [[NSAttributedString alloc] initWithProtobuf:pbbutton.styledText];
     [self.button setAttributedTitle:string forState:UIControlStateNormal];
+    self.funcId = pbbutton.onPress;
 }
 
 - (void)layoutSubviews {
@@ -142,8 +145,7 @@
 }
 
 - (void)onPress {
-    MochiGoValue *identifier = [[MochiGoValue alloc] initWithLongLong:self.node.identifier.longLongValue];
-    [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/view/button OnPress"] call:nil args:@[identifier]];
+    [self.viewNode.rootVC call:self.funcId viewId:self.node.identifier.longLongValue args:@[]];
 }
 
 @end
@@ -208,6 +210,8 @@ UIView<MochiChildView> *MochiViewWithNode(MochiNode *node, MochiViewNode *viewNo
         child = [[MochiScrollView alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"github.com/overcyn/mochi/view/switch"]) {
         child = [[MochiSwitchView alloc] initWithViewNode:viewNode];
+    } else if ([name isEqual:@"github.com/overcyn/mochi/view/textinput"]) {
+        child = [[MochiTextInput alloc] initWithViewNode:viewNode];
     }
     return child;
 }
