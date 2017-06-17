@@ -4,14 +4,14 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/env"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/pb"
-	pbenv "github.com/overcyn/mochi/pb/env"
-	"github.com/overcyn/mochi/view"
-	"github.com/overcyn/mochi/view/imageview"
+	"github.com/overcyn/matcha"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/env"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/pb"
+	pbenv "github.com/overcyn/matcha/pb/env"
+	"github.com/overcyn/matcha/view"
+	"github.com/overcyn/matcha/view/imageview"
 )
 
 type layouter struct {
@@ -19,7 +19,7 @@ type layouter struct {
 	resizeMode imageview.ResizeMode
 }
 
-func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
 	g := layout.Guide{Frame: layout.Rect{Max: ctx.MaxSize}}
 	switch l.resizeMode {
 	case imageview.ResizeModeFit:
@@ -78,7 +78,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 	return &view.Model{
 		Layouter:       &layouter{bounds: bounds, resizeMode: resizeMode},
-		NativeViewName: "github.com/overcyn/mochi/view/imageview",
+		NativeViewName: "github.com/overcyn/matcha/view/imageview",
 		NativeViewState: &pb.ImageView{
 			Resource:   resPb,
 			ResizeMode: v.ResizeMode.MarshalProtobuf(),

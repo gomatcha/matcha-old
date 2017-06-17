@@ -1,9 +1,9 @@
 package env
 
 import (
-	"github.com/overcyn/mochibridge"
+	"github.com/overcyn/matchabridge"
 )
 
 func AssetsDir() (string, error) {
-	return mochibridge.Bridge().Call("assetsDir").ToString(), nil
+	return matchabridge.Bridge().Call("assetsDir").ToString(), nil
 }

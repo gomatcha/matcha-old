@@ -1,11 +1,11 @@
 package settings
 
 import (
-	"github.com/overcyn/mochi/layout/table"
-	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/view"
-	"github.com/overcyn/mochi/view/basicview"
-	"github.com/overcyn/mochi/view/scrollview"
+	"github.com/overcyn/matcha/layout/table"
+	"github.com/overcyn/matcha/paint"
+	"github.com/overcyn/matcha/view"
+	"github.com/overcyn/matcha/view/basicview"
+	"github.com/overcyn/matcha/view/scrollview"
 )
 
 type BluetoothView struct {

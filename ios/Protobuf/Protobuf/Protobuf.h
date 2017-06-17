@@ -3,7 +3,7 @@
 //  Protobuf
 //
 //  Created by Kevin Dang on 5/23/17.
-//  Copyright © 2017 mochi. All rights reserved.
+//  Copyright © 2017 matcha. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

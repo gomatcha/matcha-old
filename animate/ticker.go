@@ -3,8 +3,8 @@ package animate
 import (
 	"time"
 
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/internal"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/internal"
 )
 
 type Ticker struct {

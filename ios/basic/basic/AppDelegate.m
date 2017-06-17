@@ -3,15 +3,15 @@
 //  basic
 //
 //  Created by Kevin Dang on 3/30/17.
-//  Copyright © 2017 Mochi. All rights reserved.
+//  Copyright © 2017 Matcha. All rights reserved.
 //
 
 #import "AppDelegate.h"
-#import "MochiViewController.h"
-#import "MochiObjcBridge.h"
-#import "MochiNode.h"
+#import "MatchaViewController.h"
+#import "MatchaObjcBridge.h"
+#import "MatchaNode.h"
 #import "ViewController.h"
-@import Mochi;
+@import Matcha;
 
 @interface AppDelegate ()
 @end
@@ -20,16 +20,16 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [[MochiObjcBridge sharedBridge] configure];
+    [[MatchaObjcBridge sharedBridge] configure];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHeightDidChange:) name:UIKeyboardDidChangeFrameNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
     
-    MochiGoValue *rootVC = [[[MochiGoValue alloc] initWithFunc:@"github.com/overcyn/mochi/examples/textview New"] call:nil args:nil][0];
+    MatchaGoValue *rootVC = [[[MatchaGoValue alloc] initWithFunc:@"github.com/overcyn/matcha/examples/textview New"] call:nil args:nil][0];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [[MochiViewController alloc] initWithGoValue:rootVC];
+    self.window.rootViewController = [[MatchaViewController alloc] initWithGoValue:rootVC];
     [self.window makeKeyAndVisible];
     return YES;
 }

@@ -19,12 +19,12 @@ https://inconshreveable.com/07-08-2014/principles-of-designing-go-apis-with-chan
 
 // import (
 //  "fmt"
-//  "github.com/overcyn/mochi"
+//  "github.com/overcyn/matcha"
 // )
 
 // func main() {
 //  fmt.Println("Hello, 世界")
-// mochi.Display(nil)
+// matcha.Display(nil)
 // }
 
 // type AnimatedView struct {
@@ -374,7 +374,7 @@ https://inconshreveable.com/07-08-2014/principles-of-designing-go-apis-with-chan
 
 //  scroll = &ScrollView{
 //      Children: c,
-//      Layouter: &mochi.TableLayouter{},
+//      Layouter: &matcha.TableLayouter{},
 //  }
 
 //  return map[string]View{"scroll": scroll}
@@ -383,7 +383,7 @@ https://inconshreveable.com/07-08-2014/principles-of-designing-go-apis-with-chan
 // type ComplexView struct {}
 // func (v *ComplexView) Update(ctx *UpdateContext) map[string]View {
 //  c := make(map[string]View)
-//  l := &mochi.AbsoluteLayouter{}
+//  l := &matcha.AbsoluteLayouter{}
 
 //  circle, _ := ctx.children["1"].(*PathView)
 //  circle = circle.Init()
@@ -443,7 +443,7 @@ https://inconshreveable.com/07-08-2014/principles-of-designing-go-apis-with-chan
 // type ComplexView struct {}
 // func (v *ComplexView) Update() map[string]View {
 //  c := make(map[string]View)
-//  l := &mochi.AbsoluteLayouter{}
+//  l := &matcha.AbsoluteLayouter{}
 
 //  c["1"] = &PathView{
 //      path: Circle(0, 0, 10)

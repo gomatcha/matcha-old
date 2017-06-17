@@ -1,8 +1,8 @@
 # Bridge
 
-Mochi need some way of connecting the iOS/Android app with Go code. 
+Matcha need some way of connecting the iOS/Android app with Go code. 
 
-## Mochi
+## Matcha
 
 This is our fork of Gomobile to better understand it.
 
@@ -59,7 +59,7 @@ Go provides some basic tools for binding in [Go Mobile](golang.org/x/mobile). Th
 * Building an all Go mobile application.
 * Calling into Go code through generated bindings from Java and Objective-C.
 
-Mochi will be focusing on the second option, as developers will likely need to fallback into "native" code for various reasons. Integration into preexisting codebases, using non-go libraries, or needing deeper control than Mochi provides. To build bindings, `gomobile` takes a specified package and generates a framework with translated ObjC headers that can be added to XCode project. The exported APIs are limited to a subset of types that includes:
+Matcha will be focusing on the second option, as developers will likely need to fallback into "native" code for various reasons. Integration into preexisting codebases, using non-go libraries, or needing deeper control than Matcha provides. To build bindings, `gomobile` takes a specified package and generates a framework with translated ObjC headers that can be added to XCode project. The exported APIs are limited to a subset of types that includes:
 
 * Signed integer and floating point types.
 * String and boolean types.

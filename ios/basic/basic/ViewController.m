@@ -3,11 +3,11 @@
 //  basic
 //
 //  Created by Kevin Dang on 3/30/17.
-//  Copyright © 2017 Mochi. All rights reserved.
+//  Copyright © 2017 Matcha. All rights reserved.
 //
 
 #import "ViewController.h"
-#import "MochiButtonGestureRecognizer.h"
+#import "MatchaButtonGestureRecognizer.h"
 
 @interface ViewController ()
 
@@ -24,7 +24,7 @@
         subview.autoresizingMask = UIViewAutoresizingNone;
         [self.view addSubview:subview];
         
-        MochiButtonGestureRecognizer *recognizer = [[MochiButtonGestureRecognizer alloc] initWithTarget:self action:@selector(action:)];
+        MatchaButtonGestureRecognizer *recognizer = [[MatchaButtonGestureRecognizer alloc] initWithTarget:self action:@selector(action:)];
         [subview addGestureRecognizer:recognizer];
     }
     return self;
@@ -40,7 +40,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)action:(MochiButtonGestureRecognizer *)recognizer {
+- (void)action:(MatchaButtonGestureRecognizer *)recognizer {
     NSLog(@"action,%@,%@",recognizer,@(recognizer.state));
 }
 

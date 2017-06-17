@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/mochi/layout/constraint"
-	"github.com/overcyn/mochi/pb/view/switchview"
-	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/matcha/layout/constraint"
+	"github.com/overcyn/matcha/pb/view/switchview"
+	"github.com/overcyn/matcha/view"
 )
 
 type View struct {
@@ -50,7 +50,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 	return &view.Model{
 		Layouter:       l,
-		NativeViewName: "github.com/overcyn/mochi/view/switch",
+		NativeViewName: "github.com/overcyn/matcha/view/switch",
 		NativeViewState: &switchview.View{
 			Value:         v.Value,
 			OnValueChange: funcId,

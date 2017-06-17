@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/pb"
-	"github.com/overcyn/mochi/pb/env"
-	"github.com/overcyn/mochibridge"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/pb"
+	"github.com/overcyn/matcha/pb/env"
+	"github.com/overcyn/matchabridge"
 )
 
 type Resource struct {
@@ -27,7 +27,7 @@ func MustLoad(path string) *Resource {
 }
 
 func (r *Resource) Size() layout.Point {
-	pointData := mochibridge.Bridge().Call("sizeForResource:", mochibridge.String(r.path)).ToInterface().([]byte)
+	pointData := matchabridge.Bridge().Call("sizeForResource:", matchabridge.String(r.path)).ToInterface().([]byte)
 	pbpoint := &pb.Point{}
 	err := proto.Unmarshal(pointData, pbpoint)
 	if err != nil {

@@ -2,7 +2,7 @@ syntax = "proto3";
 package switchview;
 
 option go_package = "switchview";
-option objc_class_prefix = "MochiPBSwitchView";
+option objc_class_prefix = "MatchaPBSwitchView";
 
 message View {
     bool value = 1;

@@ -1,18 +1,18 @@
 package textview
 
 import (
-	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/text"
-	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/matcha"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/text"
+	"github.com/overcyn/matcha/view"
 )
 
 type layouter struct {
 	styledText *text.StyledText
 }
 
-func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
 	size := l.styledText.Size(layout.Pt(0, 0), ctx.MaxSize)
 	g := layout.Guide{Frame: layout.Rt(0, 0, size.X, size.Y)}
 	return g, nil
@@ -53,7 +53,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 	return &view.Model{
 		Layouter:        &layouter{styledText: st},
-		NativeViewName:  "github.com/overcyn/mochi/view/textview",
+		NativeViewName:  "github.com/overcyn/matcha/view/textview",
 		NativeViewState: st.MarshalProtobuf(),
 	}
 }

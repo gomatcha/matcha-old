@@ -2,7 +2,7 @@ syntax = "proto3";
 package env;
 
 option go_package = "env";
-option objc_class_prefix = "MochiPBEnv";
+option objc_class_prefix = "MatchaPBEnv";
 
 message Resource {
     string path = 1;

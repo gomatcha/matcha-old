@@ -5,7 +5,7 @@ package internal
 // 	count := 0
 
 // 	ticker := NewTicker(time.Second / 20)
-// 	done := mochi.NotifyFunc(ticker, func() {
+// 	done := matcha.NotifyFunc(ticker, func() {
 // 		mu.Lock()
 // 		defer mu.Unlock()
 // 		count += 1

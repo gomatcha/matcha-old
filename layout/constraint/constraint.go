@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/matcha"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/view"
 )
 
 type comparison int
@@ -132,13 +132,13 @@ func (a guideAnchor) value(sys *Layout) float64 {
 	var g layout.Guide
 	switch a.guide.id {
 	case rootId:
-		g = *sys.Guide.mochiGuide
+		g = *sys.Guide.matchaGuide
 	case minId:
-		g = *sys.min.mochiGuide
+		g = *sys.min.matchaGuide
 	case maxId:
-		g = *sys.max.mochiGuide
+		g = *sys.max.matchaGuide
 	default:
-		g = *sys.children[a.guide.id].mochiGuide
+		g = *sys.children[a.guide.id].matchaGuide
 	}
 
 	// if g == nil {
@@ -175,10 +175,10 @@ func Notifier(n comm.Float64Notifier) *Anchor {
 }
 
 type Guide struct {
-	id         mochi.Id
-	system     *Layout
-	children   map[mochi.Id]*Guide
-	mochiGuide *layout.Guide
+	id          matcha.Id
+	system      *Layout
+	children    map[matcha.Id]*Guide
+	matchaGuide *layout.Guide
 }
 
 func (g *Guide) Top() *Anchor {
@@ -216,10 +216,10 @@ func (g *Guide) CenterY() *Anchor {
 func (g *Guide) Add(view view.View, solveFunc func(*Solver)) *Guide {
 	id := view.Id()
 	chl := &Guide{
-		id:         id,
-		system:     g.system,
-		children:   map[mochi.Id]*Guide{},
-		mochiGuide: nil,
+		id:          id,
+		system:      g.system,
+		children:    map[matcha.Id]*Guide{},
+		matchaGuide: nil,
 	}
 	s := &Solver{id: id}
 	if solveFunc != nil {
@@ -264,7 +264,7 @@ func (c constraint) String() string {
 }
 
 type Solver struct {
-	id          mochi.Id
+	id          matcha.Id
 	constraints []constraint
 }
 
@@ -315,9 +315,9 @@ func (s *Solver) solve(sys *Layout, ctx *layout.Context) {
 	// Get parent guide.
 	var parent layout.Guide
 	if s.id == rootId {
-		parent = *sys.min.mochiGuide
+		parent = *sys.min.matchaGuide
 	} else {
-		parent = *sys.Guide.mochiGuide
+		parent = *sys.Guide.matchaGuide
 	}
 
 	// Solve for width & height.
@@ -365,9 +365,9 @@ func (s *Solver) solve(sys *Layout, ctx *layout.Context) {
 	// Update the guide and the system.
 	g.Frame = layout.Rt(centerX-width/2, centerY-height/2, centerX+width/2, centerY+height/2)
 	if s.id == rootId {
-		sys.Guide.mochiGuide = &g
+		sys.Guide.matchaGuide = &g
 	} else {
-		sys.Guide.children[s.id].mochiGuide = &g
+		sys.Guide.children[s.id].matchaGuide = &g
 	}
 }
 
@@ -474,7 +474,7 @@ func (s *Solver) String() string {
 type systemId int
 
 const (
-	rootId mochi.Id = -1 * iota
+	rootId matcha.Id = -1 * iota
 	minId
 	maxId
 )
@@ -493,9 +493,9 @@ type Layout struct {
 
 func New() *Layout {
 	sys := &Layout{}
-	sys.Guide = &Guide{id: rootId, system: sys, children: map[mochi.Id]*Guide{}}
-	sys.min = &Guide{id: minId, system: sys, children: map[mochi.Id]*Guide{}}
-	sys.max = &Guide{id: maxId, system: sys, children: map[mochi.Id]*Guide{}}
+	sys.Guide = &Guide{id: rootId, system: sys, children: map[matcha.Id]*Guide{}}
+	sys.min = &Guide{id: minId, system: sys, children: map[matcha.Id]*Guide{}}
+	sys.max = &Guide{id: maxId, system: sys, children: map[matcha.Id]*Guide{}}
 	sys.batchNotifiers = map[comm.Id]notifier{}
 	return sys
 }
@@ -512,14 +512,14 @@ func (sys *Layout) MaxGuide() *Guide {
 	return sys.max
 }
 
-func (sys *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
-	sys.min.mochiGuide = &layout.Guide{
+func (sys *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
+	sys.min.matchaGuide = &layout.Guide{
 		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
-	sys.max.mochiGuide = &layout.Guide{
+	sys.max.matchaGuide = &layout.Guide{
 		Frame: layout.Rt(0, 0, ctx.MaxSize.X, ctx.MaxSize.Y),
 	}
-	sys.Guide.mochiGuide = &layout.Guide{
+	sys.Guide.matchaGuide = &layout.Guide{
 		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
 	// TODO(Kevin): reset all guides
@@ -528,10 +528,10 @@ func (sys *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layou
 		i.solve(sys, ctx)
 	}
 
-	g := *sys.Guide.mochiGuide
-	gs := map[mochi.Id]layout.Guide{}
+	g := *sys.Guide.matchaGuide
+	gs := map[matcha.Id]layout.Guide{}
 	for k, v := range sys.Guide.children {
-		gs[k] = *v.mochiGuide
+		gs[k] = *v.matchaGuide
 	}
 	return g, gs
 }

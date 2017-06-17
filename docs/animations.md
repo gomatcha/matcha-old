@@ -33,7 +33,7 @@ type Animatable interface {
 }
 
 chl1 := basicview.New(ctx.Get(chl1id))
-chl1.PaintOptions.BackgroundColor = mochi.RedColor
+chl1.PaintOptions.BackgroundColor = matcha.RedColor
 n.Set(chl1id, chl1)
 g1 := l.Add(chl1id, func(s *constraint.Solver) {
     s.WidthEqual(constraint.Animater(a))
@@ -41,8 +41,8 @@ g1 := l.Add(chl1id, func(s *constraint.Solver) {
 })
 -
 
-chl1.Painter = mochi.PaintOptions{
-    BackgroundColor: mochi.RedColor `mochi:animatable`
+chl1.Painter = matcha.PaintOptions{
+    BackgroundColor: matcha.RedColor `matcha:animatable`
 }
 
 chl1.Painter = Painter.WithAnimater(func (p *Painter){

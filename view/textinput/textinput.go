@@ -1,9 +1,9 @@
 package textinput
 
 import (
-	"github.com/overcyn/mochi/pb/view/textinput"
-	"github.com/overcyn/mochi/text"
-	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/matcha/pb/view/textinput"
+	"github.com/overcyn/matcha/text"
+	"github.com/overcyn/matcha/view"
 )
 
 // View mutates it's Text and StyledText fields in place.
@@ -42,7 +42,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	}
 
 	return &view.Model{
-		NativeViewName: "github.com/overcyn/mochi/view/textinput",
+		NativeViewName: "github.com/overcyn/matcha/view/textinput",
 		NativeViewState: &textinput.View{
 			StyledText: st.MarshalProtobuf(),
 			OnUpdate:   funcId,

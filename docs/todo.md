@@ -1,4 +1,4 @@
-// mochi.Id is in the mochi package because view depends on layout. and layout needs to use the Ids
+// matcha.Id is in the matcha package because view depends on layout. and layout needs to use the Ids
 
 High:
 * Text Input / Keyboard

@@ -3,7 +3,7 @@ package animate
 import (
 	"image/color"
 
-	"github.com/overcyn/mochi/comm"
+	"github.com/overcyn/matcha/comm"
 )
 
 type ColorInterpolater interface {

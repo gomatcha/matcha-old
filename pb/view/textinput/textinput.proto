@@ -1,15 +1,15 @@
 syntax = "proto3";
-package mochi.view.textinput;
-import "github.com/overcyn/mochi/pb/text/text.proto";
+package matcha.view.textinput;
+import "github.com/overcyn/matcha/pb/text/text.proto";
 
 option go_package = "textinput";
-option objc_class_prefix = "MochiPBTextInput";
+option objc_class_prefix = "MatchaPBTextInput";
 
 message View {
-    mochi.text.StyledText styledText = 1;
+    matcha.text.StyledText styledText = 1;
     int64 onUpdate = 2;
 }
 
 message Event {
-    mochi.text.StyledText styledText = 1;
+    matcha.text.StyledText styledText = 1;
 }

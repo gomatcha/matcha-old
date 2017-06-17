@@ -6,9 +6,9 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/pb/touch"
-	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/pb/touch"
+	"github.com/overcyn/matcha/view"
 )
 
 func init() {
@@ -102,7 +102,7 @@ func (r *Middleware) Build(ctx *view.Context, next *view.Model) {
 	if next.NativeValues == nil {
 		next.NativeValues = map[string]proto.Message{}
 	}
-	next.NativeValues["github.com/overcyn/mochi/touch"] = pbRecognizers
+	next.NativeValues["github.com/overcyn/matcha/touch"] = pbRecognizers
 
 	if next.NativeFuncs == nil {
 		next.NativeFuncs = map[int64]interface{}{}

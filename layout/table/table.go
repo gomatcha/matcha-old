@@ -3,10 +3,10 @@ package table
 import (
 	"math"
 
-	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/matcha"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/view"
 )
 
 // type Direction int
@@ -20,7 +20,7 @@ import (
 
 type Layout struct {
 	// Direction Direction // TODO(KD): Direction is ignored.
-	ids   []mochi.Id
+	ids   []matcha.Id
 	views []view.View
 }
 
@@ -33,9 +33,9 @@ func (l *Layout) Add(v view.View) {
 	l.views = append(l.views, v)
 }
 
-func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
 	g := layout.Guide{}
-	gs := map[mochi.Id]layout.Guide{}
+	gs := map[matcha.Id]layout.Guide{}
 	y := 0.0
 	x := ctx.MinSize.X
 	for i, id := range l.ids {

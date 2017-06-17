@@ -4,10 +4,10 @@ import (
 	"sync"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/paint"
+	"github.com/overcyn/matcha"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/paint"
 )
 
 type Screen interface {
@@ -36,19 +36,19 @@ func (f ScreenFunc) Unlock() {
 type View interface {
 	Build(*Context) *Model
 	Lifecycle(from, to Stage)
-	Id() mochi.Id
+	Id() matcha.Id
 	comm.Notifier
 }
 
 // Embed is a convenience struct that provides a default implementation of View. It also wraps a comm.BatchNotifier.
 type Embed struct {
 	mu            sync.Mutex
-	id            mochi.Id
+	id            matcha.Id
 	batchNotifier comm.BatchNotifier
 }
 
 // NewEmbed creates a new Embed with the given Id.
-func NewEmbed(id mochi.Id) *Embed {
+func NewEmbed(id matcha.Id) *Embed {
 	return &Embed{id: id}
 }
 
@@ -58,7 +58,7 @@ func (e *Embed) Build(ctx *Context) *Model {
 }
 
 // Id returns the id passed into NewEmbed
-func (e *Embed) Id() mochi.Id {
+func (e *Embed) Id() matcha.Id {
 	return e.id
 }
 

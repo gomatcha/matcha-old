@@ -331,7 +331,7 @@ case $basic_machine in
 	leon|leon[3-9])
 		basic_machine=sparc-$basic_machine
 		;;
-	m6811 | m68hc11 | m6812 | m68hc12 | m68hcs12x | nvptx | picochip)
+	m6811 | m68hc11 | m6812 | m68hc12 | m68hcs12x | nvptx | picatchap)
 		basic_machine=$basic_machine-unknown
 		os=-none
 		;;

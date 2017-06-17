@@ -5,10 +5,10 @@ import (
 	"strconv"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/layout/constraint"
-	"github.com/overcyn/mochi/pb/view/stacknav"
-	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/layout/constraint"
+	"github.com/overcyn/matcha/pb/view/stacknav"
+	"github.com/overcyn/matcha/view"
 )
 
 type Screen struct {
@@ -129,7 +129,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Children:       l.Views(),
 		Layouter:       l,
-		NativeViewName: "github.com/overcyn/mochi/view/stacknav",
+		NativeViewName: "github.com/overcyn/matcha/view/stacknav",
 		NativeViewState: &stacknav.StackNav{
 			Screens:   screenspb,
 			EventFunc: funcId,

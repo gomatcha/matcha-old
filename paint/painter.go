@@ -4,9 +4,9 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/pb"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/pb"
 )
 
 type Painter interface {

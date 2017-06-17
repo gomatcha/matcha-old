@@ -1,4 +1,4 @@
-# Mochi - A cross platform mobile UI framework in Go
+# Matcha - A cross platform mobile UI framework in Go
 
 ## Goals
 * It should be straight forward to build general purpose UIs

@@ -2,7 +2,7 @@ syntax = "proto3";
 package paint;
 
 option go_package = "pb";
-option objc_class_prefix = "MochiPB";
+option objc_class_prefix = "MatchaPB";
 
 message ScrollView {
   bool scrollEnabled = 1;

@@ -1,14 +1,14 @@
 package settings
 
 import (
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/layout/table"
-	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/view"
-	"github.com/overcyn/mochi/view/basicview"
-	"github.com/overcyn/mochi/view/scrollview"
-	"github.com/overcyn/mochi/view/stackscreen"
-	"github.com/overcyn/mochi/view/switchview"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/layout/table"
+	"github.com/overcyn/matcha/paint"
+	"github.com/overcyn/matcha/view"
+	"github.com/overcyn/matcha/view/basicview"
+	"github.com/overcyn/matcha/view/scrollview"
+	"github.com/overcyn/matcha/view/stackscreen"
+	"github.com/overcyn/matcha/view/switchview"
 )
 
 type WifiController struct {

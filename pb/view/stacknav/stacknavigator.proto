@@ -2,7 +2,7 @@ syntax = "proto3";
 package stacknav;
 
 option go_package = "stacknav";
-option objc_class_prefix = "MochiPBStackNav";
+option objc_class_prefix = "MatchaPBStackNav";
 
 message Screen {
     int64 id = 1;

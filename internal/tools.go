@@ -4,11 +4,11 @@ import (
 	"os"
 	"runtime/pprof"
 
-	"github.com/overcyn/mochibridge"
+	"github.com/overcyn/matchabridge"
 )
 
 func init() {
-	mochibridge.RegisterFunc("github.com/overcyn/mochi/internal printStack", printStack)
+	matchabridge.RegisterFunc("github.com/overcyn/matcha/internal printStack", printStack)
 }
 
 func printStack() {

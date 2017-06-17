@@ -1,10 +1,10 @@
 syntax = "proto3";
-package mochi.text;
-import "github.com/overcyn/mochi/pb/layout.proto";
-import "github.com/overcyn/mochi/pb/color.proto";
+package matcha.text;
+import "github.com/overcyn/matcha/pb/layout.proto";
+import "github.com/overcyn/matcha/pb/color.proto";
 
 option go_package = "text";
-option objc_class_prefix = "MochiPB";
+option objc_class_prefix = "MatchaPB";
 
 message SizeFunc {
     StyledText text = 1;
@@ -68,14 +68,14 @@ enum Truncation {
 message TextStyle {
     TextAlignment textAlignment = 2;
     StrikethroughStyle strikethroughStyle = 4;
-    mochi.Color strikethroughColor = 6;
+    matcha.Color strikethroughColor = 6;
     UnderlineStyle underlineStyle = 8;
-    mochi.Color underlineColor = 10;
+    matcha.Color underlineColor = 10;
     Font font = 12;
     double hyphenation = 14;
     double lineHeightMultiple = 16;
     int64 maxLines = 18;
-    mochi.Color textColor = 20;
+    matcha.Color textColor = 20;
     TextWrap wrap = 22;
     Truncation truncation = 24;
     string truncationString = 26;

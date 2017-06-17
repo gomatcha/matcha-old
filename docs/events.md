@@ -1,7 +1,7 @@
 type TodoView struct {
     model *TodoViewModel
     operations chan Operations
-    marker chan<- Mochi.Marker
+    marker chan<- Matcha.Marker
 }
 
 type TodoViewModel {
@@ -24,7 +24,7 @@ func NewTodoView(v interface{}) {
     return todoView
 }
 
-func (v *TodoView) Load(sig chan<- Mochi.Signal) {
+func (v *TodoView) Load(sig chan<- Matcha.Signal) {
     v.sig = sig
 }
 
@@ -32,7 +32,7 @@ func (v *TodoView) Unload() {
     
 }
 
-// func (v *TodoView) Run(sig <-chan Mochi.Signal, nodeChan chan<- *Node) {
+// func (v *TodoView) Run(sig <-chan Matcha.Signal, nodeChan chan<- *Node) {
 //     for {
 //         select {
 //         case s := <-sig:
@@ -47,7 +47,7 @@ func (v *TodoView) Unload() {
 func (v *TodoView)setModel(m *TodoViewModel) {
     v.operations <- func() {
         v.model = m
-        v.marker<- Mochi.Update()
+        v.marker<- Matcha.Update()
     }
 }
 
@@ -122,20 +122,20 @@ func (v *TodoView) Update(p *Node) *Node {
         // onChange.Sig = sig
         // onChange.Func = func(s string){
         //     v.Input = s
-        //     v.sig <-Mochi.Update{}
+        //     v.sig <-Matcha.Update{}
         // })
         // onChange.Listen()
         
         // v.Listener = sig.NewListener(chl.OnChange(), func(){
         //     v.Input = blah
-        //     v.sig <-Mochi.Update{}
+        //     v.sig <-Matcha.Update{}
         // })
         
         // chl := NewTextField(p.Get(textFieldId))
         // chl.Input = v.Input
         // v.Listener = NewStringListener(chl.OnChange(), sig, func(){
         //     v.Input = blah
-        //     v.sig <-Mochi.Update{}
+        //     v.sig <-Matcha.Update{}
         // })
         
         // chl := NewTextField(p.Get(textFieldId))
@@ -146,10 +146,10 @@ func (v *TodoView) Update(p *Node) *Node {
         //     if !ok {
         //         return
         //     }
-        //     v.sig <- Mochi.Func{func() {
+        //     v.sig <- Matcha.Func{func() {
         //         // if l.Open {
         //         v.Input = x
-        //         v.sig <-Mochi.Update{}
+        //         v.sig <-Matcha.Update{}
         //         // }
         //     }}
         // }()
@@ -157,9 +157,9 @@ func (v *TodoView) Update(p *Node) *Node {
         
         
         // chl.OnChange = func(str string) {
-            // v.sig <- Mochi.Func{func() {
+            // v.sig <- Matcha.Func{func() {
             //     v.Input = str
-            //     v.sig <- Mochi.Update{}
+            //     v.sig <- Matcha.Update{}
             // }}
         // }
         
@@ -169,10 +169,10 @@ func (v *TodoView) Update(p *Node) *Node {
         // go func () {
         //     select {
         //     case in := <-input
-        //         v.sig <- Mochi.Func{func() {
+        //         v.sig <- Matcha.Func{func() {
         //             blah = 
         //             // v.Input = in
-        //             // v.sig <-Mochi.Update{}
+        //             // v.sig <-Matcha.Update{}
         //         }}
         //     case cancel
         //     }
@@ -186,10 +186,10 @@ func (v *TodoView) Update(p *Node) *Node {
         // v.textListener := chl.OnChange()
         // go func(l Listener) {
         //     blah := <- l.Listen()
-        //     v.sig <- Mochi.Func{func() {
+        //     v.sig <- Matcha.Func{func() {
         //         if v.textListener = l {
         //             v.Input = in
-        //             v.sig <-Mochi.Update{}
+        //             v.sig <-Matcha.Update{}
         //         }
         //     }}
         // }(v.textListener)
@@ -200,9 +200,9 @@ func (v *TodoView) Update(p *Node) *Node {
         // go func () {
         //     select {
         //     case in := <-input
-        //         v.sig <- Mochi.Func{func() {
+        //         v.sig <- Matcha.Func{func() {
         //             v.Input = in
-        //             v.sig <-Mochi.Update{}
+        //             v.sig <-Matcha.Update{}
         //         }}
         //     case cancel
         //     }
@@ -236,13 +236,13 @@ func (v *TodoView) Update(p *Node) *Node {
             
             select {
             case <-chl.OnClick():
-                // v.sig <- Mochi.Func{func() {
+                // v.sig <- Matcha.Func{func() {
                 if v.Input == "" {
                     return
                 }
                 v.Items = append(v.Items, v.Input)
                 v.Input = ""
-                v.sig <- Mochi.Update{}
+                v.sig <- Matcha.Update{}
                 // }}
             case <-cancel:
             }

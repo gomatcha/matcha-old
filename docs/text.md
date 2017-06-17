@@ -1,6 +1,6 @@
 # Text
 
-## Mochi
+## Matcha
 
 Option 1.
 Each attribute gets a type. And Style.Attributes() returns a slice of attributes that can be type casted. Downside is that it dirtys the package namespace, with a bunch of types.
@@ -380,11 +380,11 @@ Courier
     Courier
     Courier-Bold
     Courier-Oblique
-Cochin
-    Cochin-Bold
-    Cochin
-    Cochin-Italic
-    Cochin-BoldItalic
+Catchan
+    Catchan-Bold
+    Catchan
+    Catchan-Italic
+    Catchan-BoldItalic
 Hiragino Mincho ProN
     HiraMinProN-W6
     HiraMinProN-W3

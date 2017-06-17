@@ -4,8 +4,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochibridge"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matchabridge"
 )
 
 var tickers = struct {
@@ -19,7 +19,7 @@ var tickers = struct {
 }
 
 func init() {
-	mochibridge.RegisterFunc("github.com/overcyn/mochi/animate screenUpdate", screenUpdate)
+	matchabridge.RegisterFunc("github.com/overcyn/matcha/animate screenUpdate", screenUpdate)
 }
 
 func screenUpdate() {

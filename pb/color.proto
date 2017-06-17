@@ -1,8 +1,8 @@
 syntax = "proto3";
-package mochi;
+package matcha;
 
 option go_package = "pb";
-option objc_class_prefix = "MochiPB";
+option objc_class_prefix = "MatchaPB";
 
 message Color {
     uint32 red = 1;

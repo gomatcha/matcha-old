@@ -3,9 +3,9 @@ package basicview
 import (
 	"fmt"
 
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/paint"
+	"github.com/overcyn/matcha/view"
 )
 
 type BasicView struct {

@@ -1,3 +1,3 @@
-package mochi
+package matcha
 
 type Id int64

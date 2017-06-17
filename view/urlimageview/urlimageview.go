@@ -8,19 +8,19 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/view"
-	"github.com/overcyn/mochi/view/imageview"
+	"github.com/overcyn/matcha"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/view"
+	"github.com/overcyn/matcha/view/imageview"
 )
 
 // Layouter that returns the child's layout
 type layouter struct{}
 
-func (l layouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
+func (l layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
 	g := layout.Guide{Frame: layout.Rect{Max: ctx.MaxSize}}
-	gs := map[mochi.Id]layout.Guide{}
+	gs := map[matcha.Id]layout.Guide{}
 	for _, id := range ctx.ChildIds {
 		f := ctx.LayoutChild(id, ctx.MinSize, ctx.MaxSize)
 		gs[id] = f

@@ -3,17 +3,17 @@ package tabscreen
 import (
 	"image/color"
 
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/touch"
-	"github.com/overcyn/mochi/view"
-	"github.com/overcyn/mochi/view/tabscreen"
-	"github.com/overcyn/mochibridge"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/paint"
+	"github.com/overcyn/matcha/touch"
+	"github.com/overcyn/matcha/view"
+	"github.com/overcyn/matcha/view/tabscreen"
+	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
 )
 
 func init() {
-	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/tabscreen New", func() *view.Root {
+	matchabridge.RegisterFunc("github.com/overcyn/matcha/examples/tabscreen New", func() *view.Root {
 		return view.NewRoot(NewApp())
 	})
 }

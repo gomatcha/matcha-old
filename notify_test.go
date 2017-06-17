@@ -1,4 +1,4 @@
-package mochi
+package matcha
 
 import (
 	"testing"

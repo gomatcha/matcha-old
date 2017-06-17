@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/pb"
-	"github.com/overcyn/mochi/pb/text"
-	"github.com/overcyn/mochibridge"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/pb"
+	"github.com/overcyn/matcha/pb/text"
+	"github.com/overcyn/matchabridge"
 )
 
 type StyledText struct {
@@ -48,7 +48,7 @@ func (st *StyledText) Size(min layout.Point, max layout.Point) layout.Point {
 		return layout.Pt(0, 0)
 	}
 
-	pointData := mochibridge.Bridge().Call("sizeForAttributedString:", mochibridge.Bytes(data)).ToInterface().([]byte)
+	pointData := matchabridge.Bridge().Call("sizeForAttributedString:", matchabridge.Bytes(data)).ToInterface().([]byte)
 	pbpoint := &pb.Point{}
 	err = proto.Unmarshal(pointData, pbpoint)
 	if err != nil {

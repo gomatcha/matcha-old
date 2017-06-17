@@ -1,9 +1,9 @@
 syntax = "proto3";
 package tabnav;
-import "github.com/overcyn/mochi/pb/imageview.proto";
+import "github.com/overcyn/matcha/pb/imageview.proto";
 
 option go_package = "tabnav";
-option objc_class_prefix = "MochiPBTabNav";
+option objc_class_prefix = "MatchaPBTabNav";
 
 message Screen {
     int64 id = 1;

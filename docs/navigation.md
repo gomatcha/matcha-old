@@ -200,9 +200,9 @@ func NewRootView(ctx *view.Context, key interface{}) *RootView {
 // type View interface {
 //  Build(*Context) *Model
 //  Lifecycle(from, to Stage)
-//  Id() mochi.Id
+//  Id() matcha.Id
 //  sync.Locker
-//  mochi.Notifier
+//  matcha.Notifier
 // }
 
 // // type Nav interface {

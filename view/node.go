@@ -12,14 +12,14 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	google_protobuf "github.com/golang/protobuf/ptypes/any"
-	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/internal"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/layout/full"
-	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/pb"
-	"github.com/overcyn/mochibridge"
+	"github.com/overcyn/matcha"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/internal"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/layout/full"
+	"github.com/overcyn/matcha/paint"
+	"github.com/overcyn/matcha/pb"
+	"github.com/overcyn/matchabridge"
 )
 
 var MainMu sync.Mutex
@@ -91,7 +91,7 @@ func (r *Root) start() {
 			fmt.Println("err", err)
 			return
 		}
-		mochibridge.Bridge().Call("updateId:withProtobuf:", mochibridge.Int64(int64(id)), mochibridge.Bytes(pb))
+		matchabridge.Bridge().Call("updateId:withProtobuf:", matchabridge.Int64(int64(id)), matchabridge.Bytes(pb))
 	})
 }
 
@@ -153,7 +153,7 @@ func (r *Root) SetMiddlewares(rs []Middleware) {
 }
 
 type viewCacheKey struct {
-	id  mochi.Id
+	id  matcha.Id
 	key string
 }
 
@@ -163,9 +163,9 @@ type Context struct {
 	parent *Context
 
 	node      *node
-	prevIds   map[viewCacheKey]mochi.Id
-	prevNodes map[mochi.Id]*node
-	skipBuild map[mochi.Id]struct{}
+	prevIds   map[viewCacheKey]matcha.Id
+	prevNodes map[matcha.Id]*node
+	skipBuild map[matcha.Id]struct{}
 }
 
 // Prev returns the view returned by the last call to Build with the given key.
@@ -218,11 +218,11 @@ func (ctx *Context) PrevModel() *Model {
 }
 
 // NewId generates a new identifier for a given key.
-func (ctx *Context) NewId(key string) mochi.Id {
+func (ctx *Context) NewId(key string) matcha.Id {
 	return ctx.newId(key, "")
 }
 
-func (ctx *Context) newId(key string, prefix string) mochi.Id {
+func (ctx *Context) newId(key string, prefix string) matcha.Id {
 	if ctx.parent != nil {
 		return ctx.parent.newId(key, ctx.prefix+"|"+prefix)
 	}
@@ -230,7 +230,7 @@ func (ctx *Context) newId(key string, prefix string) mochi.Id {
 		key = prefix + "|" + key
 	}
 
-	id := mochi.Id(atomic.AddInt64(&maxId, 1))
+	id := matcha.Id(atomic.AddInt64(&maxId, 1))
 	if ctx.node != nil {
 		cacheKey := viewCacheKey{key: key, id: ctx.node.id}
 		if _, ok := ctx.node.root.ids[cacheKey]; ok {
@@ -247,14 +247,14 @@ func (ctx *Context) NewFuncId() int64 {
 }
 
 // SkipBuild marks the child ids as not needing to be rebuilt.
-func (ctx *Context) SkipBuild(ids []mochi.Id) {
+func (ctx *Context) SkipBuild(ids []matcha.Id) {
 	if ctx.parent != nil {
 		ctx.parent.SkipBuild(ids)
 		return
 	}
 
 	if ctx.skipBuild == nil {
-		ctx.skipBuild = map[mochi.Id]struct{}{}
+		ctx.skipBuild = map[matcha.Id]struct{}{}
 	}
 	for _, i := range ids {
 		ctx.skipBuild[i] = struct{}{}
@@ -267,7 +267,7 @@ func (ctx *Context) WithPrefix(key string) *Context {
 }
 
 // Id returns the identifier associated with the build context.
-func (ctx *Context) Id() mochi.Id {
+func (ctx *Context) Id() matcha.Id {
 	if ctx.parent != nil {
 		return ctx.parent.Id()
 	}
@@ -299,12 +299,12 @@ func (f updateFlag) needsPaint() bool {
 
 type root struct {
 	node        *node
-	ids         map[viewCacheKey]mochi.Id
-	nodes       map[mochi.Id]*node
+	ids         map[viewCacheKey]matcha.Id
+	nodes       map[matcha.Id]*node
 	middlewares []Middleware
 
 	flagMu      sync.Mutex
-	updateFlags map[mochi.Id]updateFlag
+	updateFlags map[matcha.Id]updateFlag
 }
 
 func newRoot(s Screen) *root {
@@ -319,12 +319,12 @@ func newRoot(s Screen) *root {
 		view: v,
 		root: root,
 	}
-	root.updateFlags = map[mochi.Id]updateFlag{v.Id(): buildFlag}
+	root.updateFlags = map[matcha.Id]updateFlag{v.Id(): buildFlag}
 	root.middlewares = defaultMiddlewares()
 	return root
 }
 
-func (root *root) addFlag(id mochi.Id, f updateFlag) {
+func (root *root) addFlag(id matcha.Id, f updateFlag) {
 	root.flagMu.Lock()
 	defer root.flagMu.Unlock()
 
@@ -353,7 +353,7 @@ func (root *root) update(size layout.Point) bool {
 		root.paint()
 		updated = true
 	}
-	root.updateFlags = map[mochi.Id]updateFlag{}
+	root.updateFlags = map[matcha.Id]updateFlag{}
 	return updated
 }
 
@@ -371,15 +371,15 @@ func (root *root) build() {
 	prevIds := root.ids
 	prevNodes := root.nodes
 
-	root.ids = map[viewCacheKey]mochi.Id{}
-	root.nodes = map[mochi.Id]*node{
+	root.ids = map[viewCacheKey]matcha.Id{}
+	root.nodes = map[matcha.Id]*node{
 		root.node.id: root.node,
 	}
 
 	// Rebuild
 	root.node.build(prevIds, prevNodes)
 
-	keys := map[mochi.Id]viewCacheKey{}
+	keys := map[matcha.Id]viewCacheKey{}
 	for k, v := range root.ids {
 		keys[v] = k
 	}
@@ -387,7 +387,7 @@ func (root *root) build() {
 		keys[v] = k
 	}
 
-	ids := map[viewCacheKey]mochi.Id{}
+	ids := map[viewCacheKey]matcha.Id{}
 	for k := range root.nodes {
 		key, ok := keys[k]
 		if ok {
@@ -408,7 +408,7 @@ func (root *root) paint() {
 }
 
 func (root *root) call(funcId int64, viewId int64, args []reflect.Value) []reflect.Value {
-	node, ok := root.nodes[mochi.Id(viewId)]
+	node, ok := root.nodes[matcha.Id(viewId)]
 	if !ok || node.model == nil {
 		return nil
 	}
@@ -423,7 +423,7 @@ func (root *root) call(funcId int64, viewId int64, args []reflect.Value) []refle
 }
 
 type node struct {
-	id    mochi.Id
+	id    matcha.Id
 	root  *root
 	view  View
 	stage Stage
@@ -432,7 +432,7 @@ type node struct {
 	buildNotify   bool
 	buildNotifyId comm.Id
 	model         *Model
-	children      map[mochi.Id]*node
+	children      map[matcha.Id]*node
 
 	layoutId       int64
 	layoutNotify   bool
@@ -480,7 +480,7 @@ func (n *node) MarshalProtobuf() *pb.Node {
 	}
 }
 
-func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*node) {
+func (n *node) build(prevIds map[viewCacheKey]matcha.Id, prevNodes map[matcha.Id]*node) {
 	if n.root.updateFlags[n.id].needsBuild() {
 		n.buildId += 1
 
@@ -493,7 +493,7 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 		// Generate the new viewModel.
 		ctx := &Context{node: n, prevIds: prevIds, prevNodes: prevNodes}
 		viewModel := n.view.Build(ctx)
-		viewModelChildren := map[mochi.Id]View{} // TODO: Do this without maps.
+		viewModelChildren := map[matcha.Id]View{} // TODO: Do this without maps.
 		for _, i := range viewModel.Children {
 			viewModelChildren[i.Id()] = i
 		}
@@ -504,9 +504,9 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 		}
 
 		// Diff the old children (n.children) with new children (viewModelChildren).
-		addedIds := []mochi.Id{}
-		removedIds := []mochi.Id{}
-		unchangedIds := []mochi.Id{}
+		addedIds := []matcha.Id{}
+		removedIds := []matcha.Id{}
+		unchangedIds := []matcha.Id{}
 		for id := range n.children {
 			if _, ok := viewModelChildren[id]; !ok {
 				removedIds = append(removedIds, id)
@@ -520,7 +520,7 @@ func (n *node) build(prevIds map[viewCacheKey]mochi.Id, prevNodes map[mochi.Id]*
 			}
 		}
 
-		children := map[mochi.Id]*node{}
+		children := map[matcha.Id]*node{}
 		// Add build contexts for new children.
 		for _, id := range addedIds {
 			var view View
@@ -606,8 +606,8 @@ func (n *node) layout(minSize layout.Point, maxSize layout.Point) layout.Guide {
 	ctx := &layout.Context{
 		MinSize:  minSize,
 		MaxSize:  maxSize,
-		ChildIds: []mochi.Id{},
-		LayoutFunc: func(id mochi.Id, minSize, maxSize layout.Point) layout.Guide {
+		ChildIds: []matcha.Id{},
+		LayoutFunc: func(id matcha.Id, minSize, maxSize layout.Point) layout.Guide {
 			return n.children[id].layout(minSize, maxSize)
 		},
 	}

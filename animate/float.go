@@ -1,6 +1,6 @@
 package animate
 
-import "github.com/overcyn/mochi/comm"
+import "github.com/overcyn/matcha/comm"
 
 type FloatInterpolater interface {
 	Interpolate(float64) float64

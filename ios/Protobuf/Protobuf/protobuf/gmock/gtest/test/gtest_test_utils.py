@@ -275,7 +275,7 @@ class Subprocess:
           p = popen2.Popen4(command)
         else:
           p = popen2.Popen3(command)
-        p.tochild.close()
+        p.tatchald.close()
         self.output = p.fromchild.read()
         ret_code = p.wait()
       finally:

@@ -3,30 +3,30 @@ package layout
 import (
 	"reflect"
 
-	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/pb"
-	"github.com/overcyn/mochibridge"
+	"github.com/overcyn/matcha"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/pb"
+	"github.com/overcyn/matchabridge"
 )
 
 func init() {
-	mochibridge.RegisterType("layout.Point", reflect.TypeOf(Point{}))
-	mochibridge.RegisterType("layout.Rect", reflect.TypeOf(Rect{}))
+	matchabridge.RegisterType("layout.Point", reflect.TypeOf(Point{}))
+	matchabridge.RegisterType("layout.Rect", reflect.TypeOf(Rect{}))
 }
 
 type Context struct {
 	MinSize    Point
 	MaxSize    Point
-	ChildIds   []mochi.Id
-	LayoutFunc func(mochi.Id, Point, Point) Guide
+	ChildIds   []matcha.Id
+	LayoutFunc func(matcha.Id, Point, Point) Guide
 }
 
 type Layouter interface {
-	Layout(ctx *Context) (Guide, map[mochi.Id]Guide)
+	Layout(ctx *Context) (Guide, map[matcha.Id]Guide)
 	comm.Notifier
 }
 
-func (l *Context) LayoutChild(id mochi.Id, minSize, maxSize Point) Guide {
+func (l *Context) LayoutChild(id matcha.Id, minSize, maxSize Point) Guide {
 	return l.LayoutFunc(id, minSize, maxSize)
 }
 

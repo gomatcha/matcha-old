@@ -3,12 +3,12 @@ package scrollview
 import (
 	"math"
 
-	"github.com/overcyn/mochi"
-	"github.com/overcyn/mochi/comm"
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/pb"
-	"github.com/overcyn/mochi/view"
+	"github.com/overcyn/matcha"
+	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/paint"
+	"github.com/overcyn/matcha/pb"
+	"github.com/overcyn/matcha/view"
 )
 
 type Direction int
@@ -53,7 +53,7 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 		Layouter: &layouter{
 			Directions: v.Directions,
 		},
-		NativeViewName: "github.com/overcyn/mochi/view/scrollview",
+		NativeViewName: "github.com/overcyn/matcha/view/scrollview",
 		NativeViewState: &pb.ScrollView{
 			ScrollEnabled:                  v.ScrollEnabled,
 			ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
@@ -66,8 +66,8 @@ type layouter struct {
 	Directions Direction
 }
 
-func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[mochi.Id]layout.Guide) {
-	gs := map[mochi.Id]layout.Guide{}
+func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
+	gs := map[matcha.Id]layout.Guide{}
 	if len(ctx.ChildIds) > 0 {
 		minSize := ctx.MinSize
 		if l.Directions&Horizontal == Horizontal {

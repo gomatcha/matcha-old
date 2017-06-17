@@ -1,17 +1,17 @@
 package paint
 
 import (
-	"github.com/overcyn/mochi/layout"
-	"github.com/overcyn/mochi/layout/constraint"
-	"github.com/overcyn/mochi/paint"
-	"github.com/overcyn/mochi/view"
-	"github.com/overcyn/mochi/view/basicview"
-	"github.com/overcyn/mochibridge"
+	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/layout/constraint"
+	"github.com/overcyn/matcha/paint"
+	"github.com/overcyn/matcha/view"
+	"github.com/overcyn/matcha/view/basicview"
+	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
 )
 
 func init() {
-	mochibridge.RegisterFunc("github.com/overcyn/mochi/examples/paint New", func() *view.Root {
+	matchabridge.RegisterFunc("github.com/overcyn/matcha/examples/paint New", func() *view.Root {
 		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
 			return New(ctx, "")
 		}))
