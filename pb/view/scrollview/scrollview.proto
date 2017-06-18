@@ -1,10 +1,10 @@
 syntax = "proto3";
-package paint;
+package matcha.view.scrollview;
 
-option go_package = "pb";
-option objc_class_prefix = "MatchaPB";
+option go_package = "scrollview";
+option objc_class_prefix = "MatchaScrollViewPB";
 
-message ScrollView {
+message View {
   bool scrollEnabled = 1;
   bool showsHorizontalScrollIndicator = 2;
   bool showsVerticalScrollIndicator = 3;

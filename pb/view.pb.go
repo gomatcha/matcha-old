@@ -29,7 +29,7 @@ type Node struct {
 func (m *Node) Reset()                    { *m = Node{} }
 func (m *Node) String() string            { return proto.CompactTextString(m) }
 func (*Node) ProtoMessage()               {}
-func (*Node) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
+func (*Node) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0} }
 
 func (m *Node) GetId() int64 {
 	if m != nil {
@@ -108,7 +108,7 @@ type Root struct {
 func (m *Root) Reset()                    { *m = Root{} }
 func (m *Root) String() string            { return proto.CompactTextString(m) }
 func (*Root) ProtoMessage()               {}
-func (*Root) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{1} }
+func (*Root) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{1} }
 
 func (m *Root) GetNode() *Node {
 	if m != nil {
@@ -122,9 +122,9 @@ func init() {
 	proto.RegisterType((*Root)(nil), "view.Root")
 }
 
-func init() { proto.RegisterFile("github.com/overcyn/matcha/pb/view.proto", fileDescriptor5) }
+func init() { proto.RegisterFile("github.com/overcyn/matcha/pb/view.proto", fileDescriptor4) }
 
-var fileDescriptor5 = []byte{
+var fileDescriptor4 = []byte{
 	// 392 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0xcf, 0x8a, 0xdb, 0x30,
 	0x10, 0xc6, 0xf1, 0x9f, 0x24, 0xce, 0x98, 0xfe, 0x13, 0xa5, 0xa8, 0x3e, 0x04, 0x93, 0x43, 0xea,

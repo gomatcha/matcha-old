@@ -7,7 +7,7 @@ import (
 	"github.com/overcyn/matcha/comm"
 	"github.com/overcyn/matcha/layout"
 	"github.com/overcyn/matcha/paint"
-	"github.com/overcyn/matcha/pb"
+	"github.com/overcyn/matcha/pb/view/scrollview"
 	"github.com/overcyn/matcha/view"
 )
 
@@ -54,7 +54,7 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 			Directions: v.Directions,
 		},
 		NativeViewName: "github.com/overcyn/matcha/view/scrollview",
-		NativeViewState: &pb.ScrollView{
+		NativeViewState: &scrollview.View{
 			ScrollEnabled:                  v.ScrollEnabled,
 			ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
 			ShowsVerticalScrollIndicator:   v.ShowsVerticalScrollIndicator,

@@ -24,7 +24,7 @@
     
     GPBAny *state = value.nativeViewState;
     NSError *error = nil;
-    MatchaPBScrollView *pbscrollview = (id)[state unpackMessageClass:[MatchaPBScrollView class] error:&error];
+    MatchaScrollViewPBView *pbscrollview = (id)[state unpackMessageClass:[MatchaScrollViewPBView class] error:&error];
     if (pbscrollview != nil) {
         self.scrollEnabled = pbscrollview.scrollEnabled;
         self.showsVerticalScrollIndicator = pbscrollview.showsVerticalScrollIndicator;

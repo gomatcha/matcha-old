@@ -9,7 +9,6 @@ It is generated from these files:
 	github.com/overcyn/matcha/pb/imageview.proto
 	github.com/overcyn/matcha/pb/layout.proto
 	github.com/overcyn/matcha/pb/paint.proto
-	github.com/overcyn/matcha/pb/scrollview.proto
 	github.com/overcyn/matcha/pb/view.proto
 
 It has these top-level messages:
@@ -21,7 +20,6 @@ It has these top-level messages:
 	Insets
 	Guide
 	PaintStyle
-	ScrollView
 	Node
 	Root
 */
