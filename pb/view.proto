@@ -1,5 +1,5 @@
 syntax = "proto3";
-package view;
+package matcha;
 import "github.com/overcyn/matcha/pb/layout.proto";
 import "github.com/overcyn/matcha/pb/paint.proto";
 import "google/protobuf/any.proto";

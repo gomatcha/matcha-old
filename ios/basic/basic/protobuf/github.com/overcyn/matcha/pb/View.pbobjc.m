@@ -44,7 +44,7 @@ static GPBFileDescriptor *MatchaPBViewRoot_FileDescriptor(void) {
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
-    descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"view"
+    descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"matcha"
                                                  objcPrefix:@"MatchaPB"
                                                      syntax:GPBFileSyntaxProto3];
   }

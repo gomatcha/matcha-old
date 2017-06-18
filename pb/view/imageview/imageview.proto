@@ -1,17 +1,11 @@
 syntax = "proto3";
-package imageview;
+package matcha.view.imageview;
 import "github.com/overcyn/matcha/pb/color.proto";
 import "github.com/overcyn/matcha/pb/env/resource.proto";
+import "github.com/overcyn/matcha/pb/image.proto";
 
-option go_package = "pb";
-option objc_class_prefix = "MatchaPB";
-
-message Image {
-    int64 width = 1;
-    int64 height = 2;
-    int64 stride = 4;
-    bytes data = 3;
-}
+option go_package = "imageview";
+option objc_class_prefix = "MatchaImageViewPB";
 
 enum ResizeMode {
     FIT = 0;
@@ -20,8 +14,8 @@ enum ResizeMode {
     CENTER = 3;
 }
 
-message ImageView {
-    Image image = 1;
+message View {
+    matcha.Image image = 1;
     env.Resource resource = 4;
     ResizeMode resizeMode = 2;
     matcha.Color tint = 3;

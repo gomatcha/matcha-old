@@ -10,6 +10,7 @@ import (
 	"github.com/overcyn/matcha/comm"
 	"github.com/overcyn/matcha/layout"
 	"github.com/overcyn/matcha/pb"
+	"github.com/overcyn/matcha/pb/view/imageview"
 	"github.com/overcyn/matcha/view"
 )
 
@@ -22,8 +23,8 @@ const (
 	ResizeModeCenter
 )
 
-func (m ResizeMode) MarshalProtobuf() pb.ResizeMode {
-	return pb.ResizeMode(m)
+func (m ResizeMode) MarshalProtobuf() imageview.ResizeMode {
+	return imageview.ResizeMode(m)
 }
 
 type layouter struct {
@@ -95,7 +96,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Layouter:       &layouter{bounds: bounds, resizeMode: resizeMode},
 		NativeViewName: "github.com/overcyn/matcha/view/imageview",
-		NativeViewState: &pb.ImageView{
+		NativeViewState: &imageview.View{
 			Image:      v.pbImage,
 			ResizeMode: v.ResizeMode.MarshalProtobuf(),
 			Tint:       pb.ColorEncode(v.Tint),

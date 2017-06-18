@@ -1,0 +1,12 @@
+syntax = "proto3";
+package matcha;
+
+option go_package = "pb";
+option objc_class_prefix = "MatchaPB";
+
+message Image {
+    int64 width = 1;
+    int64 height = 2;
+    int64 stride = 4;
+    bytes data = 3;
+}

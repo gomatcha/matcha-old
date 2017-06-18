@@ -6,7 +6,7 @@ Package pb is a generated protocol buffer package.
 
 It is generated from these files:
 	github.com/overcyn/matcha/pb/color.proto
-	github.com/overcyn/matcha/pb/imageview.proto
+	github.com/overcyn/matcha/pb/image.proto
 	github.com/overcyn/matcha/pb/layout.proto
 	github.com/overcyn/matcha/pb/paint.proto
 	github.com/overcyn/matcha/pb/view.proto
@@ -14,7 +14,6 @@ It is generated from these files:
 It has these top-level messages:
 	Color
 	Image
-	ImageView
 	Point
 	Rect
 	Insets

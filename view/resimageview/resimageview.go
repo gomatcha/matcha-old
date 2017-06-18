@@ -10,6 +10,7 @@ import (
 	"github.com/overcyn/matcha/layout"
 	"github.com/overcyn/matcha/pb"
 	pbenv "github.com/overcyn/matcha/pb/env"
+	pbimageview "github.com/overcyn/matcha/pb/view/imageview"
 	"github.com/overcyn/matcha/view"
 	"github.com/overcyn/matcha/view/imageview"
 )
@@ -79,7 +80,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Layouter:       &layouter{bounds: bounds, resizeMode: resizeMode},
 		NativeViewName: "github.com/overcyn/matcha/view/imageview",
-		NativeViewState: &pb.ImageView{
+		NativeViewState: &pbimageview.View{
 			Resource:   resPb,
 			ResizeMode: v.ResizeMode.MarshalProtobuf(),
 			Tint:       pb.ColorEncode(v.Tint),

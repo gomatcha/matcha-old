@@ -1,6 +1,6 @@
 syntax = "proto3";
 package matcha.view.tabscreen;
-import "github.com/overcyn/matcha/pb/imageview.proto";
+import "github.com/overcyn/matcha/pb/image.proto";
 
 option go_package = "tabscreen";
 option objc_class_prefix = "MatchaTabScreenPB";
@@ -8,8 +8,8 @@ option objc_class_prefix = "MatchaTabScreenPB";
 message ChildView {
     int64 id = 1;
     string title = 2;
-    imageview.Image icon = 3;
-    imageview.Image selectedIcon = 4;
+    matcha.Image icon = 3;
+    matcha.Image selectedIcon = 4;
     string badge = 5;
 }
 

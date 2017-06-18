@@ -77,7 +77,7 @@
     _node = value;
     GPBAny *state = value.nativeViewState;
     NSError *error = nil;
-    MatchaPBImageView *pbimageview = (id)[state unpackMessageClass:[MatchaPBImageView class] error:&error];
+    MatchaImageViewPBView *pbimageview = (id)[state unpackMessageClass:[MatchaImageViewPBView class] error:&error];
     
     UIImage *image = nil;
     if (pbimageview.hasImage) {
@@ -87,16 +87,16 @@
     }
     
     switch (pbimageview.resizeMode) {
-    case MatchaPBResizeMode_Fit:
+    case MatchaImageViewPBResizeMode_Fit:
         self.contentMode = UIViewContentModeScaleAspectFit;
         break;
-    case MatchaPBResizeMode_Fill:
+    case MatchaImageViewPBResizeMode_Fill:
         self.contentMode = UIViewContentModeScaleAspectFill;
         break;
-    case MatchaPBResizeMode_Stretch:
+    case MatchaImageViewPBResizeMode_Stretch:
         self.contentMode = UIViewContentModeScaleToFill;
         break;
-    case MatchaPBResizeMode_Center:
+    case MatchaImageViewPBResizeMode_Center:
         self.contentMode = UIViewContentModeCenter;
         break;
     }
