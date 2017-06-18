@@ -36,9 +36,14 @@
     MatchaPBText *text = [[MatchaPBText alloc] init];
     text.text = self.string;
     
+    NSDictionary *attributes = nil;
+    if (self.length != 0) {
+        attributes = [self attributesAtIndex:0 effectiveRange:NULL];
+    }
+    
     MatchaPBStyledText *styledText = [[MatchaPBStyledText alloc] init];
     styledText.text = text;
-    styledText.style = [NSAttributedString protobufWithAttributes:[self attributesAtIndex:0 effectiveRange:NULL]];
+    styledText.style = [NSAttributedString protobufWithAttributes:attributes];
     return styledText;
 }
 

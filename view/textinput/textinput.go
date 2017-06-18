@@ -40,7 +40,6 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		st = text.NewStyledText(v.Text)
 		st.Set(v.Style, 0, 0)
 	}
-	fmt.Println("st", st)
 
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
