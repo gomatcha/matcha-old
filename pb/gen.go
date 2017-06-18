@@ -1,7 +1,6 @@
 package pb
 
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/matcha/pb/*.proto )"
-//go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/matcha/pb/button/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/matcha/pb/env/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/matcha/pb/text/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/matcha/pb/touch/*.proto )"
@@ -14,9 +13,9 @@ package pb
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/matcha/pb/view/switchview/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/matcha/pb/view/tabscreen/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/matcha/pb/view/textinput/*.proto )"
+//go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. github.com/overcyn/matcha/pb/view/button/*.proto )"
 
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/matcha/ios/basic/basic/protobuf github.com/overcyn/matcha/pb/*.proto )"
-//go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/matcha/ios/basic/basic/protobuf github.com/overcyn/matcha/pb/button/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/matcha/ios/basic/basic/protobuf github.com/overcyn/matcha/pb/env/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/matcha/ios/basic/basic/protobuf github.com/overcyn/matcha/pb/text/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/matcha/ios/basic/basic/protobuf github.com/overcyn/matcha/pb/touch/*.proto )"
@@ -29,3 +28,4 @@ package pb
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/matcha/ios/basic/basic/protobuf github.com/overcyn/matcha/pb/view/switchview/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/matcha/ios/basic/basic/protobuf github.com/overcyn/matcha/pb/view/tabscreen/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/matcha/ios/basic/basic/protobuf github.com/overcyn/matcha/pb/view/textinput/*.proto )"
+//go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=github.com/overcyn/matcha/ios/basic/basic/protobuf github.com/overcyn/matcha/pb/view/button/*.proto )"

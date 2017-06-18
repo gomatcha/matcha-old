@@ -31,7 +31,7 @@ CF_EXTERN_C_BEGIN
 
 NS_ASSUME_NONNULL_BEGIN
 
-#pragma mark - MatchaPBButtonButtonRoot
+#pragma mark - MatchaButtonPBButtonRoot
 
 /**
  * Exposes the extension registry for this file.
@@ -43,17 +43,17 @@ NS_ASSUME_NONNULL_BEGIN
  * which is a @c GPBExtensionRegistry that includes all the extensions defined by
  * this file and all files that it depends on.
  **/
-@interface MatchaPBButtonButtonRoot : GPBRootObject
+@interface MatchaButtonPBButtonRoot : GPBRootObject
 @end
 
-#pragma mark - MatchaPBButtonButton
+#pragma mark - MatchaButtonPBButton
 
-typedef GPB_ENUM(MatchaPBButtonButton_FieldNumber) {
-  MatchaPBButtonButton_FieldNumber_StyledText = 1,
-  MatchaPBButtonButton_FieldNumber_OnPress = 2,
+typedef GPB_ENUM(MatchaButtonPBButton_FieldNumber) {
+  MatchaButtonPBButton_FieldNumber_StyledText = 1,
+  MatchaButtonPBButton_FieldNumber_OnPress = 2,
 };
 
-@interface MatchaPBButtonButton : GPBMessage
+@interface MatchaButtonPBButton : GPBMessage
 
 @property(nonatomic, readwrite, strong, null_resettable) MatchaPBStyledText *styledText;
 /** Test to see if @c styledText has been set. */

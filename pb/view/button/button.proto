@@ -1,11 +1,11 @@
 syntax = "proto3";
-package button;
+package matcha.view.button;
 import "github.com/overcyn/matcha/pb/text/text.proto";
 
 option go_package = "button";
-option objc_class_prefix = "MatchaPBButton";
+option objc_class_prefix = "MatchaButtonPB";
 
-message Button {
+message View {
     matcha.text.StyledText styledText = 1;
     int64 onPress = 2;
 }

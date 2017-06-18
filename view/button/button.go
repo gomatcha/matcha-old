@@ -4,7 +4,7 @@ import (
 	"github.com/overcyn/matcha"
 	"github.com/overcyn/matcha/comm"
 	"github.com/overcyn/matcha/layout"
-	pbbutton "github.com/overcyn/matcha/pb/button"
+	pbbutton "github.com/overcyn/matcha/pb/view/button"
 	"github.com/overcyn/matcha/text"
 	"github.com/overcyn/matcha/view"
 )
@@ -64,7 +64,7 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Layouter:       &layouter{styledText: st},
 		NativeViewName: "github.com/overcyn/matcha/view/button",
-		NativeViewState: &pbbutton.Button{
+		NativeViewState: &pbbutton.View{
 			StyledText: st.MarshalProtobuf(),
 			OnPress:    funcId,
 		},

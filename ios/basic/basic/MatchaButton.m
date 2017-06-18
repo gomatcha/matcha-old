@@ -8,6 +8,7 @@
 
 #import "MatchaButton.h"
 #import "MatchaViewController.h"
+#import "MatchaProtobuf.h"
 
 @interface MatchaButton ()
 @property (nonatomic, strong) UIButton *button;
@@ -32,7 +33,7 @@
     _node = value;
     GPBAny *state = value.nativeViewState;
     NSError *error = nil;
-    MatchaPBButtonButton *pbbutton = (id)[state unpackMessageClass:[MatchaPBButtonButton class] error:&error];
+    MatchaButtonPBView *pbbutton = (id)[state unpackMessageClass:[MatchaButtonPBView class] error:&error];
     
     NSAttributedString *string = [[NSAttributedString alloc] initWithProtobuf:pbbutton.styledText];
     [self.button setAttributedTitle:string forState:UIControlStateNormal];

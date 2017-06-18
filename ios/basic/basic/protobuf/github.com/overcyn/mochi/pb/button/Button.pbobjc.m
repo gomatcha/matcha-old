@@ -20,42 +20,42 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-#pragma mark - MatchaPBButtonButtonRoot
+#pragma mark - MatchaButtonPBButtonRoot
 
-@implementation MatchaPBButtonButtonRoot
+@implementation MatchaButtonPBButtonRoot
 
 // No extensions in the file and none of the imports (direct or indirect)
 // defined extensions, so no need to generate +extensionRegistry.
 
 @end
 
-#pragma mark - MatchaPBButtonButtonRoot_FileDescriptor
+#pragma mark - MatchaButtonPBButtonRoot_FileDescriptor
 
-static GPBFileDescriptor *MatchaPBButtonButtonRoot_FileDescriptor(void) {
+static GPBFileDescriptor *MatchaButtonPBButtonRoot_FileDescriptor(void) {
   // This is called by +initialize so there is no need to worry
   // about thread safety of the singleton.
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
     descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"button"
-                                                 objcPrefix:@"MatchaPBButton"
+                                                 objcPrefix:@"MatchaButtonPB"
                                                      syntax:GPBFileSyntaxProto3];
   }
   return descriptor;
 }
 
-#pragma mark - MatchaPBButtonButton
+#pragma mark - MatchaButtonPBButton
 
-@implementation MatchaPBButtonButton
+@implementation MatchaButtonPBButton
 
 @dynamic hasStyledText, styledText;
 @dynamic onPress;
 
-typedef struct MatchaPBButtonButton__storage_ {
+typedef struct MatchaButtonPBButton__storage_ {
   uint32_t _has_storage_[1];
   MatchaPBStyledText *styledText;
   int64_t onPress;
-} MatchaPBButtonButton__storage_;
+} MatchaButtonPBButton__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -66,29 +66,29 @@ typedef struct MatchaPBButtonButton__storage_ {
       {
         .name = "styledText",
         .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBStyledText),
-        .number = MatchaPBButtonButton_FieldNumber_StyledText,
+        .number = MatchaButtonPBButton_FieldNumber_StyledText,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(MatchaPBButtonButton__storage_, styledText),
+        .offset = (uint32_t)offsetof(MatchaButtonPBButton__storage_, styledText),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "onPress",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBButtonButton_FieldNumber_OnPress,
+        .number = MatchaButtonPBButton_FieldNumber_OnPress,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(MatchaPBButtonButton__storage_, onPress),
+        .offset = (uint32_t)offsetof(MatchaButtonPBButton__storage_, onPress),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[MatchaPBButtonButton class]
-                                     rootClass:[MatchaPBButtonButtonRoot class]
-                                          file:MatchaPBButtonButtonRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MatchaButtonPBButton class]
+                                     rootClass:[MatchaButtonPBButtonRoot class]
+                                          file:MatchaButtonPBButtonRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(MatchaPBButtonButton__storage_)
+                                   storageSize:sizeof(MatchaButtonPBButton__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
