@@ -27,9 +27,9 @@
 
 CF_EXTERN_C_BEGIN
 
+@class MatchaLayoutPBPoint;
 @class MatchaPBColor;
 @class MatchaPBFont;
-@class MatchaPBPoint;
 @class MatchaPBStyledText;
 @class MatchaPBText;
 @class MatchaPBTextStyle;
@@ -183,11 +183,11 @@ typedef GPB_ENUM(MatchaPBSizeFunc_FieldNumber) {
 /** Test to see if @c text has been set. */
 @property(nonatomic, readwrite) BOOL hasText;
 
-@property(nonatomic, readwrite, strong, null_resettable) MatchaPBPoint *minSize;
+@property(nonatomic, readwrite, strong, null_resettable) MatchaLayoutPBPoint *minSize;
 /** Test to see if @c minSize has been set. */
 @property(nonatomic, readwrite) BOOL hasMinSize;
 
-@property(nonatomic, readwrite, strong, null_resettable) MatchaPBPoint *maxSize;
+@property(nonatomic, readwrite, strong, null_resettable) MatchaLayoutPBPoint *maxSize;
 /** Test to see if @c maxSize has been set. */
 @property(nonatomic, readwrite) BOOL hasMaxSize;
 

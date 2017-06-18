@@ -1,0 +1,25 @@
+syntax = "proto3";
+package matcha.view;
+import "github.com/overcyn/matcha/pb/layout/layout.proto";
+import "github.com/overcyn/matcha/pb/paint/paint.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "view";
+option objc_class_prefix = "MatchaViewPB";
+
+message Node {
+  int64 id = 1;
+  int64 buildId = 2;
+  int64 layoutId = 3;
+  int64 paintId = 4;
+  string bridgeName = 7;
+  google.protobuf.Any bridgeValue = 8;
+  map<string, google.protobuf.Any> values = 10;
+  repeated Node children = 5;
+  matcha.layout.Guide layoutGuide = 6;
+  matcha.paint.Style paintStyle = 9;
+}
+
+message Root {
+  Node node = 1;
+}

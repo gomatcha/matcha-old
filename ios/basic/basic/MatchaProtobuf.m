@@ -272,12 +272,12 @@
 
 @end
 
-@implementation MatchaPBRect (Matcha)
+@implementation MatchaLayoutPBRect (Matcha)
 
 - (id)initWithCGRect:(CGRect)rect {
     if ((self = [super init])) {
-        self.min = [[MatchaPBPoint alloc] initWithCGPoint:CGPointMake(rect.origin.x, rect.origin.y)];
-        self.max = [[MatchaPBPoint alloc] initWithCGPoint:CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height)];
+        self.min = [[MatchaLayoutPBPoint alloc] initWithCGPoint:CGPointMake(rect.origin.x, rect.origin.y)];
+        self.max = [[MatchaLayoutPBPoint alloc] initWithCGPoint:CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height)];
     }
     return self;
 }
@@ -289,7 +289,7 @@
 }
 
 @end
-@implementation MatchaPBPoint (Matcha)
+@implementation MatchaLayoutPBPoint (Matcha)
 
 - (id)initWithCGPoint:(CGPoint)point {
     if ((self = [super init])) {
@@ -316,7 +316,7 @@
 }
 
 @end
-@implementation MatchaPBInsets (Matcha)
+@implementation MatchaLayoutPBInsets (Matcha)
 - (UIEdgeInsets)toUIEdgeInsets {
     return UIEdgeInsetsMake(self.top, self.left, self.bottom, self.right);
 }

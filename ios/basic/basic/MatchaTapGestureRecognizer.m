@@ -58,7 +58,7 @@
     CGPoint point = [self locationInView:self.view];
     
     MatchaPBTouchTapEvent *event = [[MatchaPBTouchTapEvent alloc] init];
-    event.position = [[MatchaPBPoint alloc] initWithCGPoint:point];
+    event.position = [[MatchaLayoutPBPoint alloc] initWithCGPoint:point];
     event.timestamp = [[GPBTimestamp alloc] initWithDate:[NSDate date]];
     
     NSData *data = [event data];

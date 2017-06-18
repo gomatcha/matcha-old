@@ -11,20 +11,20 @@
 @class MatchaPaintOptions;
 @class MatchaLayoutGuide;
 @class MatchaNode;
-@class MatchaPBNode;
-@class MatchaPBRoot;
-@class MatchaPBGuide;
-@class MatchaPBPaintStyle;
+@class MatchaViewPBNode;
+@class MatchaViewPBRoot;
+@class MatchaLayoutPBGuide;
+@class MatchaPaintPBStyle;
 @class MatchaPBRecognizer;
 @class GPBAny;
 
 @interface MatchaNodeRoot : NSObject // view.root
-- (id)initWithProtobuf:(MatchaPBRoot *)data;
+- (id)initWithProtobuf:(MatchaViewPBRoot *)data;
 @property (nonatomic, readonly) MatchaNode *node;
 @end
 
 @interface MatchaNode : NSObject // view.node
-- (id)initWithProtobuf:(MatchaPBNode *)node;
+- (id)initWithProtobuf:(MatchaViewPBNode *)node;
 @property (nonatomic, readonly) NSDictionary<NSNumber *, MatchaNode *> *nodeChildren;
 @property (nonatomic, readonly) MatchaLayoutGuide *guide;
 @property (nonatomic, readonly) MatchaPaintOptions *paintOptions;
@@ -39,7 +39,7 @@
 @end
 
 @interface MatchaPaintOptions : NSObject
-- (id)initWithProtobuf:(MatchaPBPaintStyle *)style;
+- (id)initWithProtobuf:(MatchaPaintPBStyle *)style;
 @property (nonatomic, readonly) CGFloat transparency;
 @property (nonatomic, readonly) UIColor *backgroundColor;
 @property (nonatomic, readonly) UIColor *borderColor;
@@ -51,7 +51,7 @@
 @end
 
 @interface MatchaLayoutGuide : NSObject
-- (id)initWithProtobuf:(MatchaPBGuide *)guide;
+- (id)initWithProtobuf:(MatchaLayoutPBGuide *)guide;
 @property (nonatomic, readonly) CGRect frame;
 @property (nonatomic, readonly) UIEdgeInsets insets;
 @property (nonatomic, readonly) NSInteger zIndex;

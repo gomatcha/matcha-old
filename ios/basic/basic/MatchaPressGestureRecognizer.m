@@ -54,7 +54,7 @@
     CGPoint point = [self locationInView:self.view];
     
     MatchaPBTouchPressEvent *event = [[MatchaPBTouchPressEvent alloc] init];
-    event.position = [[MatchaPBPoint alloc] initWithCGPoint:point];
+    event.position = [[MatchaLayoutPBPoint alloc] initWithCGPoint:point];
     event.timestamp = [[GPBTimestamp alloc] initWithDate:[NSDate date]];
     if (self.state == UIGestureRecognizerStateBegan) {
         event.kind = MatchaPBTouchEventKind_EventKindChanged;

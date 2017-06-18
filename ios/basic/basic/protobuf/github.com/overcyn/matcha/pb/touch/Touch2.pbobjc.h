@@ -30,7 +30,7 @@ CF_EXTERN_C_BEGIN
 @class GPBAny;
 @class GPBDuration;
 @class GPBTimestamp;
-@class MatchaPBPoint;
+@class MatchaLayoutPBPoint;
 @class MatchaPBTouchRecognizer;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -179,7 +179,7 @@ typedef GPB_ENUM(MatchaPBTouchTapEvent_FieldNumber) {
 /** Test to see if @c timestamp has been set. */
 @property(nonatomic, readwrite) BOOL hasTimestamp;
 
-@property(nonatomic, readwrite, strong, null_resettable) MatchaPBPoint *position;
+@property(nonatomic, readwrite, strong, null_resettable) MatchaLayoutPBPoint *position;
 /** Test to see if @c position has been set. */
 @property(nonatomic, readwrite) BOOL hasPosition;
 
@@ -217,7 +217,7 @@ typedef GPB_ENUM(MatchaPBTouchPressEvent_FieldNumber) {
 /** Test to see if @c timestamp has been set. */
 @property(nonatomic, readwrite) BOOL hasTimestamp;
 
-@property(nonatomic, readwrite, strong, null_resettable) MatchaPBPoint *position;
+@property(nonatomic, readwrite, strong, null_resettable) MatchaLayoutPBPoint *position;
 /** Test to see if @c position has been set. */
 @property(nonatomic, readwrite) BOOL hasPosition;
 

@@ -29,7 +29,7 @@ CF_EXTERN_C_BEGIN
 
 @class GPBAny;
 @class MatchaPBGuide;
-@class MatchaPBNode;
+@class MatchaViewPBNode;
 @class MatchaPBPaintStyle;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -49,22 +49,22 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MatchaPBViewRoot : GPBRootObject
 @end
 
-#pragma mark - MatchaPBNode
+#pragma mark - MatchaViewPBNode
 
-typedef GPB_ENUM(MatchaPBNode_FieldNumber) {
-  MatchaPBNode_FieldNumber_Id_p = 1,
-  MatchaPBNode_FieldNumber_BuildId = 2,
-  MatchaPBNode_FieldNumber_LayoutId = 3,
-  MatchaPBNode_FieldNumber_PaintId = 4,
-  MatchaPBNode_FieldNumber_ChildrenArray = 5,
-  MatchaPBNode_FieldNumber_LayoutGuide = 6,
-  MatchaPBNode_FieldNumber_BridgeName = 7,
-  MatchaPBNode_FieldNumber_BridgeValue = 8,
-  MatchaPBNode_FieldNumber_PaintStyle = 9,
-  MatchaPBNode_FieldNumber_Values = 10,
+typedef GPB_ENUM(MatchaViewPBNode_FieldNumber) {
+  MatchaViewPBNode_FieldNumber_Id_p = 1,
+  MatchaViewPBNode_FieldNumber_BuildId = 2,
+  MatchaViewPBNode_FieldNumber_LayoutId = 3,
+  MatchaViewPBNode_FieldNumber_PaintId = 4,
+  MatchaViewPBNode_FieldNumber_ChildrenArray = 5,
+  MatchaViewPBNode_FieldNumber_LayoutGuide = 6,
+  MatchaViewPBNode_FieldNumber_BridgeName = 7,
+  MatchaViewPBNode_FieldNumber_BridgeValue = 8,
+  MatchaViewPBNode_FieldNumber_PaintStyle = 9,
+  MatchaViewPBNode_FieldNumber_Values = 10,
 };
 
-@interface MatchaPBNode : GPBMessage
+@interface MatchaViewPBNode : GPBMessage
 
 @property(nonatomic, readwrite) int64_t id_p;
 
@@ -84,7 +84,7 @@ typedef GPB_ENUM(MatchaPBNode_FieldNumber) {
 /** The number of items in @c values without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger values_Count;
 
-@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MatchaPBNode*> *childrenArray;
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MatchaViewPBNode*> *childrenArray;
 /** The number of items in @c childrenArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger childrenArray_Count;
 
@@ -98,15 +98,15 @@ typedef GPB_ENUM(MatchaPBNode_FieldNumber) {
 
 @end
 
-#pragma mark - MatchaPBRoot
+#pragma mark - MatchaViewPBRoot
 
-typedef GPB_ENUM(MatchaPBRoot_FieldNumber) {
-  MatchaPBRoot_FieldNumber_Node = 1,
+typedef GPB_ENUM(MatchaViewPBRoot_FieldNumber) {
+  MatchaViewPBRoot_FieldNumber_Node = 1,
 };
 
-@interface MatchaPBRoot : GPBMessage
+@interface MatchaViewPBRoot : GPBMessage
 
-@property(nonatomic, readwrite, strong, null_resettable) MatchaPBNode *node;
+@property(nonatomic, readwrite, strong, null_resettable) MatchaViewPBNode *node;
 /** Test to see if @c node has been set. */
 @property(nonatomic, readwrite) BOOL hasNode;
 

@@ -5,8 +5,8 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/matcha/layout"
-	"github.com/overcyn/matcha/pb"
 	"github.com/overcyn/matcha/pb/env"
+	pb "github.com/overcyn/matcha/pb/layout"
 	"github.com/overcyn/matchabridge"
 )
 

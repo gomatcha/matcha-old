@@ -5,7 +5,7 @@ import (
 
 	"github.com/overcyn/matcha"
 	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/pb"
+	pb "github.com/overcyn/matcha/pb/layout"
 	"github.com/overcyn/matchabridge"
 )
 

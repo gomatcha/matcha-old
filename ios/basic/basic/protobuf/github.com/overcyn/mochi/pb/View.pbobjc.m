@@ -51,9 +51,9 @@ static GPBFileDescriptor *MatchaPBViewRoot_FileDescriptor(void) {
   return descriptor;
 }
 
-#pragma mark - MatchaPBNode
+#pragma mark - MatchaViewPBNode
 
-@implementation MatchaPBNode
+@implementation MatchaViewPBNode
 
 @dynamic id_p;
 @dynamic buildId;
@@ -66,7 +66,7 @@ static GPBFileDescriptor *MatchaPBViewRoot_FileDescriptor(void) {
 @dynamic hasLayoutGuide, layoutGuide;
 @dynamic hasPaintStyle, paintStyle;
 
-typedef struct MatchaPBNode__storage_ {
+typedef struct MatchaViewPBNode__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *childrenArray;
   MatchaPBGuide *layoutGuide;
@@ -78,7 +78,7 @@ typedef struct MatchaPBNode__storage_ {
   int64_t buildId;
   int64_t layoutId;
   int64_t paintId;
-} MatchaPBNode__storage_;
+} MatchaViewPBNode__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -89,101 +89,101 @@ typedef struct MatchaPBNode__storage_ {
       {
         .name = "id_p",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBNode_FieldNumber_Id_p,
+        .number = MatchaViewPBNode_FieldNumber_Id_p,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(MatchaPBNode__storage_, id_p),
+        .offset = (uint32_t)offsetof(MatchaViewPBNode__storage_, id_p),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "buildId",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBNode_FieldNumber_BuildId,
+        .number = MatchaViewPBNode_FieldNumber_BuildId,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(MatchaPBNode__storage_, buildId),
+        .offset = (uint32_t)offsetof(MatchaViewPBNode__storage_, buildId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "layoutId",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBNode_FieldNumber_LayoutId,
+        .number = MatchaViewPBNode_FieldNumber_LayoutId,
         .hasIndex = 2,
-        .offset = (uint32_t)offsetof(MatchaPBNode__storage_, layoutId),
+        .offset = (uint32_t)offsetof(MatchaViewPBNode__storage_, layoutId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "paintId",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBNode_FieldNumber_PaintId,
+        .number = MatchaViewPBNode_FieldNumber_PaintId,
         .hasIndex = 3,
-        .offset = (uint32_t)offsetof(MatchaPBNode__storage_, paintId),
+        .offset = (uint32_t)offsetof(MatchaViewPBNode__storage_, paintId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "childrenArray",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBNode),
-        .number = MatchaPBNode_FieldNumber_ChildrenArray,
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaViewPBNode),
+        .number = MatchaViewPBNode_FieldNumber_ChildrenArray,
         .hasIndex = GPBNoHasBit,
-        .offset = (uint32_t)offsetof(MatchaPBNode__storage_, childrenArray),
+        .offset = (uint32_t)offsetof(MatchaViewPBNode__storage_, childrenArray),
         .flags = GPBFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "layoutGuide",
         .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBGuide),
-        .number = MatchaPBNode_FieldNumber_LayoutGuide,
+        .number = MatchaViewPBNode_FieldNumber_LayoutGuide,
         .hasIndex = 6,
-        .offset = (uint32_t)offsetof(MatchaPBNode__storage_, layoutGuide),
+        .offset = (uint32_t)offsetof(MatchaViewPBNode__storage_, layoutGuide),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "bridgeName",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBNode_FieldNumber_BridgeName,
+        .number = MatchaViewPBNode_FieldNumber_BridgeName,
         .hasIndex = 4,
-        .offset = (uint32_t)offsetof(MatchaPBNode__storage_, bridgeName),
+        .offset = (uint32_t)offsetof(MatchaViewPBNode__storage_, bridgeName),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
       },
       {
         .name = "bridgeValue",
         .dataTypeSpecific.className = GPBStringifySymbol(GPBAny),
-        .number = MatchaPBNode_FieldNumber_BridgeValue,
+        .number = MatchaViewPBNode_FieldNumber_BridgeValue,
         .hasIndex = 5,
-        .offset = (uint32_t)offsetof(MatchaPBNode__storage_, bridgeValue),
+        .offset = (uint32_t)offsetof(MatchaViewPBNode__storage_, bridgeValue),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "paintStyle",
         .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBPaintStyle),
-        .number = MatchaPBNode_FieldNumber_PaintStyle,
+        .number = MatchaViewPBNode_FieldNumber_PaintStyle,
         .hasIndex = 7,
-        .offset = (uint32_t)offsetof(MatchaPBNode__storage_, paintStyle),
+        .offset = (uint32_t)offsetof(MatchaViewPBNode__storage_, paintStyle),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "values",
         .dataTypeSpecific.className = GPBStringifySymbol(GPBAny),
-        .number = MatchaPBNode_FieldNumber_Values,
+        .number = MatchaViewPBNode_FieldNumber_Values,
         .hasIndex = GPBNoHasBit,
-        .offset = (uint32_t)offsetof(MatchaPBNode__storage_, values),
+        .offset = (uint32_t)offsetof(MatchaViewPBNode__storage_, values),
         .flags = GPBFieldMapKeyString,
         .dataType = GPBDataTypeMessage,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[MatchaPBNode class]
+        [GPBDescriptor allocDescriptorForClass:[MatchaViewPBNode class]
                                      rootClass:[MatchaPBViewRoot class]
                                           file:MatchaPBViewRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(MatchaPBNode__storage_)
+                                   storageSize:sizeof(MatchaViewPBNode__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
@@ -198,16 +198,16 @@ typedef struct MatchaPBNode__storage_ {
 
 @end
 
-#pragma mark - MatchaPBRoot
+#pragma mark - MatchaViewPBRoot
 
-@implementation MatchaPBRoot
+@implementation MatchaViewPBRoot
 
 @dynamic hasNode, node;
 
-typedef struct MatchaPBRoot__storage_ {
+typedef struct MatchaViewPBRoot__storage_ {
   uint32_t _has_storage_[1];
-  MatchaPBNode *node;
-} MatchaPBRoot__storage_;
+  MatchaViewPBNode *node;
+} MatchaViewPBRoot__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -217,21 +217,21 @@ typedef struct MatchaPBRoot__storage_ {
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "node",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBNode),
-        .number = MatchaPBRoot_FieldNumber_Node,
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaViewPBNode),
+        .number = MatchaViewPBRoot_FieldNumber_Node,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(MatchaPBRoot__storage_, node),
+        .offset = (uint32_t)offsetof(MatchaViewPBRoot__storage_, node),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[MatchaPBRoot class]
+        [GPBDescriptor allocDescriptorForClass:[MatchaViewPBRoot class]
                                      rootClass:[MatchaPBViewRoot class]
                                           file:MatchaPBViewRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(MatchaPBRoot__storage_)
+                                   storageSize:sizeof(MatchaViewPBRoot__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;

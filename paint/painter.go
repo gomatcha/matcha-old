@@ -7,6 +7,7 @@ import (
 	"github.com/overcyn/matcha/comm"
 	"github.com/overcyn/matcha/layout"
 	"github.com/overcyn/matcha/pb"
+	"github.com/overcyn/matcha/pb/paint"
 )
 
 type Painter interface {
@@ -28,8 +29,8 @@ type Style struct {
 	// Mask
 }
 
-func (s *Style) MarshalProtobuf() *pb.PaintStyle {
-	return &pb.PaintStyle{
+func (s *Style) MarshalProtobuf() *paint.Style {
+	return &paint.Style{
 		Transparency:    s.Transparency,
 		BackgroundColor: pb.ColorEncode(s.BackgroundColor),
 		BorderColor:     pb.ColorEncode(s.BorderColor),

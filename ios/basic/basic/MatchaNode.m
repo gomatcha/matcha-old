@@ -14,7 +14,7 @@
 @end
 
 @implementation MatchaNodeRoot
-- (id)initWithProtobuf:(MatchaPBRoot *)pbroot {
+- (id)initWithProtobuf:(MatchaViewPBRoot *)pbroot {
     if ((self = [super init])) {
         if (pbroot.node) {
             self.node = [[MatchaNode alloc] initWithProtobuf:pbroot.node];
@@ -41,7 +41,7 @@
 
 @implementation MatchaNode
 
-- (id)initWithProtobuf:(MatchaPBNode *)node {
+- (id)initWithProtobuf:(MatchaViewPBNode *)node {
     if ((self = [super init])) {
         self.identifier = @(node.id_p);
         self.buildId = @(node.buildId);
@@ -54,7 +54,7 @@
         self.nativeValues = node.values;
         
         NSMutableDictionary *children = [NSMutableDictionary dictionary];
-        for (MatchaPBNode *i in node.childrenArray) {
+        for (MatchaViewPBNode *i in node.childrenArray) {
             MatchaNode *child = [[MatchaNode alloc] initWithProtobuf:i];
             children[child.identifier] = child;
         }
@@ -89,7 +89,7 @@
 
 @implementation MatchaPaintOptions
 
-- (id)initWithProtobuf:(MatchaPBPaintStyle *)style {
+- (id)initWithProtobuf:(MatchaPaintPBStyle *)style {
     if (self = [super init]) {
         self.transparency = style.transparency;
         self.backgroundColor = [[UIColor alloc] initWithProtobuf:style.backgroundColor];
@@ -114,7 +114,7 @@
 
 @implementation MatchaLayoutGuide
 
-- (id)initWithProtobuf:(MatchaPBGuide *)guide {
+- (id)initWithProtobuf:(MatchaLayoutPBGuide *)guide {
     if (self = [super init]) {
         self.frame = guide.frame.toCGRect;
         self.insets = guide.insets.toUIEdgeInsets;

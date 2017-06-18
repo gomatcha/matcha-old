@@ -14,7 +14,7 @@
 #endif
 
  #import "github.com/overcyn/matcha/pb/text/Text.pbobjc.h"
- #import "github.com/overcyn/matcha/pb/Layout.pbobjc.h"
+ #import "github.com/overcyn/matcha/pb/layout/Layout.pbobjc.h"
  #import "github.com/overcyn/matcha/pb/Color.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
@@ -261,8 +261,8 @@ BOOL MatchaPBTruncation_IsValidValue(int32_t value__) {
 typedef struct MatchaPBSizeFunc__storage_ {
   uint32_t _has_storage_[1];
   MatchaPBStyledText *text;
-  MatchaPBPoint *minSize;
-  MatchaPBPoint *maxSize;
+  MatchaLayoutPBPoint *minSize;
+  MatchaLayoutPBPoint *maxSize;
 } MatchaPBSizeFunc__storage_;
 
 // This method is threadsafe because it is initially called
@@ -282,7 +282,7 @@ typedef struct MatchaPBSizeFunc__storage_ {
       },
       {
         .name = "minSize",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBPoint),
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaLayoutPBPoint),
         .number = MatchaPBSizeFunc_FieldNumber_MinSize,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(MatchaPBSizeFunc__storage_, minSize),
@@ -291,7 +291,7 @@ typedef struct MatchaPBSizeFunc__storage_ {
       },
       {
         .name = "maxSize",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBPoint),
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaLayoutPBPoint),
         .number = MatchaPBSizeFunc_FieldNumber_MaxSize,
         .hasIndex = 2,
         .offset = (uint32_t)offsetof(MatchaPBSizeFunc__storage_, maxSize),

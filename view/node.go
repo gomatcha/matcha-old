@@ -18,7 +18,7 @@ import (
 	"github.com/overcyn/matcha/layout"
 	"github.com/overcyn/matcha/layout/full"
 	"github.com/overcyn/matcha/paint"
-	"github.com/overcyn/matcha/pb"
+	pb "github.com/overcyn/matcha/pb/view"
 	"github.com/overcyn/matchabridge"
 )
 

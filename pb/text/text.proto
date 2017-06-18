@@ -1,6 +1,6 @@
 syntax = "proto3";
 package matcha.text;
-import "github.com/overcyn/matcha/pb/layout.proto";
+import "github.com/overcyn/matcha/pb/layout/layout.proto";
 import "github.com/overcyn/matcha/pb/color.proto";
 
 option go_package = "text";
@@ -8,8 +8,8 @@ option objc_class_prefix = "MatchaPB";
 
 message SizeFunc {
     StyledText text = 1;
-    layout.Point minSize = 2;
-    layout.Point maxSize = 3;
+    matcha.layout.Point minSize = 2;
+    matcha.layout.Point maxSize = 3;
 }
 
 message Text {

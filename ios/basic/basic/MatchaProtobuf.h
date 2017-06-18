@@ -36,19 +36,19 @@
 - (id)initWithProtobuf:(MatchaPBImage *)value;
 @end
 
-@interface MatchaPBRect (Matcha)
+@interface MatchaLayoutPBRect (Matcha)
 - (id)initWithCGRect:(CGRect)rect;
 @property (nonatomic, readonly) CGRect toCGRect;
 @end
 
-@interface MatchaPBPoint (Matcha)
+@interface MatchaLayoutPBPoint (Matcha)
 - (id)initWithCGPoint:(CGPoint)point;
 - (id)initWithCGSize:(CGSize)size;
 @property (nonatomic, readonly) CGPoint toCGPoint;
 @property (nonatomic, readonly) CGSize toCGSize;
 @end
 
-@interface MatchaPBInsets (Matcha)
+@interface MatchaLayoutPBInsets (Matcha)
 @property (nonatomic, readonly) UIEdgeInsets toUIEdgeInsets;
 @end
 

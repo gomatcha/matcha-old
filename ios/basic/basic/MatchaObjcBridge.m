@@ -32,7 +32,7 @@
     NSAttributedString *attrStr = [[NSAttributedString alloc] initWithProtobuf:func.text];
     CGRect rect = [attrStr boundingRectWithSize:func.maxSize.toCGSize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
     
-    MatchaPBPoint *point = [[MatchaPBPoint alloc] initWithCGSize:CGSizeMake(ceil(rect.size.width), ceil(rect.size.height))];
+    MatchaLayoutPBPoint *point = [[MatchaLayoutPBPoint alloc] initWithCGSize:CGSizeMake(ceil(rect.size.width), ceil(rect.size.height))];
     return [[MatchaGoValue alloc] initWithData:point.data];
 }
 
@@ -45,7 +45,7 @@
 }
 
 - (void)updateId:(NSInteger)identifier withProtobuf:(NSData *)protobuf {
-    MatchaPBRoot *pbroot = [[MatchaPBRoot alloc] initWithData:protobuf error:nil];
+    MatchaViewPBRoot *pbroot = [[MatchaViewPBRoot alloc] initWithData:protobuf error:nil];
     MatchaNodeRoot *root = [[MatchaNodeRoot alloc] initWithProtobuf:pbroot];
     
     MatchaViewController *vc = [MatchaViewController viewControllerWithIdentifier:identifier];
@@ -59,7 +59,7 @@
 - (MatchaGoValue *)sizeForResource:(NSString *)path {
     UIImage *image = [UIImage imageNamed:path];
     
-    MatchaPBPoint *point = [[MatchaPBPoint alloc] initWithCGSize:CGSizeMake(ceil(image.size.width / image.scale), ceil(image.size.height / image.scale))];
+    MatchaLayoutPBPoint *point = [[MatchaLayoutPBPoint alloc] initWithCGSize:CGSizeMake(ceil(image.size.width / image.scale), ceil(image.size.height / image.scale))];
     return [[MatchaGoValue alloc] initWithData:point.data];
 }
 

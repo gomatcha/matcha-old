@@ -24,7 +24,7 @@
 #endif
 
  #import "github.com/overcyn/matcha/pb/touch/Touch2.pbobjc.h"
- #import "github.com/overcyn/matcha/pb/Layout.pbobjc.h"
+ #import "github.com/overcyn/matcha/pb/layout/Layout.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -393,7 +393,7 @@ typedef struct MatchaPBTouchTapRecognizer__storage_ {
 typedef struct MatchaPBTouchTapEvent__storage_ {
   uint32_t _has_storage_[1];
   GPBTimestamp *timestamp;
-  MatchaPBPoint *position;
+  MatchaLayoutPBPoint *position;
 } MatchaPBTouchTapEvent__storage_;
 
 // This method is threadsafe because it is initially called
@@ -413,7 +413,7 @@ typedef struct MatchaPBTouchTapEvent__storage_ {
       },
       {
         .name = "position",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBPoint),
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaLayoutPBPoint),
         .number = MatchaPBTouchTapEvent_FieldNumber_Position,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(MatchaPBTouchTapEvent__storage_, position),
@@ -509,7 +509,7 @@ typedef struct MatchaPBTouchPressEvent__storage_ {
   uint32_t _has_storage_[1];
   MatchaPBTouchEventKind kind;
   GPBTimestamp *timestamp;
-  MatchaPBPoint *position;
+  MatchaLayoutPBPoint *position;
   GPBDuration *duration;
 } MatchaPBTouchPressEvent__storage_;
 
@@ -530,7 +530,7 @@ typedef struct MatchaPBTouchPressEvent__storage_ {
       },
       {
         .name = "position",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBPoint),
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaLayoutPBPoint),
         .number = MatchaPBTouchPressEvent_FieldNumber_Position,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(MatchaPBTouchPressEvent__storage_, position),
