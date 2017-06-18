@@ -2,6 +2,7 @@
 
 High:
 * Hide keyboard.
+* keyboard types
 * Rebuild settings app.
 
 Medium:

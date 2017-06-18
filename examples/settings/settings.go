@@ -208,6 +208,9 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 	scrollView := scrollview.New(ctx, "scrollView")
 	scrollView.ContentView = scrollChild
+	// scrollView.OnScroll = func(position float64) {
+	// 	// v.Update()
+	// }
 
 	return &view.Model{
 		Children: []view.View{scrollView},

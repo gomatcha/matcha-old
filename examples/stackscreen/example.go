@@ -26,7 +26,8 @@ type App struct {
 }
 
 func NewApp() *App {
-	app := &App{}
+	st := &comm.AsyncStore{}
+	app := &App{Storer: st, store: st}
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
 	options1 := &stackscreen.StackBar{

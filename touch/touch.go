@@ -178,10 +178,6 @@ const (
 	EventKindChanged
 	EventKindFailed
 	EventKindRecognized
-
-	// EventKindPossible // discrete events
-	// EventKindRecognized
-	// EventKindFailed
 )
 
 type PressEvent struct {
@@ -306,29 +302,3 @@ func (r *ButtonRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, ma
 			funcId: f,
 		}
 }
-
-// type PanEvent struct {
-// 	Timestamp time.Time
-// 	Position  layout.Point
-// 	Velocity  layout.Point
-// }
-
-// type PanRecognizer struct {
-// 	key      interface{}
-// 	OnBegin  func(e *PanEvent)
-// 	OnEnd    func(e *PanEvent)
-// 	OnCancel func(e *PanEvent)
-// 	OnChange func(e *PanEvent)
-// }
-
-// type SwipeRecognizer struct {
-// }
-
-// type PinchRecognizer struct {
-// }
-
-// type EdgePanRecognizer struct {
-// }
-
-// type RotationGesture struct {
-// }

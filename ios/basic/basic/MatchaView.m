@@ -4,7 +4,7 @@
 #import "MatchaPressGestureRecognizer.h"
 #import "MatchaTabBarController.h"
 #import "MatchaViewController.h"
-#import "MatchaStackViewController.h"
+#import "MatchaStackScreen.h"
 #import "MatchaSwitchView.h"
 #import "MatchaButtonGestureRecognizer.h"
 #import "MatchaTextInput.h"
@@ -150,7 +150,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     if ([name isEqual:@"github.com/overcyn/matcha/view/tabscreen"]) {
         child = [[MatchaTabBarController alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"github.com/overcyn/matcha/view/stacknav"]) {
-        child = [[MatchaStackViewController alloc] initWithViewNode:viewNode];
+        child = [[MatchaStackScreen alloc] initWithViewNode:viewNode];
     }
     return child;
 }

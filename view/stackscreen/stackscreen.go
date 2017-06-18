@@ -55,7 +55,8 @@ func (s *Screen) Pop() {
 
 type View struct {
 	*view.Embed
-	screen *Screen
+	screen     *Screen
+	subscribed []comm.Notifier
 }
 
 func New(ctx *view.Context, key string, s *Screen) *View {
@@ -97,9 +98,19 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		v.Embed.Subscribe(v.screen)
 	}
 
+	// // Unsubscribe from previous children.
+	// for _, i := range v.subscribed {
+	// 	v.Unsubscribe(i)
+	// }
+	// v.subscribed = nil
+
 	screenspb := []*stacknav.Screen{}
 	for idx, i := range v.screen.Children() {
 		chld := i.View(ctx.WithPrefix(strconv.Itoa(idx)))
+
+		// // Subscribe to children.
+		// v.Subscribe(chld)
+		// v.subscribed = append(v.subscribed, chld)
 
 		var bar *StackBar
 		if childView, ok := chld.(ChildView); ok {

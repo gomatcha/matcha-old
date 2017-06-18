@@ -31,7 +31,6 @@ func New(ctx *view.Context, key string) *ImageView {
 	if v, ok := ctx.Prev(key).(*ImageView); ok {
 		return v
 	}
-
 	return &ImageView{
 		Embed: view.NewEmbed(ctx.NewId(key)),
 	}

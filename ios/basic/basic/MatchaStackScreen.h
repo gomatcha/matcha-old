@@ -3,7 +3,7 @@
 @class MatchaViewNode;
 @class MatchaPBStackNavStackNav;
 
-@interface MatchaStackViewController : UINavigationController <MatchaChildViewController, UINavigationControllerDelegate>
+@interface MatchaStackScreen : UINavigationController <MatchaChildViewController, UINavigationControllerDelegate>
 - (id)initWithViewNode:(MatchaViewNode *)viewNode;
 @property (nonatomic, weak) MatchaViewNode *viewNode;
 @property (nonatomic, strong) MatchaNode *node;
