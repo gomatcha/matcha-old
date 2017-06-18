@@ -31,7 +31,7 @@ CF_EXTERN_C_BEGIN
 
 NS_ASSUME_NONNULL_BEGIN
 
-#pragma mark - MatchaPBTextInputTextinputRoot
+#pragma mark - MatchaTextInputPBTextinputRoot
 
 /**
  * Exposes the extension registry for this file.
@@ -43,17 +43,17 @@ NS_ASSUME_NONNULL_BEGIN
  * which is a @c GPBExtensionRegistry that includes all the extensions defined by
  * this file and all files that it depends on.
  **/
-@interface MatchaPBTextInputTextinputRoot : GPBRootObject
+@interface MatchaTextInputPBTextinputRoot : GPBRootObject
 @end
 
-#pragma mark - MatchaPBTextInputView
+#pragma mark - MatchaTextInputPBView
 
-typedef GPB_ENUM(MatchaPBTextInputView_FieldNumber) {
-  MatchaPBTextInputView_FieldNumber_StyledText = 1,
-  MatchaPBTextInputView_FieldNumber_OnUpdate = 2,
+typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
+  MatchaTextInputPBView_FieldNumber_StyledText = 1,
+  MatchaTextInputPBView_FieldNumber_OnUpdate = 2,
 };
 
-@interface MatchaPBTextInputView : GPBMessage
+@interface MatchaTextInputPBView : GPBMessage
 
 @property(nonatomic, readwrite, strong, null_resettable) MatchaPBStyledText *styledText;
 /** Test to see if @c styledText has been set. */
@@ -63,13 +63,13 @@ typedef GPB_ENUM(MatchaPBTextInputView_FieldNumber) {
 
 @end
 
-#pragma mark - MatchaPBTextInputEvent
+#pragma mark - MatchaTextInputPBEvent
 
-typedef GPB_ENUM(MatchaPBTextInputEvent_FieldNumber) {
-  MatchaPBTextInputEvent_FieldNumber_StyledText = 1,
+typedef GPB_ENUM(MatchaTextInputPBEvent_FieldNumber) {
+  MatchaTextInputPBEvent_FieldNumber_StyledText = 1,
 };
 
-@interface MatchaPBTextInputEvent : GPBMessage
+@interface MatchaTextInputPBEvent : GPBMessage
 
 @property(nonatomic, readwrite, strong, null_resettable) MatchaPBStyledText *styledText;
 /** Test to see if @c styledText has been set. */

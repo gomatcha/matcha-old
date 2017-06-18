@@ -9,7 +9,7 @@ import (
 	"github.com/overcyn/matcha/comm"
 	"github.com/overcyn/matcha/layout/constraint"
 	"github.com/overcyn/matcha/pb"
-	tabnavpb "github.com/overcyn/matcha/pb/view/tabnav"
+	tabnavpb "github.com/overcyn/matcha/pb/view/tabscreen"
 	"github.com/overcyn/matcha/view"
 )
 
@@ -87,7 +87,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		v.screen.SetSelectedIndex(int(pbevent.SelectedIndex))
 	}
 
-	screenspb := []*tabnavpb.Screen{}
+	screenspb := []*tabnavpb.ChildView{}
 	for idx, i := range v.screen.Children() {
 		chld := i.View(ctx.WithPrefix(strconv.Itoa(idx)))
 
@@ -100,7 +100,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 			}
 		}
 
-		screenspb = append(screenspb, &tabnavpb.Screen{
+		screenspb = append(screenspb, &tabnavpb.ChildView{
 			Id:           int64(chld.Id()),
 			Title:        button.Title,
 			Icon:         pb.ImageEncode(button.Icon),
@@ -120,7 +120,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		Children:       l.Views(),
 		Layouter:       l,
 		NativeViewName: "github.com/overcyn/matcha/view/tabscreen",
-		NativeViewState: &tabnavpb.TabNav{
+		NativeViewState: &tabnavpb.View{
 			Screens:       screenspb,
 			SelectedIndex: int64(v.screen.SelectedIndex()),
 			EventFunc:     funcId,

@@ -20,42 +20,42 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-#pragma mark - MatchaPBTextInputTextinputRoot
+#pragma mark - MatchaTextInputPBTextinputRoot
 
-@implementation MatchaPBTextInputTextinputRoot
+@implementation MatchaTextInputPBTextinputRoot
 
 // No extensions in the file and none of the imports (direct or indirect)
 // defined extensions, so no need to generate +extensionRegistry.
 
 @end
 
-#pragma mark - MatchaPBTextInputTextinputRoot_FileDescriptor
+#pragma mark - MatchaTextInputPBTextinputRoot_FileDescriptor
 
-static GPBFileDescriptor *MatchaPBTextInputTextinputRoot_FileDescriptor(void) {
+static GPBFileDescriptor *MatchaTextInputPBTextinputRoot_FileDescriptor(void) {
   // This is called by +initialize so there is no need to worry
   // about thread safety of the singleton.
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
     descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"matcha.view.textinput"
-                                                 objcPrefix:@"MatchaPBTextInput"
+                                                 objcPrefix:@"MatchaTextInputPB"
                                                      syntax:GPBFileSyntaxProto3];
   }
   return descriptor;
 }
 
-#pragma mark - MatchaPBTextInputView
+#pragma mark - MatchaTextInputPBView
 
-@implementation MatchaPBTextInputView
+@implementation MatchaTextInputPBView
 
 @dynamic hasStyledText, styledText;
 @dynamic onUpdate;
 
-typedef struct MatchaPBTextInputView__storage_ {
+typedef struct MatchaTextInputPBView__storage_ {
   uint32_t _has_storage_[1];
   MatchaPBStyledText *styledText;
   int64_t onUpdate;
-} MatchaPBTextInputView__storage_;
+} MatchaTextInputPBView__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -66,29 +66,29 @@ typedef struct MatchaPBTextInputView__storage_ {
       {
         .name = "styledText",
         .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBStyledText),
-        .number = MatchaPBTextInputView_FieldNumber_StyledText,
+        .number = MatchaTextInputPBView_FieldNumber_StyledText,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(MatchaPBTextInputView__storage_, styledText),
+        .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, styledText),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "onUpdate",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBTextInputView_FieldNumber_OnUpdate,
+        .number = MatchaTextInputPBView_FieldNumber_OnUpdate,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(MatchaPBTextInputView__storage_, onUpdate),
+        .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, onUpdate),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[MatchaPBTextInputView class]
-                                     rootClass:[MatchaPBTextInputTextinputRoot class]
-                                          file:MatchaPBTextInputTextinputRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MatchaTextInputPBView class]
+                                     rootClass:[MatchaTextInputPBTextinputRoot class]
+                                          file:MatchaTextInputPBTextinputRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(MatchaPBTextInputView__storage_)
+                                   storageSize:sizeof(MatchaTextInputPBView__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
@@ -103,16 +103,16 @@ typedef struct MatchaPBTextInputView__storage_ {
 
 @end
 
-#pragma mark - MatchaPBTextInputEvent
+#pragma mark - MatchaTextInputPBEvent
 
-@implementation MatchaPBTextInputEvent
+@implementation MatchaTextInputPBEvent
 
 @dynamic hasStyledText, styledText;
 
-typedef struct MatchaPBTextInputEvent__storage_ {
+typedef struct MatchaTextInputPBEvent__storage_ {
   uint32_t _has_storage_[1];
   MatchaPBStyledText *styledText;
-} MatchaPBTextInputEvent__storage_;
+} MatchaTextInputPBEvent__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -123,20 +123,20 @@ typedef struct MatchaPBTextInputEvent__storage_ {
       {
         .name = "styledText",
         .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBStyledText),
-        .number = MatchaPBTextInputEvent_FieldNumber_StyledText,
+        .number = MatchaTextInputPBEvent_FieldNumber_StyledText,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(MatchaPBTextInputEvent__storage_, styledText),
+        .offset = (uint32_t)offsetof(MatchaTextInputPBEvent__storage_, styledText),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[MatchaPBTextInputEvent class]
-                                     rootClass:[MatchaPBTextInputTextinputRoot class]
-                                          file:MatchaPBTextInputTextinputRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MatchaTextInputPBEvent class]
+                                     rootClass:[MatchaTextInputPBTextinputRoot class]
+                                          file:MatchaTextInputPBTextinputRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(MatchaPBTextInputEvent__storage_)
+                                   storageSize:sizeof(MatchaTextInputPBEvent__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =

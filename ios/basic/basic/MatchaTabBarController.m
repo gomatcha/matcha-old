@@ -17,9 +17,9 @@
 - (void)setMatchaChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs {
     GPBAny *state = self.node.nativeViewState;
     NSError *error = nil;
-    MatchaPBTabNavTabNav *pbTabNavigator = (id)[state unpackMessageClass:[MatchaPBTabNavTabNav class] error:&error];
+    MatchaTabScreenPBView *pbTabNavigator = (id)[state unpackMessageClass:[MatchaTabScreenPBView class] error:&error];
     NSMutableArray *viewControllers = [NSMutableArray array];
-    for (MatchaPBTabNavScreen *i in pbTabNavigator.screensArray) {
+    for (MatchaTabScreenPBChildView *i in pbTabNavigator.screensArray) {
         UIViewController *vc = childVCs[@(i.id_p)];
         vc.tabBarItem.title = i.title;
         vc.tabBarItem.badgeValue = i.badge.length == 0 ? nil : i.badge;
@@ -32,7 +32,7 @@
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-    MatchaPBTabNavEvent *event = [[MatchaPBTabNavEvent alloc] init];
+    MatchaTabScreenPBEvent *event = [[MatchaTabScreenPBEvent alloc] init];
     event.selectedIndex = tabBarController.selectedIndex;
     
     NSData *data = [event data];

@@ -20,33 +20,33 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-#pragma mark - MatchaPBTabNavTabnavRoot
+#pragma mark - MatchaTabScreenPBViewRoot
 
-@implementation MatchaPBTabNavTabnavRoot
+@implementation MatchaTabScreenPBViewRoot
 
 // No extensions in the file and none of the imports (direct or indirect)
 // defined extensions, so no need to generate +extensionRegistry.
 
 @end
 
-#pragma mark - MatchaPBTabNavTabnavRoot_FileDescriptor
+#pragma mark - MatchaTabScreenPBViewRoot_FileDescriptor
 
-static GPBFileDescriptor *MatchaPBTabNavTabnavRoot_FileDescriptor(void) {
+static GPBFileDescriptor *MatchaTabScreenPBViewRoot_FileDescriptor(void) {
   // This is called by +initialize so there is no need to worry
   // about thread safety of the singleton.
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
     descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"tabnav"
-                                                 objcPrefix:@"MatchaPBTabNav"
+                                                 objcPrefix:@"MatchaTabScreenPB"
                                                      syntax:GPBFileSyntaxProto3];
   }
   return descriptor;
 }
 
-#pragma mark - MatchaPBTabNavScreen
+#pragma mark - MatchaTabScreenPBChildView
 
-@implementation MatchaPBTabNavScreen
+@implementation MatchaTabScreenPBChildView
 
 @dynamic id_p;
 @dynamic title;
@@ -54,14 +54,14 @@ static GPBFileDescriptor *MatchaPBTabNavTabnavRoot_FileDescriptor(void) {
 @dynamic hasSelectedIcon, selectedIcon;
 @dynamic badge;
 
-typedef struct MatchaPBTabNavScreen__storage_ {
+typedef struct MatchaTabScreenPBChildView__storage_ {
   uint32_t _has_storage_[1];
   NSString *title;
   MatchaPBImage *icon;
   MatchaPBImage *selectedIcon;
   NSString *badge;
   int64_t id_p;
-} MatchaPBTabNavScreen__storage_;
+} MatchaTabScreenPBChildView__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -72,56 +72,56 @@ typedef struct MatchaPBTabNavScreen__storage_ {
       {
         .name = "id_p",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBTabNavScreen_FieldNumber_Id_p,
+        .number = MatchaTabScreenPBChildView_FieldNumber_Id_p,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(MatchaPBTabNavScreen__storage_, id_p),
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBChildView__storage_, id_p),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "title",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBTabNavScreen_FieldNumber_Title,
+        .number = MatchaTabScreenPBChildView_FieldNumber_Title,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(MatchaPBTabNavScreen__storage_, title),
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBChildView__storage_, title),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
       },
       {
         .name = "icon",
         .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBImage),
-        .number = MatchaPBTabNavScreen_FieldNumber_Icon,
+        .number = MatchaTabScreenPBChildView_FieldNumber_Icon,
         .hasIndex = 2,
-        .offset = (uint32_t)offsetof(MatchaPBTabNavScreen__storage_, icon),
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBChildView__storage_, icon),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "selectedIcon",
         .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBImage),
-        .number = MatchaPBTabNavScreen_FieldNumber_SelectedIcon,
+        .number = MatchaTabScreenPBChildView_FieldNumber_SelectedIcon,
         .hasIndex = 3,
-        .offset = (uint32_t)offsetof(MatchaPBTabNavScreen__storage_, selectedIcon),
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBChildView__storage_, selectedIcon),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "badge",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBTabNavScreen_FieldNumber_Badge,
+        .number = MatchaTabScreenPBChildView_FieldNumber_Badge,
         .hasIndex = 4,
-        .offset = (uint32_t)offsetof(MatchaPBTabNavScreen__storage_, badge),
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBChildView__storage_, badge),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[MatchaPBTabNavScreen class]
-                                     rootClass:[MatchaPBTabNavTabnavRoot class]
-                                          file:MatchaPBTabNavTabnavRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MatchaTabScreenPBChildView class]
+                                     rootClass:[MatchaTabScreenPBViewRoot class]
+                                          file:MatchaTabScreenPBViewRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(MatchaPBTabNavScreen__storage_)
+                                   storageSize:sizeof(MatchaTabScreenPBChildView__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
@@ -136,20 +136,20 @@ typedef struct MatchaPBTabNavScreen__storage_ {
 
 @end
 
-#pragma mark - MatchaPBTabNavTabNav
+#pragma mark - MatchaTabScreenPBView
 
-@implementation MatchaPBTabNavTabNav
+@implementation MatchaTabScreenPBView
 
 @dynamic screensArray, screensArray_Count;
 @dynamic selectedIndex;
 @dynamic eventFunc;
 
-typedef struct MatchaPBTabNavTabNav__storage_ {
+typedef struct MatchaTabScreenPBView__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *screensArray;
   int64_t selectedIndex;
   int64_t eventFunc;
-} MatchaPBTabNavTabNav__storage_;
+} MatchaTabScreenPBView__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -159,39 +159,39 @@ typedef struct MatchaPBTabNavTabNav__storage_ {
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "screensArray",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBTabNavScreen),
-        .number = MatchaPBTabNavTabNav_FieldNumber_ScreensArray,
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaTabScreenPBChildView),
+        .number = MatchaTabScreenPBView_FieldNumber_ScreensArray,
         .hasIndex = GPBNoHasBit,
-        .offset = (uint32_t)offsetof(MatchaPBTabNavTabNav__storage_, screensArray),
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBView__storage_, screensArray),
         .flags = GPBFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
       {
         .name = "selectedIndex",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBTabNavTabNav_FieldNumber_SelectedIndex,
+        .number = MatchaTabScreenPBView_FieldNumber_SelectedIndex,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(MatchaPBTabNavTabNav__storage_, selectedIndex),
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBView__storage_, selectedIndex),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "eventFunc",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBTabNavTabNav_FieldNumber_EventFunc,
+        .number = MatchaTabScreenPBView_FieldNumber_EventFunc,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(MatchaPBTabNavTabNav__storage_, eventFunc),
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBView__storage_, eventFunc),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[MatchaPBTabNavTabNav class]
-                                     rootClass:[MatchaPBTabNavTabnavRoot class]
-                                          file:MatchaPBTabNavTabnavRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MatchaTabScreenPBView class]
+                                     rootClass:[MatchaTabScreenPBViewRoot class]
+                                          file:MatchaTabScreenPBViewRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(MatchaPBTabNavTabNav__storage_)
+                                   storageSize:sizeof(MatchaTabScreenPBView__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
@@ -206,16 +206,16 @@ typedef struct MatchaPBTabNavTabNav__storage_ {
 
 @end
 
-#pragma mark - MatchaPBTabNavEvent
+#pragma mark - MatchaTabScreenPBEvent
 
-@implementation MatchaPBTabNavEvent
+@implementation MatchaTabScreenPBEvent
 
 @dynamic selectedIndex;
 
-typedef struct MatchaPBTabNavEvent__storage_ {
+typedef struct MatchaTabScreenPBEvent__storage_ {
   uint32_t _has_storage_[1];
   int64_t selectedIndex;
-} MatchaPBTabNavEvent__storage_;
+} MatchaTabScreenPBEvent__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -226,20 +226,20 @@ typedef struct MatchaPBTabNavEvent__storage_ {
       {
         .name = "selectedIndex",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaPBTabNavEvent_FieldNumber_SelectedIndex,
+        .number = MatchaTabScreenPBEvent_FieldNumber_SelectedIndex,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(MatchaPBTabNavEvent__storage_, selectedIndex),
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBEvent__storage_, selectedIndex),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[MatchaPBTabNavEvent class]
-                                     rootClass:[MatchaPBTabNavTabnavRoot class]
-                                          file:MatchaPBTabNavTabnavRoot_FileDescriptor()
+        [GPBDescriptor allocDescriptorForClass:[MatchaTabScreenPBEvent class]
+                                     rootClass:[MatchaTabScreenPBViewRoot class]
+                                          file:MatchaTabScreenPBViewRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(MatchaPBTabNavEvent__storage_)
+                                   storageSize:sizeof(MatchaTabScreenPBEvent__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =

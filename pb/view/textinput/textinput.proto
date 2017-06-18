@@ -3,7 +3,7 @@ package matcha.view.textinput;
 import "github.com/overcyn/matcha/pb/text/text.proto";
 
 option go_package = "textinput";
-option objc_class_prefix = "MatchaPBTextInput";
+option objc_class_prefix = "MatchaTextInputPB";
 
 message View {
     matcha.text.StyledText styledText = 1;

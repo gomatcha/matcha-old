@@ -16,7 +16,7 @@
     _node = value;
     GPBAny *state = value.nativeViewState;
     NSError *error = nil;
-    MatchaPBTextInputView *view = (id)[state unpackMessageClass:[MatchaPBTextInputView class] error:&error];
+    MatchaTextInputPBView *view = (id)[state unpackMessageClass:[MatchaTextInputPBView class] error:&error];
 
     self.funcId = view.onUpdate;
     NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:view.styledText];
@@ -24,7 +24,7 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
-    MatchaPBTextInputEvent *event = [[MatchaPBTextInputEvent alloc] init];
+    MatchaTextInputPBEvent *event = [[MatchaTextInputPBEvent alloc] init];
     event.styledText = self.attributedText.protobuf;
     
     NSData *data = [event data];

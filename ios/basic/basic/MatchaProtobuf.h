@@ -6,7 +6,7 @@
 #import "Imageview.pbobjc.h"
 #import "Button.pbobjc.h"
 #import "Paint.pbobjc.h"
-#import "Tabnav.pbobjc.h"
+#import "Tabscreen.pbobjc.h"
 #import "Stacknavigator.pbobjc.h"
 #import "Switchview.pbobjc.h"
 #import "Touch2.pbobjc.h"

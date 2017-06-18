@@ -1,11 +1,11 @@
 syntax = "proto3";
-package tabnav;
+package matcha.view.tabscreen;
 import "github.com/overcyn/matcha/pb/imageview.proto";
 
-option go_package = "tabnav";
-option objc_class_prefix = "MatchaPBTabNav";
+option go_package = "tabscreen";
+option objc_class_prefix = "MatchaTabScreenPB";
 
-message Screen {
+message ChildView {
     int64 id = 1;
     string title = 2;
     imageview.Image icon = 3;
@@ -13,8 +13,8 @@ message Screen {
     string badge = 5;
 }
 
-message TabNav {
-    repeated Screen screens = 1;
+message View {
+    repeated ChildView screens = 1;
     int64 selectedIndex = 2;
     int64 eventFunc = 3;
 }
