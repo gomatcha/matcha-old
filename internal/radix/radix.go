@@ -73,27 +73,31 @@ func (n *Node) at(path []int64) *Node {
 	return child.at(path[1:])
 }
 
-func (n *Node) delete(path []int64) {
-	if len(path) == 1 {
-		child, ok := n.children[path[0]]
-		if !ok {
-			return
-		}
-
-		if len(child.children) == 0 {
+func (n *Node) delete(path []int64) bool {
+	if len(path) == 0 {
+		if len(n.children) == 0 { // If node has no children, remove self.
 			n.Value = nil
-			delete(n.children, path[0])
-		} else {
-			child.exists = false
+			return true
 		}
-		return
+		// Otherwise mark as non-existant.
+		n.exists = false
+		return false
 	}
 
 	child, ok := n.children[path[0]]
-	if !ok {
-		return
+	if !ok { // If path doesn't exist, abort.
+		return false
 	}
-	child.delete(path[1:])
+
+	remove := child.delete(path[1:])
+	if !remove { // If child doesn't want to be removed, abort.
+		return false
+	}
+
+	// Remove child, and remove self if we don't exist.
+	delete(n.children, path[0])
+	n.Value = nil
+	return !n.exists
 }
 
 func (n *Node) debugString() string {
@@ -110,7 +114,7 @@ func (n *Node) debugString() string {
 		all = append(all, lines...)
 	}
 
-	str := fmt.Sprintf("{%p Exists:%v Value:%v}", n, n.exists, n.Value)
+	str := fmt.Sprintf("{%v %v}", n.exists, n.Value)
 	if len(all) > 0 {
 		str += "\n" + strings.Join(all, "\n")
 	}
