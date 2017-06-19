@@ -71,7 +71,7 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 	input := textinput.New(ctx, "input")
 	input.Text = v.text
 	input.Responder = v.responder
-	input.OnChange = func(input *textinput.View) {
+	input.OnChange = func(t *text.Text) {
 		v.Update()
 	}
 	inputP := view.WithPainter(input, &paint.Style{BackgroundColor: colornames.Yellow})

@@ -31,7 +31,7 @@ func (l *layouter) Unnotify(id comm.Id) {
 type Button struct {
 	*view.Embed
 	Text    string
-	OnPress func(*Button)
+	OnPress func()
 }
 
 func New(ctx *view.Context, key string) *Button {
@@ -63,7 +63,7 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 		NativeFuncs: map[string]interface{}{
 			"OnPress": func() {
 				if v.OnPress != nil {
-					v.OnPress(v)
+					v.OnPress()
 				}
 			},
 		},

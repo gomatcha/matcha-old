@@ -13,8 +13,6 @@ Medium:
 * Collect native resources into assets.
 * UINavigation item button. uitabbar item image
 * uitabbaritem and uinavigationitem should observer their children, so they can update their button/bar
-* callbacks should not pass view as parameter.
-* Get rid of funcId, and call by view/function index
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
 
 Low:

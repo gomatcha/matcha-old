@@ -148,11 +148,11 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 
 		switchView := switchview.New(ctx, "switch")
 		switchView.Value = v.wifiStore.Enabled()
-		switchView.OnValueChange = func(sv *switchview.View) {
+		switchView.OnValueChange = func(value bool) {
 			v.wifiStore.Lock()
 			defer v.wifiStore.Unlock()
 
-			v.wifiStore.SetEnabled(sv.Value)
+			v.wifiStore.SetEnabled(value)
 		}
 
 		cell1 := NewBasicCell(ctx, "wifi")

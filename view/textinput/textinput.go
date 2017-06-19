@@ -23,7 +23,7 @@ type View struct {
 	// Cursor position?
 	// Keyboard visibility?
 
-	OnChange func(*View)
+	OnChange func(*text.Text)
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -77,7 +77,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 				_ = v.Text.UnmarshalProtobuf(pbevent.StyledText.Text)
 				if v.OnChange != nil {
-					v.OnChange(v)
+					v.OnChange(v.Text)
 				}
 			},
 			"OnFocus": func(data []byte) {

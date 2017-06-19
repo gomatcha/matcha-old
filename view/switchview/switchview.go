@@ -12,7 +12,7 @@ import (
 type View struct {
 	*view.Embed
 	Value         bool
-	OnValueChange func(*View)
+	OnValueChange func(value bool)
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -50,7 +50,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 				v.Value = event.Value
 				if v.OnValueChange != nil {
-					v.OnValueChange(v)
+					v.OnValueChange(v.Value)
 				}
 			},
 		},

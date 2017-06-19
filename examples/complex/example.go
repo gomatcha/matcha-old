@@ -122,7 +122,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 
 	chl8 := button.New(ctx, "8")
 	chl8.Text = "Button"
-	chl8.OnPress = func(b *button.Button) {
+	chl8.OnPress = func() {
 		fmt.Println("On Click")
 		v.counter += 1
 		v.Update()
@@ -146,8 +146,8 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		})
 	}
 	chl11 := switchview.New(ctx, "12")
-	chl11.OnValueChange = func(a *switchview.View) {
-		fmt.Println("switch tapped", a.Value)
+	chl11.OnValueChange = func(value bool) {
+		fmt.Println("switch tapped", value)
 	}
 	_ = l.Add(chl11, func(s *constraint.Solver) {
 		s.LeftEqual(g6.Right())
