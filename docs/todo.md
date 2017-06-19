@@ -13,6 +13,7 @@ Medium:
 * Collect native resources into assets.
 * UINavigation item button. uitabbar item image
 * uitabbaritem and uinavigationitem should observer their children, so they can update their button/bar
+* callbacks should not pass view as parameter.
 
 Low:
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack

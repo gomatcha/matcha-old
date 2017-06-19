@@ -33,17 +33,17 @@ type Middleware interface {
 }
 
 var middlewaresMu sync.Mutex
-var middlewares = []Middleware{}
+var middlewares = []func() Middleware{}
 
 // RegisterMiddleware adds v to the list of default middleware that Root starts with.
-func RegisterMiddleware(v Middleware) {
+func RegisterMiddleware(v func() Middleware) {
 	middlewaresMu.Lock()
 	defer middlewaresMu.Unlock()
 
 	middlewares = append(middlewares, v)
 }
 
-func defaultMiddlewares() []Middleware {
+func defaultMiddlewares() []func() Middleware {
 	middlewaresMu.Lock()
 	defer middlewaresMu.Unlock()
 
@@ -320,7 +320,9 @@ func newRoot(s Screen) *root {
 		root: root,
 	}
 	root.updateFlags = map[matcha.Id]updateFlag{v.Id(): buildFlag}
-	root.middlewares = defaultMiddlewares()
+	for _, i := range defaultMiddlewares() {
+		root.middlewares = append(root.middlewares, i())
+	}
 	return root
 }
 

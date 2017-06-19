@@ -51,6 +51,8 @@ NS_ASSUME_NONNULL_BEGIN
 typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
   MatchaTextInputPBView_FieldNumber_StyledText = 1,
   MatchaTextInputPBView_FieldNumber_OnUpdate = 2,
+  MatchaTextInputPBView_FieldNumber_OnKeyboard = 3,
+  MatchaTextInputPBView_FieldNumber_KeyboardVisible = 4,
 };
 
 @interface MatchaTextInputPBView : GPBMessage
@@ -59,7 +61,11 @@ typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
 /** Test to see if @c styledText has been set. */
 @property(nonatomic, readwrite) BOOL hasStyledText;
 
+@property(nonatomic, readwrite) BOOL keyboardVisible;
+
 @property(nonatomic, readwrite) int64_t onUpdate;
+
+@property(nonatomic, readwrite) int64_t onKeyboard;
 
 @end
 

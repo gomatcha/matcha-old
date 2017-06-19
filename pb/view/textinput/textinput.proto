@@ -7,7 +7,9 @@ option objc_class_prefix = "MatchaTextInputPB";
 
 message View {
     matcha.text.StyledText styledText = 1;
+    bool keyboardVisible = 4;
     int64 onUpdate = 2;
+    int64 onKeyboard = 3;
 }
 
 message Event {

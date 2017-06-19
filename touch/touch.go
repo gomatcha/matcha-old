@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	view.RegisterMiddleware(&Middleware{})
+	view.RegisterMiddleware(func() view.Middleware { return &Middleware{} })
 }
 
 type key struct{}
