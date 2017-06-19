@@ -14,7 +14,6 @@
 @property (nonatomic, strong) UIButton *button;
 @property (nonatomic, weak) MatchaViewNode *viewNode;
 @property (nonatomic, strong) MatchaNode *node;
-@property (nonatomic, assign) int64_t funcId;
 @end
 
 @implementation MatchaButton
@@ -37,7 +36,6 @@
     
     NSAttributedString *string = [[NSAttributedString alloc] initWithProtobuf:pbbutton.styledText];
     [self.button setAttributedTitle:string forState:UIControlStateNormal];
-    self.funcId = pbbutton.onPress;
 }
 
 - (void)layoutSubviews {
@@ -45,7 +43,7 @@
 }
 
 - (void)onPress {
-    [self.viewNode.rootVC call:self.funcId viewId:self.node.identifier.longLongValue args:@[]];
+    [self.viewNode.rootVC call:@"OnPress" viewId:self.node.identifier.longLongValue args:@[]];
 }
 
 @end

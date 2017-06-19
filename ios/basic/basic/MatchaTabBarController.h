@@ -8,5 +8,4 @@
 @property (nonatomic, strong) MatchaNode *node;
 
 // Private
-@property (nonatomic, assign) int64_t funcId;
 @end

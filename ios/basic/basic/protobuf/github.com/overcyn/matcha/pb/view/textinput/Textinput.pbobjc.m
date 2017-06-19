@@ -50,14 +50,10 @@ static GPBFileDescriptor *MatchaTextInputPBTextinputRoot_FileDescriptor(void) {
 
 @dynamic hasStyledText, styledText;
 @dynamic focused;
-@dynamic onUpdate;
-@dynamic onFocus;
 
 typedef struct MatchaTextInputPBView__storage_ {
   uint32_t _has_storage_[1];
   MatchaPBStyledText *styledText;
-  int64_t onUpdate;
-  int64_t onFocus;
 } MatchaTextInputPBView__storage_;
 
 // This method is threadsafe because it is initially called
@@ -74,24 +70,6 @@ typedef struct MatchaTextInputPBView__storage_ {
         .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, styledText),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
-      },
-      {
-        .name = "onUpdate",
-        .dataTypeSpecific.className = NULL,
-        .number = MatchaTextInputPBView_FieldNumber_OnUpdate,
-        .hasIndex = 3,
-        .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, onUpdate),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeInt64,
-      },
-      {
-        .name = "onFocus",
-        .dataTypeSpecific.className = NULL,
-        .number = MatchaTextInputPBView_FieldNumber_OnFocus,
-        .hasIndex = 4,
-        .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, onFocus),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeInt64,
       },
       {
         .name = "focused",
@@ -113,7 +91,7 @@ typedef struct MatchaTextInputPBView__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\003\001\n\000\002\010\000\003\007\000";
+        "\001\001\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

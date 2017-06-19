@@ -33,30 +33,26 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		s.LeftEqual(l.MaxGuide().Left())
 	})
 
-	funcId := ctx.NewFuncId()
-	f := func(data []byte) {
-		event := &switchview.Event{}
-		err := proto.Unmarshal(data, event)
-		if err != nil {
-			fmt.Println("error", err)
-			return
-		}
-
-		v.Value = event.Value
-		if v.OnValueChange != nil {
-			v.OnValueChange(v)
-		}
-	}
-
 	return &view.Model{
 		Layouter:       l,
 		NativeViewName: "github.com/overcyn/matcha/view/switch",
 		NativeViewState: &switchview.View{
-			Value:         v.Value,
-			OnValueChange: funcId,
+			Value: v.Value,
 		},
-		NativeFuncs: map[int64]interface{}{
-			funcId: f,
+		NativeFuncs: map[string]interface{}{
+			"OnChange": func(data []byte) {
+				event := &switchview.Event{}
+				err := proto.Unmarshal(data, event)
+				if err != nil {
+					fmt.Println("error", err)
+					return
+				}
+
+				v.Value = event.Value
+				if v.OnValueChange != nil {
+					v.OnValueChange(v)
+				}
+			},
 		},
 	}
 }

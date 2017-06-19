@@ -50,7 +50,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef GPB_ENUM(MatchaButtonPBView_FieldNumber) {
   MatchaButtonPBView_FieldNumber_StyledText = 1,
-  MatchaButtonPBView_FieldNumber_OnPress = 2,
 };
 
 @interface MatchaButtonPBView : GPBMessage
@@ -58,8 +57,6 @@ typedef GPB_ENUM(MatchaButtonPBView_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) MatchaPBStyledText *styledText;
 /** Test to see if @c styledText has been set. */
 @property(nonatomic, readwrite) BOOL hasStyledText;
-
-@property(nonatomic, readwrite) int64_t onPress;
 
 @end
 

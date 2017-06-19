@@ -8,8 +8,6 @@ option objc_class_prefix = "MatchaTextInputPB";
 message View {
     matcha.text.StyledText styledText = 1;
     bool focused = 4;
-    int64 onUpdate = 2;
-    int64 onFocus = 3;
 }
 
 message Event {

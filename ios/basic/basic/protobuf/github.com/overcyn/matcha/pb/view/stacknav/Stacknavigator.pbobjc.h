@@ -87,7 +87,6 @@ typedef GPB_ENUM(MatchaPBStackNavScreen_FieldNumber) {
 
 typedef GPB_ENUM(MatchaPBStackNavStackNav_FieldNumber) {
   MatchaPBStackNavStackNav_FieldNumber_ScreensArray = 1,
-  MatchaPBStackNavStackNav_FieldNumber_EventFunc = 9,
 };
 
 @interface MatchaPBStackNavStackNav : GPBMessage
@@ -95,8 +94,6 @@ typedef GPB_ENUM(MatchaPBStackNavStackNav_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MatchaPBStackNavScreen*> *screensArray;
 /** The number of items in @c screensArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger screensArray_Count;
-
-@property(nonatomic, readwrite) int64_t eventFunc;
 
 @end
 

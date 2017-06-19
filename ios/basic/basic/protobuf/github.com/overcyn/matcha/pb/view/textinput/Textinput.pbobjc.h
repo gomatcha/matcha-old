@@ -50,8 +50,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
   MatchaTextInputPBView_FieldNumber_StyledText = 1,
-  MatchaTextInputPBView_FieldNumber_OnUpdate = 2,
-  MatchaTextInputPBView_FieldNumber_OnFocus = 3,
   MatchaTextInputPBView_FieldNumber_Focused = 4,
 };
 
@@ -62,10 +60,6 @@ typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
 @property(nonatomic, readwrite) BOOL hasStyledText;
 
 @property(nonatomic, readwrite) BOOL focused;
-
-@property(nonatomic, readwrite) int64_t onUpdate;
-
-@property(nonatomic, readwrite) int64_t onFocus;
 
 @end
 

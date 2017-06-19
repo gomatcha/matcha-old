@@ -55,56 +55,47 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		}
 	}
 
-	funcId := ctx.NewFuncId()
-	f := func(data []byte) {
-		pbevent := &textinput.Event{}
-		err := proto.Unmarshal(data, pbevent)
-		if err != nil {
-			fmt.Println("error", err)
-			return
-		}
-
-		_ = v.Text.UnmarshalProtobuf(pbevent.StyledText.Text)
-		if v.OnChange != nil {
-			v.OnChange(v)
-		}
-	}
-
-	funcId2 := ctx.NewFuncId()
-	f2 := func(data []byte) {
-		pbevent := &textinput.FocusEvent{}
-		err := proto.Unmarshal(data, pbevent)
-		if err != nil {
-			fmt.Println("error", err)
-			return
-		}
-
-		if v.responder != nil {
-			if pbevent.Focused {
-				v.responder.Show()
-			} else {
-				v.responder.Dismiss()
-			}
-		}
-	}
-
 	focused := false
 	if v.responder != nil {
 		focused = v.responder.Visible()
 	}
-	fmt.Println("focused", focused)
 
 	return &view.Model{
 		NativeViewName: "github.com/overcyn/matcha/view/textinput",
 		NativeViewState: &textinput.View{
 			StyledText: st.MarshalProtobuf(),
 			Focused:    focused,
-			OnUpdate:   funcId,
-			OnFocus:    funcId2,
 		},
-		NativeFuncs: map[int64]interface{}{
-			funcId: f,
-			funcId: f2,
+		NativeFuncs: map[string]interface{}{
+			"OnChange": func(data []byte) {
+				pbevent := &textinput.Event{}
+				err := proto.Unmarshal(data, pbevent)
+				if err != nil {
+					fmt.Println("error", err)
+					return
+				}
+
+				_ = v.Text.UnmarshalProtobuf(pbevent.StyledText.Text)
+				if v.OnChange != nil {
+					v.OnChange(v)
+				}
+			},
+			"OnFocus": func(data []byte) {
+				pbevent := &textinput.FocusEvent{}
+				err := proto.Unmarshal(data, pbevent)
+				if err != nil {
+					fmt.Println("error", err)
+					return
+				}
+
+				if v.responder != nil {
+					if pbevent.Focused {
+						v.responder.Show()
+					} else {
+						v.responder.Dismiss()
+					}
+				}
+			},
 		},
 	}
 }

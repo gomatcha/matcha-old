@@ -18,8 +18,6 @@
     NSError *error = nil;
     MatchaTextInputPBView *view = (id)[state unpackMessageClass:[MatchaTextInputPBView class] error:&error];
 
-    self.funcId = view.onUpdate;
-    self.funcId2 = view.onFocus;
     NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:view.styledText];
     self.attributedText = attrString;
     self.hasFocus = view.focused;
@@ -38,7 +36,7 @@
     NSData *data = [event data];
     MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:data];
     
-    [self.viewNode.rootVC call:self.funcId viewId:self.node.identifier.longLongValue args:@[value]];
+    [self.viewNode.rootVC call:@"OnChange" viewId:self.node.identifier.longLongValue args:@[value]];
 }
 
 @end

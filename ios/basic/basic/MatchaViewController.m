@@ -56,8 +56,8 @@
     }
 }
 
-- (NSArray<MatchaGoValue *> *)call:(int64_t)funcId viewId:(int64_t)viewId args:(NSArray<MatchaGoValue *> *)args {
-    MatchaGoValue *goValue = [[MatchaGoValue alloc] initWithLongLong:funcId];
+- (NSArray<MatchaGoValue *> *)call:(NSString *)funcId viewId:(int64_t)viewId args:(NSArray<MatchaGoValue *> *)args {
+    MatchaGoValue *goValue = [[MatchaGoValue alloc] initWithString:funcId];
     MatchaGoValue *goViewId = [[MatchaGoValue alloc] initWithLongLong:viewId];
     MatchaGoValue *goArgs = [[MatchaGoValue alloc] initWithArray:args];
     return [self.goValue call:@"Call" args:@[goValue, goViewId, goArgs]];

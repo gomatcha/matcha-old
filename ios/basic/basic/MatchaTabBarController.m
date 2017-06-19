@@ -28,7 +28,6 @@
     
     self.viewControllers = viewControllers;
     self.selectedIndex = pbTabNavigator.selectedIndex;
-    self.funcId = pbTabNavigator.eventFunc;
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
@@ -38,7 +37,7 @@
     NSData *data = [event data];
     MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:data];
     
-    [self.viewNode.rootVC call:self.funcId viewId:self.node.identifier.longLongValue args:@[value]];
+    [self.viewNode.rootVC call:@"OnSelect" viewId:self.node.identifier.longLongValue args:@[value]];
 }
 
 @end

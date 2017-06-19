@@ -48,11 +48,9 @@ static GPBFileDescriptor *MatchaPBSwitchViewSwitchviewRoot_FileDescriptor(void) 
 @implementation MatchaPBSwitchViewView
 
 @dynamic value;
-@dynamic onValueChange;
 
 typedef struct MatchaPBSwitchViewView__storage_ {
   uint32_t _has_storage_[1];
-  int64_t onValueChange;
 } MatchaPBSwitchViewView__storage_;
 
 // This method is threadsafe because it is initially called
@@ -70,15 +68,6 @@ typedef struct MatchaPBSwitchViewView__storage_ {
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBool,
       },
-      {
-        .name = "onValueChange",
-        .dataTypeSpecific.className = NULL,
-        .number = MatchaPBSwitchViewView_FieldNumber_OnValueChange,
-        .hasIndex = 2,
-        .offset = (uint32_t)offsetof(MatchaPBSwitchViewView__storage_, onValueChange),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeInt64,
-      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MatchaPBSwitchViewView class]
@@ -88,11 +77,6 @@ typedef struct MatchaPBSwitchViewView__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(MatchaPBSwitchViewView__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
-#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
-    static const char *extraTextFormatInfo =
-        "\001\002\r\000";
-    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
-#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }

@@ -117,7 +117,7 @@ UIGestureRecognizer *MatchaGestureRecognizerWithPB(int64_t viewId, GPBAny *any, 
         return [[MatchaTapGestureRecognizer alloc] initWithMatchaVC:viewNode.rootVC viewId:viewId protobuf:any];
     } else if ([any.typeURL isEqual:@"type.googleapis.com/matcha.touch.PressRecognizer"]) {
         return [[MatchaPressGestureRecognizer alloc] initWithMatchaVC:viewNode.rootVC viewId:viewId protobuf:any];
-    } else if ([any.typeURL isEqual:@"type.googleapis.com/touch.ButtonRecognizer"]) {
+    } else if ([any.typeURL isEqual:@"type.googleapis.com/matcha.touch.ButtonRecognizer"]) {
         return [[MatchaButtonGestureRecognizer alloc] initWithMatchaVC:viewNode.rootVC viewId:viewId protobuf:any];
     }
     return nil;

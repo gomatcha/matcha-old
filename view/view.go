@@ -123,7 +123,7 @@ type Model struct {
 	NativeViewName  string
 	NativeViewState proto.Message
 	NativeValues    map[string]proto.Message
-	NativeFuncs     map[int64]interface{}
+	NativeFuncs     map[string]interface{}
 }
 
 // WithPainter wraps the view v, and replaces its Model.Painter with p.

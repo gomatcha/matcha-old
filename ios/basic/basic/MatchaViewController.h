@@ -8,7 +8,7 @@
 
 - (id)initWithGoValue:(MatchaGoValue *)value;
 - (void)update:(MatchaNode *)node;
-- (NSArray<MatchaGoValue *> *)call:(int64_t)funcId viewId:(int64_t)viewId args:(NSArray<MatchaGoValue *> *)args;
+- (NSArray<MatchaGoValue *> *)call:(NSString *)funcId viewId:(int64_t)viewId args:(NSArray<MatchaGoValue *> *)args;
 @property (nonatomic, readonly) NSInteger identifier;
 @end
 

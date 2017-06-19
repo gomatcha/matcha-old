@@ -16,7 +16,6 @@ message ChildView {
 message View {
     repeated ChildView screens = 1;
     int64 selectedIndex = 2;
-    int64 eventFunc = 3;
 }
 
 message Event {

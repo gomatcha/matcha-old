@@ -2,6 +2,7 @@ package touch
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/gogo/protobuf/proto"
@@ -81,7 +82,7 @@ func (r *Middleware) Build(ctx *view.Context, next *view.Model) {
 
 	// Serialize into protobuf.
 	pbRecognizers := &touch.RecognizerList{}
-	allFuncs := map[int64]interface{}{}
+	allFuncs := map[string]interface{}{}
 	for k, v := range ids {
 		msg, funcs := v.MarshalProtobuf(ctx)
 		pbAny, err := ptypes.MarshalAny(msg)
@@ -105,7 +106,7 @@ func (r *Middleware) Build(ctx *view.Context, next *view.Model) {
 	next.NativeValues["github.com/overcyn/matcha/touch"] = pbRecognizers
 
 	if next.NativeFuncs == nil {
-		next.NativeFuncs = map[int64]interface{}{}
+		next.NativeFuncs = map[string]interface{}{}
 	}
 	for k, v := range allFuncs {
 		next.NativeFuncs[k] = v
@@ -113,7 +114,7 @@ func (r *Middleware) Build(ctx *view.Context, next *view.Model) {
 }
 
 type Recognizer interface {
-	MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{})
+	MarshalProtobuf(ctx *view.Context) (proto.Message, map[string]interface{})
 	Equal(Recognizer) bool
 }
 
@@ -142,7 +143,7 @@ func (r *TapRecognizer) Equal(a Recognizer) bool {
 	return r.Count == b.Count
 }
 
-func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
+func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[string]interface{}) {
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
 		pbevent := &touch.TapEvent{}
@@ -166,8 +167,8 @@ func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[i
 	return &touch.TapRecognizer{
 			Count:          int64(r.Count),
 			RecognizedFunc: funcId,
-		}, map[int64]interface{}{
-			funcId: f,
+		}, map[string]interface{}{
+			strconv.Itoa(int(funcId)): f,
 		}
 }
 
@@ -216,7 +217,7 @@ func (r *PressRecognizer) Equal(a Recognizer) bool {
 	return r.MinDuration == b.MinDuration
 }
 
-func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
+func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[string]interface{}) {
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
 		event := &PressEvent{}
@@ -239,8 +240,8 @@ func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map
 	return &touch.PressRecognizer{
 			MinDuration: ptypes.DurationProto(r.MinDuration),
 			FuncId:      funcId,
-		}, map[int64]interface{}{
-			funcId: f,
+		}, map[string]interface{}{
+			strconv.Itoa(int(funcId)): f,
 		}
 }
 
@@ -274,7 +275,7 @@ func (r *ButtonRecognizer) Equal(a Recognizer) bool {
 	return true
 }
 
-func (r *ButtonRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[int64]interface{}) {
+func (r *ButtonRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[string]interface{}) {
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
 		event := &ButtonEvent{}
@@ -298,7 +299,7 @@ func (r *ButtonRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, ma
 	return &touch.ButtonRecognizer{
 			OnEvent:       funcId,
 			IgnoresScroll: r.IgnoresScroll,
-		}, map[int64]interface{}{
-			funcId: f,
+		}, map[string]interface{}{
+			strconv.Itoa(int(funcId)): f,
 		}
 }

@@ -9,6 +9,5 @@
 @property (nonatomic, strong) MatchaNode *node;
 
 //Internal
-@property (nonatomic, assign) int64_t funcId;
 @property (nonatomic, strong) MatchaPBStackNavStackNav *prev;
 @end

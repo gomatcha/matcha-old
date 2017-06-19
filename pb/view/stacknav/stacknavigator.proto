@@ -17,7 +17,6 @@ message Screen {
 
 message StackNav {
     repeated Screen screens = 1;
-    int64 eventFunc = 9;
 }
 
 message StackEvent {

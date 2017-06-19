@@ -80,7 +80,6 @@ typedef GPB_ENUM(MatchaTabScreenPBChildView_FieldNumber) {
 typedef GPB_ENUM(MatchaTabScreenPBView_FieldNumber) {
   MatchaTabScreenPBView_FieldNumber_ScreensArray = 1,
   MatchaTabScreenPBView_FieldNumber_SelectedIndex = 2,
-  MatchaTabScreenPBView_FieldNumber_EventFunc = 3,
 };
 
 @interface MatchaTabScreenPBView : GPBMessage
@@ -90,8 +89,6 @@ typedef GPB_ENUM(MatchaTabScreenPBView_FieldNumber) {
 @property(nonatomic, readonly) NSUInteger screensArray_Count;
 
 @property(nonatomic, readwrite) int64_t selectedIndex;
-
-@property(nonatomic, readwrite) int64_t eventFunc;
 
 @end
 

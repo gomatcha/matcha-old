@@ -73,20 +73,6 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	v.screen.Lock()
 	defer v.screen.Unlock()
 
-	funcId := ctx.NewFuncId()
-	f := func(data []byte) {
-		pbevent := &tabnavpb.Event{}
-		err := proto.Unmarshal(data, pbevent)
-		if err != nil {
-			fmt.Println("error", err)
-			return
-		}
-
-		v.screen.Lock()
-		defer v.screen.Unlock()
-		v.screen.SetSelectedIndex(int(pbevent.SelectedIndex))
-	}
-
 	screenspb := []*tabnavpb.ChildView{}
 	for idx, i := range v.screen.Children() {
 		chld := i.View(ctx.WithPrefix(strconv.Itoa(idx)))
@@ -123,10 +109,20 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		NativeViewState: &tabnavpb.View{
 			Screens:       screenspb,
 			SelectedIndex: int64(v.screen.SelectedIndex()),
-			EventFunc:     funcId,
 		},
-		NativeFuncs: map[int64]interface{}{
-			funcId: f,
+		NativeFuncs: map[string]interface{}{
+			"OnSelect": func(data []byte) {
+				pbevent := &tabnavpb.Event{}
+				err := proto.Unmarshal(data, pbevent)
+				if err != nil {
+					fmt.Println("error", err)
+					return
+				}
+
+				v.screen.Lock()
+				defer v.screen.Unlock()
+				v.screen.SetSelectedIndex(int(pbevent.SelectedIndex))
+			},
 		},
 	}
 }

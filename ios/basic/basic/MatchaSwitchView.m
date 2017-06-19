@@ -20,7 +20,6 @@
     MatchaPBSwitchViewView *view = (id)[state unpackMessageClass:[MatchaPBSwitchViewView class] error:&error];
     if (view != nil) {
         self.on = view.value;
-        self.funcId = view.onValueChange;
     }
 }
 
@@ -31,7 +30,7 @@
     NSData *data = [event data];
     MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:data];
     
-    [self.viewNode.rootVC call:self.funcId viewId:self.node.identifier.longLongValue args:@[value]];
+    [self.viewNode.rootVC call:@"OnChange" viewId:self.node.identifier.longLongValue args:@[value]];
 
 }
 

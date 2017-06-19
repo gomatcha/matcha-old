@@ -7,5 +7,4 @@ option objc_class_prefix = "MatchaButtonPB";
 
 message View {
     matcha.text.StyledText styledText = 1;
-    int64 onPress = 2;
 }

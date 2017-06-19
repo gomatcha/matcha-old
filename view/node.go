@@ -105,7 +105,7 @@ func (r *Root) Stop() {
 	r.ticker.Stop()
 }
 
-func (r *Root) Call(funcId int64, viewId int64, args []reflect.Value) []reflect.Value {
+func (r *Root) Call(funcId string, viewId int64, args []reflect.Value) []reflect.Value {
 	MainMu.Lock()
 	defer MainMu.Unlock()
 
@@ -421,7 +421,7 @@ func (root *root) paint() {
 	root.node.paint()
 }
 
-func (root *root) call(funcId int64, viewId int64, args []reflect.Value) []reflect.Value {
+func (root *root) call(funcId string, viewId int64, args []reflect.Value) []reflect.Value {
 	node, ok := root.nodes[matcha.Id(viewId)]
 	if !ok || node.model == nil {
 		return nil

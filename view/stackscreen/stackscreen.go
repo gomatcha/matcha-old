@@ -78,26 +78,6 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	v.screen.Lock()
 	defer v.screen.Unlock()
 
-	funcId := ctx.NewFuncId()
-	f := func(data []byte) {
-		pbevent := &stacknav.StackEvent{}
-		err := proto.Unmarshal(data, pbevent)
-		if err != nil {
-			fmt.Println("error", err)
-			return
-		}
-
-		// Don't update the view for this
-		v.Embed.Unsubscribe(v.screen)
-
-		v.screen.Lock()
-		chl := v.screen.Children()[:len(pbevent.Id)]
-		v.screen.SetChildren(chl...)
-		v.screen.Unlock()
-
-		v.Embed.Subscribe(v.screen)
-	}
-
 	// // Unsubscribe from previous children.
 	// for _, i := range v.subscribed {
 	// 	v.Unsubscribe(i)
@@ -142,11 +122,27 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		Layouter:       l,
 		NativeViewName: "github.com/overcyn/matcha/view/stacknav",
 		NativeViewState: &stacknav.StackNav{
-			Screens:   screenspb,
-			EventFunc: funcId,
+			Screens: screenspb,
 		},
-		NativeFuncs: map[int64]interface{}{
-			funcId: f,
+		NativeFuncs: map[string]interface{}{
+			"OnChange": func(data []byte) {
+				pbevent := &stacknav.StackEvent{}
+				err := proto.Unmarshal(data, pbevent)
+				if err != nil {
+					fmt.Println("error", err)
+					return
+				}
+
+				// Don't update the view for this
+				v.Embed.Unsubscribe(v.screen)
+
+				v.screen.Lock()
+				chl := v.screen.Children()[:len(pbevent.Id)]
+				v.screen.SetChildren(chl...)
+				v.screen.Unlock()
+
+				v.Embed.Subscribe(v.screen)
+			},
 		},
 	}
 }

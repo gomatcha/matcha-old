@@ -54,22 +54,18 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 	st := text.NewStyledText(t)
 	st.Set(style, 0, 0)
 
-	funcId := ctx.NewFuncId()
-	f := func() {
-		if v.OnPress != nil {
-			v.OnPress(v)
-		}
-	}
-
 	return &view.Model{
 		Layouter:       &layouter{styledText: st},
 		NativeViewName: "github.com/overcyn/matcha/view/button",
 		NativeViewState: &pbbutton.View{
 			StyledText: st.MarshalProtobuf(),
-			OnPress:    funcId,
 		},
-		NativeFuncs: map[int64]interface{}{
-			funcId: f,
+		NativeFuncs: map[string]interface{}{
+			"OnPress": func() {
+				if v.OnPress != nil {
+					v.OnPress(v)
+				}
+			},
 		},
 	}
 }

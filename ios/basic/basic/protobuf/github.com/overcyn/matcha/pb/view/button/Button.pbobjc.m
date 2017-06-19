@@ -49,12 +49,10 @@ static GPBFileDescriptor *MatchaButtonPBButtonRoot_FileDescriptor(void) {
 @implementation MatchaButtonPBView
 
 @dynamic hasStyledText, styledText;
-@dynamic onPress;
 
 typedef struct MatchaButtonPBView__storage_ {
   uint32_t _has_storage_[1];
   MatchaPBStyledText *styledText;
-  int64_t onPress;
 } MatchaButtonPBView__storage_;
 
 // This method is threadsafe because it is initially called
@@ -72,15 +70,6 @@ typedef struct MatchaButtonPBView__storage_ {
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
-      {
-        .name = "onPress",
-        .dataTypeSpecific.className = NULL,
-        .number = MatchaButtonPBView_FieldNumber_OnPress,
-        .hasIndex = 1,
-        .offset = (uint32_t)offsetof(MatchaButtonPBView__storage_, onPress),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeInt64,
-      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MatchaButtonPBView class]
@@ -92,7 +81,7 @@ typedef struct MatchaButtonPBView__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\002\001\n\000\002\007\000";
+        "\001\001\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
