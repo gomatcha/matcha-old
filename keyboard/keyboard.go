@@ -1,5 +1,10 @@
 package keyboard
 
+import (
+	"github.com/overcyn/matcha"
+	"github.com/overcyn/matcha/view"
+)
+
 type key struct{}
 type textKey struct{}
 
@@ -29,52 +34,67 @@ func (g *Responder) Visible() bool {
 // func (g *Responder) Notifier() *comm.BoolNotifier {
 // }
 
-// type Helper struct {
-// 	responder *Responder
-// 	notifyId  comm.Id
-// }
+type node struct {
+	children  map[matcha.Id]*node
+	responder *Responder
+}
 
-// type Middleware struct {
-// }
+type Middleware struct {
+	root *node
+}
 
-// func (m *Middleware) Build(ctx *view.Context, next *view.Model) {
-// 	// Get previous helper and unsubscribe.
-// 	var prevHelper *Helper
-// 	if prevModel := ctx.PrevModel(); prevModel != nil && prevModel.Values != nil {
-// 		prevHelper, _ = prevModel.Values[HelperKey].(*Helper)
-// 	}
-// 	if prevHelper != nil {
-// 		prevHelper.responder.Unnotify(prevHelper.notifyId)
-// 	}
+func (m *Middleware) Build(ctx *view.Context, next *view.Model) {
+	resp, ok := next.Values[Key].(*Responder)
+	path := ctx.Path()
+	n := m.root.at(path)
+	if n == nil {
+		n = m.root.add(path)
+	}
+	n.responder = resp
 
-// 	// Get new helper.
-// 	helper, ok := next.Values[HelperKey].(*Helper)
-// 	if !ok {
-// 		return
-// 	}
-// 	helper.notifyId = helper.responder.Notify(func() {
-// 		// Subscribe
-// 		ctx.Update()
-// 	})
+	if !ok {
+		for i := 0; i < len(path); i++ {
+			p := path[0 : len(path)-i]
+			n := m.root.at(p)
+			if n != nil && n.responder == nil {
+				m.root.delete(p)
+			}
+		}
+	}
+}
 
-// 	funcId := ctx.NewFuncId()
-// 	f := func(data []byte) {
-// 		// keyboard visibility
+func (n *node) add(path []matcha.Id) *node {
+	child, ok := n.children[path[0]]
+	if !ok {
+		child = &node{}
+		n.children[path[0]] = child
+	}
+	if len(path) > 1 {
+		return child.add(path[1:])
+	} else {
+		return child
+	}
+}
 
-// 		if true {
-// 			helper.responder.Show()
-// 		} else {
-// 			helper.responder.Hide()
-// 		}
+func (n *node) at(path []matcha.Id) *node {
+	if len(path) == 0 {
+		return n
+	}
+	child, ok := n.children[path[0]]
+	if !ok {
+		return nil
+	}
+	return child.at(path[1:])
+}
 
-// 	}
-
-// 	pb, ok := next.NativeViewState.(*textinput.View)
-// 	if !ok {
-// 		return
-// 	}
-// 	pb.KeyboardVisible = helper.responder.Visible()
-// 	pb.OnKeyboard = funcId
-
-// 	next.NativeFuncs[funcId] = f
-// }
+func (n *node) delete(path []matcha.Id) {
+	if len(path) == 1 {
+		delete(n.children, path[0])
+	} else {
+		child, ok := n.children[path[0]]
+		if !ok {
+			return
+		}
+		child.delete(path[1:])
+	}
+}

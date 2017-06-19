@@ -277,6 +277,16 @@ func (ctx *Context) Id() matcha.Id {
 	return ctx.node.id
 }
 
+func (ctx *Context) Path() []matcha.Id {
+	if ctx.parent != nil {
+		return ctx.parent.Path()
+	}
+	if ctx.node == nil {
+		return []matcha.Id{0}
+	}
+	return nil
+}
+
 type updateFlag int
 
 const (
@@ -312,10 +322,12 @@ func newRoot(s Screen) *root {
 	defer s.Unlock()
 
 	v := s.View(&Context{})
+	id := v.Id()
 
 	root := &root{}
 	root.node = &node{
-		id:   v.Id(),
+		id:   id,
+		path: []matcha.Id{id},
 		view: v,
 		root: root,
 	}
@@ -426,6 +438,7 @@ func (root *root) call(funcId int64, viewId int64, args []reflect.Value) []refle
 
 type node struct {
 	id    matcha.Id
+	path  []matcha.Id
 	root  *root
 	view  View
 	stage Stage
@@ -533,8 +546,13 @@ func (n *node) build(prevIds map[viewCacheKey]matcha.Id, prevNodes map[matcha.Id
 				}
 			}
 
+			path := make([]matcha.Id, len(n.path)+1)
+			copy(path, n.path)
+			path[len(n.path)] = id
+
 			children[id] = &node{
 				id:   id,
+				path: path,
 				view: view,
 				root: n.root,
 			}
