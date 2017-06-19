@@ -2,13 +2,11 @@ package keyboard
 
 import (
 	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/internal/radix"
-	"github.com/overcyn/matcha/view"
 )
 
-type key struct{}
+// type key struct{}
 
-var Key = key{}
+// var Key = key{}
 
 type Responder struct {
 	visible bool
@@ -47,25 +45,25 @@ func (g *Responder) Unnotify(id comm.Id) {
 	g.value.Unnotify(id)
 }
 
-type Middleware struct {
-	radix *radix.Radix
-}
+// type Middleware struct {
+// 	radix *radix.Radix
+// }
 
-func NewMiddleware() *Middleware {
-	return &Middleware{radix: radix.NewRadix()}
-}
+// func NewMiddleware() *Middleware {
+// 	return &Middleware{radix: radix.NewRadix()}
+// }
 
-func (m *Middleware) Build(ctx *view.Context, next *view.Model) {
-	responder, ok := next.Values[Key].(*Responder)
-	path := []int64{}
-	for _, i := range ctx.Path() {
-		path = append(path, int64(i))
-	}
+// func (m *Middleware) Build(ctx *view.Context, next *view.Model) {
+// 	responder, ok := next.Values[Key].(*Responder)
+// 	path := []int64{}
+// 	for _, i := range ctx.Path() {
+// 		path = append(path, int64(i))
+// 	}
 
-	if ok {
-		n := m.radix.Insert(path)
-		n.Value = responder
-	} else {
-		m.radix.Delete(path)
-	}
-}
+// 	if ok {
+// 		n := m.radix.Insert(path)
+// 		n.Value = responder
+// 	} else {
+// 		m.radix.Delete(path)
+// 	}
+// }

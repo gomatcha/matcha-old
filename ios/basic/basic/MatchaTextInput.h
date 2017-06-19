@@ -7,4 +7,5 @@
 @property (nonatomic, weak) MatchaViewNode *viewNode;
 @property (nonatomic, strong) MatchaNode *node;
 @property (nonatomic, assign) bool hasFocus;
+@property (nonatomic, strong) NSAttributedString *attrStr2;
 @end

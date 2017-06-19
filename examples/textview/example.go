@@ -7,6 +7,7 @@ import (
 	"github.com/overcyn/matcha/layout/constraint"
 	"github.com/overcyn/matcha/paint"
 	"github.com/overcyn/matcha/text"
+	"github.com/overcyn/matcha/touch"
 	"github.com/overcyn/matcha/view"
 	"github.com/overcyn/matcha/view/textinput"
 	"github.com/overcyn/matcha/view/textview"
@@ -89,10 +90,20 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 		s.LeftEqual(chlG.Left())
 	})
 
+	tap := &touch.TapRecognizer{
+		Count: 2,
+		OnTouch: func(e *touch.TapEvent) {
+			v.responder.Dismiss()
+		},
+	}
+
 	return &view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+		Values: map[interface{}]interface{}{
+			touch.Key: []touch.Recognizer{tap},
+		},
 	}
 }
 

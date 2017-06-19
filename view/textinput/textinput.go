@@ -21,7 +21,6 @@ type View struct {
 	// TODO(KD):
 	// StyledText *text.StyledText
 	// Cursor position?
-	// Keyboard visibility?
 
 	OnChange func(*text.Text)
 }
