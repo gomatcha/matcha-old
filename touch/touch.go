@@ -3,6 +3,7 @@ package touch
 import (
 	"fmt"
 	"strconv"
+	"sync/atomic"
 	"time"
 
 	"github.com/gogo/protobuf/proto"
@@ -24,6 +25,13 @@ var idKey = _idKey{}
 
 type Middleware struct {
 	maxId int64
+}
+
+var maxFuncId int64 = 0
+
+// NewFuncId generates a new func identifier for serialization.
+func newFuncId() int64 {
+	return atomic.AddInt64(&maxFuncId, 1)
 }
 
 func (r *Middleware) Build(ctx *view.Context, next *view.Model) {
@@ -144,7 +152,7 @@ func (r *TapRecognizer) Equal(a Recognizer) bool {
 }
 
 func (r *TapRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[string]interface{}) {
-	funcId := ctx.NewFuncId()
+	funcId := newFuncId()
 	f := func(data []byte) {
 		pbevent := &touch.TapEvent{}
 		err := proto.Unmarshal(data, pbevent)
@@ -218,7 +226,7 @@ func (r *PressRecognizer) Equal(a Recognizer) bool {
 }
 
 func (r *PressRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[string]interface{}) {
-	funcId := ctx.NewFuncId()
+	funcId := newFuncId()
 	f := func(data []byte) {
 		event := &PressEvent{}
 		pbevent := &touch.PressEvent{}
@@ -276,7 +284,7 @@ func (r *ButtonRecognizer) Equal(a Recognizer) bool {
 }
 
 func (r *ButtonRecognizer) MarshalProtobuf(ctx *view.Context) (proto.Message, map[string]interface{}) {
-	funcId := ctx.NewFuncId()
+	funcId := newFuncId()
 	f := func(data []byte) {
 		event := &ButtonEvent{}
 		pbevent := &touch.ButtonEvent{}

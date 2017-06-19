@@ -25,7 +25,6 @@ import (
 var MainMu sync.Mutex
 
 var maxId int64
-var maxFuncId int64
 
 // Middleware is called on the result of View.Build(*context).
 type Middleware interface {
@@ -239,11 +238,6 @@ func (ctx *Context) newId(key string, prefix string) matcha.Id {
 		ctx.node.root.ids[cacheKey] = id
 	}
 	return id
-}
-
-// NewFuncId generates a new func identifier for serialization.
-func (ctx *Context) NewFuncId() int64 {
-	return atomic.AddInt64(&maxFuncId, 1)
 }
 
 // SkipBuild marks the child ids as not needing to be rebuilt.
