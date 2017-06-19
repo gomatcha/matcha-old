@@ -1,7 +1,7 @@
 package keyboard
 
 import (
-	"github.com/overcyn/matcha"
+	"github.com/overcyn/matcha/internal/radix"
 	"github.com/overcyn/matcha/view"
 )
 
@@ -34,67 +34,25 @@ func (g *Responder) Visible() bool {
 // func (g *Responder) Notifier() *comm.BoolNotifier {
 // }
 
-type node struct {
-	children  map[matcha.Id]*node
-	responder *Responder
+type Middleware struct {
+	radix *radix.Radix
 }
 
-type Middleware struct {
-	root *node
+func NewMiddleware() *Middleware {
+	return &Middleware{radix: radix.NewRadix()}
 }
 
 func (m *Middleware) Build(ctx *view.Context, next *view.Model) {
-	resp, ok := next.Values[Key].(*Responder)
-	path := ctx.Path()
-	n := m.root.at(path)
-	if n == nil {
-		n = m.root.add(path)
+	responder, ok := next.Values[Key].(*Responder)
+	path := []int64{}
+	for _, i := range ctx.Path() {
+		path = append(path, int64(i))
 	}
-	n.responder = resp
 
-	if !ok {
-		for i := 0; i < len(path); i++ {
-			p := path[0 : len(path)-i]
-			n := m.root.at(p)
-			if n != nil && n.responder == nil {
-				m.root.delete(p)
-			}
-		}
-	}
-}
-
-func (n *node) add(path []matcha.Id) *node {
-	child, ok := n.children[path[0]]
-	if !ok {
-		child = &node{}
-		n.children[path[0]] = child
-	}
-	if len(path) > 1 {
-		return child.add(path[1:])
+	if ok {
+		n := m.radix.Insert(path)
+		n.Value = responder
 	} else {
-		return child
-	}
-}
-
-func (n *node) at(path []matcha.Id) *node {
-	if len(path) == 0 {
-		return n
-	}
-	child, ok := n.children[path[0]]
-	if !ok {
-		return nil
-	}
-	return child.at(path[1:])
-}
-
-func (n *node) delete(path []matcha.Id) {
-	if len(path) == 1 {
-		delete(n.children, path[0])
-	} else {
-		child, ok := n.children[path[0]]
-		if !ok {
-			return
-		}
-		child.delete(path[1:])
+		m.radix.Delete(path)
 	}
 }

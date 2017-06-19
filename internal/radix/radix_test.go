@@ -1,7 +1,6 @@
 package radix
 
 import (
-	"fmt"
 	"testing"
 )
 
