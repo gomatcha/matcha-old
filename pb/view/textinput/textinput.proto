@@ -7,11 +7,15 @@ option objc_class_prefix = "MatchaTextInputPB";
 
 message View {
     matcha.text.StyledText styledText = 1;
-    bool keyboardVisible = 4;
+    bool focused = 4;
     int64 onUpdate = 2;
-    int64 onKeyboard = 3;
+    int64 onFocus = 3;
 }
 
 message Event {
     matcha.text.StyledText styledText = 1;
+}
+
+message FocusEvent {
+    bool focused = 1;
 }

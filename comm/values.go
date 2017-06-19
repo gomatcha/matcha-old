@@ -35,40 +35,29 @@ package comm
 // 	s.value = v
 // }
 
-// type Bool struct {
-// 	store Store3
-// 	value bool
-// }
+type Value struct {
+	funcs map[Id]func()
+	maxId Id
+}
 
-// func (s *Bool) Notify() chan struct{} {
-// 	return s.store.Notify()
-// }
+func (s *Value) Notify(f func()) Id {
+	s.maxId += 1
+	if s.funcs == nil {
+		s.funcs = map[Id]func(){}
+	}
+	s.funcs[s.maxId] = f
+	return s.maxId
+}
 
-// func (s *Bool) Unnotify(c chan struct{}) {
-// 	s.store.Unnotify(c)
-// }
+func (s *Value) Unnotify(id Id) {
+	delete(s.funcs, id)
+}
 
-// func (s *Bool) Value() bool {
-// 	return s.Get(nil)
-// }
-
-// func (s *Bool) Get(tx *Tx) bool {
-// 	if tx == nil {
-// 		tx = NewReadTx()
-// 		defer tx.Commit()
-// 	}
-// 	s.store.Read(tx)
-// 	return s.value
-// }
-
-// func (s *Bool) Set(v bool, tx *Tx) {
-// 	if tx == nil {
-// 		tx = NewWriteTx()
-// 		defer tx.Commit()
-// 	}
-// 	s.store.Write(tx)
-// 	s.value = v
-// }
+func (s *Value) Signal() {
+	for _, f := range s.funcs {
+		f()
+	}
+}
 
 // // type Int struct{}
 // // type Uint struct{}

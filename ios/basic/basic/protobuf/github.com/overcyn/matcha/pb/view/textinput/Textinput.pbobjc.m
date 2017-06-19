@@ -49,15 +49,15 @@ static GPBFileDescriptor *MatchaTextInputPBTextinputRoot_FileDescriptor(void) {
 @implementation MatchaTextInputPBView
 
 @dynamic hasStyledText, styledText;
-@dynamic keyboardVisible;
+@dynamic focused;
 @dynamic onUpdate;
-@dynamic onKeyboard;
+@dynamic onFocus;
 
 typedef struct MatchaTextInputPBView__storage_ {
   uint32_t _has_storage_[1];
   MatchaPBStyledText *styledText;
   int64_t onUpdate;
-  int64_t onKeyboard;
+  int64_t onFocus;
 } MatchaTextInputPBView__storage_;
 
 // This method is threadsafe because it is initially called
@@ -85,21 +85,21 @@ typedef struct MatchaTextInputPBView__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
-        .name = "onKeyboard",
+        .name = "onFocus",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaTextInputPBView_FieldNumber_OnKeyboard,
+        .number = MatchaTextInputPBView_FieldNumber_OnFocus,
         .hasIndex = 4,
-        .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, onKeyboard),
+        .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, onFocus),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
       {
-        .name = "keyboardVisible",
+        .name = "focused",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaTextInputPBView_FieldNumber_KeyboardVisible,
+        .number = MatchaTextInputPBView_FieldNumber_Focused,
         .hasIndex = 1,
         .offset = 2,  // Stored in _has_storage_ to save space.
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBool,
       },
     };
@@ -113,7 +113,7 @@ typedef struct MatchaTextInputPBView__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\001\n\000\002\010\000\003\n\000\004\017\000";
+        "\003\001\n\000\002\010\000\003\007\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -164,6 +164,48 @@ typedef struct MatchaTextInputPBEvent__storage_ {
         "\001\001\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - MatchaTextInputPBFocusEvent
+
+@implementation MatchaTextInputPBFocusEvent
+
+@dynamic focused;
+
+typedef struct MatchaTextInputPBFocusEvent__storage_ {
+  uint32_t _has_storage_[1];
+} MatchaTextInputPBFocusEvent__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "focused",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaTextInputPBFocusEvent_FieldNumber_Focused,
+        .hasIndex = 0,
+        .offset = 1,  // Stored in _has_storage_ to save space.
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBool,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MatchaTextInputPBFocusEvent class]
+                                     rootClass:[MatchaTextInputPBTextinputRoot class]
+                                          file:MatchaTextInputPBTextinputRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MatchaTextInputPBFocusEvent__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }

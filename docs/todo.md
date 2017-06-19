@@ -1,7 +1,7 @@
 // matcha.Id is in the matcha package because view depends on layout. and layout needs to use the Ids
 
 High:
-* Hide keyboard.
+* Send keyboard focus events back.
 * keyboard types
 * Rebuild settings app.
 
@@ -14,6 +14,8 @@ Medium:
 * UINavigation item button. uitabbar item image
 * uitabbaritem and uinavigationitem should observer their children, so they can update their button/bar
 * callbacks should not pass view as parameter.
+* Get rid of funcId, and call by view/function index
+* How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
 
 Low:
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack

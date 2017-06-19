@@ -1,17 +1,18 @@
 package keyboard
 
 import (
+	"github.com/overcyn/matcha/comm"
 	"github.com/overcyn/matcha/internal/radix"
 	"github.com/overcyn/matcha/view"
 )
 
 type key struct{}
-type textKey struct{}
 
 var Key = key{}
-var HelperKey = textKey{}
 
 type Responder struct {
+	visible bool
+	value   comm.Value
 }
 
 // func (g *Responder) Next() {
@@ -21,18 +22,30 @@ type Responder struct {
 // }
 
 func (g *Responder) Show() {
-
+	if !g.visible {
+		g.visible = true
+		g.value.Signal()
+	}
 }
 
 func (g *Responder) Dismiss() {
+	if g.visible {
+		g.visible = false
+		g.value.Signal()
+	}
 }
 
 func (g *Responder) Visible() bool {
-	return true
+	return g.visible
 }
 
-// func (g *Responder) Notifier() *comm.BoolNotifier {
-// }
+func (g *Responder) Notify(f func()) comm.Id {
+	return g.value.Notify(f)
+}
+
+func (g *Responder) Unnotify(id comm.Id) {
+	g.value.Unnotify(id)
+}
 
 type Middleware struct {
 	radix *radix.Radix

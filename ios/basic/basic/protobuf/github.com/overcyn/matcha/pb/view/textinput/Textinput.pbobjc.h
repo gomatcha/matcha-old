@@ -51,8 +51,8 @@ NS_ASSUME_NONNULL_BEGIN
 typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
   MatchaTextInputPBView_FieldNumber_StyledText = 1,
   MatchaTextInputPBView_FieldNumber_OnUpdate = 2,
-  MatchaTextInputPBView_FieldNumber_OnKeyboard = 3,
-  MatchaTextInputPBView_FieldNumber_KeyboardVisible = 4,
+  MatchaTextInputPBView_FieldNumber_OnFocus = 3,
+  MatchaTextInputPBView_FieldNumber_Focused = 4,
 };
 
 @interface MatchaTextInputPBView : GPBMessage
@@ -61,11 +61,11 @@ typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
 /** Test to see if @c styledText has been set. */
 @property(nonatomic, readwrite) BOOL hasStyledText;
 
-@property(nonatomic, readwrite) BOOL keyboardVisible;
+@property(nonatomic, readwrite) BOOL focused;
 
 @property(nonatomic, readwrite) int64_t onUpdate;
 
-@property(nonatomic, readwrite) int64_t onKeyboard;
+@property(nonatomic, readwrite) int64_t onFocus;
 
 @end
 
@@ -80,6 +80,18 @@ typedef GPB_ENUM(MatchaTextInputPBEvent_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) MatchaPBStyledText *styledText;
 /** Test to see if @c styledText has been set. */
 @property(nonatomic, readwrite) BOOL hasStyledText;
+
+@end
+
+#pragma mark - MatchaTextInputPBFocusEvent
+
+typedef GPB_ENUM(MatchaTextInputPBFocusEvent_FieldNumber) {
+  MatchaTextInputPBFocusEvent_FieldNumber_Focused = 1,
+};
+
+@interface MatchaTextInputPBFocusEvent : GPBMessage
+
+@property(nonatomic, readwrite) BOOL focused;
 
 @end
 

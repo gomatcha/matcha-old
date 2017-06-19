@@ -16,6 +16,7 @@ type View struct {
 	Text      *text.Text
 	Style     *text.Style
 	Responder *keyboard.Responder
+	responder *keyboard.Responder
 
 	// TODO(KD):
 	// StyledText *text.StyledText
@@ -43,6 +44,17 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		st.Set(v.Style, 0, 0)
 	}
 
+	if v.Responder != v.responder {
+		if v.responder != nil {
+			v.Unsubscribe(v.responder)
+		}
+
+		v.responder = v.Responder
+		if v.responder != nil {
+			v.Subscribe(v.responder)
+		}
+	}
+
 	funcId := ctx.NewFuncId()
 	f := func(data []byte) {
 		pbevent := &textinput.Event{}
@@ -58,17 +70,41 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		}
 	}
 
+	funcId2 := ctx.NewFuncId()
+	f2 := func(data []byte) {
+		pbevent := &textinput.FocusEvent{}
+		err := proto.Unmarshal(data, pbevent)
+		if err != nil {
+			fmt.Println("error", err)
+			return
+		}
+
+		if v.responder != nil {
+			if pbevent.Focused {
+				v.responder.Show()
+			} else {
+				v.responder.Dismiss()
+			}
+		}
+	}
+
+	focused := false
+	if v.responder != nil {
+		focused = v.responder.Visible()
+	}
+	fmt.Println("focused", focused)
+
 	return &view.Model{
-		Values: map[interface{}]interface{}{
-			keyboard.HelperKey: v.Responder,
-		},
 		NativeViewName: "github.com/overcyn/matcha/view/textinput",
 		NativeViewState: &textinput.View{
 			StyledText: st.MarshalProtobuf(),
+			Focused:    focused,
 			OnUpdate:   funcId,
+			OnFocus:    funcId2,
 		},
 		NativeFuncs: map[int64]interface{}{
 			funcId: f,
+			funcId: f2,
 		},
 	}
 }

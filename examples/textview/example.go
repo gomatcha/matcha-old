@@ -1,6 +1,9 @@
 package textview
 
 import (
+	"fmt"
+
+	"github.com/overcyn/matcha/keyboard"
 	"github.com/overcyn/matcha/layout/constraint"
 	"github.com/overcyn/matcha/paint"
 	"github.com/overcyn/matcha/text"
@@ -21,7 +24,8 @@ func init() {
 
 type TextView struct {
 	*view.Embed
-	text *text.Text
+	text      *text.Text
+	responder *keyboard.Responder
 }
 
 func New(ctx *view.Context, key string) *TextView {
@@ -29,8 +33,16 @@ func New(ctx *view.Context, key string) *TextView {
 		return v
 	}
 	return &TextView{
-		text:  text.New("blah"),
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed:     view.NewEmbed(ctx.NewId(key)),
+		text:      text.New("blah"),
+		responder: &keyboard.Responder{},
+	}
+}
+
+func (v *TextView) Lifecycle(from, to view.Stage) {
+	if view.EntersStage(from, to, view.StageVisible) {
+		v.responder.Show()
+		fmt.Println("show", v.responder.Visible())
 	}
 }
 
@@ -58,6 +70,7 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 
 	input := textinput.New(ctx, "input")
 	input.Text = v.text
+	input.Responder = v.responder
 	input.OnChange = func(input *textinput.View) {
 		v.Update()
 	}

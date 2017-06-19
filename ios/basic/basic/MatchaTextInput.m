@@ -19,8 +19,16 @@
     MatchaTextInputPBView *view = (id)[state unpackMessageClass:[MatchaTextInputPBView class] error:&error];
 
     self.funcId = view.onUpdate;
+    self.funcId2 = view.onFocus;
     NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:view.styledText];
     self.attributedText = attrString;
+    self.hasFocus = view.focused;
+    
+    if (self.hasFocus && !self.isFirstResponder) {
+        [self becomeFirstResponder];
+    } else if (!self.hasFocus && self.isFirstResponder) {
+        [self resignFirstResponder];
+    }
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
