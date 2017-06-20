@@ -27,6 +27,8 @@
 
 CF_EXTERN_C_BEGIN
 
+@class MatchaPBImage;
+
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - MatchaPBImageRoot
@@ -80,6 +82,23 @@ typedef GPB_ENUM(MatchaPBImageProperties_FieldNumber) {
 @property(nonatomic, readwrite) int64_t height;
 
 @property(nonatomic, readwrite) double scale;
+
+@end
+
+#pragma mark - MatchaPBImageOrResource
+
+typedef GPB_ENUM(MatchaPBImageOrResource_FieldNumber) {
+  MatchaPBImageOrResource_FieldNumber_Image = 1,
+  MatchaPBImageOrResource_FieldNumber_Path = 2,
+};
+
+@interface MatchaPBImageOrResource : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBImage *image;
+/** Test to see if @c image has been set. */
+@property(nonatomic, readwrite) BOOL hasImage;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *path;
 
 @end
 

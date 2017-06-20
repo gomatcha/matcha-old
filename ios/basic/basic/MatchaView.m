@@ -79,13 +79,7 @@
     NSError *error = nil;
     MatchaImageViewPBView *pbimageview = (id)[state unpackMessageClass:[MatchaImageViewPBView class] error:&error];
     
-    UIImage *image = nil;
-    if (pbimageview.hasImage) {
-        image = [[UIImage alloc] initWithProtobuf:pbimageview.image];
-        image = [UIImage imageWithCIImage:image.CIImage scale:pbimageview.scale orientation:image.imageOrientation];
-    } else if (pbimageview.hasResource) {
-        image = [UIImage imageNamed:pbimageview.resource.path];
-    }
+    UIImage *image = [[UIImage alloc] initWithImageOrResourceProtobuf:pbimageview.image];
     
     switch (pbimageview.resizeMode) {
     case MatchaImageViewPBResizeMode_Fit:

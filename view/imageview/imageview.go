@@ -11,7 +11,6 @@ import (
 	"github.com/overcyn/matcha/env"
 	"github.com/overcyn/matcha/layout"
 	"github.com/overcyn/matcha/pb"
-	pbenv "github.com/overcyn/matcha/pb/env"
 	"github.com/overcyn/matcha/pb/view/imageview"
 	"github.com/overcyn/matcha/view"
 )
@@ -70,8 +69,7 @@ type View struct {
 	ResizeMode ResizeMode
 	Tint       color.Color
 	image      image.Image
-	pbImage    *pb.Image
-	pbRes      *pbenv.ImageResource
+	pbImage    *pb.ImageOrResource
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -86,14 +84,7 @@ func New(ctx *view.Context, key string) *View {
 func (v *View) Build(ctx *view.Context) *view.Model {
 	if v.Image != v.image {
 		v.image = v.Image
-
-		if res, ok := v.image.(*env.ImageResource); ok {
-			v.pbImage = nil
-			v.pbRes = res.MarshalProtobuf()
-		} else {
-			v.pbImage = pb.ImageEncode(v.image)
-			v.pbRes = nil
-		}
+		v.pbImage = env.ImageMarshalProtobuf(v.image)
 	}
 
 	// Default to Center if we don't have an image
@@ -114,7 +105,6 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		NativeViewName: "github.com/overcyn/matcha/view/imageview",
 		NativeViewState: &imageview.View{
 			Image:      v.pbImage,
-			Resource:   v.pbRes,
 			Scale:      scale,
 			ResizeMode: v.ResizeMode.MarshalProtobuf(),
 			Tint:       pb.ColorEncode(v.Tint),

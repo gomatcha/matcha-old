@@ -57,8 +57,8 @@ static GPBFileDescriptor *MatchaTabScreenPBTabscreenRoot_FileDescriptor(void) {
 typedef struct MatchaTabScreenPBChildView__storage_ {
   uint32_t _has_storage_[1];
   NSString *title;
-  MatchaPBImage *icon;
-  MatchaPBImage *selectedIcon;
+  MatchaPBImageOrResource *icon;
+  MatchaPBImageOrResource *selectedIcon;
   NSString *badge;
   int64_t id_p;
 } MatchaTabScreenPBChildView__storage_;
@@ -89,7 +89,7 @@ typedef struct MatchaTabScreenPBChildView__storage_ {
       },
       {
         .name = "icon",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBImage),
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBImageOrResource),
         .number = MatchaTabScreenPBChildView_FieldNumber_Icon,
         .hasIndex = 2,
         .offset = (uint32_t)offsetof(MatchaTabScreenPBChildView__storage_, icon),
@@ -98,7 +98,7 @@ typedef struct MatchaTabScreenPBChildView__storage_ {
       },
       {
         .name = "selectedIcon",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBImage),
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBImageOrResource),
         .number = MatchaTabScreenPBChildView_FieldNumber_SelectedIcon,
         .hasIndex = 3,
         .offset = (uint32_t)offsetof(MatchaTabScreenPBChildView__storage_, selectedIcon),

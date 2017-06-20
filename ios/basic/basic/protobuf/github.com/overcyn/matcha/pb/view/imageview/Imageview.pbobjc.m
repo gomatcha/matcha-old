@@ -15,7 +15,6 @@
 
  #import "github.com/overcyn/matcha/pb/view/imageview/Imageview.pbobjc.h"
  #import "github.com/overcyn/matcha/pb/Color.pbobjc.h"
- #import "github.com/overcyn/matcha/pb/env/Resource.pbobjc.h"
  #import "github.com/overcyn/matcha/pb/Image.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
@@ -89,7 +88,6 @@ BOOL MatchaImageViewPBResizeMode_IsValidValue(int32_t value__) {
 @implementation MatchaImageViewPBView
 
 @dynamic hasImage, image;
-@dynamic hasResource, resource;
 @dynamic resizeMode;
 @dynamic hasTint, tint;
 @dynamic scale;
@@ -97,9 +95,8 @@ BOOL MatchaImageViewPBResizeMode_IsValidValue(int32_t value__) {
 typedef struct MatchaImageViewPBView__storage_ {
   uint32_t _has_storage_[1];
   MatchaImageViewPBResizeMode resizeMode;
-  MatchaPBImage *image;
+  MatchaPBImageOrResource *image;
   MatchaPBColor *tint;
-  MatchaPBEnvImageResource *resource;
   double scale;
 } MatchaImageViewPBView__storage_;
 
@@ -111,7 +108,7 @@ typedef struct MatchaImageViewPBView__storage_ {
     static GPBMessageFieldDescription fields[] = {
       {
         .name = "image",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBImage),
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBImageOrResource),
         .number = MatchaImageViewPBView_FieldNumber_Image,
         .hasIndex = 0,
         .offset = (uint32_t)offsetof(MatchaImageViewPBView__storage_, image),
@@ -122,7 +119,7 @@ typedef struct MatchaImageViewPBView__storage_ {
         .name = "resizeMode",
         .dataTypeSpecific.enumDescFunc = MatchaImageViewPBResizeMode_EnumDescriptor,
         .number = MatchaImageViewPBView_FieldNumber_ResizeMode,
-        .hasIndex = 2,
+        .hasIndex = 1,
         .offset = (uint32_t)offsetof(MatchaImageViewPBView__storage_, resizeMode),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldHasEnumDescriptor),
         .dataType = GPBDataTypeEnum,
@@ -131,17 +128,8 @@ typedef struct MatchaImageViewPBView__storage_ {
         .name = "tint",
         .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBColor),
         .number = MatchaImageViewPBView_FieldNumber_Tint,
-        .hasIndex = 3,
+        .hasIndex = 2,
         .offset = (uint32_t)offsetof(MatchaImageViewPBView__storage_, tint),
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeMessage,
-      },
-      {
-        .name = "resource",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBEnvImageResource),
-        .number = MatchaImageViewPBView_FieldNumber_Resource,
-        .hasIndex = 1,
-        .offset = (uint32_t)offsetof(MatchaImageViewPBView__storage_, resource),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
@@ -149,7 +137,7 @@ typedef struct MatchaImageViewPBView__storage_ {
         .name = "scale",
         .dataTypeSpecific.className = NULL,
         .number = MatchaImageViewPBView_FieldNumber_Scale,
-        .hasIndex = 4,
+        .hasIndex = 3,
         .offset = (uint32_t)offsetof(MatchaImageViewPBView__storage_, scale),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeDouble,

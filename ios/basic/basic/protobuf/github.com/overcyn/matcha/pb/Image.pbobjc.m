@@ -184,6 +184,60 @@ typedef struct MatchaPBImageProperties__storage_ {
 
 @end
 
+#pragma mark - MatchaPBImageOrResource
+
+@implementation MatchaPBImageOrResource
+
+@dynamic hasImage, image;
+@dynamic path;
+
+typedef struct MatchaPBImageOrResource__storage_ {
+  uint32_t _has_storage_[1];
+  MatchaPBImage *image;
+  NSString *path;
+} MatchaPBImageOrResource__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "image",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBImage),
+        .number = MatchaPBImageOrResource_FieldNumber_Image,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MatchaPBImageOrResource__storage_, image),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "path",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaPBImageOrResource_FieldNumber_Path,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MatchaPBImageOrResource__storage_, path),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MatchaPBImageOrResource class]
+                                     rootClass:[MatchaPBImageRoot class]
+                                          file:MatchaPBImageRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MatchaPBImageOrResource__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 
 #pragma clang diagnostic pop
 

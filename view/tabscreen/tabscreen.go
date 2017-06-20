@@ -7,8 +7,8 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/env"
 	"github.com/overcyn/matcha/layout/constraint"
-	"github.com/overcyn/matcha/pb"
 	tabnavpb "github.com/overcyn/matcha/pb/view/tabscreen"
 	"github.com/overcyn/matcha/view"
 )
@@ -89,8 +89,8 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		screenspb = append(screenspb, &tabnavpb.ChildView{
 			Id:           int64(chld.Id()),
 			Title:        button.Title,
-			Icon:         pb.ImageEncode(button.Icon),
-			SelectedIcon: pb.ImageEncode(button.SelectedIcon),
+			Icon:         env.ImageMarshalProtobuf(button.Icon),
+			SelectedIcon: env.ImageMarshalProtobuf(button.SelectedIcon),
 			Badge:        button.Badge,
 		})
 

@@ -1,7 +1,6 @@
 syntax = "proto3";
 package matcha.view.imageview;
 import "github.com/overcyn/matcha/pb/color.proto";
-import "github.com/overcyn/matcha/pb/env/resource.proto";
 import "github.com/overcyn/matcha/pb/image.proto";
 
 option go_package = "imageview";
@@ -15,8 +14,7 @@ enum ResizeMode {
 }
 
 message View {
-    matcha.Image image = 1;
-    env.ImageResource resource = 4;
+    matcha.ImageOrResource image = 1;
     ResizeMode resizeMode = 2;
     matcha.Color tint = 3;
     double scale = 5;

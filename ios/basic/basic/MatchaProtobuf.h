@@ -35,6 +35,7 @@
 
 @interface UIImage (Matcha)
 - (id)initWithProtobuf:(MatchaPBImage *)value;
+- (id)initWithImageOrResourceProtobuf:(MatchaPBImageOrResource *)value;
 - (MatchaPBImage *)protobuf;
 @end
 

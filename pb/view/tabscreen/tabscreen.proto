@@ -8,8 +8,8 @@ option objc_class_prefix = "MatchaTabScreenPB";
 message ChildView {
     int64 id = 1;
     string title = 2;
-    matcha.Image icon = 3;
-    matcha.Image selectedIcon = 4;
+    matcha.ImageOrResource icon = 3;
+    matcha.ImageOrResource selectedIcon = 4;
     string badge = 5;
 }
 

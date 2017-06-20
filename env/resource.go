@@ -8,7 +8,7 @@ import (
 	"golang.org/x/image/colornames"
 
 	"github.com/gogo/protobuf/proto"
-	pb2 "github.com/overcyn/matcha/pb"
+	"github.com/overcyn/matcha/pb"
 	"github.com/overcyn/matcha/pb/env"
 	"github.com/overcyn/matchabridge"
 )
@@ -44,7 +44,7 @@ type ImageResource struct {
 
 func LoadImage(path string) (*ImageResource, error) {
 	propData := matchabridge.Bridge().Call("propertiesForResource:", matchabridge.String(path)).ToInterface().([]byte)
-	props := &pb2.ImageProperties{}
+	props := &pb.ImageProperties{}
 	err := proto.Unmarshal(propData, props)
 	if err != nil {
 		return nil, err
@@ -105,5 +105,20 @@ func (res *ImageResource) MarshalProtobuf() *env.ImageResource {
 	}
 	return &env.ImageResource{
 		Path: res.path,
+	}
+}
+
+func ImageMarshalProtobuf(img image.Image) *pb.ImageOrResource {
+	if img == nil {
+		return nil
+	}
+	if res, ok := img.(*ImageResource); ok {
+		return &pb.ImageOrResource{
+			Path: res.path,
+		}
+	} else {
+		return &pb.ImageOrResource{
+			Image: pb.ImageEncode(img),
+		}
 	}
 }

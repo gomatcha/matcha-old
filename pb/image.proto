@@ -16,3 +16,8 @@ message ImageProperties {
     int64 height = 2;
     double scale = 3;
 }
+
+message ImageOrResource {
+    Image image = 1;
+    string path = 2;
+}

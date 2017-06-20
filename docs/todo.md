@@ -5,15 +5,14 @@ High:
 * UINavigation item button. uitabbar item image
 * uitabbaritem and uinavigationitem should observer their children, so they can update their button/bar
 * UINavigationItem cycle.
-* How to handle image scale
 
 
 Medium:
 * Rebuild settings app.
-* Documentation
+* Documentation.
 * Fix middleware.
-* Cache layout properties
-* Faster transferring of Images/ data blobs
+* Cache layout properties.
+* Only send updated views.
 * Collect native resources into assets.
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
 * Animations
@@ -27,7 +26,6 @@ Low:
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
 * Constraints should force views onto pixel boundries
 * Rotation
-* Accessibility
 * GridView
 * Flexbox
 * Picker
@@ -62,3 +60,4 @@ Pro:
 * MapView
 * More Touch Recognizers: Pan, Swipe, Pinch, EdgePan, Rotation
 * GPS
+* Accessibility

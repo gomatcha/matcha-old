@@ -250,6 +250,14 @@
     return [self initWithCIImage:image];
 }
 
+- (id)initWithImageOrResourceProtobuf:(MatchaPBImageOrResource *)value {
+    if (value.hasImage) {
+        return [self initWithProtobuf:value.image];
+    } else {
+        return [UIImage imageNamed:value.path];
+    }
+}
+
 - (MatchaPBImage *)protobuf {
     return nil;
 }

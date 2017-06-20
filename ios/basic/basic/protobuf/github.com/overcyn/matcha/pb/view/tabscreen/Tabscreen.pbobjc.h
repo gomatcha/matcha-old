@@ -27,7 +27,7 @@
 
 CF_EXTERN_C_BEGIN
 
-@class MatchaPBImage;
+@class MatchaPBImageOrResource;
 @class MatchaTabScreenPBChildView;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -63,11 +63,11 @@ typedef GPB_ENUM(MatchaTabScreenPBChildView_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *title;
 
-@property(nonatomic, readwrite, strong, null_resettable) MatchaPBImage *icon;
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBImageOrResource *icon;
 /** Test to see if @c icon has been set. */
 @property(nonatomic, readwrite) BOOL hasIcon;
 
-@property(nonatomic, readwrite, strong, null_resettable) MatchaPBImage *selectedIcon;
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBImageOrResource *selectedIcon;
 /** Test to see if @c selectedIcon has been set. */
 @property(nonatomic, readwrite) BOOL hasSelectedIcon;
 
