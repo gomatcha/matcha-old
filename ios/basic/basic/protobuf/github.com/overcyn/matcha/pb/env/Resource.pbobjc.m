@@ -86,6 +86,49 @@ typedef struct MatchaPBEnvResource__storage_ {
 
 @end
 
+#pragma mark - MatchaPBEnvImageResource
+
+@implementation MatchaPBEnvImageResource
+
+@dynamic path;
+
+typedef struct MatchaPBEnvImageResource__storage_ {
+  uint32_t _has_storage_[1];
+  NSString *path;
+} MatchaPBEnvImageResource__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "path",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaPBEnvImageResource_FieldNumber_Path,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MatchaPBEnvImageResource__storage_, path),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MatchaPBEnvImageResource class]
+                                     rootClass:[MatchaPBEnvResourceRoot class]
+                                          file:MatchaPBEnvResourceRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MatchaPBEnvImageResource__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 
 #pragma clang diagnostic pop
 

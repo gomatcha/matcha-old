@@ -2,11 +2,60 @@ package keyboard
 
 import (
 	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/pb/keyboard"
 )
 
-// type key struct{}
+type Type int
 
-// var Key = key{}
+const (
+	DefaultType           Type = iota
+	NumberType                 // Numbers
+	NumberPunctuationType      // Numbers + Punctuation
+	DecimalType                // Numbers + '.'
+	PhoneType                  // Numbers + Phone keys
+	ASCIIType                  // Ascii
+	EmailType                  // Ascii + '@' + '.'
+	URLType                    // Ascii + '.' + '/' + '.com'
+	WebSearchType              // Ascii + '.' + 'go'
+	NamePhoneType              // Ascii + Phone
+)
+
+func (t Type) MarshalProtobuf() keyboard.Type {
+	return keyboard.Type(t)
+}
+
+type Appearance int
+
+const (
+	DefaultAppearance Appearance = iota
+	LightAppearance
+	DarkAppearance
+)
+
+func (a Appearance) MarshalProtobuf() keyboard.Appearance {
+	return keyboard.Appearance(a)
+}
+
+type ReturnType int
+
+const (
+	DefaultReturnType ReturnType = iota
+	GoReturnType
+	GoogleReturnType
+	JoinReturnType
+	NextReturnType
+	RouteReturnType
+	SearchReturnType
+	SendReturnType
+	YahooReturnType
+	DoneReturnType
+	EmergencyCallReturnType
+	ContinueReturnType
+)
+
+func (t ReturnType) MarshalProtobuf() keyboard.ReturnType {
+	return keyboard.ReturnType(t)
+}
 
 type Responder struct {
 	visible bool
@@ -44,6 +93,10 @@ func (g *Responder) Notify(f func()) comm.Id {
 func (g *Responder) Unnotify(id comm.Id) {
 	g.value.Unnotify(id)
 }
+
+// type key struct{}
+
+// var Key = key{}
 
 // type Middleware struct {
 // 	radix *radix.Radix

@@ -250,6 +250,10 @@
     return [self initWithCIImage:image];
 }
 
+- (MatchaPBImage *)protobuf {
+    return nil;
+}
+
 @end
 
 @implementation UIFont (Matcha)
@@ -345,3 +349,124 @@
 }
 
 @end
+
+UIKeyboardType MatchaKeyboardTypeWithProtobuf(MatchaKeyboardPBType a) {
+    UIKeyboardType t = UIKeyboardTypeDefault;
+    switch (a) {
+    case MatchaKeyboardPBType_DefaultType: {
+        t = UIKeyboardTypeDefault;
+        break;
+    }
+    case MatchaKeyboardPBType_NumberType: {
+        t = UIKeyboardTypeNumberPad;
+        break;
+    }
+    case MatchaKeyboardPBType_NumberPunctuationType: {
+        t = UIKeyboardTypeNumbersAndPunctuation;
+        break;
+    }
+    case MatchaKeyboardPBType_DecimalType: {
+        t = UIKeyboardTypeDecimalPad;
+        break;
+    }
+    case MatchaKeyboardPBType_PhoneType: {
+        t = UIKeyboardTypePhonePad;
+        break;
+    }
+    case MatchaKeyboardPBType_AsciiType: {
+        t = UIKeyboardTypeASCIICapable;
+        break;
+    }
+    case MatchaKeyboardPBType_EmailType: {
+        t = UIKeyboardTypeEmailAddress;
+        break;
+    }
+    case MatchaKeyboardPBType_URLType: {
+        t = UIKeyboardTypeURL;
+        break;
+    }
+    case MatchaKeyboardPBType_WebSearchType: {
+        t = UIKeyboardTypeWebSearch;
+        break;
+    }
+    case MatchaKeyboardPBType_NamePhoneType: {
+        t = UIKeyboardTypeNamePhonePad;
+        break;
+    }
+    }
+    return t;
+}
+
+UIKeyboardAppearance MatchaKeyboardAppearanceWithProtobuf(MatchaKeyboardPBAppearance a) {
+    UIKeyboardAppearance t = UIKeyboardAppearanceDefault;
+    switch (a) {
+    case MatchaKeyboardPBAppearance_DefaultAppearance: {
+        t = UIKeyboardAppearanceDefault;
+        break;
+    }
+    case MatchaKeyboardPBAppearance_LightAppearance: {
+        t = UIKeyboardAppearanceLight;
+        break;
+    }
+    case MatchaKeyboardPBAppearance_DarkAppearance: {
+        t = UIKeyboardAppearanceDark;
+        break;
+    }
+    }
+    return t;
+}
+
+UIReturnKeyType MatchaReturnTypeWithProtobuf(MatchaKeyboardPBReturnType a) {
+    UIReturnKeyType t = UIReturnKeyDefault;
+    switch (a) {
+    case MatchaKeyboardPBReturnType_DefaultReturnType: {
+        t = UIReturnKeyDefault;
+        break;
+    }
+    case MatchaKeyboardPBReturnType_GoReturnType: {
+        t = UIReturnKeyGo;
+        break;
+    }
+    case MatchaKeyboardPBReturnType_GoogleReturnType: {
+        t = UIReturnKeyGoogle;
+        break;
+    }
+    case MatchaKeyboardPBReturnType_JoinReturnType: {
+        t = UIReturnKeyJoin;
+        break;
+    }
+    case MatchaKeyboardPBReturnType_NextReturnType: {
+        t = UIReturnKeyNext;
+        break;
+    }
+    case MatchaKeyboardPBReturnType_RouteReturnType: {
+        t = UIReturnKeyRoute;
+        break;
+    }
+    case MatchaKeyboardPBReturnType_SearchReturnType: {
+        t = UIReturnKeySearch;
+        break;
+    }
+    case MatchaKeyboardPBReturnType_SendReturnType: {
+        t = UIReturnKeySend;
+        break;
+    }
+    case MatchaKeyboardPBReturnType_YahooReturnType: {
+        t = UIReturnKeyYahoo;
+        break;
+    }
+    case MatchaKeyboardPBReturnType_DoneReturnType: {
+        t = UIReturnKeyDone;
+        break;
+    }
+    case MatchaKeyboardPBReturnType_EmergencyCallReturnType: {
+        t = UIReturnKeyEmergencyCall;
+        break;
+    }
+    case MatchaKeyboardPBReturnType_ContinueReturnType: {
+        t = UIReturnKeyContinue;
+        break;
+    }
+    }
+    return t;
+}

@@ -56,6 +56,18 @@ typedef GPB_ENUM(MatchaPBEnvResource_FieldNumber) {
 
 @end
 
+#pragma mark - MatchaPBEnvImageResource
+
+typedef GPB_ENUM(MatchaPBEnvImageResource_FieldNumber) {
+  MatchaPBEnvImageResource_FieldNumber_Path = 1,
+};
+
+@interface MatchaPBEnvImageResource : GPBMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *path;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END

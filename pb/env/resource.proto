@@ -7,3 +7,7 @@ option objc_class_prefix = "MatchaPBEnv";
 message Resource {
     string path = 1;
 }
+
+message ImageResource {
+    string path  = 1;
+}

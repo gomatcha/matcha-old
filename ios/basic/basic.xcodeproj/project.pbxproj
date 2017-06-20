@@ -20,6 +20,7 @@
 		67349E9A1EF66CF400E07354 /* Layout.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349E991EF66CF400E07354 /* Layout.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67349E9E1EF66F2C00E07354 /* Paint.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349E9D1EF66F2C00E07354 /* Paint.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67349EA21EF6712700E07354 /* Button.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349EA11EF6712700E07354 /* Button.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349EA61EF8A1C500E07354 /* Keyboard.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349EA51EF8A1C400E07354 /* Keyboard.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		674080DD1ED8D4800093D987 /* MatchaTapGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080DC1ED8D4800093D987 /* MatchaTapGestureRecognizer.m */; };
 		674080E31EDA4D480093D987 /* MatchaTouchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080E21EDA4D480093D987 /* MatchaTouchController.m */; };
 		674080E61EDC7EF80093D987 /* MatchaProtobuf.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080E51EDC7EF80093D987 /* MatchaProtobuf.m */; };
@@ -89,6 +90,8 @@
 		67349E9D1EF66F2C00E07354 /* Paint.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Paint.pbobjc.m; sourceTree = "<group>"; };
 		67349EA01EF6712700E07354 /* Button.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.pbobjc.h; sourceTree = "<group>"; };
 		67349EA11EF6712700E07354 /* Button.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Button.pbobjc.m; sourceTree = "<group>"; };
+		67349EA41EF8A1C400E07354 /* Keyboard.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Keyboard.pbobjc.h; sourceTree = "<group>"; };
+		67349EA51EF8A1C400E07354 /* Keyboard.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Keyboard.pbobjc.m; sourceTree = "<group>"; };
 		674080DB1ED8D4800093D987 /* MatchaTapGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaTapGestureRecognizer.h; sourceTree = "<group>"; };
 		674080DC1ED8D4800093D987 /* MatchaTapGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaTapGestureRecognizer.m; sourceTree = "<group>"; };
 		674080E11EDA4D480093D987 /* MatchaTouchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaTouchController.h; sourceTree = "<group>"; };
@@ -211,6 +214,15 @@
 				67349EA11EF6712700E07354 /* Button.pbobjc.m */,
 			);
 			path = button;
+			sourceTree = "<group>";
+		};
+		67349EA31EF8A1C400E07354 /* keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				67349EA41EF8A1C400E07354 /* Keyboard.pbobjc.h */,
+				67349EA51EF8A1C400E07354 /* Keyboard.pbobjc.m */,
+			);
+			path = keyboard;
 			sourceTree = "<group>";
 		};
 		674080DA1ED8D41F0093D987 /* Touch */ = {
@@ -350,6 +362,7 @@
 		677830FE1EE299A4009D9D7F /* pb */ = {
 			isa = PBXGroup;
 			children = (
+				67349EA31EF8A1C400E07354 /* keyboard */,
 				67349E9B1EF66F2C00E07354 /* paint */,
 				67349E971EF66CF400E07354 /* layout */,
 				677831511EF345E6009D9D7F /* text */,
@@ -553,6 +566,7 @@
 				677830F91EDFF2A4009D9D7F /* MatchaTabBarController.m in Sources */,
 				674081371EDE05E00093D987 /* MatchaPressGestureRecognizer.m in Sources */,
 				676EF4CD1E8E341800C1488A /* main.m in Sources */,
+				67349EA61EF8A1C500E07354 /* Keyboard.pbobjc.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

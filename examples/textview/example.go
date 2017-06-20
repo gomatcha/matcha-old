@@ -71,6 +71,9 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 
 	input := textinput.New(ctx, "input")
 	input.Text = v.text
+	input.KeyboardType = keyboard.URLType
+	input.KeyboardAppearance = keyboard.DarkAppearance
+	input.KeyboardReturnType = keyboard.GoogleReturnType
 	input.Responder = v.responder
 	input.OnChange = func(t *text.Text) {
 		v.Update()

@@ -1,6 +1,7 @@
 syntax = "proto3";
 package matcha.view.textinput;
 import "github.com/overcyn/matcha/pb/text/text.proto";
+import "github.com/overcyn/matcha/pb/keyboard/keyboard.proto";
 
 option go_package = "textinput";
 option objc_class_prefix = "MatchaTextInputPB";
@@ -8,6 +9,9 @@ option objc_class_prefix = "MatchaTextInputPB";
 message View {
     matcha.text.StyledText styledText = 1;
     bool focused = 4;
+    matcha.keyboard.Type keyboardType = 5;
+    matcha.keyboard.Appearance keyboardAppearance = 6;
+    matcha.keyboard.ReturnType keyboardReturnType = 7;
 }
 
 message Event {

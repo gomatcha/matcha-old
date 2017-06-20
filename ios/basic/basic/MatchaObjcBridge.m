@@ -58,9 +58,20 @@
 
 - (MatchaGoValue *)sizeForResource:(NSString *)path {
     UIImage *image = [UIImage imageNamed:path];
-    
+    if (image == nil) {
+        return nil;
+    }
     MatchaLayoutPBPoint *point = [[MatchaLayoutPBPoint alloc] initWithCGSize:CGSizeMake(ceil(image.size.width / image.scale), ceil(image.size.height / image.scale))];
     return [[MatchaGoValue alloc] initWithData:point.data];
+}
+
+- (MatchaGoValue *)imageForResource:(NSString *)path {
+    UIImage *image = [UIImage imageNamed:path];
+    if (image == nil) {
+        return nil;
+    }
+    NSData *data = (__bridge_transfer NSData *)CGDataProviderCopyData(CGImageGetDataProvider(image.CGImage));
+    return [[MatchaGoValue alloc] initWithData:data];
 }
 
 @end

@@ -13,10 +13,13 @@ import (
 // View mutates the Text and StyledText fields in place.
 type View struct {
 	*view.Embed
-	Text      *text.Text
-	Style     *text.Style
-	Responder *keyboard.Responder
-	responder *keyboard.Responder
+	Text               *text.Text
+	Style              *text.Style
+	KeyboardType       keyboard.Type
+	KeyboardAppearance keyboard.Appearance
+	KeyboardReturnType keyboard.ReturnType
+	Responder          *keyboard.Responder
+	responder          *keyboard.Responder
 
 	// TODO(KD):
 	// StyledText *text.StyledText
@@ -62,8 +65,11 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		NativeViewName: "github.com/overcyn/matcha/view/textinput",
 		NativeViewState: &textinput.View{
-			StyledText: st.MarshalProtobuf(),
-			Focused:    focused,
+			StyledText:         st.MarshalProtobuf(),
+			KeyboardType:       v.KeyboardType.MarshalProtobuf(),
+			KeyboardAppearance: v.KeyboardAppearance.MarshalProtobuf(),
+			KeyboardReturnType: v.KeyboardReturnType.MarshalProtobuf(),
+			Focused:            focused,
 		},
 		NativeFuncs: map[string]interface{}{
 			"OnChange": func(data []byte) {

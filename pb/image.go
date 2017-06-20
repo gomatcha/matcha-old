@@ -37,3 +37,11 @@ func ImageEncode(img image.Image) *Image {
 		Data:   newImg.Pix,
 	}
 }
+
+func ImageDecode(img *Image) *image.RGBA {
+	return &image.RGBA{
+		Pix:    img.Data,
+		Stride: int(img.Stride),
+		Rect:   image.Rect(0, 0, int(img.Width), int(img.Height)),
+	}
+}

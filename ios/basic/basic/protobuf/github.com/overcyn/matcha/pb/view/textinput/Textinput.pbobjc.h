@@ -28,6 +28,9 @@
 CF_EXTERN_C_BEGIN
 
 @class MatchaPBStyledText;
+GPB_ENUM_FWD_DECLARE(MatchaKeyboardPBAppearance);
+GPB_ENUM_FWD_DECLARE(MatchaKeyboardPBReturnType);
+GPB_ENUM_FWD_DECLARE(MatchaKeyboardPBType);
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,6 +54,9 @@ NS_ASSUME_NONNULL_BEGIN
 typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
   MatchaTextInputPBView_FieldNumber_StyledText = 1,
   MatchaTextInputPBView_FieldNumber_Focused = 4,
+  MatchaTextInputPBView_FieldNumber_KeyboardType = 5,
+  MatchaTextInputPBView_FieldNumber_KeyboardAppearance = 6,
+  MatchaTextInputPBView_FieldNumber_KeyboardReturnType = 7,
 };
 
 @interface MatchaTextInputPBView : GPBMessage
@@ -61,7 +67,49 @@ typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
 
 @property(nonatomic, readwrite) BOOL focused;
 
+@property(nonatomic, readwrite) enum MatchaKeyboardPBType keyboardType;
+
+@property(nonatomic, readwrite) enum MatchaKeyboardPBAppearance keyboardAppearance;
+
+@property(nonatomic, readwrite) enum MatchaKeyboardPBReturnType keyboardReturnType;
+
 @end
+
+/**
+ * Fetches the raw value of a @c MatchaTextInputPBView's @c keyboardType property, even
+ * if the value was not defined by the enum at the time the code was generated.
+ **/
+int32_t MatchaTextInputPBView_KeyboardType_RawValue(MatchaTextInputPBView *message);
+/**
+ * Sets the raw value of an @c MatchaTextInputPBView's @c keyboardType property, allowing
+ * it to be set to a value that was not defined by the enum at the time the code
+ * was generated.
+ **/
+void SetMatchaTextInputPBView_KeyboardType_RawValue(MatchaTextInputPBView *message, int32_t value);
+
+/**
+ * Fetches the raw value of a @c MatchaTextInputPBView's @c keyboardAppearance property, even
+ * if the value was not defined by the enum at the time the code was generated.
+ **/
+int32_t MatchaTextInputPBView_KeyboardAppearance_RawValue(MatchaTextInputPBView *message);
+/**
+ * Sets the raw value of an @c MatchaTextInputPBView's @c keyboardAppearance property, allowing
+ * it to be set to a value that was not defined by the enum at the time the code
+ * was generated.
+ **/
+void SetMatchaTextInputPBView_KeyboardAppearance_RawValue(MatchaTextInputPBView *message, int32_t value);
+
+/**
+ * Fetches the raw value of a @c MatchaTextInputPBView's @c keyboardReturnType property, even
+ * if the value was not defined by the enum at the time the code was generated.
+ **/
+int32_t MatchaTextInputPBView_KeyboardReturnType_RawValue(MatchaTextInputPBView *message);
+/**
+ * Sets the raw value of an @c MatchaTextInputPBView's @c keyboardReturnType property, allowing
+ * it to be set to a value that was not defined by the enum at the time the code
+ * was generated.
+ **/
+void SetMatchaTextInputPBView_KeyboardReturnType_RawValue(MatchaTextInputPBView *message, int32_t value);
 
 #pragma mark - MatchaTextInputPBEvent
 

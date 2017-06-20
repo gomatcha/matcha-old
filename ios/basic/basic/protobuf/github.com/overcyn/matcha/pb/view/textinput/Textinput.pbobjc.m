@@ -15,6 +15,7 @@
 
  #import "github.com/overcyn/matcha/pb/view/textinput/Textinput.pbobjc.h"
  #import "github.com/overcyn/matcha/pb/text/Text.pbobjc.h"
+ #import "github.com/overcyn/matcha/pb/keyboard/Keyboard.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -50,9 +51,15 @@ static GPBFileDescriptor *MatchaTextInputPBTextinputRoot_FileDescriptor(void) {
 
 @dynamic hasStyledText, styledText;
 @dynamic focused;
+@dynamic keyboardType;
+@dynamic keyboardAppearance;
+@dynamic keyboardReturnType;
 
 typedef struct MatchaTextInputPBView__storage_ {
   uint32_t _has_storage_[1];
+  MatchaKeyboardPBType keyboardType;
+  MatchaKeyboardPBAppearance keyboardAppearance;
+  MatchaKeyboardPBReturnType keyboardReturnType;
   MatchaPBStyledText *styledText;
 } MatchaTextInputPBView__storage_;
 
@@ -80,6 +87,33 @@ typedef struct MatchaTextInputPBView__storage_ {
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBool,
       },
+      {
+        .name = "keyboardType",
+        .dataTypeSpecific.enumDescFunc = MatchaKeyboardPBType_EnumDescriptor,
+        .number = MatchaTextInputPBView_FieldNumber_KeyboardType,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, keyboardType),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldHasEnumDescriptor),
+        .dataType = GPBDataTypeEnum,
+      },
+      {
+        .name = "keyboardAppearance",
+        .dataTypeSpecific.enumDescFunc = MatchaKeyboardPBAppearance_EnumDescriptor,
+        .number = MatchaTextInputPBView_FieldNumber_KeyboardAppearance,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, keyboardAppearance),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldHasEnumDescriptor),
+        .dataType = GPBDataTypeEnum,
+      },
+      {
+        .name = "keyboardReturnType",
+        .dataTypeSpecific.enumDescFunc = MatchaKeyboardPBReturnType_EnumDescriptor,
+        .number = MatchaTextInputPBView_FieldNumber_KeyboardReturnType,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, keyboardReturnType),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldHasEnumDescriptor),
+        .dataType = GPBDataTypeEnum,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MatchaTextInputPBView class]
@@ -91,7 +125,7 @@ typedef struct MatchaTextInputPBView__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\001\n\000";
+        "\004\001\n\000\005\014\000\006\022\000\007\022\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -101,6 +135,42 @@ typedef struct MatchaTextInputPBView__storage_ {
 }
 
 @end
+
+int32_t MatchaTextInputPBView_KeyboardType_RawValue(MatchaTextInputPBView *message) {
+  GPBDescriptor *descriptor = [MatchaTextInputPBView descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MatchaTextInputPBView_FieldNumber_KeyboardType];
+  return GPBGetMessageInt32Field(message, field);
+}
+
+void SetMatchaTextInputPBView_KeyboardType_RawValue(MatchaTextInputPBView *message, int32_t value) {
+  GPBDescriptor *descriptor = [MatchaTextInputPBView descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MatchaTextInputPBView_FieldNumber_KeyboardType];
+  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+}
+
+int32_t MatchaTextInputPBView_KeyboardAppearance_RawValue(MatchaTextInputPBView *message) {
+  GPBDescriptor *descriptor = [MatchaTextInputPBView descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MatchaTextInputPBView_FieldNumber_KeyboardAppearance];
+  return GPBGetMessageInt32Field(message, field);
+}
+
+void SetMatchaTextInputPBView_KeyboardAppearance_RawValue(MatchaTextInputPBView *message, int32_t value) {
+  GPBDescriptor *descriptor = [MatchaTextInputPBView descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MatchaTextInputPBView_FieldNumber_KeyboardAppearance];
+  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+}
+
+int32_t MatchaTextInputPBView_KeyboardReturnType_RawValue(MatchaTextInputPBView *message) {
+  GPBDescriptor *descriptor = [MatchaTextInputPBView descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MatchaTextInputPBView_FieldNumber_KeyboardReturnType];
+  return GPBGetMessageInt32Field(message, field);
+}
+
+void SetMatchaTextInputPBView_KeyboardReturnType_RawValue(MatchaTextInputPBView *message, int32_t value) {
+  GPBDescriptor *descriptor = [MatchaTextInputPBView descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MatchaTextInputPBView_FieldNumber_KeyboardReturnType];
+  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+}
 
 #pragma mark - MatchaTextInputPBEvent
 

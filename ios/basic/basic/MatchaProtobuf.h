@@ -14,6 +14,7 @@
 #import "Color.pbobjc.h"
 #import "Image.pbobjc.h"
 #import "Textinput.pbobjc.h"
+#import "Keyboard.pbobjc.h"
 
 @import Matcha;
 
@@ -34,6 +35,7 @@
 
 @interface UIImage (Matcha)
 - (id)initWithProtobuf:(MatchaPBImage *)value;
+- (MatchaPBImage *)protobuf;
 @end
 
 @interface MatchaLayoutPBRect (Matcha)
@@ -56,3 +58,7 @@
 - (id)initWithDate:(NSDate *)date;
 @property (nonatomic, readonly) NSDate *toDate;
 @end
+
+UIKeyboardType MatchaKeyboardTypeWithProtobuf(MatchaKeyboardPBType t);
+UIKeyboardAppearance MatchaKeyboardAppearanceWithProtobuf(MatchaKeyboardPBAppearance t);
+UIReturnKeyType MatchaReturnTypeWithProtobuf(MatchaKeyboardPBReturnType t);

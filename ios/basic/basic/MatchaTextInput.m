@@ -24,6 +24,9 @@
     }
     self.attrStr2 = attrString;
     self.hasFocus = view.focused;
+    self.keyboardType = MatchaKeyboardTypeWithProtobuf(view.keyboardType);
+    self.keyboardAppearance = MatchaKeyboardAppearanceWithProtobuf(view.keyboardAppearance);
+    self.returnKeyType = MatchaReturnTypeWithProtobuf(view.keyboardReturnType);
     
     if (self.hasFocus && !self.isFirstResponder) {
         [self becomeFirstResponder];
