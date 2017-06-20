@@ -119,6 +119,71 @@ typedef struct MatchaPBImage__storage_ {
 
 @end
 
+#pragma mark - MatchaPBImageProperties
+
+@implementation MatchaPBImageProperties
+
+@dynamic width;
+@dynamic height;
+@dynamic scale;
+
+typedef struct MatchaPBImageProperties__storage_ {
+  uint32_t _has_storage_[1];
+  int64_t width;
+  int64_t height;
+  double scale;
+} MatchaPBImageProperties__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "width",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaPBImageProperties_FieldNumber_Width,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MatchaPBImageProperties__storage_, width),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "height",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaPBImageProperties_FieldNumber_Height,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MatchaPBImageProperties__storage_, height),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "scale",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaPBImageProperties_FieldNumber_Scale,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MatchaPBImageProperties__storage_, scale),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeDouble,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MatchaPBImageProperties class]
+                                     rootClass:[MatchaPBImageRoot class]
+                                          file:MatchaPBImageRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MatchaPBImageProperties__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 
 #pragma clang diagnostic pop
 

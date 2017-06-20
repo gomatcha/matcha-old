@@ -8,6 +8,7 @@ import (
 
 	"github.com/overcyn/matcha"
 	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/env"
 	"github.com/overcyn/matcha/layout"
 	"github.com/overcyn/matcha/pb"
 	"github.com/overcyn/matcha/pb/view/imageview"
@@ -29,6 +30,7 @@ func (m ResizeMode) MarshalProtobuf() imageview.ResizeMode {
 
 type layouter struct {
 	bounds     image.Rectangle
+	scale      float64
 	resizeMode ResizeMode
 }
 
@@ -36,7 +38,7 @@ func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layo
 	g := layout.Guide{Frame: layout.Rect{Max: ctx.MaxSize}}
 	switch l.resizeMode {
 	case ResizeModeFit:
-		imgRatio := float64(l.bounds.Dx()) / float64(l.bounds.Dy())
+		imgRatio := float64(l.bounds.Dx()) / l.scale / float64(l.bounds.Dy()) / l.scale
 		maxRatio := ctx.MaxSize.X / ctx.MaxSize.Y
 		if imgRatio > maxRatio {
 			g.Frame.Max = layout.Pt(ctx.MaxSize.X, ctx.MaxSize.X/imgRatio)
@@ -48,7 +50,7 @@ func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layo
 	case ResizeModeStretch:
 		g.Frame.Max = ctx.MaxSize
 	case ResizeModeCenter:
-		g.Frame.Max = layout.Pt(float64(l.bounds.Dx()), float64(l.bounds.Dy()))
+		g.Frame.Max = layout.Pt(float64(l.bounds.Dx())/l.scale, float64(l.bounds.Dy())/l.scale)
 	}
 	return g, nil
 }
@@ -88,16 +90,22 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	// Default to Center if we don't have an image
 	bounds := image.Rect(0, 0, 0, 0)
 	resizeMode := ResizeModeCenter
+	scale := 1.0
 	if v.image != nil {
 		bounds = v.image.Bounds()
 		resizeMode = v.ResizeMode
+
+		if res, ok := v.image.(*env.ImageResource); ok {
+			scale = res.Scale()
+		}
 	}
 
 	return &view.Model{
-		Layouter:       &layouter{bounds: bounds, resizeMode: resizeMode},
+		Layouter:       &layouter{bounds: bounds, resizeMode: resizeMode, scale: scale},
 		NativeViewName: "github.com/overcyn/matcha/view/imageview",
 		NativeViewState: &imageview.View{
 			Image:      v.pbImage,
+			Scale:      scale,
 			ResizeMode: v.ResizeMode.MarshalProtobuf(),
 			Tint:       pb.ColorEncode(v.Tint),
 		},

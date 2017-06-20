@@ -19,4 +19,5 @@ message View {
     env.Resource resource = 4;
     ResizeMode resizeMode = 2;
     matcha.Color tint = 3;
+    double scale = 5;
 }

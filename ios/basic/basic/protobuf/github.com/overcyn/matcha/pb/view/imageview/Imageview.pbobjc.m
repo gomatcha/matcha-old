@@ -92,6 +92,7 @@ BOOL MatchaImageViewPBResizeMode_IsValidValue(int32_t value__) {
 @dynamic hasResource, resource;
 @dynamic resizeMode;
 @dynamic hasTint, tint;
+@dynamic scale;
 
 typedef struct MatchaImageViewPBView__storage_ {
   uint32_t _has_storage_[1];
@@ -99,6 +100,7 @@ typedef struct MatchaImageViewPBView__storage_ {
   MatchaPBImage *image;
   MatchaPBColor *tint;
   MatchaPBEnvResource *resource;
+  double scale;
 } MatchaImageViewPBView__storage_;
 
 // This method is threadsafe because it is initially called
@@ -142,6 +144,15 @@ typedef struct MatchaImageViewPBView__storage_ {
         .offset = (uint32_t)offsetof(MatchaImageViewPBView__storage_, resource),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "scale",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaImageViewPBView_FieldNumber_Scale,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(MatchaImageViewPBView__storage_, scale),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeDouble,
       },
     };
     GPBDescriptor *localDescriptor =

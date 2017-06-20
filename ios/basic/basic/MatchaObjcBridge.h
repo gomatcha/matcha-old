@@ -16,4 +16,5 @@
 - (NSString *)assetsDir;
 - (MatchaGoValue *)sizeForResource:(NSString *)path;
 - (MatchaGoValue *)imageForResource:(NSString *)path;
+- (MatchaGoValue *)propertiesForResource:(NSString *)path;
 @end

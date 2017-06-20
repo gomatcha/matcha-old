@@ -15,7 +15,6 @@ import (
 	"github.com/overcyn/matcha/view"
 	"github.com/overcyn/matcha/view/basicview"
 	"github.com/overcyn/matcha/view/imageview"
-	"github.com/overcyn/matcha/view/resimageview"
 	"github.com/overcyn/matcha/view/scrollview"
 	"github.com/overcyn/matcha/view/stackscreen"
 	"github.com/overcyn/matcha/view/switchview"
@@ -96,7 +95,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		switchView := switchview.New(ctx, "switch")
 		cell1 := NewBasicCell(ctx, "airplane")
 		cell1.Title = "Airplane Mode"
-		cell1.Icon = env.MustLoad("Airplane")
+		cell1.Icon = env.MustLoadImage("Airplane")
 		cell1.AccessoryView = switchView
 		cell1.HasIcon = true
 		group = append(group, cell1)
@@ -109,7 +108,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 			cell2.Subtitle = ""
 		}
 		cell2.HasIcon = true
-		cell2.Icon = env.MustLoad("Wifi")
+		cell2.Icon = env.MustLoadImage("Wifi")
 		cell2.Chevron = true
 		cell2.OnTap = func() {
 			v.app.Lock()
@@ -122,7 +121,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 		cell3 := NewBasicCell(ctx, "bluetooth")
 		cell3.HasIcon = true
-		cell3.Icon = env.MustLoad("Bluetooth")
+		cell3.Icon = env.MustLoadImage("Bluetooth")
 		cell3.Title = "Bluetooth"
 		cell3.Subtitle = "On"
 		cell3.Chevron = true
@@ -137,7 +136,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 		cell4 := NewBasicCell(ctx, "cellular")
 		cell4.HasIcon = true
-		cell4.Icon = env.MustLoad("Cellular")
+		cell4.Icon = env.MustLoadImage("Cellular")
 		cell4.Title = "Cellular"
 		cell4.Chevron = true
 		cell4.OnTap = func() {
@@ -151,7 +150,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 		cell5 := NewBasicCell(ctx, "hotspot")
 		cell5.HasIcon = true
-		cell5.Icon = env.MustLoad("Hotspot")
+		cell5.Icon = env.MustLoadImage("Hotspot")
 		cell5.Title = "Personal Hotspot"
 		cell5.Subtitle = "Off"
 		cell5.Chevron = true
@@ -159,7 +158,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 		cell6 := NewBasicCell(ctx, "carrier")
 		cell6.HasIcon = true
-		cell6.Icon = env.MustLoad("Carrier")
+		cell6.Icon = env.MustLoadImage("Carrier")
 		cell6.Title = "Carrier"
 		cell6.Subtitle = "T-Mobile"
 		cell6.Chevron = true
@@ -178,21 +177,21 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 
 		cell1 := NewBasicCell(ctx, "notifications")
 		cell1.HasIcon = true
-		cell1.Icon = env.MustLoad("Notifications")
+		cell1.Icon = env.MustLoadImage("Notifications")
 		cell1.Title = "Notifications"
 		cell1.Chevron = true
 		group = append(group, cell1)
 
 		cell2 := NewBasicCell(ctx, "controlcenter")
 		cell2.HasIcon = true
-		cell2.Icon = env.MustLoad("ControlCenter")
+		cell2.Icon = env.MustLoadImage("ControlCenter")
 		cell2.Title = "Control Center"
 		cell2.Chevron = true
 		group = append(group, cell2)
 
 		cell3 := NewBasicCell(ctx, "donotdisturb")
 		cell3.HasIcon = true
-		cell3.Icon = env.MustLoad("DoNotDisturb")
+		cell3.Icon = env.MustLoadImage("DoNotDisturb")
 		cell3.Title = "Do Not Disturb"
 		cell3.Chevron = true
 		group = append(group, cell3)
@@ -410,7 +409,7 @@ func (v *SpacerDescription) Build(ctx *view.Context) *view.Model {
 type BasicCell struct {
 	*view.Embed
 	HasIcon       bool
-	Icon          *env.Resource
+	Icon          *env.ImageResource
 	Title         string
 	Subtitle      string
 	AccessoryView view.View
@@ -435,8 +434,8 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 
 	leftAnchor := l.Left()
 	if v.HasIcon {
-		iconView := resimageview.New(ctx, "icon")
-		iconView.Resource = v.Icon
+		iconView := imageview.New(ctx, "icon")
+		iconView.Image = v.Icon
 		iconView.ResizeMode = imageview.ResizeModeFill
 		pIconView := view.WithPainter(iconView, &paint.Style{BackgroundColor: colornames.Lightgray, CornerRadius: 5})
 
@@ -451,8 +450,8 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 
 	rightAnchor := l.Right()
 	if v.Chevron {
-		chevronView := resimageview.New(ctx, "chevron")
-		chevronView.Resource = env.MustLoad("TableArrow")
+		chevronView := imageview.New(ctx, "chevron")
+		chevronView.Image = env.MustLoadImage("TableArrow")
 		chevronView.ResizeMode = imageview.ResizeModeCenter
 		chevronView.Tint = chevronColor
 

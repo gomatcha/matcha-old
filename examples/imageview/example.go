@@ -9,7 +9,6 @@ import (
 	"github.com/overcyn/matcha/paint"
 	"github.com/overcyn/matcha/view"
 	"github.com/overcyn/matcha/view/imageview"
-	"github.com/overcyn/matcha/view/resimageview"
 	"github.com/overcyn/matcha/view/urlimageview"
 	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
@@ -49,8 +48,8 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 		s.HeightLess(constraint.Const(200))
 	})
 
-	chl2 := resimageview.New(ctx, "1")
-	chl2.Resource = env.MustLoad("TableArrow")
+	chl2 := imageview.New(ctx, "1")
+	chl2.Image = env.MustLoadImage("TableArrow")
 	chl2.ResizeMode = imageview.ResizeModeFit
 	l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(300))

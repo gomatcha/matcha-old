@@ -65,6 +65,24 @@ typedef GPB_ENUM(MatchaPBImage_FieldNumber) {
 
 @end
 
+#pragma mark - MatchaPBImageProperties
+
+typedef GPB_ENUM(MatchaPBImageProperties_FieldNumber) {
+  MatchaPBImageProperties_FieldNumber_Width = 1,
+  MatchaPBImageProperties_FieldNumber_Height = 2,
+  MatchaPBImageProperties_FieldNumber_Scale = 3,
+};
+
+@interface MatchaPBImageProperties : GPBMessage
+
+@property(nonatomic, readwrite) int64_t width;
+
+@property(nonatomic, readwrite) int64_t height;
+
+@property(nonatomic, readwrite) double scale;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END

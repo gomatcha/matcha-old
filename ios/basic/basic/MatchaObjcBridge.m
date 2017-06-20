@@ -56,22 +56,25 @@
      return [[NSBundle mainBundle] resourcePath];
 }
 
-- (MatchaGoValue *)sizeForResource:(NSString *)path {
-    UIImage *image = [UIImage imageNamed:path];
-    if (image == nil) {
-        return nil;
-    }
-    MatchaLayoutPBPoint *point = [[MatchaLayoutPBPoint alloc] initWithCGSize:CGSizeMake(ceil(image.size.width / image.scale), ceil(image.size.height / image.scale))];
-    return [[MatchaGoValue alloc] initWithData:point.data];
-}
-
 - (MatchaGoValue *)imageForResource:(NSString *)path {
     UIImage *image = [UIImage imageNamed:path];
     if (image == nil) {
         return nil;
     }
-    NSData *data = (__bridge_transfer NSData *)CGDataProviderCopyData(CGImageGetDataProvider(image.CGImage));
+    NSData *data = UIImagePNGRepresentation(image);
     return [[MatchaGoValue alloc] initWithData:data];
+}
+
+- (MatchaGoValue *)propertiesForResource:(NSString *)path {
+    UIImage *image = [UIImage imageNamed:path];
+    if (image == nil) {
+        return nil;
+    }
+    MatchaPBImageProperties *props = [[MatchaPBImageProperties alloc] init];
+    props.width = ceil(image.size.width * image.scale);
+    props.height = ceil(image.size.height * image.scale);
+    props.scale = image.scale;
+    return [[MatchaGoValue alloc] initWithData:props.data];
 }
 
 @end

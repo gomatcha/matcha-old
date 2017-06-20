@@ -5,6 +5,7 @@ High:
 * UINavigation item button. uitabbar item image
 * uitabbaritem and uinavigationitem should observer their children, so they can update their button/bar
 * UINavigationItem cycle.
+* How to handle image scale
 
 
 Medium:
@@ -19,6 +20,7 @@ Medium:
 * remove global Middleware list
 * Webview
 * Define constraints
+* Make painters easier to set.
 
 Low:
 * Localization

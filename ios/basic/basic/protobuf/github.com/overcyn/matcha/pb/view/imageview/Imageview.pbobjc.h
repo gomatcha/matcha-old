@@ -78,6 +78,7 @@ typedef GPB_ENUM(MatchaImageViewPBView_FieldNumber) {
   MatchaImageViewPBView_FieldNumber_ResizeMode = 2,
   MatchaImageViewPBView_FieldNumber_Tint = 3,
   MatchaImageViewPBView_FieldNumber_Resource = 4,
+  MatchaImageViewPBView_FieldNumber_Scale = 5,
 };
 
 @interface MatchaImageViewPBView : GPBMessage
@@ -95,6 +96,8 @@ typedef GPB_ENUM(MatchaImageViewPBView_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) MatchaPBColor *tint;
 /** Test to see if @c tint has been set. */
 @property(nonatomic, readwrite) BOOL hasTint;
+
+@property(nonatomic, readwrite) double scale;
 
 @end
 
