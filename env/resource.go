@@ -100,6 +100,9 @@ func (res *ImageResource) load() {
 }
 
 func (res *ImageResource) MarshalProtobuf() *env.ImageResource {
+	if res == nil {
+		return nil
+	}
 	return &env.ImageResource{
 		Path: res.path,
 	}

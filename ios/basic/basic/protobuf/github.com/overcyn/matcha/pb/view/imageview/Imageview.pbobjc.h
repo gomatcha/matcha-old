@@ -28,7 +28,7 @@
 CF_EXTERN_C_BEGIN
 
 @class MatchaPBColor;
-@class MatchaPBEnvResource;
+@class MatchaPBEnvImageResource;
 @class MatchaPBImage;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -87,7 +87,7 @@ typedef GPB_ENUM(MatchaImageViewPBView_FieldNumber) {
 /** Test to see if @c image has been set. */
 @property(nonatomic, readwrite) BOOL hasImage;
 
-@property(nonatomic, readwrite, strong, null_resettable) MatchaPBEnvResource *resource;
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBEnvImageResource *resource;
 /** Test to see if @c resource has been set. */
 @property(nonatomic, readwrite) BOOL hasResource;
 

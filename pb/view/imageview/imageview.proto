@@ -16,7 +16,7 @@ enum ResizeMode {
 
 message View {
     matcha.Image image = 1;
-    env.Resource resource = 4;
+    env.ImageResource resource = 4;
     ResizeMode resizeMode = 2;
     matcha.Color tint = 3;
     double scale = 5;

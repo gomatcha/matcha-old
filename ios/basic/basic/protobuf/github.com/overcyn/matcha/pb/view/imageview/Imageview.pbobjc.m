@@ -99,7 +99,7 @@ typedef struct MatchaImageViewPBView__storage_ {
   MatchaImageViewPBResizeMode resizeMode;
   MatchaPBImage *image;
   MatchaPBColor *tint;
-  MatchaPBEnvResource *resource;
+  MatchaPBEnvImageResource *resource;
   double scale;
 } MatchaImageViewPBView__storage_;
 
@@ -138,7 +138,7 @@ typedef struct MatchaImageViewPBView__storage_ {
       },
       {
         .name = "resource",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBEnvResource),
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBEnvImageResource),
         .number = MatchaImageViewPBView_FieldNumber_Resource,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(MatchaImageViewPBView__storage_, resource),
