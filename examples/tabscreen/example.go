@@ -4,6 +4,7 @@ import (
 	"image/color"
 
 	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/env"
 	"github.com/overcyn/matcha/paint"
 	"github.com/overcyn/matcha/touch"
 	"github.com/overcyn/matcha/view"
@@ -33,12 +34,17 @@ func NewApp() *App {
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
 	options1 := &tabscreen.TabButton{
-		Title: "Title 1",
+		Title:        "Title 1",
+		Badge:        "badge",
+		Icon:         env.MustLoadImage("TabCamera"),
+		SelectedIcon: env.MustLoadImage("TabCameraFilled"),
 	}
 
 	screen2 := NewTouchScreen(app, colornames.Red)
 	options2 := &tabscreen.TabButton{
-		Title: "Title 2",
+		Title:        "Title 2",
+		Icon:         env.MustLoadImage("TabMap"),
+		SelectedIcon: env.MustLoadImage("TabMapFilled"),
 	}
 
 	screen3 := NewTouchScreen(app, colornames.Yellow)
@@ -74,8 +80,9 @@ func NewTouchScreen(app *App, c color.Color) view.Screen {
 
 type TouchView struct {
 	*view.Embed
-	app   *App
-	Color color.Color
+	app    *App
+	Color  color.Color
+	button *tabscreen.TabButton
 }
 
 func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
@@ -85,6 +92,11 @@ func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
 	return &TouchView{
 		Embed: view.NewEmbed(ctx.NewId(key)),
 		app:   app,
+		button: &tabscreen.TabButton{
+			Title:        "Testing",
+			Icon:         env.MustLoadImage("TabSearch"),
+			SelectedIcon: env.MustLoadImage("TabSearchFilled"),
+		},
 	}
 }
 
@@ -105,4 +117,8 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 			touch.Key: []touch.Recognizer{tap},
 		},
 	}
+}
+
+func (v *TouchView) TabButton(*view.Context) *tabscreen.TabButton {
+	return v.button
 }

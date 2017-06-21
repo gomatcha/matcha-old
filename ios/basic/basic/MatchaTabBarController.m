@@ -23,6 +23,8 @@
         UIViewController *vc = childVCs[@(i.id_p)];
         vc.tabBarItem.title = i.title;
         vc.tabBarItem.badgeValue = i.badge.length == 0 ? nil : i.badge;
+        vc.tabBarItem.image = [[UIImage alloc] initWithImageOrResourceProtobuf:i.icon];
+        vc.tabBarItem.selectedImage = [[UIImage alloc] initWithImageOrResourceProtobuf:i.selectedIcon];
         [viewControllers addObject:vc];
     }
     
