@@ -179,7 +179,7 @@ func (v *barView) Build(ctx *view.Context) *view.Model {
 		rightViewIds = append(rightViewIds, int64(i.Id()))
 		l.Add(i, func(s *constraint.Solver) {
 			s.TopEqual(constraint.Const(0))
-			s.BottomEqual(constraint.Const(0))
+			s.LeftEqual(constraint.Const(0))
 			s.HeightLess(l.MaxGuide().Height())
 			s.WidthLess(l.MaxGuide().Width())
 		})
@@ -189,7 +189,7 @@ func (v *barView) Build(ctx *view.Context) *view.Model {
 		leftViewIds = append(leftViewIds, int64(i.Id()))
 		l.Add(i, func(s *constraint.Solver) {
 			s.TopEqual(constraint.Const(0))
-			s.BottomEqual(constraint.Const(0))
+			s.LeftEqual(constraint.Const(0))
 			s.HeightLess(l.MaxGuide().Height())
 			s.WidthLess(l.MaxGuide().Width())
 		})

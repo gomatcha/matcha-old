@@ -27,6 +27,9 @@
         vc.navigationItem.title = bar.titleString;
         vc.navigationItem.hidesBackButton = bar.backButtonHidden;
         vc.navigationItem.titleView = bar.titleView;
+        vc.navigationItem.rightBarButtonItems = bar.rightViews;
+        vc.navigationItem.leftBarButtonItems = bar.leftViews;
+        vc.navigationItem.leftItemsSupplementBackButton = true;
         if (bar.customBackButtonTitle) {
             vc.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:bar.backButtonTitle style:UIBarButtonItemStylePlain target:nil action:nil];
         }
@@ -92,6 +95,27 @@
         MatchaNode *n = self.node.nodeChildren[@(bar.titleViewId)];
         self.titleView.frame = n.guide.frame;
     }
+    NSMutableArray *rightViews = [NSMutableArray array];
+    for (NSInteger i = 0; i < bar.rightViewIdsArray.count; i++) {
+        int64_t childId = [bar.rightViewIdsArray valueAtIndex:i];
+        UIView *rightView = childVCs[@(childId)].view;
+        MatchaNode *n = self.node.nodeChildren[@(childId)];
+        rightView.frame = n.guide.frame;
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:rightView];
+        [rightViews addObject:item];
+    }
+    self.rightViews = rightViews;
+    
+    NSMutableArray *leftViews = [NSMutableArray array];
+    for (NSInteger i = 0; i < bar.leftViewIdsArray.count; i++) {
+        int64_t childId = [bar.leftViewIdsArray valueAtIndex:i];
+        UIView *leftView = childVCs[@(childId)].view;
+        MatchaNode *n = self.node.nodeChildren[@(childId)];
+        leftView.frame = n.guide.frame;
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:leftView];
+        [leftViews addObject:item];
+    }
+    self.leftViews = leftViews;
 }
 
 @end

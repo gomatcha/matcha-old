@@ -121,8 +121,33 @@ func (v *TouchView) StackBar(ctx *view.Context) *stackscreen.Bar {
 	titleView := basicview.New(ctx, "axbaba")
 	titleView.Painter = &paint.Style{BackgroundColor: colornames.Red}
 	titleView.Layouter = l
+
+	l2 := constraint.New()
+	l2.Solve(func(s *constraint.Solver) {
+		s.TopEqual(constraint.Const(0))
+		s.LeftEqual(constraint.Const(0))
+		s.HeightEqual(constraint.Const(50))
+		s.WidthEqual(constraint.Const(50))
+	})
+	rightView := basicview.New(ctx, "right")
+	rightView.Painter = &paint.Style{BackgroundColor: colornames.Blue}
+	rightView.Layouter = l2
+
+	l3 := constraint.New()
+	l3.Solve(func(s *constraint.Solver) {
+		s.TopEqual(constraint.Const(0))
+		s.LeftEqual(constraint.Const(0))
+		s.HeightEqual(constraint.Const(50))
+		s.WidthEqual(constraint.Const(50))
+	})
+	leftView := basicview.New(ctx, "right")
+	leftView.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
+	leftView.Layouter = l3
+
 	return &stackscreen.Bar{
-		Title:     "Title",
-		TitleView: titleView,
+		Title:      "Title",
+		TitleView:  titleView,
+		RightViews: []view.View{rightView},
+		LeftViews:  []view.View{leftView},
 	}
 }

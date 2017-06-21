@@ -77,7 +77,6 @@ func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
 		s.LeftEqual(g3.Right())
 		s.WidthEqual(constraint.Const(50))
 		s.HeightEqual(constraint.Const(50))
-		s.HeightEqual(100)
 	})
 
 	return &view.Model{

@@ -1,5 +1,5 @@
 syntax = "proto3";
-package stacknav;
+package matcha.view.stacknav;
 
 option go_package = "stacknav";
 option objc_class_prefix = "MatchaStackScreenPB";
