@@ -27,11 +27,11 @@
 
 CF_EXTERN_C_BEGIN
 
-@class MatchaPBStackNavScreen;
+@class MatchaStackScreenPBChildView;
 
 NS_ASSUME_NONNULL_BEGIN
 
-#pragma mark - MatchaPBStackNavStacknavigatorRoot
+#pragma mark - MatchaStackScreenPBStacknavigatorRoot
 
 /**
  * Exposes the extension registry for this file.
@@ -43,33 +43,59 @@ NS_ASSUME_NONNULL_BEGIN
  * which is a @c GPBExtensionRegistry that includes all the extensions defined by
  * this file and all files that it depends on.
  **/
-@interface MatchaPBStackNavStacknavigatorRoot : GPBRootObject
+@interface MatchaStackScreenPBStacknavigatorRoot : GPBRootObject
 @end
 
-#pragma mark - MatchaPBStackNavScreen
+#pragma mark - MatchaStackScreenPBChildView
 
-typedef GPB_ENUM(MatchaPBStackNavScreen_FieldNumber) {
-  MatchaPBStackNavScreen_FieldNumber_Id_p = 1,
-  MatchaPBStackNavScreen_FieldNumber_Title = 2,
-  MatchaPBStackNavScreen_FieldNumber_BackButtonTitle = 3,
-  MatchaPBStackNavScreen_FieldNumber_BackButtonHidden = 4,
-  MatchaPBStackNavScreen_FieldNumber_TitleViewId = 5,
-  MatchaPBStackNavScreen_FieldNumber_RightViewIdsArray = 6,
-  MatchaPBStackNavScreen_FieldNumber_LeftViewIdsArray = 7,
-  MatchaPBStackNavScreen_FieldNumber_CustomBackButtonTitle = 8,
+typedef GPB_ENUM(MatchaStackScreenPBChildView_FieldNumber) {
+  MatchaStackScreenPBChildView_FieldNumber_ViewId = 1,
+  MatchaStackScreenPBChildView_FieldNumber_BarId = 2,
 };
 
-@interface MatchaPBStackNavScreen : GPBMessage
+@interface MatchaStackScreenPBChildView : GPBMessage
 
-@property(nonatomic, readwrite) int64_t id_p;
+@property(nonatomic, readwrite) int64_t viewId;
+
+@property(nonatomic, readwrite) int64_t barId;
+
+@end
+
+#pragma mark - MatchaStackScreenPBView
+
+typedef GPB_ENUM(MatchaStackScreenPBView_FieldNumber) {
+  MatchaStackScreenPBView_FieldNumber_ChildrenArray = 1,
+};
+
+@interface MatchaStackScreenPBView : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MatchaStackScreenPBChildView*> *childrenArray;
+/** The number of items in @c childrenArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger childrenArray_Count;
+
+@end
+
+#pragma mark - MatchaStackScreenPBBar
+
+typedef GPB_ENUM(MatchaStackScreenPBBar_FieldNumber) {
+  MatchaStackScreenPBBar_FieldNumber_Title = 1,
+  MatchaStackScreenPBBar_FieldNumber_CustomBackButtonTitle = 2,
+  MatchaStackScreenPBBar_FieldNumber_BackButtonTitle = 3,
+  MatchaStackScreenPBBar_FieldNumber_TitleViewId = 4,
+  MatchaStackScreenPBBar_FieldNumber_RightViewIdsArray = 5,
+  MatchaStackScreenPBBar_FieldNumber_LeftViewIdsArray = 6,
+  MatchaStackScreenPBBar_FieldNumber_BackButtonHidden = 7,
+};
+
+@interface MatchaStackScreenPBBar : GPBMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *title;
+
+@property(nonatomic, readwrite) BOOL backButtonHidden;
 
 @property(nonatomic, readwrite) BOOL customBackButtonTitle;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *backButtonTitle;
-
-@property(nonatomic, readwrite) BOOL backButtonHidden;
 
 @property(nonatomic, readwrite) int64_t titleViewId;
 
@@ -83,27 +109,13 @@ typedef GPB_ENUM(MatchaPBStackNavScreen_FieldNumber) {
 
 @end
 
-#pragma mark - MatchaPBStackNavStackNav
+#pragma mark - MatchaStackScreenPBStackEvent
 
-typedef GPB_ENUM(MatchaPBStackNavStackNav_FieldNumber) {
-  MatchaPBStackNavStackNav_FieldNumber_ScreensArray = 1,
+typedef GPB_ENUM(MatchaStackScreenPBStackEvent_FieldNumber) {
+  MatchaStackScreenPBStackEvent_FieldNumber_IdArray = 1,
 };
 
-@interface MatchaPBStackNavStackNav : GPBMessage
-
-@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MatchaPBStackNavScreen*> *screensArray;
-/** The number of items in @c screensArray without causing the array to be created. */
-@property(nonatomic, readonly) NSUInteger screensArray_Count;
-
-@end
-
-#pragma mark - MatchaPBStackNavStackEvent
-
-typedef GPB_ENUM(MatchaPBStackNavStackEvent_FieldNumber) {
-  MatchaPBStackNavStackEvent_FieldNumber_IdArray = 1,
-};
-
-@interface MatchaPBStackNavStackEvent : GPBMessage
+@interface MatchaStackScreenPBStackEvent : GPBMessage
 
 @property(nonatomic, readwrite, strong, null_resettable) GPBInt64Array *idArray;
 /** The number of items in @c idArray without causing the array to be created. */

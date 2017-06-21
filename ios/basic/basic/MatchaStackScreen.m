@@ -17,18 +17,18 @@
 
 - (void)setMatchaChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs {
     GPBAny *state = self.node.nativeViewState;
-    NSError *error = nil;
-    
     NSLog(@"ChildVcs:%@", childVCs);
     
-    MatchaPBStackNavStackNav *pb = (id)[state unpackMessageClass:[MatchaPBStackNavStackNav class] error:&error];
+    MatchaStackScreenPBView *view = (id)[state unpackMessageClass:[MatchaStackScreenPBView class] error:nil];
     NSMutableArray *viewControllers = [NSMutableArray array];
-    for (MatchaPBStackNavScreen *i in pb.screensArray) {
-        UIViewController *vc = childVCs[@(i.id_p)];
-        vc.navigationItem.title = i.title;
-        vc.navigationItem.hidesBackButton = i.backButtonHidden;
-        if (i.customBackButtonTitle) {
-            vc.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:i.backButtonTitle style:UIBarButtonItemStylePlain target:nil action:nil];
+    for (MatchaStackScreenPBChildView *i in view.childrenArray) {
+        MatchaStackBar *bar = (id)childVCs[@(i.barId)];
+        UIViewController *vc = childVCs[@(i.viewId)];
+        vc.navigationItem.title = bar.titleString;
+        vc.navigationItem.hidesBackButton = bar.backButtonHidden;
+        vc.navigationItem.titleView = bar.titleView;
+        if (bar.customBackButtonTitle) {
+            vc.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:bar.backButtonTitle style:UIBarButtonItemStylePlain target:nil action:nil];
         }
         [viewControllers addObject:vc];
     }
@@ -41,7 +41,12 @@
     self.prev = viewControllers;
 }
 
+//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+//    NSLog(@"willShow");
+//}
+
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    NSLog(@"didShow");
     [self update];
 }
 
@@ -51,17 +56,42 @@
         return;
     }
     GPBInt64Array *array = [[GPBInt64Array alloc] init];
-    for (UIViewController *i in self.viewControllers) {
+    for (NSInteger i = 0; i < self.viewControllers.count; i++) {
         [array addValue:0];
     }
     
-    MatchaPBStackNavStackEvent *event = [[MatchaPBStackNavStackEvent alloc] init];
+    MatchaStackScreenPBStackEvent *event = [[MatchaStackScreenPBStackEvent alloc] init];
     event.idArray = array;
     
     NSData *data = [event data];
     MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:data];
     
     [self.viewNode.rootVC call:@"OnChange" viewId:self.node.identifier.longLongValue args:@[value]];
+}
+
+@end
+
+@implementation MatchaStackBar
+
+- (id)initWithViewNode:(MatchaViewNode *)viewNode {
+    if ((self = [super init])) {
+        self.viewNode = viewNode;
+    }
+    return self;
+}
+
+- (void)setMatchaChildViewControllers:(NSDictionary<NSNumber *,UIViewController *> *)childVCs {
+    GPBAny *state = self.node.nativeViewState;
+    MatchaStackScreenPBBar *bar = (id)[state unpackMessageClass:[MatchaStackScreenPBBar class] error:nil];
+    self.titleString = bar.title;
+    self.backButtonHidden = bar.backButtonHidden;
+    self.backButtonTitle = bar.backButtonTitle;
+    self.customBackButtonTitle = bar.customBackButtonTitle;
+    self.titleView = childVCs[@(bar.titleViewId)].view;
+    if (self.titleView) {
+        MatchaNode *n = self.node.nodeChildren[@(bar.titleViewId)];
+        self.titleView.frame = n.guide.frame;
+    }
 }
 
 @end

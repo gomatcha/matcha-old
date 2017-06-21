@@ -264,6 +264,7 @@ func (c constraint) String() string {
 }
 
 type Solver struct {
+	debug       bool
 	id          matcha.Id
 	constraints []constraint
 }
@@ -307,9 +308,15 @@ func (s *Solver) solve(sys *Layout, ctx *layout.Context) {
 
 		// Validate that the new system is well-formed. Otherwise ignore the changes.
 		if !copy.isValid() {
+			if s.debug {
+				fmt.Println("constraint: Debug 0", i, copy) // TODO(KD): Better debugging.
+			}
 			continue
 		}
 		cr = copy
+	}
+	if s.debug {
+		fmt.Println("constraint: Debug 1", cr, s.constraints)
 	}
 
 	// Get parent guide.
@@ -337,7 +344,7 @@ func (s *Solver) solve(sys *Layout, ctx *layout.Context) {
 		height = g.Height()
 
 		if width < cr.width.min || height < cr.height.min || width > cr.width.max || height > cr.height.max {
-			fmt.Printf("constraints: child guide is outside of bounds. Min:%v Max:%v Actual:%v", layout.Pt(cr.width.min, cr.height.min), layout.Pt(cr.width.max, cr.height.max), layout.Pt(width, height))
+			fmt.Printf("constraint: child guide is outside of bounds. Min:%v Max:%v Actual:%v", layout.Pt(cr.width.min, cr.height.min), layout.Pt(cr.width.max, cr.height.max), layout.Pt(width, height))
 			width = cr.width.min
 			height = cr.height.min
 		}
@@ -347,7 +354,7 @@ func (s *Solver) solve(sys *Layout, ctx *layout.Context) {
 	cr.width = cr.width.intersect(_range{min: width, max: width})
 	cr.height = cr.height.intersect(_range{min: height, max: height})
 	if !cr.isValid() {
-		panic("constraints: system inconsistency")
+		panic("constraint: system inconsistency")
 	}
 	var centerX, centerY float64
 	if s.id == rootId {
@@ -369,6 +376,13 @@ func (s *Solver) solve(sys *Layout, ctx *layout.Context) {
 	} else {
 		sys.Guide.children[s.id].matchaGuide = &g
 	}
+	if s.debug {
+		fmt.Println("constraint: Debug 2", g)
+	}
+}
+
+func (s *Solver) Debug() {
+	s.debug = true
 }
 
 func (s *Solver) TopEqual(a *Anchor) {
@@ -587,6 +601,9 @@ func (r _range) intersect(r2 _range) _range {
 }
 
 func (r _range) isValid() bool {
+	if r.max < r.min {
+		fmt.Println("invalid2", r.max-r.min)
+	}
 	return r.max >= r.min
 }
 

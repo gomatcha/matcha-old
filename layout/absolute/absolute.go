@@ -8,17 +8,9 @@ import (
 )
 
 type Layout struct {
-	guide       layout.Guide
+	Guide       layout.Guide
 	childGuides map[matcha.Id]layout.Guide
 	views       []view.View
-}
-
-func (l *Layout) Guide() layout.Guide {
-	return l.guide
-}
-
-func (l *Layout) SetGuide(g layout.Guide) {
-	l.guide = g
 }
 
 func (l *Layout) Add(v view.View, g layout.Guide) {
@@ -30,7 +22,7 @@ func (l *Layout) Add(v view.View, g layout.Guide) {
 }
 
 func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
-	return l.guide, l.childGuides
+	return l.Guide, l.childGuides
 }
 
 func (l *Layout) Notify(f func()) comm.Id {

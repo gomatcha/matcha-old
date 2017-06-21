@@ -146,6 +146,8 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
         child = [[MatchaTabScreen alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"github.com/overcyn/matcha/view/stacknav"]) {
         child = [[MatchaStackScreen alloc] initWithViewNode:viewNode];
+    } else if ([name isEqual:@"github.com/overcyn/matcha/view/stacknav Bar"]) {
+        child = [[MatchaStackBar alloc] initWithViewNode:viewNode];
     }
     return child;
 }

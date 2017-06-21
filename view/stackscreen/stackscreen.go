@@ -84,34 +84,43 @@ func (v *stackView) Build(ctx *view.Context) *view.Model {
 	}
 
 	v.children = []view.View{}
-	screenspb := []*stacknav.Screen{}
+	childrenPb := []*stacknav.ChildView{}
 	for idx, i := range v.screen.Children() {
-		chld := i.View(ctx.WithPrefix(strconv.Itoa(idx)))
+		ctx := ctx.WithPrefix(strconv.Itoa(idx))
+		chld := i.View(ctx.WithPrefix("view"))
 
 		var bar *Bar
 		if childView, ok := chld.(ChildView); ok {
-			bar = childView.StackBar(ctx)
+			bar = childView.StackBar(ctx.WithPrefix("bar"))
 		} else {
 			bar = &Bar{
 				Title: "Title",
 			}
 		}
 
+		barV := &barView{
+			Embed: view.NewEmbed(ctx.NewId(strconv.Itoa(idx))),
+			bar:   bar,
+		}
+		l.Add(barV, func(s *constraint.Solver) {
+			s.TopEqual(constraint.Const(0))
+			s.LeftEqual(constraint.Const(0))
+			s.WidthEqual(l.MaxGuide().Width())
+			s.HeightEqual(constraint.Const(44))
+		})
+
 		v.Subscribe(chld) // TODO(KD): Don't reload entire tab view when a single child updates.
 		v.children = append(v.children, chld)
-		screenspb = append(screenspb, &stacknav.Screen{
-			Id:    int64(chld.Id()),
-			Title: bar.Title,
-			CustomBackButtonTitle: len(bar.BackButtonTitle) > 0,
-			BackButtonTitle:       bar.BackButtonTitle,
-			BackButtonHidden:      bar.BackButtonHidden,
+		childrenPb = append(childrenPb, &stacknav.ChildView{
+			ViewId: int64(chld.Id()),
+			BarId:  int64(barV.Id()),
 		})
 
 		l.Add(chld, func(s *constraint.Solver) {
 			s.TopEqual(constraint.Const(0))
 			s.LeftEqual(constraint.Const(0))
 			s.WidthEqual(l.MaxGuide().Width())
-			s.HeightEqual(l.MaxGuide().Height())
+			s.HeightEqual(l.MaxGuide().Height().Add(-64)) // TODO(KD): Respect bar actual height, shorter when rotated, etc...
 		})
 	}
 
@@ -119,8 +128,8 @@ func (v *stackView) Build(ctx *view.Context) *view.Model {
 		Children:       l.Views(),
 		Layouter:       l,
 		NativeViewName: "github.com/overcyn/matcha/view/stacknav",
-		NativeViewState: &stacknav.StackNav{
-			Screens: screenspb,
+		NativeViewState: &stacknav.View{
+			Children: childrenPb,
 		},
 		NativeFuncs: map[string]interface{}{
 			"OnChange": func(data []byte) {
@@ -131,15 +140,10 @@ func (v *stackView) Build(ctx *view.Context) *view.Model {
 					return
 				}
 
-				// // Don't update the view for this
-				// v.Embed.Unsubscribe(v.screen)
-
 				v.screen.Lock()
 				chl := v.screen.Children()[:len(pbevent.Id)]
 				v.screen.SetChildren(chl...)
 				v.screen.Unlock()
-
-				// v.Embed.Subscribe(v.screen)
 			},
 		},
 	}
@@ -150,15 +154,71 @@ type ChildView interface {
 	StackBar(*view.Context) *Bar
 }
 
+type barView struct {
+	*view.Embed
+	bar *Bar
+}
+
+func (v *barView) Build(ctx *view.Context) *view.Model {
+	l := constraint.New()
+
+	// iOS does the layouting for us. We just need the correct sizes.
+	titleViewId := int64(0)
+	if v.bar.TitleView != nil {
+		titleViewId = int64(v.bar.TitleView.Id())
+		l.Add(v.bar.TitleView, func(s *constraint.Solver) {
+			s.TopEqual(constraint.Const(0))
+			s.LeftEqual(constraint.Const(0))
+			s.HeightLess(l.MaxGuide().Height())
+			s.WidthLess(l.MaxGuide().Width())
+		})
+	}
+
+	rightViewIds := []int64{}
+	for _, i := range v.bar.RightViews {
+		rightViewIds = append(rightViewIds, int64(i.Id()))
+		l.Add(i, func(s *constraint.Solver) {
+			s.TopEqual(constraint.Const(0))
+			s.BottomEqual(constraint.Const(0))
+			s.HeightLess(l.MaxGuide().Height())
+			s.WidthLess(l.MaxGuide().Width())
+		})
+	}
+	leftViewIds := []int64{}
+	for _, i := range v.bar.LeftViews {
+		leftViewIds = append(leftViewIds, int64(i.Id()))
+		l.Add(i, func(s *constraint.Solver) {
+			s.TopEqual(constraint.Const(0))
+			s.BottomEqual(constraint.Const(0))
+			s.HeightLess(l.MaxGuide().Height())
+			s.WidthLess(l.MaxGuide().Width())
+		})
+	}
+
+	return &view.Model{
+		Layouter:       l,
+		Children:       l.Views(),
+		NativeViewName: "github.com/overcyn/matcha/view/stacknav Bar",
+		NativeViewState: &stacknav.Bar{
+			Title: v.bar.Title,
+			CustomBackButtonTitle: len(v.bar.BackButtonTitle) > 0,
+			BackButtonTitle:       v.bar.BackButtonTitle,
+			BackButtonHidden:      v.bar.BackButtonHidden,
+			TitleViewId:           titleViewId,
+			RightViewIds:          rightViewIds,
+			LeftViewIds:           leftViewIds,
+		},
+	}
+}
+
 type Bar struct {
 	Title            string
 	BackButtonTitle  string
 	BackButtonHidden bool
-	TitleView        view.View // TODO(KD):
-	RightViews       []view.View
-	LeftViews        []view.View
-	BarHidden        bool
-	// Bar height?
+
+	TitleView  view.View
+	RightViews []view.View
+	LeftViews  []view.View
 }
 
 func WithBar(s view.Screen, bar *Bar) view.Screen {

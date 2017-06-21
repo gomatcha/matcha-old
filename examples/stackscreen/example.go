@@ -4,9 +4,11 @@ import (
 	"image/color"
 
 	"github.com/overcyn/matcha/comm"
+	"github.com/overcyn/matcha/layout/constraint"
 	"github.com/overcyn/matcha/paint"
 	"github.com/overcyn/matcha/touch"
 	"github.com/overcyn/matcha/view"
+	"github.com/overcyn/matcha/view/basicview"
 	"github.com/overcyn/matcha/view/stackscreen"
 	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
@@ -29,12 +31,12 @@ func NewApp() *App {
 	app := &App{Storer: st, store: st}
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
-	options1 := &stackscreen.Bar{
+	bar1 := &stackscreen.Bar{
 		Title: "Title 1",
 	}
 
 	screen2 := NewTouchScreen(app, colornames.Red)
-	options2 := &stackscreen.Bar{
+	bar2 := &stackscreen.Bar{
 		Title: "Title 2",
 	}
 
@@ -44,8 +46,8 @@ func NewApp() *App {
 	app.stackScreen = stackscreen.New()
 	app.store.Set("stackscreen", app.stackScreen)
 	app.stackScreen.SetChildren(
-		stackscreen.WithBar(screen1, options1),
-		stackscreen.WithBar(screen2, options2),
+		stackscreen.WithBar(screen1, bar1),
+		stackscreen.WithBar(screen2, bar2),
 		screen3,
 		screen4,
 	)
@@ -82,9 +84,6 @@ func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
 	return &TouchView{
 		Embed: view.NewEmbed(ctx.NewId(key)),
 		app:   app,
-		bar: &stackscreen.Bar{
-			Title: "Title",
-		},
 	}
 }
 
@@ -111,5 +110,19 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 }
 
 func (v *TouchView) StackBar(ctx *view.Context) *stackscreen.Bar {
-	return v.bar
+	l := constraint.New()
+	l.Solve(func(s *constraint.Solver) {
+		s.TopEqual(constraint.Const(0))
+		s.LeftEqual(constraint.Const(0))
+		s.HeightEqual(constraint.Const(100))
+		s.WidthEqual(constraint.Const(100))
+	})
+
+	titleView := basicview.New(ctx, "axbaba")
+	titleView.Painter = &paint.Style{BackgroundColor: colornames.Red}
+	titleView.Layouter = l
+	return &stackscreen.Bar{
+		Title:     "Title",
+		TitleView: titleView,
+	}
 }

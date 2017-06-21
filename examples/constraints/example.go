@@ -36,6 +36,16 @@ func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
 	chl1 := basicview.New(ctx, "1")
 	chl1.Painter = &paint.Style{BackgroundColor: colornames.Blue}
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
+		// s.TopEqualC(0) // TODO(KD): Possible API? for doing const guides?
+		// s.LeftEqualC(0)
+		// s.WidthEqualC(100)
+		// s.HeightEqualC(100)
+
+		// s.TopEqual(s.Const(0)) // TODO(KD): Possible API? for doing const guides?
+		// s.LeftEqual(s.Const(0))
+		// s.WidthEqual(s.Const(100))
+		// s.HeightEqual(s.Const(100))
+
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
 		s.WidthEqual(constraint.Const(100))
@@ -67,6 +77,7 @@ func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
 		s.LeftEqual(g3.Right())
 		s.WidthEqual(constraint.Const(50))
 		s.HeightEqual(constraint.Const(50))
+		s.HeightEqual(100)
 	})
 
 	return &view.Model{

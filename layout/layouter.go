@@ -31,16 +31,16 @@ func (l *Context) LayoutChild(id matcha.Id, minSize, maxSize Point) Guide {
 }
 
 type Guide struct {
-	Frame  Rect
-	Insets Insets
+	Frame Rect
+	// Insets Insets
 	ZIndex int
 	// Transform?
 }
 
 func (g Guide) MarshalProtobuf() *pb.Guide {
 	return &pb.Guide{
-		Frame:  g.Frame.MarshalProtobuf(),
-		Insets: g.Insets.MarshalProtobuf(),
+		Frame: g.Frame.MarshalProtobuf(),
+		// Insets: g.Insets.MarshalProtobuf(),
 		ZIndex: int64(g.ZIndex),
 	}
 }

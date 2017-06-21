@@ -2,21 +2,25 @@ syntax = "proto3";
 package stacknav;
 
 option go_package = "stacknav";
-option objc_class_prefix = "MatchaPBStackNav";
+option objc_class_prefix = "MatchaStackScreenPB";
 
-message Screen {
-    int64 id = 1;
-    string title = 2;
-    bool customBackButtonTitle = 8;
-    string backButtonTitle = 3;
-    bool backButtonHidden = 4;
-    int64 titleViewId = 5;
-    repeated int64 rightViewIds = 6;
-    repeated int64 leftViewIds = 7;
+message ChildView {
+    int64 viewId = 1;
+    int64 barId = 2;
 }
 
-message StackNav {
-    repeated Screen screens = 1;
+message View {
+    repeated ChildView children = 1;
+}
+
+message Bar {
+    string title = 1;
+    bool backButtonHidden = 7;
+    bool customBackButtonTitle = 2;
+    string backButtonTitle = 3;
+    int64 titleViewId = 4;
+    repeated int64 rightViewIds = 5;
+    repeated int64 leftViewIds = 6;
 }
 
 message StackEvent {

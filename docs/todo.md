@@ -3,6 +3,7 @@
 High:
 * Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 * UINavigation item views...
+* Switching quickly between navigation item causes loop. 2 quick backs.
 
 Medium:
 * Rebuild settings app.
@@ -15,7 +16,7 @@ Medium:
 * Animations
 * remove global Middleware list
 * Define constraints
-* Make painters easier to set.
+* Add PaintStyle back as a property for all views. so as to make painters easier to set.
 * Updating a tabscreen or stackscreen should not trigger a rebuild of its children.
 
 Low:
@@ -35,6 +36,8 @@ Low:
 * Add preload, and prepreload stages
 * Support StyledText in textinput and textview.
 * Asset catalog
+* StackBar height / hidden
+* Debug constraints.
 
 Bugs:
 * Crash in protobuf if view does not have a layout guide.

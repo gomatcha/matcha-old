@@ -91,6 +91,8 @@ func (r *Root) start() {
 			return
 		}
 		matchabridge.Bridge().Call("updateId:withProtobuf:", matchabridge.Int64(int64(id)), matchabridge.Bytes(pb))
+
+		fmt.Println(r.root.node.debugString())
 	})
 }
 
@@ -691,7 +693,7 @@ func (n *node) debugString() string {
 		all = append(all, lines...)
 	}
 
-	str := fmt.Sprintf("{%p Id:%v View:%v Node:%p}", n, n.id, n.view, n.model)
+	str := fmt.Sprintf("{%p Id:%v View:%v Node:%p Layout:%v}", n, n.id, n.view, n.model, n.layoutGuide.Frame)
 	if len(all) > 0 {
 		str += "\n" + strings.Join(all, "\n")
 	}
