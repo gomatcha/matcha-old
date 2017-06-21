@@ -55,8 +55,8 @@ func (s *Screen) Pop() {
 
 type View struct {
 	*view.Embed
-	screen     *Screen
-	subscribed []comm.Notifier
+	screen   *Screen
+	children []view.View
 }
 
 func New(ctx *view.Context, key string, s *Screen) *View {
@@ -78,19 +78,15 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	v.screen.Lock()
 	defer v.screen.Unlock()
 
-	// // Unsubscribe from previous children.
-	// for _, i := range v.subscribed {
-	// 	v.Unsubscribe(i)
-	// }
-	// v.subscribed = nil
+	// Unsubscribe from old views
+	for _, i := range v.children {
+		v.Unsubscribe(i)
+	}
 
+	v.children = []view.View{}
 	screenspb := []*stacknav.Screen{}
 	for idx, i := range v.screen.Children() {
 		chld := i.View(ctx.WithPrefix(strconv.Itoa(idx)))
-
-		// // Subscribe to children.
-		// v.Subscribe(chld)
-		// v.subscribed = append(v.subscribed, chld)
 
 		var bar *StackBar
 		if childView, ok := chld.(ChildView); ok {
@@ -101,6 +97,8 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 			}
 		}
 
+		v.Subscribe(chld) // TODO(KD): Don't reload entire tab view when a single child updates.
+		v.children = append(v.children, chld)
 		screenspb = append(screenspb, &stacknav.Screen{
 			Id:    int64(chld.Id()),
 			Title: bar.Title,

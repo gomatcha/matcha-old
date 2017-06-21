@@ -73,6 +73,7 @@ type TouchView struct {
 	*view.Embed
 	app   *App
 	Color color.Color
+	bar   *stackscreen.StackBar
 }
 
 func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
@@ -82,6 +83,9 @@ func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
 	return &TouchView{
 		Embed: view.NewEmbed(ctx.NewId(key)),
 		app:   app,
+		bar: &stackscreen.StackBar{
+			Title: "Title",
+		},
 	}
 }
 
@@ -90,10 +94,14 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 		Count: 1,
 		OnTouch: func(e *touch.TapEvent) {
 			fmt.Println("recognized")
-			v.app.Lock()
-			defer v.app.Unlock()
 
-			v.app.StackScreen().Push(NewTouchScreen(v.app, colornames.Blue))
+			v.bar.Title = "Updated"
+			v.Update()
+
+			// v.app.Lock()
+			// defer v.app.Unlock()
+
+			// v.app.StackScreen().Push(NewTouchScreen(v.app, colornames.Blue))
 		},
 	}
 
@@ -103,4 +111,8 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 			touch.Key: []touch.Recognizer{tap},
 		},
 	}
+}
+
+func (v *TouchView) StackBar(ctx *view.Context) *stackscreen.StackBar {
+	return v.bar
 }
