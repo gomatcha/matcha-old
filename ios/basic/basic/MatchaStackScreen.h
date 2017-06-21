@@ -9,5 +9,5 @@
 @property (nonatomic, strong) MatchaNode *node;
 
 //Internal
-@property (nonatomic, strong) MatchaPBStackNavStackNav *prev;
+@property (nonatomic, strong) NSArray *prev;
 @end

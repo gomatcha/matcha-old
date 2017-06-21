@@ -131,15 +131,15 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 					return
 				}
 
-				// Don't update the view for this
-				v.Embed.Unsubscribe(v.screen)
+				// // Don't update the view for this
+				// v.Embed.Unsubscribe(v.screen)
 
 				v.screen.Lock()
 				chl := v.screen.Children()[:len(pbevent.Id)]
 				v.screen.SetChildren(chl...)
 				v.screen.Unlock()
 
-				v.Embed.Subscribe(v.screen)
+				// v.Embed.Subscribe(v.screen)
 			},
 		},
 	}

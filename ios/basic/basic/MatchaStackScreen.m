@@ -19,9 +19,10 @@
     GPBAny *state = self.node.nativeViewState;
     NSError *error = nil;
     
+    NSLog(@"ChildVcs:%@", childVCs);
+    
     MatchaPBStackNavStackNav *pb = (id)[state unpackMessageClass:[MatchaPBStackNavStackNav class] error:&error];
     NSMutableArray *viewControllers = [NSMutableArray array];
-    NSMutableDictionary *vcDict = [NSMutableDictionary dictionary];
     for (MatchaPBStackNavScreen *i in pb.screensArray) {
         UIViewController *vc = childVCs[@(i.id_p)];
         vc.navigationItem.title = i.title;
@@ -37,7 +38,7 @@
     } else {
         [self setViewControllers:viewControllers animated:YES];
     }
-    self.prev = pb;
+    self.prev = viewControllers;
 }
 
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
@@ -45,6 +46,10 @@
 }
 
 - (void)update {
+    // TODO(KD): More accurate comparison.
+    if (self.viewControllers.count == self.prev.count) {
+        return;
+    }
     GPBInt64Array *array = [[GPBInt64Array alloc] init];
     for (UIViewController *i in self.viewControllers) {
         [array addValue:0];

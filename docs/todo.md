@@ -3,7 +3,6 @@
 High:
 * Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 * UINavigation item views...
-* UINavigationItem cycle.
 
 Medium:
 * Rebuild settings app.
@@ -15,11 +14,12 @@ Medium:
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
 * Animations
 * remove global Middleware list
-* Webview
 * Define constraints
 * Make painters easier to set.
+* Updating a tabscreen or stackscreen should not trigger a rebuild of its children.
 
 Low:
+* Webview
 * Localization
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
 * Constraints should force views onto pixel boundries

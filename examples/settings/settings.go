@@ -46,7 +46,7 @@ func NewApp() *App {
 
 	app.stackScreen = stackscreen.NewScreen()
 	app.store.Set("stackScreen", app.stackScreen)
-	app.stackScreen.SetChildren(rootScreen)
+	app.stackScreen.SetChildren(rootScreen, rootScreen, rootScreen)
 
 	app.wifiController = NewWifiStore()
 	app.store.Set("wifi", app.wifiController)

@@ -1,7 +1,6 @@
 package stackscreen
 
 import (
-	"fmt"
 	"image/color"
 
 	"github.com/overcyn/matcha/comm"
@@ -43,7 +42,7 @@ func NewApp() *App {
 	screen4 := NewTouchScreen(app, colornames.Green)
 
 	app.stackScreen = stackscreen.NewScreen()
-	app.store.Set("0", app.stackScreen)
+	app.store.Set("stackscreen", app.stackScreen)
 	app.stackScreen.SetChildren(
 		stackscreen.WithStackBar(screen1, options1),
 		stackscreen.WithStackBar(screen2, options2),
@@ -93,15 +92,13 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
 		OnTouch: func(e *touch.TapEvent) {
-			fmt.Println("recognized")
+			// v.bar.Title = "Updated"
+			// v.Update()
 
-			v.bar.Title = "Updated"
-			v.Update()
+			v.app.Lock()
+			defer v.app.Unlock()
 
-			// v.app.Lock()
-			// defer v.app.Unlock()
-
-			// v.app.StackScreen().Push(NewTouchScreen(v.app, colornames.Blue))
+			v.app.StackScreen().Push(NewTouchScreen(v.app, colornames.Purple))
 		},
 	}
 
