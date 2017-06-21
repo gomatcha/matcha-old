@@ -51,7 +51,8 @@ func (s *Screen) SelectedIndex() int {
 
 type View struct {
 	*view.Embed
-	screen *Screen
+	screen     *Screen
+	childViews []view.View
 }
 
 func NewView(ctx *view.Context, key string, s *Screen) *View {
@@ -73,6 +74,12 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	v.screen.Lock()
 	defer v.screen.Unlock()
 
+	// Unsubscribe from old views
+	for _, i := range v.childViews {
+		v.Unsubscribe(i)
+	}
+
+	v.childViews = []view.View{}
 	screenspb := []*tabnavpb.ChildView{}
 	for idx, i := range v.screen.Children() {
 		chld := i.View(ctx.WithPrefix(strconv.Itoa(idx)))
@@ -86,6 +93,8 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 			}
 		}
 
+		v.Subscribe(chld) // TODO(KD): Don't reload entire tab view when a single child updates.
+		v.childViews = append(v.childViews, chld)
 		screenspb = append(screenspb, &tabnavpb.ChildView{
 			Id:           int64(chld.Id()),
 			Title:        button.Title,

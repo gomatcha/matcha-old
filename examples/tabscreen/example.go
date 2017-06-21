@@ -104,10 +104,13 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
 		OnTouch: func(e *touch.TapEvent) {
-			v.app.Lock()
-			defer v.app.Unlock()
+			v.button.Title = "Updated"
+			v.Update()
 
-			v.app.TabScreen().SetSelectedIndex(0)
+			// v.app.Lock()
+			// defer v.app.Unlock()
+
+			// v.app.TabScreen().SetSelectedIndex(0)
 		},
 	}
 

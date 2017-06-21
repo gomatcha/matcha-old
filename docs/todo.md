@@ -2,7 +2,7 @@
 
 High:
 * Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
-* UINavigation item button. uitabbar item image
+* UINavigation item button
 * uitabbaritem and uinavigationitem should observer their children, so they can update their button/bar
 * UINavigationItem cycle.
 

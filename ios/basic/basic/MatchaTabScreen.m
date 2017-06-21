@@ -1,9 +1,9 @@
-#import "MatchaTabBarController.h"
+#import "MatchaTabScreen.h"
 #import "MatchaView.h"
 #import "MatchaProtobuf.h"
 #import "MatchaViewController.h"
 
-@implementation MatchaTabBarController
+@implementation MatchaTabScreen
 
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super init])) {
