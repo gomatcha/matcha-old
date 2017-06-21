@@ -17,7 +17,6 @@
 
 - (void)setMatchaChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs {
     GPBAny *state = self.node.nativeViewState;
-    NSLog(@"ChildVcs:%@", childVCs);
     
     MatchaStackScreenPBView *view = (id)[state unpackMessageClass:[MatchaStackScreenPBView class] error:nil];
     NSMutableArray *viewControllers = [NSMutableArray array];

@@ -140,7 +140,7 @@ func (v *TouchView) StackBar(ctx *view.Context) *stackscreen.Bar {
 		s.HeightEqual(constraint.Const(50))
 		s.WidthEqual(constraint.Const(50))
 	})
-	leftView := basicview.New(ctx, "right")
+	leftView := basicview.New(ctx, "left")
 	leftView.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
 	leftView.Layouter = l3
 
