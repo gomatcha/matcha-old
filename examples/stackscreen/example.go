@@ -29,23 +29,23 @@ func NewApp() *App {
 	app := &App{Storer: st, store: st}
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
-	options1 := &stackscreen.StackBar{
+	options1 := &stackscreen.Bar{
 		Title: "Title 1",
 	}
 
 	screen2 := NewTouchScreen(app, colornames.Red)
-	options2 := &stackscreen.StackBar{
+	options2 := &stackscreen.Bar{
 		Title: "Title 2",
 	}
 
 	screen3 := NewTouchScreen(app, colornames.Yellow)
 	screen4 := NewTouchScreen(app, colornames.Green)
 
-	app.stackScreen = stackscreen.NewScreen()
+	app.stackScreen = stackscreen.New()
 	app.store.Set("stackscreen", app.stackScreen)
 	app.stackScreen.SetChildren(
-		stackscreen.WithStackBar(screen1, options1),
-		stackscreen.WithStackBar(screen2, options2),
+		stackscreen.WithBar(screen1, options1),
+		stackscreen.WithBar(screen2, options2),
 		screen3,
 		screen4,
 	)
@@ -72,7 +72,7 @@ type TouchView struct {
 	*view.Embed
 	app   *App
 	Color color.Color
-	bar   *stackscreen.StackBar
+	bar   *stackscreen.Bar
 }
 
 func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
@@ -82,7 +82,7 @@ func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
 	return &TouchView{
 		Embed: view.NewEmbed(ctx.NewId(key)),
 		app:   app,
-		bar: &stackscreen.StackBar{
+		bar: &stackscreen.Bar{
 			Title: "Title",
 		},
 	}
@@ -110,6 +110,6 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	}
 }
 
-func (v *TouchView) StackBar(ctx *view.Context) *stackscreen.StackBar {
+func (v *TouchView) StackBar(ctx *view.Context) *stackscreen.Bar {
 	return v.bar
 }

@@ -44,7 +44,7 @@ func NewApp() *App {
 		return NewRootView(ctx, "", app)
 	})
 
-	app.stackScreen = stackscreen.NewScreen()
+	app.stackScreen = stackscreen.New()
 	app.store.Set("stackScreen", app.stackScreen)
 	app.stackScreen.SetChildren(rootScreen, rootScreen, rootScreen)
 
@@ -214,8 +214,8 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 	}
 }
 
-func (v *RootView) StackBar(ctx *view.Context) *stackscreen.StackBar {
-	return &stackscreen.StackBar{Title: "Settings"}
+func (v *RootView) StackBar(ctx *view.Context) *stackscreen.Bar {
+	return &stackscreen.Bar{Title: "Settings"}
 }
 
 var (

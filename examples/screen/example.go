@@ -33,31 +33,31 @@ func NewApp() *App {
 	st := &comm.AsyncStore{}
 	app := &App{Storer: st, store: st}
 
-	app.stackScreen1 = stackscreen.NewScreen()
+	app.stackScreen1 = stackscreen.New()
 	app.store.Set("1", app.stackScreen1)
 	app.stackScreen1.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.stackScreen2 = stackscreen.NewScreen()
+	app.stackScreen2 = stackscreen.New()
 	app.store.Set("2", app.stackScreen2)
 	app.stackScreen2.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.stackScreen3 = stackscreen.NewScreen()
+	app.stackScreen3 = stackscreen.New()
 	app.store.Set("3", app.stackScreen3)
 	app.stackScreen3.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.stackScreen4 = stackscreen.NewScreen()
+	app.stackScreen4 = stackscreen.New()
 	app.store.Set("4", app.stackScreen4)
 	app.stackScreen4.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.tabScreen = tabscreen.NewScreen()
+	app.tabScreen = tabscreen.New()
 	app.store.Set("5", app.tabScreen)
 	app.tabScreen.SetChildren(
 		app.stackScreen1,

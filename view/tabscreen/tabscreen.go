@@ -20,13 +20,13 @@ type Screen struct {
 	selectedIndex int
 }
 
-func NewScreen() *Screen {
+func New() *Screen {
 	st := &comm.AsyncStore{}
 	return &Screen{Storer: st, store: st}
 }
 
 func (s *Screen) View(ctx *view.Context) view.View {
-	return NewView(ctx, "", s)
+	return newView(ctx, "", s)
 }
 
 func (s *Screen) SetChildren(ss ...view.Screen) {
@@ -49,26 +49,26 @@ func (s *Screen) SelectedIndex() int {
 	return s.selectedIndex
 }
 
-type View struct {
+type tabView struct {
 	*view.Embed
 	screen   *Screen
 	children []view.View
 }
 
-func NewView(ctx *view.Context, key string, s *Screen) *View {
-	if v, ok := ctx.Prev(key).(*View); ok && v.screen == s {
+func newView(ctx *view.Context, key string, s *Screen) *tabView {
+	if v, ok := ctx.Prev(key).(*tabView); ok && v.screen == s {
 		return v
 	}
 
 	embed := view.NewEmbed(ctx.NewId(key))
 	embed.Subscribe(s)
-	return &View{
+	return &tabView{
 		Embed:  embed,
 		screen: s,
 	}
 }
 
-func (v *View) Build(ctx *view.Context) *view.Model {
+func (v *tabView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
 	v.screen.Lock()
@@ -84,11 +84,11 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	for idx, i := range v.screen.Children() {
 		chld := i.View(ctx.WithPrefix(strconv.Itoa(idx)))
 
-		var button *TabButton
+		var button *Button
 		if childView, ok := chld.(ChildView); ok {
 			button = childView.TabButton(ctx)
 		} else {
-			button = &TabButton{
+			button = &Button{
 				Title: "Title",
 			}
 		}
@@ -138,40 +138,40 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 type ChildView interface {
 	view.View
-	TabButton(*view.Context) *TabButton
+	TabButton(*view.Context) *Button
 }
 
-type TabButton struct {
+type Button struct {
 	Title        string
 	Icon         image.Image
 	SelectedIcon image.Image
 	Badge        string
 }
 
-func WithTabButton(s view.Screen, button *TabButton) view.Screen {
-	return &tabButtonScreen{
+func WithButton(s view.Screen, button *Button) view.Screen {
+	return &screenWrapper{
 		Screen: s,
 		button: button,
 	}
 }
 
-type tabButtonScreen struct {
+type screenWrapper struct {
 	view.Screen
-	button *TabButton
+	button *Button
 }
 
-func (s *tabButtonScreen) View(ctx *view.Context) view.View {
-	return &tabButtonView{
+func (s *screenWrapper) View(ctx *view.Context) view.View {
+	return &viewWrapper{
 		View:   s.Screen.View(ctx),
 		button: s.button,
 	}
 }
 
-type tabButtonView struct {
+type viewWrapper struct {
 	view.View
-	button *TabButton
+	button *Button
 }
 
-func (v *tabButtonView) TabButton(*view.Context) *TabButton {
+func (v *viewWrapper) TabButton(*view.Context) *Button {
 	return v.button
 }

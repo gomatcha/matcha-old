@@ -33,7 +33,7 @@ func NewApp() *App {
 	}
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
-	options1 := &tabscreen.TabButton{
+	options1 := &tabscreen.Button{
 		Title:        "Title 1",
 		Badge:        "badge",
 		Icon:         env.MustLoadImage("TabCamera"),
@@ -41,7 +41,7 @@ func NewApp() *App {
 	}
 
 	screen2 := NewTouchScreen(app, colornames.Red)
-	options2 := &tabscreen.TabButton{
+	options2 := &tabscreen.Button{
 		Title:        "Title 2",
 		Icon:         env.MustLoadImage("TabMap"),
 		SelectedIcon: env.MustLoadImage("TabMapFilled"),
@@ -50,12 +50,12 @@ func NewApp() *App {
 	screen3 := NewTouchScreen(app, colornames.Yellow)
 	screen4 := NewTouchScreen(app, colornames.Green)
 
-	app.tabScreen = tabscreen.NewScreen()
+	app.tabScreen = tabscreen.New()
 	app.store.Set("0", app.tabScreen)
 	app.tabScreen.SetSelectedIndex(1)
 	app.tabScreen.SetChildren(
-		tabscreen.WithTabButton(screen1, options1),
-		tabscreen.WithTabButton(screen2, options2),
+		tabscreen.WithButton(screen1, options1),
+		tabscreen.WithButton(screen2, options2),
 		screen3,
 		screen4,
 	)
@@ -82,7 +82,7 @@ type TouchView struct {
 	*view.Embed
 	app    *App
 	Color  color.Color
-	button *tabscreen.TabButton
+	button *tabscreen.Button
 }
 
 func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
@@ -92,7 +92,7 @@ func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
 	return &TouchView{
 		Embed: view.NewEmbed(ctx.NewId(key)),
 		app:   app,
-		button: &tabscreen.TabButton{
+		button: &tabscreen.Button{
 			Title:        "Testing",
 			Icon:         env.MustLoadImage("TabSearch"),
 			SelectedIcon: env.MustLoadImage("TabSearchFilled"),
@@ -122,6 +122,6 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	}
 }
 
-func (v *TouchView) TabButton(*view.Context) *tabscreen.TabButton {
+func (v *TouchView) TabButton(*view.Context) *tabscreen.Button {
 	return v.button
 }

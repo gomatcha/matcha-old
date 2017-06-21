@@ -249,6 +249,6 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 	}
 }
 
-func (v *WifiView) StackBar(ctx *view.Context) *stackscreen.StackBar {
-	return &stackscreen.StackBar{Title: "Wi-Fi"}
+func (v *WifiView) StackBar(ctx *view.Context) *stackscreen.Bar {
+	return &stackscreen.Bar{Title: "Wi-Fi"}
 }

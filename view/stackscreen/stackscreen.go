@@ -17,7 +17,7 @@ type Screen struct {
 	screens []view.Screen
 }
 
-func NewScreen() *Screen {
+func New() *Screen {
 	st := &comm.AsyncStore{}
 	return &Screen{
 		Storer: st,
@@ -26,7 +26,7 @@ func NewScreen() *Screen {
 }
 
 func (s *Screen) View(ctx *view.Context) view.View {
-	return New(ctx, "", s)
+	return newView(ctx, "", s)
 }
 
 func (s *Screen) SetChildren(ss ...view.Screen) {
@@ -53,26 +53,26 @@ func (s *Screen) Pop() {
 	}
 }
 
-type View struct {
+type stackView struct {
 	*view.Embed
 	screen   *Screen
 	children []view.View
 }
 
-func New(ctx *view.Context, key string, s *Screen) *View {
-	if v, ok := ctx.Prev(key).(*View); ok && v.screen == s {
+func newView(ctx *view.Context, key string, s *Screen) *stackView {
+	if v, ok := ctx.Prev(key).(*stackView); ok && v.screen == s {
 		return v
 	}
 
 	embed := view.NewEmbed(ctx.NewId(key))
 	embed.Subscribe(s)
-	return &View{
+	return &stackView{
 		Embed:  embed,
 		screen: s,
 	}
 }
 
-func (v *View) Build(ctx *view.Context) *view.Model {
+func (v *stackView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
 	v.screen.Lock()
@@ -88,11 +88,11 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	for idx, i := range v.screen.Children() {
 		chld := i.View(ctx.WithPrefix(strconv.Itoa(idx)))
 
-		var bar *StackBar
+		var bar *Bar
 		if childView, ok := chld.(ChildView); ok {
 			bar = childView.StackBar(ctx)
 		} else {
-			bar = &StackBar{
+			bar = &Bar{
 				Title: "Title",
 			}
 		}
@@ -147,10 +147,10 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 
 type ChildView interface {
 	view.View
-	StackBar(*view.Context) *StackBar
+	StackBar(*view.Context) *Bar
 }
 
-type StackBar struct {
+type Bar struct {
 	Title            string
 	BackButtonTitle  string
 	BackButtonHidden bool
@@ -161,30 +161,30 @@ type StackBar struct {
 	// Bar height?
 }
 
-func WithStackBar(s view.Screen, bar *StackBar) view.Screen {
-	return &stackScreen{
+func WithBar(s view.Screen, bar *Bar) view.Screen {
+	return &screenWrapper{
 		Screen:   s,
 		stackBar: bar,
 	}
 }
 
-type stackScreen struct {
+type screenWrapper struct {
 	view.Screen
-	stackBar *StackBar
+	stackBar *Bar
 }
 
-func (s *stackScreen) View(ctx *view.Context) view.View {
-	return &stackView{
+func (s *screenWrapper) View(ctx *view.Context) view.View {
+	return &viewWrapper{
 		View:     s.Screen.View(ctx),
 		stackBar: s.stackBar,
 	}
 }
 
-type stackView struct {
+type viewWrapper struct {
 	view.View
-	stackBar *StackBar
+	stackBar *Bar
 }
 
-func (s *stackView) StackBar(*view.Context) *StackBar {
+func (s *viewWrapper) StackBar(*view.Context) *Bar {
 	return s.stackBar
 }
