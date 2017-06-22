@@ -14,7 +14,6 @@ Medium:
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
 * Animations
 * remove global Middleware list
-* Define constraints
 * Add PaintStyle back as a property for all views. so as to make painters easier to set.
 * Build website and documentation.
 
