@@ -154,7 +154,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.TopEqual(g6.Top())
 	})
 
-	childLayouter := &table.Layout{}
+	childLayouter := &table.Layouter{}
 	for i := 0; i < 20; i++ {
 		childView := NewTableCell(ctx, "a"+strconv.Itoa(i))
 		childView.String = "TEST TEST"

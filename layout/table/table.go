@@ -18,22 +18,22 @@ import (
 // 	DirectionFromRight
 // )
 
-type Layout struct {
+type Layouter struct {
 	// Direction Direction // TODO(KD): Direction is ignored.
 	ids   []matcha.Id
 	views []view.View
 }
 
-func (l *Layout) Views() []view.View {
+func (l *Layouter) Views() []view.View {
 	return l.views
 }
 
-func (l *Layout) Add(v view.View) {
+func (l *Layouter) Add(v view.View) {
 	l.ids = append(l.ids, v.Id())
 	l.views = append(l.views, v)
 }
 
-func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
+func (l *Layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
 	g := layout.Guide{}
 	gs := map[matcha.Id]layout.Guide{}
 	y := 0.0
@@ -49,10 +49,10 @@ func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout
 	return g, gs
 }
 
-func (l *Layout) Notify(f func()) comm.Id {
+func (l *Layouter) Notify(f func()) comm.Id {
 	return 0 // no-op
 }
 
-func (l *Layout) Unnotify(id comm.Id) {
+func (l *Layouter) Unnotify(id comm.Id) {
 	// no-op
 }

@@ -7,13 +7,13 @@ import (
 	"github.com/overcyn/matcha/view"
 )
 
-type Layout struct {
+type Layouter struct {
 	Guide       layout.Guide
 	childGuides map[matcha.Id]layout.Guide
 	views       []view.View
 }
 
-func (l *Layout) Add(v view.View, g layout.Guide) {
+func (l *Layouter) Add(v view.View, g layout.Guide) {
 	if l.childGuides == nil {
 		l.childGuides = map[matcha.Id]layout.Guide{}
 	}
@@ -21,14 +21,14 @@ func (l *Layout) Add(v view.View, g layout.Guide) {
 	l.views = append(l.views, v)
 }
 
-func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
+func (l *Layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
 	return l.Guide, l.childGuides
 }
 
-func (l *Layout) Notify(f func()) comm.Id {
+func (l *Layouter) Notify(f func()) comm.Id {
 	return 0 // no-op
 }
 
-func (l *Layout) Unnotify(id comm.Id) {
+func (l *Layouter) Unnotify(id comm.Id) {
 	// no-op
 }

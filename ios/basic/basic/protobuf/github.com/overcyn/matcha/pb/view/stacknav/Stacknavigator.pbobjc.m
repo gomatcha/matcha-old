@@ -36,7 +36,7 @@ static GPBFileDescriptor *MatchaStackScreenPBStacknavigatorRoot_FileDescriptor(v
   static GPBFileDescriptor *descriptor = NULL;
   if (!descriptor) {
     GPB_DEBUG_CHECK_RUNTIME_VERSIONS();
-    descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"stacknav"
+    descriptor = [[GPBFileDescriptor alloc] initWithPackage:@"matcha.view.stacknav"
                                                  objcPrefix:@"MatchaStackScreenPB"
                                                      syntax:GPBFileSyntaxProto3];
   }

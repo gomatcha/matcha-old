@@ -21,7 +21,7 @@ func NewBluetoothView(ctx *view.Context, key string, app *App) *BluetoothView {
 }
 
 func (v *BluetoothView) Build(ctx *view.Context) *view.Model {
-	l := &table.Layout{}
+	l := &table.Layouter{}
 	chlds := []view.View{}
 
 	scrollChild := basicview.New(ctx, "a")

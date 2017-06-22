@@ -84,7 +84,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 	v.app.Lock()
 	defer v.app.Unlock()
 
-	l := &table.Layout{}
+	l := &table.Layouter{}
 	{
 		ctx := ctx.WithPrefix("1")
 		group := []view.View{}

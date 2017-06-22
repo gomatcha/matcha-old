@@ -1,3 +1,6 @@
+// Package constraint implements a constraint-based layout system.
+//
+//
 package constraint
 
 import (
@@ -65,10 +68,12 @@ func (a attribute) String() string {
 	return ""
 }
 
+// Anchor represents a float64 value that is materialized during the layout phase.
 type Anchor struct {
 	anchor anchor
 }
 
+// Add returns a new Anchor that is offset by v.
 func (a *Anchor) Add(v float64) *Anchor {
 	return &Anchor{
 		offsetAnchor{
@@ -78,6 +83,7 @@ func (a *Anchor) Add(v float64) *Anchor {
 	}
 }
 
+// Multiply returns a new anchor that is multiplied by v.
 func (a *Anchor) Multiply(v float64) *Anchor {
 	return &Anchor{
 		multiplierAnchor{
@@ -88,7 +94,7 @@ func (a *Anchor) Multiply(v float64) *Anchor {
 }
 
 type anchor interface {
-	value(*Layout) float64
+	value(*Layouter) float64
 }
 
 type multiplierAnchor struct {
@@ -96,7 +102,7 @@ type multiplierAnchor struct {
 	underlying anchor
 }
 
-func (a multiplierAnchor) value(sys *Layout) float64 {
+func (a multiplierAnchor) value(sys *Layouter) float64 {
 	return a.underlying.value(sys) * a.multiplier
 }
 
@@ -105,13 +111,13 @@ type offsetAnchor struct {
 	underlying anchor
 }
 
-func (a offsetAnchor) value(sys *Layout) float64 {
+func (a offsetAnchor) value(sys *Layouter) float64 {
 	return a.underlying.value(sys) + a.offset
 }
 
 type constAnchor float64
 
-func (a constAnchor) value(sys *Layout) float64 {
+func (a constAnchor) value(sys *Layouter) float64 {
 	return float64(a)
 }
 
@@ -119,7 +125,7 @@ type notifierAnchor struct {
 	n comm.Float64Notifier
 }
 
-func (a notifierAnchor) value(sys *Layout) float64 {
+func (a notifierAnchor) value(sys *Layouter) float64 {
 	return a.n.Value()
 }
 
@@ -128,7 +134,7 @@ type guideAnchor struct {
 	attribute attribute
 }
 
-func (a guideAnchor) value(sys *Layout) float64 {
+func (a guideAnchor) value(sys *Layouter) float64 {
 	var g layout.Guide
 	switch a.guide.id {
 	case rootId:
@@ -166,78 +172,65 @@ func (a guideAnchor) value(sys *Layout) float64 {
 	return 0
 }
 
+// Const returns a new Anchor with a constant value f.
 func Const(f float64) *Anchor {
 	return &Anchor{constAnchor(f)}
 }
 
+// Notifier returns a new Anchor whose value is equal to n.Value().
 func Notifier(n comm.Float64Notifier) *Anchor {
 	return &Anchor{notifierAnchor{n}}
 }
 
+// Guide represents a layout.Guide that is materialized during the layout phase.
 type Guide struct {
 	id          matcha.Id
-	system      *Layout
+	system      *Layouter
 	children    map[matcha.Id]*Guide
 	matchaGuide *layout.Guide
 }
 
+// Top returns the minimum Y coordinate as an Anchor.
 func (g *Guide) Top() *Anchor {
 	return &Anchor{guideAnchor{guide: g, attribute: topAttr}}
 }
 
+// Right returns the maximum X coordinate as an Anchor.
 func (g *Guide) Right() *Anchor {
 	return &Anchor{guideAnchor{guide: g, attribute: rightAttr}}
 }
 
+// Bottom returns the maximum Y coordinate as an Anchor.
 func (g *Guide) Bottom() *Anchor {
 	return &Anchor{guideAnchor{guide: g, attribute: bottomAttr}}
 }
 
+// Left returns the minimum X coordinate as an Anchor.
 func (g *Guide) Left() *Anchor {
 	return &Anchor{guideAnchor{guide: g, attribute: leftAttr}}
 }
 
+// Width returns the width of g as an Anchor.
 func (g *Guide) Width() *Anchor {
 	return &Anchor{guideAnchor{guide: g, attribute: widthAttr}}
 }
 
+// Height returns the height of g as an Anchor.
 func (g *Guide) Height() *Anchor {
 	return &Anchor{guideAnchor{guide: g, attribute: heightAttr}}
 }
 
+// CenterX returns the center of g along the X axis as an Anchor.
 func (g *Guide) CenterX() *Anchor {
 	return &Anchor{guideAnchor{guide: g, attribute: centerXAttr}}
 }
 
+// CenterY returns the center of g along the Y axis as an Anchor.
 func (g *Guide) CenterY() *Anchor {
 	return &Anchor{guideAnchor{guide: g, attribute: centerYAttr}}
 }
 
-func (g *Guide) Add(view view.View, solveFunc func(*Solver)) *Guide {
-	id := view.Id()
-	chl := &Guide{
-		id:          id,
-		system:      g.system,
-		children:    map[matcha.Id]*Guide{},
-		matchaGuide: nil,
-	}
-	s := &Solver{id: id}
-	if solveFunc != nil {
-		solveFunc(s)
-	}
-	g.children[id] = chl
-	g.system.solvers = append(g.system.solvers, s)
-	g.system.views = append(g.system.views, view)
-
-	// Add any new notifier anchors to our notifier list.
-	for _, i := range s.constraints {
-		if anchor, ok := i.anchor.(notifierAnchor); ok {
-			g.system.notifiers = append(g.system.notifiers, anchor.n)
-		}
-	}
-	return chl
-}
-
+// Solve immediately calls solveFunc to update the constraints for g.
 func (g *Guide) Solve(solveFunc func(*Solver)) {
 	s := &Solver{id: g.id}
 	if solveFunc != nil {
@@ -251,6 +244,32 @@ func (g *Guide) Solve(solveFunc func(*Solver)) {
 			g.system.notifiers = append(g.system.notifiers, anchor.n)
 		}
 	}
+}
+
+// TODO(KD): remove support for adding directly to guides.
+func (g *Guide) add(v view.View, solveFunc func(*Solver)) *Guide {
+	id := v.Id()
+	chl := &Guide{
+		id:          id,
+		system:      g.system,
+		children:    map[matcha.Id]*Guide{},
+		matchaGuide: nil,
+	}
+	s := &Solver{id: id}
+	if solveFunc != nil {
+		solveFunc(s)
+	}
+	g.children[id] = chl
+	g.system.solvers = append(g.system.solvers, s)
+	g.system.views = append(g.system.views, v)
+
+	// Add any new notifier anchors to our notifier list.
+	for _, i := range s.constraints {
+		if anchor, ok := i.anchor.(notifierAnchor); ok {
+			g.system.notifiers = append(g.system.notifiers, anchor.n)
+		}
+	}
+	return chl
 }
 
 type constraint struct {
@@ -269,7 +288,7 @@ type Solver struct {
 	constraints []constraint
 }
 
-func (s *Solver) solve(sys *Layout, ctx *layout.Context) {
+func (s *Solver) solve(sys *Layouter, ctx *layout.Context) {
 	cr := newConstrainedRect()
 
 	for _, i := range s.constraints {
@@ -525,7 +544,7 @@ const (
 	maxId
 )
 
-type Layout struct {
+type Layouter struct {
 	*Guide
 	min            *Guide
 	max            *Guide
@@ -537,8 +556,9 @@ type Layout struct {
 	views          []view.View
 }
 
-func New() *Layout {
-	sys := &Layout{}
+// New creates a new layouter.
+func New() *Layouter {
+	sys := &Layouter{}
 	sys.Guide = &Guide{id: rootId, system: sys, children: map[matcha.Id]*Guide{}}
 	sys.min = &Guide{id: minId, system: sys, children: map[matcha.Id]*Guide{}}
 	sys.max = &Guide{id: maxId, system: sys, children: map[matcha.Id]*Guide{}}
@@ -546,19 +566,23 @@ func New() *Layout {
 	return sys
 }
 
-func (l *Layout) Views() []view.View {
+// View returns a list of all views added to l.
+func (l *Layouter) Views() []view.View {
 	return l.views
 }
 
-func (l *Layout) MinGuide() *Guide {
+// MinGuide returns a guide representing the smallest allowed size for the view.
+func (l *Layouter) MinGuide() *Guide {
 	return l.min
 }
 
-func (l *Layout) MaxGuide() *Guide {
+// MaxGuide returns a guide representing the largest allowed size for the view.
+func (l *Layouter) MaxGuide() *Guide {
 	return l.max
 }
 
-func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
+// Layout evaluates the constraints and returns the calculated guide and child guides.
+func (l *Layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
 	l.min.matchaGuide = &layout.Guide{
 		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
@@ -582,12 +606,18 @@ func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout
 	return g, gs
 }
 
+// Add immediately calls solveFunc to generate the constraints for v. These constraints are solved by l during the layout phase.
+// A corresponding guide is returned, which can be used to position other views or reposition v.
+func (l *Layouter) Add(v view.View, solveFunc func(*Solver)) *Guide {
+	return l.Guide.add(v, solveFunc)
+}
+
 type notifier struct {
 	notifier *comm.BatchNotifier
 	id       comm.Id
 }
 
-func (l *Layout) Notify(f func()) comm.Id {
+func (l *Layouter) Notify(f func()) comm.Id {
 	if len(l.notifiers) == 0 {
 		return 0
 	}
@@ -605,7 +635,7 @@ func (l *Layout) Notify(f func()) comm.Id {
 	return l.maxId
 }
 
-func (l *Layout) Unnotify(id comm.Id) {
+func (l *Layouter) Unnotify(id comm.Id) {
 	n, ok := l.batchNotifiers[id]
 	if ok {
 		n.notifier.Unnotify(n.id)

@@ -6,10 +6,10 @@ import (
 	"github.com/overcyn/matcha/layout"
 )
 
-type Layout struct {
+type Layouter struct {
 }
 
-func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
+func (l *Layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
 	g := layout.Guide{Frame: layout.Rect{Max: ctx.MinSize}}
 	gs := map[matcha.Id]layout.Guide{}
 	for _, id := range ctx.ChildIds {
@@ -18,10 +18,10 @@ func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout
 	return g, gs
 }
 
-func (l *Layout) Notify(f func()) comm.Id {
+func (l *Layouter) Notify(f func()) comm.Id {
 	return 0 // no-op
 }
 
-func (l *Layout) Unnotify(id comm.Id) {
+func (l *Layouter) Unnotify(id comm.Id) {
 	// no-op
 }

@@ -138,7 +138,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 	v.wifiStore.Lock()
 	defer v.wifiStore.Unlock()
 
-	l := &table.Layout{}
+	l := &table.Layouter{}
 	{
 		ctx := ctx.WithPrefix("1")
 		group := []view.View{}

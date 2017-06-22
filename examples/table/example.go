@@ -39,7 +39,7 @@ func New(ctx *view.Context, key string) *TableView {
 func (v *TableView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	childLayouter := &table.Layout{}
+	childLayouter := &table.Layouter{}
 	for i := 0; i < 20; i++ {
 		childView := NewTableCell(ctx, strconv.Itoa(i))
 		childView.String = "TEST TEST"

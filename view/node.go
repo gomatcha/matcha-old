@@ -634,7 +634,7 @@ func (n *node) layout(minSize layout.Point, maxSize layout.Point) layout.Guide {
 	// Perform layout
 	layouter := n.model.Layouter
 	if layouter == nil {
-		layouter = &full.Layout{}
+		layouter = &full.Layouter{}
 	}
 	g, gs := layouter.Layout(ctx)
 	g = g.Fit(ctx)
