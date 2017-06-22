@@ -1,8 +1,7 @@
 // matcha.Id is in the matcha package because view depends on layout. and layout needs to use the Ids
 
 High:
-* Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
-* UINavigation item views...
+* Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.f
 * Switching quickly between navigation item causes loop. 2 quick backs.
 
 Medium:
@@ -17,9 +16,10 @@ Medium:
 * remove global Middleware list
 * Define constraints
 * Add PaintStyle back as a property for all views. so as to make painters easier to set.
-* Updating a tabscreen or stackscreen should not trigger a rebuild of its children.
+* Build website and documentation.
 
 Low:
+* Updating a tabscreen or stackscreen should not trigger a rebuild of its children.
 * Webview
 * Localization
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack

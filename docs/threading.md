@@ -515,6 +515,43 @@ https://inconshreveable.com/07-08-2014/principles-of-designing-go-apis-with-chan
 //      layout.Eq(layout.TopIn, layout.TopIn, listId),
 //      layout.Ls(layout.BotIn, layout.BotIn, "")}
 
+_ = l.Add(pIconView, func(s *constraint.Solver) {
+    s.Width(constraint.Const(30))
+    s.Height(constraint.Const(30))
+    s.Left(l.Left().Add(15))
+    s.CenterY(l.CenterY())
+})
+_ = l.Add(pIconView, func(s constraint.Solver) {
+    s.Width = constraint.Const(30)
+    s.Height = constraint.Const(30)
+    s.Left = l.Left().Add(15)
+    s.CenterY = l.CenterY()
+})
+_ = l.Add(pIconView, constraint.Solver{
+    Width:   constraint.Const(30),
+    Height:  constraint.Const(30),
+    Left:    l.Left().Add(15),
+    CenterY: l.CenterY(),
+})
+_ = l.Add(pIconView, []constraint.Solver{
+    constraint.WidthEqual(constraint.Const(30)),
+    constraint.HeightEqual(constraint.Const(30)),
+    constraint.LeftEqual(l.Left().Add(15)),
+    constraint.CenterYEqual(l.CenterY()),
+})
+_ = l.Add(pIconView, []constraint.Constraint{
+    {WidthEqual: constraint.Const(30)},
+    {HeightEqual: constraint.Const(30)},
+    {LeftEqual: l.Left().Add(15)},
+    {CenterYEqual: l.CenterY()},
+})
+_ = l.Add(pIconView, []constraint.Constraint{
+    constraint.Const(30).WidthEqual(),
+    constraint.Const(30).HeightEqual(),
+    l.Left().Add(15).LeftEqual(),
+    l.CenterY().RightEqual(),
+})
+
 //  return l
 // }
 

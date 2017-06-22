@@ -56,8 +56,8 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	chl1 := basicview.New(ctx, "1")
 	chl1.Painter = &paint.AnimatedStyle{BackgroundColor: color}
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
-		s.TopEqual(constraint.Const(0))
-		s.LeftEqual(constraint.Const(0))
+		s.Top(0)
+		s.Left(0)
 		s.WidthEqual(constraint.Notifier(value))
 		s.HeightEqual(constraint.Notifier(value))
 	})
@@ -67,8 +67,8 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(g1.Bottom())
 		s.LeftEqual(g1.Left())
-		s.WidthEqual(constraint.Const(300))
-		s.HeightEqual(constraint.Const(300))
+		s.Width(300)
+		s.Height(300)
 	})
 
 	chl3 := basicview.New(ctx, "3")
@@ -76,8 +76,8 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	g3 := l.Add(chl3, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g2.Left())
-		s.WidthEqual(constraint.Const(100))
-		s.HeightEqual(constraint.Const(100))
+		s.Width(100)
+		s.Height(100)
 	})
 
 	chl4 := basicview.New(ctx, "4")
@@ -85,8 +85,8 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	g4 := l.Add(chl4, func(s *constraint.Solver) {
 		s.TopEqual(g2.Bottom())
 		s.LeftEqual(g3.Right())
-		s.WidthEqual(constraint.Const(50))
-		s.HeightEqual(constraint.Const(50))
+		s.Width(50)
+		s.Height(50)
 	})
 
 	chl5 := textview.New(ctx, "a")
@@ -141,8 +141,8 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		_ = l.Add(pChl9, func(s *constraint.Solver) {
 			s.BottomEqual(g8.Top())
 			s.RightEqual(g2.Right().Add(-15))
-			s.WidthEqual(constraint.Const(200))
-			s.HeightEqual(constraint.Const(200))
+			s.Width(200)
+			s.Height(200)
 		})
 	}
 	chl11 := switchview.New(ctx, "12")
@@ -173,8 +173,8 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	_ = l.Add(chl10, func(s *constraint.Solver) {
 		s.TopEqual(g4.Bottom())
 		s.LeftEqual(g4.Left())
-		s.WidthEqual(constraint.Const(200))
-		s.HeightEqual(constraint.Const(200))
+		s.Width(200)
+		s.Height(200)
 	})
 
 	return &view.Model{
@@ -203,7 +203,7 @@ func (v *TableCell) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
 	l.Solve(func(s *constraint.Solver) {
-		s.HeightEqual(constraint.Const(50))
+		s.Height(50)
 	})
 
 	textView := textview.New(ctx, "1")

@@ -335,11 +335,11 @@ func (s *Solver) solve(sys *Layout, ctx *layout.Context) {
 		width, _ = cr.solveWidth(parent.Width())
 		height, _ = cr.solveHeight(parent.Height())
 	} else {
-		// Solve for width and height? Should we set cr to this?
-		_, widthCR := cr.solveWidth(0)
-		_, heightCR := cr.solveHeight(0)
+		// Update the width and height ranges based on other constraints.
+		_, cr = cr.solveWidth(0)
+		_, cr = cr.solveHeight(0)
 
-		g = ctx.LayoutChild(s.id, layout.Pt(widthCR.width.min, heightCR.height.min), layout.Pt(widthCR.width.max, heightCR.height.max))
+		g = ctx.LayoutChild(s.id, layout.Pt(cr.width.min, cr.height.min), layout.Pt(cr.width.max, cr.height.max))
 		width = g.Width()
 		height = g.Height()
 
@@ -385,6 +385,10 @@ func (s *Solver) Debug() {
 	s.debug = true
 }
 
+func (s *Solver) Top(v float64) {
+	s.TopEqual(Const(v))
+}
+
 func (s *Solver) TopEqual(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: topAttr, comparison: equal, anchor: a.anchor})
 }
@@ -395,6 +399,10 @@ func (s *Solver) TopLess(a *Anchor) {
 
 func (s *Solver) TopGreater(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: topAttr, comparison: greater, anchor: a.anchor})
+}
+
+func (s *Solver) Right(v float64) {
+	s.RightEqual(Const(v))
 }
 
 func (s *Solver) RightEqual(a *Anchor) {
@@ -409,6 +417,10 @@ func (s *Solver) RightGreater(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: rightAttr, comparison: greater, anchor: a.anchor})
 }
 
+func (s *Solver) Bottom(v float64) {
+	s.BottomEqual(Const(v))
+}
+
 func (s *Solver) BottomEqual(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: bottomAttr, comparison: equal, anchor: a.anchor})
 }
@@ -419,6 +431,10 @@ func (s *Solver) BottomLess(a *Anchor) {
 
 func (s *Solver) BottomGreater(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: bottomAttr, comparison: greater, anchor: a.anchor})
+}
+
+func (s *Solver) Left(v float64) {
+	s.LeftEqual(Const(v))
 }
 
 func (s *Solver) LeftEqual(a *Anchor) {
@@ -433,6 +449,10 @@ func (s *Solver) LeftGreater(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: leftAttr, comparison: greater, anchor: a.anchor})
 }
 
+func (s *Solver) Width(v float64) {
+	s.WidthEqual(Const(v))
+}
+
 func (s *Solver) WidthEqual(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: widthAttr, comparison: equal, anchor: a.anchor})
 }
@@ -443,6 +463,10 @@ func (s *Solver) WidthLess(a *Anchor) {
 
 func (s *Solver) WidthGreater(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: widthAttr, comparison: greater, anchor: a.anchor})
+}
+
+func (s *Solver) Height(v float64) {
+	s.HeightEqual(Const(v))
 }
 
 func (s *Solver) HeightEqual(a *Anchor) {
@@ -457,6 +481,10 @@ func (s *Solver) HeightGreater(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: heightAttr, comparison: greater, anchor: a.anchor})
 }
 
+func (s *Solver) CenterX(v float64) {
+	s.CenterXEqual(Const(v))
+}
+
 func (s *Solver) CenterXEqual(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: centerXAttr, comparison: equal, anchor: a.anchor})
 }
@@ -467,6 +495,10 @@ func (s *Solver) CenterXLess(a *Anchor) {
 
 func (s *Solver) CenterXGreater(a *Anchor) {
 	s.constraints = append(s.constraints, constraint{attribute: centerXAttr, comparison: greater, anchor: a.anchor})
+}
+
+func (s *Solver) CenterY(v float64) {
+	s.CenterYEqual(Const(v))
 }
 
 func (s *Solver) CenterYEqual(a *Anchor) {
@@ -518,33 +550,33 @@ func (l *Layout) Views() []view.View {
 	return l.views
 }
 
-func (sys *Layout) MinGuide() *Guide {
-	return sys.min
+func (l *Layout) MinGuide() *Guide {
+	return l.min
 }
 
-func (sys *Layout) MaxGuide() *Guide {
-	return sys.max
+func (l *Layout) MaxGuide() *Guide {
+	return l.max
 }
 
-func (sys *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
-	sys.min.matchaGuide = &layout.Guide{
+func (l *Layout) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
+	l.min.matchaGuide = &layout.Guide{
 		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
-	sys.max.matchaGuide = &layout.Guide{
+	l.max.matchaGuide = &layout.Guide{
 		Frame: layout.Rt(0, 0, ctx.MaxSize.X, ctx.MaxSize.Y),
 	}
-	sys.Guide.matchaGuide = &layout.Guide{
+	l.Guide.matchaGuide = &layout.Guide{
 		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
 	// TODO(Kevin): reset all guides
 
-	for _, i := range sys.solvers {
-		i.solve(sys, ctx)
+	for _, i := range l.solvers {
+		i.solve(l, ctx)
 	}
 
-	g := *sys.Guide.matchaGuide
+	g := *l.Guide.matchaGuide
 	gs := map[matcha.Id]layout.Guide{}
-	for k, v := range sys.Guide.children {
+	for k, v := range l.Guide.children {
 		gs[k] = *v.matchaGuide
 	}
 	return g, gs
