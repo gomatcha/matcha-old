@@ -282,6 +282,7 @@ func (c constraint) String() string {
 	return fmt.Sprintf("%v%v%v", c.attribute, c.comparison, c.anchor)
 }
 
+// Solver represents a list of constraints to be applied to a view.
 type Solver struct {
 	debug       bool
 	id          matcha.Id
@@ -400,6 +401,7 @@ func (s *Solver) solve(sys *Layouter, ctx *layout.Context) {
 	}
 }
 
+// Debug adds debug logging for the solver.
 func (s *Solver) Debug() {
 	s.debug = true
 }
@@ -617,6 +619,7 @@ type notifier struct {
 	id       comm.Id
 }
 
+// Notify calls f anytime a Notifier anchor changes. Other updates to the layouter, such as adding guides will not trigger the notification.
 func (l *Layouter) Notify(f func()) comm.Id {
 	if len(l.notifiers) == 0 {
 		return 0
@@ -635,6 +638,7 @@ func (l *Layouter) Notify(f func()) comm.Id {
 	return l.maxId
 }
 
+// Unnotify stops notifications for id.
 func (l *Layouter) Unnotify(id comm.Id) {
 	n, ok := l.batchNotifiers[id]
 	if ok {
