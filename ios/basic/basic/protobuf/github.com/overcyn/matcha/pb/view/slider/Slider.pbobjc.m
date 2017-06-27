@@ -50,6 +50,7 @@ static GPBFileDescriptor *MatchaSliderPbSliderRoot_FileDescriptor(void) {
 @dynamic value;
 @dynamic maxValue;
 @dynamic minValue;
+@dynamic enabled;
 
 typedef struct MatchaSliderPbView__storage_ {
   uint32_t _has_storage_[1];
@@ -90,6 +91,15 @@ typedef struct MatchaSliderPbView__storage_ {
         .offset = (uint32_t)offsetof(MatchaSliderPbView__storage_, minValue),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeDouble,
+      },
+      {
+        .name = "enabled",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaSliderPbView_FieldNumber_Enabled,
+        .hasIndex = 3,
+        .offset = 4,  // Stored in _has_storage_ to save space.
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBool,
       },
     };
     GPBDescriptor *localDescriptor =

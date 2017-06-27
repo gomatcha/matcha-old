@@ -50,6 +50,7 @@ typedef GPB_ENUM(MatchaSliderPbView_FieldNumber) {
   MatchaSliderPbView_FieldNumber_Value = 1,
   MatchaSliderPbView_FieldNumber_MaxValue = 2,
   MatchaSliderPbView_FieldNumber_MinValue = 3,
+  MatchaSliderPbView_FieldNumber_Enabled = 4,
 };
 
 @interface MatchaSliderPbView : GPBMessage
@@ -59,6 +60,8 @@ typedef GPB_ENUM(MatchaSliderPbView_FieldNumber) {
 @property(nonatomic, readwrite) double maxValue;
 
 @property(nonatomic, readwrite) double minValue;
+
+@property(nonatomic, readwrite) BOOL enabled;
 
 @end
 

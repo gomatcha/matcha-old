@@ -8,6 +8,7 @@ message View {
     double value = 1;
     double maxValue = 2;
     double minValue = 3;
+    bool enabled = 4;
 }
 
 message Event {

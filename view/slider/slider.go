@@ -33,6 +33,7 @@ type View struct {
 	MaxValue      float64
 	MinValue      float64
 	OnValueChange func(value float64)
+	Enabled       bool
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -43,6 +44,7 @@ func New(ctx *view.Context, key string) *View {
 		Embed:    view.NewEmbed(ctx.NewId(key)),
 		MaxValue: 1,
 		MinValue: 0,
+		Enabled:  true,
 	}
 }
 
@@ -54,6 +56,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 			Value:    v.Value,
 			MaxValue: v.MaxValue,
 			MinValue: v.MinValue,
+			Enabled:  v.Enabled,
 		},
 		NativeFuncs: map[string]interface{}{
 			"OnValueChange": func(data []byte) {
