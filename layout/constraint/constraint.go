@@ -1,6 +1,6 @@
-// Package constraint implements a constraint-based layout system.
-//
 /*
+Package constraint implements a constraint-based layout system.
+
  func (v *View) Build(ctx *view.Context) *view.Model {
  	 // Create a new constraint system.
 	 l := constraint.New()
@@ -17,7 +17,7 @@
 	 guide1 := l.Add(child1, func(s *constraint.Solver) {
 		 s.Width(5) // Left(), Top(), CenterX()... methods support constraining to floats.
 		 s.Height(10)
-		 s.TopEqual(l.Bottom()) // LeftEqual(), TopLess(), CenterXGreater()... methods support constraining to other guides.
+		 s.TopEqual(l.Bottom()) // LeftEqual(), TopLess(), CenterXGreater()... methods support constraining to anchors.
 		 s.LeftEqual(l.Right())
 	 })
 
@@ -33,7 +33,7 @@
 		 s.CenterYEqual(verticalCenter.Add(10))
 	 })
 
-	 // If a constraint is recalculated, the previous set of constraints are thrown out.
+	 // Recalulates the constraints for child1.
 	 guide1.Solve(func(s *constraint.Solver) {
 	 	s.Width(40)
 	 	s.Height(30)
@@ -41,7 +41,7 @@
 	 	s.LeftEqual(l.Right())
  	 })
 
- 	 // Solvers also do not run simultaneously! Child2 is still 10x20 since at the time it was added Child1 was 5x10.
+ 	 // Solvers do not run simultaneously! Child2 is still 10x20 since at the time it was added Child1 was 5x10.
 
 	 return &view.Model{
 	 	Views: l.Views(),

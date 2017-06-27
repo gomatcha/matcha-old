@@ -1,13 +1,15 @@
 // matcha.Id is in the matcha package because view depends on layout. and layout needs to use the Ids
+go get github.com/matcha/matcha/...
 
 High:
-* Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.f
+* Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
 * Switching quickly between navigation item causes loop. 2 quick backs.
 
 Medium:
+* Support more flags in matcha command.
 * Rebuild settings app.
 * Documentation.
-* Fix middleware.
+* Remove middleware api.
 * Cache layout properties.
 * Only send updated views.
 * Collect native resources into assets.
