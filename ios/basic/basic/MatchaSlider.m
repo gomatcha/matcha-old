@@ -27,6 +27,8 @@
     MatchaSliderPbView *view = (id)[state unpackMessageClass:[MatchaSliderPbView class] error:&error];
     if (view != nil) {
         self.value = view.value;
+        self.maximumValue = view.maxValue;
+        self.minimumValue = view.minValue;
     }
 }
 

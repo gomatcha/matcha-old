@@ -48,11 +48,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef GPB_ENUM(MatchaSliderPbView_FieldNumber) {
   MatchaSliderPbView_FieldNumber_Value = 1,
+  MatchaSliderPbView_FieldNumber_MaxValue = 2,
+  MatchaSliderPbView_FieldNumber_MinValue = 3,
 };
 
 @interface MatchaSliderPbView : GPBMessage
 
 @property(nonatomic, readwrite) double value;
+
+@property(nonatomic, readwrite) double maxValue;
+
+@property(nonatomic, readwrite) double minValue;
 
 @end
 

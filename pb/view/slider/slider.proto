@@ -6,6 +6,8 @@ option objc_class_prefix = "MatchaSliderPb";
 
 message View {
     double value = 1;
+    double maxValue = 2;
+    double minValue = 3;
 }
 
 message Event {

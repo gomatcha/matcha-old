@@ -48,10 +48,14 @@ static GPBFileDescriptor *MatchaSliderPbSliderRoot_FileDescriptor(void) {
 @implementation MatchaSliderPbView
 
 @dynamic value;
+@dynamic maxValue;
+@dynamic minValue;
 
 typedef struct MatchaSliderPbView__storage_ {
   uint32_t _has_storage_[1];
   double value;
+  double maxValue;
+  double minValue;
 } MatchaSliderPbView__storage_;
 
 // This method is threadsafe because it is initially called
@@ -69,6 +73,24 @@ typedef struct MatchaSliderPbView__storage_ {
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeDouble,
       },
+      {
+        .name = "maxValue",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaSliderPbView_FieldNumber_MaxValue,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MatchaSliderPbView__storage_, maxValue),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeDouble,
+      },
+      {
+        .name = "minValue",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaSliderPbView_FieldNumber_MinValue,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MatchaSliderPbView__storage_, minValue),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeDouble,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MatchaSliderPbView class]
@@ -78,6 +100,11 @@ typedef struct MatchaSliderPbView__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(MatchaSliderPbView__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\002\002\010\000\003\010\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }

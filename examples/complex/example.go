@@ -179,7 +179,9 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl12 := slider.New(ctx, "11")
-	chl12.Value = 1
+	chl12.MaxValue = 12
+	chl12.MinValue = 4
+	chl12.Value = 7
 	chl12.OnValueChange = func(value float64) {
 		fmt.Println("value", value)
 	}

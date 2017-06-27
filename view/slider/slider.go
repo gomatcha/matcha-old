@@ -30,6 +30,8 @@ func (l *layouter) Unnotify(id comm.Id) {
 type View struct {
 	*view.Embed
 	Value         float64
+	MaxValue      float64
+	MinValue      float64
 	OnValueChange func(value float64)
 }
 
@@ -38,7 +40,9 @@ func New(ctx *view.Context, key string) *View {
 		return v
 	}
 	return &View{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed:    view.NewEmbed(ctx.NewId(key)),
+		MaxValue: 1,
+		MinValue: 0,
 	}
 }
 
@@ -47,7 +51,9 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		Layouter:       &layouter{},
 		NativeViewName: "github.com/overcyn/matcha/view/slider",
 		NativeViewState: &slider.View{
-			Value: v.Value,
+			Value:    v.Value,
+			MaxValue: v.MaxValue,
+			MinValue: v.MinValue,
 		},
 		NativeFuncs: map[string]interface{}{
 			"OnValueChange": func(data []byte) {

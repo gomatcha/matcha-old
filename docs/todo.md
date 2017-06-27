@@ -7,7 +7,7 @@ High:
 * Build objective c files into the framework.
 
 Medium:
-* Why doesn't simulator debugger work?
+* Why doesn't simulator debugger work? Why does simulator crash all the time?
 * Rebuild settings app.
 * Documentation.
 * Remove middleware api.
@@ -33,7 +33,6 @@ Low:
 * Picker
 * ProgressBar
 * SegmentedControl
-* Slider
 * AlertView
 * Modal presentation
 * Add preload, and prepreload stages
