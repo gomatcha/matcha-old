@@ -31,7 +31,6 @@
     MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:data];
     
     [self.viewNode.rootVC call:@"OnChange" viewId:self.node.identifier.longLongValue args:@[value]];
-
 }
 
 @end

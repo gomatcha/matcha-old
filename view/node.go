@@ -92,7 +92,7 @@ func (r *Root) start() {
 		}
 		matchabridge.Bridge().Call("updateId:withProtobuf:", matchabridge.Int64(int64(id)), matchabridge.Bytes(pb))
 
-		fmt.Println(r.root.node.debugString())
+		// fmt.Println(r.root.node.debugString())
 	})
 }
 

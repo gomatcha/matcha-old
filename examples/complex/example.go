@@ -17,6 +17,7 @@ import (
 	"github.com/overcyn/matcha/view/button"
 	"github.com/overcyn/matcha/view/imageview"
 	"github.com/overcyn/matcha/view/scrollview"
+	"github.com/overcyn/matcha/view/slider"
 	"github.com/overcyn/matcha/view/switchview"
 	"github.com/overcyn/matcha/view/textview"
 	"github.com/overcyn/matcha/view/urlimageview"
@@ -175,6 +176,18 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.LeftEqual(g4.Left())
 		s.Width(200)
 		s.Height(200)
+	})
+
+	chl12 := slider.New(ctx, "11")
+	chl12.Value = 1
+	chl12.OnValueChange = func(value float64) {
+		fmt.Println("value", value)
+	}
+	chl12p := view.WithPainter(chl12, &paint.Style{BackgroundColor: colornames.Blue})
+	_ = l.Add(chl12p, func(s *constraint.Solver) {
+		s.TopEqual(l.Top().Add(50))
+		s.LeftEqual(l.Left())
+		s.Width(75)
 	})
 
 	return &view.Model{

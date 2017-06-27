@@ -2,11 +2,12 @@
 go get github.com/matcha/matcha/...
 
 High:
-* Rewrite gomobile. We want to generate a bunch of xcprojects that the user can then add into an xcworkspace.
+* Rewrite gomobile. We want to generate an bunch of xcprojects that the user can then add into an xcworkspace.
 * Switching quickly between navigation item causes loop. 2 quick backs.
+* Build objective c files into the framework.
 
 Medium:
-* Support more flags in matcha command.
+* Why doesn't simulator debugger work?
 * Rebuild settings app.
 * Documentation.
 * Remove middleware api.
@@ -20,6 +21,7 @@ Medium:
 * Build website and documentation.
 
 Low:
+* Support more flags in matcha command.
 * Updating a tabscreen or stackscreen should not trigger a rebuild of its children.
 * Webview
 * Localization

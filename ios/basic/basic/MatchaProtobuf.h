@@ -15,6 +15,7 @@
 #import "Image.pbobjc.h"
 #import "Textinput.pbobjc.h"
 #import "Keyboard.pbobjc.h"
+#import "Slider.pbobjc.h"
 
 @import Matcha;
 

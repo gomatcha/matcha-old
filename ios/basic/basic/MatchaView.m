@@ -10,6 +10,7 @@
 #import "MatchaTextInput.h"
 #import "MatchaScrollView.h"
 #import "MatchaButton.h"
+#import "MatchaSlider.h"
 
 @interface MatchaBasicView ()
 @property (nonatomic, weak) MatchaViewNode *viewNode;
@@ -135,6 +136,8 @@ UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *vi
         child = [[MatchaSwitchView alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"github.com/overcyn/matcha/view/textinput"]) {
         child = [[MatchaTextInput alloc] initWithViewNode:viewNode];
+    } else if ([name isEqual:@"github.com/overcyn/matcha/view/slider"]) {
+        child = [[MatchaSlider alloc] initWithViewNode:viewNode];
     }
     return child;
 }
