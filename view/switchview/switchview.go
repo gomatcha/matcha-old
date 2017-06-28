@@ -5,6 +5,7 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/overcyn/matcha/layout/constraint"
+	"github.com/overcyn/matcha/paint"
 	"github.com/overcyn/matcha/pb/view/switchview"
 	"github.com/overcyn/matcha/view"
 )
@@ -13,6 +14,7 @@ type View struct {
 	*view.Embed
 	Value         bool
 	OnValueChange func(value bool)
+	PaintStyle    *paint.Style
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -33,7 +35,12 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		s.LeftEqual(l.MaxGuide().Left())
 	})
 
+	painter := paint.Painter(nil)
+	if v.PaintStyle != nil {
+		painter = v.PaintStyle
+	}
 	return &view.Model{
+		Painter:        painter,
 		Layouter:       l,
 		NativeViewName: "github.com/overcyn/matcha/view/switch",
 		NativeViewState: &switchview.View{

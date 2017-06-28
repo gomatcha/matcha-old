@@ -5,19 +5,16 @@ High:
 * We want to generate an bunch of xcprojects that the user can then add into an xcworkspace.
 * Switching quickly between navigation item causes loop. 2 quick backs.
 * Build objective c files into the framework.
+* Collect native resources into assets.
 
 Medium:
 * Why doesn't simulator debugger work? Why does simulator crash all the time?
 * Rebuild settings app.
-* Documentation.
 * Remove middleware api.
-* Cache layout properties.
 * Only send updated views.
-* Collect native resources into assets.
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
 * Animations
 * remove global Middleware list
-* Add PaintStyle back as a property for all views. so as to make painters easier to set.
 * Build website and documentation.
 
 Low:

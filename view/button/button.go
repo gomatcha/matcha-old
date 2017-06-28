@@ -4,6 +4,7 @@ import (
 	"github.com/overcyn/matcha"
 	"github.com/overcyn/matcha/comm"
 	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/paint"
 	pbbutton "github.com/overcyn/matcha/pb/view/button"
 	"github.com/overcyn/matcha/text"
 	"github.com/overcyn/matcha/view"
@@ -30,8 +31,9 @@ func (l *layouter) Unnotify(id comm.Id) {
 
 type Button struct {
 	*view.Embed
-	Text    string
-	OnPress func()
+	Text       string
+	OnPress    func()
+	PaintStyle *paint.Style
 }
 
 func New(ctx *view.Context, key string) *Button {
@@ -54,7 +56,12 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 	st := text.NewStyledText(t)
 	st.Set(style, 0, 0)
 
+	painter := paint.Painter(nil)
+	if v.PaintStyle != nil {
+		painter = v.PaintStyle
+	}
 	return &view.Model{
+		Painter:        painter,
 		Layouter:       &layouter{styledText: st},
 		NativeViewName: "github.com/overcyn/matcha/view/button",
 		NativeViewState: &pbbutton.View{

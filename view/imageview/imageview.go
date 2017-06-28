@@ -10,6 +10,7 @@ import (
 	"github.com/overcyn/matcha/comm"
 	"github.com/overcyn/matcha/env"
 	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/paint"
 	"github.com/overcyn/matcha/pb"
 	"github.com/overcyn/matcha/pb/view/imageview"
 	"github.com/overcyn/matcha/view"
@@ -68,6 +69,7 @@ type View struct {
 	Image      image.Image
 	ResizeMode ResizeMode
 	Tint       color.Color
+	PaintStyle *paint.Style
 	image      image.Image
 	pbImage    *pb.ImageOrResource
 }
@@ -100,7 +102,12 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		}
 	}
 
+	var painter paint.Painter
+	if v.PaintStyle != nil {
+		painter = v.PaintStyle
+	}
 	return &view.Model{
+		Painter:        painter,
 		Layouter:       &layouter{bounds: bounds, resizeMode: resizeMode, scale: scale},
 		NativeViewName: "github.com/overcyn/matcha/view/imageview",
 		NativeViewState: &imageview.View{

@@ -11,6 +11,7 @@ import (
 	"github.com/overcyn/matcha"
 	"github.com/overcyn/matcha/comm"
 	"github.com/overcyn/matcha/layout"
+	"github.com/overcyn/matcha/paint"
 	"github.com/overcyn/matcha/view"
 	"github.com/overcyn/matcha/view/imageview"
 )
@@ -39,6 +40,7 @@ func (l layouter) Unnotify(id comm.Id) {
 
 type View struct {
 	*view.Embed
+	PaintStyle *paint.Style
 	ResizeMode imageview.ResizeMode
 	URL        string
 	Path       string
@@ -69,7 +71,12 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	chl.Image = v.image
 	chl.Tint = v.Tint
 
+	var painter paint.Painter
+	if v.PaintStyle != nil {
+		painter = v.PaintStyle
+	}
 	return &view.Model{
+		Painter:  painter,
 		Layouter: layouter{},
 		Children: []view.View{chl},
 	}
