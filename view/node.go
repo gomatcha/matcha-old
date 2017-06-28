@@ -27,26 +27,8 @@ var MainMu sync.Mutex
 var maxId int64
 
 // Middleware is called on the result of View.Build(*context).
-type Middleware interface {
+type middleware interface {
 	Build(*Context, *Model)
-}
-
-var middlewaresMu sync.Mutex
-var middlewares = []func() Middleware{}
-
-// RegisterMiddleware adds v to the list of default middleware that Root starts with.
-func RegisterMiddleware(v func() Middleware) {
-	middlewaresMu.Lock()
-	defer middlewaresMu.Unlock()
-
-	middlewares = append(middlewares, v)
-}
-
-func defaultMiddlewares() []func() Middleware {
-	middlewaresMu.Lock()
-	defer middlewaresMu.Unlock()
-
-	return middlewares
 }
 
 type Root struct {
@@ -135,22 +117,6 @@ func (r *Root) SetSize(p layout.Point) {
 	defer MainMu.Unlock()
 
 	r.size = p
-}
-
-// Middlewares returns the Middleware that are applied to r's views.
-func (r *Root) Middlewares() []Middleware {
-	MainMu.Lock()
-	defer MainMu.Unlock()
-
-	return r.root.middlewares
-}
-
-// SetMiddlewares sets the list of Middleware applied to all of r's views.
-func (r *Root) SetMiddlewares(rs []Middleware) {
-	MainMu.Lock()
-	defer MainMu.Unlock()
-
-	r.root.middlewares = rs
 }
 
 type viewCacheKey struct {
@@ -307,7 +273,7 @@ type root struct {
 	node        *node
 	ids         map[viewCacheKey]matcha.Id
 	nodes       map[matcha.Id]*node
-	middlewares []Middleware
+	middlewares []middleware
 
 	flagMu      sync.Mutex
 	updateFlags map[matcha.Id]updateFlag
@@ -328,8 +294,8 @@ func newRoot(s Screen) *root {
 		root: root,
 	}
 	root.updateFlags = map[matcha.Id]updateFlag{v.Id(): buildFlag}
-	for _, i := range defaultMiddlewares() {
-		root.middlewares = append(root.middlewares, i())
+	for _, i := range internal.Middlewares() {
+		root.middlewares = append(root.middlewares, i().(middleware))
 	}
 	return root
 }

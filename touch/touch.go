@@ -8,13 +8,14 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/overcyn/matcha/internal"
 	"github.com/overcyn/matcha/layout"
 	"github.com/overcyn/matcha/pb/touch"
 	"github.com/overcyn/matcha/view"
 )
 
 func init() {
-	view.RegisterMiddleware(func() view.Middleware { return &Middleware{} })
+	internal.RegisterMiddleware(func() interface{} { return &Middleware{} })
 }
 
 type key struct{}
