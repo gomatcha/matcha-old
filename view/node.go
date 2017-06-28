@@ -449,6 +449,8 @@ type node struct {
 	layoutNotify   bool
 	layoutNotifyId comm.Id
 	layoutGuide    *layout.Guide
+	layoutMinSize  layout.Point
+	layoutMaxSize  layout.Point
 
 	paintId       int64
 	paintNotify   bool
@@ -617,6 +619,13 @@ func (n *node) build(prevIds map[viewCacheKey]matcha.Id, prevNodes map[matcha.Id
 
 func (n *node) layout(minSize layout.Point, maxSize layout.Point) layout.Guide {
 	n.layoutId += 1
+
+	// If node has no children, has the same min/max size, and does not need relayout, return the previous guide.
+	if len(n.children) == 0 && n.layoutGuide != nil && n.layoutMinSize == minSize && n.layoutMaxSize == maxSize && !n.root.updateFlags[n.id].needsLayout() {
+		return *n.layoutGuide
+	}
+	n.layoutMinSize = minSize
+	n.layoutMaxSize = maxSize
 
 	// Create the LayoutContext
 	ctx := &layout.Context{

@@ -2,7 +2,7 @@
 go get github.com/matcha/matcha/...
 
 High:
-* Rewrite gomobile. We want to generate an bunch of xcprojects that the user can then add into an xcworkspace.
+* We want to generate an bunch of xcprojects that the user can then add into an xcworkspace.
 * Switching quickly between navigation item causes loop. 2 quick backs.
 * Build objective c files into the framework.
 
