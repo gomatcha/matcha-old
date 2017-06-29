@@ -3,7 +3,6 @@ package example
 import (
 	"fmt"
 	"strconv"
-	"time"
 
 	"golang.org/x/image/colornames"
 
@@ -49,14 +48,7 @@ func NewNestedView(ctx *view.Context, key string) *NestedView {
 
 func (v *NestedView) Lifecycle(from, to view.Stage) {
 	if view.EntersStage(from, to, view.StageVisible) {
-		// animation := animate.NewBasic()
-		// animation.SetStart(0)
-		// animation.SetEnd(1)
-		// animation.SetDuration(5 * time.Second)
-		// animation := animate.Basic{Start: 1.0, End: 3.0}
-		// animate.Run(animation, &v.value, nil)
-
-		_ = v.value.Run(&animate.Basic{Start: 0, End: 1, TimeInterval: time.Second * 5}, nil)
+		// _ = v.value.Run(&animate.Basic{Start: 0, End: 1, TimeInterval: time.Second * 5, Ease: animate.PolyInEase{3}}, nil)
 	}
 }
 

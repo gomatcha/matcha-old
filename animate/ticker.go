@@ -8,32 +8,6 @@ import (
 	"github.com/overcyn/matcha/view"
 )
 
-type Ticker struct {
-	ticker *internal.Ticker
-}
-
-func NewTicker(duration time.Duration) *Ticker {
-	return &Ticker{
-		ticker: internal.NewTicker(duration),
-	}
-}
-
-func (t *Ticker) Notify(f func()) comm.Id {
-	return t.ticker.Notify(f)
-}
-
-func (t *Ticker) Unnotify(id comm.Id) {
-	t.ticker.Unnotify(id)
-}
-
-func (t *Ticker) Value() float64 {
-	return t.ticker.Value()
-}
-
-func (t *Ticker) Stop() {
-	t.ticker.Stop()
-}
-
 type Value struct {
 	value     float64
 	batch     comm.BatchNotifier
@@ -63,7 +37,7 @@ func (v *Value) Run(a Animation, onComplete func()) (cancelFunc func()) {
 	}
 
 	start := time.Now()
-	an := &animation{animation: a, onComplete: onComplete, ticker: NewTicker(time.Hour * 99)}
+	an := &animation{animation: a, onComplete: onComplete, ticker: internal.NewTicker(time.Hour * 99)}
 	an.tickerId = an.ticker.Notify(func() {
 		view.MainMu.Lock()
 		defer view.MainMu.Unlock()
@@ -103,7 +77,7 @@ type Animation interface {
 type animation struct {
 	cancelled  bool
 	animation  Animation
-	ticker     *Ticker
+	ticker     *internal.Ticker
 	tickerId   comm.Id
 	onComplete func()
 	value      *Value
@@ -191,31 +165,6 @@ func (a *Basic) Value() float64 {
 // 	return 0
 // }
 
-// func Run(a Animation, v *Value, onComplete func()) (cancelFunc func()) {
-// 	if v.animation != nil {
-// 		v.animation.cancel()
-// 	}
-
-// 	start := time.Now()
-// 	an := &animation{animation: a, onComplete: onComplete, ticker: NewTicker(time.Hour * 99)}
-// 	an.tickerId = an.ticker.Notify(func() {
-// 		view.MainMu.Lock()
-// 		defer view.MainMu.Unlock()
-
-// 		d := time.Now().Sub(start)
-// 		a.SetTime(d)
-// 		v.setValue(a.Value())
-// 		if d > a.Duration() {
-// 			an.cancel()
-// 		}
-// 	})
-// 	v.animation = an
-
-// 	return func() {
-// 		an.cancel()
-// 	}
-// }
-
 // func Reverse(a animation) animation {
 // }
 
@@ -224,16 +173,3 @@ func (a *Basic) Value() float64 {
 
 // func Repeat(a animation) animation {
 // }
-
-// cancelFunc := animate.RunMultiple(func(t *animate.Timing) {
-// 	a := &animate.Basic{Start:animate.Current, End:3.0, Duration: 4.0}
-// 	a := &animate.Bounce{Start:animate.Current, End:3.0, Velocity: 2.0}
-
-// 	t.Run(a, value, nil)
-// 	t.Run(b, value, nil)
-
-// 	t = t.After(a.Duration())
-
-// 	a2 := animate.Basic{Start:1.0, End:3.0, Duration: 4.0, Value:Value}
-// 	t.Run(a, value, nil)
-// }, nil)

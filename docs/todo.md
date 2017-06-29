@@ -35,7 +35,7 @@ Low:
 * Asset catalog
 * StackBar height / hidden
 * Debug constraints.
-* Batch animations.
+* Animations: Spring, Delay, Batch, Reverse, Decay, Repeat, 2d, 3d, Nd
 
 Bugs:
 * Crash in protobuf if view does not have a layout guide.
