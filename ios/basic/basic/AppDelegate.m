@@ -11,7 +11,6 @@
 #import "MatchaObjcBridge.h"
 #import "MatchaNode.h"
 #import "ViewController.h"
-#import "MatchaDeadlockLogger.h"
 @import Matcha;
 
 @interface AppDelegate ()
@@ -21,8 +20,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSLog(@"Bl'h!");
     [[MatchaObjcBridge sharedBridge] configure];
-    [MatchaDeadlockLogger sharedLogger];
     
     // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHeightDidChange:) name:UIKeyboardDidChangeFrameNotification object:nil];
     // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
@@ -31,6 +30,7 @@
     MatchaGoValue *rootVC = [[[MatchaGoValue alloc] initWithFunc:@"github.com/overcyn/matcha/examples/complex New"] call:nil args:nil][0];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+//    self.window.rootViewController = [[UIViewController alloc] init];
     self.window.rootViewController = [[MatchaViewController alloc] initWithGoValue:rootVC];
     [self.window makeKeyAndVisible];
     return YES;
