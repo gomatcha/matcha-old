@@ -48,7 +48,7 @@ func (st *StyledText) Size(min layout.Point, max layout.Point) layout.Point {
 		return layout.Pt(0, 0)
 	}
 
-	pointData := matchabridge.Bridge().Call("sizeForAttributedString:", matchabridge.Bytes(data)).ToInterface().([]byte)
+	pointData := bridge.Bridge().Call("sizeForAttributedString:", bridge.Bytes(data)).ToInterface().([]byte)
 	pbpoint := &pb.Point{}
 	err = proto.Unmarshal(pointData, pbpoint)
 	if err != nil {

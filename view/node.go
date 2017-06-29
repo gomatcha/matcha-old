@@ -72,7 +72,7 @@ func (r *Root) start() {
 			fmt.Println("err", err)
 			return
 		}
-		matchabridge.Bridge().Call("updateId:withProtobuf:", matchabridge.Int64(int64(id)), matchabridge.Bytes(pb))
+		bridge.Bridge().Call("updateId:withProtobuf:", bridge.Int64(int64(id)), bridge.Bytes(pb))
 
 		// fmt.Println(r.root.node.debugString())
 	})

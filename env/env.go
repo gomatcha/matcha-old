@@ -5,5 +5,5 @@ import (
 )
 
 func AssetsDir() (string, error) {
-	return matchabridge.Bridge().Call("assetsDir").ToString(), nil
+	return bridge.Bridge().Call("assetsDir").ToString(), nil
 }

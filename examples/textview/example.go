@@ -16,7 +16,7 @@ import (
 )
 
 func init() {
-	matchabridge.RegisterFunc("gomatcha.io/matcha/examples/textview New", func() *view.Root {
+	bridge.RegisterFunc("gomatcha.io/matcha/examples/textview New", func() *view.Root {
 		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
 			return New(ctx, "")
 		}))

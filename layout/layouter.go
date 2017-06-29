@@ -10,8 +10,8 @@ import (
 )
 
 func init() {
-	matchabridge.RegisterType("layout.Point", reflect.TypeOf(Point{}))
-	matchabridge.RegisterType("layout.Rect", reflect.TypeOf(Rect{}))
+	bridge.RegisterType("layout.Point", reflect.TypeOf(Point{}))
+	bridge.RegisterType("layout.Rect", reflect.TypeOf(Rect{}))
 }
 
 type Context struct {

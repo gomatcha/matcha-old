@@ -19,7 +19,7 @@ var tickers = struct {
 }
 
 func init() {
-	matchabridge.RegisterFunc("gomatcha.io/matcha/animate screenUpdate", screenUpdate)
+	bridge.RegisterFunc("gomatcha.io/matcha/animate screenUpdate", screenUpdate)
 }
 
 func screenUpdate() {

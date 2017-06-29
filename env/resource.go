@@ -43,7 +43,7 @@ type ImageResource struct {
 }
 
 func LoadImage(path string) (*ImageResource, error) {
-	propData := matchabridge.Bridge().Call("propertiesForResource:", matchabridge.String(path)).ToInterface().([]byte)
+	propData := bridge.Bridge().Call("propertiesForResource:", bridge.String(path)).ToInterface().([]byte)
 	props := &pb.ImageProperties{}
 	err := proto.Unmarshal(propData, props)
 	if err != nil {
@@ -89,7 +89,7 @@ func (res *ImageResource) Scale() float64 {
 }
 
 func (res *ImageResource) load() {
-	data := matchabridge.Bridge().Call("imageForResource:", matchabridge.String(res.path)).ToInterface().([]byte)
+	data := bridge.Bridge().Call("imageForResource:", bridge.String(res.path)).ToInterface().([]byte)
 	reader := bytes.NewReader(data)
 	img, _, err := image.Decode(reader)
 	if err != nil {
