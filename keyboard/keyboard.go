@@ -1,4 +1,4 @@
-package keyboard
+package keyboard // import "gomatcha.io/matcha/keyboard"
 
 import (
 	"gomatcha.io/matcha/comm"

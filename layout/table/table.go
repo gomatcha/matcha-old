@@ -1,4 +1,4 @@
-package table
+package table // import "gomatcha.io/matcha/layout/table"
 
 import (
 	"math"

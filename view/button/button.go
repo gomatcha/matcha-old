@@ -1,4 +1,4 @@
-package button
+package button // import "gomatcha.io/matcha/view/button"
 
 import (
 	"gomatcha.io/matcha"

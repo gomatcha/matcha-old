@@ -1,4 +1,4 @@
-package slider
+package slider // import "gomatcha.io/matcha/view/slider"
 
 import (
 	"fmt"

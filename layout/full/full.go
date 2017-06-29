@@ -1,4 +1,4 @@
-package full
+package full // import "gomatcha.io/matcha/layout/full"
 
 import (
 	"gomatcha.io/matcha"

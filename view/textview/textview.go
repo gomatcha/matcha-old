@@ -1,4 +1,4 @@
-package textview
+package textview // import "gomatcha.io/matcha/view/textview"
 
 import (
 	"gomatcha.io/matcha"

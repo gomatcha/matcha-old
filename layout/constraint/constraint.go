@@ -49,7 +49,7 @@ Package constraint implements a constraint-based layout system.
  	 }
  }
 */
-package constraint
+package constraint // import "gomatcha.io/matcha/layout/constraint"
 
 import (
 	"fmt"

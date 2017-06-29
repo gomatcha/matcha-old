@@ -1,4 +1,4 @@
-package touch
+package touch // import "gomatcha.io/matcha/touch"
 
 import (
 	"fmt"

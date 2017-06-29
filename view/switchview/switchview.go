@@ -1,4 +1,4 @@
-package switchview
+package switchview // import "gomatcha.io/matcha/view/switchview"
 
 import (
 	"fmt"

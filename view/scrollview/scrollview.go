@@ -1,4 +1,4 @@
-package scrollview
+package scrollview // import "gomatcha.io/matcha/view/scrollview"
 
 import (
 	"math"

@@ -1,4 +1,4 @@
-package env
+package env // import "gomatcha.io/matcha/env"
 
 import (
 	"gomatcha.io/bridge"

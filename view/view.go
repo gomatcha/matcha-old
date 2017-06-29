@@ -1,4 +1,4 @@
-package view
+package view // import "gomatcha.io/matcha/view"
 
 import (
 	"sync"

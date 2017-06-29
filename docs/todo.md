@@ -15,6 +15,7 @@ Medium:
 * Why doesn't simulator debugger work? Why does simulator crash all the time?
 * Rebuild settings app.
 * Only send updated views.
+* License agreement? http://cla-assistant.io?
 
 Low:
 * Support StyledText in textinput and textview.
