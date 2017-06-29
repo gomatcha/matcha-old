@@ -15,8 +15,8 @@ package paint
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import matcha "github.com/overcyn/matcha/pb"
-import matcha_layout "github.com/overcyn/matcha/pb/layout"
+import matcha "github.com/gomatcha/matcha/pb"
+import matcha_layout "github.com/gomatcha/matcha/pb/layout"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -105,7 +105,7 @@ func init() {
 	proto.RegisterType((*Style)(nil), "matcha.paint.Style")
 }
 
-func init() { proto.RegisterFile("github.com/overcyn/matcha/pb/paint/paint.proto", fileDescriptor0) }
+func init() { proto.RegisterFile("github.com/gomatcha/matcha/pb/paint/paint.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
 	// 290 bytes of a gzipped FileDescriptorProto

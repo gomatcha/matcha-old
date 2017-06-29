@@ -112,7 +112,7 @@ func Bind(flags *Flags, args []string) error {
 	}
 
 	// Get the supporting files
-	objcPkg, err := ctx.Import("github.com/overcyn/matcha/cmd", "", build.FindOnly)
+	objcPkg, err := ctx.Import("github.com/gomatcha/matcha/cmd", "", build.FindOnly)
 	if err != nil {
 		return err
 	}

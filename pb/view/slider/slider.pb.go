@@ -90,7 +90,7 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("github.com/overcyn/matcha/pb/view/slider/slider.proto", fileDescriptor0)
+	proto.RegisterFile("github.com/gomatcha/matcha/pb/view/slider/slider.proto", fileDescriptor0)
 }
 
 var fileDescriptor0 = []byte{

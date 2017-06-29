@@ -8,12 +8,12 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/overcyn/matcha"
-	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/layout"
-	"github.com/overcyn/matcha/paint"
-	"github.com/overcyn/matcha/view"
-	"github.com/overcyn/matcha/view/imageview"
+	"github.com/gomatcha/matcha"
+	"github.com/gomatcha/matcha/comm"
+	"github.com/gomatcha/matcha/layout"
+	"github.com/gomatcha/matcha/paint"
+	"github.com/gomatcha/matcha/view"
+	"github.com/gomatcha/matcha/view/imageview"
 )
 
 // Layouter that returns the child's layout

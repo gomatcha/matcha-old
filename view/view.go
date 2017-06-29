@@ -4,10 +4,10 @@ import (
 	"sync"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/matcha"
-	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/layout"
-	"github.com/overcyn/matcha/paint"
+	"github.com/gomatcha/matcha"
+	"github.com/gomatcha/matcha/comm"
+	"github.com/gomatcha/matcha/layout"
+	"github.com/gomatcha/matcha/paint"
 )
 
 type Screen interface {

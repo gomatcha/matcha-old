@@ -3,10 +3,10 @@ package table
 import (
 	"math"
 
-	"github.com/overcyn/matcha"
-	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/layout"
-	"github.com/overcyn/matcha/view"
+	"github.com/gomatcha/matcha"
+	"github.com/gomatcha/matcha/comm"
+	"github.com/gomatcha/matcha/layout"
+	"github.com/gomatcha/matcha/view"
 )
 
 // type Direction int

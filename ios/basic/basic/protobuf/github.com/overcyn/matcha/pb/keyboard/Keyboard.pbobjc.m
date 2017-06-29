@@ -13,7 +13,7 @@
  #import "GPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
- #import "github.com/overcyn/matcha/pb/keyboard/Keyboard.pbobjc.h"
+ #import "github.com/gomatcha/matcha/pb/keyboard/Keyboard.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push

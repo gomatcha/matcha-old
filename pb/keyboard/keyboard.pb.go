@@ -153,7 +153,7 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("github.com/overcyn/matcha/pb/keyboard/keyboard.proto", fileDescriptor0)
+	proto.RegisterFile("github.com/gomatcha/matcha/pb/keyboard/keyboard.proto", fileDescriptor0)
 }
 
 var fileDescriptor0 = []byte{

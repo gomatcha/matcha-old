@@ -1,7 +1,7 @@
 syntax = "proto3";
 package matcha.view.imageview;
-import "github.com/overcyn/matcha/pb/color.proto";
-import "github.com/overcyn/matcha/pb/image.proto";
+import "github.com/gomatcha/matcha/pb/color.proto";
+import "github.com/gomatcha/matcha/pb/image.proto";
 
 option go_package = "imageview";
 option objc_class_prefix = "MatchaImageViewPB";

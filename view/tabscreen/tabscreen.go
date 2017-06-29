@@ -6,11 +6,11 @@ import (
 	"strconv"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/env"
-	"github.com/overcyn/matcha/layout/constraint"
-	tabnavpb "github.com/overcyn/matcha/pb/view/tabscreen"
-	"github.com/overcyn/matcha/view"
+	"github.com/gomatcha/matcha/comm"
+	"github.com/gomatcha/matcha/env"
+	"github.com/gomatcha/matcha/layout/constraint"
+	tabnavpb "github.com/gomatcha/matcha/pb/view/tabscreen"
+	"github.com/gomatcha/matcha/view"
 )
 
 type Screen struct {
@@ -114,7 +114,7 @@ func (v *tabView) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Children:       l.Views(),
 		Layouter:       l,
-		NativeViewName: "github.com/overcyn/matcha/view/tabscreen",
+		NativeViewName: "github.com/gomatcha/matcha/view/tabscreen",
 		NativeViewState: &tabnavpb.View{
 			Screens:       screenspb,
 			SelectedIndex: int64(v.screen.SelectedIndex()),

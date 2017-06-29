@@ -21,7 +21,7 @@
 
 - (id)init {
     if ((self = [super init])) {
-        self.printStackFunc = [[MatchaGoValue alloc] initWithFunc:@"github.com/overcyn/matcha/internal printStack"];
+        self.printStackFunc = [[MatchaGoValue alloc] initWithFunc:@"github.com/gomatcha/matcha/internal printStack"];
         __weak typeof(self) weakSelf = self;
         self.queue = dispatch_queue_create(NULL, DISPATCH_QUEUE_SERIAL);
         self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.queue);

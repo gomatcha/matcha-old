@@ -3,7 +3,7 @@ package matcha.touch;
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
-import "github.com/overcyn/matcha/pb/layout/layout.proto";
+import "github.com/gomatcha/matcha/pb/layout/layout.proto";
 
 option go_package = "touch";
 option objc_class_prefix = "MatchaPBTouch";

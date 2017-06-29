@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/overcyn/matcha/comm"
+	"github.com/gomatcha/matcha/comm"
 	"golang.org/x/mobile/exp/sprite/clock"
 )
 

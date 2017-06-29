@@ -5,26 +5,26 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/env"
-	"github.com/overcyn/matcha/layout/constraint"
-	"github.com/overcyn/matcha/layout/table"
-	"github.com/overcyn/matcha/paint"
-	"github.com/overcyn/matcha/text"
-	"github.com/overcyn/matcha/touch"
-	"github.com/overcyn/matcha/view"
-	"github.com/overcyn/matcha/view/basicview"
-	"github.com/overcyn/matcha/view/imageview"
-	"github.com/overcyn/matcha/view/scrollview"
-	"github.com/overcyn/matcha/view/stackscreen"
-	"github.com/overcyn/matcha/view/switchview"
-	"github.com/overcyn/matcha/view/textview"
+	"github.com/gomatcha/matcha/comm"
+	"github.com/gomatcha/matcha/env"
+	"github.com/gomatcha/matcha/layout/constraint"
+	"github.com/gomatcha/matcha/layout/table"
+	"github.com/gomatcha/matcha/paint"
+	"github.com/gomatcha/matcha/text"
+	"github.com/gomatcha/matcha/touch"
+	"github.com/gomatcha/matcha/view"
+	"github.com/gomatcha/matcha/view/basicview"
+	"github.com/gomatcha/matcha/view/imageview"
+	"github.com/gomatcha/matcha/view/scrollview"
+	"github.com/gomatcha/matcha/view/stackscreen"
+	"github.com/gomatcha/matcha/view/switchview"
+	"github.com/gomatcha/matcha/view/textview"
 	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
 )
 
 func init() {
-	matchabridge.RegisterFunc("github.com/overcyn/matcha/examples/settings New", func() *view.Root {
+	matchabridge.RegisterFunc("github.com/gomatcha/matcha/examples/settings New", func() *view.Root {
 		return view.NewRoot(NewApp())
 	})
 }

@@ -25,7 +25,7 @@ import math "math"
 import google_protobuf "github.com/golang/protobuf/ptypes/any"
 import google_protobuf1 "github.com/golang/protobuf/ptypes/duration"
 import google_protobuf2 "github.com/golang/protobuf/ptypes/timestamp"
-import matcha_layout "github.com/overcyn/matcha/pb/layout"
+import matcha_layout "github.com/gomatcha/matcha/pb/layout"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -285,7 +285,7 @@ func init() {
 	proto.RegisterEnum("matcha.touch.EventKind", EventKind_name, EventKind_value)
 }
 
-func init() { proto.RegisterFile("github.com/overcyn/matcha/pb/touch/touch2.proto", fileDescriptor0) }
+func init() { proto.RegisterFile("github.com/gomatcha/matcha/pb/touch/touch2.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
 	// 562 bytes of a gzipped FileDescriptorProto

@@ -17,8 +17,8 @@ package textinput
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import matcha_text "github.com/overcyn/matcha/pb/text"
-import matcha_keyboard "github.com/overcyn/matcha/pb/keyboard"
+import matcha_text "github.com/gomatcha/matcha/pb/text"
+import matcha_keyboard "github.com/gomatcha/matcha/pb/keyboard"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -118,7 +118,7 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("github.com/overcyn/matcha/pb/view/textinput/textinput.proto", fileDescriptor0)
+	proto.RegisterFile("github.com/gomatcha/matcha/pb/view/textinput/textinput.proto", fileDescriptor0)
 }
 
 var fileDescriptor0 = []byte{

@@ -4,10 +4,10 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/layout"
-	"github.com/overcyn/matcha/pb"
-	"github.com/overcyn/matcha/pb/paint"
+	"github.com/gomatcha/matcha/comm"
+	"github.com/gomatcha/matcha/layout"
+	"github.com/gomatcha/matcha/pb"
+	"github.com/gomatcha/matcha/pb/paint"
 )
 
 type Painter interface {

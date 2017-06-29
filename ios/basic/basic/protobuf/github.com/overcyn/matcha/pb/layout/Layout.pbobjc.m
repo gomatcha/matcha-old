@@ -13,7 +13,7 @@
  #import "GPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
- #import "github.com/overcyn/matcha/pb/layout/Layout.pbobjc.h"
+ #import "github.com/gomatcha/matcha/pb/layout/Layout.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push

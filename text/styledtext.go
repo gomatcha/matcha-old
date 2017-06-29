@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/matcha/layout"
-	pb "github.com/overcyn/matcha/pb/layout"
-	"github.com/overcyn/matcha/pb/text"
+	"github.com/gomatcha/matcha/layout"
+	pb "github.com/gomatcha/matcha/pb/layout"
+	"github.com/gomatcha/matcha/pb/text"
 	"github.com/overcyn/matchabridge"
 )
 

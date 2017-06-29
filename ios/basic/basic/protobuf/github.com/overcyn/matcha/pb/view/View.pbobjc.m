@@ -19,9 +19,9 @@
  #import "google/protobuf/Any.pbobjc.h"
 #endif
 
- #import "github.com/overcyn/matcha/pb/view/View.pbobjc.h"
- #import "github.com/overcyn/matcha/pb/layout/Layout.pbobjc.h"
- #import "github.com/overcyn/matcha/pb/paint/Paint.pbobjc.h"
+ #import "github.com/gomatcha/matcha/pb/view/View.pbobjc.h"
+ #import "github.com/gomatcha/matcha/pb/layout/Layout.pbobjc.h"
+ #import "github.com/gomatcha/matcha/pb/paint/Paint.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push

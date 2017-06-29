@@ -4,18 +4,18 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 
-	"github.com/overcyn/matcha/env"
-	"github.com/overcyn/matcha/layout/constraint"
-	"github.com/overcyn/matcha/paint"
-	"github.com/overcyn/matcha/view"
-	"github.com/overcyn/matcha/view/imageview"
-	"github.com/overcyn/matcha/view/urlimageview"
+	"github.com/gomatcha/matcha/env"
+	"github.com/gomatcha/matcha/layout/constraint"
+	"github.com/gomatcha/matcha/paint"
+	"github.com/gomatcha/matcha/view"
+	"github.com/gomatcha/matcha/view/imageview"
+	"github.com/gomatcha/matcha/view/urlimageview"
 	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
 )
 
 func init() {
-	matchabridge.RegisterFunc("github.com/overcyn/matcha/examples/imageview New", func() *view.Root {
+	matchabridge.RegisterFunc("github.com/gomatcha/matcha/examples/imageview New", func() *view.Root {
 		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
 			return New(ctx, "")
 		}))

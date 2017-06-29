@@ -64,7 +64,7 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("github.com/overcyn/matcha/pb/view/scrollview/scrollview.proto", fileDescriptor0)
+	proto.RegisterFile("github.com/gomatcha/matcha/pb/view/scrollview/scrollview.proto", fileDescriptor0)
 }
 
 var fileDescriptor0 = []byte{

@@ -6,25 +6,25 @@ import (
 
 	"golang.org/x/image/colornames"
 
-	"github.com/overcyn/matcha/animate"
-	"github.com/overcyn/matcha/layout/constraint"
-	"github.com/overcyn/matcha/layout/table"
-	"github.com/overcyn/matcha/paint"
-	"github.com/overcyn/matcha/text"
-	"github.com/overcyn/matcha/view"
-	"github.com/overcyn/matcha/view/basicview"
-	"github.com/overcyn/matcha/view/button"
-	"github.com/overcyn/matcha/view/imageview"
-	"github.com/overcyn/matcha/view/scrollview"
-	"github.com/overcyn/matcha/view/slider"
-	"github.com/overcyn/matcha/view/switchview"
-	"github.com/overcyn/matcha/view/textview"
-	"github.com/overcyn/matcha/view/urlimageview"
+	"github.com/gomatcha/matcha/animate"
+	"github.com/gomatcha/matcha/layout/constraint"
+	"github.com/gomatcha/matcha/layout/table"
+	"github.com/gomatcha/matcha/paint"
+	"github.com/gomatcha/matcha/text"
+	"github.com/gomatcha/matcha/view"
+	"github.com/gomatcha/matcha/view/basicview"
+	"github.com/gomatcha/matcha/view/button"
+	"github.com/gomatcha/matcha/view/imageview"
+	"github.com/gomatcha/matcha/view/scrollview"
+	"github.com/gomatcha/matcha/view/slider"
+	"github.com/gomatcha/matcha/view/switchview"
+	"github.com/gomatcha/matcha/view/textview"
+	"github.com/gomatcha/matcha/view/urlimageview"
 	"github.com/overcyn/matchabridge"
 )
 
 func init() {
-	matchabridge.RegisterFunc("github.com/overcyn/matcha/examples/complex New", func() *view.Root {
+	matchabridge.RegisterFunc("github.com/gomatcha/matcha/examples/complex New", func() *view.Root {
 		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
 			return NewNestedView(ctx, "")
 		}))

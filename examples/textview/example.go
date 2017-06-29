@@ -3,20 +3,20 @@ package textview
 import (
 	"fmt"
 
-	"github.com/overcyn/matcha/keyboard"
-	"github.com/overcyn/matcha/layout/constraint"
-	"github.com/overcyn/matcha/paint"
-	"github.com/overcyn/matcha/text"
-	"github.com/overcyn/matcha/touch"
-	"github.com/overcyn/matcha/view"
-	"github.com/overcyn/matcha/view/textinput"
-	"github.com/overcyn/matcha/view/textview"
+	"github.com/gomatcha/matcha/keyboard"
+	"github.com/gomatcha/matcha/layout/constraint"
+	"github.com/gomatcha/matcha/paint"
+	"github.com/gomatcha/matcha/text"
+	"github.com/gomatcha/matcha/touch"
+	"github.com/gomatcha/matcha/view"
+	"github.com/gomatcha/matcha/view/textinput"
+	"github.com/gomatcha/matcha/view/textview"
 	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
 )
 
 func init() {
-	matchabridge.RegisterFunc("github.com/overcyn/matcha/examples/textview New", func() *view.Root {
+	matchabridge.RegisterFunc("github.com/gomatcha/matcha/examples/textview New", func() *view.Root {
 		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
 			return New(ctx, "")
 		}))

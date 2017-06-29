@@ -1,7 +1,7 @@
 syntax = "proto3";
 package matcha.text;
-import "github.com/overcyn/matcha/pb/layout/layout.proto";
-import "github.com/overcyn/matcha/pb/color.proto";
+import "github.com/gomatcha/matcha/pb/layout/layout.proto";
+import "github.com/gomatcha/matcha/pb/color.proto";
 
 option go_package = "text";
 option objc_class_prefix = "MatchaPB";

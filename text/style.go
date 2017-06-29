@@ -3,8 +3,8 @@ package text
 import (
 	"image/color"
 
-	pb2 "github.com/overcyn/matcha/pb"
-	pb "github.com/overcyn/matcha/pb/text"
+	pb2 "github.com/gomatcha/matcha/pb"
+	pb "github.com/gomatcha/matcha/pb/text"
 )
 
 type Alignment int

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/overcyn/matcha/cmd"
+	"github.com/gomatcha/matcha/cmd"
 	"github.com/spf13/cobra"
 )
 

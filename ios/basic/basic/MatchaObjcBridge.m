@@ -39,7 +39,7 @@
 - (void)screenUpdate {
     static MatchaGoValue *updateFunc = nil;
     if (updateFunc == nil) {
-        updateFunc = [[MatchaGoValue alloc] initWithFunc:@"github.com/overcyn/matcha/animate screenUpdate"];
+        updateFunc = [[MatchaGoValue alloc] initWithFunc:@"github.com/gomatcha/matcha/animate screenUpdate"];
     }
     [updateFunc call:nil args:nil];
 }

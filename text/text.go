@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/text/unicode/norm"
 
-	pb "github.com/overcyn/matcha/pb/text"
+	pb "github.com/gomatcha/matcha/pb/text"
 )
 
 type Position struct {

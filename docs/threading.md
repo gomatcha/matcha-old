@@ -19,7 +19,7 @@ https://inconshreveable.com/07-08-2014/principles-of-designing-go-apis-with-chan
 
 // import (
 //  "fmt"
-//  "github.com/overcyn/matcha"
+//  "github.com/gomatcha/matcha"
 // )
 
 // func main() {

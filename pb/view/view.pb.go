@@ -16,8 +16,8 @@ package view
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import matcha_layout "github.com/overcyn/matcha/pb/layout"
-import matcha_paint "github.com/overcyn/matcha/pb/paint"
+import matcha_layout "github.com/gomatcha/matcha/pb/layout"
+import matcha_paint "github.com/gomatcha/matcha/pb/paint"
 import google_protobuf "github.com/golang/protobuf/ptypes/any"
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -140,7 +140,7 @@ func init() {
 	proto.RegisterType((*Root)(nil), "matcha.view.Root")
 }
 
-func init() { proto.RegisterFile("github.com/overcyn/matcha/pb/view/view.proto", fileDescriptor0) }
+func init() { proto.RegisterFile("github.com/gomatcha/matcha/pb/view/view.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
 	// 400 bytes of a gzipped FileDescriptorProto

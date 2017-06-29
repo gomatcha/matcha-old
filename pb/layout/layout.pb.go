@@ -157,7 +157,7 @@ func init() {
 	proto.RegisterType((*Guide)(nil), "matcha.layout.Guide")
 }
 
-func init() { proto.RegisterFile("github.com/overcyn/matcha/pb/layout/layout.proto", fileDescriptor0) }
+func init() { proto.RegisterFile("github.com/gomatcha/matcha/pb/layout/layout.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
 	// 280 bytes of a gzipped FileDescriptorProto

@@ -6,14 +6,14 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 
-	"github.com/overcyn/matcha"
-	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/env"
-	"github.com/overcyn/matcha/layout"
-	"github.com/overcyn/matcha/paint"
-	"github.com/overcyn/matcha/pb"
-	"github.com/overcyn/matcha/pb/view/imageview"
-	"github.com/overcyn/matcha/view"
+	"github.com/gomatcha/matcha"
+	"github.com/gomatcha/matcha/comm"
+	"github.com/gomatcha/matcha/env"
+	"github.com/gomatcha/matcha/layout"
+	"github.com/gomatcha/matcha/paint"
+	"github.com/gomatcha/matcha/pb"
+	"github.com/gomatcha/matcha/pb/view/imageview"
+	"github.com/gomatcha/matcha/view"
 )
 
 type ResizeMode int
@@ -109,7 +109,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Painter:        painter,
 		Layouter:       &layouter{bounds: bounds, resizeMode: resizeMode, scale: scale},
-		NativeViewName: "github.com/overcyn/matcha/view/imageview",
+		NativeViewName: "github.com/gomatcha/matcha/view/imageview",
 		NativeViewState: &imageview.View{
 			Image:      v.pbImage,
 			Scale:      scale,

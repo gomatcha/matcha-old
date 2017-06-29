@@ -5,10 +5,10 @@ import (
 	"strconv"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/layout/constraint"
-	"github.com/overcyn/matcha/pb/view/stacknav"
-	"github.com/overcyn/matcha/view"
+	"github.com/gomatcha/matcha/comm"
+	"github.com/gomatcha/matcha/layout/constraint"
+	"github.com/gomatcha/matcha/pb/view/stacknav"
+	"github.com/gomatcha/matcha/view"
 )
 
 type Screen struct {
@@ -127,7 +127,7 @@ func (v *stackView) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Children:       l.Views(),
 		Layouter:       l,
-		NativeViewName: "github.com/overcyn/matcha/view/stacknav",
+		NativeViewName: "github.com/gomatcha/matcha/view/stacknav",
 		NativeViewState: &stacknav.View{
 			Children: childrenPb,
 		},
@@ -198,7 +198,7 @@ func (v *barView) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Layouter:       l,
 		Children:       l.Views(),
-		NativeViewName: "github.com/overcyn/matcha/view/stacknav Bar",
+		NativeViewName: "github.com/gomatcha/matcha/view/stacknav Bar",
 		NativeViewState: &stacknav.Bar{
 			Title: v.bar.Title,
 			CustomBackButtonTitle: len(v.bar.BackButtonTitle) > 0,

@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/matcha/keyboard"
-	"github.com/overcyn/matcha/paint"
-	"github.com/overcyn/matcha/pb/view/textinput"
-	"github.com/overcyn/matcha/text"
-	"github.com/overcyn/matcha/view"
+	"github.com/gomatcha/matcha/keyboard"
+	"github.com/gomatcha/matcha/paint"
+	"github.com/gomatcha/matcha/pb/view/textinput"
+	"github.com/gomatcha/matcha/text"
+	"github.com/gomatcha/matcha/view"
 )
 
 // View mutates the Text and StyledText fields in place.
@@ -70,7 +70,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	}
 	return &view.Model{
 		Painter:        painter,
-		NativeViewName: "github.com/overcyn/matcha/view/textinput",
+		NativeViewName: "github.com/gomatcha/matcha/view/textinput",
 		NativeViewState: &textinput.View{
 			StyledText:         st.MarshalProtobuf(),
 			KeyboardType:       v.KeyboardType.MarshalProtobuf(),

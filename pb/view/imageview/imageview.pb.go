@@ -15,8 +15,8 @@ package imageview
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import matcha "github.com/overcyn/matcha/pb"
-import matcha1 "github.com/overcyn/matcha/pb"
+import matcha "github.com/gomatcha/matcha/pb"
+import matcha1 "github.com/gomatcha/matcha/pb"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -102,7 +102,7 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("github.com/overcyn/matcha/pb/view/imageview/imageview.proto", fileDescriptor0)
+	proto.RegisterFile("github.com/gomatcha/matcha/pb/view/imageview/imageview.proto", fileDescriptor0)
 }
 
 var fileDescriptor0 = []byte{

@@ -1,8 +1,8 @@
 package keyboard
 
 import (
-	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/pb/keyboard"
+	"github.com/gomatcha/matcha/comm"
+	"github.com/gomatcha/matcha/pb/keyboard"
 )
 
 type Type int

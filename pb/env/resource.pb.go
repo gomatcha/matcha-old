@@ -65,7 +65,7 @@ func init() {
 	proto.RegisterType((*ImageResource)(nil), "env.ImageResource")
 }
 
-func init() { proto.RegisterFile("github.com/overcyn/matcha/pb/env/resource.proto", fileDescriptor0) }
+func init() { proto.RegisterFile("github.com/gomatcha/matcha/pb/env/resource.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
 	// 134 bytes of a gzipped FileDescriptorProto

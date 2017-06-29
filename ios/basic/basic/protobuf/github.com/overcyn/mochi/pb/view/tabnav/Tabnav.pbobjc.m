@@ -13,8 +13,8 @@
  #import "GPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
- #import "github.com/overcyn/matcha/pb/view/tabnav/Tabnav.pbobjc.h"
- #import "github.com/overcyn/matcha/pb/Imageview.pbobjc.h"
+ #import "github.com/gomatcha/matcha/pb/view/tabnav/Tabnav.pbobjc.h"
+ #import "github.com/gomatcha/matcha/pb/Imageview.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push

@@ -1,12 +1,12 @@
 package textview
 
 import (
-	"github.com/overcyn/matcha"
-	"github.com/overcyn/matcha/comm"
-	"github.com/overcyn/matcha/layout"
-	"github.com/overcyn/matcha/paint"
-	"github.com/overcyn/matcha/text"
-	"github.com/overcyn/matcha/view"
+	"github.com/gomatcha/matcha"
+	"github.com/gomatcha/matcha/comm"
+	"github.com/gomatcha/matcha/layout"
+	"github.com/gomatcha/matcha/paint"
+	"github.com/gomatcha/matcha/text"
+	"github.com/gomatcha/matcha/view"
 )
 
 type layouter struct {
@@ -60,7 +60,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Painter:         painter,
 		Layouter:        &layouter{styledText: st},
-		NativeViewName:  "github.com/overcyn/matcha/view/textview",
+		NativeViewName:  "github.com/gomatcha/matcha/view/textview",
 		NativeViewState: st.MarshalProtobuf(),
 	}
 }

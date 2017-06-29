@@ -15,7 +15,7 @@ package button
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import matcha_text "github.com/overcyn/matcha/pb/text"
+import matcha_text "github.com/gomatcha/matcha/pb/text"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -49,7 +49,7 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("github.com/overcyn/matcha/pb/view/button/button.proto", fileDescriptor0)
+	proto.RegisterFile("github.com/gomatcha/matcha/pb/view/button/button.proto", fileDescriptor0)
 }
 
 var fileDescriptor0 = []byte{

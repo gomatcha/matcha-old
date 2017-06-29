@@ -23,8 +23,8 @@
  #import "google/protobuf/Timestamp.pbobjc.h"
 #endif
 
- #import "github.com/overcyn/matcha/pb/touch/Touch2.pbobjc.h"
- #import "github.com/overcyn/matcha/pb/layout/Layout.pbobjc.h"
+ #import "github.com/gomatcha/matcha/pb/touch/Touch2.pbobjc.h"
+ #import "github.com/gomatcha/matcha/pb/layout/Layout.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
