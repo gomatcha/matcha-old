@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/image/colornames"
 
-	"github.com/overcyn/matchabridge"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/animate"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"

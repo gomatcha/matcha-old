@@ -95,7 +95,7 @@ func Bind(flags *Flags, args []string) error {
 	// }
 
 	// Build the "matcha/bridge" dir
-	bridgeDir := filepath.Join(genDir, "src", "github.com", "overcyn", "matchabridge")
+	bridgeDir := filepath.Join(genDir, "src", "gomatcha.io", "bridge")
 	if err := Mkdir(flags, bridgeDir); err != nil {
 		return err
 	}
@@ -250,7 +250,7 @@ var BindFile = `
 package main
 
 import (
-    _ "github.com/overcyn/matchabridge"
+    _ "gomatcha.io/bridge"
     _ "%s"
 )
 

@@ -12,7 +12,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	google_protobuf "github.com/golang/protobuf/ptypes/any"
-	"github.com/overcyn/matchabridge"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha"
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/internal"

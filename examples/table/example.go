@@ -3,8 +3,8 @@ package example
 import (
 	"strconv"
 
-	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"

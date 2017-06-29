@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/overcyn/matchabridge"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/comm"
 )
 

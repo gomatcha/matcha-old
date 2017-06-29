@@ -3,8 +3,8 @@ package tabscreen
 import (
 	"image/color"
 
-	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/paint"

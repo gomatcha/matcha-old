@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/layout/constraint"

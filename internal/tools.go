@@ -4,7 +4,7 @@ import (
 	"os"
 	"runtime/pprof"
 
-	"github.com/overcyn/matchabridge"
+	"gomatcha.io/bridge"
 )
 
 func init() {

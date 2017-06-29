@@ -3,8 +3,8 @@ package screen
 import (
 	"image/color"
 
-	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/touch"

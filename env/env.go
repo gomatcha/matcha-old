@@ -1,7 +1,7 @@
 package env
 
 import (
-	"github.com/overcyn/matchabridge"
+	"gomatcha.io/bridge"
 )
 
 func AssetsDir() (string, error) {

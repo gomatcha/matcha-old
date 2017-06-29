@@ -8,7 +8,7 @@ import (
 	"golang.org/x/image/colornames"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/overcyn/matchabridge"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/pb"
 	"gomatcha.io/matcha/pb/env"
 )

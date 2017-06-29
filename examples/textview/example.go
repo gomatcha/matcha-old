@@ -3,8 +3,8 @@ package textview
 import (
 	"fmt"
 
-	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/keyboard"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"

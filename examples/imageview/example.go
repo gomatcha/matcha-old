@@ -4,8 +4,8 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 
-	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
