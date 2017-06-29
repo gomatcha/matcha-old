@@ -35,6 +35,7 @@ Low:
 * Asset catalog
 * StackBar height / hidden
 * Debug constraints.
+* Batch animations.
 
 Bugs:
 * Crash in protobuf if view does not have a layout guide.

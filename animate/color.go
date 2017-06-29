@@ -10,7 +10,7 @@ type ColorInterpolater interface {
 	Interpolate(float64) color.Color
 }
 
-func ColorInterpolate(w comm.Float64Notifier, l ColorInterpolater) comm.ColorNotifier {
+func colorInterpolate(w comm.Float64Notifier, l ColorInterpolater) comm.ColorNotifier {
 	return &colorInterpolater{
 		watcher:      w,
 		interpolater: l,
@@ -48,6 +48,10 @@ func (e RGBALerp) Interpolate(a float64) color.Color {
 		A: uintInterpolate(a1, a2, a),
 	}
 	return color
+}
+
+func (e RGBALerp) Notifier(a comm.Float64Notifier) comm.ColorNotifier {
+	return colorInterpolate(a, e)
 }
 
 func uintInterpolate(a, b uint32, c float64) uint16 {

@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/overcyn/matcha/comm"
+	"golang.org/x/mobile/exp/sprite/clock"
 )
 
 type FloatInterpolater interface {
@@ -32,6 +33,23 @@ func (w *floatInterpolater) Unnotify(id comm.Id) {
 
 func (w *floatInterpolater) Value() float64 {
 	return w.interpolater.Interpolate(w.watcher.Value())
+}
+
+var (
+	DefaultEase      FloatInterpolater = CubicBezierEase{0.25, 0.1, 0.25, 1}
+	DefaultInEase    FloatInterpolater = CubicBezierEase{0.42, 0, 1, 1}
+	DefaultOutEase   FloatInterpolater = CubicBezierEase{0, 0, 0.58, 1}
+	DefaultInOutEase FloatInterpolater = CubicBezierEase{0.42, 0, 0.58, 1}
+)
+
+type CubicBezierEase struct {
+	X0, Y0, X1, Y1 float64
+}
+
+func (e CubicBezierEase) Interpolate(a float64) float64 {
+	f := clock.CubicBezier(float32(e.X0), float32(e.Y0), float32(e.X1), float32(e.Y1))
+	t := f(0, 100000, clock.Time(a*100000))
+	return float64(t) / 100000
 }
 
 type LinearEase struct {
@@ -70,14 +88,15 @@ func (e PolyOutEase) Notifier(a comm.Float64Notifier) comm.Float64Notifier {
 }
 
 type PolyInOutEase struct {
-	Exp float64
+	ExpIn  float64
+	ExpOut float64
 }
 
 func (e PolyInOutEase) Interpolate(a float64) float64 {
 	if a < 0.5 {
-		return math.Pow(a, e.Exp)
+		return math.Pow(a, e.ExpIn)
 	} else {
-		return 1 - math.Pow(1-a, e.Exp)
+		return 1 - math.Pow(1-a, e.ExpOut)
 	}
 }
 
@@ -96,19 +115,3 @@ func (f FloatLerp) Interpolate(a float64) float64 {
 func (e FloatLerp) Notifier(a comm.Float64Notifier) comm.Float64Notifier {
 	return floatInterpolate(a, e)
 }
-
-// value := animate.UnitValue()
-// Ticker := animate.NewTicker(10, value)
-// func onMount() {
-// 	// I want multiple Tickers to be able to update the animate.UnitValue()
-// 	// And I want multiple things to be able to watch animate.UnitValue
-// 	unitN := animate.UnitInterpolate(animate.NewTicker(10), animate.LinearEase{})
-// 	floatN = animate.FloatInterpolate(w, animate.FloatLerp{0, 10})
-
-// 	value := &animate.FloatValue{}
-// 	value.Watch(floatN)
-// 	value.Unwatch(floatN)
-// 	// value.Notify
-
-// 	view.Rect.X(value)
-// }
