@@ -25,7 +25,7 @@
         __weak typeof(self) weakSelf = self;
         self.queue = dispatch_queue_create(NULL, DISPATCH_QUEUE_SERIAL);
         self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, self.queue);
-        dispatch_source_set_timer(self.timer, dispatch_time(DISPATCH_TIME_NOW, 5), 5, 5 / 5);
+        dispatch_source_set_timer(self.timer, dispatch_time(DISPATCH_TIME_NOW, 5*NSEC_PER_SEC), 5*NSEC_PER_SEC, 5*NSEC_PER_SEC / 5);
         dispatch_source_set_event_handler(self.timer, ^{
             [weakSelf timerDidTick];
         });

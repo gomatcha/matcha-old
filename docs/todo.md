@@ -8,15 +8,16 @@ High:
 * Collect native resources into assets.
 
 Medium:
+* Why do easing functions cause deadlock?
 * Why doesn't simulator debugger work? Why does simulator crash all the time?
 * Rebuild settings app.
 * Only send updated views.
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
-* Animations
 * Build website and documentation.
-* Support StyledText in textinput and textview.
+* Hide StyledText
 
 Low:
+* Support StyledText in textinput and textview.
 * Support more flags in matcha command.
 * Updating a tabscreen or stackscreen should not trigger a rebuild of its children.
 * Webview

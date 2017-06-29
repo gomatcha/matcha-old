@@ -11,6 +11,7 @@
 #import "MatchaObjcBridge.h"
 #import "MatchaNode.h"
 #import "ViewController.h"
+#import "MatchaDeadlockLogger.h"
 @import Matcha;
 
 @interface AppDelegate ()
@@ -21,6 +22,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[MatchaObjcBridge sharedBridge] configure];
+    [MatchaDeadlockLogger sharedLogger];
     
     // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHeightDidChange:) name:UIKeyboardDidChangeFrameNotification object:nil];
     // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
