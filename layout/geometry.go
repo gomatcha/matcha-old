@@ -3,7 +3,7 @@ package layout
 import (
 	"fmt"
 
-	pb "github.com/gomatcha/matcha/pb/layout"
+	pb "gomatcha.io/matcha/pb/layout"
 )
 
 type Rect struct {

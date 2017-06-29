@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gomatcha/matcha/layout/constraint"
-	"github.com/gomatcha/matcha/paint"
-	"github.com/gomatcha/matcha/view"
-	"github.com/gomatcha/matcha/view/basicview"
 	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
+	"gomatcha.io/matcha/layout/constraint"
+	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/view"
+	"gomatcha.io/matcha/view/basicview"
 )
 
 func init() {
-	matchabridge.RegisterFunc("github.com/gomatcha/matcha/examples/animate New", func() *view.Root {
+	matchabridge.RegisterFunc("gomatcha.io/matcha/examples/animate New", func() *view.Root {
 		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
 			return New(ctx, "")
 		}))

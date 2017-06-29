@@ -1,8 +1,8 @@
 package keyboard
 
 import (
-	"github.com/gomatcha/matcha/comm"
-	"github.com/gomatcha/matcha/pb/keyboard"
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/pb/keyboard"
 )
 
 type Type int

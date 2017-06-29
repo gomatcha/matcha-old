@@ -27,7 +27,7 @@
     // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
     // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
     
-    MatchaGoValue *rootVC = [[[MatchaGoValue alloc] initWithFunc:@"github.com/gomatcha/matcha/examples/complex New"] call:nil args:nil][0];
+    MatchaGoValue *rootVC = [[[MatchaGoValue alloc] initWithFunc:@"gomatcha.io/matcha/examples/complex New"] call:nil args:nil][0];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 //    self.window.rootViewController = [[UIViewController alloc] init];

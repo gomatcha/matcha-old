@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	matchabridge.RegisterFunc("github.com/gomatcha/matcha/internal printStack", printStack)
+	matchabridge.RegisterFunc("gomatcha.io/matcha/internal printStack", printStack)
 }
 
 func printStack() {

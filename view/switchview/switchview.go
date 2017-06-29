@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/gomatcha/matcha/layout/constraint"
-	"github.com/gomatcha/matcha/paint"
-	"github.com/gomatcha/matcha/pb/view/switchview"
-	"github.com/gomatcha/matcha/view"
+	"gomatcha.io/matcha/layout/constraint"
+	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/pb/view/switchview"
+	"gomatcha.io/matcha/view"
 )
 
 type View struct {
@@ -42,7 +42,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Painter:        painter,
 		Layouter:       l,
-		NativeViewName: "github.com/gomatcha/matcha/view/switch",
+		NativeViewName: "gomatcha.io/matcha/view/switch",
 		NativeViewState: &switchview.View{
 			Value: v.Value,
 		},

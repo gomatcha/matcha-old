@@ -3,7 +3,7 @@ package animate
 import (
 	"image/color"
 
-	"github.com/gomatcha/matcha/comm"
+	"gomatcha.io/matcha/comm"
 	// "gomatcha.io/matcha/comm"
 )
 

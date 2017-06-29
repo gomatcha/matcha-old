@@ -6,14 +6,14 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 
-	"github.com/gomatcha/matcha"
-	"github.com/gomatcha/matcha/comm"
-	"github.com/gomatcha/matcha/env"
-	"github.com/gomatcha/matcha/layout"
-	"github.com/gomatcha/matcha/paint"
-	"github.com/gomatcha/matcha/pb"
-	"github.com/gomatcha/matcha/pb/view/imageview"
-	"github.com/gomatcha/matcha/view"
+	"gomatcha.io/matcha"
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/env"
+	"gomatcha.io/matcha/layout"
+	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/pb"
+	"gomatcha.io/matcha/pb/view/imageview"
+	"gomatcha.io/matcha/view"
 )
 
 type ResizeMode int
@@ -109,7 +109,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Painter:        painter,
 		Layouter:       &layouter{bounds: bounds, resizeMode: resizeMode, scale: scale},
-		NativeViewName: "github.com/gomatcha/matcha/view/imageview",
+		NativeViewName: "gomatcha.io/matcha/view/imageview",
 		NativeViewState: &imageview.View{
 			Image:      v.pbImage,
 			Scale:      scale,

@@ -3,9 +3,9 @@ package animate
 import (
 	"time"
 
-	"github.com/gomatcha/matcha/comm"
-	"github.com/gomatcha/matcha/internal"
-	"github.com/gomatcha/matcha/view"
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/internal"
+	"gomatcha.io/matcha/view"
 )
 
 type Value struct {

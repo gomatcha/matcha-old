@@ -8,10 +8,10 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/gomatcha/matcha/internal"
-	"github.com/gomatcha/matcha/layout"
-	"github.com/gomatcha/matcha/pb/touch"
-	"github.com/gomatcha/matcha/view"
+	"gomatcha.io/matcha/internal"
+	"gomatcha.io/matcha/layout"
+	"gomatcha.io/matcha/pb/touch"
+	"gomatcha.io/matcha/view"
 )
 
 func init() {
@@ -112,7 +112,7 @@ func (r *Middleware) Build(ctx *view.Context, next *view.Model) {
 	if next.NativeValues == nil {
 		next.NativeValues = map[string]proto.Message{}
 	}
-	next.NativeValues["github.com/gomatcha/matcha/touch"] = pbRecognizers
+	next.NativeValues["gomatcha.io/matcha/touch"] = pbRecognizers
 
 	if next.NativeFuncs == nil {
 		next.NativeFuncs = map[string]interface{}{}

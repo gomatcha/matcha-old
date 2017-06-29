@@ -1,6 +1,6 @@
 syntax = "proto3";
 package matcha.view.tabscreen;
-import "github.com/gomatcha/matcha/pb/image.proto";
+import "gomatcha.io/matcha/pb/image.proto";
 
 option go_package = "tabscreen";
 option objc_class_prefix = "MatchaTabScreenPB";

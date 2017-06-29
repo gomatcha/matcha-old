@@ -3,10 +3,10 @@ package layout
 import (
 	"reflect"
 
-	"github.com/gomatcha/matcha"
-	"github.com/gomatcha/matcha/comm"
-	pb "github.com/gomatcha/matcha/pb/layout"
 	"github.com/overcyn/matchabridge"
+	"gomatcha.io/matcha"
+	"gomatcha.io/matcha/comm"
+	pb "gomatcha.io/matcha/pb/layout"
 )
 
 func init() {

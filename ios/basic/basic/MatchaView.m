@@ -124,19 +124,19 @@ UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *vi
     UIView<MatchaChildView> *child = nil;
     if ([name isEqual:@""]) {
         child = [[MatchaBasicView alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"github.com/gomatcha/matcha/view/textview"]) {
+    } else if ([name isEqual:@"gomatcha.io/matcha/view/textview"]) {
         child = [[MatchaTextView alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"github.com/gomatcha/matcha/view/imageview"]) {
+    } else if ([name isEqual:@"gomatcha.io/matcha/view/imageview"]) {
         child = [[MatchaImageView alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"github.com/gomatcha/matcha/view/button"]) {
+    } else if ([name isEqual:@"gomatcha.io/matcha/view/button"]) {
         child = [[MatchaButton alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"github.com/gomatcha/matcha/view/scrollview"]) {
+    } else if ([name isEqual:@"gomatcha.io/matcha/view/scrollview"]) {
         child = [[MatchaScrollView alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"github.com/gomatcha/matcha/view/switch"]) {
+    } else if ([name isEqual:@"gomatcha.io/matcha/view/switch"]) {
         child = [[MatchaSwitchView alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"github.com/gomatcha/matcha/view/textinput"]) {
+    } else if ([name isEqual:@"gomatcha.io/matcha/view/textinput"]) {
         child = [[MatchaTextInput alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"github.com/gomatcha/matcha/view/slider"]) {
+    } else if ([name isEqual:@"gomatcha.io/matcha/view/slider"]) {
         child = [[MatchaSlider alloc] initWithViewNode:viewNode];
     }
     return child;
@@ -145,11 +145,11 @@ UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *vi
 UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(MatchaNode *node, MatchaViewNode *viewNode) {
     NSString *name = node.nativeViewName;
     UIViewController<MatchaChildViewController> *child = nil;
-    if ([name isEqual:@"github.com/gomatcha/matcha/view/tabscreen"]) {
+    if ([name isEqual:@"gomatcha.io/matcha/view/tabscreen"]) {
         child = [[MatchaTabScreen alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"github.com/gomatcha/matcha/view/stacknav"]) {
+    } else if ([name isEqual:@"gomatcha.io/matcha/view/stacknav"]) {
         child = [[MatchaStackScreen alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"github.com/gomatcha/matcha/view/stacknav Bar"]) {
+    } else if ([name isEqual:@"gomatcha.io/matcha/view/stacknav Bar"]) {
         child = [[MatchaStackBar alloc] initWithViewNode:viewNode];
     }
     return child;

@@ -1,16 +1,16 @@
 package examples
 
 import (
-	_ "github.com/gomatcha/matcha/examples/animate"
-	_ "github.com/gomatcha/matcha/examples/complex"
-	_ "github.com/gomatcha/matcha/examples/constraints"
-	_ "github.com/gomatcha/matcha/examples/imageview"
-	_ "github.com/gomatcha/matcha/examples/paint"
-	_ "github.com/gomatcha/matcha/examples/screen"
-	_ "github.com/gomatcha/matcha/examples/settings"
-	_ "github.com/gomatcha/matcha/examples/stackscreen"
-	_ "github.com/gomatcha/matcha/examples/table"
-	_ "github.com/gomatcha/matcha/examples/tabscreen"
-	_ "github.com/gomatcha/matcha/examples/textview"
-	_ "github.com/gomatcha/matcha/examples/touch"
+	_ "gomatcha.io/matcha/examples/animate"
+	_ "gomatcha.io/matcha/examples/complex"
+	_ "gomatcha.io/matcha/examples/constraints"
+	_ "gomatcha.io/matcha/examples/imageview"
+	_ "gomatcha.io/matcha/examples/paint"
+	_ "gomatcha.io/matcha/examples/screen"
+	_ "gomatcha.io/matcha/examples/settings"
+	_ "gomatcha.io/matcha/examples/stackscreen"
+	_ "gomatcha.io/matcha/examples/table"
+	_ "gomatcha.io/matcha/examples/tabscreen"
+	_ "gomatcha.io/matcha/examples/textview"
+	_ "gomatcha.io/matcha/examples/touch"
 )

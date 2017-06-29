@@ -1,10 +1,10 @@
 package absolute
 
 import (
-	"github.com/gomatcha/matcha"
-	"github.com/gomatcha/matcha/comm"
-	"github.com/gomatcha/matcha/layout"
-	"github.com/gomatcha/matcha/view"
+	"gomatcha.io/matcha"
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/layout"
+	"gomatcha.io/matcha/view"
 )
 
 type Layouter struct {

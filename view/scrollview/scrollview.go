@@ -3,12 +3,12 @@ package scrollview
 import (
 	"math"
 
-	"github.com/gomatcha/matcha"
-	"github.com/gomatcha/matcha/comm"
-	"github.com/gomatcha/matcha/layout"
-	"github.com/gomatcha/matcha/paint"
-	"github.com/gomatcha/matcha/pb/view/scrollview"
-	"github.com/gomatcha/matcha/view"
+	"gomatcha.io/matcha"
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/layout"
+	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/pb/view/scrollview"
+	"gomatcha.io/matcha/view"
 )
 
 type Direction int
@@ -53,7 +53,7 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 		Layouter: &layouter{
 			Directions: v.Directions,
 		},
-		NativeViewName: "github.com/gomatcha/matcha/view/scrollview",
+		NativeViewName: "gomatcha.io/matcha/view/scrollview",
 		NativeViewState: &scrollview.View{
 			ScrollEnabled:                  v.ScrollEnabled,
 			ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,

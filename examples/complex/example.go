@@ -6,25 +6,25 @@ import (
 
 	"golang.org/x/image/colornames"
 
-	"github.com/gomatcha/matcha/animate"
-	"github.com/gomatcha/matcha/layout/constraint"
-	"github.com/gomatcha/matcha/layout/table"
-	"github.com/gomatcha/matcha/paint"
-	"github.com/gomatcha/matcha/text"
-	"github.com/gomatcha/matcha/view"
-	"github.com/gomatcha/matcha/view/basicview"
-	"github.com/gomatcha/matcha/view/button"
-	"github.com/gomatcha/matcha/view/imageview"
-	"github.com/gomatcha/matcha/view/scrollview"
-	"github.com/gomatcha/matcha/view/slider"
-	"github.com/gomatcha/matcha/view/switchview"
-	"github.com/gomatcha/matcha/view/textview"
-	"github.com/gomatcha/matcha/view/urlimageview"
 	"github.com/overcyn/matchabridge"
+	"gomatcha.io/matcha/animate"
+	"gomatcha.io/matcha/layout/constraint"
+	"gomatcha.io/matcha/layout/table"
+	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/text"
+	"gomatcha.io/matcha/view"
+	"gomatcha.io/matcha/view/basicview"
+	"gomatcha.io/matcha/view/button"
+	"gomatcha.io/matcha/view/imageview"
+	"gomatcha.io/matcha/view/scrollview"
+	"gomatcha.io/matcha/view/slider"
+	"gomatcha.io/matcha/view/switchview"
+	"gomatcha.io/matcha/view/textview"
+	"gomatcha.io/matcha/view/urlimageview"
 )
 
 func init() {
-	matchabridge.RegisterFunc("github.com/gomatcha/matcha/examples/complex New", func() *view.Root {
+	matchabridge.RegisterFunc("gomatcha.io/matcha/examples/complex New", func() *view.Root {
 		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
 			return NewNestedView(ctx, "")
 		}))

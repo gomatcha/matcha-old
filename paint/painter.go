@@ -4,10 +4,10 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/gomatcha/matcha/comm"
-	"github.com/gomatcha/matcha/layout"
-	"github.com/gomatcha/matcha/pb"
-	"github.com/gomatcha/matcha/pb/paint"
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/layout"
+	"gomatcha.io/matcha/pb"
+	"gomatcha.io/matcha/pb/paint"
 )
 
 type Painter interface {

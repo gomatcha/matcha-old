@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/gomatcha/matcha/layout"
-	pb "github.com/gomatcha/matcha/pb/layout"
-	"github.com/gomatcha/matcha/pb/text"
 	"github.com/overcyn/matchabridge"
+	"gomatcha.io/matcha/layout"
+	pb "gomatcha.io/matcha/pb/layout"
+	"gomatcha.io/matcha/pb/text"
 )
 
 type StyledText struct {

@@ -3,20 +3,20 @@ package example
 import (
 	"strconv"
 
-	"github.com/gomatcha/matcha/layout/constraint"
-	"github.com/gomatcha/matcha/layout/table"
-	"github.com/gomatcha/matcha/paint"
-	"github.com/gomatcha/matcha/text"
-	"github.com/gomatcha/matcha/view"
-	"github.com/gomatcha/matcha/view/basicview"
-	"github.com/gomatcha/matcha/view/scrollview"
-	"github.com/gomatcha/matcha/view/textview"
 	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
+	"gomatcha.io/matcha/layout/constraint"
+	"gomatcha.io/matcha/layout/table"
+	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/text"
+	"gomatcha.io/matcha/view"
+	"gomatcha.io/matcha/view/basicview"
+	"gomatcha.io/matcha/view/scrollview"
+	"gomatcha.io/matcha/view/textview"
 )
 
 func init() {
-	matchabridge.RegisterFunc("github.com/gomatcha/matcha/examples/table New", func() *view.Root {
+	matchabridge.RegisterFunc("gomatcha.io/matcha/examples/table New", func() *view.Root {
 		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
 			return New(ctx, "")
 		}))

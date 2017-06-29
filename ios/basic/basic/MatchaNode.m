@@ -60,7 +60,7 @@
         }
         self.nodeChildren = children;
         
-        GPBAny *any = self.nativeValues[@"github.com/gomatcha/matcha/touch"];
+        GPBAny *any = self.nativeValues[@"gomatcha.io/matcha/touch"];
         NSError *error = nil;
         MatchaPBTouchRecognizerList *recognizerList = (id)[any unpackMessageClass:[MatchaPBTouchRecognizerList class] error:&error];
         if (error == nil) {

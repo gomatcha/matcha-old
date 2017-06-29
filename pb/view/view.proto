@@ -1,7 +1,7 @@
 syntax = "proto3";
 package matcha.view;
-import "github.com/gomatcha/matcha/pb/layout/layout.proto";
-import "github.com/gomatcha/matcha/pb/paint/paint.proto";
+import "gomatcha.io/matcha/pb/layout/layout.proto";
+import "gomatcha.io/matcha/pb/paint/paint.proto";
 import "google/protobuf/any.proto";
 
 option go_package = "view";

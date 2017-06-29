@@ -1,7 +1,7 @@
 syntax = "proto3";
 package matcha.view.textinput;
-import "github.com/gomatcha/matcha/pb/text/text.proto";
-import "github.com/gomatcha/matcha/pb/keyboard/keyboard.proto";
+import "gomatcha.io/matcha/pb/text/text.proto";
+import "gomatcha.io/matcha/pb/keyboard/keyboard.proto";
 
 option go_package = "textinput";
 option objc_class_prefix = "MatchaTextInputPB";

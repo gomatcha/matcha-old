@@ -1,7 +1,7 @@
 syntax = "proto3";
 package matcha.paint;
-import "github.com/gomatcha/matcha/pb/color.proto";
-import "github.com/gomatcha/matcha/pb/layout/layout.proto";
+import "gomatcha.io/matcha/pb/color.proto";
+import "gomatcha.io/matcha/pb/layout/layout.proto";
 
 option go_package = "paint";
 option objc_class_prefix = "MatchaPaintPB";

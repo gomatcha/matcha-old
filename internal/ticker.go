@@ -4,8 +4,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gomatcha/matcha/comm"
 	"github.com/overcyn/matchabridge"
+	"gomatcha.io/matcha/comm"
 )
 
 var tickers = struct {
@@ -19,7 +19,7 @@ var tickers = struct {
 }
 
 func init() {
-	matchabridge.RegisterFunc("github.com/gomatcha/matcha/animate screenUpdate", screenUpdate)
+	matchabridge.RegisterFunc("gomatcha.io/matcha/animate screenUpdate", screenUpdate)
 }
 
 func screenUpdate() {

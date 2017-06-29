@@ -1,11 +1,11 @@
 package settings
 
 import (
-	"github.com/gomatcha/matcha/layout/table"
-	"github.com/gomatcha/matcha/paint"
-	"github.com/gomatcha/matcha/view"
-	"github.com/gomatcha/matcha/view/basicview"
-	"github.com/gomatcha/matcha/view/scrollview"
+	"gomatcha.io/matcha/layout/table"
+	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/view"
+	"gomatcha.io/matcha/view/basicview"
+	"gomatcha.io/matcha/view/scrollview"
 )
 
 type CellularView struct {

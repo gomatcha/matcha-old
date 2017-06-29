@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/gomatcha/matcha/comm"
 	"golang.org/x/mobile/exp/sprite/clock"
+	"gomatcha.io/matcha/comm"
 )
 
 type FloatInterpolater interface {

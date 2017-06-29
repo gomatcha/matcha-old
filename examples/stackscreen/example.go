@@ -3,19 +3,19 @@ package stackscreen
 import (
 	"image/color"
 
-	"github.com/gomatcha/matcha/comm"
-	"github.com/gomatcha/matcha/layout/constraint"
-	"github.com/gomatcha/matcha/paint"
-	"github.com/gomatcha/matcha/touch"
-	"github.com/gomatcha/matcha/view"
-	"github.com/gomatcha/matcha/view/basicview"
-	"github.com/gomatcha/matcha/view/stackscreen"
 	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/layout/constraint"
+	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/touch"
+	"gomatcha.io/matcha/view"
+	"gomatcha.io/matcha/view/basicview"
+	"gomatcha.io/matcha/view/stackscreen"
 )
 
 func init() {
-	matchabridge.RegisterFunc("github.com/gomatcha/matcha/examples/stackscreen New", func() *view.Root {
+	matchabridge.RegisterFunc("gomatcha.io/matcha/examples/stackscreen New", func() *view.Root {
 		return view.NewRoot(NewApp())
 	})
 }

@@ -12,14 +12,14 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	google_protobuf "github.com/golang/protobuf/ptypes/any"
-	"github.com/gomatcha/matcha"
-	"github.com/gomatcha/matcha/comm"
-	"github.com/gomatcha/matcha/internal"
-	"github.com/gomatcha/matcha/layout"
-	"github.com/gomatcha/matcha/layout/full"
-	"github.com/gomatcha/matcha/paint"
-	pb "github.com/gomatcha/matcha/pb/view"
 	"github.com/overcyn/matchabridge"
+	"gomatcha.io/matcha"
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/internal"
+	"gomatcha.io/matcha/layout"
+	"gomatcha.io/matcha/layout/full"
+	"gomatcha.io/matcha/paint"
+	pb "gomatcha.io/matcha/pb/view"
 )
 
 var MainMu sync.Mutex

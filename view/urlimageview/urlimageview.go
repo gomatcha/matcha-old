@@ -8,12 +8,12 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gomatcha/matcha"
-	"github.com/gomatcha/matcha/comm"
-	"github.com/gomatcha/matcha/layout"
-	"github.com/gomatcha/matcha/paint"
-	"github.com/gomatcha/matcha/view"
-	"github.com/gomatcha/matcha/view/imageview"
+	"gomatcha.io/matcha"
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/layout"
+	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/view"
+	"gomatcha.io/matcha/view/imageview"
 )
 
 // Layouter that returns the child's layout

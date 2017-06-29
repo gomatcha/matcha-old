@@ -3,18 +3,18 @@ package screen
 import (
 	"image/color"
 
-	"github.com/gomatcha/matcha/comm"
-	"github.com/gomatcha/matcha/paint"
-	"github.com/gomatcha/matcha/touch"
-	"github.com/gomatcha/matcha/view"
-	"github.com/gomatcha/matcha/view/stackscreen"
-	"github.com/gomatcha/matcha/view/tabscreen"
 	"github.com/overcyn/matchabridge"
 	"golang.org/x/image/colornames"
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/touch"
+	"gomatcha.io/matcha/view"
+	"gomatcha.io/matcha/view/stackscreen"
+	"gomatcha.io/matcha/view/tabscreen"
 )
 
 func init() {
-	matchabridge.RegisterFunc("github.com/gomatcha/matcha/examples/screen New", func() *view.Root {
+	matchabridge.RegisterFunc("gomatcha.io/matcha/examples/screen New", func() *view.Root {
 		return view.NewRoot(NewApp())
 	})
 }

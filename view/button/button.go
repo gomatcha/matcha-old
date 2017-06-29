@@ -1,13 +1,13 @@
 package button
 
 import (
-	"github.com/gomatcha/matcha"
-	"github.com/gomatcha/matcha/comm"
-	"github.com/gomatcha/matcha/layout"
-	"github.com/gomatcha/matcha/paint"
-	pbbutton "github.com/gomatcha/matcha/pb/view/button"
-	"github.com/gomatcha/matcha/text"
-	"github.com/gomatcha/matcha/view"
+	"gomatcha.io/matcha"
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/layout"
+	"gomatcha.io/matcha/paint"
+	pbbutton "gomatcha.io/matcha/pb/view/button"
+	"gomatcha.io/matcha/text"
+	"gomatcha.io/matcha/view"
 )
 
 type layouter struct {
@@ -63,7 +63,7 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 	return &view.Model{
 		Painter:        painter,
 		Layouter:       &layouter{styledText: st},
-		NativeViewName: "github.com/gomatcha/matcha/view/button",
+		NativeViewName: "gomatcha.io/matcha/view/button",
 		NativeViewState: &pbbutton.View{
 			StyledText: st.MarshalProtobuf(),
 		},

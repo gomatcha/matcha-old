@@ -1,6 +1,6 @@
 syntax = "proto3";
 package matcha.view.button;
-import "github.com/gomatcha/matcha/pb/text/text.proto";
+import "gomatcha.io/matcha/pb/text/text.proto";
 
 option go_package = "button";
 option objc_class_prefix = "MatchaButtonPB";

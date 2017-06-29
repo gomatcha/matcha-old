@@ -3,9 +3,9 @@ package basicview
 import (
 	"fmt"
 
-	"github.com/gomatcha/matcha/layout"
-	"github.com/gomatcha/matcha/paint"
-	"github.com/gomatcha/matcha/view"
+	"gomatcha.io/matcha/layout"
+	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/view"
 )
 
 type BasicView struct {

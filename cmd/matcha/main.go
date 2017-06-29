@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gomatcha/matcha/cmd"
 	"github.com/spf13/cobra"
+	"gomatcha.io/matcha/cmd"
 )
 
 func main() {
