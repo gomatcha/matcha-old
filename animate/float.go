@@ -1,12 +1,16 @@
 package animate
 
-import "github.com/overcyn/matcha/comm"
+import (
+	"math"
+
+	"github.com/overcyn/matcha/comm"
+)
 
 type FloatInterpolater interface {
 	Interpolate(float64) float64
 }
 
-func FloatInterpolate(w comm.Float64Notifier, l FloatInterpolater) comm.Float64Notifier {
+func floatInterpolate(w comm.Float64Notifier, l FloatInterpolater) comm.Float64Notifier {
 	return &floatInterpolater{
 		watcher:      w,
 		interpolater: l,
@@ -33,29 +37,52 @@ func (w *floatInterpolater) Value() float64 {
 type LinearEase struct {
 }
 
-func (e *LinearEase) Interpolate(a float64) float64 {
+func (e LinearEase) Interpolate(a float64) float64 {
 	return a
+}
+
+func (e LinearEase) Notifier(a comm.Float64Notifier) comm.Float64Notifier {
+	return floatInterpolate(a, e)
 }
 
 type PolyInEase struct {
+	Exp float64
 }
 
-func (e *PolyInEase) Interpolate(a float64) float64 {
-	return a
+func (e PolyInEase) Interpolate(a float64) float64 {
+	return math.Pow(a, e.Exp)
+}
+
+func (e PolyInEase) Notifier(a comm.Float64Notifier) comm.Float64Notifier {
+	return floatInterpolate(a, e)
 }
 
 type PolyOutEase struct {
+	Exp float64
 }
 
-func (e *PolyOutEase) Interpolate(a float64) float64 {
-	return a
+func (e PolyOutEase) Interpolate(a float64) float64 {
+	return 1 - math.Pow(1-a, e.Exp)
+}
+
+func (e PolyOutEase) Notifier(a comm.Float64Notifier) comm.Float64Notifier {
+	return floatInterpolate(a, e)
 }
 
 type PolyInOutEase struct {
+	Exp float64
 }
 
-func (e *PolyInOutEase) Interpolate(a float64) float64 {
-	return a
+func (e PolyInOutEase) Interpolate(a float64) float64 {
+	if a < 0.5 {
+		return math.Pow(a, e.Exp)
+	} else {
+		return 1 - math.Pow(1-a, e.Exp)
+	}
+}
+
+func (e PolyInOutEase) Notifier(a comm.Float64Notifier) comm.Float64Notifier {
+	return floatInterpolate(a, e)
 }
 
 type FloatLerp struct {
@@ -64,6 +91,10 @@ type FloatLerp struct {
 
 func (f FloatLerp) Interpolate(a float64) float64 {
 	return f.Start + (f.End-f.Start)*a
+}
+
+func (e FloatLerp) Notifier(a comm.Float64Notifier) comm.Float64Notifier {
+	return floatInterpolate(a, e)
 }
 
 // value := animate.UnitValue()

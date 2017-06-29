@@ -35,7 +35,7 @@ func init() {
 type NestedView struct {
 	*view.Embed
 	counter int
-	ticker  *animate.Ticker
+	value   animate.Value
 }
 
 func NewNestedView(ctx *view.Context, key string) *NestedView {
@@ -43,19 +43,62 @@ func NewNestedView(ctx *view.Context, key string) *NestedView {
 		return v
 	}
 	return &NestedView{
-		Embed:  view.NewEmbed(ctx.NewId(key)),
-		ticker: animate.NewTicker(time.Second * 5),
+		Embed: view.NewEmbed(ctx.NewId(key)),
+	}
+}
+
+func (v *NestedView) Lifecycle(from, to view.Stage) {
+	if view.EntersStage(from, to, view.StageVisible) {
+		// animation := animate.NewBasic()
+		// animation.SetStart(0)
+		// animation.SetEnd(1)
+		// animation.SetDuration(5 * time.Second)
+		// animation := animate.Basic{Start: 1.0, End: 3.0}
+		// animate.Run(animation, &v.value, nil)
+
+		_ = v.value.Run(&animate.Basic{Start: 0, End: 1, TimeInterval: time.Second * 5}, nil)
+
+		// b := animate.NewBatch()
+		// cancelfunc := v.value.Run(b.With(animation), nil)
+		// cancelfunc := v.value.Run(b.With(animation2), nil)
+
+		// cancelFunc := animate.RunMultiple(func(t *animate.Timing) {
+		// 	// animation := animate.NewBasic()
+		// 	// animation.SetDuration(5 * time.Second)
+		// 	// t.Run(value, animation, nil)
+		// 	v.value.Run(t, animation, nil)
+
+		// 	t.Run(a, value, nil)
+		// 	t.Run(b, value, nil)
+
+		// 	t = t.After(a.Duration())
+
+		// 	a2 := animate.Basic{Start: 1.0, End: 3.0, Duration: 4.0, Value: Value}
+		// 	t.Run(a, value, nil)
+		// }, nil)
+
+		// _ = v.value.Run(animation, nil)
 	}
 }
 
 func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
-	value := animate.FloatInterpolate(v.ticker, animate.FloatLerp{Start: 0, End: 150})
-	color := animate.ColorInterpolate(v.ticker, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow})
+	value := animate.FloatLerp{Start: 0, End: 150}.Notifier(&v.value)
+	// value := animate.FloatInterpolate(&v.value, animate.FloatLerp{Start: 0, End: 150})
+	// value := animate.FloatLerp{Start: 0, End: 150}.Interpolate(v.source)
+
+	// color := animate.ColorInterpolate(&v.value, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow})
+	// color := animate.ColorInterpolate(&v.value, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow})
+	// animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow, Notifier: &v.value}
+
+	// animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow}
+
+	// y := v.value.FloatInterpolate(animate.FloatLerp{Start: 0, End: 150})
+	// x := v.value.ColorInterpolate(animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow})
 
 	chl1 := basicview.New(ctx, "1")
-	chl1.Painter = &paint.AnimatedStyle{BackgroundColor: color}
+	// chl1.Painter = &paint.AnimatedStyle{BackgroundColor: color}
 	g1 := l.Add(chl1, func(s *constraint.Solver) {
 		s.Top(0)
 		s.Left(0)

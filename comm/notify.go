@@ -2,6 +2,7 @@ package comm
 
 import (
 	"image/color"
+	"time"
 )
 
 type Id int64
@@ -59,4 +60,9 @@ type StringNotifier interface {
 type BytesNotifier interface {
 	Notifier
 	Value() []byte
+}
+
+type DurationNotifier interface {
+	Notifier
+	Value() time.Duration
 }

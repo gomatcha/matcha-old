@@ -16,47 +16,33 @@
 * Scalability
 	* Support large programs with large numbers of dependencies, with large teams of programmers working on them.
 
-## Non-goals
-* Ultra-high performance
-* Model and data fetching
-	* Out of scope
-* Templating
-	* I dont get templating... 
-* Niche usecases
-	* This isn't supposed to replace graphing libraries, game engines, etc.
-
 ## Example
 
 ```go
 type TodoView struct {
+	*Embed
 	Items []string
 	Input string
 }
 
-const (
-	labelId = "todo.label"
-	listId = "todo.list"
-	textFieldId = "todo.textField"
-	buttonId = "todo.button"
-)
-
-func NewTodoView(v interface{}) {
-	todoView, ok := v.(*TodoView)
-	if !ok {
-		todoView = (*TodoView){}
+func NewTodoView(ctx *view.Context, key string) *TodoView {
+	if v, ok := ctx.Prev(key).(*TodoView); ok {
+		return v
 	}
-	return todoView
+	return &TodoView{
+		Embed:  view.NewEmbed(ctx.NewId(key)),
+	}
 }
 
 func (v *TodoView) Update(p *Node) *Node {
-	l := &constraint.System{}
+	l := &constraint.New()
 	n := &Node{}
 	n.layouter = l
 
 	var prev *constraint.Guide
 	{
 		// Label
-		chl := NewLabel(p.Get(labelId))
+		chl := NewLabel(ctx, "title")
 		chl.Text = "TODO"
 		n.Set(labelId, chl)
 
@@ -130,31 +116,6 @@ Similar Libraries
 * https://sciter.com
 <!--
 ## Blah
-
-
-
-## Renderer
-
-Building the tree 
-
-### Blah
-
-func (v *TodoView) Render(prev, next *Node) {
-	...
-}
-
-### RenderContext
-
-func (v *TodoView) Render(ctx *RenderContext) {
-	label := AddLabel(ctx, labelId)
-	label.Text = "TODO"
-
-	scroll := AddScrollView(ctx, scrollId)
-	content := AddWebView(scroll.ContentContext, contentId)
-	content.URL = "www.example.com"
-	scroll.ContentView = content
-}
-
 ### 
 
 func (v *TodoView) Update(p *Node) *Node {
