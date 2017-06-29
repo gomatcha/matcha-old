@@ -1,4 +1,4 @@
-package text // import "gomatcha.io/matcha/text"
+package text
 
 import (
 	"runtime"

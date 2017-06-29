@@ -1,4 +1,4 @@
-package absolute // import "gomatcha.io/matcha/layout/absolute"
+package absolute
 
 import (
 	"gomatcha.io/matcha"

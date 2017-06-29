@@ -1,4 +1,4 @@
-package pb // import "gomatcha.io/matcha/pb"
+package pb
 
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/env/*.proto )"

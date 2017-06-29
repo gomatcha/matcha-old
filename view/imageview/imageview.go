@@ -1,4 +1,4 @@
-package imageview // import "gomatcha.io/matcha/view/imageview"
+package imageview
 
 import (
 	"image"

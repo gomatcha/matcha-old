@@ -1,4 +1,4 @@
-package paint // import "gomatcha.io/matcha/paint"
+package paint
 
 import (
 	"image"

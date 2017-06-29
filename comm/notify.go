@@ -1,4 +1,4 @@
-package comm // import "gomatcha.io/matcha/comm"
+package comm
 
 import (
 	"image/color"

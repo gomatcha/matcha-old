@@ -1,4 +1,4 @@
-package basicview // import "gomatcha.io/matcha/view/basicview"
+package basicview
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package animate // import "gomatcha.io/matcha/animate"
+package animate
 
 import (
 	"image/color"

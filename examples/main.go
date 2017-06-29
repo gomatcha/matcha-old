@@ -1,4 +1,4 @@
-package examples // import "gomatcha.io/matcha/examples"
+package examples
 
 import (
 	_ "gomatcha.io/matcha/examples/animate"

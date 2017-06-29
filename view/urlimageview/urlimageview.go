@@ -1,4 +1,4 @@
-package urlimageview // import "gomatcha.io/matcha/view/urlimageview"
+package urlimageview
 
 import (
 	"context"

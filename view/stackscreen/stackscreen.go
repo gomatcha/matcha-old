@@ -1,4 +1,4 @@
-package stackscreen // import "gomatcha.io/matcha/view/stackscreen"
+package stackscreen
 
 import (
 	"fmt"

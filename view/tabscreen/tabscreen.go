@@ -1,4 +1,4 @@
-package tabscreen // import "gomatcha.io/matcha/view/tabscreen"
+package tabscreen
 
 import (
 	"fmt"

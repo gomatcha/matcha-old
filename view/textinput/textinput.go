@@ -1,4 +1,4 @@
-package textinput // import "gomatcha.io/matcha/view/textinput"
+package textinput
 
 import (
 	"fmt"

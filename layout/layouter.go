@@ -1,4 +1,4 @@
-package layout // import "gomatcha.io/matcha/layout"
+package layout
 
 import (
 	"reflect"
