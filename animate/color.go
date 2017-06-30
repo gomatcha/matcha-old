@@ -4,7 +4,6 @@ import (
 	"image/color"
 
 	"gomatcha.io/matcha/comm"
-	// "gomatcha.io/matcha/comm"
 )
 
 type ColorInterpolater interface {

@@ -2,6 +2,7 @@
 go get github.com/matcha/matcha/...
 
 High:
+* Find all packages that import gomatcha.io/bridge. check if that package has a directory named ios, assets, android
 * We want to generate an bunch of xcprojects that the user can then add into an xcworkspace.
 * Switching quickly between navigation item causes loop. 2 quick backs.
 * Build objective c files into the framework.
@@ -15,6 +16,7 @@ Medium:
 * Why doesn't simulator debugger work? Why does simulator crash all the time?
 * Rebuild settings app.
 * Only send updated views.
+* Dont add a default PaintStyle to every view.
 
 Low:
 * Support StyledText in textinput and textview.
