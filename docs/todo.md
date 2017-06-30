@@ -8,7 +8,7 @@ High:
 * Collect native resources into assets.
 * Build website and documentation.
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
-* Hide StyledText, Keyboard middleware.
+* Hide StyledText
 
 Medium:
 * Why do easing functions cause deadlock?

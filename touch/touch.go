@@ -15,7 +15,7 @@ import (
 )
 
 func init() {
-	internal.RegisterMiddleware(func() interface{} { return &Middleware{} })
+	internal.RegisterMiddleware(func() interface{} { return &middleware{} })
 }
 
 type key struct{}
@@ -24,7 +24,7 @@ type _idKey struct{}
 var Key = key{}
 var idKey = _idKey{}
 
-type Middleware struct {
+type middleware struct {
 	maxId int64
 }
 
@@ -35,7 +35,7 @@ func newFuncId() int64 {
 	return atomic.AddInt64(&maxFuncId, 1)
 }
 
-func (r *Middleware) Build(ctx *view.Context, next *view.Model) {
+func (r *middleware) Build(ctx *view.Context, next *view.Model) {
 	var prevIds map[int64]Recognizer
 	if prevModel := ctx.PrevModel(); prevModel != nil && prevModel.Values != nil {
 		prevIds, _ = prevModel.Values[idKey].(map[int64]Recognizer)
