@@ -144,7 +144,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		group := []view.View{}
 
 		spacer := NewSpacer(ctx, "spacer")
-		l.Add(spacer)
+		l, nil.Add(spacer)
 
 		switchView := switchview.New(ctx, "switch")
 		switchView.Value = v.wifiStore.Enabled()
@@ -176,7 +176,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		}
 
 		for _, i := range AddSeparators(ctx, group) {
-			l.Add(i)
+			l.Add(i, nil)
 		}
 	}
 
@@ -187,7 +187,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 
 			spacer := NewSpacerHeader(ctx, "spacer")
 			spacer.Title = "Choose a Network..."
-			l.Add(spacer)
+			l.Add(spacer, nil)
 
 			for _, i := range v.wifiStore.Networks() {
 				if i.SSID() != v.wifiStore.CurrentNetworkSSID() {
@@ -209,7 +209,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 			group = append(group, cell1)
 
 			for _, i := range AddSeparators(ctx, group) {
-				l.Add(i)
+				l.Add(i, nil)
 			}
 		}
 		{
@@ -217,7 +217,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 			group := []view.View{}
 
 			spacer := NewSpacer(ctx, "spacer")
-			l.Add(spacer)
+			l.Add(spacer, nil)
 
 			switchView := switchview.New(ctx, "switch")
 			cell1 := NewBasicCell(ctx, "join")
@@ -226,13 +226,13 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 			group = append(group, cell1)
 
 			for _, i := range AddSeparators(ctx, group) {
-				l.Add(i)
+				l.Add(i, nil)
 			}
 		}
 		{
 			spacer := NewSpacerDescription(ctx, "spacerDescr")
 			spacer.Description = "Known networks will be joined automatically. If no known networks are available, you will have to manually join a network."
-			l.Add(spacer)
+			l.Add(spacer, nil)
 		}
 	}
 

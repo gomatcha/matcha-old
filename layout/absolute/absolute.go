@@ -38,7 +38,7 @@ func (l *Layouter) Add(v view.View, g layout.Guide) {
 	l.views = append(l.views, v)
 }
 
-// Views returns all views that have been added to the layouter.
+// Views returns all views that have been added to l.
 func (l *Layouter) Views() []view.View {
 	return l.views
 }

@@ -38,6 +38,8 @@ Low:
 * Debug constraints.
 * Animations: Spring, Delay, Batch, Reverse, Decay, Repeat, 2d, 3d, Nd
 * More Touch Recognizers: Pan, Swipe, Pinch, EdgePan, Rotation
+* Table scroll position?
+* Table ScrollBehaviors, Table Direction
 
 Bugs:
 * Crash in protobuf if view does not have a layout guide.
@@ -58,7 +60,6 @@ Documentation:
 * keyboard
 * layout
     * constraint
-    * table
 * paint
 * text
 * touch

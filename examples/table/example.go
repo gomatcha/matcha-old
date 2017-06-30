@@ -44,7 +44,7 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 		childView := NewTableCell(ctx, strconv.Itoa(i))
 		childView.String = "TEST TEST"
 		childView.Painter = &paint.Style{BackgroundColor: colornames.Red}
-		childLayouter.Add(childView)
+		childLayouter.Add(childView, nil)
 	}
 
 	scrollChild := basicview.New(ctx, "a")

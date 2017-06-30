@@ -172,7 +172,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		childView := NewTableCell(ctx, "a"+strconv.Itoa(i))
 		childView.String = "TEST TEST"
 		childView.Painter = &paint.Style{BackgroundColor: colornames.Red}
-		childLayouter.Add(childView)
+		childLayouter.Add(childView, nil)
 	}
 
 	scrollChild := basicview.New(ctx, "9")

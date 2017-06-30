@@ -1,3 +1,16 @@
+/*
+Package table implements a vertical, single column layout system. Views are layed out from top to bottom.
+
+ l := &table.Layouter{}
+
+ childView := NewChildView(...)
+ l.Add(childView, nil) // The height of the view is determined by the child's layouter.
+
+ return &view.Model{
+ 	Views: l.Views(),
+ 	Layouter:l,
+ }
+*/
 package table
 
 import (
@@ -9,30 +22,26 @@ import (
 	"gomatcha.io/matcha/view"
 )
 
-// type Direction int
-
-// const (
-// 	DirectionFromTop Direction = iota
-// 	DirectionFromBottom
-// 	DirectionFromLeft
-// 	DirectionFromRight
-// )
+type ScrollBehavior interface {
+}
 
 type Layouter struct {
-	// Direction Direction // TODO(KD): Direction is ignored.
 	ids   []matcha.Id
 	views []view.View
 }
 
+// Views returns all views that have been added to l.
 func (l *Layouter) Views() []view.View {
 	return l.views
 }
 
-func (l *Layouter) Add(v view.View) {
+// Add adds v to the layouter and positions it with g.
+func (l *Layouter) Add(v view.View, b ScrollBehavior) {
 	l.ids = append(l.ids, v.Id())
 	l.views = append(l.views, v)
 }
 
+// Layout implements the view.Layouter interface.
 func (l *Layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
 	g := layout.Guide{}
 	gs := map[matcha.Id]layout.Guide{}
@@ -49,10 +58,12 @@ func (l *Layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layo
 	return g, gs
 }
 
+// Notify implements the view.Layouter interface.
 func (l *Layouter) Notify(f func()) comm.Id {
 	return 0 // no-op
 }
 
+// Unnotify implements the view.Layouter interface.
 func (l *Layouter) Unnotify(id comm.Id) {
 	// no-op
 }

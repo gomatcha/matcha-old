@@ -90,7 +90,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		group := []view.View{}
 
 		spacer := NewSpacer(ctx, "spacer")
-		l.Add(spacer)
+		l.Add(spacer, nil)
 
 		switchView := switchview.New(ctx, "switch")
 		cell1 := NewBasicCell(ctx, "airplane")
@@ -165,7 +165,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		group = append(group, cell6)
 
 		for _, i := range AddSeparators(ctx, group) {
-			l.Add(i)
+			l.Add(i, nil)
 		}
 	}
 	{
@@ -173,7 +173,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		group := []view.View{}
 
 		spacer := NewSpacer(ctx, "spacer")
-		l.Add(spacer)
+		l.Add(spacer, nil)
 
 		cell1 := NewBasicCell(ctx, "notifications")
 		cell1.HasIcon = true
@@ -197,7 +197,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		group = append(group, cell3)
 
 		for _, i := range AddSeparators(ctx, group) {
-			l.Add(i)
+			l.Add(i, nil)
 		}
 	}
 
