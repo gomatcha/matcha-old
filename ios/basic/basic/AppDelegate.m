@@ -23,28 +23,12 @@
     NSLog(@"Bl'h!");
     [[MatchaObjcBridge sharedBridge] configure];
     
-    // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHeightDidChange:) name:UIKeyboardDidChangeFrameNotification object:nil];
-    // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
-    // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
-    
     MatchaGoValue *rootVC = [[[MatchaGoValue alloc] initWithFunc:@"gomatcha.io/matcha/examples/complex New"] call:nil args:nil][0];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    self.window.rootViewController = [[UIViewController alloc] init];
     self.window.rootViewController = [[MatchaViewController alloc] initWithGoValue:rootVC];
     [self.window makeKeyAndVisible];
     return YES;
-}
-
-- (void)keyboardHeightDidChange:(NSNotification *)note {
-    NSLog(@"%@",note);
-}
-
-- (void)keyboardDidShow:(NSNotification *)note {
-    NSLog(@"%@", note);
-}
-- (void)keyboardDidHide:(NSNotification *)note {
-    NSLog(@"%@", note);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

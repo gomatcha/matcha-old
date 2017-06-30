@@ -1,3 +1,24 @@
+/*
+Package constraint implements touch recognizers.
+
+Create the touch recognizer in the Build function.
+
+ tap := &touch.TapRecognizer{
+ 	Count: 1,
+ 	OnTouch: func(e *touch.TapEvent) {
+ 		// Respond to touch events. This callback occurs on main thread.
+ 		fmt.Println("view touched")
+ 	},
+ }
+
+Attach the recognizer to the view.
+
+ return &view.Model{
+ 	Values: map[interface{}]interface{}{
+ 		touch.Key:[]touch.Recognizer{tap},
+ 	},
+ }
+*/
 package touch
 
 import (

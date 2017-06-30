@@ -1,4 +1,4 @@
-package matchabridge
+package bridge
 
 // Go support functions for Objective-C. Note that this
 // file is copied into and compiled with the generated

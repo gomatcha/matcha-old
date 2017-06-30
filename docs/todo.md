@@ -9,6 +9,7 @@ High:
 * Build website and documentation.
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
 * Hide StyledText
+* Automatically insert copyright notice.
 
 Medium:
 * Why do easing functions cause deadlock?
@@ -37,6 +38,7 @@ Low:
 * StackBar height / hidden
 * Debug constraints.
 * Animations: Spring, Delay, Batch, Reverse, Decay, Repeat, 2d, 3d, Nd
+* More Touch Recognizers: Pan, Swipe, Pinch, EdgePan, Rotation
 
 Bugs:
 * Crash in protobuf if view does not have a layout guide.
@@ -58,6 +60,5 @@ Pro:
 * ActionSheet
 * CameraView
 * MapView
-* More Touch Recognizers: Pan, Swipe, Pinch, EdgePan, Rotation
 * GPS
 * Accessibility

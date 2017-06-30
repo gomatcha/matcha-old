@@ -28,7 +28,8 @@
 		67349EF31F05A8C800E07354 /* Tabscreen.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349EDF1F05A8C800E07354 /* Tabscreen.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67349EF41F05A8C800E07354 /* Textinput.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349EE21F05A8C800E07354 /* Textinput.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67349EF51F05A8C800E07354 /* View.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349EE41F05A8C800E07354 /* View.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		67349EF71F05A9C700E07354 /* Protobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67349EF61F05A9C700E07354 /* Protobuf.framework */; };
+		67349EF91F06068B00E07354 /* Protobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67349EF81F06068B00E07354 /* Protobuf.framework */; };
+		67349EFA1F0606B200E07354 /* Protobuf.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67349EF81F06068B00E07354 /* Protobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		674080DD1ED8D4800093D987 /* MatchaTapGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080DC1ED8D4800093D987 /* MatchaTapGestureRecognizer.m */; };
 		674080E31EDA4D480093D987 /* MatchaTouchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080E21EDA4D480093D987 /* MatchaTouchController.m */; };
 		674080E61EDC7EF80093D987 /* MatchaProtobuf.m in Sources */ = {isa = PBXBuildFile; fileRef = 674080E51EDC7EF80093D987 /* MatchaProtobuf.m */; };
@@ -61,6 +62,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				67349EFA1F0606B200E07354 /* Protobuf.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,7 +111,7 @@
 		67349EE21F05A8C800E07354 /* Textinput.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Textinput.pbobjc.m; sourceTree = "<group>"; };
 		67349EE31F05A8C800E07354 /* View.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.pbobjc.h; sourceTree = "<group>"; };
 		67349EE41F05A8C800E07354 /* View.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.pbobjc.m; sourceTree = "<group>"; };
-		67349EF61F05A9C700E07354 /* Protobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Protobuf.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/Matcha-exjmburxjcmeaeeykscehzncbcdz/Build/Products/Debug-iphonesimulator/Protobuf.framework"; sourceTree = "<group>"; };
+		67349EF81F06068B00E07354 /* Protobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Protobuf.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/Matcha-exjmburxjcmeaeeykscehzncbcdz/Build/Products/Debug-iphoneos/Protobuf.framework"; sourceTree = "<group>"; };
 		674080DB1ED8D4800093D987 /* MatchaTapGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaTapGestureRecognizer.h; sourceTree = "<group>"; };
 		674080DC1ED8D4800093D987 /* MatchaTapGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaTapGestureRecognizer.m; sourceTree = "<group>"; };
 		674080E11EDA4D480093D987 /* MatchaTouchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaTouchController.h; sourceTree = "<group>"; };
@@ -158,8 +160,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67349EF71F05A9C700E07354 /* Protobuf.framework in Frameworks */,
 				67D89E211ED4AE1E0063A1E2 /* Matcha.framework in Frameworks */,
+				67349EF91F06068B00E07354 /* Protobuf.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,7 +460,7 @@
 		67D89DCD1ED4A2C30063A1E2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				67349EF61F05A9C700E07354 /* Protobuf.framework */,
+				67349EF81F06068B00E07354 /* Protobuf.framework */,
 				67608AC31EA7EB5E00AE2EC7 /* Matcha.framework */,
 			);
 			name = Frameworks;

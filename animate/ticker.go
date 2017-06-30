@@ -1,6 +1,7 @@
 package animate
 
 import (
+	"fmt"
 	"time"
 
 	"gomatcha.io/matcha/comm"
@@ -37,10 +38,13 @@ func (v *Value) Run(a Animation, onComplete func()) (cancelFunc func()) {
 	}
 
 	start := time.Now()
-	an := &animation{animation: a, onComplete: onComplete, ticker: internal.NewTicker(time.Hour * 99)}
+	an := &animation{animation: a, onComplete: onComplete, ticker: internal.NewTicker(time.Hour * 99), value: v}
 	an.tickerId = an.ticker.Notify(func() {
 		view.MainMu.Lock()
 		defer view.MainMu.Unlock()
+		if an.cancelled {
+			return
+		}
 
 		d := time.Now().Sub(start)
 		a.SetTime(d)
@@ -97,15 +101,47 @@ func (a *animation) cancel() {
 }
 
 type Basic struct {
-	Start        float64
-	End          float64
-	Ease         FloatInterpolater
-	TimeInterval time.Duration
-	time         time.Duration
+	start    float64
+	end      float64
+	ease     FloatInterpolater
+	duration time.Duration
+	time     time.Duration
+}
+
+func (a *Basic) SetStart(v float64) {
+	a.start = v
+}
+
+func (a *Basic) Start() float64 {
+	return a.start
+}
+
+func (a *Basic) SetEnd(v float64) {
+	a.end = v
+}
+
+func (a *Basic) End() float64 {
+	return a.end
+}
+
+func (a *Basic) SetEase(v FloatInterpolater) {
+	a.ease = v
+}
+
+func (a *Basic) Ease() FloatInterpolater {
+	return a.ease
+}
+
+func (a *Basic) SetDuration(v time.Duration) {
+	a.duration = v
 }
 
 func (a *Basic) Duration() time.Duration {
-	return a.TimeInterval
+	return a.duration
+}
+
+func (a *Basic) Time() time.Duration {
+	return a.time
 }
 
 func (a *Basic) SetTime(t time.Duration) {
@@ -113,19 +149,19 @@ func (a *Basic) SetTime(t time.Duration) {
 }
 
 func (a *Basic) Value() float64 {
-	if a.TimeInterval == 0 {
-		return a.End
+	if a.duration == 0 {
+		return a.end
 	}
-	ratio := float64(a.time) / float64(a.TimeInterval)
+	ratio := float64(a.time) / float64(a.duration)
 	if ratio < 0 {
 		ratio = 0
 	} else if ratio > 1 {
 		ratio = 1
 	}
-	if a.Ease != nil {
-		ratio = a.Ease.Interpolate(ratio)
+	if a.ease != nil {
+		ratio = a.ease.Interpolate(ratio)
 	}
-	return a.Start + ratio*(a.End-a.Start)
+	return a.start + ratio*(a.end-a.start)
 }
 
 // type Spring struct {

@@ -100,9 +100,10 @@ func (t *Ticker) Stop() {
 
 func (t *Ticker) update() {
 	t.mu.Lock()
-	defer t.mu.Unlock()
+	funcs := t.funcs
+	t.mu.Unlock()
 
-	for _, f := range t.funcs {
+	for _, f := range funcs {
 		f()
 	}
 }
