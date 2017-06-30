@@ -53,7 +53,7 @@ func (v *NestedView) Lifecycle(from, to view.Stage) {
 		a.SetStart(0)
 		a.SetEnd(1)
 		a.SetDuration(2 * time.Second)
-		a.SetEase(animate.PolyInEase{Exp: 3})
+		a.SetEase(animate.DefaultEase)
 
 		_ = v.value.Run(a, nil)
 	}

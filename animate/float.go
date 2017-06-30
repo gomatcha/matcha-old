@@ -1,7 +1,6 @@
 package animate
 
 import (
-	"fmt"
 	"math"
 
 	"golang.org/x/mobile/exp/sprite/clock"
@@ -50,8 +49,7 @@ type CubicBezierEase struct {
 func (e CubicBezierEase) Interpolate(a float64) float64 {
 	f := clock.CubicBezier(float32(e.X0), float32(e.Y0), float32(e.X1), float32(e.Y1))
 	t := f(0, 100000, clock.Time(a*100000))
-	fmt.Println(a, t)
-	return float64(t) / 100000
+	return float64(t)
 }
 
 type LinearEase struct {
