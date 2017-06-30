@@ -144,7 +144,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		group := []view.View{}
 
 		spacer := NewSpacer(ctx, "spacer")
-		l, nil.Add(spacer)
+		l.Add(spacer, nil)
 
 		switchView := switchview.New(ctx, "switch")
 		switchView.Value = v.wifiStore.Enabled()

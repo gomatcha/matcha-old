@@ -17,6 +17,7 @@ Medium:
 * Rebuild settings app.
 * Only send updated views.
 * Dont add a default PaintStyle to every view.
+* Todo example.
 
 Low:
 * Support StyledText in textinput and textview.
