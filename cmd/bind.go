@@ -20,7 +20,15 @@ func Bind(flags *Flags, args []string) error {
 	if err != nil {
 		return err
 	}
-	defer RemoveAll(flags, tempdir)
+	if !flags.BuildWork {
+		defer RemoveAll(flags, tempdir)
+	}
+
+	// Make $WORK/matcha-ios
+	outputDir := filepath.Join(tempdir, "matcha-ios")
+	if err := Mkdir(flags, outputDir); err != nil {
+		return err
+	}
 
 	// Get $GOPATH/pkg/gomobile.
 	gomobilepath, err := GoMobilePath()
@@ -57,23 +65,24 @@ func Bind(flags *Flags, args []string) error {
 	ctx.GOOS = "darwin"
 	ctx.BuildTags = append(ctx.BuildTags, "ios")
 
-	// Get packages to be built.
-	pkgs := []*build.Package{}
+	// Get import paths to be built.
+	importPaths := []string{}
+	srcDir := ""
 	if len(args) == 0 {
-		pkg, err := ctx.ImportDir(cwd, build.ImportComment)
-		if err != nil {
-			return err
-		}
-		pkgs = append(pkgs, pkg)
+		importPaths = append(importPaths, ".")
+		srcDir = cwd
 	} else {
-		for _, a := range args {
-			a = path.Clean(a)
-			pkg, err := ctx.Import(a, cwd, build.ImportComment)
-			if err != nil {
-				return err
-			}
-			pkgs = append(pkgs, pkg)
+		for _, i := range args {
+			i = path.Clean(i)
+			importPaths = append(importPaths, i)
 		}
+		srcDir = cwd
+	}
+
+	// Get packages to be built
+	pkgs, err := ImportAll(&ctx, importPaths, srcDir, build.ImportComment)
+	if err != nil {
+		return err
 	}
 
 	// Check if any of the package is main.
@@ -83,9 +92,36 @@ func Bind(flags *Flags, args []string) error {
 		}
 	}
 
+	// Copy package's ios directory if it imports gomatcha.io/bridge.
+	for _, pkg := range pkgs {
+		importsBridge := false
+		for _, i := range pkg.Imports {
+			if i == "gomatcha.io/bridge" {
+				importsBridge = true
+				break
+			}
+		}
+
+		if importsBridge {
+			files, err := ioutil.ReadDir(pkg.Dir)
+			if err != nil {
+				continue
+			}
+
+			for _, i := range files {
+				if i.IsDir() && i.Name() == "ios" {
+					// Copy directory
+					src := filepath.Join(pkg.Dir, "ios")
+					dst := filepath.Join(outputDir)
+					CopyDirContents(flags, dst, src)
+				}
+			}
+		}
+	}
+
 	title := "Matcha"
 	genDir := filepath.Join(tempdir, "gen")
-	frameworkDir := title + ".framework"
+	frameworkDir := filepath.Join(outputDir, title+".framework")
 	// frameworkDir := flags.BuildO
 	// if frameworkDir != "" && !strings.HasSuffix(frameworkDir, ".framework") {
 	// 	return fmt.Errorf("static framework name %q missing .framework suffix", frameworkDir)
@@ -194,12 +230,10 @@ func Bind(flags *Flags, args []string) error {
 	if err != nil {
 		return err
 	}
-
 	matchaDarwinArm64Env, err := DarwinArm64Env(flags)
 	if err != nil {
 		return err
 	}
-
 	matchaDarwinAmd64Env, err := DarwinAmd64Env(flags)
 	if err != nil {
 		return err

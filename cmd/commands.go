@@ -39,7 +39,7 @@ func RunCmd(f *Flags, tmpdir string, cmd *exec.Cmd) error {
 		cmd.Stderr = buf
 	}
 
-	if f.BuildWork {
+	if f.BuildWork && tmpdir != "" {
 		if runtime.GOOS == "windows" {
 			cmd.Env = append(cmd.Env, `TEMP=`+tmpdir)
 			cmd.Env = append(cmd.Env, `TMP=`+tmpdir)
@@ -48,7 +48,7 @@ func RunCmd(f *Flags, tmpdir string, cmd *exec.Cmd) error {
 		}
 	}
 
-	if !f.BuildN {
+	if f.ShouldRun() {
 		cmd.Env = Environ(cmd.Env)
 		if err := cmd.Run(); err != nil {
 			return fmt.Errorf("%s failed: %v%s", strings.Join(cmd.Args, " "), err, buf)
@@ -111,7 +111,7 @@ func NewTmpDir(f *Flags, path string) (string, error) {
 			tmpdir = filepath.Join(path, "work")
 		}
 	}
-	if f.ShouldPrint() {
+	if f.ShouldPrint() || f.BuildWork {
 		fmt.Fprintln(os.Stderr, "WORK="+tmpdir)
 	}
 	return tmpdir, nil
@@ -177,6 +177,11 @@ func CopyFile(f *Flags, dst, src string) error {
 		}
 		return nil
 	})
+}
+
+func CopyDirContents(f *Flags, dst, src string) error {
+	cmd := exec.Command("cp", "-R", src+string(filepath.Separator)+".", dst)
+	return RunCmd(f, "", cmd)
 }
 
 func Mkdir(flags *Flags, dir string) error {
