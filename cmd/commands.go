@@ -179,6 +179,11 @@ func CopyFile(f *Flags, dst, src string) error {
 	})
 }
 
+func CopyDir(f *Flags, dst, src string) error {
+	cmd := exec.Command("cp", "-R", src, dst)
+	return RunCmd(f, "", cmd)
+}
+
 func CopyDirContents(f *Flags, dst, src string) error {
 	cmd := exec.Command("cp", "-R", src+string(filepath.Separator)+".", dst)
 	return RunCmd(f, "", cmd)

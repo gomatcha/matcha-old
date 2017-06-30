@@ -11,6 +11,7 @@ High:
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
 * Hide StyledText
 * Automatically insert copyright notice.
+* Have flag that generates a new xcodeproj for easy setup.
 
 Medium:
 * Why doesn't simulator debugger work? Why does simulator crash all the time?

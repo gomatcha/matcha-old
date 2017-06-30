@@ -18,6 +18,7 @@ type Flags struct {
 	BuildWork    bool   // use working directory
 	BuildGcflags string // -gcflags
 	BuildLdflags string // -ldflags
+	BuildO       string // output path
 }
 
 func (f *Flags) ShouldPrint() bool {

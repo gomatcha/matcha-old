@@ -25,8 +25,8 @@ func Bind(flags *Flags, args []string) error {
 	}
 
 	// Make $WORK/matcha-ios
-	outputDir := filepath.Join(tempdir, "matcha-ios")
-	if err := Mkdir(flags, outputDir); err != nil {
+	workOutputDir := filepath.Join(tempdir, "matcha-ios")
+	if err := Mkdir(flags, workOutputDir); err != nil {
 		return err
 	}
 
@@ -112,7 +112,7 @@ func Bind(flags *Flags, args []string) error {
 				if i.IsDir() && i.Name() == "ios" {
 					// Copy directory
 					src := filepath.Join(pkg.Dir, "ios")
-					dst := filepath.Join(outputDir)
+					dst := filepath.Join(workOutputDir)
 					CopyDirContents(flags, dst, src)
 				}
 			}
@@ -121,14 +121,7 @@ func Bind(flags *Flags, args []string) error {
 
 	title := "Matcha"
 	genDir := filepath.Join(tempdir, "gen")
-	frameworkDir := filepath.Join(outputDir, title+".framework")
-	// frameworkDir := flags.BuildO
-	// if frameworkDir != "" && !strings.HasSuffix(frameworkDir, ".framework") {
-	// 	return fmt.Errorf("static framework name %q missing .framework suffix", frameworkDir)
-	// }
-	// if frameworkDir == "" {
-	// 	frameworkDir = title + ".framework"
-	// }
+	frameworkDir := filepath.Join(workOutputDir, title+".framework")
 
 	// Build the "matcha/bridge" dir
 	bridgeDir := filepath.Join(genDir, "src", "gomatcha.io", "bridge")
@@ -168,11 +161,6 @@ func Bind(flags *Flags, args []string) error {
 		return err
 	}
 	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchago.go"), filepath.Join(objcPkg.Dir, "matchago.go.support")); err != nil {
-		return err
-	}
-
-	// Build static framework output directory.
-	if err := RemoveAll(flags, frameworkDir); err != nil {
 		return err
 	}
 
@@ -269,7 +257,25 @@ func Bind(flags *Flags, args []string) error {
 		cmd.Args = append(cmd.Args, "-arch", ArchClang(i.arch), i.path)
 	}
 	cmd.Args = append(cmd.Args, "-o", binaryPath)
-	return RunCmd(flags, tempdir, cmd)
+	if err := RunCmd(flags, tempdir, cmd); err != nil {
+		return err
+	}
+
+	// Create output dir
+	outputDir := flags.BuildO
+	if outputDir == "" {
+		outputDir = "Matcha-iOS"
+	}
+	if err := RemoveAll(flags, outputDir); err != nil {
+		return err
+	}
+
+	// Copy output directory into place.
+	if err := CopyDir(flags, outputDir, workOutputDir); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 var InfoPlist = `<?xml version="1.0" encoding="UTF-8"?>

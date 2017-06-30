@@ -33,6 +33,7 @@ var (
 	buildWork    bool   // -work
 	buildGcflags string // -gcflags
 	buildLdflags string // -ldflags
+	buildO       string // -o
 )
 
 func init() {
@@ -77,6 +78,7 @@ func init() {
 	flags.BoolVar(&buildWork, "work", false, "print the name of the temporary work directory and do not delete it when exiting.")
 	flags.StringVar(&buildGcflags, "gcflags", "", "arguments to pass on each go tool compile invocation.")
 	flags.StringVar(&buildLdflags, "ldflags", "", "arguments to pass on each go tool link invocation.")
+	flags.StringVar(&buildO, "output", "", "forces build to write the resulting object to the named output file.")
 
 	RootCmd.AddCommand(BuildCmd)
 }
@@ -93,6 +95,7 @@ var BuildCmd = &cobra.Command{
 			BuildWork:    buildWork,
 			BuildGcflags: buildGcflags,
 			BuildLdflags: buildLdflags,
+			BuildO:       buildO,
 		}
 		if err := cmd.Bind(flags, args); err != nil {
 			fmt.Println(err)
