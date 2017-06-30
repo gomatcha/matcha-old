@@ -58,7 +58,6 @@ Documentation:
 * keyboard
 * layout
     * constraint
-    * full
     * table
 * paint
 * text
