@@ -12,7 +12,6 @@ High:
 * Automatically insert copyright notice.
 
 Medium:
-* Why do easing functions cause deadlock?
 * Why doesn't simulator debugger work? Why does simulator crash all the time?
 * Rebuild settings app.
 * Only send updated views.
@@ -46,9 +45,36 @@ Bugs:
 * Constraints crash if unconstrained.
 * Auto disable PNGCrush. "Compress PNG Files" and "Remove Text Metadata from PNG Files"
 * Should we panic if user tries to unnotify with an unknown comm.Id
-
 * Add attribution link to https://icons8.com
 
+Documentation:
+* animate
+* cmd
+* comm
+* docs
+* env
+* examples
+* ios
+* keyboard
+* layout
+    * constraint
+    * full
+    * table
+* paint
+* text
+* touch
+* view 
+    * basicview
+    * button
+    * imageview
+    * scrollview
+    * slider
+    * stackscreen
+    * switchview
+    * tabscrceen
+    * textinput
+    * textview
+    * urlimageview
 
 Pro:
 * Debugging
