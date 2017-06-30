@@ -1,7 +1,6 @@
 package animate
 
 import (
-	"fmt"
 	"time"
 
 	"gomatcha.io/matcha/comm"
