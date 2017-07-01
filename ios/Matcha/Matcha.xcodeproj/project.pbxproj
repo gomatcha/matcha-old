@@ -8,12 +8,156 @@
 
 /* Begin PBXBuildFile section */
 		67349F0A1F06292A00E07354 /* Matcha.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F081F06292A00E07354 /* Matcha.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		67349F361F07890200E07354 /* MatchaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F101F07890200E07354 /* MatchaViewController.m */; };
+		67349F371F07890200E07354 /* MatchaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F111F07890200E07354 /* MatchaViewController.h */; };
+		67349F381F07890200E07354 /* MatchaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F121F07890200E07354 /* MatchaView.m */; };
+		67349F391F07890200E07354 /* MatchaView.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F131F07890200E07354 /* MatchaView.h */; };
+		67349F3A1F07890200E07354 /* MatchaTouchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F141F07890200E07354 /* MatchaTouchController.m */; };
+		67349F3B1F07890200E07354 /* MatchaTouchController.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F151F07890200E07354 /* MatchaTouchController.h */; };
+		67349F3C1F07890200E07354 /* MatchaTextInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F161F07890200E07354 /* MatchaTextInput.m */; };
+		67349F3D1F07890200E07354 /* MatchaTextInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F171F07890200E07354 /* MatchaTextInput.h */; };
+		67349F3E1F07890200E07354 /* MatchaTapGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F181F07890200E07354 /* MatchaTapGestureRecognizer.m */; };
+		67349F3F1F07890200E07354 /* MatchaTapGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F191F07890200E07354 /* MatchaTapGestureRecognizer.h */; };
+		67349F401F07890200E07354 /* MatchaTabScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F1A1F07890200E07354 /* MatchaTabScreen.m */; };
+		67349F411F07890200E07354 /* MatchaTabScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F1B1F07890200E07354 /* MatchaTabScreen.h */; };
+		67349F421F07890200E07354 /* MatchaSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F1C1F07890200E07354 /* MatchaSwitchView.m */; };
+		67349F431F07890200E07354 /* MatchaSwitchView.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F1D1F07890200E07354 /* MatchaSwitchView.h */; };
+		67349F441F07890200E07354 /* MatchaStackScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F1E1F07890200E07354 /* MatchaStackScreen.m */; };
+		67349F451F07890200E07354 /* MatchaStackScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F1F1F07890200E07354 /* MatchaStackScreen.h */; };
+		67349F461F07890200E07354 /* MatchaSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F201F07890200E07354 /* MatchaSlider.m */; };
+		67349F471F07890200E07354 /* MatchaSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F211F07890200E07354 /* MatchaSlider.h */; };
+		67349F481F07890200E07354 /* MatchaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F221F07890200E07354 /* MatchaScrollView.m */; };
+		67349F491F07890200E07354 /* MatchaScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F231F07890200E07354 /* MatchaScrollView.h */; };
+		67349F4A1F07890200E07354 /* MatchaProtobuf.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F241F07890200E07354 /* MatchaProtobuf.m */; };
+		67349F4B1F07890200E07354 /* MatchaProtobuf.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F251F07890200E07354 /* MatchaProtobuf.h */; };
+		67349F4C1F07890200E07354 /* MatchaPressGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F261F07890200E07354 /* MatchaPressGestureRecognizer.m */; };
+		67349F4D1F07890200E07354 /* MatchaPressGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F271F07890200E07354 /* MatchaPressGestureRecognizer.h */; };
+		67349F4E1F07890200E07354 /* MatchaObjcBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F281F07890200E07354 /* MatchaObjcBridge.m */; };
+		67349F4F1F07890200E07354 /* MatchaObjcBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F291F07890200E07354 /* MatchaObjcBridge.h */; };
+		67349F501F07890200E07354 /* MatchaNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F2A1F07890200E07354 /* MatchaNode.m */; };
+		67349F511F07890200E07354 /* MatchaNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F2B1F07890200E07354 /* MatchaNode.h */; };
+		67349F521F07890200E07354 /* MatchaGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F2C1F07890200E07354 /* MatchaGuide.m */; };
+		67349F531F07890200E07354 /* MatchaGuide.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F2D1F07890200E07354 /* MatchaGuide.h */; };
+		67349F541F07890200E07354 /* MatchaDeadlockLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F2E1F07890200E07354 /* MatchaDeadlockLogger.m */; };
+		67349F551F07890200E07354 /* MatchaDeadlockLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F2F1F07890200E07354 /* MatchaDeadlockLogger.h */; };
+		67349F561F07890200E07354 /* MatchaButtonGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F301F07890200E07354 /* MatchaButtonGestureRecognizer.m */; };
+		67349F571F07890200E07354 /* MatchaButtonGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F311F07890200E07354 /* MatchaButtonGestureRecognizer.h */; };
+		67349F581F07890200E07354 /* MatchaButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F321F07890200E07354 /* MatchaButton.m */; };
+		67349F591F07890200E07354 /* MatchaButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F331F07890200E07354 /* MatchaButton.h */; };
+		67349F5A1F07890200E07354 /* MatchaBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F341F07890200E07354 /* MatchaBridge.m */; };
+		67349F5B1F07890200E07354 /* MatchaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F351F07890200E07354 /* MatchaBridge.h */; };
+		67349F911F07892100E07354 /* Color.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F601F07892100E07354 /* Color.pbobjc.h */; };
+		67349F921F07892100E07354 /* Color.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F611F07892100E07354 /* Color.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349F931F07892100E07354 /* Resource.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F631F07892100E07354 /* Resource.pbobjc.h */; };
+		67349F941F07892100E07354 /* Resource.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F641F07892100E07354 /* Resource.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349F951F07892100E07354 /* Image.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F651F07892100E07354 /* Image.pbobjc.h */; };
+		67349F961F07892100E07354 /* Image.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F661F07892100E07354 /* Image.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349F971F07892100E07354 /* Keyboard.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F681F07892100E07354 /* Keyboard.pbobjc.h */; };
+		67349F981F07892100E07354 /* Keyboard.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F691F07892100E07354 /* Keyboard.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349F991F07892100E07354 /* Layout.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F6B1F07892100E07354 /* Layout.pbobjc.h */; };
+		67349F9A1F07892100E07354 /* Layout.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F6C1F07892100E07354 /* Layout.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349F9B1F07892100E07354 /* Paint.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F6E1F07892100E07354 /* Paint.pbobjc.h */; };
+		67349F9C1F07892100E07354 /* Paint.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F6F1F07892100E07354 /* Paint.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349F9D1F07892100E07354 /* Text.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F711F07892100E07354 /* Text.pbobjc.h */; };
+		67349F9E1F07892100E07354 /* Text.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F721F07892100E07354 /* Text.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349F9F1F07892100E07354 /* Touch2.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F741F07892100E07354 /* Touch2.pbobjc.h */; };
+		67349FA01F07892100E07354 /* Touch2.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F751F07892100E07354 /* Touch2.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349FA11F07892100E07354 /* Button.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F781F07892100E07354 /* Button.pbobjc.h */; };
+		67349FA21F07892100E07354 /* Button.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F791F07892100E07354 /* Button.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349FA31F07892100E07354 /* Imageview.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F7B1F07892100E07354 /* Imageview.pbobjc.h */; };
+		67349FA41F07892100E07354 /* Imageview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F7C1F07892100E07354 /* Imageview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349FA51F07892100E07354 /* Scrollview.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F7E1F07892100E07354 /* Scrollview.pbobjc.h */; };
+		67349FA61F07892100E07354 /* Scrollview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F7F1F07892100E07354 /* Scrollview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349FA71F07892100E07354 /* Slider.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F811F07892100E07354 /* Slider.pbobjc.h */; };
+		67349FA81F07892100E07354 /* Slider.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F821F07892100E07354 /* Slider.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349FA91F07892100E07354 /* Stacknavigator.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F841F07892100E07354 /* Stacknavigator.pbobjc.h */; };
+		67349FAA1F07892100E07354 /* Stacknavigator.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F851F07892100E07354 /* Stacknavigator.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349FAB1F07892100E07354 /* Switchview.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F871F07892100E07354 /* Switchview.pbobjc.h */; };
+		67349FAC1F07892100E07354 /* Switchview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F881F07892100E07354 /* Switchview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349FAD1F07892100E07354 /* Tabscreen.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F8A1F07892100E07354 /* Tabscreen.pbobjc.h */; };
+		67349FAE1F07892100E07354 /* Tabscreen.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F8B1F07892100E07354 /* Tabscreen.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349FAF1F07892100E07354 /* Textinput.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F8D1F07892100E07354 /* Textinput.pbobjc.h */; };
+		67349FB01F07892100E07354 /* Textinput.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F8E1F07892100E07354 /* Textinput.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67349FB11F07892100E07354 /* View.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67349F8F1F07892100E07354 /* View.pbobjc.h */; };
+		67349FB21F07892100E07354 /* View.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67349F901F07892100E07354 /* View.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		67349F051F06292A00E07354 /* Matcha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Matcha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67349F081F06292A00E07354 /* Matcha.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matcha.h; sourceTree = "<group>"; };
 		67349F091F06292A00E07354 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		67349F101F07890200E07354 /* MatchaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaViewController.m; sourceTree = "<group>"; };
+		67349F111F07890200E07354 /* MatchaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaViewController.h; sourceTree = "<group>"; };
+		67349F121F07890200E07354 /* MatchaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaView.m; sourceTree = "<group>"; };
+		67349F131F07890200E07354 /* MatchaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaView.h; sourceTree = "<group>"; };
+		67349F141F07890200E07354 /* MatchaTouchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaTouchController.m; sourceTree = "<group>"; };
+		67349F151F07890200E07354 /* MatchaTouchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaTouchController.h; sourceTree = "<group>"; };
+		67349F161F07890200E07354 /* MatchaTextInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaTextInput.m; sourceTree = "<group>"; };
+		67349F171F07890200E07354 /* MatchaTextInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaTextInput.h; sourceTree = "<group>"; };
+		67349F181F07890200E07354 /* MatchaTapGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaTapGestureRecognizer.m; sourceTree = "<group>"; };
+		67349F191F07890200E07354 /* MatchaTapGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaTapGestureRecognizer.h; sourceTree = "<group>"; };
+		67349F1A1F07890200E07354 /* MatchaTabScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaTabScreen.m; sourceTree = "<group>"; };
+		67349F1B1F07890200E07354 /* MatchaTabScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaTabScreen.h; sourceTree = "<group>"; };
+		67349F1C1F07890200E07354 /* MatchaSwitchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaSwitchView.m; sourceTree = "<group>"; };
+		67349F1D1F07890200E07354 /* MatchaSwitchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaSwitchView.h; sourceTree = "<group>"; };
+		67349F1E1F07890200E07354 /* MatchaStackScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaStackScreen.m; sourceTree = "<group>"; };
+		67349F1F1F07890200E07354 /* MatchaStackScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaStackScreen.h; sourceTree = "<group>"; };
+		67349F201F07890200E07354 /* MatchaSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaSlider.m; sourceTree = "<group>"; };
+		67349F211F07890200E07354 /* MatchaSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaSlider.h; sourceTree = "<group>"; };
+		67349F221F07890200E07354 /* MatchaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaScrollView.m; sourceTree = "<group>"; };
+		67349F231F07890200E07354 /* MatchaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaScrollView.h; sourceTree = "<group>"; };
+		67349F241F07890200E07354 /* MatchaProtobuf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaProtobuf.m; sourceTree = "<group>"; };
+		67349F251F07890200E07354 /* MatchaProtobuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaProtobuf.h; sourceTree = "<group>"; };
+		67349F261F07890200E07354 /* MatchaPressGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaPressGestureRecognizer.m; sourceTree = "<group>"; };
+		67349F271F07890200E07354 /* MatchaPressGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaPressGestureRecognizer.h; sourceTree = "<group>"; };
+		67349F281F07890200E07354 /* MatchaObjcBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaObjcBridge.m; sourceTree = "<group>"; };
+		67349F291F07890200E07354 /* MatchaObjcBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaObjcBridge.h; sourceTree = "<group>"; };
+		67349F2A1F07890200E07354 /* MatchaNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaNode.m; sourceTree = "<group>"; };
+		67349F2B1F07890200E07354 /* MatchaNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaNode.h; sourceTree = "<group>"; };
+		67349F2C1F07890200E07354 /* MatchaGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaGuide.m; sourceTree = "<group>"; };
+		67349F2D1F07890200E07354 /* MatchaGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaGuide.h; sourceTree = "<group>"; };
+		67349F2E1F07890200E07354 /* MatchaDeadlockLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaDeadlockLogger.m; sourceTree = "<group>"; };
+		67349F2F1F07890200E07354 /* MatchaDeadlockLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaDeadlockLogger.h; sourceTree = "<group>"; };
+		67349F301F07890200E07354 /* MatchaButtonGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaButtonGestureRecognizer.m; sourceTree = "<group>"; };
+		67349F311F07890200E07354 /* MatchaButtonGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaButtonGestureRecognizer.h; sourceTree = "<group>"; };
+		67349F321F07890200E07354 /* MatchaButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaButton.m; sourceTree = "<group>"; };
+		67349F331F07890200E07354 /* MatchaButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaButton.h; sourceTree = "<group>"; };
+		67349F341F07890200E07354 /* MatchaBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaBridge.m; sourceTree = "<group>"; };
+		67349F351F07890200E07354 /* MatchaBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaBridge.h; sourceTree = "<group>"; };
+		67349F601F07892100E07354 /* Color.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.pbobjc.h; sourceTree = "<group>"; };
+		67349F611F07892100E07354 /* Color.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Color.pbobjc.m; sourceTree = "<group>"; };
+		67349F631F07892100E07354 /* Resource.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Resource.pbobjc.h; sourceTree = "<group>"; };
+		67349F641F07892100E07354 /* Resource.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Resource.pbobjc.m; sourceTree = "<group>"; };
+		67349F651F07892100E07354 /* Image.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Image.pbobjc.h; sourceTree = "<group>"; };
+		67349F661F07892100E07354 /* Image.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Image.pbobjc.m; sourceTree = "<group>"; };
+		67349F681F07892100E07354 /* Keyboard.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Keyboard.pbobjc.h; sourceTree = "<group>"; };
+		67349F691F07892100E07354 /* Keyboard.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Keyboard.pbobjc.m; sourceTree = "<group>"; };
+		67349F6B1F07892100E07354 /* Layout.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.pbobjc.h; sourceTree = "<group>"; };
+		67349F6C1F07892100E07354 /* Layout.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Layout.pbobjc.m; sourceTree = "<group>"; };
+		67349F6E1F07892100E07354 /* Paint.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Paint.pbobjc.h; sourceTree = "<group>"; };
+		67349F6F1F07892100E07354 /* Paint.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Paint.pbobjc.m; sourceTree = "<group>"; };
+		67349F711F07892100E07354 /* Text.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Text.pbobjc.h; sourceTree = "<group>"; };
+		67349F721F07892100E07354 /* Text.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Text.pbobjc.m; sourceTree = "<group>"; };
+		67349F741F07892100E07354 /* Touch2.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Touch2.pbobjc.h; sourceTree = "<group>"; };
+		67349F751F07892100E07354 /* Touch2.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Touch2.pbobjc.m; sourceTree = "<group>"; };
+		67349F781F07892100E07354 /* Button.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.pbobjc.h; sourceTree = "<group>"; };
+		67349F791F07892100E07354 /* Button.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Button.pbobjc.m; sourceTree = "<group>"; };
+		67349F7B1F07892100E07354 /* Imageview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Imageview.pbobjc.h; sourceTree = "<group>"; };
+		67349F7C1F07892100E07354 /* Imageview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Imageview.pbobjc.m; sourceTree = "<group>"; };
+		67349F7E1F07892100E07354 /* Scrollview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scrollview.pbobjc.h; sourceTree = "<group>"; };
+		67349F7F1F07892100E07354 /* Scrollview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scrollview.pbobjc.m; sourceTree = "<group>"; };
+		67349F811F07892100E07354 /* Slider.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Slider.pbobjc.h; sourceTree = "<group>"; };
+		67349F821F07892100E07354 /* Slider.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Slider.pbobjc.m; sourceTree = "<group>"; };
+		67349F841F07892100E07354 /* Stacknavigator.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stacknavigator.pbobjc.h; sourceTree = "<group>"; };
+		67349F851F07892100E07354 /* Stacknavigator.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stacknavigator.pbobjc.m; sourceTree = "<group>"; };
+		67349F871F07892100E07354 /* Switchview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Switchview.pbobjc.h; sourceTree = "<group>"; };
+		67349F881F07892100E07354 /* Switchview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Switchview.pbobjc.m; sourceTree = "<group>"; };
+		67349F8A1F07892100E07354 /* Tabscreen.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tabscreen.pbobjc.h; sourceTree = "<group>"; };
+		67349F8B1F07892100E07354 /* Tabscreen.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tabscreen.pbobjc.m; sourceTree = "<group>"; };
+		67349F8D1F07892100E07354 /* Textinput.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Textinput.pbobjc.h; sourceTree = "<group>"; };
+		67349F8E1F07892100E07354 /* Textinput.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Textinput.pbobjc.m; sourceTree = "<group>"; };
+		67349F8F1F07892100E07354 /* View.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.pbobjc.h; sourceTree = "<group>"; };
+		67349F901F07892100E07354 /* View.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.pbobjc.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,10 +190,234 @@
 		67349F071F06292A00E07354 /* Matcha */ = {
 			isa = PBXGroup;
 			children = (
+				67349F5C1F07892100E07354 /* protobuf */,
+				67349F101F07890200E07354 /* MatchaViewController.m */,
+				67349F111F07890200E07354 /* MatchaViewController.h */,
+				67349F121F07890200E07354 /* MatchaView.m */,
+				67349F131F07890200E07354 /* MatchaView.h */,
+				67349F141F07890200E07354 /* MatchaTouchController.m */,
+				67349F151F07890200E07354 /* MatchaTouchController.h */,
+				67349F161F07890200E07354 /* MatchaTextInput.m */,
+				67349F171F07890200E07354 /* MatchaTextInput.h */,
+				67349F181F07890200E07354 /* MatchaTapGestureRecognizer.m */,
+				67349F191F07890200E07354 /* MatchaTapGestureRecognizer.h */,
+				67349F1A1F07890200E07354 /* MatchaTabScreen.m */,
+				67349F1B1F07890200E07354 /* MatchaTabScreen.h */,
+				67349F1C1F07890200E07354 /* MatchaSwitchView.m */,
+				67349F1D1F07890200E07354 /* MatchaSwitchView.h */,
+				67349F1E1F07890200E07354 /* MatchaStackScreen.m */,
+				67349F1F1F07890200E07354 /* MatchaStackScreen.h */,
+				67349F201F07890200E07354 /* MatchaSlider.m */,
+				67349F211F07890200E07354 /* MatchaSlider.h */,
+				67349F221F07890200E07354 /* MatchaScrollView.m */,
+				67349F231F07890200E07354 /* MatchaScrollView.h */,
+				67349F241F07890200E07354 /* MatchaProtobuf.m */,
+				67349F251F07890200E07354 /* MatchaProtobuf.h */,
+				67349F261F07890200E07354 /* MatchaPressGestureRecognizer.m */,
+				67349F271F07890200E07354 /* MatchaPressGestureRecognizer.h */,
+				67349F281F07890200E07354 /* MatchaObjcBridge.m */,
+				67349F291F07890200E07354 /* MatchaObjcBridge.h */,
+				67349F2A1F07890200E07354 /* MatchaNode.m */,
+				67349F2B1F07890200E07354 /* MatchaNode.h */,
+				67349F2C1F07890200E07354 /* MatchaGuide.m */,
+				67349F2D1F07890200E07354 /* MatchaGuide.h */,
+				67349F2E1F07890200E07354 /* MatchaDeadlockLogger.m */,
+				67349F2F1F07890200E07354 /* MatchaDeadlockLogger.h */,
+				67349F301F07890200E07354 /* MatchaButtonGestureRecognizer.m */,
+				67349F311F07890200E07354 /* MatchaButtonGestureRecognizer.h */,
+				67349F321F07890200E07354 /* MatchaButton.m */,
+				67349F331F07890200E07354 /* MatchaButton.h */,
+				67349F341F07890200E07354 /* MatchaBridge.m */,
+				67349F351F07890200E07354 /* MatchaBridge.h */,
 				67349F081F06292A00E07354 /* Matcha.h */,
 				67349F091F06292A00E07354 /* Info.plist */,
 			);
 			path = Matcha;
+			sourceTree = "<group>";
+		};
+		67349F5C1F07892100E07354 /* protobuf */ = {
+			isa = PBXGroup;
+			children = (
+				67349F5D1F07892100E07354 /* gomatcha.io */,
+			);
+			path = protobuf;
+			sourceTree = "<group>";
+		};
+		67349F5D1F07892100E07354 /* gomatcha.io */ = {
+			isa = PBXGroup;
+			children = (
+				67349F5E1F07892100E07354 /* matcha */,
+			);
+			path = gomatcha.io;
+			sourceTree = "<group>";
+		};
+		67349F5E1F07892100E07354 /* matcha */ = {
+			isa = PBXGroup;
+			children = (
+				67349F5F1F07892100E07354 /* pb */,
+			);
+			path = matcha;
+			sourceTree = "<group>";
+		};
+		67349F5F1F07892100E07354 /* pb */ = {
+			isa = PBXGroup;
+			children = (
+				67349F601F07892100E07354 /* Color.pbobjc.h */,
+				67349F611F07892100E07354 /* Color.pbobjc.m */,
+				67349F621F07892100E07354 /* env */,
+				67349F651F07892100E07354 /* Image.pbobjc.h */,
+				67349F661F07892100E07354 /* Image.pbobjc.m */,
+				67349F671F07892100E07354 /* keyboard */,
+				67349F6A1F07892100E07354 /* layout */,
+				67349F6D1F07892100E07354 /* paint */,
+				67349F701F07892100E07354 /* text */,
+				67349F731F07892100E07354 /* touch */,
+				67349F761F07892100E07354 /* view */,
+			);
+			path = pb;
+			sourceTree = "<group>";
+		};
+		67349F621F07892100E07354 /* env */ = {
+			isa = PBXGroup;
+			children = (
+				67349F631F07892100E07354 /* Resource.pbobjc.h */,
+				67349F641F07892100E07354 /* Resource.pbobjc.m */,
+			);
+			path = env;
+			sourceTree = "<group>";
+		};
+		67349F671F07892100E07354 /* keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				67349F681F07892100E07354 /* Keyboard.pbobjc.h */,
+				67349F691F07892100E07354 /* Keyboard.pbobjc.m */,
+			);
+			path = keyboard;
+			sourceTree = "<group>";
+		};
+		67349F6A1F07892100E07354 /* layout */ = {
+			isa = PBXGroup;
+			children = (
+				67349F6B1F07892100E07354 /* Layout.pbobjc.h */,
+				67349F6C1F07892100E07354 /* Layout.pbobjc.m */,
+			);
+			path = layout;
+			sourceTree = "<group>";
+		};
+		67349F6D1F07892100E07354 /* paint */ = {
+			isa = PBXGroup;
+			children = (
+				67349F6E1F07892100E07354 /* Paint.pbobjc.h */,
+				67349F6F1F07892100E07354 /* Paint.pbobjc.m */,
+			);
+			path = paint;
+			sourceTree = "<group>";
+		};
+		67349F701F07892100E07354 /* text */ = {
+			isa = PBXGroup;
+			children = (
+				67349F711F07892100E07354 /* Text.pbobjc.h */,
+				67349F721F07892100E07354 /* Text.pbobjc.m */,
+			);
+			path = text;
+			sourceTree = "<group>";
+		};
+		67349F731F07892100E07354 /* touch */ = {
+			isa = PBXGroup;
+			children = (
+				67349F741F07892100E07354 /* Touch2.pbobjc.h */,
+				67349F751F07892100E07354 /* Touch2.pbobjc.m */,
+			);
+			path = touch;
+			sourceTree = "<group>";
+		};
+		67349F761F07892100E07354 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				67349F771F07892100E07354 /* button */,
+				67349F7A1F07892100E07354 /* imageview */,
+				67349F7D1F07892100E07354 /* scrollview */,
+				67349F801F07892100E07354 /* slider */,
+				67349F831F07892100E07354 /* stacknav */,
+				67349F861F07892100E07354 /* switchview */,
+				67349F891F07892100E07354 /* tabscreen */,
+				67349F8C1F07892100E07354 /* textinput */,
+				67349F8F1F07892100E07354 /* View.pbobjc.h */,
+				67349F901F07892100E07354 /* View.pbobjc.m */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		67349F771F07892100E07354 /* button */ = {
+			isa = PBXGroup;
+			children = (
+				67349F781F07892100E07354 /* Button.pbobjc.h */,
+				67349F791F07892100E07354 /* Button.pbobjc.m */,
+			);
+			path = button;
+			sourceTree = "<group>";
+		};
+		67349F7A1F07892100E07354 /* imageview */ = {
+			isa = PBXGroup;
+			children = (
+				67349F7B1F07892100E07354 /* Imageview.pbobjc.h */,
+				67349F7C1F07892100E07354 /* Imageview.pbobjc.m */,
+			);
+			path = imageview;
+			sourceTree = "<group>";
+		};
+		67349F7D1F07892100E07354 /* scrollview */ = {
+			isa = PBXGroup;
+			children = (
+				67349F7E1F07892100E07354 /* Scrollview.pbobjc.h */,
+				67349F7F1F07892100E07354 /* Scrollview.pbobjc.m */,
+			);
+			path = scrollview;
+			sourceTree = "<group>";
+		};
+		67349F801F07892100E07354 /* slider */ = {
+			isa = PBXGroup;
+			children = (
+				67349F811F07892100E07354 /* Slider.pbobjc.h */,
+				67349F821F07892100E07354 /* Slider.pbobjc.m */,
+			);
+			path = slider;
+			sourceTree = "<group>";
+		};
+		67349F831F07892100E07354 /* stacknav */ = {
+			isa = PBXGroup;
+			children = (
+				67349F841F07892100E07354 /* Stacknavigator.pbobjc.h */,
+				67349F851F07892100E07354 /* Stacknavigator.pbobjc.m */,
+			);
+			path = stacknav;
+			sourceTree = "<group>";
+		};
+		67349F861F07892100E07354 /* switchview */ = {
+			isa = PBXGroup;
+			children = (
+				67349F871F07892100E07354 /* Switchview.pbobjc.h */,
+				67349F881F07892100E07354 /* Switchview.pbobjc.m */,
+			);
+			path = switchview;
+			sourceTree = "<group>";
+		};
+		67349F891F07892100E07354 /* tabscreen */ = {
+			isa = PBXGroup;
+			children = (
+				67349F8A1F07892100E07354 /* Tabscreen.pbobjc.h */,
+				67349F8B1F07892100E07354 /* Tabscreen.pbobjc.m */,
+			);
+			path = tabscreen;
+			sourceTree = "<group>";
+		};
+		67349F8C1F07892100E07354 /* textinput */ = {
+			isa = PBXGroup;
+			children = (
+				67349F8D1F07892100E07354 /* Textinput.pbobjc.h */,
+				67349F8E1F07892100E07354 /* Textinput.pbobjc.m */,
+			);
+			path = textinput;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -59,7 +427,43 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67349F9B1F07892100E07354 /* Paint.pbobjc.h in Headers */,
+				67349F991F07892100E07354 /* Layout.pbobjc.h in Headers */,
+				67349F911F07892100E07354 /* Color.pbobjc.h in Headers */,
+				67349F3F1F07890200E07354 /* MatchaTapGestureRecognizer.h in Headers */,
+				67349F9F1F07892100E07354 /* Touch2.pbobjc.h in Headers */,
+				67349FB11F07892100E07354 /* View.pbobjc.h in Headers */,
+				67349F3D1F07890200E07354 /* MatchaTextInput.h in Headers */,
+				67349FA71F07892100E07354 /* Slider.pbobjc.h in Headers */,
+				67349FA31F07892100E07354 /* Imageview.pbobjc.h in Headers */,
+				67349F571F07890200E07354 /* MatchaButtonGestureRecognizer.h in Headers */,
+				67349FA91F07892100E07354 /* Stacknavigator.pbobjc.h in Headers */,
+				67349F4D1F07890200E07354 /* MatchaPressGestureRecognizer.h in Headers */,
+				67349F491F07890200E07354 /* MatchaScrollView.h in Headers */,
+				67349F951F07892100E07354 /* Image.pbobjc.h in Headers */,
 				67349F0A1F06292A00E07354 /* Matcha.h in Headers */,
+				67349F931F07892100E07354 /* Resource.pbobjc.h in Headers */,
+				67349FAF1F07892100E07354 /* Textinput.pbobjc.h in Headers */,
+				67349F431F07890200E07354 /* MatchaSwitchView.h in Headers */,
+				67349FAB1F07892100E07354 /* Switchview.pbobjc.h in Headers */,
+				67349F5B1F07890200E07354 /* MatchaBridge.h in Headers */,
+				67349F591F07890200E07354 /* MatchaButton.h in Headers */,
+				67349F551F07890200E07354 /* MatchaDeadlockLogger.h in Headers */,
+				67349F391F07890200E07354 /* MatchaView.h in Headers */,
+				67349F971F07892100E07354 /* Keyboard.pbobjc.h in Headers */,
+				67349FA11F07892100E07354 /* Button.pbobjc.h in Headers */,
+				67349F471F07890200E07354 /* MatchaSlider.h in Headers */,
+				67349F3B1F07890200E07354 /* MatchaTouchController.h in Headers */,
+				67349F411F07890200E07354 /* MatchaTabScreen.h in Headers */,
+				67349F4B1F07890200E07354 /* MatchaProtobuf.h in Headers */,
+				67349F9D1F07892100E07354 /* Text.pbobjc.h in Headers */,
+				67349F451F07890200E07354 /* MatchaStackScreen.h in Headers */,
+				67349F511F07890200E07354 /* MatchaNode.h in Headers */,
+				67349FAD1F07892100E07354 /* Tabscreen.pbobjc.h in Headers */,
+				67349F371F07890200E07354 /* MatchaViewController.h in Headers */,
+				67349F4F1F07890200E07354 /* MatchaObjcBridge.h in Headers */,
+				67349FA51F07892100E07354 /* Scrollview.pbobjc.h in Headers */,
+				67349F531F07890200E07354 /* MatchaGuide.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +536,42 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67349FA21F07892100E07354 /* Button.pbobjc.m in Sources */,
+				67349F3A1F07890200E07354 /* MatchaTouchController.m in Sources */,
+				67349F941F07892100E07354 /* Resource.pbobjc.m in Sources */,
+				67349F3E1F07890200E07354 /* MatchaTapGestureRecognizer.m in Sources */,
+				67349F441F07890200E07354 /* MatchaStackScreen.m in Sources */,
+				67349F4C1F07890200E07354 /* MatchaPressGestureRecognizer.m in Sources */,
+				67349F381F07890200E07354 /* MatchaView.m in Sources */,
+				67349F961F07892100E07354 /* Image.pbobjc.m in Sources */,
+				67349F361F07890200E07354 /* MatchaViewController.m in Sources */,
+				67349F921F07892100E07354 /* Color.pbobjc.m in Sources */,
+				67349FB01F07892100E07354 /* Textinput.pbobjc.m in Sources */,
+				67349F541F07890200E07354 /* MatchaDeadlockLogger.m in Sources */,
+				67349F461F07890200E07354 /* MatchaSlider.m in Sources */,
+				67349F421F07890200E07354 /* MatchaSwitchView.m in Sources */,
+				67349F9C1F07892100E07354 /* Paint.pbobjc.m in Sources */,
+				67349F4A1F07890200E07354 /* MatchaProtobuf.m in Sources */,
+				67349F521F07890200E07354 /* MatchaGuide.m in Sources */,
+				67349F9A1F07892100E07354 /* Layout.pbobjc.m in Sources */,
+				67349FAA1F07892100E07354 /* Stacknavigator.pbobjc.m in Sources */,
+				67349F481F07890200E07354 /* MatchaScrollView.m in Sources */,
+				67349F981F07892100E07354 /* Keyboard.pbobjc.m in Sources */,
+				67349F3C1F07890200E07354 /* MatchaTextInput.m in Sources */,
+				67349F9E1F07892100E07354 /* Text.pbobjc.m in Sources */,
+				67349FAE1F07892100E07354 /* Tabscreen.pbobjc.m in Sources */,
+				67349FA81F07892100E07354 /* Slider.pbobjc.m in Sources */,
+				67349F581F07890200E07354 /* MatchaButton.m in Sources */,
+				67349FAC1F07892100E07354 /* Switchview.pbobjc.m in Sources */,
+				67349F5A1F07890200E07354 /* MatchaBridge.m in Sources */,
+				67349F4E1F07890200E07354 /* MatchaObjcBridge.m in Sources */,
+				67349FB21F07892100E07354 /* View.pbobjc.m in Sources */,
+				67349F401F07890200E07354 /* MatchaTabScreen.m in Sources */,
+				67349FA41F07892100E07354 /* Imageview.pbobjc.m in Sources */,
+				67349F501F07890200E07354 /* MatchaNode.m in Sources */,
+				67349F561F07890200E07354 /* MatchaButtonGestureRecognizer.m in Sources */,
+				67349FA61F07892100E07354 /* Scrollview.pbobjc.m in Sources */,
+				67349FA01F07892100E07354 /* Touch2.pbobjc.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +731,7 @@
 				67349F0F1F06292A00E07354 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
