@@ -361,6 +361,7 @@
 UIKeyboardType MatchaKeyboardTypeWithProtobuf(MatchaKeyboardPBType a) {
     UIKeyboardType t = UIKeyboardTypeDefault;
     switch (a) {
+    case MatchaKeyboardPBType_GPBUnrecognizedEnumeratorValue:
     case MatchaKeyboardPBType_DefaultType: {
         t = UIKeyboardTypeDefault;
         break;
@@ -408,6 +409,7 @@ UIKeyboardType MatchaKeyboardTypeWithProtobuf(MatchaKeyboardPBType a) {
 UIKeyboardAppearance MatchaKeyboardAppearanceWithProtobuf(MatchaKeyboardPBAppearance a) {
     UIKeyboardAppearance t = UIKeyboardAppearanceDefault;
     switch (a) {
+    case MatchaKeyboardPBAppearance_GPBUnrecognizedEnumeratorValue:
     case MatchaKeyboardPBAppearance_DefaultAppearance: {
         t = UIKeyboardAppearanceDefault;
         break;
@@ -427,6 +429,7 @@ UIKeyboardAppearance MatchaKeyboardAppearanceWithProtobuf(MatchaKeyboardPBAppear
 UIReturnKeyType MatchaReturnTypeWithProtobuf(MatchaKeyboardPBReturnType a) {
     UIReturnKeyType t = UIReturnKeyDefault;
     switch (a) {
+    case MatchaKeyboardPBReturnType_GPBUnrecognizedEnumeratorValue:
     case MatchaKeyboardPBReturnType_DefaultReturnType: {
         t = UIReturnKeyDefault;
         break;

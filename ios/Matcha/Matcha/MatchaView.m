@@ -83,6 +83,7 @@
     UIImage *image = [[UIImage alloc] initWithImageOrResourceProtobuf:pbimageview.image];
     
     switch (pbimageview.resizeMode) {
+    case MatchaImageViewPBResizeMode_GPBUnrecognizedEnumeratorValue:
     case MatchaImageViewPBResizeMode_Fit:
         self.contentMode = UIViewContentModeScaleAspectFit;
         break;
