@@ -1,5 +1,5 @@
 @import UIKit;
-@import Matcha;
+@import MatchaBridge;
 @class MatchaNode;
 
 @interface MatchaViewController : UIViewController // view.Root

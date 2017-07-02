@@ -119,9 +119,10 @@ func Bind(flags *Flags, args []string) error {
 		}
 	}
 
-	title := "Matcha"
+	// title := "MatchaBridge"
 	genDir := filepath.Join(tempdir, "gen")
-	frameworkDir := filepath.Join(workOutputDir, title+".framework")
+	binaryPath := filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "MatchaBridge.a")
+	// frameworkDir := filepath.Join(workOutputDir, "Matcha", title+".framework")
 
 	// Build the "matcha/bridge" dir
 	bridgeDir := filepath.Join(genDir, "src", "gomatcha.io", "bridge")
@@ -165,53 +166,53 @@ func Bind(flags *Flags, args []string) error {
 	}
 
 	// Build framework directory structure.
-	headersDir := filepath.Join(frameworkDir, "Versions", "A", "Headers")
-	resourcesDir := filepath.Join(frameworkDir, "Versions", "A", "Resources")
-	modulesDir := filepath.Join(frameworkDir, "Versions", "A", "Modules")
-	binaryPath := filepath.Join(frameworkDir, "Versions", "A", title)
-	if err := Mkdir(flags, headersDir); err != nil {
-		return err
-	}
-	if err := Mkdir(flags, resourcesDir); err != nil {
-		return err
-	}
-	if err := Mkdir(flags, modulesDir); err != nil {
-		return err
-	}
-	if err := Symlink(flags, "A", filepath.Join(frameworkDir, "Versions", "Current")); err != nil {
-		return err
-	}
-	if err := Symlink(flags, filepath.Join("Versions", "Current", "Headers"), filepath.Join(frameworkDir, "Headers")); err != nil {
-		return err
-	}
-	if err := Symlink(flags, filepath.Join("Versions", "Current", "Resources"), filepath.Join(frameworkDir, "Resources")); err != nil {
-		return err
-	}
-	if err := Symlink(flags, filepath.Join("Versions", "Current", "Modules"), filepath.Join(frameworkDir, "Modules")); err != nil {
-		return err
-	}
-	if err := Symlink(flags, filepath.Join("Versions", "Current", title), filepath.Join(frameworkDir, title)); err != nil {
-		return err
-	}
+	// headersDir := filepath.Join(frameworkDir, "Versions", "A", "Headers")
+	// resourcesDir := filepath.Join(frameworkDir, "Versions", "A", "Resources")
+	// modulesDir := filepath.Join(frameworkDir, "Versions", "A", "Modules")
+	// binaryPath := filepath.Join(frameworkDir, "Versions", "A", title+".a")
+	// if err := Mkdir(flags, headersDir); err != nil {
+	// 	return err
+	// }
+	// if err := Mkdir(flags, resourcesDir); err != nil {
+	// 	return err
+	// }
+	// if err := Mkdir(flags, modulesDir); err != nil {
+	// 	return err
+	// }
+	// if err := Symlink(flags, "A", filepath.Join(frameworkDir, "Versions", "Current")); err != nil {
+	// 	return err
+	// }
+	// if err := Symlink(flags, filepath.Join("Versions", "Current", "Headers"), filepath.Join(frameworkDir, "Headers")); err != nil {
+	// 	return err
+	// }
+	// if err := Symlink(flags, filepath.Join("Versions", "Current", "Resources"), filepath.Join(frameworkDir, "Resources")); err != nil {
+	// 	return err
+	// }
+	// if err := Symlink(flags, filepath.Join("Versions", "Current", "Modules"), filepath.Join(frameworkDir, "Modules")); err != nil {
+	// 	return err
+	// }
+	// if err := Symlink(flags, filepath.Join("Versions", "Current", title), filepath.Join(frameworkDir, title)); err != nil {
+	// 	return err
+	// }
 
-	// Copy in headers.
-	if err = CopyFile(flags, filepath.Join(headersDir, "matchaobjc.h"), filepath.Join(bridgeDir, "matchaobjc.h")); err != nil {
-		return err
-	}
-	if err = CopyFile(flags, filepath.Join(headersDir, "matchago.h"), filepath.Join(bridgeDir, "matchago.h")); err != nil {
-		return err
-	}
+	// // Copy in headers.
+	// if err = CopyFile(flags, filepath.Join(headersDir, "matchaobjc.h"), filepath.Join(bridgeDir, "matchaobjc.h")); err != nil {
+	// 	return err
+	// }
+	// if err = CopyFile(flags, filepath.Join(headersDir, "matchago.h"), filepath.Join(bridgeDir, "matchago.h")); err != nil {
+	// 	return err
+	// }
 
-	// Copy in resources.
-	if err := ioutil.WriteFile(filepath.Join(resourcesDir, "Info.plist"), []byte(InfoPlist), 0666); err != nil {
-		return err
-	}
+	// // Copy in resources.
+	// if err := ioutil.WriteFile(filepath.Join(resourcesDir, "Info.plist"), []byte(InfoPlist), 0666); err != nil {
+	// 	return err
+	// }
 
-	// Write modulemap.
-	err = WriteModuleMap(flags, filepath.Join(modulesDir, "module.modulemap"), title)
-	if err != nil {
-		return err
-	}
+	// // Write modulemap.
+	// err = WriteModuleMap(flags, filepath.Join(modulesDir, "module.modulemap"), title)
+	// if err != nil {
+	// 	return err
+	// }
 
 	// Build platform binaries concurrently.
 	matchaDarwinArmEnv, err := DarwinArmEnv(flags)
@@ -219,6 +220,10 @@ func Bind(flags *Flags, args []string) error {
 		return err
 	}
 	matchaDarwinArm64Env, err := DarwinArm64Env(flags)
+	if err != nil {
+		return err
+	}
+	matchaDarwin386Env, err := Darwin386Env(flags)
 	if err != nil {
 		return err
 	}
@@ -233,7 +238,7 @@ func Bind(flags *Flags, args []string) error {
 		err  error
 	}
 	archChan := make(chan archPath)
-	for _, i := range [][]string{matchaDarwinArmEnv, matchaDarwinArm64Env, matchaDarwinAmd64Env} {
+	for _, i := range [][]string{matchaDarwinArmEnv, matchaDarwinArm64Env, matchaDarwinAmd64Env, matchaDarwin386Env} {
 		go func(env []string) {
 			arch := Getenv(env, "GOARCH")
 			env = append(env, "GOPATH="+genDir+string(filepath.ListSeparator)+os.Getenv("GOPATH"))
@@ -243,7 +248,7 @@ func Bind(flags *Flags, args []string) error {
 		}(i)
 	}
 	archs := []archPath{}
-	for i := 0; i < 3; i++ {
+	for i := 0; i < 4; i++ {
 		arch := <-archChan
 		if arch.err != nil {
 			return arch.err
@@ -258,6 +263,14 @@ func Bind(flags *Flags, args []string) error {
 	}
 	cmd.Args = append(cmd.Args, "-o", binaryPath)
 	if err := RunCmd(flags, tempdir, cmd); err != nil {
+		return err
+	}
+
+	// Copy in headers.
+	if err = CopyFile(flags, filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "matchaobjc.h"), filepath.Join(bridgeDir, "matchaobjc.h")); err != nil {
+		return err
+	}
+	if err = CopyFile(flags, filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "matchago.h"), filepath.Join(bridgeDir, "matchago.h")); err != nil {
 		return err
 	}
 

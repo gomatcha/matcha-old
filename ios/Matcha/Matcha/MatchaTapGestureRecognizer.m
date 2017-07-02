@@ -7,7 +7,7 @@
 //
 
 #import "MatchaTapGestureRecognizer.h"
-#import <Matcha/matchago.h>
+#import <MatchaBridge/MatchaBridge.h>
 #import "MatchaNode.h"
 #import "MatchaProtobuf.h"
 #import "MatchaBridge.h"

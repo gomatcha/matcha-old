@@ -17,7 +17,7 @@
 #import "Keyboard.pbobjc.h"
 #import "Slider.pbobjc.h"
 
-@import Matcha;
+@import MatchaBridge;
 
 @interface UIColor (Matcha)
 - (id)initWithProtobuf:(MatchaPBColor *)value;

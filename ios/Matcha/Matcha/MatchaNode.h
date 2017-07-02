@@ -7,7 +7,7 @@
 //
 
 @import UIKit;
-@import Matcha;
+@import MatchaBridge;
 @class MatchaPaintOptions;
 @class MatchaLayoutGuide;
 @class MatchaNode;

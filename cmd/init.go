@@ -54,6 +54,13 @@ func Init(flags *Flags) error {
 		return err
 	}
 
+	if env, err = Darwin386Env(flags); err != nil {
+		return err
+	}
+	if err := InstallPkg(flags, tmpdir, "std", env, "-tags=ios"); err != nil {
+		return err
+	}
+
 	if env, err = DarwinAmd64Env(flags); err != nil {
 		return err
 	}

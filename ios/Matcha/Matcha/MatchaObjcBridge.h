@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@import Matcha;
+@import MatchaBridge;
 
 @interface MatchaObjcBridge (Extensions)
 - (void)configure;

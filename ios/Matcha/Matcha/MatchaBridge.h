@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
-@import Matcha;
+@import MatchaBridge;
 
 @interface MatchaGoValue (Matcha)
 - (id)initWithCGPoint:(CGPoint)point;
