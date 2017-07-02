@@ -14,7 +14,6 @@
 - (MatchaGoValue *)sizeForAttributedString:(NSData *)data;
 - (void)updateId:(NSInteger)identifier withProtobuf:(NSData *)protobuf;
 - (NSString *)assetsDir;
-- (MatchaGoValue *)sizeForResource:(NSString *)path;
 - (MatchaGoValue *)imageForResource:(NSString *)path;
 - (MatchaGoValue *)propertiesForResource:(NSString *)path;
 @end
