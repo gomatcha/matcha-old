@@ -78,6 +78,12 @@
 		67FEBB1B1F09A18F005AFEDA /* MatchaButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAF51F09A18F005AFEDA /* MatchaButton.h */; };
 		67FEBB1C1F09A18F005AFEDA /* MatchaBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAF61F09A18F005AFEDA /* MatchaBridge.m */; };
 		67FEBB1D1F09A18F005AFEDA /* MatchaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAF71F09A18F005AFEDA /* MatchaBridge.h */; };
+		67FEBB351F0A1FF6005AFEDA /* MatchaBasicView.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBB331F0A1FF6005AFEDA /* MatchaBasicView.h */; };
+		67FEBB361F0A1FF6005AFEDA /* MatchaBasicView.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBB341F0A1FF6005AFEDA /* MatchaBasicView.m */; };
+		67FEBB3A1F0A2048005AFEDA /* MatchaTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBB381F0A2048005AFEDA /* MatchaTextView.h */; };
+		67FEBB3B1F0A2048005AFEDA /* MatchaTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBB391F0A2048005AFEDA /* MatchaTextView.m */; };
+		67FEBB3F1F0A209B005AFEDA /* MatchaImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBB3D1F0A209B005AFEDA /* MatchaImageView.h */; };
+		67FEBB401F0A209B005AFEDA /* MatchaImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBB3E1F0A209B005AFEDA /* MatchaImageView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -154,6 +160,12 @@
 		67FEBAF51F09A18F005AFEDA /* MatchaButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaButton.h; sourceTree = "<group>"; };
 		67FEBAF61F09A18F005AFEDA /* MatchaBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaBridge.m; sourceTree = "<group>"; };
 		67FEBAF71F09A18F005AFEDA /* MatchaBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaBridge.h; sourceTree = "<group>"; };
+		67FEBB331F0A1FF6005AFEDA /* MatchaBasicView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaBasicView.h; sourceTree = "<group>"; };
+		67FEBB341F0A1FF6005AFEDA /* MatchaBasicView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaBasicView.m; sourceTree = "<group>"; };
+		67FEBB381F0A2048005AFEDA /* MatchaTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaTextView.h; sourceTree = "<group>"; };
+		67FEBB391F0A2048005AFEDA /* MatchaTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaTextView.m; sourceTree = "<group>"; };
+		67FEBB3D1F0A209B005AFEDA /* MatchaImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaImageView.h; sourceTree = "<group>"; };
+		67FEBB3E1F0A209B005AFEDA /* MatchaImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaImageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,8 +205,6 @@
 				67FEBA6E1F099EDF005AFEDA /* Matcha.h */,
 				67FEBAD31F09A18F005AFEDA /* MatchaViewController.h */,
 				67FEBAD21F09A18F005AFEDA /* MatchaViewController.m */,
-				67FEBAD51F09A18F005AFEDA /* MatchaView.h */,
-				67FEBAD41F09A18F005AFEDA /* MatchaView.m */,
 				67FEBB291F09AD17005AFEDA /* Touch */,
 				67FEBB2A1F09AD3C005AFEDA /* View */,
 				67FEBAE71F09A18F005AFEDA /* MatchaProtobuf.h */,
@@ -422,22 +432,110 @@
 		67FEBB2A1F09AD3C005AFEDA /* View */ = {
 			isa = PBXGroup;
 			children = (
-				67FEBAD81F09A18F005AFEDA /* MatchaTextInput.m */,
-				67FEBAD91F09A18F005AFEDA /* MatchaTextInput.h */,
-				67FEBADC1F09A18F005AFEDA /* MatchaTabScreen.m */,
-				67FEBADD1F09A18F005AFEDA /* MatchaTabScreen.h */,
-				67FEBADE1F09A18F005AFEDA /* MatchaSwitchView.m */,
-				67FEBADF1F09A18F005AFEDA /* MatchaSwitchView.h */,
-				67FEBAE01F09A18F005AFEDA /* MatchaStackScreen.m */,
-				67FEBAE11F09A18F005AFEDA /* MatchaStackScreen.h */,
-				67FEBAE21F09A18F005AFEDA /* MatchaSlider.m */,
-				67FEBAE31F09A18F005AFEDA /* MatchaSlider.h */,
-				67FEBAE41F09A18F005AFEDA /* MatchaScrollView.m */,
-				67FEBAE51F09A18F005AFEDA /* MatchaScrollView.h */,
+				67FEBAD51F09A18F005AFEDA /* MatchaView.h */,
+				67FEBAD41F09A18F005AFEDA /* MatchaView.m */,
+				67FEBB321F0A1FE4005AFEDA /* BasicView */,
+				67FEBB2B1F0A1FA8005AFEDA /* Button */,
+				67FEBB3C1F0A2087005AFEDA /* ImageView */,
+				67FEBB311F0A1FCF005AFEDA /* TextInput */,
+				67FEBB371F0A203D005AFEDA /* TextView */,
+				67FEBB301F0A1FCA005AFEDA /* TabScreen */,
+				67FEBB2F1F0A1FC3005AFEDA /* SwitchView */,
+				67FEBB2E1F0A1FBC005AFEDA /* StackScreen */,
+				67FEBB2D1F0A1FB5005AFEDA /* Slider */,
+				67FEBB2C1F0A1FAE005AFEDA /* ScrollView */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		67FEBB2B1F0A1FA8005AFEDA /* Button */ = {
+			isa = PBXGroup;
+			children = (
 				67FEBAF41F09A18F005AFEDA /* MatchaButton.m */,
 				67FEBAF51F09A18F005AFEDA /* MatchaButton.h */,
 			);
-			name = View;
+			name = Button;
+			sourceTree = "<group>";
+		};
+		67FEBB2C1F0A1FAE005AFEDA /* ScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				67FEBAE41F09A18F005AFEDA /* MatchaScrollView.m */,
+				67FEBAE51F09A18F005AFEDA /* MatchaScrollView.h */,
+			);
+			name = ScrollView;
+			sourceTree = "<group>";
+		};
+		67FEBB2D1F0A1FB5005AFEDA /* Slider */ = {
+			isa = PBXGroup;
+			children = (
+				67FEBAE31F09A18F005AFEDA /* MatchaSlider.h */,
+				67FEBAE21F09A18F005AFEDA /* MatchaSlider.m */,
+			);
+			name = Slider;
+			sourceTree = "<group>";
+		};
+		67FEBB2E1F0A1FBC005AFEDA /* StackScreen */ = {
+			isa = PBXGroup;
+			children = (
+				67FEBAE01F09A18F005AFEDA /* MatchaStackScreen.m */,
+				67FEBAE11F09A18F005AFEDA /* MatchaStackScreen.h */,
+			);
+			name = StackScreen;
+			sourceTree = "<group>";
+		};
+		67FEBB2F1F0A1FC3005AFEDA /* SwitchView */ = {
+			isa = PBXGroup;
+			children = (
+				67FEBADE1F09A18F005AFEDA /* MatchaSwitchView.m */,
+				67FEBADF1F09A18F005AFEDA /* MatchaSwitchView.h */,
+			);
+			name = SwitchView;
+			sourceTree = "<group>";
+		};
+		67FEBB301F0A1FCA005AFEDA /* TabScreen */ = {
+			isa = PBXGroup;
+			children = (
+				67FEBADC1F09A18F005AFEDA /* MatchaTabScreen.m */,
+				67FEBADD1F09A18F005AFEDA /* MatchaTabScreen.h */,
+			);
+			name = TabScreen;
+			sourceTree = "<group>";
+		};
+		67FEBB311F0A1FCF005AFEDA /* TextInput */ = {
+			isa = PBXGroup;
+			children = (
+				67FEBAD81F09A18F005AFEDA /* MatchaTextInput.m */,
+				67FEBAD91F09A18F005AFEDA /* MatchaTextInput.h */,
+			);
+			name = TextInput;
+			sourceTree = "<group>";
+		};
+		67FEBB321F0A1FE4005AFEDA /* BasicView */ = {
+			isa = PBXGroup;
+			children = (
+				67FEBB331F0A1FF6005AFEDA /* MatchaBasicView.h */,
+				67FEBB341F0A1FF6005AFEDA /* MatchaBasicView.m */,
+			);
+			name = BasicView;
+			sourceTree = "<group>";
+		};
+		67FEBB371F0A203D005AFEDA /* TextView */ = {
+			isa = PBXGroup;
+			children = (
+				67FEBB381F0A2048005AFEDA /* MatchaTextView.h */,
+				67FEBB391F0A2048005AFEDA /* MatchaTextView.m */,
+			);
+			name = TextView;
+			sourceTree = "<group>";
+		};
+		67FEBB3C1F0A2087005AFEDA /* ImageView */ = {
+			isa = PBXGroup;
+			children = (
+				67FEBB3D1F0A209B005AFEDA /* MatchaImageView.h */,
+				67FEBB3E1F0A209B005AFEDA /* MatchaImageView.m */,
+			);
+			name = ImageView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -452,6 +550,7 @@
 				67FEBAAF1F099F1D005AFEDA /* Image.pbobjc.h in Headers */,
 				67FEBAC11F099F1D005AFEDA /* Slider.pbobjc.h in Headers */,
 				67FEBB0B1F09A18F005AFEDA /* MatchaScrollView.h in Headers */,
+				67FEBB3F1F0A209B005AFEDA /* MatchaImageView.h in Headers */,
 				67FEBB1B1F09A18F005AFEDA /* MatchaButton.h in Headers */,
 				67FEBAB11F099F1D005AFEDA /* Keyboard.pbobjc.h in Headers */,
 				67FEBABB1F099F1D005AFEDA /* Button.pbobjc.h in Headers */,
@@ -460,6 +559,7 @@
 				67FEBAC51F099F1D005AFEDA /* Switchview.pbobjc.h in Headers */,
 				67FEBB071F09A18F005AFEDA /* MatchaStackScreen.h in Headers */,
 				67FEBAFB1F09A18F005AFEDA /* MatchaView.h in Headers */,
+				67FEBB3A1F0A2048005AFEDA /* MatchaTextView.h in Headers */,
 				67FEBAAD1F099F1D005AFEDA /* Resource.pbobjc.h in Headers */,
 				67FEBAB51F099F1D005AFEDA /* Paint.pbobjc.h in Headers */,
 				67FEBAC31F099F1D005AFEDA /* Stacknavigator.pbobjc.h in Headers */,
@@ -469,6 +569,7 @@
 				67FEBAB71F099F1D005AFEDA /* Text.pbobjc.h in Headers */,
 				67FEBABD1F099F1D005AFEDA /* Imageview.pbobjc.h in Headers */,
 				67FEBB0F1F09A18F005AFEDA /* MatchaPressGestureRecognizer.h in Headers */,
+				67FEBB351F0A1FF6005AFEDA /* MatchaBasicView.h in Headers */,
 				67FEBAC71F099F1D005AFEDA /* Tabscreen.pbobjc.h in Headers */,
 				67FEBB171F09A18F005AFEDA /* MatchaDeadlockLogger.h in Headers */,
 				67FEBB131F09A18F005AFEDA /* MatchaNode.h in Headers */,
@@ -562,6 +663,8 @@
 				67FEBABE1F099F1D005AFEDA /* Imageview.pbobjc.m in Sources */,
 				67FEBAAE1F099F1D005AFEDA /* Resource.pbobjc.m in Sources */,
 				67FEBB0A1F09A18F005AFEDA /* MatchaScrollView.m in Sources */,
+				67FEBB401F0A209B005AFEDA /* MatchaImageView.m in Sources */,
+				67FEBB3B1F0A2048005AFEDA /* MatchaTextView.m in Sources */,
 				67FEBB101F09A18F005AFEDA /* MatchaObjcBridge.m in Sources */,
 				67FEBB1A1F09A18F005AFEDA /* MatchaButton.m in Sources */,
 				67FEBAAC1F099F1D005AFEDA /* Color.pbobjc.m in Sources */,
@@ -583,6 +686,7 @@
 				67FEBAFE1F09A18F005AFEDA /* MatchaTextInput.m in Sources */,
 				67FEBB121F09A18F005AFEDA /* MatchaNode.m in Sources */,
 				67FEBB161F09A18F005AFEDA /* MatchaDeadlockLogger.m in Sources */,
+				67FEBB361F0A1FF6005AFEDA /* MatchaBasicView.m in Sources */,
 				67FEBB021F09A18F005AFEDA /* MatchaTabScreen.m in Sources */,
 				67FEBB061F09A18F005AFEDA /* MatchaStackScreen.m in Sources */,
 				67FEBAB21F099F1D005AFEDA /* Keyboard.pbobjc.m in Sources */,

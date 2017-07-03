@@ -16,15 +16,6 @@
 - (void)setMatchaChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs;
 @end
 
-@interface MatchaBasicView : UIView <MatchaChildView>
-@end
-
-@interface MatchaTextView : UILabel <MatchaChildView>
-@end
-
-@interface MatchaImageView : UIImageView <MatchaChildView>
-@end
-
 UIGestureRecognizer *MatchaGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MatchaViewNode *viewNode);
 UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *viewNode);
 UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(MatchaNode *node, MatchaViewNode *viewNode);
