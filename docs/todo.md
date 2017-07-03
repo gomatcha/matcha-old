@@ -13,7 +13,6 @@ Medium:
 * Why doesn't simulator debugger work? Why does simulator crash all the time?
 * Rebuild settings app.
 * Only send updated views.
-* Dont add a default PaintStyle to every view.
 * Todo example.
 * Make sure development team isn't packaged with sample app.
 * Have flag that generates a new xcodeproj for easy setup.

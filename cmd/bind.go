@@ -14,7 +14,7 @@ import (
 	"path/filepath"
 )
 
-func Bind(flags *Flags, args []string) error {
+func Bind(flags *Flags, args []string, dev bool) error {
 	// Make $WORK.
 	tempdir, err := NewTmpDir(flags, "")
 	if err != nil {
@@ -119,10 +119,8 @@ func Bind(flags *Flags, args []string) error {
 		}
 	}
 
-	// title := "MatchaBridge"
 	genDir := filepath.Join(tempdir, "gen")
 	binaryPath := filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "MatchaBridge.a")
-	// frameworkDir := filepath.Join(workOutputDir, "Matcha", title+".framework")
 
 	// Build the "matcha/bridge" dir
 	bridgeDir := filepath.Join(genDir, "src", "gomatcha.io", "bridge")
@@ -164,6 +162,9 @@ func Bind(flags *Flags, args []string) error {
 	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchago.go"), filepath.Join(objcPkg.Dir, "matchago.go.support")); err != nil {
 		return err
 	}
+
+	// title := "MatchaBridge"
+	// frameworkDir := filepath.Join(workOutputDir, "Matcha", title+".framework")
 
 	// Build framework directory structure.
 	// headersDir := filepath.Join(frameworkDir, "Versions", "A", "Headers")

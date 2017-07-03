@@ -71,6 +71,39 @@ for Android.`,
 }
 
 func init() {
+	flags := DevCmd.Flags()
+	flags.BoolVar(&buildN, "n", false, "print the commands but do not run them.")
+	flags.BoolVar(&buildX, "x", false, "print the commands.")
+	flags.BoolVar(&buildV, "v", false, "print the names of packages as they are compiled.")
+	flags.BoolVar(&buildWork, "work", false, "print the name of the temporary work directory and do not delete it when exiting.")
+	flags.StringVar(&buildGcflags, "gcflags", "", "arguments to pass on each go tool compile invocation.")
+	flags.StringVar(&buildLdflags, "ldflags", "", "arguments to pass on each go tool link invocation.")
+	flags.StringVar(&buildO, "output", "", "forces build to write the resulting object to the named output file.")
+
+	RootCmd.AddCommand(DevCmd)
+}
+
+var DevCmd = &cobra.Command{
+	Use:   "dev",
+	Short: "internal dev command",
+	Long:  ``,
+	Run: func(command *cobra.Command, args []string) {
+		flags := &cmd.Flags{
+			BuildN:       buildN,
+			BuildX:       buildX,
+			BuildV:       buildV,
+			BuildWork:    buildWork,
+			BuildGcflags: buildGcflags,
+			BuildLdflags: buildLdflags,
+			BuildO:       buildO,
+		}
+		if err := cmd.Bind(flags, args, true); err != nil {
+			fmt.Println(err)
+		}
+	},
+}
+
+func init() {
 	flags := BuildCmd.Flags()
 	flags.BoolVar(&buildN, "n", false, "print the commands but do not run them.")
 	flags.BoolVar(&buildX, "x", false, "print the commands.")
@@ -97,7 +130,7 @@ var BuildCmd = &cobra.Command{
 			BuildLdflags: buildLdflags,
 			BuildO:       buildO,
 		}
-		if err := cmd.Bind(flags, args); err != nil {
+		if err := cmd.Bind(flags, args, false); err != nil {
 			fmt.Println(err)
 		}
 	},
