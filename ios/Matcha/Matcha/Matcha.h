@@ -8,4 +8,5 @@ FOUNDATION_EXPORT const unsigned char MatchaVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <Matcha/PublicHeader.h>
 
-
+#import <Matcha/MatchaObjcBridge.h>
+#import <Matcha/MatchaViewController.h>

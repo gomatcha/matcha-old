@@ -45,7 +45,7 @@
 		67FEBACF1F09A00C005AFEDA /* libProtocolBuffers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FEBACE1F09A00C005AFEDA /* libProtocolBuffers.a */; };
 		67FEBAD11F09A096005AFEDA /* MatchaBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FEBAD01F09A096005AFEDA /* MatchaBridge.framework */; };
 		67FEBAF81F09A18F005AFEDA /* MatchaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAD21F09A18F005AFEDA /* MatchaViewController.m */; };
-		67FEBAF91F09A18F005AFEDA /* MatchaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAD31F09A18F005AFEDA /* MatchaViewController.h */; };
+		67FEBAF91F09A18F005AFEDA /* MatchaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAD31F09A18F005AFEDA /* MatchaViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67FEBAFA1F09A18F005AFEDA /* MatchaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAD41F09A18F005AFEDA /* MatchaView.m */; };
 		67FEBAFB1F09A18F005AFEDA /* MatchaView.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAD51F09A18F005AFEDA /* MatchaView.h */; };
 		67FEBAFE1F09A18F005AFEDA /* MatchaTextInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAD81F09A18F005AFEDA /* MatchaTextInput.m */; };
@@ -67,7 +67,7 @@
 		67FEBB0E1F09A18F005AFEDA /* MatchaPressGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAE81F09A18F005AFEDA /* MatchaPressGestureRecognizer.m */; };
 		67FEBB0F1F09A18F005AFEDA /* MatchaPressGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAE91F09A18F005AFEDA /* MatchaPressGestureRecognizer.h */; };
 		67FEBB101F09A18F005AFEDA /* MatchaObjcBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAEA1F09A18F005AFEDA /* MatchaObjcBridge.m */; };
-		67FEBB111F09A18F005AFEDA /* MatchaObjcBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAEB1F09A18F005AFEDA /* MatchaObjcBridge.h */; };
+		67FEBB111F09A18F005AFEDA /* MatchaObjcBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAEB1F09A18F005AFEDA /* MatchaObjcBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67FEBB121F09A18F005AFEDA /* MatchaNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAEC1F09A18F005AFEDA /* MatchaNode.m */; };
 		67FEBB131F09A18F005AFEDA /* MatchaNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAED1F09A18F005AFEDA /* MatchaNode.h */; };
 		67FEBB161F09A18F005AFEDA /* MatchaDeadlockLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAF01F09A18F005AFEDA /* MatchaDeadlockLogger.m */; };
@@ -803,6 +803,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Protobuf",
@@ -825,6 +826,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Protobuf",

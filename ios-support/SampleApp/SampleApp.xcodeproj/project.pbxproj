@@ -10,9 +10,11 @@
 		67FEBB501F0A246C005AFEDA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBB4F1F0A246C005AFEDA /* main.m */; };
 		67FEBB531F0A246C005AFEDA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBB521F0A246C005AFEDA /* AppDelegate.m */; };
 		67FEBB561F0A246C005AFEDA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBB551F0A246C005AFEDA /* ViewController.m */; };
-		67FEBB591F0A246C005AFEDA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67FEBB571F0A246C005AFEDA /* Main.storyboard */; };
 		67FEBB5B1F0A246C005AFEDA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67FEBB5A1F0A246C005AFEDA /* Assets.xcassets */; };
 		67FEBB5E1F0A246C005AFEDA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67FEBB5C1F0A246C005AFEDA /* LaunchScreen.storyboard */; };
+		67FEBB6F1F0A280D005AFEDA /* libProtocolBuffers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FEBB6C1F0A280D005AFEDA /* libProtocolBuffers.a */; };
+		67FEBB701F0A280D005AFEDA /* Matcha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FEBB6D1F0A280D005AFEDA /* Matcha.framework */; };
+		67FEBB711F0A280D005AFEDA /* MatchaBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FEBB6E1F0A280D005AFEDA /* MatchaBridge.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,10 +24,12 @@
 		67FEBB521F0A246C005AFEDA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		67FEBB541F0A246C005AFEDA /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		67FEBB551F0A246C005AFEDA /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		67FEBB581F0A246C005AFEDA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		67FEBB5A1F0A246C005AFEDA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		67FEBB5D1F0A246C005AFEDA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		67FEBB5F1F0A246C005AFEDA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		67FEBB6C1F0A280D005AFEDA /* libProtocolBuffers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libProtocolBuffers.a; path = "../../../../../../../Library/Developer/Xcode/DerivedData/SampleApp-dfuufnnmjxhmdfgjhkfgorerbcig/Build/Products/Debug-iphonesimulator/libProtocolBuffers.a"; sourceTree = "<group>"; };
+		67FEBB6D1F0A280D005AFEDA /* Matcha.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Matcha.framework; path = "../../ios/Matcha/build/Debug-iphoneos/Matcha.framework"; sourceTree = "<group>"; };
+		67FEBB6E1F0A280D005AFEDA /* MatchaBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MatchaBridge.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/SampleApp-dfuufnnmjxhmdfgjhkfgorerbcig/Build/Products/Debug-iphonesimulator/MatchaBridge.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +37,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67FEBB6F1F0A280D005AFEDA /* libProtocolBuffers.a in Frameworks */,
+				67FEBB701F0A280D005AFEDA /* Matcha.framework in Frameworks */,
+				67FEBB711F0A280D005AFEDA /* MatchaBridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +51,7 @@
 			children = (
 				67FEBB4D1F0A246C005AFEDA /* SampleApp */,
 				67FEBB4C1F0A246C005AFEDA /* Products */,
+				67FEBB6B1F0A280D005AFEDA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,7 +70,6 @@
 				67FEBB521F0A246C005AFEDA /* AppDelegate.m */,
 				67FEBB541F0A246C005AFEDA /* ViewController.h */,
 				67FEBB551F0A246C005AFEDA /* ViewController.m */,
-				67FEBB571F0A246C005AFEDA /* Main.storyboard */,
 				67FEBB5A1F0A246C005AFEDA /* Assets.xcassets */,
 				67FEBB5C1F0A246C005AFEDA /* LaunchScreen.storyboard */,
 				67FEBB5F1F0A246C005AFEDA /* Info.plist */,
@@ -77,6 +84,16 @@
 				67FEBB4F1F0A246C005AFEDA /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		67FEBB6B1F0A280D005AFEDA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				67FEBB6C1F0A280D005AFEDA /* libProtocolBuffers.a */,
+				67FEBB6D1F0A280D005AFEDA /* Matcha.framework */,
+				67FEBB6E1F0A280D005AFEDA /* MatchaBridge.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,7 +156,6 @@
 			files = (
 				67FEBB5E1F0A246C005AFEDA /* LaunchScreen.storyboard in Resources */,
 				67FEBB5B1F0A246C005AFEDA /* Assets.xcassets in Resources */,
-				67FEBB591F0A246C005AFEDA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,14 +175,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		67FEBB571F0A246C005AFEDA /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				67FEBB581F0A246C005AFEDA /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		67FEBB5C1F0A246C005AFEDA /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -311,6 +319,7 @@
 				67FEBB641F0A246C005AFEDA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

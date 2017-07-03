@@ -1,11 +1,3 @@
-//
-//  AppDelegate.m
-//  basic
-//
-//  Created by Kevin Dang on 3/30/17.
-//  Copyright © 2017 Matcha. All rights reserved.
-//
-
 #import "AppDelegate.h"
 #import "MatchaViewController.h"
 #import "MatchaObjcBridge.h"
