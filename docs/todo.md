@@ -7,6 +7,7 @@ High:
 * Build website and documentation.
 * Hide StyledText
 * Automatically insert copyright notice.
+* Only Rebuild MatchaBridge
 
 Medium:
 * Why doesn't simulator debugger work? Why does simulator crash all the time?

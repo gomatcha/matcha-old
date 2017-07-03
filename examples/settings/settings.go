@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"fmt"
 	"image/color"
 	"strconv"
 	"strings"
@@ -33,6 +34,7 @@ type App struct {
 	comm.Storer
 	store          *comm.AsyncStore
 	stackScreen    *stackscreen.Screen
+	airplaneMode   bool
 	wifiController *WifiController
 }
 
@@ -45,11 +47,13 @@ func NewApp() *App {
 	})
 
 	app.stackScreen = stackscreen.New()
-	app.store.Set("stackScreen", app.stackScreen)
 	app.stackScreen.SetChildren(rootScreen, rootScreen, rootScreen)
+	app.store.Set("stackScreen", app.stackScreen)
 
 	app.wifiController = NewWifiStore()
 	app.store.Set("wifi", app.wifiController)
+
+	app.airplaneMode = true
 
 	return app
 }
@@ -66,6 +70,16 @@ func (app *App) WifiController() *WifiController {
 	return app.wifiController
 }
 
+func (app *App) SetAirplaneMode(v bool) {
+	app.airplaneMode = v
+	app.store.Update()
+	app.wifiController.SetEnabled(app.airplaneMode)
+}
+
+func (app *App) AirplaneMode() bool {
+	return app.airplaneMode
+}
+
 type RootView struct {
 	*view.Embed
 	app *App
@@ -76,6 +90,7 @@ func NewRootView(ctx *view.Context, key string, app *App) *RootView {
 		return v
 	}
 	v := &RootView{Embed: view.NewEmbed(ctx.NewId(key)), app: app}
+	v.Subscribe(app)
 	v.Subscribe(app.WifiController())
 	return v
 }
@@ -93,6 +108,12 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		l.Add(spacer, nil)
 
 		switchView := switchview.New(ctx, "switch")
+		switchView.Value = v.app.AirplaneMode()
+		switchView.OnValueChange = func(value bool) {
+			v.app.Lock()
+			defer v.app.Unlock()
+			v.app.SetAirplaneMode(value)
+		}
 		cell1 := NewBasicCell(ctx, "airplane")
 		cell1.Title = "Airplane Mode"
 		cell1.Icon = env.MustLoadImage("Airplane")
