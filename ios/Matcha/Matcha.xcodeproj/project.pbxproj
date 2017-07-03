@@ -460,8 +460,8 @@
 		67FEBB2C1F0A1FAE005AFEDA /* ScrollView */ = {
 			isa = PBXGroup;
 			children = (
-				67FEBAE41F09A18F005AFEDA /* MatchaScrollView.m */,
 				67FEBAE51F09A18F005AFEDA /* MatchaScrollView.h */,
+				67FEBAE41F09A18F005AFEDA /* MatchaScrollView.m */,
 			);
 			name = ScrollView;
 			sourceTree = "<group>";

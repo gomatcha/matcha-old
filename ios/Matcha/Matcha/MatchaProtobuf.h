@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#import <MatchaBridge/MatchaBridge.h>
 #import "View.pbobjc.h"
 #import "Layout.pbobjc.h"
 #import "Text.pbobjc.h"
@@ -16,7 +17,6 @@
 #import "Textinput.pbobjc.h"
 #import "Keyboard.pbobjc.h"
 #import "Slider.pbobjc.h"
-#import <MatchaBridge/MatchaBridge.h>
 
 @interface UIColor (Matcha)
 - (id)initWithProtobuf:(MatchaPBColor *)value;
