@@ -18,3 +18,10 @@ FOUNDATION_EXPORT const unsigned char ProtobufVersionString[];
 
 
 #import <Protobuf/GPBProtocolBuffers.h>
+#import <Protobuf/GPBProtocolBuffers_RuntimeSupport.h>
+#import <Protobuf/GPBArray_PackagePrivate.h>
+#import <Protobuf/GPBCodedInputStream_PackagePrivate.h>
+#import <Protobuf/GPBCodedOutputStream_PackagePrivate.h>
+#import <Protobuf/GPBDictionary_PackagePrivate.h>
+#import <Protobuf/GPBUnknownField_PackagePrivate.h>
+#import <Protobuf/GPBUnknownFieldSet_PackagePrivate.h>
