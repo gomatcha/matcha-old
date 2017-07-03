@@ -13,9 +13,26 @@
 		67FEBB5B1F0A246C005AFEDA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67FEBB5A1F0A246C005AFEDA /* Assets.xcassets */; };
 		67FEBB5E1F0A246C005AFEDA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67FEBB5C1F0A246C005AFEDA /* LaunchScreen.storyboard */; };
 		67FEBB6F1F0A280D005AFEDA /* libProtocolBuffers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FEBB6C1F0A280D005AFEDA /* libProtocolBuffers.a */; };
-		67FEBB701F0A280D005AFEDA /* Matcha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FEBB6D1F0A280D005AFEDA /* Matcha.framework */; };
-		67FEBB711F0A280D005AFEDA /* MatchaBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FEBB6E1F0A280D005AFEDA /* MatchaBridge.framework */; };
+		67FEBB751F0A2B8F005AFEDA /* Matcha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FEBB741F0A2B8F005AFEDA /* Matcha.framework */; };
+		67FEBB791F0A2BBA005AFEDA /* Matcha.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 67FEBB741F0A2B8F005AFEDA /* Matcha.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67FEBB7D1F0A2CD6005AFEDA /* MatchaBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FEBB7C1F0A2CD6005AFEDA /* MatchaBridge.framework */; };
+		67FEBB7E1F0A2CDB005AFEDA /* MatchaBridge.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 67FEBB7C1F0A2CD6005AFEDA /* MatchaBridge.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		67FEBB781F0A2BAB005AFEDA /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				67FEBB7E1F0A2CDB005AFEDA /* MatchaBridge.framework in Copy Files */,
+				67FEBB791F0A2BBA005AFEDA /* Matcha.framework in Copy Files */,
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		67FEBB4B1F0A246C005AFEDA /* SampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -28,8 +45,9 @@
 		67FEBB5D1F0A246C005AFEDA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		67FEBB5F1F0A246C005AFEDA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67FEBB6C1F0A280D005AFEDA /* libProtocolBuffers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libProtocolBuffers.a; path = "../../../../../../../Library/Developer/Xcode/DerivedData/SampleApp-dfuufnnmjxhmdfgjhkfgorerbcig/Build/Products/Debug-iphonesimulator/libProtocolBuffers.a"; sourceTree = "<group>"; };
-		67FEBB6D1F0A280D005AFEDA /* Matcha.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Matcha.framework; path = "../../ios/Matcha/build/Debug-iphoneos/Matcha.framework"; sourceTree = "<group>"; };
 		67FEBB6E1F0A280D005AFEDA /* MatchaBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MatchaBridge.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/SampleApp-dfuufnnmjxhmdfgjhkfgorerbcig/Build/Products/Debug-iphonesimulator/MatchaBridge.framework"; sourceTree = "<group>"; };
+		67FEBB741F0A2B8F005AFEDA /* Matcha.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Matcha.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/SampleApp-dfuufnnmjxhmdfgjhkfgorerbcig/Build/Products/Debug-iphoneos/Matcha.framework"; sourceTree = "<group>"; };
+		67FEBB7C1F0A2CD6005AFEDA /* MatchaBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MatchaBridge.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/SampleApp-dfuufnnmjxhmdfgjhkfgorerbcig/Build/Products/Debug-iphoneos/MatchaBridge.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,9 +55,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67FEBB7D1F0A2CD6005AFEDA /* MatchaBridge.framework in Frameworks */,
+				67FEBB751F0A2B8F005AFEDA /* Matcha.framework in Frameworks */,
 				67FEBB6F1F0A280D005AFEDA /* libProtocolBuffers.a in Frameworks */,
-				67FEBB701F0A280D005AFEDA /* Matcha.framework in Frameworks */,
-				67FEBB711F0A280D005AFEDA /* MatchaBridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,8 +107,9 @@
 		67FEBB6B1F0A280D005AFEDA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				67FEBB7C1F0A2CD6005AFEDA /* MatchaBridge.framework */,
+				67FEBB741F0A2B8F005AFEDA /* Matcha.framework */,
 				67FEBB6C1F0A280D005AFEDA /* libProtocolBuffers.a */,
-				67FEBB6D1F0A280D005AFEDA /* Matcha.framework */,
 				67FEBB6E1F0A280D005AFEDA /* MatchaBridge.framework */,
 			);
 			name = Frameworks;
@@ -106,6 +125,7 @@
 				67FEBB471F0A246C005AFEDA /* Sources */,
 				67FEBB481F0A246C005AFEDA /* Frameworks */,
 				67FEBB491F0A246C005AFEDA /* Resources */,
+				67FEBB781F0A2BAB005AFEDA /* Copy Files */,
 			);
 			buildRules = (
 			);
