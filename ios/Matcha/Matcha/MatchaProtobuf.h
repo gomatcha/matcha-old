@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 #import <MatchaBridge/MatchaBridge.h>
+#import "GPBProtocolBuffers.h"
 #import "View.pbobjc.h"
 #import "Layout.pbobjc.h"
 #import "Text.pbobjc.h"

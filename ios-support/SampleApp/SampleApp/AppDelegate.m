@@ -1,5 +1,4 @@
 #import "AppDelegate.h"
-#import "ViewController.h"
 #import <MatchaBridge/MatchaBridge.h>
 #import <Matcha/Matcha.h>
 
@@ -8,7 +7,7 @@
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     [[MatchaObjcBridge sharedBridge] configure];
     
     MatchaGoValue *rootVC = [[[MatchaGoValue alloc] initWithFunc:@"gomatcha.io/matcha/examples/constraints New"] call:nil args:nil][0];
