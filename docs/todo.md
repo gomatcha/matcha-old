@@ -9,7 +9,6 @@ High:
 * Automatically insert copyright notice.
 
 Medium:
-* Collect native resources into assets.
 * Why doesn't simulator debugger work? Why does simulator crash all the time?
 * Rebuild settings app.
 * Only send updated views.
@@ -18,6 +17,7 @@ Medium:
 * Have flag that generates a new xcodeproj for easy setup.
 
 Low:
+* Collect native resources into assets.
 * Support StyledText in textinput and textview.
 * Support more flags in matcha command.
 * Updating a tabscreen or stackscreen should not trigger a rebuild of its children.
