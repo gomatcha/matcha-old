@@ -16,8 +16,7 @@
 #import "Textinput.pbobjc.h"
 #import "Keyboard.pbobjc.h"
 #import "Slider.pbobjc.h"
-
-@import MatchaBridge;
+#import <MatchaBridge/MatchaBridge.h>
 
 @interface UIColor (Matcha)
 - (id)initWithProtobuf:(MatchaPBColor *)value;

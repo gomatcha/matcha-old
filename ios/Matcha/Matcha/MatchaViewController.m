@@ -1,11 +1,3 @@
-//
-//  MatchaViewController.m
-//  basic
-//
-//  Created by Kevin Dang on 3/31/17.
-//  Copyright © 2017 Matcha. All rights reserved.
-//
-
 #import "MatchaViewController.h"
 #import "MatchaView.h"
 #import "MatchaBridge.h"

@@ -1,5 +1,4 @@
 #import "MatchaDeadlockLogger.h"
-
 #import "MatchaBridge.h"
 
 @interface MatchaDeadlockLogger ()

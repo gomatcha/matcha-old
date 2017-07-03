@@ -70,8 +70,6 @@
 		67FEBB111F09A18F005AFEDA /* MatchaObjcBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAEB1F09A18F005AFEDA /* MatchaObjcBridge.h */; };
 		67FEBB121F09A18F005AFEDA /* MatchaNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAEC1F09A18F005AFEDA /* MatchaNode.m */; };
 		67FEBB131F09A18F005AFEDA /* MatchaNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAED1F09A18F005AFEDA /* MatchaNode.h */; };
-		67FEBB141F09A18F005AFEDA /* MatchaGuide.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAEE1F09A18F005AFEDA /* MatchaGuide.m */; };
-		67FEBB151F09A18F005AFEDA /* MatchaGuide.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAEF1F09A18F005AFEDA /* MatchaGuide.h */; };
 		67FEBB161F09A18F005AFEDA /* MatchaDeadlockLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAF01F09A18F005AFEDA /* MatchaDeadlockLogger.m */; };
 		67FEBB171F09A18F005AFEDA /* MatchaDeadlockLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAF11F09A18F005AFEDA /* MatchaDeadlockLogger.h */; };
 		67FEBB181F09A18F005AFEDA /* MatchaButtonGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAF21F09A18F005AFEDA /* MatchaButtonGestureRecognizer.m */; };
@@ -148,8 +146,6 @@
 		67FEBAEB1F09A18F005AFEDA /* MatchaObjcBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaObjcBridge.h; sourceTree = "<group>"; };
 		67FEBAEC1F09A18F005AFEDA /* MatchaNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaNode.m; sourceTree = "<group>"; };
 		67FEBAED1F09A18F005AFEDA /* MatchaNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaNode.h; sourceTree = "<group>"; };
-		67FEBAEE1F09A18F005AFEDA /* MatchaGuide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaGuide.m; sourceTree = "<group>"; };
-		67FEBAEF1F09A18F005AFEDA /* MatchaGuide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaGuide.h; sourceTree = "<group>"; };
 		67FEBAF01F09A18F005AFEDA /* MatchaDeadlockLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaDeadlockLogger.m; sourceTree = "<group>"; };
 		67FEBAF11F09A18F005AFEDA /* MatchaDeadlockLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaDeadlockLogger.h; sourceTree = "<group>"; };
 		67FEBAF21F09A18F005AFEDA /* MatchaButtonGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaButtonGestureRecognizer.m; sourceTree = "<group>"; };
@@ -194,25 +190,23 @@
 		67FEBA6D1F099EDF005AFEDA /* Matcha */ = {
 			isa = PBXGroup;
 			children = (
-				67FEBAD21F09A18F005AFEDA /* MatchaViewController.m */,
+				67FEBA6E1F099EDF005AFEDA /* Matcha.h */,
 				67FEBAD31F09A18F005AFEDA /* MatchaViewController.h */,
-				67FEBAD41F09A18F005AFEDA /* MatchaView.m */,
+				67FEBAD21F09A18F005AFEDA /* MatchaViewController.m */,
 				67FEBAD51F09A18F005AFEDA /* MatchaView.h */,
+				67FEBAD41F09A18F005AFEDA /* MatchaView.m */,
 				67FEBB291F09AD17005AFEDA /* Touch */,
 				67FEBB2A1F09AD3C005AFEDA /* View */,
-				67FEBAE61F09A18F005AFEDA /* MatchaProtobuf.m */,
 				67FEBAE71F09A18F005AFEDA /* MatchaProtobuf.h */,
-				67FEBAEA1F09A18F005AFEDA /* MatchaObjcBridge.m */,
+				67FEBAE61F09A18F005AFEDA /* MatchaProtobuf.m */,
 				67FEBAEB1F09A18F005AFEDA /* MatchaObjcBridge.h */,
-				67FEBAEC1F09A18F005AFEDA /* MatchaNode.m */,
+				67FEBAEA1F09A18F005AFEDA /* MatchaObjcBridge.m */,
 				67FEBAED1F09A18F005AFEDA /* MatchaNode.h */,
-				67FEBAEE1F09A18F005AFEDA /* MatchaGuide.m */,
-				67FEBAEF1F09A18F005AFEDA /* MatchaGuide.h */,
-				67FEBAF01F09A18F005AFEDA /* MatchaDeadlockLogger.m */,
+				67FEBAEC1F09A18F005AFEDA /* MatchaNode.m */,
 				67FEBAF11F09A18F005AFEDA /* MatchaDeadlockLogger.h */,
-				67FEBAF61F09A18F005AFEDA /* MatchaBridge.m */,
+				67FEBAF01F09A18F005AFEDA /* MatchaDeadlockLogger.m */,
 				67FEBAF71F09A18F005AFEDA /* MatchaBridge.h */,
-				67FEBA6E1F099EDF005AFEDA /* Matcha.h */,
+				67FEBAF61F09A18F005AFEDA /* MatchaBridge.m */,
 				67FEBA6F1F099EDF005AFEDA /* Info.plist */,
 			);
 			path = Matcha;
@@ -415,12 +409,12 @@
 		67FEBB291F09AD17005AFEDA /* Touch */ = {
 			isa = PBXGroup;
 			children = (
-				67FEBADA1F09A18F005AFEDA /* MatchaTapGestureRecognizer.m */,
 				67FEBADB1F09A18F005AFEDA /* MatchaTapGestureRecognizer.h */,
-				67FEBAE81F09A18F005AFEDA /* MatchaPressGestureRecognizer.m */,
+				67FEBADA1F09A18F005AFEDA /* MatchaTapGestureRecognizer.m */,
 				67FEBAE91F09A18F005AFEDA /* MatchaPressGestureRecognizer.h */,
-				67FEBAF21F09A18F005AFEDA /* MatchaButtonGestureRecognizer.m */,
+				67FEBAE81F09A18F005AFEDA /* MatchaPressGestureRecognizer.m */,
 				67FEBAF31F09A18F005AFEDA /* MatchaButtonGestureRecognizer.h */,
+				67FEBAF21F09A18F005AFEDA /* MatchaButtonGestureRecognizer.m */,
 			);
 			name = Touch;
 			sourceTree = "<group>";
@@ -456,7 +450,6 @@
 				67FEBA701F099EDF005AFEDA /* Matcha.h in Headers */,
 				67FEBABF1F099F1D005AFEDA /* Scrollview.pbobjc.h in Headers */,
 				67FEBAAF1F099F1D005AFEDA /* Image.pbobjc.h in Headers */,
-				67FEBB151F09A18F005AFEDA /* MatchaGuide.h in Headers */,
 				67FEBAC11F099F1D005AFEDA /* Slider.pbobjc.h in Headers */,
 				67FEBB0B1F09A18F005AFEDA /* MatchaScrollView.h in Headers */,
 				67FEBB1B1F09A18F005AFEDA /* MatchaButton.h in Headers */,
@@ -564,7 +557,6 @@
 				67FEBACA1F099F1D005AFEDA /* Textinput.pbobjc.m in Sources */,
 				67FEBB081F09A18F005AFEDA /* MatchaSlider.m in Sources */,
 				67FEBAB41F099F1D005AFEDA /* Layout.pbobjc.m in Sources */,
-				67FEBB141F09A18F005AFEDA /* MatchaGuide.m in Sources */,
 				67FEBAC01F099F1D005AFEDA /* Scrollview.pbobjc.m in Sources */,
 				67FEBB0C1F09A18F005AFEDA /* MatchaProtobuf.m in Sources */,
 				67FEBABE1F099F1D005AFEDA /* Imageview.pbobjc.m in Sources */,

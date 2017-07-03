@@ -1,11 +1,3 @@
-//
-//  MatchaObjcRoot.m
-//  basic
-//
-//  Created by Kevin Dang on 4/19/17.
-//  Copyright © 2017 Matcha. All rights reserved.
-//
-
 #import "MatchaObjcBridge.h"
 #import "MatchaBridge.h"
 #import "MatchaNode.h"

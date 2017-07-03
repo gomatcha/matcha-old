@@ -1,4 +1,4 @@
-@import UIKit;
+#import <UIKit/UIKit.h>
 #import "MatchaBridge.h"
 #import "MatchaNode.h"
 @class MatchaViewConfig;
