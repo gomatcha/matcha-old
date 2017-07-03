@@ -1,7 +1,0 @@
-framework module "GoMatcha" {
-    // header "ref.h"
-    header "matchaobjc.h"
-    header "matchago.h"
-
-    export *
-}
