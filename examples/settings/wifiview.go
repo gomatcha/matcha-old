@@ -1,6 +1,8 @@
 package settings
 
 import (
+	"fmt"
+
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/store"
@@ -17,25 +19,10 @@ type WifiStore struct {
 }
 
 func NewWifiStore() *WifiStore {
-	n1 := &WifiNetworkStore{}
-	n1.SetNetwork(WifiNetwork{
-		SSID: "XfinityWifi",
-	})
-
-	n2 := &WifiNetworkStore{}
-	n2.SetNetwork(WifiNetwork{
-		SSID: "Bluestone",
-	})
-
-	n3 := &WifiNetworkStore{}
-	n3.SetNetwork(WifiNetwork{
-		SSID: "Starbucks",
-	})
-
-	n4 := &WifiNetworkStore{}
-	n4.SetNetwork(WifiNetwork{
-		SSID: "FastMesh Wifi",
-	})
+	n1 := NewWifiNetworkStore("XfinityWifi")
+	n2 := NewWifiNetworkStore("Bluestone")
+	n3 := NewWifiNetworkStore("Starbucks")
+	n4 := NewWifiNetworkStore("FastMesh Wifi")
 
 	s := &WifiStore{}
 	s.SetWifi(Wifi{
