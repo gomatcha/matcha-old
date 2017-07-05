@@ -16,29 +16,10 @@ type BluetoothStore struct {
 }
 
 func NewBluetoothStore() *BluetoothStore {
-	n1 := &BluetoothDeviceStore{}
-	n1.SetDevice(BluetoothDevice{
-		SSID:      "JBL Charge 3",
-		Connected: false,
-	})
-
-	n2 := &BluetoothDeviceStore{}
-	n2.SetDevice(BluetoothDevice{
-		SSID:      "Kevin's AirPods",
-		Connected: true,
-	})
-
-	n3 := &BluetoothDeviceStore{}
-	n3.SetDevice(BluetoothDevice{
-		SSID:      "Kevin's Apple Watch",
-		Connected: true,
-	})
-
-	n4 := &BluetoothDeviceStore{}
-	n4.SetDevice(BluetoothDevice{
-		SSID:      "FastMesh Wifi",
-		Connected: false,
-	})
+	n1 := NewBluetoothDeviceStore("JBL Charge 3")
+	n2 := NewBluetoothDeviceStore("Kevin's AirPods")
+	n3 := NewBluetoothDeviceStore("Kevin's Apple Watch")
+	n4 := NewBluetoothDeviceStore("Honda Fit")
 
 	s := &BluetoothStore{}
 	s.SetBluetooth(Bluetooth{
@@ -74,6 +55,16 @@ type Bluetooth struct {
 type BluetoothDeviceStore struct {
 	store.Store
 	device BluetoothDevice
+	ssid   string
+}
+
+func NewBluetoothDeviceStore(ssid string) *BluetoothDeviceStore {
+	return &BluetoothDeviceStore{
+		ssid: ssid,
+		device: BluetoothDevice{
+			SSID: ssid,
+		},
+	}
 }
 
 func (s *BluetoothDeviceStore) Device() BluetoothDevice {
@@ -82,6 +73,7 @@ func (s *BluetoothDeviceStore) Device() BluetoothDevice {
 
 func (s *BluetoothDeviceStore) SetDevice(v BluetoothDevice) {
 	s.device = v
+	s.device.SSID = s.ssid // Don't allow the SSID to change.
 	s.Update()
 }
 

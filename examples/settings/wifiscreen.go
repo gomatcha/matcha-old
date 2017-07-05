@@ -13,15 +13,10 @@ import (
 
 type WifiStore struct {
 	store.Store
-	enabled            bool
-	networks           []*WifiNetworkStore
-	currentNetworkSSID string
+	wifi Wifi
 }
 
 func NewWifiStore() *WifiStore {
-	s := &WifiStore{}
-	s.SetEnabled(true)
-
 	n1 := &WifiNetworkStore{}
 	n1.SetNetwork(WifiNetwork{
 		SSID: "XfinityWifi",
@@ -42,42 +37,35 @@ func NewWifiStore() *WifiStore {
 		SSID: "FastMesh Wifi",
 	})
 
-	s.SetNetworks([]*WifiNetworkStore{n1, n2, n3, n4})
-	s.SetCurrentNetworkSSID(n4.Network().SSID)
+	s := &WifiStore{}
+	s.SetWifi(Wifi{
+		Enabled:     true,
+		Networks:    []*WifiNetworkStore{n1, n2, n3, n4},
+		CurrentSSID: n4.Network().SSID,
+	})
 	return s
 }
 
-func (s *WifiStore) SetEnabled(v bool) {
-	s.enabled = v
-	s.Update()
-}
-
-func (s *WifiStore) Enabled() bool {
-	return s.enabled
-}
-
-func (s *WifiStore) SetNetworks(ns []*WifiNetworkStore) {
-	for _, i := range s.networks {
-		s.Delete(i.Network().SSID)
+func (s *WifiStore) SetWifi(v Wifi) {
+	for _, i := range s.wifi.Networks {
+		s.Delete(i.Network().SSID) // TODO(KD): What if SSID of the network changes? do we want to prevent that somehow?
 	}
-	for _, i := range ns {
+	for _, i := range v.Networks {
 		s.Set(i.Network().SSID, i)
 	}
-	s.networks = ns
+
+	s.wifi = v
 	s.Update()
 }
 
-func (s *WifiStore) Networks() []*WifiNetworkStore {
-	return s.networks
+func (s *WifiStore) Wifi() Wifi {
+	return s.wifi
 }
 
-func (s *WifiStore) SetCurrentNetworkSSID(v string) {
-	s.currentNetworkSSID = v
-	s.Update()
-}
-
-func (s *WifiStore) CurrentNetworkSSID() string {
-	return s.currentNetworkSSID
+type Wifi struct {
+	Enabled     bool
+	Networks    []*WifiNetworkStore
+	CurrentSSID string
 }
 
 type WifiNetworkStore struct {
@@ -122,6 +110,7 @@ func NewWifiView(ctx *view.Context, key string, app *App, wifiStore *WifiStore) 
 func (v *WifiView) Build(ctx *view.Context) *view.Model {
 	v.wifiStore.Lock()
 	defer v.wifiStore.Unlock()
+	wifi := v.wifiStore.Wifi()
 
 	l := &table.Layouter{}
 	{
@@ -132,12 +121,12 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		l.Add(spacer, nil)
 
 		switchView := switchview.New(ctx, "switch")
-		switchView.Value = v.wifiStore.Enabled()
+		switchView.Value = wifi.Enabled
 		switchView.OnValueChange = func(value bool) {
 			v.wifiStore.Lock()
 			defer v.wifiStore.Unlock()
 
-			v.wifiStore.SetEnabled(value)
+			// v.wifiStore.SetEnabled(value)
 		}
 
 		cell1 := NewBasicCell(ctx, "wifi")
@@ -145,18 +134,9 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		cell1.AccessoryView = switchView
 		group = append(group, cell1)
 
-		currentSSID := v.wifiStore.CurrentNetworkSSID()
-		if currentSSID != "" && v.wifiStore.Enabled() {
-			var currentNetwork WifiNetwork
-			for _, i := range v.wifiStore.Networks() {
-				if i.Network().SSID == currentSSID {
-					currentNetwork = i.Network()
-					break
-				}
-			}
-
+		if wifi.CurrentSSID != "" && wifi.Enabled {
 			cell2 := NewBasicCell(ctx, "current")
-			cell2.Title = currentNetwork.SSID
+			cell2.Title = wifi.CurrentSSID
 			group = append(group, cell2)
 		}
 
@@ -165,7 +145,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		}
 	}
 
-	if v.wifiStore.Enabled() {
+	if wifi.Enabled {
 		{
 			ctx := ctx.WithPrefix("2")
 			group := []view.View{}
@@ -174,19 +154,23 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 			spacer.Title = "Choose a Network..."
 			l.Add(spacer, nil)
 
-			for _, i := range v.wifiStore.Networks() {
+			for _, i := range wifi.Networks {
 				network := i.Network()
-				if network.SSID != v.wifiStore.CurrentNetworkSSID() {
-					cell := NewBasicCell(ctx, "network"+network.SSID)
-					cell.Title = network.SSID
-					cell.OnTap = func() {
-						v.wifiStore.Lock()
-						defer v.wifiStore.Unlock()
 
-						v.wifiStore.SetCurrentNetworkSSID(network.SSID)
-					}
-					group = append(group, cell)
+				// Don't show the current network in this list.
+				if network.SSID == wifi.CurrentSSID {
+					continue
 				}
+
+				cell := NewBasicCell(ctx, "network"+network.SSID)
+				cell.Title = network.SSID
+				cell.OnTap = func() {
+					v.wifiStore.Lock()
+					defer v.wifiStore.Unlock()
+
+					// v.wifiStore.SetCurrentNetworkSSID(network.SSID)
+				}
+				group = append(group, cell)
 			}
 
 			cell1 := NewBasicCell(ctx, "other")

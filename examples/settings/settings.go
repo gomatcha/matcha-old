@@ -31,11 +31,11 @@ func init() {
 
 type App struct {
 	store.Storer
-	store               *store.Store
-	stackScreen         *stackscreen.Screen
-	airplaneMode        bool
-	wifiController      *WifiStore
-	bluetoothController *BluetoothStore
+	store          *store.Store
+	stackScreen    *stackscreen.Screen
+	airplaneMode   bool
+	wifiStore      *WifiStore
+	bluetoothStore *BluetoothStore
 }
 
 func NewApp() *App {
@@ -50,11 +50,11 @@ func NewApp() *App {
 	app.stackScreen.SetChildren(rootScreen, rootScreen, rootScreen)
 	app.store.Set("stackScreen", app.stackScreen)
 
-	app.wifiController = NewWifiStore()
-	app.store.Set("wifi", app.wifiController)
+	app.wifiStore = NewWifiStore()
+	app.store.Set("wifi", app.wifiStore)
 
-	app.bluetoothController = NewBluetoothStore()
-	app.store.Set("bluetooth", app.bluetoothController)
+	app.bluetoothStore = NewBluetoothStore()
+	app.store.Set("bluetooth", app.bluetoothStore)
 
 	app.airplaneMode = true
 
@@ -69,22 +69,25 @@ func (app *App) StackScreen() *stackscreen.Screen {
 	return app.stackScreen
 }
 
-func (app *App) WifiController() *WifiStore {
-	return app.wifiController
+func (app *App) WifiStore() *WifiStore {
+	return app.wifiStore
 }
 
-func (app *App) BluetoothController() *BluetoothStore {
-	return app.bluetoothController
+func (app *App) BluetoothStore() *BluetoothStore {
+	return app.bluetoothStore
 }
 
 func (app *App) SetAirplaneMode(v bool) {
 	app.airplaneMode = v
 	app.store.Update()
-	app.wifiController.SetEnabled(app.airplaneMode)
 
-	bt := app.bluetoothController.Bluetooth()
+	wifi := app.wifiStore.Wifi()
+	wifi.Enabled = app.airplaneMode
+	app.wifiStore.SetWifi(wifi)
+
+	bt := app.bluetoothStore.Bluetooth()
 	bt.Enabled = app.airplaneMode
-	app.bluetoothController.SetBluetooth(bt)
+	app.bluetoothStore.SetBluetooth(bt)
 
 }
 
@@ -103,8 +106,8 @@ func NewRootView(ctx *view.Context, key string, app *App) *RootView {
 	}
 	v := &RootView{Embed: view.NewEmbed(ctx.NewId(key)), app: app}
 	v.Subscribe(app)
-	v.Subscribe(app.WifiController())
-	v.Subscribe(app.BluetoothController())
+	v.Subscribe(app.WifiStore())
+	v.Subscribe(app.BluetoothStore())
 	return v
 }
 
@@ -139,10 +142,11 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell1.HasIcon = true
 		group = append(group, cell1)
 
+		wifi := v.app.WifiStore().Wifi()
 		cell2 := NewBasicCell(ctx, "wifi")
 		cell2.Title = "Wi-Fi"
-		if v.app.WifiController().Enabled() {
-			cell2.Subtitle = v.app.WifiController().CurrentNetworkSSID()
+		if wifi.Enabled {
+			cell2.Subtitle = wifi.CurrentSSID
 		} else {
 			cell2.Subtitle = ""
 		}
@@ -154,7 +158,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 			defer v.app.Unlock()
 			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
 				// TODO(KD): Do we need to lock/unlock here?
-				return NewWifiView(ctx, "", v.app, v.app.WifiController())
+				return NewWifiView(ctx, "", v.app, v.app.WifiStore())
 			}))
 		}
 		group = append(group, cell2)
@@ -163,7 +167,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell3.HasIcon = true
 		cell3.Icon = env.MustLoadImage("Bluetooth")
 		cell3.Title = "Bluetooth"
-		if v.app.BluetoothController().Bluetooth().Enabled {
+		if v.app.BluetoothStore().Bluetooth().Enabled {
 			cell3.Subtitle = "On"
 		} else {
 			cell3.Subtitle = ""
@@ -173,7 +177,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 			v.app.Lock()
 			defer v.app.Unlock()
 			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
-				return NewBluetoothView(ctx, "", v.app, v.app.BluetoothController())
+				return NewBluetoothView(ctx, "", v.app, v.app.BluetoothStore())
 			}))
 		}
 		group = append(group, cell3)
