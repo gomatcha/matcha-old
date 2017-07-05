@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 )
 
-func Bind(flags *Flags, args []string, install bool) error {
+func Bind(flags *Flags, args []string, binaryOnly bool) error {
 	// Make $WORK.
 	tempdir, err := NewTmpDir(flags, "")
 	if err != nil {
@@ -138,7 +138,7 @@ func Bind(flags *Flags, args []string, install bool) error {
 		return err
 	}
 
-	if install {
+	if !binaryOnly {
 		// Copy package's ios directory if it imports gomatcha.io/bridge.
 		for _, pkg := range pkgs {
 			importsBridge := false
@@ -232,11 +232,12 @@ func Bind(flags *Flags, args []string, install bool) error {
 	if outputDir == "" {
 		outputDir = "Matcha-iOS"
 	}
-	if err := RemoveAll(flags, outputDir); err != nil {
-		return err
-	}
 
-	if install {
+	if !binaryOnly {
+		if err := RemoveAll(flags, outputDir); err != nil {
+			return err
+		}
+
 		// Copy output directory into place.
 		if err := CopyDir(flags, outputDir, workOutputDir); err != nil {
 			return err
