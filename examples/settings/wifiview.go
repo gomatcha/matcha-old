@@ -70,7 +70,17 @@ type Wifi struct {
 
 type WifiNetworkStore struct {
 	store.Store
+	ssid    string
 	network WifiNetwork
+}
+
+func NewWifiNetworkStore(ssid string) *WifiNetworkStore {
+	return &WifiNetworkStore{
+		ssid: ssid,
+		network: WifiNetwork{
+			SSID: ssid,
+		},
+	}
 }
 
 func (s *WifiNetworkStore) Network() WifiNetwork {
@@ -79,6 +89,7 @@ func (s *WifiNetworkStore) Network() WifiNetwork {
 
 func (s *WifiNetworkStore) SetNetwork(v WifiNetwork) {
 	s.network = v
+	s.network.SSID = s.ssid // Don't allow the network's ssid to change.
 	s.Update()
 }
 
@@ -126,7 +137,9 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 			v.wifiStore.Lock()
 			defer v.wifiStore.Unlock()
 
-			// v.wifiStore.SetEnabled(value)
+			wifi := v.wifiStore.Wifi()
+			wifi.Enabled = value
+			v.wifiStore.SetWifi(wifi)
 		}
 
 		cell1 := NewBasicCell(ctx, "wifi")
@@ -168,7 +181,9 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 					v.wifiStore.Lock()
 					defer v.wifiStore.Unlock()
 
-					// v.wifiStore.SetCurrentNetworkSSID(network.SSID)
+					wifi := v.wifiStore.Wifi()
+					wifi.CurrentSSID = network.SSID
+					v.wifiStore.SetWifi(wifi)
 				}
 				group = append(group, cell)
 			}
