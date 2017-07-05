@@ -5,7 +5,7 @@ High:
 * Switching quickly between navigation item causes loop. 2 quick backs.
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
 * Build website and documentation. Make sure go get "gomatcha.io/..." works.
-* Automatically insert copyright notice.
+* How do I quickly update objc files?
 
 Medium:
 * Add a Notifyall, and notifyBetween to store.
@@ -16,6 +16,7 @@ Medium:
 * Make sure development team isn't packaged with sample app.
 * Have flag that generates a new xcodeproj for easy setup.
 * Rotation
+* Automatically insert copyright notice.
 
 Low:
 * Collect native resources into assets.

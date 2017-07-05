@@ -117,6 +117,7 @@ func (r *Root) SetSize(p layout.Point) {
 	defer MainMu.Unlock()
 
 	r.size = p
+	r.root.addFlag(r.root.node.id, layoutFlag)
 }
 
 type viewCacheKey struct {
