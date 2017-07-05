@@ -1,32 +1,34 @@
-package comm
+package store
 
 import (
 	"sync"
+
+	"gomatcha.io/matcha/comm"
 )
 
 type Storer interface {
 	sync.Locker
-	Notifier
+	comm.Notifier
 	Stores() map[string]Storer
-	StoreNotifier(string) Notifier
+	StoreNotifier(string) comm.Notifier
 }
 
-type asyncStoreNotifier struct {
-	store *AsyncStore
+type storeNotifier struct {
+	store *Store
 	key   string
 }
 
-func (s *asyncStoreNotifier) Notify(f func()) Id {
+func (s *storeNotifier) Notify(f func()) comm.Id {
 	s.store.funcsMu.Lock()
 	defer s.store.funcsMu.Unlock()
 
 	if s.store.keyFuncs == nil {
-		s.store.keyFuncs = map[string]map[Id]func(){}
+		s.store.keyFuncs = map[string]map[comm.Id]func(){}
 	}
 
 	funcs := s.store.keyFuncs[s.key]
 	if funcs == nil {
-		funcs = map[Id]func(){}
+		funcs = map[comm.Id]func(){}
 		s.store.keyFuncs[s.key] = funcs
 	}
 
@@ -35,7 +37,7 @@ func (s *asyncStoreNotifier) Notify(f func()) Id {
 	return s.store.maxId
 }
 
-func (s *asyncStoreNotifier) Unnotify(id Id) {
+func (s *storeNotifier) Unnotify(id comm.Id) {
 	s.store.funcsMu.Lock()
 	defer s.store.funcsMu.Unlock()
 
@@ -51,7 +53,7 @@ func (s *asyncStoreNotifier) Unnotify(id Id) {
 	delete(funcs, id)
 }
 
-type AsyncStore struct {
+type Store struct {
 	mu     sync.Mutex
 	locked bool
 	stores map[string]Storer
@@ -60,12 +62,12 @@ type AsyncStore struct {
 	updatedKeys []string
 
 	funcsMu  sync.Mutex
-	funcs    map[Id]func()
-	keyFuncs map[string]map[Id]func()
-	maxId    Id
+	funcs    map[comm.Id]func()
+	keyFuncs map[string]map[comm.Id]func()
+	maxId    comm.Id
 }
 
-func (s *AsyncStore) Set(key string, chl Storer) {
+func (s *Store) Set(key string, chl Storer) {
 	if s.stores == nil {
 		s.stores = map[string]Storer{}
 	}
@@ -73,20 +75,20 @@ func (s *AsyncStore) Set(key string, chl Storer) {
 	s.updatedKeys = append(s.updatedKeys, key)
 }
 
-func (s *AsyncStore) Delete(key string) {
+func (s *Store) Delete(key string) {
 	delete(s.stores, key)
 	s.updatedKeys = append(s.updatedKeys, key)
 }
 
-func (s *AsyncStore) StoreNotifier(key string) Notifier {
-	return &asyncStoreNotifier{store: s, key: key}
+func (s *Store) StoreNotifier(key string) comm.Notifier {
+	return &storeNotifier{store: s, key: key}
 }
 
-func (s *AsyncStore) Stores() map[string]Storer {
+func (s *Store) Stores() map[string]Storer {
 	return s.stores
 }
 
-func (s *AsyncStore) Lock() {
+func (s *Store) Lock() {
 	s.mu.Lock()
 	s.locked = true
 	for _, i := range s.stores {
@@ -96,7 +98,7 @@ func (s *AsyncStore) Lock() {
 	s.updatedKeys = nil
 }
 
-func (s *AsyncStore) Unlock() {
+func (s *Store) Unlock() {
 	go func(updated bool, updatedKeys []string) {
 		s.funcsMu.Lock()
 		defer s.funcsMu.Unlock()
@@ -122,12 +124,12 @@ func (s *AsyncStore) Unlock() {
 	s.mu.Unlock()
 }
 
-func (s *AsyncStore) Notify(f func()) Id {
+func (s *Store) Notify(f func()) comm.Id {
 	s.funcsMu.Lock()
 	defer s.funcsMu.Unlock()
 
 	if s.funcs == nil {
-		s.funcs = map[Id]func(){}
+		s.funcs = map[comm.Id]func(){}
 	}
 
 	s.maxId += 1
@@ -135,7 +137,7 @@ func (s *AsyncStore) Notify(f func()) Id {
 	return s.maxId
 }
 
-func (s *AsyncStore) Unnotify(id Id) {
+func (s *Store) Unnotify(id comm.Id) {
 	s.funcsMu.Lock()
 	defer s.funcsMu.Unlock()
 
@@ -146,6 +148,6 @@ func (s *AsyncStore) Unnotify(id Id) {
 	delete(s.funcs, id)
 }
 
-func (s *AsyncStore) Update() {
+func (s *Store) Update() {
 	s.updated = true
 }

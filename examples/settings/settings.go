@@ -1,18 +1,17 @@
 package settings
 
 import (
-	"fmt"
 	"image/color"
 	"strconv"
 	"strings"
 
 	"golang.org/x/image/colornames"
 	"gomatcha.io/bridge"
-	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/text"
 	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
@@ -31,15 +30,16 @@ func init() {
 }
 
 type App struct {
-	comm.Storer
-	store          *comm.AsyncStore
-	stackScreen    *stackscreen.Screen
-	airplaneMode   bool
-	wifiController *WifiController
+	store.Storer
+	store               *store.Store
+	stackScreen         *stackscreen.Screen
+	airplaneMode        bool
+	wifiController      *WifiStore
+	bluetoothController *BluetoothStore
 }
 
 func NewApp() *App {
-	st := &comm.AsyncStore{}
+	st := &store.Store{}
 	app := &App{Storer: st, store: st}
 
 	rootScreen := view.ScreenFunc(func(ctx *view.Context) view.View {
@@ -52,6 +52,9 @@ func NewApp() *App {
 
 	app.wifiController = NewWifiStore()
 	app.store.Set("wifi", app.wifiController)
+
+	app.bluetoothController = NewBluetoothStore()
+	app.store.Set("bluetooth", app.bluetoothController)
 
 	app.airplaneMode = true
 
@@ -66,14 +69,23 @@ func (app *App) StackScreen() *stackscreen.Screen {
 	return app.stackScreen
 }
 
-func (app *App) WifiController() *WifiController {
+func (app *App) WifiController() *WifiStore {
 	return app.wifiController
+}
+
+func (app *App) BluetoothController() *BluetoothStore {
+	return app.bluetoothController
 }
 
 func (app *App) SetAirplaneMode(v bool) {
 	app.airplaneMode = v
 	app.store.Update()
 	app.wifiController.SetEnabled(app.airplaneMode)
+
+	bt := app.bluetoothController.Bluetooth()
+	bt.Enabled = app.airplaneMode
+	app.bluetoothController.SetBluetooth(bt)
+
 }
 
 func (app *App) AirplaneMode() bool {
@@ -92,6 +104,7 @@ func NewRootView(ctx *view.Context, key string, app *App) *RootView {
 	v := &RootView{Embed: view.NewEmbed(ctx.NewId(key)), app: app}
 	v.Subscribe(app)
 	v.Subscribe(app.WifiController())
+	v.Subscribe(app.BluetoothController())
 	return v
 }
 
@@ -113,6 +126,11 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 			v.app.Lock()
 			defer v.app.Unlock()
 			v.app.SetAirplaneMode(value)
+
+			// v.app.Write(func (a *App) *App {
+			// 	a.AirplaneMode = true
+			// 	return a
+			// })
 		}
 		cell1 := NewBasicCell(ctx, "airplane")
 		cell1.Title = "Airplane Mode"
@@ -135,7 +153,8 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 			v.app.Lock()
 			defer v.app.Unlock()
 			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
-				return NewWifiView(ctx, "", v.app, v.app.wifiController)
+				// TODO(KD): Do we need to lock/unlock here?
+				return NewWifiView(ctx, "", v.app, v.app.WifiController())
 			}))
 		}
 		group = append(group, cell2)
@@ -144,13 +163,17 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		cell3.HasIcon = true
 		cell3.Icon = env.MustLoadImage("Bluetooth")
 		cell3.Title = "Bluetooth"
-		cell3.Subtitle = "On"
+		if v.app.BluetoothController().Bluetooth().Enabled {
+			cell3.Subtitle = "On"
+		} else {
+			cell3.Subtitle = ""
+		}
 		cell3.Chevron = true
 		cell3.OnTap = func() {
 			v.app.Lock()
 			defer v.app.Unlock()
 			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
-				return NewBluetoothView(ctx, "", v.app)
+				return NewBluetoothView(ctx, "", v.app, v.app.BluetoothController())
 			}))
 		}
 		group = append(group, cell3)

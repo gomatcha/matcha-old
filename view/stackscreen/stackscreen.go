@@ -5,20 +5,20 @@ import (
 	"strconv"
 
 	"github.com/gogo/protobuf/proto"
-	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/pb/view/stacknav"
+	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/view"
 )
 
 type Screen struct {
-	comm.Storer
-	store   *comm.AsyncStore
+	store.Storer
+	store   *store.Store
 	screens []view.Screen
 }
 
 func New() *Screen {
-	st := &comm.AsyncStore{}
+	st := &store.Store{}
 	return &Screen{
 		Storer: st,
 		store:  st,

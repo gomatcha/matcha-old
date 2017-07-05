@@ -643,7 +643,7 @@ func (l *Layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layo
 	l.Guide.matchaGuide = &layout.Guide{
 		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
-	// TODO(Kevin): reset all guides
+	// TODO(KD): reset all guides
 
 	for _, i := range l.solvers {
 		i.solve(l, ctx)

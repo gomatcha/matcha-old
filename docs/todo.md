@@ -10,12 +10,13 @@ High:
 * Only Rebuild MatchaBridge
 
 Medium:
+* Add tests around core functionality. Store, etc.
 * Why doesn't simulator debugger work? Why does simulator crash all the time?
-* Rebuild settings app.
+* Rebuild settings app, Todo App.
 * Only send updated views.
-* Todo example.
 * Make sure development team isn't packaged with sample app.
 * Have flag that generates a new xcodeproj for easy setup.
+* Rotation
 
 Low:
 * Collect native resources into assets.
@@ -26,7 +27,6 @@ Low:
 * Localization
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
 * Constraints should force views onto pixel boundries
-* Rotation
 * GridView
 * Flexbox
 * Picker

@@ -5,8 +5,8 @@ import (
 
 	"golang.org/x/image/colornames"
 	"gomatcha.io/bridge"
-	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/stackscreen"
@@ -20,8 +20,8 @@ func init() {
 }
 
 type App struct {
-	comm.Storer
-	store        *comm.AsyncStore
+	store.Storer
+	store        *store.Store
 	tabScreen    *tabscreen.Screen
 	stackScreen1 *stackscreen.Screen
 	stackScreen2 *stackscreen.Screen
@@ -30,7 +30,7 @@ type App struct {
 }
 
 func NewApp() *App {
-	st := &comm.AsyncStore{}
+	st := &store.Store{}
 	app := &App{Storer: st, store: st}
 
 	app.stackScreen1 = stackscreen.New()

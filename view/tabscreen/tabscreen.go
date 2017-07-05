@@ -6,22 +6,22 @@ import (
 	"strconv"
 
 	"github.com/gogo/protobuf/proto"
-	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/layout/constraint"
 	tabnavpb "gomatcha.io/matcha/pb/view/tabscreen"
+	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/view"
 )
 
 type Screen struct {
-	comm.Storer
-	store         *comm.AsyncStore
+	store.Storer
+	store         *store.Store
 	screens       []view.Screen
 	selectedIndex int
 }
 
 func New() *Screen {
-	st := &comm.AsyncStore{}
+	st := &store.Store{}
 	return &Screen{Storer: st, store: st}
 }
 
