@@ -72,6 +72,40 @@ for Android.`,
 }
 
 func init() {
+	flags := BuildCmd.Flags()
+	flags.BoolVar(&buildN, "n", false, "print the commands but do not run them.")
+	flags.BoolVar(&buildX, "x", false, "print the commands.")
+	flags.BoolVar(&buildV, "v", false, "print the names of packages as they are compiled.")
+	flags.BoolVar(&buildWork, "work", false, "print the name of the temporary work directory and do not delete it when exiting.")
+	flags.StringVar(&buildGcflags, "gcflags", "", "arguments to pass on each go tool compile invocation.")
+	flags.StringVar(&buildLdflags, "ldflags", "", "arguments to pass on each go tool link invocation.")
+
+	RootCmd.AddCommand(BuildCmd)
+}
+
+var BuildCmd = &cobra.Command{
+	Use:   "build",
+	Short: "install mobile compiler toolchain",
+	Long: `Init builds copies of the Go standard library for mobile devices.
+It uses Xcode, if available, to build for iOS and uses the Android
+NDK from the ndk-bundle SDK package or from the -ndk flag, to build
+for Android.`,
+	Run: func(command *cobra.Command, args []string) {
+		flags := &cmd.Flags{
+			BuildN:       buildN,
+			BuildX:       buildX,
+			BuildV:       buildV,
+			BuildWork:    buildWork,
+			BuildGcflags: buildGcflags,
+			BuildLdflags: buildLdflags,
+		}
+		if err := cmd.Build(flags, args); err != nil {
+			fmt.Println(err)
+		}
+	},
+}
+
+func init() {
 	flags := InstallCmd.Flags()
 	flags.BoolVar(&buildN, "n", false, "print the commands but do not run them.")
 	flags.BoolVar(&buildX, "x", false, "print the commands.")
@@ -98,8 +132,9 @@ var InstallCmd = &cobra.Command{
 			BuildGcflags: buildGcflags,
 			BuildLdflags: buildLdflags,
 			BuildO:       buildO,
+			BuildBinary:  buildBinary,
 		}
-		if err := cmd.Bind(flags, args, buildBinary); err != nil {
+		if err := cmd.Bind(flags, args); err != nil {
 			fmt.Println(err)
 		}
 	},

@@ -19,6 +19,7 @@ type Flags struct {
 	BuildGcflags string // -gcflags
 	BuildLdflags string // -ldflags
 	BuildO       string // output path
+	BuildBinary  bool
 }
 
 func (f *Flags) ShouldPrint() bool {

@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"go/build"
 	"io"
 	"io/ioutil"
 	"os"
@@ -115,6 +116,15 @@ func NewTmpDir(f *Flags, path string) (string, error) {
 		fmt.Fprintln(os.Stderr, "WORK="+tmpdir)
 	}
 	return tmpdir, nil
+}
+
+// Returns the directory for a given package.
+func PackageDir(f *Flags, pkgpath string) (string, error) {
+	pkg, err := build.Default.Import(pkgpath, "", build.FindOnly)
+	if err != nil {
+		return "", err
+	}
+	return pkg.Dir, nil
 }
 
 func RemoveAll(f *Flags, path string) error {

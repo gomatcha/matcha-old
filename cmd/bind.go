@@ -13,7 +13,17 @@ import (
 	"path/filepath"
 )
 
-func Bind(flags *Flags, args []string, binaryOnly bool) error {
+func Build(flags *Flags, args []string) error {
+	iosDir, err := PackageDir(flags, "gomatcha.io/matcha/ios")
+	if err != nil {
+		return err
+	}
+	flags.BuildBinary = true
+	flags.BuildO = iosDir
+	return Bind(flags, args)
+}
+
+func Bind(flags *Flags, args []string) error {
 	// Make $WORK.
 	tempdir, err := NewTmpDir(flags, "")
 	if err != nil {
@@ -115,30 +125,30 @@ func Bind(flags *Flags, args []string, binaryOnly bool) error {
 	}
 
 	// Get the supporting files
-	objcPkg, err := ctx.Import("gomatcha.io/matcha/cmd", "", build.FindOnly)
+	cmdPath, err := PackageDir(flags, "gomatcha.io/matcha/cmd")
 	if err != nil {
 		return err
 	}
-	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchaobjc.h"), filepath.Join(objcPkg.Dir, "matchaobjc.h.support")); err != nil {
+	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchaobjc.h"), filepath.Join(cmdPath, "matchaobjc.h.support")); err != nil {
 		return err
 	}
-	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchaobjc.m"), filepath.Join(objcPkg.Dir, "matchaobjc.m.support")); err != nil {
+	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchaobjc.m"), filepath.Join(cmdPath, "matchaobjc.m.support")); err != nil {
 		return err
 	}
-	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchaobjc.go"), filepath.Join(objcPkg.Dir, "matchaobjc.go.support")); err != nil {
+	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchaobjc.go"), filepath.Join(cmdPath, "matchaobjc.go.support")); err != nil {
 		return err
 	}
-	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchago.h"), filepath.Join(objcPkg.Dir, "matchago.h.support")); err != nil {
+	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchago.h"), filepath.Join(cmdPath, "matchago.h.support")); err != nil {
 		return err
 	}
-	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchago.m"), filepath.Join(objcPkg.Dir, "matchago.m.support")); err != nil {
+	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchago.m"), filepath.Join(cmdPath, "matchago.m.support")); err != nil {
 		return err
 	}
-	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchago.go"), filepath.Join(objcPkg.Dir, "matchago.go.support")); err != nil {
+	if err := CopyFile(flags, filepath.Join(bridgeDir, "matchago.go"), filepath.Join(cmdPath, "matchago.go.support")); err != nil {
 		return err
 	}
 
-	if !binaryOnly {
+	if !flags.BuildBinary {
 		// Copy package's ios directory if it imports gomatcha.io/bridge.
 		for _, pkg := range pkgs {
 			importsBridge := false
@@ -167,10 +177,10 @@ func Bind(flags *Flags, args []string, binaryOnly bool) error {
 		}
 
 		// Copy headers into Xcode project.
-		if err = CopyFile(flags, filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "matchaobjc.h"), filepath.Join(objcPkg.Dir, "matchaobjc.h.support")); err != nil {
+		if err = CopyFile(flags, filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "matchaobjc.h"), filepath.Join(cmdPath, "matchaobjc.h.support")); err != nil {
 			return err
 		}
-		if err = CopyFile(flags, filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "matchago.h"), filepath.Join(objcPkg.Dir, "matchago.h.support")); err != nil {
+		if err = CopyFile(flags, filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "matchago.h"), filepath.Join(cmdPath, "matchago.h.support")); err != nil {
 			return err
 		}
 	}
@@ -233,7 +243,7 @@ func Bind(flags *Flags, args []string, binaryOnly bool) error {
 		outputDir = "Matcha-iOS"
 	}
 
-	if !binaryOnly {
+	if !flags.BuildBinary {
 		if err := RemoveAll(flags, outputDir); err != nil {
 			return err
 		}

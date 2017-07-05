@@ -15,7 +15,6 @@ Medium:
 * Only send updated views.
 * Make sure development team isn't packaged with sample app.
 * Have flag that generates a new xcodeproj for easy setup.
-* Rotation
 * Automatically insert copyright notice.
 
 Low:
@@ -39,6 +38,7 @@ Low:
 * StackBar height / hidden
 * Debug constraints.
 * Animations: Spring, Delay, Batch, Reverse, Decay, Repeat, 2d, 3d, Nd
+* Rotation
 * More Touch Recognizers: Pan, Swipe, Pinch, EdgePan, Rotation
 * Table scroll position?
 * Table ScrollBehaviors, Table Direction
@@ -52,6 +52,7 @@ Bugs:
 * Add attribution link to https://icons8.com
 
 Documentation:
+* Build process.
 * animate
 * cmd
 * comm
