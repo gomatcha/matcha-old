@@ -58,7 +58,7 @@ func Bind(flags *Flags, args []string) error {
 	}
 
 	// Check toolchain matches go version.
-	if !bytes.Equal(installedVersion, goVersion) {
+	if !bytes.Equal(installedVersion, goVersion) && flags.ShouldRun() {
 		return errors.New("toolchain out of date, run `gomobile init`")
 	}
 
