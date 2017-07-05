@@ -4,12 +4,13 @@ go get github.com/matcha/matcha/...
 High:
 * Switching quickly between navigation item causes loop. 2 quick backs.
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
-* Build website and documentation.
+* Build website and documentation. Make sure go get "gomatcha.io/..." works.
 * Hide StyledText
 * Automatically insert copyright notice.
 * Only Rebuild MatchaBridge
 
 Medium:
+* Add a Notifyall, and notifyBetween to store.
 * Add tests around core functionality. Store, etc.
 * Why doesn't simulator debugger work? Why does simulator crash all the time?
 * Rebuild settings app, Todo App.
@@ -55,6 +56,7 @@ Documentation:
 * animate
 * cmd
 * comm
+* store
 * docs
 * env
 * examples

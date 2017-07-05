@@ -1,8 +1,6 @@
 package settings
 
 import (
-	"fmt"
-
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/store"

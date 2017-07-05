@@ -71,7 +71,7 @@ for Android.`,
 }
 
 func init() {
-	flags := DevCmd.Flags()
+	flags := InstallCmd.Flags()
 	flags.BoolVar(&buildN, "n", false, "print the commands but do not run them.")
 	flags.BoolVar(&buildX, "x", false, "print the commands.")
 	flags.BoolVar(&buildV, "v", false, "print the names of packages as they are compiled.")
@@ -80,11 +80,11 @@ func init() {
 	flags.StringVar(&buildLdflags, "ldflags", "", "arguments to pass on each go tool link invocation.")
 	flags.StringVar(&buildO, "output", "", "forces build to write the resulting object to the named output file.")
 
-	RootCmd.AddCommand(DevCmd)
+	RootCmd.AddCommand(InstallCmd)
 }
 
-var DevCmd = &cobra.Command{
-	Use:   "dev",
+var InstallCmd = &cobra.Command{
+	Use:   "install",
 	Short: "internal dev command",
 	Long:  ``,
 	Run: func(command *cobra.Command, args []string) {

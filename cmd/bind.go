@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"go/build"
-	"html/template"
 	"io"
 	"io/ioutil"
 	"os"
@@ -14,7 +13,7 @@ import (
 	"path/filepath"
 )
 
-func Bind(flags *Flags, args []string, dev bool) error {
+func Bind(flags *Flags, args []string, install bool) error {
 	// Make $WORK.
 	tempdir, err := NewTmpDir(flags, "")
 	if err != nil {
@@ -92,35 +91,11 @@ func Bind(flags *Flags, args []string, dev bool) error {
 		}
 	}
 
-	// Copy package's ios directory if it imports gomatcha.io/bridge.
-	for _, pkg := range pkgs {
-		importsBridge := false
-		for _, i := range pkg.Imports {
-			if i == "gomatcha.io/bridge" {
-				importsBridge = true
-				break
-			}
-		}
-
-		if importsBridge {
-			files, err := ioutil.ReadDir(pkg.Dir)
-			if err != nil {
-				continue
-			}
-
-			for _, i := range files {
-				if i.IsDir() && i.Name() == "ios" {
-					// Copy directory
-					src := filepath.Join(pkg.Dir, "ios")
-					dst := filepath.Join(workOutputDir)
-					CopyDirContents(flags, dst, src)
-				}
-			}
-		}
-	}
-
 	genDir := filepath.Join(tempdir, "gen")
 	binaryPath := filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "MatchaBridge.a")
+	if err := Mkdir(flags, filepath.Dir(binaryPath)); err != nil {
+		return err
+	}
 
 	// Build the "matcha/bridge" dir
 	bridgeDir := filepath.Join(genDir, "src", "gomatcha.io", "bridge")
@@ -163,57 +138,42 @@ func Bind(flags *Flags, args []string, dev bool) error {
 		return err
 	}
 
-	// title := "MatchaBridge"
-	// frameworkDir := filepath.Join(workOutputDir, "Matcha", title+".framework")
+	if install {
+		// Copy package's ios directory if it imports gomatcha.io/bridge.
+		for _, pkg := range pkgs {
+			importsBridge := false
+			for _, i := range pkg.Imports {
+				if i == "gomatcha.io/bridge" {
+					importsBridge = true
+					break
+				}
+			}
 
-	// Build framework directory structure.
-	// headersDir := filepath.Join(frameworkDir, "Versions", "A", "Headers")
-	// resourcesDir := filepath.Join(frameworkDir, "Versions", "A", "Resources")
-	// modulesDir := filepath.Join(frameworkDir, "Versions", "A", "Modules")
-	// binaryPath := filepath.Join(frameworkDir, "Versions", "A", title+".a")
-	// if err := Mkdir(flags, headersDir); err != nil {
-	// 	return err
-	// }
-	// if err := Mkdir(flags, resourcesDir); err != nil {
-	// 	return err
-	// }
-	// if err := Mkdir(flags, modulesDir); err != nil {
-	// 	return err
-	// }
-	// if err := Symlink(flags, "A", filepath.Join(frameworkDir, "Versions", "Current")); err != nil {
-	// 	return err
-	// }
-	// if err := Symlink(flags, filepath.Join("Versions", "Current", "Headers"), filepath.Join(frameworkDir, "Headers")); err != nil {
-	// 	return err
-	// }
-	// if err := Symlink(flags, filepath.Join("Versions", "Current", "Resources"), filepath.Join(frameworkDir, "Resources")); err != nil {
-	// 	return err
-	// }
-	// if err := Symlink(flags, filepath.Join("Versions", "Current", "Modules"), filepath.Join(frameworkDir, "Modules")); err != nil {
-	// 	return err
-	// }
-	// if err := Symlink(flags, filepath.Join("Versions", "Current", title), filepath.Join(frameworkDir, title)); err != nil {
-	// 	return err
-	// }
+			if importsBridge {
+				files, err := ioutil.ReadDir(pkg.Dir)
+				if err != nil {
+					continue
+				}
 
-	// // Copy in headers.
-	// if err = CopyFile(flags, filepath.Join(headersDir, "matchaobjc.h"), filepath.Join(bridgeDir, "matchaobjc.h")); err != nil {
-	// 	return err
-	// }
-	// if err = CopyFile(flags, filepath.Join(headersDir, "matchago.h"), filepath.Join(bridgeDir, "matchago.h")); err != nil {
-	// 	return err
-	// }
+				for _, i := range files {
+					if i.IsDir() && i.Name() == "ios" {
+						// Copy directory
+						src := filepath.Join(pkg.Dir, "ios")
+						dst := filepath.Join(workOutputDir)
+						CopyDirContents(flags, dst, src)
+					}
+				}
+			}
+		}
 
-	// // Copy in resources.
-	// if err := ioutil.WriteFile(filepath.Join(resourcesDir, "Info.plist"), []byte(InfoPlist), 0666); err != nil {
-	// 	return err
-	// }
-
-	// // Write modulemap.
-	// err = WriteModuleMap(flags, filepath.Join(modulesDir, "module.modulemap"), title)
-	// if err != nil {
-	// 	return err
-	// }
+		// Copy headers into Xcode project.
+		if err = CopyFile(flags, filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "matchaobjc.h"), filepath.Join(objcPkg.Dir, "matchaobjc.h.support")); err != nil {
+			return err
+		}
+		if err = CopyFile(flags, filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "matchago.h"), filepath.Join(objcPkg.Dir, "matchago.h.support")); err != nil {
+			return err
+		}
+	}
 
 	// Build platform binaries concurrently.
 	matchaDarwinArmEnv, err := DarwinArmEnv(flags)
@@ -267,14 +227,6 @@ func Bind(flags *Flags, args []string, dev bool) error {
 		return err
 	}
 
-	// Copy in headers.
-	if err = CopyFile(flags, filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "matchaobjc.h"), filepath.Join(bridgeDir, "matchaobjc.h")); err != nil {
-		return err
-	}
-	if err = CopyFile(flags, filepath.Join(workOutputDir, "MatchaBridge", "MatchaBridge", "matchago.h"), filepath.Join(bridgeDir, "matchago.h")); err != nil {
-		return err
-	}
-
 	// Create output dir
 	outputDir := flags.BuildO
 	if outputDir == "" {
@@ -284,21 +236,19 @@ func Bind(flags *Flags, args []string, dev bool) error {
 		return err
 	}
 
-	// Copy output directory into place.
-	if err := CopyDir(flags, outputDir, workOutputDir); err != nil {
-		return err
+	if install {
+		// Copy output directory into place.
+		if err := CopyDir(flags, outputDir, workOutputDir); err != nil {
+			return err
+		}
+	} else {
+		// Copy binary into place.
+		if err := CopyFile(flags, filepath.Join(outputDir, "MatchaBridge", "MatchaBridge", "MatchaBridge.a"), binaryPath); err != nil {
+			return err
+		}
 	}
-
 	return nil
 }
-
-var InfoPlist = `<?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-      </dict>
-    </plist>
-`
 
 var BindFile = `
 package main
@@ -312,28 +262,3 @@ import "C"
 
 func main() {}
 `
-
-var ModuleMapTemplate = template.Must(template.New("iosmmap").Parse(`framework module "{{.Module}}" {
-    // header "ref.h"
-{{range .Headers}}    header "{{.}}"
-{{end}}
-    export *
-}`))
-
-func WriteModuleMap(flags *Flags, filename string, title string) error {
-	// Write modulemap.
-	var mmVals = struct {
-		Module  string
-		Headers []string
-	}{
-		Module:  title,
-		Headers: []string{"matchaobjc.h", "matchago.h"},
-	}
-	err := WriteFile(flags, filename, func(w io.Writer) error {
-		return ModuleMapTemplate.Execute(w, mmVals)
-	})
-	if err != nil {
-		return err
-	}
-	return nil
-}
