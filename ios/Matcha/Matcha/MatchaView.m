@@ -14,6 +14,7 @@
 #import "MatchaBasicView.h"
 #import "MatchaTextView.h"
 #import "MatchaImageView.h"
+#import "MatchaProgressView.h"
 
 UIGestureRecognizer *MatchaGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MatchaViewNode *viewNode) {
     if ([any.typeURL isEqual:@"type.googleapis.com/matcha.touch.TapRecognizer"]) {
@@ -45,6 +46,8 @@ UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *vi
         child = [[MatchaTextInput alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"gomatcha.io/matcha/view/slider"]) {
         child = [[MatchaSlider alloc] initWithViewNode:viewNode];
+    } else if ([name isEqual:@"gomatcha.io/matcha/view/progressview"]) {
+        child = [[MatchaProgressView alloc] initWithViewNode:viewNode];
     }
     return child;
 }
@@ -79,7 +82,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
         self.view = MatchaViewWithNode(node, self);
         self.viewController = MatchaViewControllerWithNode(node, self);
         if (self.view == nil && self.viewController == nil) {
-            NSLog(@"Cannot find corresponding view or view controller for node:%@", node.nativeViewName);
+            NSLog(@"Cannot find corresponding view or view controller for node: %@", node.nativeViewName);
         }
     }
     

@@ -8,7 +8,6 @@
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;
         [self addTarget:self action: @selector(onChange:) forControlEvents: UIControlEventValueChanged];
-
     }
     return self;
 }

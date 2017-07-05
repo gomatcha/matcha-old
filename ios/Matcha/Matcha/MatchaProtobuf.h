@@ -18,6 +18,7 @@
 #import "Textinput.pbobjc.h"
 #import "Keyboard.pbobjc.h"
 #import "Slider.pbobjc.h"
+#import "ProgressView.pbobjc.h"
 
 @interface UIColor (Matcha)
 - (id)initWithProtobuf:(MatchaPBColor *)value;

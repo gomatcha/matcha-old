@@ -5,7 +5,6 @@ High:
 * Switching quickly between navigation item causes loop. 2 quick backs.
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
 * Build website and documentation. Make sure go get "gomatcha.io/..." works.
-* How do I quickly update objc files?
 
 Medium:
 * Add a Notifyall, and notifyBetween to store.
@@ -29,13 +28,12 @@ Low:
 * GridView
 * Flexbox
 * Picker
-* ProgressBar
 * SegmentedControl
 * AlertView
 * Modal presentation
 * Add preload, and prepreload stages
 * Asset catalog
-* StackBar height / hidden
+* StackBar height / hidden, color
 * Debug constraints.
 * Animations: Spring, Delay, Batch, Reverse, Decay, Repeat, 2d, 3d, Nd
 * Rotation

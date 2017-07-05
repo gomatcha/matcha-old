@@ -17,6 +17,7 @@ import (
 	"gomatcha.io/matcha/view/basicview"
 	"gomatcha.io/matcha/view/button"
 	"gomatcha.io/matcha/view/imageview"
+	"gomatcha.io/matcha/view/progressview"
 	"gomatcha.io/matcha/view/scrollview"
 	"gomatcha.io/matcha/view/slider"
 	"gomatcha.io/matcha/view/switchview"
@@ -34,8 +35,9 @@ func init() {
 
 type NestedView struct {
 	*view.Embed
-	counter int
-	value   animate.Value
+	counter     int
+	sliderValue float64
+	value       animate.Value
 }
 
 func NewNestedView(ctx *view.Context, key string) *NestedView {
@@ -191,17 +193,28 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl12 := slider.New(ctx, "11")
-	chl12.MaxValue = 12
-	chl12.MinValue = 4
-	chl12.Value = 7
+	// chl12.MaxValue = 12
+	// chl12.MinValue = 4
+	// chl12.Value = v.sliderValue
 	chl12.OnValueChange = func(value float64) {
 		fmt.Println("value", value)
+		v.sliderValue = value
+		v.Update()
 	}
 	chl12p := view.WithPainter(chl12, &paint.Style{BackgroundColor: colornames.Blue})
-	_ = l.Add(chl12p, func(s *constraint.Solver) {
+	g12 := l.Add(chl12p, func(s *constraint.Solver) {
 		s.TopEqual(l.Top().Add(50))
 		s.LeftEqual(l.Left())
-		s.Width(75)
+		s.Width(150)
+	})
+
+	chl13 := progressview.New(ctx, "13")
+	chl13.Progress = v.sliderValue
+	chl13.PaintStyle = &paint.Style{BackgroundColor: colornames.White}
+	_ = l.Add(chl13, func(s *constraint.Solver) {
+		s.TopEqual(g12.Bottom().Add(5))
+		s.LeftEqual(l.Left())
+		s.Width(150)
 	})
 
 	return &view.Model{
