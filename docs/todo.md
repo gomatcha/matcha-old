@@ -7,7 +7,6 @@ High:
 * Build website and documentation. Make sure go get "gomatcha.io/..." works.
 * Hide StyledText
 * Automatically insert copyright notice.
-* Only Rebuild MatchaBridge
 
 Medium:
 * Add a Notifyall, and notifyBetween to store.
