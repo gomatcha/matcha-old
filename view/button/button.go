@@ -3,6 +3,7 @@ package button
 import (
 	"gomatcha.io/matcha"
 	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/internal"
 	"gomatcha.io/matcha/layout"
 	"gomatcha.io/matcha/paint"
 	pbbutton "gomatcha.io/matcha/pb/view/button"
@@ -11,7 +12,7 @@ import (
 )
 
 type layouter struct {
-	styledText *text.StyledText
+	styledText *internal.StyledText
 }
 
 func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
@@ -53,7 +54,7 @@ func (v *Button) Build(ctx *view.Context) *view.Model {
 		Size:   20,
 	})
 	t := text.New(v.Text)
-	st := text.NewStyledText(t)
+	st := internal.NewStyledText(t)
 	st.Set(style, 0, 0)
 
 	painter := paint.Painter(nil)

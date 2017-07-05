@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gogo/protobuf/proto"
+	"gomatcha.io/matcha/internal"
 	"gomatcha.io/matcha/keyboard"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/pb/view/textinput"
@@ -41,10 +42,9 @@ func New(ctx *view.Context, key string) *View {
 }
 
 func (v *View) Build(ctx *view.Context) *view.Model {
-	// st := v.StyledText
-	var st *text.StyledText
-	if st == nil {
-		st = text.NewStyledText(v.Text)
+	var st *internal.StyledText
+	if v.Text != nil {
+		st = internal.NewStyledText(v.Text)
 		st.Set(v.Style, 0, 0)
 	}
 

@@ -5,7 +5,6 @@ High:
 * Switching quickly between navigation item causes loop. 2 quick backs.
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
 * Build website and documentation. Make sure go get "gomatcha.io/..." works.
-* Hide StyledText
 * Automatically insert copyright notice.
 
 Medium:

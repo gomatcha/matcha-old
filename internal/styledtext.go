@@ -1,4 +1,4 @@
-package text
+package internal
 
 import (
 	"fmt"
@@ -7,38 +7,39 @@ import (
 	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/layout"
 	pb "gomatcha.io/matcha/pb/layout"
-	"gomatcha.io/matcha/pb/text"
+	pbtext "gomatcha.io/matcha/pb/text"
+	"gomatcha.io/matcha/text"
 )
 
 type StyledText struct {
-	text  *Text
-	style *Style
+	text  *text.Text
+	style *text.Style
 }
 
-func NewStyledText(text *Text) *StyledText {
+func NewStyledText(t *text.Text) *StyledText {
 	return &StyledText{
-		text:  text,
-		style: &Style{},
+		text:  t,
+		style: &text.Style{},
 	}
 }
 
-func (st *StyledText) Text() *Text {
+func (st *StyledText) Text() *text.Text {
 	return st.text
 }
 
-func (st *StyledText) At(a int) *Style {
+func (st *StyledText) At(a int) *text.Style {
 	return nil
 }
 
-func (st *StyledText) Set(s *Style, start, end int) {
+func (st *StyledText) Set(s *text.Style, start, end int) {
 	st.style = s
 }
 
-func (st *StyledText) Update(s *Style, start, end int) {
+func (st *StyledText) Update(s *text.Style, start, end int) {
 }
 
 func (st *StyledText) Size(min layout.Point, max layout.Point) layout.Point {
-	sizeFunc := &text.SizeFunc{
+	sizeFunc := &pbtext.SizeFunc{
 		Text:    st.MarshalProtobuf(),
 		MinSize: min.MarshalProtobuf(),
 		MaxSize: max.MarshalProtobuf(),
@@ -58,11 +59,11 @@ func (st *StyledText) Size(min layout.Point, max layout.Point) layout.Point {
 	return layout.Pt(pbpoint.X, pbpoint.Y)
 }
 
-func (st *StyledText) MarshalProtobuf() *text.StyledText {
+func (st *StyledText) MarshalProtobuf() *pbtext.StyledText {
 	if st == nil {
 		return nil
 	}
-	return &text.StyledText{
+	return &pbtext.StyledText{
 		Text:  st.text.MarshalProtobuf(),
 		Style: st.style.MarshalProtobuf(),
 	}

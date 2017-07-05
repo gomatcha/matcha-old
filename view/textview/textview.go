@@ -3,6 +3,7 @@ package textview
 import (
 	"gomatcha.io/matcha"
 	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/internal"
 	"gomatcha.io/matcha/layout"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/text"
@@ -10,7 +11,7 @@ import (
 )
 
 type layouter struct {
-	styledText *text.StyledText
+	styledText *internal.StyledText
 }
 
 func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
@@ -31,8 +32,8 @@ type View struct {
 	*view.Embed
 	PaintStyle *paint.Style
 	String     string
+	Text       *text.Text
 	Style      *text.Style
-	StyledText *text.StyledText
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -46,12 +47,12 @@ func New(ctx *view.Context, key string) *View {
 }
 
 func (v *View) Build(ctx *view.Context) *view.Model {
-	st := v.StyledText
-	if st == nil {
-		t := text.New(v.String)
-		st = text.NewStyledText(t)
-		st.Set(v.Style, 0, 0)
+	t := v.Text
+	if t == nil {
+		t = text.New(v.String)
 	}
+	st := internal.NewStyledText(t)
+	st.Set(v.Style, 0, 0)
 
 	painter := paint.Painter(nil)
 	if v.PaintStyle != nil {
