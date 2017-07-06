@@ -1,7 +1,10 @@
 package scrollview
 
 import (
+	"fmt"
 	"math"
+
+	"github.com/gogo/protobuf/proto"
 
 	"gomatcha.io/matcha"
 	"gomatcha.io/matcha/comm"
@@ -24,8 +27,17 @@ type ScrollView struct {
 	ScrollEnabled                  bool // TODO(KD): replace with Directions flag
 	ShowsHorizontalScrollIndicator bool // TODO(KD): replace with Directions flag
 	ShowsVerticalScrollIndicator   bool
-	ContentView                    view.View
-	Painter                        paint.Painter
+
+	// DefaultOffset  layout.Point
+	OffsetNotifier layout.PointNotifier
+	OnScroll       func(offset layout.Point)
+
+	// ContentChildren []view.View
+	// ContentPainter
+	// ContentLayour
+
+	ContentView view.View
+	PaintStyle  *paint.Style
 }
 
 func New(ctx *view.Context, key string) *ScrollView {
@@ -47,9 +59,13 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 		children = append(children, v.ContentView)
 	}
 
+	var painter paint.Painter
+	if v.PaintStyle != nil {
+		painter = v.PaintStyle
+	}
 	return &view.Model{
 		Children: children,
-		Painter:  v.Painter,
+		Painter:  painter,
 		Layouter: &layouter{
 			Directions: v.Directions,
 		},
@@ -58,6 +74,23 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 			ScrollEnabled:                  v.ScrollEnabled,
 			ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
 			ShowsVerticalScrollIndicator:   v.ShowsVerticalScrollIndicator,
+			ScrollEvents:                   v.OnScroll != nil,
+		},
+		NativeFuncs: map[string]interface{}{
+			"OnScroll": func(data []byte) {
+				event := &scrollview.ScrollEvent{}
+				err := proto.Unmarshal(data, event)
+				if err != nil {
+					fmt.Println("error", err)
+					return
+				}
+
+				if v.OnScroll != nil {
+					var offset layout.Point
+					(&offset).UnmarshalProtobuf(event.ContentOffset)
+					v.OnScroll(offset)
+				}
+			},
 		},
 	}
 }

@@ -53,7 +53,7 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 	scrollChild.Children = childLayouter.Views()
 
 	scrollView := scrollview.New(ctx, "b")
-	scrollView.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
+	scrollView.PaintStyle = &paint.Style{BackgroundColor: colornames.Cyan}
 	scrollView.ContentView = scrollChild
 	_ = l.Add(scrollView, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))

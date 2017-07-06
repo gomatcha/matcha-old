@@ -27,6 +27,8 @@
 
 CF_EXTERN_C_BEGIN
 
+@class MatchaLayoutPBPoint;
+
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - MatchaScrollViewPBScrollviewRoot
@@ -50,6 +52,7 @@ typedef GPB_ENUM(MatchaScrollViewPBView_FieldNumber) {
   MatchaScrollViewPBView_FieldNumber_ScrollEnabled = 1,
   MatchaScrollViewPBView_FieldNumber_ShowsHorizontalScrollIndicator = 2,
   MatchaScrollViewPBView_FieldNumber_ShowsVerticalScrollIndicator = 3,
+  MatchaScrollViewPBView_FieldNumber_ScrollEvents = 4,
 };
 
 @interface MatchaScrollViewPBView : GPBMessage
@@ -59,6 +62,22 @@ typedef GPB_ENUM(MatchaScrollViewPBView_FieldNumber) {
 @property(nonatomic, readwrite) BOOL showsHorizontalScrollIndicator;
 
 @property(nonatomic, readwrite) BOOL showsVerticalScrollIndicator;
+
+@property(nonatomic, readwrite) BOOL scrollEvents;
+
+@end
+
+#pragma mark - MatchaScrollViewPBScrollEvent
+
+typedef GPB_ENUM(MatchaScrollViewPBScrollEvent_FieldNumber) {
+  MatchaScrollViewPBScrollEvent_FieldNumber_ContentOffset = 1,
+};
+
+@interface MatchaScrollViewPBScrollEvent : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) MatchaLayoutPBPoint *contentOffset;
+/** Test to see if @c contentOffset has been set. */
+@property(nonatomic, readwrite) BOOL hasContentOffset;
 
 @end
 

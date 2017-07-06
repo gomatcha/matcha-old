@@ -10,6 +10,7 @@ import (
 	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/animate"
 	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/layout"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
@@ -183,8 +184,11 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	scrollChild.Children = childLayouter.Views()
 
 	chl10 := scrollview.New(ctx, "10")
-	chl10.Painter = &paint.Style{BackgroundColor: colornames.Cyan}
+	chl10.PaintStyle = &paint.Style{BackgroundColor: colornames.Cyan}
 	chl10.ContentView = scrollChild
+	chl10.OnScroll = func(offset layout.Point) {
+		fmt.Println("scroll", offset)
+	}
 	_ = l.Add(chl10, func(s *constraint.Solver) {
 		s.TopEqual(g4.Bottom())
 		s.LeftEqual(g4.Left())
@@ -193,8 +197,8 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl12 := slider.New(ctx, "11")
-	chl12.MaxValue = 12
-	chl12.MinValue = 4
+	chl12.MaxValue = 1
+	chl12.MinValue = 0
 	chl12.DefaultValue = 0.5
 	chl12.OnValueChange = func(value float64) {
 		v.sliderValue.SetValue(value)

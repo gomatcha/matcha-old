@@ -14,6 +14,7 @@
 #endif
 
  #import "gomatcha.io/matcha/pb/view/scrollview/Scrollview.pbobjc.h"
+ #import "gomatcha.io/matcha/pb/layout/Layout.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -23,8 +24,8 @@
 
 @implementation MatchaScrollViewPBScrollviewRoot
 
-// No extensions in the file and no imports, so no need to generate
-// +extensionRegistry.
+// No extensions in the file and none of the imports (direct or indirect)
+// defined extensions, so no need to generate +extensionRegistry.
 
 @end
 
@@ -50,6 +51,7 @@ static GPBFileDescriptor *MatchaScrollViewPBScrollviewRoot_FileDescriptor(void) 
 @dynamic scrollEnabled;
 @dynamic showsHorizontalScrollIndicator;
 @dynamic showsVerticalScrollIndicator;
+@dynamic scrollEvents;
 
 typedef struct MatchaScrollViewPBView__storage_ {
   uint32_t _has_storage_[1];
@@ -88,6 +90,15 @@ typedef struct MatchaScrollViewPBView__storage_ {
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeBool,
       },
+      {
+        .name = "scrollEvents",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaScrollViewPBView_FieldNumber_ScrollEvents,
+        .hasIndex = 6,
+        .offset = 7,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeBool,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MatchaScrollViewPBView class]
@@ -99,7 +110,55 @@ typedef struct MatchaScrollViewPBView__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\003\001\r\000\002\036\000\003\034\000";
+        "\004\001\r\000\002\036\000\003\034\000\004\014\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - MatchaScrollViewPBScrollEvent
+
+@implementation MatchaScrollViewPBScrollEvent
+
+@dynamic hasContentOffset, contentOffset;
+
+typedef struct MatchaScrollViewPBScrollEvent__storage_ {
+  uint32_t _has_storage_[1];
+  MatchaLayoutPBPoint *contentOffset;
+} MatchaScrollViewPBScrollEvent__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "contentOffset",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaLayoutPBPoint),
+        .number = MatchaScrollViewPBScrollEvent_FieldNumber_ContentOffset,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MatchaScrollViewPBScrollEvent__storage_, contentOffset),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MatchaScrollViewPBScrollEvent class]
+                                     rootClass:[MatchaScrollViewPBScrollviewRoot class]
+                                          file:MatchaScrollViewPBScrollviewRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MatchaScrollViewPBScrollEvent__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\001\001\r\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

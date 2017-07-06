@@ -3,6 +3,7 @@ package layout
 import (
 	"fmt"
 
+	"gomatcha.io/matcha/comm"
 	pb "gomatcha.io/matcha/pb/layout"
 )
 
@@ -78,4 +79,37 @@ func (in *Insets) MarshalProtobuf() *pb.Insets {
 		Bottom: in.Bottom,
 		Right:  in.Right,
 	}
+}
+
+type PointNotifier interface {
+	comm.Notifier
+	Value() Point
+}
+
+type PointValue struct {
+	value Point
+	batch comm.BatchNotifier
+}
+
+func NewPointValue(val Point) *PointValue {
+	v := &PointValue{}
+	v.SetValue(val)
+	return v
+}
+
+func (v *PointValue) Notify(f func()) comm.Id {
+	return v.batch.Notify(f)
+}
+
+func (v *PointValue) Unnotify(id comm.Id) {
+	v.batch.Unnotify(id)
+}
+
+func (v *PointValue) Value() Point {
+	return v.value
+}
+
+func (v *PointValue) SetValue(val Point) {
+	v.value = val
+	v.batch.Update()
 }

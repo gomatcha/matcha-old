@@ -1,5 +1,6 @@
 syntax = "proto3";
 package matcha.view.scrollview;
+import "gomatcha.io/matcha/pb/layout/layout.proto";
 
 option go_package = "scrollview";
 option objc_class_prefix = "MatchaScrollViewPB";
@@ -8,4 +9,9 @@ message View {
   bool scrollEnabled = 1;
   bool showsHorizontalScrollIndicator = 2;
   bool showsVerticalScrollIndicator = 3;
+  bool scrollEvents = 4;
+}
+
+message ScrollEvent {
+    matcha.layout.Point contentOffset = 1;
 }

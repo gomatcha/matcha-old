@@ -32,11 +32,11 @@ type View struct {
 	*view.Embed
 	PaintStyle    *paint.Style
 	DefaultValue  float64
-	Value         float64
+	ValueNotifier comm.Float64Notifier
 	MaxValue      float64
 	MinValue      float64
 	OnValueChange func(value float64)
-	OnSubmit      func(value float64)
+	OnSubmit      func(value float64) // TODO(KD): naming?
 	Enabled       bool
 	initialized   bool
 }
@@ -54,11 +54,13 @@ func New(ctx *view.Context, key string) *View {
 }
 
 func (v *View) Build(ctx *view.Context) *view.Model {
+	val := 0.0
 	if !v.initialized {
 		v.initialized = true
-		if v.Value == 0 {
-			v.Value = v.DefaultValue
-		}
+		val = v.DefaultValue
+	}
+	if v.ValueNotifier != nil {
+		val = v.ValueNotifier.Value()
 	}
 
 	painter := paint.Painter(nil)
@@ -70,7 +72,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		Layouter:       &layouter{},
 		NativeViewName: "gomatcha.io/matcha/view/slider",
 		NativeViewState: &slider.View{
-			Value:    v.Value,
+			Value:    val,
 			MaxValue: v.MaxValue,
 			MinValue: v.MinValue,
 			Enabled:  v.Enabled,
@@ -84,9 +86,8 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 					return
 				}
 
-				v.Value = event.Value
 				if v.OnValueChange != nil {
-					v.OnValueChange(v.Value)
+					v.OnValueChange(event.Value)
 				}
 			},
 			"OnSubmit": func(data []byte) {
@@ -97,9 +98,8 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 					return
 				}
 
-				v.Value = event.Value
 				if v.OnSubmit != nil {
-					v.OnSubmit(v.Value)
+					v.OnSubmit(event.Value)
 				}
 			},
 		},
