@@ -31,12 +31,14 @@ func (l *layouter) Unnotify(id comm.Id) {
 type View struct {
 	*view.Embed
 	PaintStyle    *paint.Style
+	DefaultValue  float64
 	Value         float64
 	MaxValue      float64
 	MinValue      float64
 	OnValueChange func(value float64)
 	OnSubmit      func(value float64)
 	Enabled       bool
+	initialized   bool
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -52,6 +54,13 @@ func New(ctx *view.Context, key string) *View {
 }
 
 func (v *View) Build(ctx *view.Context) *view.Model {
+	if !v.initialized {
+		v.initialized = true
+		if v.Value == 0 {
+			v.Value = v.DefaultValue
+		}
+	}
+
 	painter := paint.Painter(nil)
 	if v.PaintStyle != nil {
 		painter = v.PaintStyle

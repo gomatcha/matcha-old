@@ -1,6 +1,7 @@
 package progressview
 
 import (
+	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/pb/view/progressview"
@@ -9,8 +10,10 @@ import (
 
 type View struct {
 	*view.Embed
-	Progress   float64
-	PaintStyle *paint.Style
+	Progress         float64
+	ProgressNotifier comm.Float64Notifier
+	PaintStyle       *paint.Style
+	progressNotifier comm.Float64Notifier
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -31,6 +34,21 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		s.LeftEqual(l.MaxGuide().Left())
 	})
 
+	if v.ProgressNotifier != v.progressNotifier {
+		if v.progressNotifier != nil {
+			v.Unsubscribe(v.progressNotifier)
+		}
+		if v.ProgressNotifier != nil {
+			v.Subscribe(v.ProgressNotifier)
+		}
+		v.progressNotifier = v.ProgressNotifier
+	}
+
+	val := v.Progress
+	if v.ProgressNotifier != nil {
+		val = v.ProgressNotifier.Value()
+	}
+
 	painter := paint.Painter(nil)
 	if v.PaintStyle != nil {
 		painter = v.PaintStyle
@@ -40,7 +58,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		Layouter:       l,
 		NativeViewName: "gomatcha.io/matcha/view/progressview",
 		NativeViewState: &progressview.View{
-			Progress: v.Progress,
+			Progress: val,
 		},
 	}
 }

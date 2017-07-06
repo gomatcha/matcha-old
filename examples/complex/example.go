@@ -9,6 +9,7 @@ import (
 
 	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/animate"
+	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
@@ -36,7 +37,7 @@ func init() {
 type NestedView struct {
 	*view.Embed
 	counter     int
-	sliderValue float64
+	sliderValue comm.Float64Value
 	value       animate.Value
 }
 
@@ -193,16 +194,11 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl12 := slider.New(ctx, "11")
-	// chl12.MaxValue = 12
-	// chl12.MinValue = 4
-	// chl12.Value = v.sliderValue
-	// chl12.OnValueChange = func(value float64) {
-	// 	v.sliderValue = value
-	// 	v.Update()
-	// }
-	chl12.OnSubmit = func(value float64) {
-		v.sliderValue = value
-		v.Update()
+	chl12.MaxValue = 12
+	chl12.MinValue = 4
+	chl12.DefaultValue = 0.5
+	chl12.OnValueChange = func(value float64) {
+		v.sliderValue.SetValue(value)
 	}
 	chl12p := view.WithPainter(chl12, &paint.Style{BackgroundColor: colornames.Blue})
 	g12 := l.Add(chl12p, func(s *constraint.Solver) {
@@ -212,7 +208,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl13 := progressview.New(ctx, "13")
-	chl13.Progress = v.sliderValue
+	chl13.ProgressNotifier = &v.sliderValue
 	chl13.PaintStyle = &paint.Style{BackgroundColor: colornames.White}
 	_ = l.Add(chl13, func(s *constraint.Solver) {
 		s.TopEqual(g12.Bottom().Add(5))

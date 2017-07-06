@@ -1,39 +1,110 @@
 package comm
 
-// type Interface struct {
-// 	store Store
-// 	value interface{}
-// }
+type InterfaceValue struct {
+	value interface{}
+	batch BatchNotifier
+}
 
-// func (s *Interface) Notify() chan struct{} {
-// 	return s.store.Notify()
-// }
+func (v *InterfaceValue) Notify(f func()) Id {
+	return v.batch.Notify(f)
+}
 
-// func (s *Interface) Unnotify(c chan struct{}) {
-// 	s.store.Unnotify(c)
-// }
+func (v *InterfaceValue) Unnotify(id Id) {
+	v.batch.Unnotify(id)
+}
 
-// func (s *Interface) Value() interface{} {
-// 	return s.Get(nil)
-// }
+func (v *InterfaceValue) Value() interface{} {
+	return v.value
+}
 
-// func (s *Interface) Get(tx *Tx) interface{} {
-// 	if tx == nil {
-// 		tx = NewReadTx()
-// 		defer tx.Commit()
-// 	}
-// 	s.store.Read(tx)
-// 	return s.value
-// }
+func (v *InterfaceValue) SetValue(val interface{}) {
+	v.value = val
+	v.batch.Update()
+}
 
-// func (s *Interface) Set(v interface{}, tx *Tx) {
-// 	if tx == nil {
-// 		tx = NewWriteTx()
-// 		defer tx.Commit()
-// 	}
-// 	s.store.Write(tx)
-// 	s.value = v
-// }
+type BoolValue struct {
+	value bool
+	batch BatchNotifier
+}
+
+func NewBoolValue(val bool) *BoolValue {
+	v := &BoolValue{}
+	v.SetValue(val)
+	return v
+}
+
+func (v *BoolValue) Notify(f func()) Id {
+	return v.batch.Notify(f)
+}
+
+func (v *BoolValue) Unnotify(id Id) {
+	v.batch.Unnotify(id)
+}
+
+func (v *BoolValue) Value() bool {
+	return v.value
+}
+
+func (v *BoolValue) SetValue(val bool) {
+	v.value = val
+	v.batch.Update()
+}
+
+type IntValue struct {
+	value int
+	batch BatchNotifier
+}
+
+func NewIntValue(val int) *IntValue {
+	v := &IntValue{}
+	v.SetValue(val)
+	return v
+}
+
+func (v *IntValue) Notify(f func()) Id {
+	return v.batch.Notify(f)
+}
+
+func (v *IntValue) Unnotify(id Id) {
+	v.batch.Unnotify(id)
+}
+
+func (v *IntValue) Value() int {
+	return v.value
+}
+
+func (v *IntValue) SetValue(val int) {
+	v.value = val
+	v.batch.Update()
+}
+
+type Float64Value struct {
+	value float64
+	batch BatchNotifier
+}
+
+func NewFloat64Value(val float64) *Float64Value {
+	v := &Float64Value{}
+	v.SetValue(val)
+	return v
+}
+
+func (v *Float64Value) Notify(f func()) Id {
+	return v.batch.Notify(f)
+}
+
+func (v *Float64Value) Unnotify(id Id) {
+	v.batch.Unnotify(id)
+}
+
+func (v *Float64Value) Value() float64 {
+	return v.value
+}
+
+func (v *Float64Value) SetValue(val float64) {
+	v.value = val
+	v.batch.Update()
+}
 
 type Value struct {
 	funcs map[Id]func()
@@ -58,80 +129,3 @@ func (s *Value) Signal() {
 		f()
 	}
 }
-
-// // type Int struct{}
-// // type Uint struct{}
-// // type Int64 struct{}
-// // type Uint64 struct{}
-
-// type Float64 struct {
-// 	store Store3
-// 	value float64
-// }
-
-// func (s *Float64) Notify() chan struct{} {
-// 	return s.store.Notify()
-// }
-
-// func (s *Float64) Unnotify(c chan struct{}) {
-// 	s.store.Unnotify(c)
-// }
-
-// func (s *Float64) Value() float64 {
-// 	return s.Get(nil)
-// }
-
-// func (s *Float64) Get(tx *Tx) float64 {
-// 	if tx == nil {
-// 		tx = NewReadTx()
-// 		defer tx.Commit()
-// 	}
-// 	s.store.Read(tx)
-// 	return s.value
-// }
-
-// func (s *Float64) Set(v float64, tx *Tx) {
-// 	if tx == nil {
-// 		tx = NewWriteTx()
-// 		defer tx.Commit()
-// 	}
-// 	s.store.Write(tx)
-// 	s.value = v
-// }
-
-// type String struct {
-// 	store Store3
-// 	value string
-// }
-
-// func (s *String) Notify() chan struct{} {
-// 	return s.store.Notify()
-// }
-
-// func (s *String) Unnotify(c chan struct{}) {
-// 	s.store.Unnotify(c)
-// }
-
-// func (s *String) Value() string {
-// 	return s.Get(nil)
-// }
-
-// func (s *String) Get(tx *Tx) string {
-// 	if tx == nil {
-// 		tx = NewReadTx()
-// 		defer tx.Commit()
-// 	}
-// 	s.store.Read(tx)
-// 	return s.value
-// }
-
-// func (s *String) Set(v string, tx *Tx) {
-// 	if tx == nil {
-// 		tx = NewWriteTx()
-// 		defer tx.Commit()
-// 	}
-// 	s.store.Write(tx)
-// 	s.value = v
-// }
-
-// // type Bytes struct{}

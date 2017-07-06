@@ -12,9 +12,11 @@ import (
 
 type View struct {
 	*view.Embed
+	DefaultValue  bool
 	Value         bool
 	OnValueChange func(value bool)
 	PaintStyle    *paint.Style
+	initialized   bool
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -27,6 +29,13 @@ func New(ctx *view.Context, key string) *View {
 }
 
 func (v *View) Build(ctx *view.Context) *view.Model {
+	if !v.initialized {
+		v.initialized = true
+		if !v.Value {
+			v.Value = v.DefaultValue
+		}
+	}
+
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.HeightEqual(constraint.Const(31))
