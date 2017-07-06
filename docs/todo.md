@@ -15,7 +15,7 @@ Medium:
 * Make sure development team isn't packaged with sample app.
 * Have flag that generates a new xcodeproj for easy setup.
 * Automatically insert copyright notice.
-* Merge/Get rid of comm.Value / comm.BatchNotifier.
+* Rename comm.BatchNotifier?
 
 Low:
 * Collect native resources into assets.

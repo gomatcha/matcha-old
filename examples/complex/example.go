@@ -52,13 +52,12 @@ func NewNestedView(ctx *view.Context, key string) *NestedView {
 
 func (v *NestedView) Lifecycle(from, to view.Stage) {
 	if view.EntersStage(from, to, view.StageVisible) {
-		a := &animate.Basic{}
-		a.SetStart(0)
-		a.SetEnd(1)
-		a.SetDuration(2 * time.Second)
-		a.SetEase(animate.DefaultEase)
-
-		_ = v.value.Run(a, nil)
+		v.value.Run(&animate.Basic{
+			Start: 0,
+			End:   1,
+			Ease:  animate.DefaultEase,
+			Dur:   2 * time.Second,
+		})
 	}
 }
 

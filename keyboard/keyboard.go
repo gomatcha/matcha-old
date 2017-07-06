@@ -59,7 +59,7 @@ func (t ReturnType) MarshalProtobuf() keyboard.ReturnType {
 
 type Responder struct {
 	visible bool
-	value   comm.Value
+	value   comm.BatchNotifier
 }
 
 // func (g *Responder) Next() {
@@ -71,14 +71,14 @@ type Responder struct {
 func (g *Responder) Show() {
 	if !g.visible {
 		g.visible = true
-		g.value.Signal()
+		g.value.Update()
 	}
 }
 
 func (g *Responder) Dismiss() {
 	if g.visible {
 		g.visible = false
-		g.value.Signal()
+		g.value.Update()
 	}
 }
 

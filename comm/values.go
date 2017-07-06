@@ -105,27 +105,3 @@ func (v *Float64Value) SetValue(val float64) {
 	v.value = val
 	v.batch.Update()
 }
-
-type Value struct {
-	funcs map[Id]func()
-	maxId Id
-}
-
-func (s *Value) Notify(f func()) Id {
-	s.maxId += 1
-	if s.funcs == nil {
-		s.funcs = map[Id]func(){}
-	}
-	s.funcs[s.maxId] = f
-	return s.maxId
-}
-
-func (s *Value) Unnotify(id Id) {
-	delete(s.funcs, id)
-}
-
-func (s *Value) Signal() {
-	for _, f := range s.funcs {
-		f()
-	}
-}
