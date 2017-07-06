@@ -4,7 +4,6 @@ import (
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/view"
-	"gomatcha.io/matcha/view/basicview"
 	"gomatcha.io/matcha/view/scrollview"
 )
 
@@ -24,12 +23,9 @@ func (v *CellularView) Build(ctx *view.Context) *view.Model {
 	l := &table.Layouter{}
 	chlds := []view.View{}
 
-	scrollChild := basicview.New(ctx, "a")
-	scrollChild.Layouter = l
-	scrollChild.Children = chlds
-
 	scrollView := scrollview.New(ctx, "b")
-	scrollView.ContentView = scrollChild
+	scrollView.ContentLayouter = l
+	scrollView.ContentChildren = chlds
 
 	return &view.Model{
 		Children: []view.View{scrollView},

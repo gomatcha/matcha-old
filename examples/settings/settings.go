@@ -129,11 +129,6 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 			v.app.Lock()
 			defer v.app.Unlock()
 			v.app.SetAirplaneMode(value)
-
-			// v.app.Write(func (a *App) *App {
-			// 	a.AirplaneMode = true
-			// 	return a
-			// })
 		}
 		cell1 := NewBasicCell(ctx, "airplane")
 		cell1.Title = "Airplane Mode"
@@ -249,12 +244,9 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 		}
 	}
 
-	scrollChild := basicview.New(ctx, "scrollChild")
-	scrollChild.Layouter = l
-	scrollChild.Children = l.Views()
-
 	scrollView := scrollview.New(ctx, "scrollView")
-	scrollView.ContentView = scrollChild
+	scrollView.ContentChildren = l.Views()
+	scrollView.ContentLayouter = l
 
 	return &view.Model{
 		Children: []view.View{scrollView},

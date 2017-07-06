@@ -5,7 +5,6 @@ import (
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/view"
-	"gomatcha.io/matcha/view/basicview"
 	"gomatcha.io/matcha/view/scrollview"
 	"gomatcha.io/matcha/view/switchview"
 )
@@ -169,12 +168,9 @@ func (v *BluetoothView) Build(ctx *view.Context) *view.Model {
 		}
 	}
 
-	scrollChild := basicview.New(ctx, "a")
-	scrollChild.Layouter = l
-	scrollChild.Children = l.Views()
-
 	scrollView := scrollview.New(ctx, "b")
-	scrollView.ContentView = scrollChild
+	scrollView.ContentLayouter = l
+	scrollView.ContentChildren = l.Views()
 
 	return &view.Model{
 		Children: []view.View{scrollView},

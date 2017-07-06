@@ -12,6 +12,7 @@ import (
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/pb/view/scrollview"
 	"gomatcha.io/matcha/view"
+	"gomatcha.io/matcha/view/basicview"
 )
 
 type Direction int
@@ -32,12 +33,10 @@ type ScrollView struct {
 	OffsetNotifier layout.PointNotifier
 	OnScroll       func(offset layout.Point)
 
-	// ContentChildren []view.View
-	// ContentPainter
-	// ContentLayour
-
-	ContentView view.View
-	PaintStyle  *paint.Style
+	ContentChildren []view.View
+	ContentPainter  paint.Painter
+	ContentLayouter layout.Layouter
+	PaintStyle      *paint.Style
 }
 
 func New(ctx *view.Context, key string) *ScrollView {
@@ -54,17 +53,17 @@ func New(ctx *view.Context, key string) *ScrollView {
 }
 
 func (v *ScrollView) Build(ctx *view.Context) *view.Model {
-	children := []view.View{}
-	if v.ContentView != nil {
-		children = append(children, v.ContentView)
-	}
+	child := basicview.New(ctx, "child")
+	child.Children = v.ContentChildren
+	child.Layouter = v.ContentLayouter
+	child.Painter = v.ContentPainter
 
 	var painter paint.Painter
 	if v.PaintStyle != nil {
 		painter = v.PaintStyle
 	}
 	return &view.Model{
-		Children: children,
+		Children: []view.View{child},
 		Painter:  painter,
 		Layouter: &layouter{
 			Directions: v.Directions,

@@ -178,14 +178,11 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		childLayouter.Add(childView, nil)
 	}
 
-	scrollChild := basicview.New(ctx, "9")
-	scrollChild.Painter = &paint.Style{BackgroundColor: colornames.White}
-	scrollChild.Layouter = childLayouter
-	scrollChild.Children = childLayouter.Views()
-
 	chl10 := scrollview.New(ctx, "10")
 	chl10.PaintStyle = &paint.Style{BackgroundColor: colornames.Cyan}
-	chl10.ContentView = scrollChild
+	chl10.ContentPainter = &paint.Style{BackgroundColor: colornames.White}
+	chl10.ContentLayouter = childLayouter
+	chl10.ContentChildren = childLayouter.Views()
 	chl10.OnScroll = func(offset layout.Point) {
 		fmt.Println("scroll", offset)
 	}

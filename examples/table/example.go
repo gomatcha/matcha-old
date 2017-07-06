@@ -10,7 +10,6 @@ import (
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/text"
 	"gomatcha.io/matcha/view"
-	"gomatcha.io/matcha/view/basicview"
 	"gomatcha.io/matcha/view/scrollview"
 	"gomatcha.io/matcha/view/textview"
 )
@@ -47,14 +46,11 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 		childLayouter.Add(childView, nil)
 	}
 
-	scrollChild := basicview.New(ctx, "a")
-	scrollChild.Painter = &paint.Style{BackgroundColor: colornames.White}
-	scrollChild.Layouter = childLayouter
-	scrollChild.Children = childLayouter.Views()
-
 	scrollView := scrollview.New(ctx, "b")
 	scrollView.PaintStyle = &paint.Style{BackgroundColor: colornames.Cyan}
-	scrollView.ContentView = scrollChild
+	scrollView.ContentPainter = &paint.Style{BackgroundColor: colornames.White}
+	scrollView.ContentLayouter = childLayouter
+	scrollView.ContentChildren = childLayouter.Views()
 	_ = l.Add(scrollView, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))

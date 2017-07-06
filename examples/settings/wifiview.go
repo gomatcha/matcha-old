@@ -5,7 +5,6 @@ import (
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/view"
-	"gomatcha.io/matcha/view/basicview"
 	"gomatcha.io/matcha/view/scrollview"
 	"gomatcha.io/matcha/view/stackscreen"
 	"gomatcha.io/matcha/view/switchview"
@@ -205,12 +204,9 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 		}
 	}
 
-	scrollChild := basicview.New(ctx, "scrollChild")
-	scrollChild.Layouter = l
-	scrollChild.Children = l.Views()
-
 	scrollView := scrollview.New(ctx, "scroll")
-	scrollView.ContentView = scrollChild
+	scrollView.ContentChildren = l.Views()
+	scrollView.ContentLayouter = l
 
 	return &view.Model{
 		Children: []view.View{scrollView},
