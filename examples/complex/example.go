@@ -196,8 +196,11 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	// chl12.MaxValue = 12
 	// chl12.MinValue = 4
 	// chl12.Value = v.sliderValue
-	chl12.OnValueChange = func(value float64) {
-		fmt.Println("value", value)
+	// chl12.OnValueChange = func(value float64) {
+	// 	v.sliderValue = value
+	// 	v.Update()
+	// }
+	chl12.OnSubmit = func(value float64) {
 		v.sliderValue = value
 		v.Update()
 	}

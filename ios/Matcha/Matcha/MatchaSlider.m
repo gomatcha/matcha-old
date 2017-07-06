@@ -6,7 +6,7 @@
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;
-        [self addTarget:self action: @selector(onChange:) forControlEvents: UIControlEventValueChanged];
+        [self addTarget:self action:@selector(onChange:forEvent:) forControlEvents:UIControlEventValueChanged];
         
     }
     return self;
@@ -25,7 +25,7 @@
     }
 }
 
-- (void)onChange:(id)sender {
+- (void)onChange:(id)sender forEvent:(UIEvent *)e {
     MatchaSliderPbEvent *event = [[MatchaSliderPbEvent alloc] init];
     event.value = self.value;
     
@@ -33,6 +33,11 @@
     MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:data];
     
     [self.viewNode.rootVC call:@"OnValueChange" viewId:self.node.identifier.longLongValue args:@[value]];
+    
+    UITouch *touchEvent = [[e allTouches] anyObject];
+    if (touchEvent.phase == UITouchPhaseEnded) {
+        [self.viewNode.rootVC call:@"OnSubmit" viewId:self.node.identifier.longLongValue args:@[value]];
+    }
 }
 
 @end

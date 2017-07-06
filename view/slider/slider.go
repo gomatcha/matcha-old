@@ -35,6 +35,7 @@ type View struct {
 	MaxValue      float64
 	MinValue      float64
 	OnValueChange func(value float64)
+	OnSubmit      func(value float64)
 	Enabled       bool
 }
 
@@ -77,6 +78,19 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 				v.Value = event.Value
 				if v.OnValueChange != nil {
 					v.OnValueChange(v.Value)
+				}
+			},
+			"OnSubmit": func(data []byte) {
+				event := &slider.Event{}
+				err := proto.Unmarshal(data, event)
+				if err != nil {
+					fmt.Println("error", err)
+					return
+				}
+
+				v.Value = event.Value
+				if v.OnSubmit != nil {
+					v.OnSubmit(v.Value)
 				}
 			},
 		},

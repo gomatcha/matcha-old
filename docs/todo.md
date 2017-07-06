@@ -77,6 +77,7 @@ Documentation:
     * textinput
     * textview
     * urlimageview
+    * progressview
 
 Pro:
 * Debugging
