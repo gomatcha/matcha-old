@@ -19,7 +19,7 @@ Medium:
 
 Low:
 * Collect native resources into assets.
-* Support StyledText in textinput and textview.
+* StyledText
 * Support more flags in matcha command.
 * Updating a tabscreen or stackscreen should not trigger a rebuild of its children.
 * Webview

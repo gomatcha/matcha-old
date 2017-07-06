@@ -7,9 +7,11 @@ import (
 	"github.com/gogo/protobuf/proto"
 
 	"gomatcha.io/matcha"
+	"gomatcha.io/matcha/animate"
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/layout"
 	"gomatcha.io/matcha/paint"
+	pblayout "gomatcha.io/matcha/pb/layout"
 	"gomatcha.io/matcha/pb/view/scrollview"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/basicview"
@@ -29,9 +31,8 @@ type ScrollView struct {
 	ShowsHorizontalScrollIndicator bool // TODO(KD): replace with Directions flag
 	ShowsVerticalScrollIndicator   bool
 
-	// DefaultOffset  layout.Point
-	OffsetNotifier layout.PointNotifier
-	OnScroll       func(offset layout.Point)
+	ScrollPosition *ScrollPosition
+	OnScroll       func(position layout.Point)
 
 	ContentChildren []view.View
 	ContentPainter  paint.Painter
@@ -58,6 +59,12 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 	child.Layouter = v.ContentLayouter
 	child.Painter = v.ContentPainter
 
+	var offset *pblayout.Point
+	if v.ScrollPosition != nil {
+		point := v.ScrollPosition.Value()
+		offset = (&point).MarshalProtobuf()
+	}
+
 	var painter paint.Painter
 	if v.PaintStyle != nil {
 		painter = v.PaintStyle
@@ -74,6 +81,7 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 			ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
 			ShowsVerticalScrollIndicator:   v.ShowsVerticalScrollIndicator,
 			ScrollEvents:                   v.OnScroll != nil,
+			ContentOffset:                  offset,
 		},
 		NativeFuncs: map[string]interface{}{
 			"OnScroll": func(data []byte) {
@@ -124,4 +132,45 @@ func (l *layouter) Notify(f func()) comm.Id {
 
 func (l *layouter) Unnotify(id comm.Id) {
 	// no-op
+}
+
+type ScrollPosition struct {
+	X           animate.Value
+	Y           animate.Value
+	batch       comm.BatchNotifier
+	initialized bool
+}
+
+func (p *ScrollPosition) initialize() {
+	if p.initialized {
+		return
+	}
+	p.initialized = true
+	p.batch.Subscribe(&p.X)
+	p.batch.Subscribe(&p.Y)
+}
+
+func (p *ScrollPosition) Notify(f func()) comm.Id {
+	p.initialize()
+	return p.batch.Notify(f)
+}
+
+func (p *ScrollPosition) Unnotify(id comm.Id) {
+	p.initialize()
+	p.batch.Unnotify(id)
+}
+
+func (p *ScrollPosition) Value() layout.Point {
+	return layout.Pt(p.X.Value(), p.Y.Value())
+}
+
+func (p *ScrollPosition) SetValue(val layout.Point) {
+	p.X.SetValue(val.X)
+	p.Y.SetValue(val.Y)
+}
+
+func (p *ScrollPosition) ScrollToPoint(val layout.Point) {
+}
+
+func (p *ScrollPosition) ScrollToChild(id comm.Id) {
 }

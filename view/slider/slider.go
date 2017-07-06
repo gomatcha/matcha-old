@@ -32,7 +32,7 @@ type View struct {
 	*view.Embed
 	PaintStyle    *paint.Style
 	DefaultValue  float64
-	ValueNotifier comm.Float64Notifier
+	Value         *comm.Float64Value
 	MaxValue      float64
 	MinValue      float64
 	OnValueChange func(value float64)
@@ -59,8 +59,8 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		v.initialized = true
 		val = v.DefaultValue
 	}
-	if v.ValueNotifier != nil {
-		val = v.ValueNotifier.Value()
+	if v.Value != nil {
+		val = v.Value.Value()
 	}
 
 	painter := paint.Painter(nil)

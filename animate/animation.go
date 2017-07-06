@@ -26,6 +26,13 @@ func (v *Value) Value() float64 {
 	return v.value
 }
 
+func (v *Value) SetValue(val float64) {
+	v.setValue(val)
+	if v.animation != nil {
+		v.animation.cancel()
+	}
+}
+
 func (v *Value) setValue(val float64) {
 	v.value = val
 	v.batch.Update()
