@@ -10,7 +10,6 @@ message View {
   bool showsHorizontalScrollIndicator = 2;
   bool showsVerticalScrollIndicator = 3;
   bool scrollEvents = 4;
-  matcha.layout.Point contentOffset = 5;
 }
 
 message ScrollEvent {

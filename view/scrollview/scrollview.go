@@ -11,7 +11,6 @@ import (
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/layout"
 	"gomatcha.io/matcha/paint"
-	pblayout "gomatcha.io/matcha/pb/layout"
 	"gomatcha.io/matcha/pb/view/scrollview"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/basicview"
@@ -59,10 +58,9 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 	child.Layouter = v.ContentLayouter
 	child.Painter = v.ContentPainter
 
-	var offset *pblayout.Point
+	var position layout.Point
 	if v.ScrollPosition != nil {
-		point := v.ScrollPosition.Value()
-		offset = (&point).MarshalProtobuf()
+		position = v.ScrollPosition.Value()
 	}
 
 	var painter paint.Painter
@@ -73,7 +71,8 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 		Children: []view.View{child},
 		Painter:  painter,
 		Layouter: &layouter{
-			Directions: v.Directions,
+			directions: v.Directions,
+			position:   position,
 		},
 		NativeViewName: "gomatcha.io/matcha/view/scrollview",
 		NativeViewState: &scrollview.View{
@@ -81,7 +80,6 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 			ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
 			ShowsVerticalScrollIndicator:   v.ShowsVerticalScrollIndicator,
 			ScrollEvents:                   v.OnScroll != nil,
-			ContentOffset:                  offset,
 		},
 		NativeFuncs: map[string]interface{}{
 			"OnScroll": func(data []byte) {
@@ -95,6 +93,9 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 				if v.OnScroll != nil {
 					var offset layout.Point
 					(&offset).UnmarshalProtobuf(event.ContentOffset)
+					if v.ScrollPosition != nil {
+						v.ScrollPosition.SetValue(offset)
+					}
 					v.OnScroll(offset)
 				}
 			},
@@ -103,24 +104,25 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 }
 
 type layouter struct {
-	Directions Direction
+	directions Direction
+	position   layout.Point
 }
 
 func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
 	gs := map[matcha.Id]layout.Guide{}
-	if len(ctx.ChildIds) > 0 {
-		minSize := ctx.MinSize
-		if l.Directions&Horizontal == Horizontal {
-			minSize.X = 0
-		}
-		if l.Directions&Vertical == Vertical {
-			minSize.Y = 0
-		}
 
-		g := ctx.LayoutChild(ctx.ChildIds[0], minSize, layout.Pt(math.Inf(1), math.Inf(1)))
-		g.Frame = g.Frame.Add(layout.Pt(-g.Frame.Min.X, -g.Frame.Min.Y))
-		gs[ctx.ChildIds[0]] = g
+	minSize := ctx.MinSize
+	if l.directions&Horizontal == Horizontal {
+		minSize.X = 0
 	}
+	if l.directions&Vertical == Vertical {
+		minSize.Y = 0
+	}
+
+	g := ctx.LayoutChild(ctx.ChildIds[0], minSize, layout.Pt(math.Inf(1), math.Inf(1)))
+	g.Frame = layout.Rt(-l.position.X, -l.position.Y, g.Width()-l.position.X, g.Height()-l.position.Y)
+	gs[ctx.ChildIds[0]] = g
+
 	return layout.Guide{
 		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}, gs
@@ -165,6 +167,9 @@ func (p *ScrollPosition) Value() layout.Point {
 }
 
 func (p *ScrollPosition) SetValue(val layout.Point) {
+	if val == p.Value() {
+		return
+	}
 	p.X.SetValue(val.X)
 	p.Y.SetValue(val.Y)
 }

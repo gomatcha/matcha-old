@@ -9,7 +9,6 @@ High:
 Medium:
 * Add a Notifyall, and notifyBetween to store.
 * Add tests around core functionality. Store, etc.
-* Why doesn't simulator debugger work? Why does simulator crash all the time?
 * Rebuild settings app, Todo App.
 * Only send updated views.
 * Make sure development team isn't packaged with sample app.

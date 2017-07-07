@@ -2,12 +2,6 @@
 #import "MatchaProtobuf.h"
 #import "MatchaViewController.h"
 
-@interface MatchaScrollView () <UIScrollViewDelegate>
-@property (nonatomic, weak) MatchaViewNode *viewNode;
-@property (nonatomic, strong) MatchaNode *node;
-@property (nonatomic, assign) BOOL scrollEvents;
-@end
-
 @implementation MatchaScrollView
 
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {

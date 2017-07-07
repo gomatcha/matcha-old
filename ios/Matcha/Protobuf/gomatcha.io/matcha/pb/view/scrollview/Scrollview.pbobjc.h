@@ -53,7 +53,6 @@ typedef GPB_ENUM(MatchaScrollViewPBView_FieldNumber) {
   MatchaScrollViewPBView_FieldNumber_ShowsHorizontalScrollIndicator = 2,
   MatchaScrollViewPBView_FieldNumber_ShowsVerticalScrollIndicator = 3,
   MatchaScrollViewPBView_FieldNumber_ScrollEvents = 4,
-  MatchaScrollViewPBView_FieldNumber_ContentOffset = 5,
 };
 
 @interface MatchaScrollViewPBView : GPBMessage
@@ -65,10 +64,6 @@ typedef GPB_ENUM(MatchaScrollViewPBView_FieldNumber) {
 @property(nonatomic, readwrite) BOOL showsVerticalScrollIndicator;
 
 @property(nonatomic, readwrite) BOOL scrollEvents;
-
-@property(nonatomic, readwrite, strong, null_resettable) MatchaLayoutPBPoint *contentOffset;
-/** Test to see if @c contentOffset has been set. */
-@property(nonatomic, readwrite) BOOL hasContentOffset;
 
 @end
 

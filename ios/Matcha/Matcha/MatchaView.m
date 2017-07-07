@@ -225,8 +225,22 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
             }
         }
         
-        // let view controllers do their own layout
-        if (self.parent.viewController == nil) {
+        
+        if ([self.parent.view isKindOfClass:[MatchaScrollView class]]) {
+            MatchaScrollView *scrollView = (MatchaScrollView *)self.parent.view;
+            bool scrollEvents = scrollView.scrollEvents;
+            scrollView.scrollEvents = false;
+            
+            CGRect frame = node.guide.frame;
+            frame.origin = CGPointZero;
+            self.materializedView.frame = frame;
+            self.materializedView.autoresizingMask = UIViewAutoresizingNone;
+            [scrollView setContentOffset:node.guide.frame.origin];
+            
+            scrollView.scrollEvents = scrollEvents;
+            
+        } else if (self.parent.viewController == nil) {
+            // let view controllers do their own layout
             self.materializedView.frame = node.guide.frame;
             self.materializedView.autoresizingMask = UIViewAutoresizingNone;
         }
