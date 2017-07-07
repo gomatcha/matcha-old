@@ -1,6 +1,3 @@
-// matcha.Id is in the matcha package because view depends on layout. and layout needs to use the Ids
-go get github.com/matcha/matcha/...
-
 High:
 * Switching quickly between navigation item causes loop. 2 quick backs.
 * How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
@@ -11,37 +8,39 @@ Medium:
 * Rebuild settings app, Todo App.
 * Only send updated views.
 * Make sure development team isn't packaged with sample app.
+* Table scroll position?
 
 Low:
-* Have flag that generates a new xcodeproj for easy setup.
+* Have matcha flag that generates a new xcodeproj for easy setup.
 * Add tests around core functionality. Store, etc.
 * Automatically insert copyright notice.
-* Collect native resources into assets.
 * StyledText
-* Support more flags in matcha command.
 * Updating a tabscreen or stackscreen should not trigger a rebuild of its children.
 * Webview
 * Localization
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
 * Constraints should force views onto pixel boundries
-* GridView
 * Flexbox
 * Picker
 * TextField
 * SegmentedControl
 * AlertView
 * Modal presentation
-* Add preload, and prepreload stages
 * Asset catalog
 * StackBar height / hidden, color
-* Debug constraints.
-* Animations: Spring, Delay, Batch, Reverse, Decay, Repeat, 2d, 3d, Nd
+* Animations: Spring, Delay, Batch, Reverse, Decay, Repeat
 * Rotation
 * More Touch Recognizers: Pan, Swipe, Pinch, EdgePan, Rotation
-* Table scroll position?
 * Table ScrollBehaviors, Table Direction
 * Custom painters.
+
+Very Low:
 * View 3d transforms.
+* GridView
+* Add preload, and prepreload stages
+* Debug constraints.
+* Collect native resources into assets.
+
 
 Bugs:
 * Crash in protobuf if view does not have a layout guide.

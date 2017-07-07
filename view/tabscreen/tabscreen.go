@@ -93,7 +93,7 @@ func (v *tabView) Build(ctx *view.Context) *view.Model {
 			}
 		}
 
-		v.Subscribe(chld) // TODO(KD): Don't reload entire tab view when a single child updates.
+		v.Subscribe(chld)
 		v.children = append(v.children, chld)
 		screenspb = append(screenspb, &tabnavpb.ChildView{
 			Id:           int64(chld.Id()),

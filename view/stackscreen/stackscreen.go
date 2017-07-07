@@ -109,7 +109,7 @@ func (v *stackView) Build(ctx *view.Context) *view.Model {
 			s.HeightEqual(constraint.Const(44))
 		})
 
-		v.Subscribe(chld) // TODO(KD): Don't reload entire tab view when a single child updates.
+		v.Subscribe(chld)
 		v.children = append(v.children, chld)
 		childrenPb = append(childrenPb, &stacknav.ChildView{
 			ViewId: int64(chld.Id()),

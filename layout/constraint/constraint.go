@@ -294,7 +294,6 @@ func (g *Guide) Solve(solveFunc func(*Solver)) {
 	}
 }
 
-// TODO(KD): remove support for adding directly to guides.
 func (g *Guide) add(v view.View, solveFunc func(*Solver)) *Guide {
 	id := v.Id()
 	chl := &Guide{

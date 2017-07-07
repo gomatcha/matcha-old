@@ -32,7 +32,7 @@ func NewWifiStore() *WifiStore {
 
 func (s *WifiStore) SetWifi(v Wifi) {
 	for _, i := range s.wifi.Networks {
-		s.Delete(i.Network().SSID) // TODO(KD): What if SSID of the network changes? do we want to prevent that somehow?
+		s.Delete(i.Network().SSID)
 	}
 	for _, i := range v.Networks {
 		s.Set(i.Network().SSID, i)
