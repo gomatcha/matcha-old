@@ -8,15 +8,15 @@ High:
 
 Medium:
 * Add a Notifyall, and notifyBetween to store.
-* Add tests around core functionality. Store, etc.
 * Rebuild settings app, Todo App.
 * Only send updated views.
 * Make sure development team isn't packaged with sample app.
-* Have flag that generates a new xcodeproj for easy setup.
-* Automatically insert copyright notice.
 * Rename comm.BatchNotifier?
 
 Low:
+* Have flag that generates a new xcodeproj for easy setup.
+* Add tests around core functionality. Store, etc.
+* Automatically insert copyright notice.
 * Collect native resources into assets.
 * StyledText
 * Support more flags in matcha command.
@@ -41,6 +41,8 @@ Low:
 * More Touch Recognizers: Pan, Swipe, Pinch, EdgePan, Rotation
 * Table scroll position?
 * Table ScrollBehaviors, Table Direction
+* Custom painters.
+* View 3d transforms.
 
 Bugs:
 * Crash in protobuf if view does not have a layout guide.
@@ -59,11 +61,7 @@ Documentation:
 * docs
 * env
 * examples
-* ios
-* keyboard
 * layout
-    * constraint
-* paint
 * text
 * touch
 * view 

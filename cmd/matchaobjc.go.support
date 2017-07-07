@@ -24,26 +24,26 @@ type Value struct {
     ref int64
 }
 
-func NewValue(ref C.ObjcRef) *Value {
+func newValue(ref C.ObjcRef) *Value {
     v := &Value{ ref: int64(ref) }
     if ref != 0 {
         runtime.SetFinalizer(v, func(a *Value) {
-            C.MatchaUntrackObjc(a.Ref())  
+            C.MatchaUntrackObjc(a.ref())  
         })
     }
     return v
 }
 
-func (v *Value)Ref() C.ObjcRef {
+func (v *Value)ref() C.ObjcRef {
     return C.ObjcRef(v.ref)
 }
 
 func Bridge() *Value {
-    return NewValue(C.MatchaObjcBridge_())
+    return newValue(C.MatchaObjcBridge_())
 }
 
 func Nil() *Value {
-    return NewValue(C.ObjcRef(0))
+    return newValue(C.ObjcRef(0))
 }
 
 func (v *Value)IsNil() bool {
@@ -51,86 +51,86 @@ func (v *Value)IsNil() bool {
 }
 
 func Bool(v bool) *Value {
-    return NewValue(C.MatchaObjcBool(C.bool(v)))
+    return newValue(C.MatchaObjcBool(C.bool(v)))
 }
 
 func (v *Value)ToBool() bool {
     defer runtime.KeepAlive(v)
-    return bool(C.MatchaObjcToBool(v.Ref()))
+    return bool(C.MatchaObjcToBool(v.ref()))
 }
 
 func Int64(v int64) *Value {
-    return NewValue(C.MatchaObjcInt64(C.int64_t(v)))
+    return newValue(C.MatchaObjcInt64(C.int64_t(v)))
 }
 
 func (v *Value)ToInt64() int64 {
     defer runtime.KeepAlive(v)
-    return int64(C.MatchaObjcToInt64(v.Ref()))
+    return int64(C.MatchaObjcToInt64(v.ref()))
 }
 
 func Float64(v float64) *Value {
-    return NewValue(C.MatchaObjcFloat64(C.double(v)))
+    return newValue(C.MatchaObjcFloat64(C.double(v)))
 }
 
 func (v *Value)ToFloat64() float64 {
     defer runtime.KeepAlive(v)
-    return float64(C.MatchaObjcToFloat64(v.Ref()))
+    return float64(C.MatchaObjcToFloat64(v.ref()))
 }
 
 func String(v string) *Value {
     cstr := cString(v)
-    return NewValue(C.MatchaObjcString(cstr));
+    return newValue(C.MatchaObjcString(cstr));
 }
 
 func (v *Value)ToString() string {
     defer runtime.KeepAlive(v)
-    buf := C.MatchaObjcToString(v.Ref())
+    buf := C.MatchaObjcToString(v.ref())
     return goString(buf)
 }
 
 func Bytes(v []byte) *Value {
     cbytes := cBytes(v)
-    return NewValue(C.MatchaObjcBytes(cbytes))
+    return newValue(C.MatchaObjcBytes(cbytes))
 }
 
 func (v *Value)ToBytes() []byte {
     defer runtime.KeepAlive(v)
-    buf := C.MatchaObjcToBytes(v.Ref())
+    buf := C.MatchaObjcToBytes(v.ref())
     return goBytes(buf)
 }
 
 func Interface(v interface{}) *Value {
     rv := reflect.ValueOf(v)
-    return NewValue(C.MatchaObjcGoRef(matchaGoTrack(rv)))
+    return newValue(C.MatchaObjcGoRef(matchaGoTrack(rv)))
 }
 
 func (v *Value)ToInterface() interface{} {
     defer runtime.KeepAlive(v)
-    return matchaGoGet(C.MatchaObjcToGoRef(v.Ref())).Interface()
+    return matchaGoGet(C.MatchaObjcToGoRef(v.ref())).Interface()
 }
 
 func Array(a ...*Value) *Value {
     ref := C.MatchaObjcArray()
-    array := NewValue(ref);
+    array := newValue(ref);
     for _, i := range a {
-        C.MatchaObjcArrayAppend(ref, i.Ref())
+        C.MatchaObjcArrayAppend(ref, i.ref())
     }
     return array
 }
 
 func (v *Value)ToArray() []*Value {
     defer runtime.KeepAlive(v)
-    ref := v.Ref()
-    length := int64(C.MatchaObjcArrayLen(v.Ref()))
+    ref := v.ref()
+    length := int64(C.MatchaObjcArrayLen(v.ref()))
     slice := make([]*Value, length)
     for i := int64(0); i < length; i++ {
-        slice[i] = NewValue(C.MatchaObjcArrayAt(ref, C.int64_t(i)))
+        slice[i] = newValue(C.MatchaObjcArrayAt(ref, C.int64_t(i)))
     }
     return slice
 }
 
 func callSentinel() *Value {
-    return NewValue(C.MatchaObjcCallSentinel())
+    return newValue(C.MatchaObjcCallSentinel())
 }
 
 // Call accepts `nil` in its variadic arguments
@@ -150,7 +150,7 @@ func (v *Value)Call(s string, args ...*Value) *Value {
         defer runtime.KeepAlive(argsValue)
     }
     
-    return NewValue(C.MatchaObjcCall(v.Ref(), cString(s), argsValue.Ref()))
+    return newValue(C.MatchaObjcCall(v.ref(), cString(s), argsValue.ref()))
 }
 
 func cBytes(v []byte) C.CGoBuffer {

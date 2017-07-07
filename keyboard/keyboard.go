@@ -1,3 +1,15 @@
+// Package keyboard exposes access to displaying and hiding the keyboard.
+//  input := textinput.New(ctx, "input")
+//  input.Text = v.text
+//  input.KeyboardType = keyboard.URLType
+//  input.KeyboardAppearance = keyboard.DarkAppearance
+//  input.KeyboardReturnType = keyboard.GoogleReturnType
+//  input.Responder = v.responder
+//
+//  button := ...
+//  button.OnTap = func() {
+//  	v.responder.Dismiss()
+//  }
 package keyboard
 
 import (
@@ -5,30 +17,45 @@ import (
 	"gomatcha.io/matcha/pb/keyboard"
 )
 
+// Type defines the kind of keyboard.
 type Type int
 
 const (
-	DefaultType           Type = iota
-	NumberType                 // Numbers
-	NumberPunctuationType      // Numbers + Punctuation
-	DecimalType                // Numbers + '.'
-	PhoneType                  // Numbers + Phone keys
-	ASCIIType                  // Ascii
-	EmailType                  // Ascii + '@' + '.'
-	URLType                    // Ascii + '.' + '/' + '.com'
-	WebSearchType              // Ascii + '.' + 'go'
-	NamePhoneType              // Ascii + Phone
+	// Default
+	DefaultType Type = iota
+	// Numbers
+	NumberType
+	// Numbers + Punctuation
+	NumberPunctuationType
+	// Numbers + '.'
+	DecimalType
+	// Numbers + Phone keys
+	PhoneType
+	// Ascii
+	ASCIIType
+	// Ascii + '@' + '.'
+	EmailType
+	// Ascii + '.' + '/' + '.com'
+	URLType
+	// Ascii + '.' + 'go'
+	WebSearchType
+	// Ascii + Phone
+	NamePhoneType
 )
 
 func (t Type) MarshalProtobuf() keyboard.Type {
 	return keyboard.Type(t)
 }
 
+// Appearance defines the appearance of the keyboard.
 type Appearance int
 
 const (
+	// Default keyboard appearnce
 	DefaultAppearance Appearance = iota
+	// Light keyboard appearance
 	LightAppearance
+	// Dark keyboard appearance
 	DarkAppearance
 )
 
@@ -36,6 +63,7 @@ func (a Appearance) MarshalProtobuf() keyboard.Appearance {
 	return keyboard.Appearance(a)
 }
 
+// ReturnType defines the keyboard return key style
 type ReturnType int
 
 const (
@@ -57,17 +85,13 @@ func (t ReturnType) MarshalProtobuf() keyboard.ReturnType {
 	return keyboard.ReturnType(t)
 }
 
+// Responder is a model object that represents the keyboard's state. To use Responder it must be attached to a textinput.View.
 type Responder struct {
 	visible bool
 	value   comm.BatchNotifier
 }
 
-// func (g *Responder) Next() {
-// }
-
-// func (g *Responder) Prev() {
-// }
-
+// Show displays the keyboard.
 func (g *Responder) Show() {
 	if !g.visible {
 		g.visible = true
@@ -75,6 +99,7 @@ func (g *Responder) Show() {
 	}
 }
 
+// Dismiss hides any displayed keyboards.
 func (g *Responder) Dismiss() {
 	if g.visible {
 		g.visible = false
@@ -82,17 +107,26 @@ func (g *Responder) Dismiss() {
 	}
 }
 
+// Visible returns true if the keyboard is visible.
 func (g *Responder) Visible() bool {
 	return g.visible
 }
 
+// Notify implements comm.Notifier.
 func (g *Responder) Notify(f func()) comm.Id {
 	return g.value.Notify(f)
 }
 
+// Unnotify implements comm.Notifier.
 func (g *Responder) Unnotify(id comm.Id) {
 	g.value.Unnotify(id)
 }
+
+// func (g *Responder) Next() {
+// }
+
+// func (g *Responder) Prev() {
+// }
 
 // type key struct{}
 

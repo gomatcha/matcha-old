@@ -1,3 +1,12 @@
+// Package paint implements view display properties.
+//  func (v *View) Build(ctx *view.Context) *view.Model {
+//  	return &view.Model{
+//  		Painter: &paint.Style{
+//  			BackgroundColor: colornames.Green,
+//  			CornerRadius: 3,
+//  		},
+//  	}
+//  }
 package paint
 
 import (
@@ -10,12 +19,13 @@ import (
 	"gomatcha.io/matcha/pb/paint"
 )
 
+// Painter is the interface that describes how a view should be drawn on screen.
 type Painter interface {
-	Paint(*image.RGBA) // does nothing atm
 	PaintStyle() Style
 	comm.Notifier
 }
 
+// Style is a list of display properties of that views can set.
 type Style struct {
 	Transparency    float64
 	BackgroundColor color.Color
@@ -25,8 +35,6 @@ type Style struct {
 	ShadowRadius    float64
 	ShadowOffset    layout.Point
 	ShadowColor     color.Color
-	// Transform?
-	// Mask
 }
 
 func (s *Style) MarshalProtobuf() *paint.Style {
@@ -42,17 +50,17 @@ func (s *Style) MarshalProtobuf() *paint.Style {
 	}
 }
 
-func (s *Style) Paint(img *image.RGBA) {
-}
-
+// PaintStyle implements the Painter interface.
 func (s *Style) PaintStyle() Style {
 	return *s
 }
 
+// Notify implements the Painter interface. This is a no-op.
 func (s *Style) Notify(func()) comm.Id {
 	return 0 // no-op
 }
 
+// Unnotify implements the Painter interface. This is a no-op.
 func (s *Style) Unnotify(id comm.Id) {
 	// no-op
 }
@@ -62,6 +70,7 @@ type notifier struct {
 	id       comm.Id
 }
 
+// AnimatedStyle is the animated version of Style.
 type AnimatedStyle struct {
 	Style           Style
 	Transparency    comm.Float64Notifier
@@ -70,16 +79,14 @@ type AnimatedStyle struct {
 	BorderWidth     comm.Float64Notifier
 	CornerRadius    comm.Float64Notifier
 	ShadowRadius    comm.Float64Notifier
-	// ShadowOffset    comm.Float64Notifier
-	ShadowColor comm.ColorNotifier
+	ShadowOffset    layout.PointNotifier
+	ShadowColor     comm.ColorNotifier
 
 	maxId          comm.Id
 	batchNotifiers map[comm.Id]notifier
 }
 
-func (as *AnimatedStyle) Paint(img *image.RGBA) {
-}
-
+// PaintStyle implements the Painter interface.
 func (as *AnimatedStyle) PaintStyle() Style {
 	s := as.Style
 	if as.Transparency != nil {
@@ -100,16 +107,16 @@ func (as *AnimatedStyle) PaintStyle() Style {
 	if as.ShadowRadius != nil {
 		s.ShadowRadius = as.ShadowRadius.Value()
 	}
-	// if as.ShadowOffset != nil {
-	// 	s.ShadowOffset = as.ShadowOffset.Value()
-	// }
+	if as.ShadowOffset != nil {
+		s.ShadowOffset = as.ShadowOffset.Value()
+	}
 	if as.ShadowColor != nil {
 		s.ShadowColor = as.ShadowColor.Value()
 	}
-	// fmt.Println(s.BackgroundColor)
 	return s
 }
 
+// Notify implements the Painter interface.
 func (as *AnimatedStyle) Notify(f func()) comm.Id {
 	n := &comm.BatchNotifier{}
 
@@ -131,9 +138,9 @@ func (as *AnimatedStyle) Notify(f func()) comm.Id {
 	if as.ShadowRadius != nil {
 		n.Subscribe(as.ShadowRadius)
 	}
-	// if as.ShadowOffset != nil {
-	// 	n.Subscribe(as.ShadowOffset)
-	// }
+	if as.ShadowOffset != nil {
+		n.Subscribe(as.ShadowOffset)
+	}
 	if as.ShadowColor != nil {
 		n.Subscribe(as.ShadowColor)
 	}
@@ -149,6 +156,7 @@ func (as *AnimatedStyle) Notify(f func()) comm.Id {
 	return as.maxId
 }
 
+// Unnotify implements the Painter interface.
 func (as *AnimatedStyle) Unnotify(id comm.Id) {
 	n, ok := as.batchNotifiers[id]
 	if ok {
