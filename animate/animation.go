@@ -10,7 +10,7 @@ import (
 
 type Value struct {
 	value     float64
-	batch     comm.BatchNotifier
+	batch     comm.GroupNotifier
 	animation *animation
 }
 

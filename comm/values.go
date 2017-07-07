@@ -2,7 +2,7 @@ package comm
 
 type InterfaceValue struct {
 	value interface{}
-	batch BatchNotifier
+	batch GroupNotifier
 }
 
 func (v *InterfaceValue) Notify(f func()) Id {
@@ -24,7 +24,7 @@ func (v *InterfaceValue) SetValue(val interface{}) {
 
 type BoolValue struct {
 	value bool
-	batch BatchNotifier
+	batch GroupNotifier
 }
 
 func NewBoolValue(val bool) *BoolValue {
@@ -52,7 +52,7 @@ func (v *BoolValue) SetValue(val bool) {
 
 type IntValue struct {
 	value int
-	batch BatchNotifier
+	batch GroupNotifier
 }
 
 func NewIntValue(val int) *IntValue {
@@ -80,7 +80,7 @@ func (v *IntValue) SetValue(val int) {
 
 type Float64Value struct {
 	value float64
-	batch BatchNotifier
+	batch GroupNotifier
 }
 
 func NewFloat64Value(val float64) *Float64Value {

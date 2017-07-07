@@ -11,7 +11,6 @@ Medium:
 * Rebuild settings app, Todo App.
 * Only send updated views.
 * Make sure development team isn't packaged with sample app.
-* Rename comm.BatchNotifier?
 
 Low:
 * Have flag that generates a new xcodeproj for easy setup.

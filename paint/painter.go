@@ -10,7 +10,6 @@
 package paint
 
 import (
-	"image"
 	"image/color"
 
 	"gomatcha.io/matcha/comm"
@@ -66,7 +65,7 @@ func (s *Style) Unnotify(id comm.Id) {
 }
 
 type notifier struct {
-	notifier *comm.BatchNotifier
+	notifier *comm.GroupNotifier
 	id       comm.Id
 }
 
@@ -83,7 +82,7 @@ type AnimatedStyle struct {
 	ShadowColor     comm.ColorNotifier
 
 	maxId          comm.Id
-	batchNotifiers map[comm.Id]notifier
+	groupNotifiers map[comm.Id]notifier
 }
 
 // PaintStyle implements the Painter interface.
@@ -118,7 +117,7 @@ func (as *AnimatedStyle) PaintStyle() Style {
 
 // Notify implements the Painter interface.
 func (as *AnimatedStyle) Notify(f func()) comm.Id {
-	n := &comm.BatchNotifier{}
+	n := &comm.GroupNotifier{}
 
 	if as.Transparency != nil {
 		n.Subscribe(as.Transparency)
@@ -146,10 +145,10 @@ func (as *AnimatedStyle) Notify(f func()) comm.Id {
 	}
 
 	as.maxId += 1
-	if as.batchNotifiers == nil {
-		as.batchNotifiers = map[comm.Id]notifier{}
+	if as.groupNotifiers == nil {
+		as.groupNotifiers = map[comm.Id]notifier{}
 	}
-	as.batchNotifiers[as.maxId] = notifier{
+	as.groupNotifiers[as.maxId] = notifier{
 		notifier: n,
 		id:       n.Notify(f),
 	}
@@ -158,9 +157,9 @@ func (as *AnimatedStyle) Notify(f func()) comm.Id {
 
 // Unnotify implements the Painter interface.
 func (as *AnimatedStyle) Unnotify(id comm.Id) {
-	n, ok := as.batchNotifiers[id]
+	n, ok := as.groupNotifiers[id]
 	if ok {
 		n.notifier.Unnotify(n.id)
-		delete(as.batchNotifiers, id)
+		delete(as.groupNotifiers, id)
 	}
 }

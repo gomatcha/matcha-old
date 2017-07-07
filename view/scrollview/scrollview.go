@@ -139,7 +139,7 @@ func (l *layouter) Unnotify(id comm.Id) {
 type ScrollPosition struct {
 	X           animate.Value
 	Y           animate.Value
-	batch       comm.BatchNotifier
+	batch       comm.GroupNotifier
 	initialized bool
 }
 

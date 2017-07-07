@@ -602,7 +602,7 @@ type Layouter struct {
 	solvers        []*Solver
 	zIndex         int
 	notifiers      []comm.Notifier
-	batchNotifiers map[comm.Id]notifier
+	groupNotifiers map[comm.Id]notifier
 	maxId          comm.Id
 	views          []view.View
 }
@@ -613,7 +613,7 @@ func New() *Layouter {
 	sys.Guide = &Guide{id: rootId, system: sys, children: map[matcha.Id]*Guide{}}
 	sys.min = &Guide{id: minId, system: sys, children: map[matcha.Id]*Guide{}}
 	sys.max = &Guide{id: maxId, system: sys, children: map[matcha.Id]*Guide{}}
-	sys.batchNotifiers = map[comm.Id]notifier{}
+	sys.groupNotifiers = map[comm.Id]notifier{}
 	return sys
 }
 
@@ -665,7 +665,7 @@ func (l *Layouter) Add(v view.View, solveFunc func(*Solver)) *Guide {
 }
 
 type notifier struct {
-	notifier *comm.BatchNotifier
+	notifier *comm.GroupNotifier
 	id       comm.Id
 }
 
@@ -675,13 +675,13 @@ func (l *Layouter) Notify(f func()) comm.Id {
 		return 0
 	}
 
-	n := &comm.BatchNotifier{}
+	n := &comm.GroupNotifier{}
 	for _, i := range l.notifiers {
 		n.Subscribe(i)
 	}
 
 	l.maxId += 1
-	l.batchNotifiers[l.maxId] = notifier{
+	l.groupNotifiers[l.maxId] = notifier{
 		notifier: n,
 		id:       n.Notify(f),
 	}
@@ -690,10 +690,10 @@ func (l *Layouter) Notify(f func()) comm.Id {
 
 // Unnotify stops notifications for id.
 func (l *Layouter) Unnotify(id comm.Id) {
-	n, ok := l.batchNotifiers[id]
+	n, ok := l.groupNotifiers[id]
 	if ok {
 		n.notifier.Unnotify(n.id)
-		delete(l.batchNotifiers, id)
+		delete(l.groupNotifiers, id)
 	}
 }
 

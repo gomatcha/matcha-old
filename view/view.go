@@ -40,11 +40,11 @@ type View interface {
 	comm.Notifier
 }
 
-// Embed is a convenience struct that provides a default implementation of View. It also wraps a comm.BatchNotifier.
+// Embed is a convenience struct that provides a default implementation of View. It also wraps a comm.GroupNotifier.
 type Embed struct {
-	mu            sync.Mutex
-	id            matcha.Id
-	batchNotifier comm.BatchNotifier
+	mu       sync.Mutex
+	id       matcha.Id
+	notifier comm.GroupNotifier
 }
 
 // NewEmbed creates a new Embed with the given Id.
@@ -67,29 +67,29 @@ func (e *Embed) Lifecycle(from, to Stage) {
 	// no-op
 }
 
-// Notify calls Notify(id) on the underlying comm.BatchNotifier.
+// Notify calls Notify(id) on the underlying comm.GroupNotifier.
 func (e *Embed) Notify(f func()) comm.Id {
-	return e.batchNotifier.Notify(f)
+	return e.notifier.Notify(f)
 }
 
-// Unnotify calls Unnotify(id) on the underlying comm.BatchNotifier.
+// Unnotify calls Unnotify(id) on the underlying comm.GroupNotifier.
 func (e *Embed) Unnotify(id comm.Id) {
-	e.batchNotifier.Unnotify(id)
+	e.notifier.Unnotify(id)
 }
 
-// Subscribe calls Subscribe(n) on the underlying comm.BatchNotifier.
+// Subscribe calls Subscribe(n) on the underlying comm.GroupNotifier.
 func (e *Embed) Subscribe(n comm.Notifier) {
-	e.batchNotifier.Subscribe(n)
+	e.notifier.Subscribe(n)
 }
 
-// Unsubscribe calls Unsubscribe(n) on the underlying comm.BatchNotifier.
+// Unsubscribe calls Unsubscribe(n) on the underlying comm.GroupNotifier.
 func (e *Embed) Unsubscribe(n comm.Notifier) {
-	e.batchNotifier.Unsubscribe(n)
+	e.notifier.Unsubscribe(n)
 }
 
-// Update calls Update() on the underlying comm.BatchNotifier.
+// Update calls Update() on the underlying comm.GroupNotifier.
 func (e *Embed) Update() {
-	e.batchNotifier.Update()
+	e.notifier.Update()
 }
 
 type Stage int

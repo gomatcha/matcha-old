@@ -4,14 +4,14 @@ import (
 	"sync"
 )
 
-type BatchNotifier struct {
+type GroupNotifier struct {
 	mu    sync.Mutex
 	subs  map[Notifier]Id
 	funcs map[Id]func()
 	maxId Id
 }
 
-func (bn *BatchNotifier) Subscribe(n Notifier) {
+func (bn *GroupNotifier) Subscribe(n Notifier) {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
@@ -29,7 +29,7 @@ func (bn *BatchNotifier) Subscribe(n Notifier) {
 	bn.subs[n] = id
 }
 
-func (bn *BatchNotifier) Unsubscribe(n Notifier) {
+func (bn *GroupNotifier) Unsubscribe(n Notifier) {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
@@ -41,7 +41,7 @@ func (bn *BatchNotifier) Unsubscribe(n Notifier) {
 	delete(bn.subs, n)
 }
 
-func (bn *BatchNotifier) Notify(f func()) Id {
+func (bn *GroupNotifier) Notify(f func()) Id {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
@@ -53,7 +53,7 @@ func (bn *BatchNotifier) Notify(f func()) Id {
 	return bn.maxId
 }
 
-func (bn *BatchNotifier) Unnotify(id Id) {
+func (bn *GroupNotifier) Unnotify(id Id) {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
@@ -63,7 +63,7 @@ func (bn *BatchNotifier) Unnotify(id Id) {
 	delete(bn.funcs, id)
 }
 
-func (bn *BatchNotifier) Update() {
+func (bn *GroupNotifier) Update() {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
