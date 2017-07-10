@@ -18,7 +18,7 @@ import (
 
 func init() {
 	bridge.RegisterFunc("gomatcha.io/matcha/examples/todo New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
+		return view.NewRootFunc(func(ctx *view.Context) view.View {
 			app := NewAppView(ctx, "")
 			app.Todos = []*Todo{
 				&Todo{Title: "Title1"},
@@ -26,7 +26,7 @@ func init() {
 				&Todo{Title: "Title3"},
 			}
 			return app
-		}))
+		})
 	})
 }
 

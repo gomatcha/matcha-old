@@ -48,6 +48,16 @@ func NewRoot(s Screen) *Root {
 	return r
 }
 
+// NewRootFunc initializes a Root with func f. This is a convenience method around. NewRoot(ScreenFunc())
+func NewRootFunc(f func(*Context) View) *Root {
+	r := &Root{
+		root: newRoot(ScreenFunc(f)),
+		id:   comm.Id(atomic.AddInt64(&maxId, 1)),
+	}
+	r.start()
+	return r
+}
+
 func (r *Root) start() {
 	MainMu.Lock()
 	defer MainMu.Unlock()
