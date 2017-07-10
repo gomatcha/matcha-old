@@ -224,46 +224,46 @@ func (ctx *Context) newId(key string, prefix string) matcha.Id {
 	return id
 }
 
-// SkipBuild marks the child ids as not needing to be rebuilt.
-func (ctx *Context) SkipBuild(ids []matcha.Id) {
-	if ctx.parent != nil {
-		ctx.parent.SkipBuild(ids)
-		return
-	}
+// // SkipBuild marks the child ids as not needing to be rebuilt.
+// func (ctx *Context) SkipBuild(ids []matcha.Id) {
+// 	if ctx.parent != nil {
+// 		ctx.parent.SkipBuild(ids)
+// 		return
+// 	}
 
-	if ctx.skipBuild == nil {
-		ctx.skipBuild = map[matcha.Id]struct{}{}
-	}
-	for _, i := range ids {
-		ctx.skipBuild[i] = struct{}{}
-	}
-}
+// 	if ctx.skipBuild == nil {
+// 		ctx.skipBuild = map[matcha.Id]struct{}{}
+// 	}
+// 	for _, i := range ids {
+// 		ctx.skipBuild[i] = struct{}{}
+// 	}
+// }
 
 // WithPrefix returns a new Context. Calls to this Prev and NewId on this context will be prepended with key.
 func (ctx *Context) WithPrefix(key string) *Context {
 	return &Context{prefix: key, parent: ctx}
 }
 
-// Id returns the identifier associated with the build context.
-func (ctx *Context) Id() matcha.Id {
-	if ctx.parent != nil {
-		return ctx.parent.Id()
-	}
-	if ctx.node == nil {
-		return 0
-	}
-	return ctx.node.id
-}
+// // Id returns the identifier associated with the build context.
+// func (ctx *Context) Id() matcha.Id {
+// 	if ctx.parent != nil {
+// 		return ctx.parent.Id()
+// 	}
+// 	if ctx.node == nil {
+// 		return 0
+// 	}
+// 	return ctx.node.id
+// }
 
-func (ctx *Context) Path() []matcha.Id {
-	if ctx.parent != nil {
-		return ctx.parent.Path()
-	}
-	if ctx.node == nil {
-		return []matcha.Id{0}
-	}
-	return nil
-}
+// func (ctx *Context) Path() []matcha.Id {
+// 	if ctx.parent != nil {
+// 		return ctx.parent.Path()
+// 	}
+// 	if ctx.node == nil {
+// 		return []matcha.Id{0}
+// 	}
+// 	return nil
+// }
 
 type updateFlag int
 
