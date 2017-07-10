@@ -10,6 +10,7 @@ import (
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/basicview"
 	"gomatcha.io/matcha/view/scrollview"
@@ -97,9 +98,7 @@ func (v *TodoView) Build(ctx *view.Context) *view.Model {
 	checkbox := NewCheckbox(ctx, "checkbox")
 	checkbox.Value = v.Todo.Completed
 	checkbox.OnValueChange = func(value bool) {
-		if v.OnComplete != nil {
-			v.OnComplete(value)
-		}
+		v.OnComplete(value)
 	}
 	checkboxGuide := l.Add(checkbox, func(s *constraint.Solver) {
 		s.CenterYEqual(l.CenterY())
@@ -108,9 +107,7 @@ func (v *TodoView) Build(ctx *view.Context) *view.Model {
 
 	deleteButton := NewDeleteButton(ctx, "delete")
 	deleteButton.OnPress = func() {
-		if v.OnDelete != nil {
-			v.OnDelete()
-		}
+		v.OnDelete()
 	}
 	deleteGuide := l.Add(deleteButton, func(s *constraint.Solver) {
 		s.CenterYEqual(l.CenterY())
@@ -161,9 +158,27 @@ func (v *Checkbox) Build(ctx *view.Context) *view.Model {
 		s.Height(25)
 	})
 
+	painter := &paint.Style{}
+	if v.Value {
+		painter.BackgroundColor = colornames.Red
+	} else {
+		painter.BackgroundColor = colornames.Blue
+	}
+
+	button := &touch.ButtonRecognizer{
+		OnTouch: func(e *touch.ButtonEvent) {
+			if e.Kind == touch.EventKindRecognized {
+				v.OnValueChange(!v.Value)
+			}
+		},
+	}
+
 	return &view.Model{
-		Painter:  &paint.Style{BackgroundColor: colornames.Red},
+		Painter:  painter,
 		Layouter: l,
+		Values: map[interface{}]interface{}{
+			touch.Key: []touch.Recognizer{button},
+		},
 	}
 }
 
@@ -186,8 +201,19 @@ func (v *DeleteButton) Build(ctx *view.Context) *view.Model {
 		s.Height(25)
 	})
 
+	button := &touch.ButtonRecognizer{
+		OnTouch: func(e *touch.ButtonEvent) {
+			if e.Kind == touch.EventKindRecognized {
+				v.OnPress()
+			}
+		},
+	}
+
 	return &view.Model{
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
 		Layouter: l,
+		Values: map[interface{}]interface{}{
+			touch.Key: []touch.Recognizer{button},
+		},
 	}
 }
