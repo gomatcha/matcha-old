@@ -11,7 +11,7 @@ import (
 )
 
 type WifiStore struct {
-	store.Store
+	store.Node
 	wifi Wifi
 }
 
@@ -39,7 +39,7 @@ func (s *WifiStore) SetWifi(v Wifi) {
 	}
 
 	s.wifi = v
-	s.Update()
+	s.Signal()
 }
 
 func (s *WifiStore) Wifi() Wifi {
@@ -53,7 +53,7 @@ type Wifi struct {
 }
 
 type WifiNetworkStore struct {
-	store.Store
+	store.Node
 	ssid    string
 	network WifiNetwork
 }
@@ -74,7 +74,7 @@ func (s *WifiNetworkStore) Network() WifiNetwork {
 func (s *WifiNetworkStore) SetNetwork(v WifiNetwork) {
 	s.network = v
 	s.network.SSID = s.ssid // Don't allow the network's ssid to change.
-	s.Update()
+	s.Signal()
 }
 
 type WifiNetwork struct {

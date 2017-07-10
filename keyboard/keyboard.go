@@ -95,7 +95,7 @@ type Responder struct {
 func (g *Responder) Show() {
 	if !g.visible {
 		g.visible = true
-		g.value.Update()
+		g.value.Signal()
 	}
 }
 
@@ -103,7 +103,7 @@ func (g *Responder) Show() {
 func (g *Responder) Dismiss() {
 	if g.visible {
 		g.visible = false
-		g.value.Update()
+		g.value.Signal()
 	}
 }
 

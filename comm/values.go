@@ -19,7 +19,7 @@ func (v *InterfaceValue) Value() interface{} {
 
 func (v *InterfaceValue) SetValue(val interface{}) {
 	v.value = val
-	v.batch.Update()
+	v.batch.Signal()
 }
 
 type BoolValue struct {
@@ -47,7 +47,7 @@ func (v *BoolValue) Value() bool {
 
 func (v *BoolValue) SetValue(val bool) {
 	v.value = val
-	v.batch.Update()
+	v.batch.Signal()
 }
 
 type IntValue struct {
@@ -75,7 +75,7 @@ func (v *IntValue) Value() int {
 
 func (v *IntValue) SetValue(val int) {
 	v.value = val
-	v.batch.Update()
+	v.batch.Signal()
 }
 
 type Float64Value struct {
@@ -103,5 +103,5 @@ func (v *Float64Value) Value() float64 {
 
 func (v *Float64Value) SetValue(val float64) {
 	v.value = val
-	v.batch.Update()
+	v.batch.Signal()
 }

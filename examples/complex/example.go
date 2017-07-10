@@ -66,6 +66,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
 	value := animate.FloatLerp{Start: 0, End: 150}.Notifier(&v.value)
+	// value := animate.FloatInterpolate(animate.FloatLerp{Start: 0, End: 150}, &v.value)
 
 	chl1 := basicview.New(ctx, "1")
 	chl1.Painter = &paint.AnimatedStyle{
@@ -141,7 +142,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	chl8.OnPress = func() {
 		fmt.Println("On Click")
 		v.counter += 1
-		v.Update()
+		v.Signal()
 	}
 	g8 := l.Add(chl8, func(s *constraint.Solver) {
 		s.BottomEqual(g6.Top())

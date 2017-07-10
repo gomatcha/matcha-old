@@ -7,99 +7,90 @@ import (
 )
 
 type Storer interface {
-	sync.Locker
-	comm.Notifier
-	Stores() map[string]Storer
-	StoreNotifier(string) comm.Notifier
+	StoreNode() *Node
 }
 
-type storeNotifier struct {
-	store *Store
-	key   string
+type Node struct {
+	mu       sync.Mutex
+	mu2      sync.Mutex
+	locked   bool
+	children map[string]*Node
+	parent   *Node
+
+	updated bool
+
+	funcsMu sync.Mutex
+	funcs   map[comm.Id]func()
+	// notifiers []keyNotifier
+	// keyNotifiers map[keyNotifierKey]struct{}
+	maxId comm.Id
 }
 
-func (s *storeNotifier) Notify(f func()) comm.Id {
-	s.store.funcsMu.Lock()
-	defer s.store.funcsMu.Unlock()
-
-	if s.store.keyFuncs == nil {
-		s.store.keyFuncs = map[string]map[comm.Id]func(){}
+func (s *Node) Set(key string, chl Storer) {
+	if s.children == nil {
+		s.children = map[string]*Node{}
 	}
 
-	funcs := s.store.keyFuncs[s.key]
-	if funcs == nil {
-		funcs = map[comm.Id]func(){}
-		s.store.keyFuncs[s.key] = funcs
+	// Remove old child.
+	s.Delete(key)
+
+	// Add child.
+	chlStore := chl.StoreNode()
+	if s.locked {
+		chlStore.lock()
+	}
+	s.children[key] = chlStore
+	chlStore.parent = s
+}
+
+func (s *Node) Delete(key string) {
+	if s.children == nil {
+		s.children = map[string]*Node{}
 	}
 
-	s.store.maxId += 1
-	funcs[s.store.maxId] = f
-	return s.store.maxId
-}
+	// Flag as updated.
+	s.Signal()
 
-func (s *storeNotifier) Unnotify(id comm.Id) {
-	s.store.funcsMu.Lock()
-	defer s.store.funcsMu.Unlock()
-
-	if s.store.keyFuncs == nil {
-		panic("Unknown id")
+	// Remove child.
+	if prevChild, ok := s.children[key]; ok {
+		if s.locked {
+			prevChild.unlock()
+		}
+		prevChild.parent = nil
 	}
+	delete(s.children, key)
+}
 
-	funcs := s.store.keyFuncs[s.key]
-	if funcs == nil {
-		panic("Unknown id")
+func (s *Node) root() *Node {
+	n := s
+	for n.parent != nil {
+		n = n.parent
 	}
-
-	delete(funcs, id)
+	return n
 }
 
-type Store struct {
-	mu     sync.Mutex
-	locked bool
-	stores map[string]Storer
-
-	updated     bool
-	updatedKeys []string
-
-	funcsMu  sync.Mutex
-	funcs    map[comm.Id]func()
-	keyFuncs map[string]map[comm.Id]func()
-	maxId    comm.Id
-}
-
-func (s *Store) Set(key string, chl Storer) {
-	if s.stores == nil {
-		s.stores = map[string]Storer{}
-	}
-	s.stores[key] = chl
-	s.updatedKeys = append(s.updatedKeys, key)
-}
-
-func (s *Store) Delete(key string) {
-	delete(s.stores, key)
-	s.updatedKeys = append(s.updatedKeys, key)
-}
-
-func (s *Store) StoreNotifier(key string) comm.Notifier {
-	return &storeNotifier{store: s, key: key}
-}
-
-func (s *Store) Stores() map[string]Storer {
-	return s.stores
-}
-
-func (s *Store) Lock() {
+func (s *Node) Lock() {
 	s.mu.Lock()
-	s.locked = true
-	for _, i := range s.stores {
-		i.Lock()
-	}
-	s.updated = false
-	s.updatedKeys = nil
+	s.root().lock()
 }
 
-func (s *Store) Unlock() {
-	go func(updated bool, updatedKeys []string) {
+func (s *Node) lock() {
+	s.mu2.Lock()
+	for _, i := range s.children {
+		i.lock()
+	}
+
+	s.locked = true
+	s.updated = false
+}
+
+func (s *Node) Unlock() {
+	s.root().unlock()
+	s.mu.Unlock()
+}
+
+func (s *Node) unlock() {
+	go func(updated bool) {
 		s.funcsMu.Lock()
 		defer s.funcsMu.Unlock()
 
@@ -108,23 +99,17 @@ func (s *Store) Unlock() {
 				i()
 			}
 		}
-		for _, i := range updatedKeys {
-			for _, j := range s.keyFuncs[i] {
-				j()
-			}
-		}
-	}(s.updated, s.updatedKeys)
+	}(s.updated)
 	s.updated = false
-	s.updatedKeys = nil
-
 	s.locked = false
-	for _, i := range s.stores {
-		i.Unlock()
+
+	s.mu2.Unlock()
+	for _, i := range s.children {
+		i.unlock()
 	}
-	s.mu.Unlock()
 }
 
-func (s *Store) Notify(f func()) comm.Id {
+func (s *Node) Notify(f func()) comm.Id {
 	s.funcsMu.Lock()
 	defer s.funcsMu.Unlock()
 
@@ -137,17 +122,50 @@ func (s *Store) Notify(f func()) comm.Id {
 	return s.maxId
 }
 
-func (s *Store) Unnotify(id comm.Id) {
+func (s *Node) Unnotify(id comm.Id) {
 	s.funcsMu.Lock()
 	defer s.funcsMu.Unlock()
 
-	if s.funcs == nil {
+	if _, ok := s.funcs[id]; !ok {
 		panic("store.Unnotify(): Unknown id")
 	}
-
 	delete(s.funcs, id)
 }
 
-func (s *Store) Update() {
+// func (s *Node) keyNotify(key string, kn *keyNotifier) {
+// 	s.funcsMu.Lock()
+// 	defer s.funcsMu.Unlock()
+
+// 	if s.keyNotifiers == nil {
+// 		s.keyNotifiers = map[keyNotifierKey]struct{}{}
+// 	}
+// 	s.keyNotifiers[keyNotifierKey{key: key, kn: kn}] = struct{}{}
+// }
+
+// func (s *Node) keyUnnotify(key string, kn *keyNotifier) {
+// }
+
+// func (s *Node) Notifier(keys ...string) *Notifier {
+// 	return keyNotifier{keys: keys, n: s}
+// }
+
+func (s *Node) StoreNode() *Node {
+	return s
+}
+
+func (s *Node) Signal() { // key string
+	if s.parent != nil {
+		s.parent.updated = true
+	}
 	s.updated = true
 }
+
+// type keyNotifierKey struct {
+// 	key string
+// 	kn  *keyNotifier
+// }
+
+// type keyNotifier struct {
+// 	keys []string
+// 	n    *Node
+// }

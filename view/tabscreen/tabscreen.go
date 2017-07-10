@@ -14,15 +14,13 @@ import (
 )
 
 type Screen struct {
-	store.Storer
-	store         *store.Store
+	store.Node
 	screens       []view.Screen
 	selectedIndex int
 }
 
 func New() *Screen {
-	st := &store.Store{}
-	return &Screen{Storer: st, store: st}
+	return &Screen{}
 }
 
 func (s *Screen) View(ctx *view.Context) view.View {
@@ -30,7 +28,7 @@ func (s *Screen) View(ctx *view.Context) view.View {
 }
 
 func (s *Screen) SetChildren(ss ...view.Screen) {
-	s.store.Update()
+	s.Signal()
 	s.screens = ss
 }
 
@@ -40,7 +38,7 @@ func (s *Screen) Children() []view.Screen {
 
 func (s *Screen) SetSelectedIndex(idx int) {
 	if idx != s.selectedIndex {
-		s.store.Update()
+		s.Signal()
 		s.selectedIndex = idx
 	}
 }

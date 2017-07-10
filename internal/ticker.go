@@ -31,7 +31,7 @@ func screenUpdate() {
 	tickers.mu.Unlock()
 
 	for _, i := range ts {
-		i.update()
+		i.Signal()
 	}
 }
 
@@ -98,7 +98,7 @@ func (t *Ticker) Stop() {
 	delete(tickers.ts, t.key)
 }
 
-func (t *Ticker) update() {
+func (t *Ticker) Signal() {
 	t.mu.Lock()
 	funcs := t.funcs
 	t.mu.Unlock()

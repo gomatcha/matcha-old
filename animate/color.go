@@ -6,13 +6,15 @@ import (
 	"gomatcha.io/matcha/comm"
 )
 
+// ColorInterpolater represents an object that interpolates between colors given a float64 between 0-1.
 type ColorInterpolater interface {
 	Interpolate(float64) color.Color
 }
 
-func colorInterpolate(w comm.Float64Notifier, l ColorInterpolater) comm.ColorNotifier {
+// ColorInterpolate wraps n and returns a notifier with the corresponding interpolated colors.
+func ColorInterpolate(n comm.Float64Notifier, l ColorInterpolater) comm.ColorNotifier {
 	return &colorInterpolater{
-		watcher:      w,
+		watcher:      n,
 		interpolater: l,
 	}
 }
@@ -34,10 +36,12 @@ func (w *colorInterpolater) Value() color.Color {
 	return w.interpolater.Interpolate(w.watcher.Value())
 }
 
+// RGBALerp interpolates between colors Start and End.
 type RGBALerp struct {
 	Start, End color.Color
 }
 
+// Interpolate implements the ColorInterpolater interface
 func (e RGBALerp) Interpolate(a float64) color.Color {
 	r1, g1, b1, a1 := e.Start.RGBA()
 	r2, g2, b2, a2 := e.End.RGBA()
@@ -50,8 +54,9 @@ func (e RGBALerp) Interpolate(a float64) color.Color {
 	return color
 }
 
-func (e RGBALerp) Notifier(a comm.Float64Notifier) comm.ColorNotifier {
-	return colorInterpolate(a, e)
+// Notifier is a convenience method around animate.ColorInterpolate(n, e)
+func (e RGBALerp) Notifier(n comm.Float64Notifier) comm.ColorNotifier {
+	return ColorInterpolate(n, e)
 }
 
 func uintInterpolate(a, b uint32, c float64) uint16 {

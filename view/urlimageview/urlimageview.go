@@ -114,7 +114,7 @@ func (v *View) reload() {
 				v.cancelFunc()
 				v.image = image
 				v.err = err
-				v.Update()
+				v.Signal()
 			}
 		}(v.url, v.path)
 	}

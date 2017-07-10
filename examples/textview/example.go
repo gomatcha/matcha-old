@@ -76,7 +76,7 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 	input.KeyboardReturnType = keyboard.GoogleReturnType
 	input.Responder = v.responder
 	input.OnChange = func(t *text.Text) {
-		v.Update()
+		v.Signal()
 	}
 	inputP := view.WithPainter(input, &paint.Style{BackgroundColor: colornames.Yellow})
 	l.Add(inputP, func(s *constraint.Solver) {

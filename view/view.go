@@ -87,9 +87,9 @@ func (e *Embed) Unsubscribe(n comm.Notifier) {
 	e.notifier.Unsubscribe(n)
 }
 
-// Update calls Update() on the underlying comm.GroupNotifier.
-func (e *Embed) Update() {
-	e.notifier.Update()
+// Update calls Signal() on the underlying comm.GroupNotifier.
+func (e *Embed) Signal() {
+	e.notifier.Signal()
 }
 
 type Stage int

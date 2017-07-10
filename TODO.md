@@ -4,7 +4,6 @@ High:
 * Build website and documentation. Make sure go get "gomatcha.io/..." works.
 
 Medium:
-* Add a Notifyall, and notifyBetween to store.
 * Rebuild settings app, Todo App.
 * Only send updated views.
 * Make sure development team isn't packaged with sample app.
@@ -17,7 +16,6 @@ Low:
 * StyledText
 * Updating a tabscreen or stackscreen should not trigger a rebuild of its children.
 * Webview
-* Localization
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
 * Constraints should force views onto pixel boundries
 * Flexbox
@@ -28,18 +26,20 @@ Low:
 * Modal presentation
 * Asset catalog
 * StackBar height / hidden, color
-* Animations: Spring, Delay, Batch, Reverse, Decay, Repeat
 * Rotation
 * More Touch Recognizers: Pan, Swipe, Pinch, EdgePan, Rotation
 * Table ScrollBehaviors, Table Direction
 * Custom painters.
 
 Very Low:
+* Localization
 * View 3d transforms.
 * GridView
 * Add preload, and prepreload stages
 * Debug constraints.
 * Collect native resources into assets.
+* Animations: Spring, Delay, Batch, Reverse, Decay, Repeat
+
 
 
 Bugs:

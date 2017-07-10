@@ -63,7 +63,7 @@ func (bn *GroupNotifier) Unnotify(id Id) {
 	delete(bn.funcs, id)
 }
 
-func (bn *GroupNotifier) Update() {
+func (bn *GroupNotifier) Signal() {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 

@@ -14,18 +14,22 @@ type Value struct {
 	animation *animation
 }
 
+// Notify implements the comm.Notifier interface.
 func (v *Value) Notify(f func()) comm.Id {
 	return v.batch.Notify(f)
 }
 
+// Unnotify implements the comm.Notifier interface.
 func (v *Value) Unnotify(id comm.Id) {
 	v.batch.Unnotify(id)
 }
 
+// Value returns the current value of v.
 func (v *Value) Value() float64 {
 	return v.value
 }
 
+// SetValue updates Value, calls any subscribed functions and cancels any running animations.
 func (v *Value) SetValue(val float64) {
 	v.setValue(val)
 	if v.animation != nil {
@@ -35,9 +39,10 @@ func (v *Value) SetValue(val float64) {
 
 func (v *Value) setValue(val float64) {
 	v.value = val
-	v.batch.Update()
+	v.batch.Signal()
 }
 
+// Run runs animation a on v. Cancels any previously running animations on v.
 func (v *Value) Run(a Animation) (cancelFunc func()) {
 	if v.animation != nil {
 		v.animation.cancel()
@@ -66,22 +71,11 @@ func (v *Value) Run(a Animation) (cancelFunc func()) {
 	}
 }
 
+// Animation is an interface that represents a float64 that changes over a fixed duration.
 type Animation interface {
 	Duration() time.Duration
 	Tick(time.Duration) float64
 }
-
-// type Animation2D interface {
-// 	Duration() time.Duration
-// 	SetTime(*time.Duration)
-// 	Values() [2]float64
-// }
-
-// type AnimationND interface {
-// 	Duration() time.Duration
-// 	SetTime(*time.Duration)
-// 	Values() []float64
-// }
 
 type animation struct {
 	cancelled  bool
@@ -105,6 +99,7 @@ func (a *animation) cancel() {
 	a.cancelled = true
 }
 
+// Basic is an animation that goes from Start to End with duration Dur.
 type Basic struct {
 	Start float64
 	End   float64
@@ -112,10 +107,12 @@ type Basic struct {
 	Dur   time.Duration // Duration
 }
 
+// Duration implements the Animation interface.
 func (a *Basic) Duration() time.Duration {
 	return a.Dur
 }
 
+// Tick implements the Animation interface.
 func (a *Basic) Tick(t time.Duration) float64 {
 	if a.Dur == 0 {
 		return a.End

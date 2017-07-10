@@ -28,13 +28,13 @@ func newValue(ref C.ObjcRef) *Value {
     v := &Value{ ref: int64(ref) }
     if ref != 0 {
         runtime.SetFinalizer(v, func(a *Value) {
-            C.MatchaUntrackObjc(a.ref())  
+            C.MatchaUntrackObjc(a._ref())  
         })
     }
     return v
 }
 
-func (v *Value)ref() C.ObjcRef {
+func (v *Value)_ref() C.ObjcRef {
     return C.ObjcRef(v.ref)
 }
 
@@ -56,7 +56,7 @@ func Bool(v bool) *Value {
 
 func (v *Value)ToBool() bool {
     defer runtime.KeepAlive(v)
-    return bool(C.MatchaObjcToBool(v.ref()))
+    return bool(C.MatchaObjcToBool(v._ref()))
 }
 
 func Int64(v int64) *Value {
@@ -65,7 +65,7 @@ func Int64(v int64) *Value {
 
 func (v *Value)ToInt64() int64 {
     defer runtime.KeepAlive(v)
-    return int64(C.MatchaObjcToInt64(v.ref()))
+    return int64(C.MatchaObjcToInt64(v._ref()))
 }
 
 func Float64(v float64) *Value {
@@ -74,7 +74,7 @@ func Float64(v float64) *Value {
 
 func (v *Value)ToFloat64() float64 {
     defer runtime.KeepAlive(v)
-    return float64(C.MatchaObjcToFloat64(v.ref()))
+    return float64(C.MatchaObjcToFloat64(v._ref()))
 }
 
 func String(v string) *Value {
@@ -84,7 +84,7 @@ func String(v string) *Value {
 
 func (v *Value)ToString() string {
     defer runtime.KeepAlive(v)
-    buf := C.MatchaObjcToString(v.ref())
+    buf := C.MatchaObjcToString(v._ref())
     return goString(buf)
 }
 
@@ -95,7 +95,7 @@ func Bytes(v []byte) *Value {
 
 func (v *Value)ToBytes() []byte {
     defer runtime.KeepAlive(v)
-    buf := C.MatchaObjcToBytes(v.ref())
+    buf := C.MatchaObjcToBytes(v._ref())
     return goBytes(buf)
 }
 
@@ -106,22 +106,22 @@ func Interface(v interface{}) *Value {
 
 func (v *Value)ToInterface() interface{} {
     defer runtime.KeepAlive(v)
-    return matchaGoGet(C.MatchaObjcToGoRef(v.ref())).Interface()
+    return matchaGoGet(C.MatchaObjcToGoRef(v._ref())).Interface()
 }
 
 func Array(a ...*Value) *Value {
     ref := C.MatchaObjcArray()
     array := newValue(ref);
     for _, i := range a {
-        C.MatchaObjcArrayAppend(ref, i.ref())
+        C.MatchaObjcArrayAppend(ref, i._ref())
     }
     return array
 }
 
 func (v *Value)ToArray() []*Value {
     defer runtime.KeepAlive(v)
-    ref := v.ref()
-    length := int64(C.MatchaObjcArrayLen(v.ref()))
+    ref := v._ref()
+    length := int64(C.MatchaObjcArrayLen(v._ref()))
     slice := make([]*Value, length)
     for i := int64(0); i < length; i++ {
         slice[i] = newValue(C.MatchaObjcArrayAt(ref, C.int64_t(i)))
@@ -150,7 +150,7 @@ func (v *Value)Call(s string, args ...*Value) *Value {
         defer runtime.KeepAlive(argsValue)
     }
     
-    return newValue(C.MatchaObjcCall(v.ref(), cString(s), argsValue.ref()))
+    return newValue(C.MatchaObjcCall(v._ref(), cString(s), argsValue._ref()))
 }
 
 func cBytes(v []byte) C.CGoBuffer {

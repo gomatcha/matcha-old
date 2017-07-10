@@ -20,8 +20,7 @@ func init() {
 }
 
 type App struct {
-	store.Storer
-	store        *store.Store
+	store.Node
 	tabScreen    *tabscreen.Screen
 	stackScreen1 *stackscreen.Screen
 	stackScreen2 *stackscreen.Screen
@@ -30,35 +29,34 @@ type App struct {
 }
 
 func NewApp() *App {
-	st := &store.Store{}
-	app := &App{Storer: st, store: st}
+	app := &App{}
 
 	app.stackScreen1 = stackscreen.New()
-	app.store.Set("1", app.stackScreen1)
+	app.Set("1", app.stackScreen1)
 	app.stackScreen1.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
 	app.stackScreen2 = stackscreen.New()
-	app.store.Set("2", app.stackScreen2)
+	app.Set("2", app.stackScreen2)
 	app.stackScreen2.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
 	app.stackScreen3 = stackscreen.New()
-	app.store.Set("3", app.stackScreen3)
+	app.Set("3", app.stackScreen3)
 	app.stackScreen3.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
 	app.stackScreen4 = stackscreen.New()
-	app.store.Set("4", app.stackScreen4)
+	app.Set("4", app.stackScreen4)
 	app.stackScreen4.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
 	app.tabScreen = tabscreen.New()
-	app.store.Set("5", app.tabScreen)
+	app.Set("5", app.tabScreen)
 	app.tabScreen.SetChildren(
 		app.stackScreen1,
 		app.stackScreen2,

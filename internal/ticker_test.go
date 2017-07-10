@@ -11,9 +11,9 @@ package internal
 // 		count += 1
 // 	})
 
-// 	screenUpdate()
-// 	screenUpdate()
-// 	screenUpdate()
+// 	screenSignal()
+// 	screenSignal()
+// 	screenSignal()
 
 // 	mu.Lock()
 // 	if count != 3 {
@@ -23,9 +23,9 @@ package internal
 
 // 	<-time.After(time.Second / 10)
 
-// 	screenUpdate()
-// 	screenUpdate()
-// 	screenUpdate()
+// 	screenSignal()
+// 	screenSignal()
+// 	screenSignal()
 
 // 	if count != 3 {
 // 		t.Error("Ticker not stopped")
@@ -57,7 +57,7 @@ package internal
 // 		t.Error("Channel not removed")
 // 	}
 
-// 	screenUpdate()
+// 	screenSignal()
 
 // 	ticker.Stop()
 // }

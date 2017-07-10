@@ -30,8 +30,7 @@ func init() {
 }
 
 type App struct {
-	store.Storer
-	store          *store.Store
+	store.Node
 	stackScreen    *stackscreen.Screen
 	airplaneMode   bool
 	wifiStore      *WifiStore
@@ -39,22 +38,20 @@ type App struct {
 }
 
 func NewApp() *App {
-	st := &store.Store{}
-	app := &App{Storer: st, store: st}
-
+	app := &App{}
 	rootScreen := view.ScreenFunc(func(ctx *view.Context) view.View {
 		return NewRootView(ctx, "", app)
 	})
 
 	app.stackScreen = stackscreen.New()
 	app.stackScreen.SetChildren(rootScreen, rootScreen, rootScreen)
-	app.store.Set("stackScreen", app.stackScreen)
+	app.Set("stackScreen", app.stackScreen)
 
 	app.wifiStore = NewWifiStore()
-	app.store.Set("wifi", app.wifiStore)
+	app.Set("wifi", app.wifiStore)
 
 	app.bluetoothStore = NewBluetoothStore()
-	app.store.Set("bluetooth", app.bluetoothStore)
+	app.Set("bluetooth", app.bluetoothStore)
 
 	app.airplaneMode = true
 
@@ -79,7 +76,7 @@ func (app *App) BluetoothStore() *BluetoothStore {
 
 func (app *App) SetAirplaneMode(v bool) {
 	app.airplaneMode = v
-	app.store.Update()
+	app.Signal()
 
 	wifi := app.wifiStore.Wifi()
 	wifi.Enabled = app.airplaneMode
@@ -554,7 +551,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 					v.highlighted = false
 					v.OnTap()
 				}
-				v.Update()
+				v.Signal()
 			},
 		}
 		values[touch.Key] = []touch.Recognizer{tap}

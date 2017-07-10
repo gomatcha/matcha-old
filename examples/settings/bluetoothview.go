@@ -10,7 +10,7 @@ import (
 )
 
 type BluetoothStore struct {
-	store.Store
+	store.Node
 	bluetooth Bluetooth
 }
 
@@ -43,7 +43,7 @@ func (s *BluetoothStore) SetBluetooth(v Bluetooth) {
 	}
 
 	s.bluetooth = v
-	s.Update()
+	s.Signal()
 }
 
 type Bluetooth struct {
@@ -52,7 +52,7 @@ type Bluetooth struct {
 }
 
 type BluetoothDeviceStore struct {
-	store.Store
+	store.Node
 	device BluetoothDevice
 	ssid   string
 }
@@ -73,7 +73,7 @@ func (s *BluetoothDeviceStore) Device() BluetoothDevice {
 func (s *BluetoothDeviceStore) SetDevice(v BluetoothDevice) {
 	s.device = v
 	s.device.SSID = s.ssid // Don't allow the SSID to change.
-	s.Update()
+	s.Signal()
 }
 
 type BluetoothDevice struct {
@@ -91,7 +91,6 @@ func NewBluetoothView(ctx *view.Context, key string, app *App, bts *BluetoothSto
 	if v, ok := ctx.Prev(key).(*BluetoothView); ok {
 		return v
 	}
-	// TODO(KD): Observe bluetooth devices.
 	v := &BluetoothView{
 		Embed:     view.NewEmbed(ctx.NewId(key)),
 		app:       app,

@@ -21,14 +21,12 @@ func init() {
 }
 
 type App struct {
-	store.Storer
-	store       *store.Store
+	store.Node
 	stackScreen *stackscreen.Screen
 }
 
 func NewApp() *App {
-	st := &store.Store{}
-	app := &App{Storer: st, store: st}
+	app := &App{}
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
 	bar1 := &stackscreen.Bar{
@@ -44,7 +42,7 @@ func NewApp() *App {
 	screen4 := NewTouchScreen(app, colornames.Green)
 
 	app.stackScreen = stackscreen.New()
-	app.store.Set("stackscreen", app.stackScreen)
+	app.Set("stackscreen", app.stackScreen)
 	app.stackScreen.SetChildren(
 		stackscreen.WithBar(screen1, bar1),
 		stackscreen.WithBar(screen2, bar2),
@@ -92,7 +90,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 		Count: 1,
 		OnTouch: func(e *touch.TapEvent) {
 			// v.bar.Title = "Updated"
-			// v.Update()
+			// v.Signal()
 
 			v.app.Lock()
 			defer v.app.Unlock()
