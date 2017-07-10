@@ -146,7 +146,7 @@ func (v *stackView) Build(ctx *view.Context) *view.Model {
 
 type ChildView interface {
 	view.View
-	StackBar(*view.Context) *Bar
+	StackBar(*view.Context) *Bar // TODO(KD): Doesn't this make it harder to wrap??
 }
 
 type barView struct {

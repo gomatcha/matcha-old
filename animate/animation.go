@@ -1,3 +1,4 @@
+// Package animate implements animations, easings and interpolaters.
 package animate
 
 import (
@@ -8,6 +9,7 @@ import (
 	"gomatcha.io/matcha/view"
 )
 
+// Value is an struct that runs Animations and emits float64s.
 type Value struct {
 	value     float64
 	batch     comm.GroupNotifier
