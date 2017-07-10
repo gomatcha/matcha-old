@@ -94,7 +94,7 @@ func NewWifiView(ctx *view.Context, key string, app *App, wifiStore *WifiStore) 
 		return v
 	}
 	v := &WifiView{
-		Embed:     view.NewEmbed(ctx.NewId(key)),
+		Embed:     ctx.NewEmbed(key),
 		app:       app,
 		wifiStore: wifiStore,
 	}

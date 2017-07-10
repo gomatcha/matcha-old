@@ -37,7 +37,7 @@ func New(ctx *view.Context, key string) *View {
 	}
 	return &View{
 		Text:  text.New(""),
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed: ctx.NewEmbed(key),
 	}
 }
 

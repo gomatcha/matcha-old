@@ -44,7 +44,7 @@ func New(ctx *view.Context, key string) *ScrollView {
 		return v
 	}
 	return &ScrollView{
-		Embed:                          view.NewEmbed(ctx.NewId(key)),
+		Embed:                          ctx.NewEmbed(key),
 		Directions:                     Vertical,
 		ShowsHorizontalScrollIndicator: true,
 		ShowsVerticalScrollIndicator:   true,

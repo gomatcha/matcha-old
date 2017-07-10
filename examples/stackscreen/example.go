@@ -80,7 +80,7 @@ func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
 		return v
 	}
 	return &TouchView{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed: ctx.NewEmbed(key),
 		app:   app,
 	}
 }

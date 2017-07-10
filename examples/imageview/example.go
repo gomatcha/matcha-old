@@ -31,7 +31,7 @@ func New(ctx *view.Context, key string) *ImageView {
 		return v
 	}
 	return &ImageView{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed: ctx.NewEmbed(key),
 	}
 }
 

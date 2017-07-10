@@ -59,7 +59,7 @@ func newView(ctx *view.Context, key string, s *Screen) *stackView {
 		return v
 	}
 
-	embed := view.NewEmbed(ctx.NewId(key))
+	embed := ctx.NewEmbed(key)
 	embed.Subscribe(s)
 	return &stackView{
 		Embed:  embed,

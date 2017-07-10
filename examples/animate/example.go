@@ -36,7 +36,7 @@ func New(ctx *view.Context, key string) *AnimateView {
 	}
 	// ticker := animate.NewTicker(time.Second * 4)
 	return &AnimateView{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed: ctx.NewEmbed(key),
 		// ticker:      ticker,
 		// floatTicker: animate.FloatInterpolate(ticker, animate.FloatLerp{Start: 0, End: 500}),
 		// colorTicker: animate.ColorInterpolate(ticker, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow}),

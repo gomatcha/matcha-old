@@ -58,7 +58,7 @@ func newView(ctx *view.Context, key string, s *Screen) *tabView {
 		return v
 	}
 
-	embed := view.NewEmbed(ctx.NewId(key))
+	embed := ctx.NewEmbed(key)
 	embed.Subscribe(s)
 	return &tabView{
 		Embed:  embed,

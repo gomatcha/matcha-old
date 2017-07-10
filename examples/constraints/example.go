@@ -26,7 +26,7 @@ func New(ctx *view.Context, key string) *ConstraintsView {
 		return v
 	}
 	return &ConstraintsView{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed: ctx.NewEmbed(key),
 	}
 }
 

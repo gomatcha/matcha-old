@@ -47,7 +47,7 @@ func NewNestedView(ctx *view.Context, key string) *NestedView {
 		return v
 	}
 	return &NestedView{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed: ctx.NewEmbed(key),
 	}
 }
 
@@ -235,7 +235,7 @@ func NewTableCell(ctx *view.Context, key string) *TableCell {
 		return v
 	}
 	return &TableCell{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed: ctx.NewEmbed(key),
 	}
 }
 

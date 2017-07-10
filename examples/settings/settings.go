@@ -101,7 +101,7 @@ func NewRootView(ctx *view.Context, key string, app *App) *RootView {
 	if v, ok := ctx.Prev(key).(*RootView); ok {
 		return v
 	}
-	v := &RootView{Embed: view.NewEmbed(ctx.NewId(key)), app: app}
+	v := &RootView{Embed: ctx.NewEmbed(key), app: app}
 	v.Subscribe(app)
 	v.Subscribe(app.WifiStore())
 	v.Subscribe(app.BluetoothStore())
@@ -297,7 +297,7 @@ func NewSeparator(ctx *view.Context, key string) *Separator {
 	if v, ok := ctx.Prev(key).(*Separator); ok {
 		return v
 	}
-	return &Separator{Embed: view.NewEmbed(ctx.NewId(key))}
+	return &Separator{Embed: ctx.NewEmbed(key)}
 }
 
 func (v *Separator) Build(ctx *view.Context) *view.Model {
@@ -332,7 +332,7 @@ func NewSpacer(ctx *view.Context, key string) *Spacer {
 		return v
 	}
 	return &Spacer{
-		Embed:  view.NewEmbed(ctx.NewId(key)),
+		Embed:  ctx.NewEmbed(key),
 		Height: 35,
 	}
 }
@@ -361,7 +361,7 @@ func NewSpacerHeader(ctx *view.Context, key string) *SpacerHeader {
 		return v
 	}
 	return &SpacerHeader{
-		Embed:  view.NewEmbed(ctx.NewId(key)),
+		Embed:  ctx.NewEmbed(key),
 		Height: 50,
 	}
 }
@@ -406,7 +406,7 @@ func NewSpacerDescription(ctx *view.Context, key string) *SpacerDescription {
 	if v, ok := ctx.Prev(key).(*SpacerDescription); ok {
 		return v
 	}
-	return &SpacerDescription{Embed: view.NewEmbed(ctx.NewId(key))}
+	return &SpacerDescription{Embed: ctx.NewEmbed(key)}
 }
 
 func (v *SpacerDescription) Build(ctx *view.Context) *view.Model {
@@ -454,7 +454,7 @@ func NewBasicCell(ctx *view.Context, key string) *BasicCell {
 	if v, ok := ctx.Prev(key).(*BasicCell); ok {
 		return v
 	}
-	return &BasicCell{Embed: view.NewEmbed(ctx.NewId(key))}
+	return &BasicCell{Embed: ctx.NewEmbed(key)}
 }
 
 func (v *BasicCell) Build(ctx *view.Context) *view.Model {

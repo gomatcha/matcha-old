@@ -16,7 +16,7 @@ func NewCellularView(ctx *view.Context, key string, app *App) *CellularView {
 	if v, ok := ctx.Prev(key).(*CellularView); ok {
 		return v
 	}
-	return &CellularView{Embed: view.NewEmbed(ctx.NewId(key)), app: app}
+	return &CellularView{Embed: ctx.NewEmbed(key), app: app}
 }
 
 func (v *CellularView) Build(ctx *view.Context) *view.Model {

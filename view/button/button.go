@@ -42,7 +42,7 @@ func New(ctx *view.Context, key string) *Button {
 		return v
 	}
 	return &Button{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed: ctx.NewEmbed(key),
 	}
 }
 

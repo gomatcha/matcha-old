@@ -59,7 +59,7 @@ func New(ctx *view.Context, key string) *View {
 		return v
 	}
 	return &View{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed: ctx.NewEmbed(key),
 	}
 }
 

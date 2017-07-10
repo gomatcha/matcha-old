@@ -20,7 +20,7 @@ func New(ctx *view.Context, key string) *BasicView {
 		return v
 	}
 	return &BasicView{
-		Embed: view.NewEmbed(ctx.NewId(key)),
+		Embed: ctx.NewEmbed(key),
 	}
 }
 

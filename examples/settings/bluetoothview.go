@@ -92,7 +92,7 @@ func NewBluetoothView(ctx *view.Context, key string, app *App, bts *BluetoothSto
 		return v
 	}
 	v := &BluetoothView{
-		Embed:     view.NewEmbed(ctx.NewId(key)),
+		Embed:     ctx.NewEmbed(key),
 		app:       app,
 		bluetooth: bts,
 	}

@@ -44,7 +44,7 @@ func NewAppView(ctx *view.Context, key string) *AppView {
 	if v, ok := ctx.Prev(key).(*AppView); ok {
 		return v
 	}
-	return &AppView{Embed: view.NewEmbed(ctx.NewId(key))}
+	return &AppView{Embed: ctx.NewEmbed(key)}
 }
 
 func (v *AppView) Build(ctx *view.Context) *view.Model {
@@ -84,7 +84,7 @@ func NewTodoView(ctx *view.Context, key string) *TodoView {
 	if v, ok := ctx.Prev(key).(*TodoView); ok {
 		return v
 	}
-	return &TodoView{Embed: view.NewEmbed(ctx.NewId(key))}
+	return &TodoView{Embed: ctx.NewEmbed(key)}
 }
 
 func (v *TodoView) Build(ctx *view.Context) *view.Model {
@@ -151,7 +151,7 @@ func NewCheckbox(ctx *view.Context, key string) *Checkbox {
 	if v, ok := ctx.Prev(key).(*Checkbox); ok {
 		return v
 	}
-	return &Checkbox{Embed: view.NewEmbed(ctx.NewId(key))}
+	return &Checkbox{Embed: ctx.NewEmbed(key)}
 }
 
 func (v *Checkbox) Build(ctx *view.Context) *view.Model {
@@ -176,7 +176,7 @@ func NewDeleteButton(ctx *view.Context, key string) *DeleteButton {
 	if v, ok := ctx.Prev(key).(*DeleteButton); ok {
 		return v
 	}
-	return &DeleteButton{Embed: view.NewEmbed(ctx.NewId(key))}
+	return &DeleteButton{Embed: ctx.NewEmbed(key)}
 }
 
 func (v *DeleteButton) Build(ctx *view.Context) *view.Model {

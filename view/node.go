@@ -195,6 +195,11 @@ func (ctx *Context) PrevModel() *Model {
 	return ctx.node.model
 }
 
+// NewEmbed generates a new Embed for a given key. NewEmbed is a convenience around NewEmbed(ctx.NewId(key)).
+func (ctx *Context) NewEmbed(key string) *Embed {
+	return NewEmbed(ctx.NewId(key))
+}
+
 // NewId generates a new identifier for a given key.
 func (ctx *Context) NewId(key string) matcha.Id {
 	return ctx.newId(key, "")
