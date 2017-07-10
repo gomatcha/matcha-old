@@ -19,7 +19,13 @@ import (
 func init() {
 	bridge.RegisterFunc("gomatcha.io/matcha/examples/todo New", func() *view.Root {
 		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
-			return NewAppView(ctx, "")
+			app := NewAppView(ctx, "")
+			app.Todos = []*Todo{
+				&Todo{Title: "Title1"},
+				&Todo{Title: "Title2"},
+				&Todo{Title: "Title3"},
+			}
+			return app
 		}))
 	})
 }
@@ -55,6 +61,7 @@ func (v *AppView) Build(ctx *view.Context) *view.Model {
 			v.Todos[idx].Completed = complete
 			v.Signal()
 		}
+		l.Add(todoView, nil)
 	}
 
 	scrollView := scrollview.New(ctx, "scrollView")
@@ -62,6 +69,7 @@ func (v *AppView) Build(ctx *view.Context) *view.Model {
 	scrollView.ContentLayouter = l
 	return &view.Model{
 		Children: []view.View{scrollView},
+		Painter:  &paint.Style{BackgroundColor: colornames.White},
 	}
 }
 
@@ -82,7 +90,7 @@ func NewTodoView(ctx *view.Context, key string) *TodoView {
 func (v *TodoView) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
-		s.Height(150)
+		s.Height(50)
 		s.WidthEqual(l.MaxGuide().Width())
 	})
 
@@ -94,7 +102,7 @@ func (v *TodoView) Build(ctx *view.Context) *view.Model {
 		}
 	}
 	checkboxGuide := l.Add(checkbox, func(s *constraint.Solver) {
-		s.CenterXEqual(l.CenterX())
+		s.CenterYEqual(l.CenterY())
 		s.LeftEqual(l.Left().Add(15))
 	})
 
@@ -105,7 +113,7 @@ func (v *TodoView) Build(ctx *view.Context) *view.Model {
 		}
 	}
 	deleteGuide := l.Add(deleteButton, func(s *constraint.Solver) {
-		s.CenterXEqual(l.CenterX())
+		s.CenterYEqual(l.CenterY())
 		s.RightEqual(l.Right().Add(-15))
 	})
 
@@ -113,9 +121,9 @@ func (v *TodoView) Build(ctx *view.Context) *view.Model {
 	titleView.String = v.Todo.Title
 	titleView.Style = nil //...
 	l.Add(titleView, func(s *constraint.Solver) {
-		s.CenterXEqual(l.CenterX())
-		s.LeftEqual(checkboxGuide.Left().Add(15))
-		s.RightEqual(deleteGuide.Right().Add(-15))
+		s.CenterYEqual(l.CenterY())
+		s.LeftEqual(checkboxGuide.Right().Add(15))
+		s.RightEqual(deleteGuide.Left().Add(-15))
 	})
 
 	separator := basicview.New(ctx, "separator")
@@ -149,8 +157,8 @@ func NewCheckbox(ctx *view.Context, key string) *Checkbox {
 func (v *Checkbox) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
-		s.Width(50)
-		s.Height(50)
+		s.Width(25)
+		s.Height(25)
 	})
 
 	return &view.Model{
@@ -174,8 +182,8 @@ func NewDeleteButton(ctx *view.Context, key string) *DeleteButton {
 func (v *DeleteButton) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
-		s.Width(50)
-		s.Height(50)
+		s.Width(25)
+		s.Height(25)
 	})
 
 	return &view.Model{

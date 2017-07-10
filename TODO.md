@@ -8,6 +8,7 @@ Medium:
 * Only send updated views.
 * Make sure development team isn't packaged with sample app.
 * Table scroll position?
+* User registered views.
 
 Low:
 * Have matcha flag that generates a new xcodeproj for easy setup.
