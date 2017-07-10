@@ -10,10 +10,12 @@ import (
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
+	"gomatcha.io/matcha/text"
 	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/basicview"
 	"gomatcha.io/matcha/view/scrollview"
+	"gomatcha.io/matcha/view/textinput"
 	"gomatcha.io/matcha/view/textview"
 )
 
@@ -65,12 +67,51 @@ func (v *AppView) Build(ctx *view.Context) *view.Model {
 		l.Add(todoView, nil)
 	}
 
+	addView := NewAddView(ctx, "add")
+	l.Add(addView, nil)
+
 	scrollView := scrollview.New(ctx, "scrollView")
 	scrollView.ContentChildren = l.Views()
 	scrollView.ContentLayouter = l
 	return &view.Model{
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: colornames.White},
+	}
+}
+
+type AddView struct {
+	*view.Embed
+	text *text.Text
+}
+
+func NewAddView(ctx *view.Context, key string) *AddView {
+	if v, ok := ctx.Prev(key).(*AddView); ok {
+		return v
+	}
+	return &AddView{Embed: ctx.NewEmbed(key)}
+}
+
+func (v *AddView) Build(ctx *view.Context) *view.Model {
+	l := constraint.New()
+	l.Solve(func(s *constraint.Solver) {
+		s.Height(50)
+		s.WidthEqual(l.MaxGuide().Width())
+	})
+
+	input := textinput.New(ctx, "input")
+	input.Text = v.text
+	l.Add(input, func(s *constraint.Solver) {
+		s.LeftEqual(l.Left().Add(70))
+		s.RightEqual(l.Right().Add(-70))
+		s.CenterYEqual(l.CenterY())
+		s.Height(50) // TODO(KD): set number of lines = 1. and calculate the height automatically.
+	})
+	_ = input
+
+	return &view.Model{
+		Children: l.Views(),
+		Painter:  &paint.Style{BackgroundColor: colornames.Yellow},
+		Layouter: l,
 	}
 }
 
@@ -154,8 +195,8 @@ func NewCheckbox(ctx *view.Context, key string) *Checkbox {
 func (v *Checkbox) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
-		s.Width(25)
-		s.Height(25)
+		s.Width(40)
+		s.Height(40)
 	})
 
 	painter := &paint.Style{}
@@ -197,8 +238,8 @@ func NewDeleteButton(ctx *view.Context, key string) *DeleteButton {
 func (v *DeleteButton) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
-		s.Width(25)
-		s.Height(25)
+		s.Width(40)
+		s.Height(40)
 	})
 
 	button := &touch.ButtonRecognizer{

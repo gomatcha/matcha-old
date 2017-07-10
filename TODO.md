@@ -46,7 +46,6 @@ Very Low:
 
 Bugs:
 * Crash in protobuf if view does not have a layout guide.
-* crash if constraint layouter adds a view that is not in the Children slice
 * Constraints crash if unconstrained.
 * Auto disable PNGCrush. "Compress PNG Files" and "Remove Text Metadata from PNG Files"
 * Should we panic if user tries to unnotify with an unknown comm.Id

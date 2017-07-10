@@ -615,7 +615,12 @@ func (n *node) layout(minSize layout.Point, maxSize layout.Point) layout.Guide {
 		MaxSize:  maxSize,
 		ChildIds: []matcha.Id{},
 		LayoutFunc: func(id matcha.Id, minSize, maxSize layout.Point) layout.Guide {
-			return n.children[id].layout(minSize, maxSize)
+			child, ok := n.children[id]
+			if !ok {
+				fmt.Println("Attempting to layout unknown child: ", id)
+				return layout.Guide{}
+			}
+			return child.layout(minSize, maxSize)
 		},
 	}
 	for i := range n.children {
@@ -633,7 +638,12 @@ func (n *node) layout(minSize layout.Point, maxSize layout.Point) layout.Guide {
 	// Assign guides to children
 	for k, v := range gs {
 		guide := v
-		n.children[k].layoutGuide = &guide
+		child, ok := n.children[k]
+		if !ok {
+			fmt.Println("Attempting to assign layout guide to unknown child: ", k)
+			continue
+		}
+		child.layoutGuide = &guide
 	}
 	return g
 }
