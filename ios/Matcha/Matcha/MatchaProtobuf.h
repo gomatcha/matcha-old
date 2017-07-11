@@ -27,6 +27,7 @@
 
 @interface NSAttributedString (Matcha)
 - (id)initWithProtobuf:(MatchaPBStyledText *)value;
++ (NSDictionary *)attributesWithProtobuf:(MatchaPBTextStyle *)style;
 - (MatchaPBStyledText *)protobuf;
 @end
 

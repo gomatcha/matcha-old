@@ -39,6 +39,13 @@ func (st *StyledText) Update(s *text.Style, start, end int) {
 }
 
 func (st *StyledText) Size(min layout.Point, max layout.Point, maxLines int) layout.Point {
+	if st.text.String() == "" {
+		st = &StyledText{
+			text:  text.New("A"),
+			style: st.style,
+		}
+	}
+
 	sizeFunc := &pbtext.SizeFunc{
 		Text:    st.MarshalProtobuf(),
 		MinSize: min.MarshalProtobuf(),

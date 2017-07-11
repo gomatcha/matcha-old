@@ -161,8 +161,12 @@ type layouter struct {
 
 func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
 	if !l.multiline {
-		// size := l.styledText.Size(layout.Pt(0, 0), ctx.MaxSize, 1)
-		g := layout.Guide{Frame: layout.Rt(0, 0, ctx.MinSize.X, 30)}
+		size := l.styledText.Size(layout.Pt(0, 0), ctx.MaxSize, 1)
+		size.Y += 15
+		if size.Y < 30 {
+			size.Y = 30
+		}
+		g := layout.Guide{Frame: layout.Rt(0, 0, ctx.MinSize.X, size.Y)}
 		return g, nil
 	} else {
 		g := layout.Guide{Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y)}

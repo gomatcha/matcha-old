@@ -20,6 +20,10 @@
     NSError *error = nil;
     MatchaTextInputPBView *view = (id)[state unpackMessageClass:[MatchaTextInputPBView class] error:&error];
     
+    NSDictionary *attributes = [NSAttributedString attributesWithProtobuf:view.styledText.style];
+    self.font = attributes[NSFontAttributeName];
+    self.textColor = attributes[NSForegroundColorAttributeName];
+    
     NSAttributedString *attrString = [[NSAttributedString alloc] initWithProtobuf:view.styledText];
     if (![attrString.string isEqual:self.attributedText.string]) { // TODO(KD): Better comparison.
         self.attributedText = attrString;
@@ -49,6 +53,7 @@
     if ([self.attributedText isEqual:self.attrStr2] || self.attributedText == self.attrStr2) {
         return;
     }
+    self.attrStr2 = self.attributedText;
     MatchaTextInputPBEvent *event = [[MatchaTextInputPBEvent alloc] init];
     event.styledText = self.attributedText.protobuf;
     

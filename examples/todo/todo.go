@@ -1,7 +1,6 @@
 package todo
 
 import (
-	"fmt"
 	"image/color"
 	"strconv"
 
