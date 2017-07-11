@@ -1,6 +1,7 @@
 #import "MatchaTextInput.h"
 #import "MatchaProtobuf.h"
 #import "MatchaViewController.h"
+#import "UITextView+Placeholder.h"
 
 @implementation MatchaTextInput
 
@@ -8,6 +9,7 @@
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;
         self.delegate = self;
+        self.scrollEnabled = false;
     }
     return self;
 }
@@ -22,11 +24,19 @@
     if (![attrString.string isEqual:self.attributedText.string]) { // TODO(KD): Better comparison.
         self.attributedText = attrString;
     }
+    
+    NSAttributedString *attrPlaceholder = [[NSAttributedString alloc] initWithProtobuf:view.placeholderText];
+    if (![attrPlaceholder.string isEqual:self.attributedPlaceholder]) { // TODO(KD): Better comparison.
+        self.attributedPlaceholder = attrPlaceholder;
+    }
+    
     self.attrStr2 = attrString;
     self.hasFocus = view.focused;
     self.keyboardType = MatchaKeyboardTypeWithProtobuf(view.keyboardType);
     self.keyboardAppearance = MatchaKeyboardAppearanceWithProtobuf(view.keyboardAppearance);
     self.returnKeyType = MatchaReturnTypeWithProtobuf(view.keyboardReturnType);
+    self.multiline = view.multiline;
+    self.secureTextEntry = view.secureTextEntry;
     
     if (self.hasFocus && !self.isFirstResponder) {
         [self becomeFirstResponder];
@@ -45,7 +55,15 @@
     NSData *data = [event data];
     MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:data];
     
-    [self.viewNode.rootVC call:@"OnChange" viewId:self.node.identifier.longLongValue args:@[value]];
+    [self.viewNode.rootVC call:@"OnTextChange" viewId:self.node.identifier.longLongValue args:@[value]];
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    if ([text isEqualToString:@"\n"]) {
+        [self.viewNode.rootVC call:@"OnSubmit" viewId:self.node.identifier.longLongValue args:nil];
+        return NO;
+    }
+    return YES;
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {

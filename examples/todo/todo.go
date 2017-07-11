@@ -7,6 +7,8 @@ import (
 	"golang.org/x/image/colornames"
 
 	"gomatcha.io/bridge"
+	"gomatcha.io/matcha/env"
+	"gomatcha.io/matcha/keyboard"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
@@ -14,6 +16,7 @@ import (
 	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/basicview"
+	"gomatcha.io/matcha/view/imageview"
 	"gomatcha.io/matcha/view/scrollview"
 	"gomatcha.io/matcha/view/textinput"
 	"gomatcha.io/matcha/view/textview"
@@ -53,7 +56,8 @@ func NewAppView(ctx *view.Context, key string) *AppView {
 func (v *AppView) Build(ctx *view.Context) *view.Model {
 	l := &table.Layouter{}
 
-	for idx, todo := range v.Todos {
+	for i, todo := range v.Todos {
+		idx := i
 		todoView := NewTodoView(ctx, strconv.Itoa(idx))
 		todoView.Todo = todo
 		todoView.OnDelete = func() {
@@ -68,6 +72,10 @@ func (v *AppView) Build(ctx *view.Context) *view.Model {
 	}
 
 	addView := NewAddView(ctx, "add")
+	addView.OnAdd = func(title string) {
+		v.Todos = append(v.Todos, &Todo{Title: title})
+		v.Signal()
+	}
 	l.Add(addView, nil)
 
 	scrollView := scrollview.New(ctx, "scrollView")
@@ -81,14 +89,19 @@ func (v *AppView) Build(ctx *view.Context) *view.Model {
 
 type AddView struct {
 	*view.Embed
-	text *text.Text
+	text      *text.Text
+	responder keyboard.Responder
+	OnAdd     func(title string)
 }
 
 func NewAddView(ctx *view.Context, key string) *AddView {
 	if v, ok := ctx.Prev(key).(*AddView); ok {
 		return v
 	}
-	return &AddView{Embed: ctx.NewEmbed(key)}
+	return &AddView{
+		Embed: ctx.NewEmbed(key),
+		text:  text.New(""),
+	}
 }
 
 func (v *AddView) Build(ctx *view.Context) *view.Model {
@@ -99,18 +112,37 @@ func (v *AddView) Build(ctx *view.Context) *view.Model {
 	})
 
 	input := textinput.New(ctx, "input")
+	input.PaintStyle = &paint.Style{BackgroundColor: colornames.White}
 	input.Text = v.text
+	input.PlaceholderText = text.New("What needs to be done?")
+	input.KeyboardReturnType = keyboard.DoneReturnType
+	input.Responder = &v.responder
+	input.OnSubmit = func() {
+		str := v.text.String()
+		v.responder.Dismiss()
+		v.text.SetString("")
+		if str != "" {
+			v.OnAdd(str)
+		}
+	}
 	l.Add(input, func(s *constraint.Solver) {
-		s.LeftEqual(l.Left().Add(70))
-		s.RightEqual(l.Right().Add(-70))
+		s.LeftEqual(l.Left().Add(15))
+		s.RightEqual(l.Right().Add(-15))
 		s.CenterYEqual(l.CenterY())
-		s.Height(50) // TODO(KD): set number of lines = 1. and calculate the height automatically.
 	})
-	_ = input
+
+	separator := basicview.New(ctx, "separator")
+	separator.Painter = &paint.Style{BackgroundColor: color.RGBA{203, 202, 207, 255}}
+	l.Add(separator, func(s *constraint.Solver) {
+		s.Height(1)
+		s.LeftEqual(l.Left())
+		s.RightEqual(l.Right())
+		s.BottomEqual(l.Bottom())
+	})
 
 	return &view.Model{
 		Children: l.Views(),
-		Painter:  &paint.Style{BackgroundColor: colornames.Yellow},
+		// Painter:  &paint.Style{BackgroundColor: colornames.Lightgray},
 		Layouter: l,
 	}
 }
@@ -199,12 +231,18 @@ func (v *Checkbox) Build(ctx *view.Context) *view.Model {
 		s.Height(40)
 	})
 
-	painter := &paint.Style{}
+	imageView := imageview.New(ctx, "image")
 	if v.Value {
-		painter.BackgroundColor = colornames.Red
+		imageView.Image = env.MustLoadImage("CheckboxChecked")
 	} else {
-		painter.BackgroundColor = colornames.Blue
+		imageView.Image = env.MustLoadImage("CheckboxUnchecked")
 	}
+	l.Add(imageView, func(s *constraint.Solver) {
+		s.CenterXEqual(l.CenterX())
+		s.CenterYEqual(l.CenterY())
+		s.WidthEqual(l.Width())
+		s.HeightEqual(l.Height())
+	})
 
 	button := &touch.ButtonRecognizer{
 		OnTouch: func(e *touch.ButtonEvent) {
@@ -215,7 +253,8 @@ func (v *Checkbox) Build(ctx *view.Context) *view.Model {
 	}
 
 	return &view.Model{
-		Painter:  painter,
+		Children: l.Views(),
+		// Painter:  painter,
 		Layouter: l,
 		Values: map[interface{}]interface{}{
 			touch.Key: []touch.Recognizer{button},
@@ -242,6 +281,15 @@ func (v *DeleteButton) Build(ctx *view.Context) *view.Model {
 		s.Height(40)
 	})
 
+	imageView := imageview.New(ctx, "image")
+	imageView.Image = env.MustLoadImage("Delete")
+	l.Add(imageView, func(s *constraint.Solver) {
+		s.CenterXEqual(l.CenterX())
+		s.CenterYEqual(l.CenterY())
+		s.WidthEqual(l.Width())
+		s.HeightEqual(l.Height())
+	})
+
 	button := &touch.ButtonRecognizer{
 		OnTouch: func(e *touch.ButtonEvent) {
 			if e.Kind == touch.EventKindRecognized {
@@ -251,7 +299,7 @@ func (v *DeleteButton) Build(ctx *view.Context) *view.Model {
 	}
 
 	return &view.Model{
-		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+		Children: l.Views(),
 		Layouter: l,
 		Values: map[interface{}]interface{}{
 			touch.Key: []touch.Recognizer{button},

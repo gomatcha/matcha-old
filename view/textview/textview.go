@@ -12,10 +12,11 @@ import (
 
 type layouter struct {
 	styledText *internal.StyledText
+	maxLines   int
 }
 
 func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
-	size := l.styledText.Size(layout.Pt(0, 0), ctx.MaxSize)
+	size := l.styledText.Size(layout.Pt(0, 0), ctx.MaxSize, l.maxLines)
 	g := layout.Guide{Frame: layout.Rt(0, 0, size.X, size.Y)}
 	return g, nil
 }
@@ -34,6 +35,7 @@ type View struct {
 	String     string
 	Text       *text.Text
 	Style      *text.Style
+	MaxLines   int
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -60,7 +62,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	}
 	return &view.Model{
 		Painter:         painter,
-		Layouter:        &layouter{styledText: st},
+		Layouter:        &layouter{styledText: st, maxLines: v.MaxLines},
 		NativeViewName:  "gomatcha.io/matcha/view/textview",
 		NativeViewState: st.MarshalProtobuf(),
 	}

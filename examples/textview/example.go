@@ -75,7 +75,7 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 	input.KeyboardAppearance = keyboard.DarkAppearance
 	input.KeyboardReturnType = keyboard.GoogleReturnType
 	input.Responder = v.responder
-	input.OnChange = func(t *text.Text) {
+	input.OnTextChange = func(t *text.Text) {
 		v.Signal()
 	}
 	inputP := view.WithPainter(input, &paint.Style{BackgroundColor: colornames.Yellow})

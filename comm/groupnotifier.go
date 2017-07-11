@@ -15,6 +15,11 @@ func (bn *GroupNotifier) Subscribe(n Notifier) {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
+	// Multiple subscriptions on the same object are ignored.
+	if _, ok := bn.subs[n]; ok {
+		return
+	}
+
 	id := n.Notify(func() {
 		bn.mu.Lock()
 		defer bn.mu.Unlock()

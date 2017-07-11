@@ -11,6 +11,7 @@ Medium:
 * User registered views.
 
 Low:
+* Remove max lines from Text.Style
 * Have matcha flag that generates a new xcodeproj for easy setup.
 * Add tests around core functionality. Store, etc.
 * Automatically insert copyright notice.
@@ -34,6 +35,7 @@ Low:
 * Compile a list of things that should be easy to do and implement them. Button activation cancelled by vertical scrolling but not horizontal, Pinch to zoom, Highlighting a view and dragging outside of it and back in., Horizontal swipe on tableview to show delete button, Touch driven animations. AKA swipe back to navigate.
 
 Very Low:
+* Text selection.
 * Localization
 * View 3d transforms.
 * GridView
@@ -42,14 +44,11 @@ Very Low:
 * Collect native resources into assets.
 * Animations: Spring, Delay, Batch, Reverse, Decay, Repeat
 
-
-
 Bugs:
 * Crash in protobuf if view does not have a layout guide.
 * Constraints crash if unconstrained.
 * Auto disable PNGCrush. "Compress PNG Files" and "Remove Text Metadata from PNG Files"
 * Should we panic if user tries to unnotify with an unknown comm.Id
-* Add attribution link to https://icons8.com
 
 Documentation:
 * Build process.

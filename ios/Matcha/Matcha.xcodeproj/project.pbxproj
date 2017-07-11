@@ -11,6 +11,8 @@
 		6731819E1F0DAB3400E1839E /* Progressview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6731819C1F0DAB3400E1839E /* Progressview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		673181A21F0DB38F00E1839E /* MatchaProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 673181A01F0DB38F00E1839E /* MatchaProgressView.h */; };
 		673181A31F0DB38F00E1839E /* MatchaProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 673181A11F0DB38F00E1839E /* MatchaProgressView.m */; };
+		673181A61F14667900E1839E /* UITextView+Placeholder.h in Headers */ = {isa = PBXBuildFile; fileRef = 673181A41F14667900E1839E /* UITextView+Placeholder.h */; };
+		673181A71F14667900E1839E /* UITextView+Placeholder.m in Sources */ = {isa = PBXBuildFile; fileRef = 673181A51F14667900E1839E /* UITextView+Placeholder.m */; };
 		67FEBA701F099EDF005AFEDA /* Matcha.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBA6E1F099EDF005AFEDA /* Matcha.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67FEBAAB1F099F1D005AFEDA /* Color.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBA7A1F099F1D005AFEDA /* Color.pbobjc.h */; };
 		67FEBAAC1F099F1D005AFEDA /* Color.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBA7B1F099F1D005AFEDA /* Color.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -95,6 +97,8 @@
 		6731819C1F0DAB3400E1839E /* Progressview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Progressview.pbobjc.m; sourceTree = "<group>"; };
 		673181A01F0DB38F00E1839E /* MatchaProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaProgressView.h; sourceTree = "<group>"; };
 		673181A11F0DB38F00E1839E /* MatchaProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaProgressView.m; sourceTree = "<group>"; };
+		673181A41F14667900E1839E /* UITextView+Placeholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Placeholder.h"; sourceTree = "<group>"; };
+		673181A51F14667900E1839E /* UITextView+Placeholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Placeholder.m"; sourceTree = "<group>"; };
 		67FEBA6B1F099EDF005AFEDA /* Matcha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Matcha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67FEBA6E1F099EDF005AFEDA /* Matcha.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matcha.h; sourceTree = "<group>"; };
 		67FEBA6F1F099EDF005AFEDA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -533,8 +537,10 @@
 		67FEBB311F0A1FCF005AFEDA /* TextInput */ = {
 			isa = PBXGroup;
 			children = (
-				67FEBAD81F09A18F005AFEDA /* MatchaTextInput.m */,
 				67FEBAD91F09A18F005AFEDA /* MatchaTextInput.h */,
+				67FEBAD81F09A18F005AFEDA /* MatchaTextInput.m */,
+				673181A41F14667900E1839E /* UITextView+Placeholder.h */,
+				673181A51F14667900E1839E /* UITextView+Placeholder.m */,
 			);
 			name = TextInput;
 			sourceTree = "<group>";
@@ -606,6 +612,7 @@
 				67FEBB111F09A18F005AFEDA /* MatchaObjcBridge.h in Headers */,
 				67FEBACB1F099F1D005AFEDA /* View.pbobjc.h in Headers */,
 				67FEBAB31F099F1D005AFEDA /* Layout.pbobjc.h in Headers */,
+				673181A61F14667900E1839E /* UITextView+Placeholder.h in Headers */,
 				67FEBB031F09A18F005AFEDA /* MatchaTabScreen.h in Headers */,
 				67FEBB051F09A18F005AFEDA /* MatchaSwitchView.h in Headers */,
 				67FEBB011F09A18F005AFEDA /* MatchaTapGestureRecognizer.h in Headers */,
@@ -707,6 +714,7 @@
 				67FEBAC81F099F1D005AFEDA /* Tabscreen.pbobjc.m in Sources */,
 				67FEBABA1F099F1D005AFEDA /* Touch2.pbobjc.m in Sources */,
 				6731819E1F0DAB3400E1839E /* Progressview.pbobjc.m in Sources */,
+				673181A71F14667900E1839E /* UITextView+Placeholder.m in Sources */,
 				67FEBAC61F099F1D005AFEDA /* Switchview.pbobjc.m in Sources */,
 				67FEBB001F09A18F005AFEDA /* MatchaTapGestureRecognizer.m in Sources */,
 				67FEBAF81F09A18F005AFEDA /* MatchaViewController.m in Sources */,

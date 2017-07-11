@@ -18,13 +18,19 @@
     }
 }
 
-- (MatchaGoValue *)sizeForAttributedString:(NSData *)protobuf {
+- (MatchaGoValue *)sizeForAttributedString:(NSData *)protobuf maxLines:(int)maxLines {
     MatchaPBSizeFunc *func = [[MatchaPBSizeFunc alloc] initWithData:protobuf error:nil];
     
     NSAttributedString *attrStr = [[NSAttributedString alloc] initWithProtobuf:func.text];
     CGRect rect = [attrStr boundingRectWithSize:func.maxSize.toCGSize options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
     
-    MatchaLayoutPBPoint *point = [[MatchaLayoutPBPoint alloc] initWithCGSize:CGSizeMake(ceil(rect.size.width), ceil(rect.size.height))];
+    UIFont *font = [attrStr attributesAtIndex:0 effectiveRange:NULL][NSFontAttributeName];
+    CGFloat height = rect.size.height;
+    if (maxLines > 0 && height > font.pointSize * maxLines) {
+        height = font.pointSize * maxLines;
+    }
+    
+    MatchaLayoutPBPoint *point = [[MatchaLayoutPBPoint alloc] initWithCGSize:CGSizeMake(ceil(rect.size.width), ceil(height))];
     return [[MatchaGoValue alloc] initWithData:point.data];
 }
 

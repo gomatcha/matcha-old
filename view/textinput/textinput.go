@@ -4,8 +4,11 @@ import (
 	"fmt"
 
 	"github.com/gogo/protobuf/proto"
+	"gomatcha.io/matcha"
+	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/internal"
 	"gomatcha.io/matcha/keyboard"
+	"gomatcha.io/matcha/layout"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/pb/view/textinput"
 	"gomatcha.io/matcha/text"
@@ -17,51 +20,70 @@ type View struct {
 	*view.Embed
 	PaintStyle         *paint.Style
 	Text               *text.Text
+	text               *text.Text
 	Style              *text.Style
+	PlaceholderText    *text.Text
+	PlaceholderStyle   *text.Style
+	SecureTextEntry    bool
 	KeyboardType       keyboard.Type
 	KeyboardAppearance keyboard.Appearance
 	KeyboardReturnType keyboard.ReturnType
 	Responder          *keyboard.Responder
+	prevResponder      *keyboard.Responder
 	responder          *keyboard.Responder
-
-	// TODO(KD):
-	// StyledText *text.StyledText
-	// Cursor position?
-
-	OnChange func(*text.Text)
+	Multiline          bool
+	OnTextChange       func(*text.Text)
+	OnSubmit           func()
+	OnFocus            func(*keyboard.Responder)
 }
 
 func New(ctx *view.Context, key string) *View {
 	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
 	}
-	return &View{
-		Text:  text.New(""),
-		Embed: ctx.NewEmbed(key),
+	v := &View{
+		Embed:     ctx.NewEmbed(key),
+		text:      text.New(""),
+		responder: &keyboard.Responder{},
 	}
+	v.Subscribe(v.responder)
+	return v
 }
 
 func (v *View) Build(ctx *view.Context) *view.Model {
-	var st *internal.StyledText
-	if v.Text != nil {
-		st = internal.NewStyledText(v.Text)
-		st.Set(v.Style, 0, 0)
+	style := v.Style
+	if style == nil {
+		style = &text.Style{}
 	}
 
-	if v.Responder != v.responder {
-		if v.responder != nil {
-			v.Unsubscribe(v.responder)
+	t := v.Text
+	if t == nil {
+		t = v.text
+	}
+	st := internal.NewStyledText(t)
+	st.Set(style, 0, 0)
+
+	placeholder := v.PlaceholderText
+	if placeholder == nil {
+		placeholder = text.New("")
+	}
+	placeholderStyledText := internal.NewStyledText(placeholder)
+	placeholderStyledText.Set(v.Style, 0, 0)
+
+	if v.Responder != v.prevResponder {
+		if v.prevResponder != nil {
+			v.Unsubscribe(v.prevResponder)
 		}
 
-		v.responder = v.Responder
-		if v.responder != nil {
-			v.Subscribe(v.responder)
+		v.prevResponder = v.Responder
+		if v.Responder != nil {
+			v.Subscribe(v.Responder)
 		}
 	}
 
-	focused := false
-	if v.responder != nil {
-		focused = v.responder.Visible()
+	responder := v.Responder
+	if responder == nil {
+		responder = v.responder
 	}
 
 	painter := paint.Painter(nil)
@@ -69,17 +91,21 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		painter = v.PaintStyle
 	}
 	return &view.Model{
+		Layouter:       &layouter{styledText: st, multiline: v.Multiline},
 		Painter:        painter,
 		NativeViewName: "gomatcha.io/matcha/view/textinput",
 		NativeViewState: &textinput.View{
 			StyledText:         st.MarshalProtobuf(),
+			PlaceholderText:    placeholderStyledText.MarshalProtobuf(),
 			KeyboardType:       v.KeyboardType.MarshalProtobuf(),
 			KeyboardAppearance: v.KeyboardAppearance.MarshalProtobuf(),
 			KeyboardReturnType: v.KeyboardReturnType.MarshalProtobuf(),
-			Focused:            focused,
+			Focused:            responder.Visible(),
+			Multiline:          v.Multiline,
+			SecureTextEntry:    v.SecureTextEntry,
 		},
 		NativeFuncs: map[string]interface{}{
-			"OnChange": func(data []byte) {
+			"OnTextChange": func(data []byte) {
 				pbevent := &textinput.Event{}
 				err := proto.Unmarshal(data, pbevent)
 				if err != nil {
@@ -87,9 +113,19 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 					return
 				}
 
-				_ = v.Text.UnmarshalProtobuf(pbevent.StyledText.Text)
-				if v.OnChange != nil {
-					v.OnChange(v.Text)
+				_text := v.Text
+				if _text == nil {
+					_text = v.text
+				}
+
+				_text.UnmarshalProtobuf(pbevent.StyledText.Text)
+				if v.OnTextChange != nil {
+					v.OnTextChange(_text)
+				}
+			},
+			"OnSubmit": func() {
+				if v.OnSubmit != nil {
+					v.OnSubmit()
 				}
 			},
 			"OnFocus": func(data []byte) {
@@ -100,14 +136,44 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 					return
 				}
 
-				if v.responder != nil {
-					if pbevent.Focused {
-						v.responder.Show()
-					} else {
-						v.responder.Dismiss()
-					}
+				responder := v.Responder
+				if responder == nil {
+					responder = v.responder
+				}
+
+				if pbevent.Focused {
+					responder.Show()
+				} else {
+					responder.Dismiss()
+				}
+				if v.OnFocus != nil {
+					v.OnFocus(responder)
 				}
 			},
 		},
 	}
+}
+
+type layouter struct {
+	styledText *internal.StyledText
+	multiline  bool
+}
+
+func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
+	if !l.multiline {
+		// size := l.styledText.Size(layout.Pt(0, 0), ctx.MaxSize, 1)
+		g := layout.Guide{Frame: layout.Rt(0, 0, ctx.MinSize.X, 30)}
+		return g, nil
+	} else {
+		g := layout.Guide{Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y)}
+		return g, nil
+	}
+}
+
+func (l *layouter) Notify(f func()) comm.Id {
+	return 0 // no-op
+}
+
+func (l *layouter) Unnotify(id comm.Id) {
+	// no-op
 }

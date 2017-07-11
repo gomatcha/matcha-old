@@ -50,10 +50,13 @@ static GPBFileDescriptor *MatchaTextInputPBTextinputRoot_FileDescriptor(void) {
 @implementation MatchaTextInputPBView
 
 @dynamic hasStyledText, styledText;
+@dynamic hasPlaceholderText, placeholderText;
 @dynamic focused;
 @dynamic keyboardType;
 @dynamic keyboardAppearance;
 @dynamic keyboardReturnType;
+@dynamic multiline;
+@dynamic secureTextEntry;
 
 typedef struct MatchaTextInputPBView__storage_ {
   uint32_t _has_storage_[1];
@@ -61,6 +64,7 @@ typedef struct MatchaTextInputPBView__storage_ {
   MatchaKeyboardPBAppearance keyboardAppearance;
   MatchaKeyboardPBReturnType keyboardReturnType;
   MatchaPBStyledText *styledText;
+  MatchaPBStyledText *placeholderText;
 } MatchaTextInputPBView__storage_;
 
 // This method is threadsafe because it is initially called
@@ -79,11 +83,20 @@ typedef struct MatchaTextInputPBView__storage_ {
         .dataType = GPBDataTypeMessage,
       },
       {
+        .name = "placeholderText",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBStyledText),
+        .number = MatchaTextInputPBView_FieldNumber_PlaceholderText,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, placeholderText),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
         .name = "focused",
         .dataTypeSpecific.className = NULL,
         .number = MatchaTextInputPBView_FieldNumber_Focused,
-        .hasIndex = 1,
-        .offset = 2,  // Stored in _has_storage_ to save space.
+        .hasIndex = 2,
+        .offset = 3,  // Stored in _has_storage_ to save space.
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBool,
       },
@@ -91,7 +104,7 @@ typedef struct MatchaTextInputPBView__storage_ {
         .name = "keyboardType",
         .dataTypeSpecific.enumDescFunc = MatchaKeyboardPBType_EnumDescriptor,
         .number = MatchaTextInputPBView_FieldNumber_KeyboardType,
-        .hasIndex = 3,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, keyboardType),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldHasEnumDescriptor),
         .dataType = GPBDataTypeEnum,
@@ -100,7 +113,7 @@ typedef struct MatchaTextInputPBView__storage_ {
         .name = "keyboardAppearance",
         .dataTypeSpecific.enumDescFunc = MatchaKeyboardPBAppearance_EnumDescriptor,
         .number = MatchaTextInputPBView_FieldNumber_KeyboardAppearance,
-        .hasIndex = 4,
+        .hasIndex = 5,
         .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, keyboardAppearance),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldHasEnumDescriptor),
         .dataType = GPBDataTypeEnum,
@@ -109,10 +122,28 @@ typedef struct MatchaTextInputPBView__storage_ {
         .name = "keyboardReturnType",
         .dataTypeSpecific.enumDescFunc = MatchaKeyboardPBReturnType_EnumDescriptor,
         .number = MatchaTextInputPBView_FieldNumber_KeyboardReturnType,
-        .hasIndex = 5,
+        .hasIndex = 6,
         .offset = (uint32_t)offsetof(MatchaTextInputPBView__storage_, keyboardReturnType),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldHasEnumDescriptor),
         .dataType = GPBDataTypeEnum,
+      },
+      {
+        .name = "multiline",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaTextInputPBView_FieldNumber_Multiline,
+        .hasIndex = 7,
+        .offset = 8,  // Stored in _has_storage_ to save space.
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "secureTextEntry",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaTextInputPBView_FieldNumber_SecureTextEntry,
+        .hasIndex = 9,
+        .offset = 10,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeBool,
       },
     };
     GPBDescriptor *localDescriptor =
@@ -125,7 +156,7 @@ typedef struct MatchaTextInputPBView__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\001\n\000\005\014\000\006\022\000\007\022\000";
+        "\006\001\n\000\002\017\000\005\014\000\006\022\000\007\022\000\t\017\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -253,6 +284,36 @@ typedef struct MatchaTextInputPBFocusEvent__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(MatchaTextInputPBFocusEvent__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - MatchaTextInputPBSubmitEvent
+
+@implementation MatchaTextInputPBSubmitEvent
+
+
+typedef struct MatchaTextInputPBSubmitEvent__storage_ {
+  uint32_t _has_storage_[1];
+} MatchaTextInputPBSubmitEvent__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MatchaTextInputPBSubmitEvent class]
+                                     rootClass:[MatchaTextInputPBTextinputRoot class]
+                                          file:MatchaTextInputPBTextinputRoot_FileDescriptor()
+                                        fields:NULL
+                                    fieldCount:0
+                                   storageSize:sizeof(MatchaTextInputPBSubmitEvent__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;

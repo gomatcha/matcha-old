@@ -53,10 +53,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
   MatchaTextInputPBView_FieldNumber_StyledText = 1,
+  MatchaTextInputPBView_FieldNumber_PlaceholderText = 2,
   MatchaTextInputPBView_FieldNumber_Focused = 4,
   MatchaTextInputPBView_FieldNumber_KeyboardType = 5,
   MatchaTextInputPBView_FieldNumber_KeyboardAppearance = 6,
   MatchaTextInputPBView_FieldNumber_KeyboardReturnType = 7,
+  MatchaTextInputPBView_FieldNumber_Multiline = 8,
+  MatchaTextInputPBView_FieldNumber_SecureTextEntry = 9,
 };
 
 @interface MatchaTextInputPBView : GPBMessage
@@ -65,6 +68,10 @@ typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
 /** Test to see if @c styledText has been set. */
 @property(nonatomic, readwrite) BOOL hasStyledText;
 
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBStyledText *placeholderText;
+/** Test to see if @c placeholderText has been set. */
+@property(nonatomic, readwrite) BOOL hasPlaceholderText;
+
 @property(nonatomic, readwrite) BOOL focused;
 
 @property(nonatomic, readwrite) enum MatchaKeyboardPBType keyboardType;
@@ -72,6 +79,10 @@ typedef GPB_ENUM(MatchaTextInputPBView_FieldNumber) {
 @property(nonatomic, readwrite) enum MatchaKeyboardPBAppearance keyboardAppearance;
 
 @property(nonatomic, readwrite) enum MatchaKeyboardPBReturnType keyboardReturnType;
+
+@property(nonatomic, readwrite) BOOL multiline;
+
+@property(nonatomic, readwrite) BOOL secureTextEntry;
 
 @end
 
@@ -134,6 +145,12 @@ typedef GPB_ENUM(MatchaTextInputPBFocusEvent_FieldNumber) {
 @interface MatchaTextInputPBFocusEvent : GPBMessage
 
 @property(nonatomic, readwrite) BOOL focused;
+
+@end
+
+#pragma mark - MatchaTextInputPBSubmitEvent
+
+@interface MatchaTextInputPBSubmitEvent : GPBMessage
 
 @end
 

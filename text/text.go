@@ -259,6 +259,14 @@ func (t *Text) normalize() {
 	t.bytes = bytes
 }
 
+func (t *Text) SetString(str string) {
+	t.bytes = []byte(str)
+	t.normalize()
+}
+
 func (t *Text) String() string {
+	if t == nil {
+		return "nil"
+	}
 	return string(t.bytes)
 }

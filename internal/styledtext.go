@@ -38,7 +38,7 @@ func (st *StyledText) Set(s *text.Style, start, end int) {
 func (st *StyledText) Update(s *text.Style, start, end int) {
 }
 
-func (st *StyledText) Size(min layout.Point, max layout.Point) layout.Point {
+func (st *StyledText) Size(min layout.Point, max layout.Point, maxLines int) layout.Point {
 	sizeFunc := &pbtext.SizeFunc{
 		Text:    st.MarshalProtobuf(),
 		MinSize: min.MarshalProtobuf(),
@@ -49,7 +49,7 @@ func (st *StyledText) Size(min layout.Point, max layout.Point) layout.Point {
 		return layout.Pt(0, 0)
 	}
 
-	pointData := bridge.Bridge().Call("sizeForAttributedString:", bridge.Bytes(data)).ToInterface().([]byte)
+	pointData := bridge.Bridge().Call("sizeForAttributedString:maxLines:", bridge.Bytes(data), bridge.Int64(int64(maxLines))).ToInterface().([]byte)
 	pbpoint := &pb.Point{}
 	err = proto.Unmarshal(pointData, pbpoint)
 	if err != nil {

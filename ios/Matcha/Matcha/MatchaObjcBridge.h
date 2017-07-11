@@ -3,7 +3,7 @@
 
 @interface MatchaObjcBridge (Extensions)
 - (void)configure;
-- (MatchaGoValue *)sizeForAttributedString:(NSData *)data;
+- (MatchaGoValue *)sizeForAttributedString:(NSData *)data maxLines:(int)maxLines;
 - (void)updateId:(NSInteger)identifier withProtobuf:(NSData *)protobuf;
 - (NSString *)assetsDir;
 - (MatchaGoValue *)imageForResource:(NSString *)path;
