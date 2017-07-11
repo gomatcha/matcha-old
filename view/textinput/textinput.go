@@ -68,7 +68,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		placeholder = text.New("")
 	}
 	placeholderStyledText := internal.NewStyledText(placeholder)
-	placeholderStyledText.Set(v.Style, 0, 0)
+	placeholderStyledText.Set(v.PlaceholderStyle, 0, 0)
 
 	if v.Responder != v.prevResponder {
 		if v.prevResponder != nil {

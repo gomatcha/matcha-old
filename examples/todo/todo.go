@@ -1,6 +1,7 @@
 package todo
 
 import (
+	"fmt"
 	"image/color"
 	"strconv"
 
@@ -111,10 +112,25 @@ func (v *AddView) Build(ctx *view.Context) *view.Model {
 		s.WidthEqual(l.MaxGuide().Width())
 	})
 
+	style := &text.Style{}
+	style.SetFont(text.Font{
+		Family: "Helvetica Neue",
+		Size:   20,
+	})
+
+	placeholderStyle := &text.Style{}
+	placeholderStyle.SetFont(text.Font{
+		Family: "Helvetica Neue",
+		Size:   20,
+	})
+	placeholderStyle.SetTextColor(colornames.Lightgray)
+
 	input := textinput.New(ctx, "input")
 	input.PaintStyle = &paint.Style{BackgroundColor: colornames.White}
 	input.Text = v.text
+	input.Style = style
 	input.PlaceholderText = text.New("What needs to be done?")
+	input.PlaceholderStyle = placeholderStyle
 	input.KeyboardReturnType = keyboard.DoneReturnType
 	input.Responder = &v.responder
 	input.OnSubmit = func() {
@@ -142,7 +158,6 @@ func (v *AddView) Build(ctx *view.Context) *view.Model {
 
 	return &view.Model{
 		Children: l.Views(),
-		// Painter:  &paint.Style{BackgroundColor: colornames.Lightgray},
 		Layouter: l,
 	}
 }
