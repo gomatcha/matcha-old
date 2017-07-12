@@ -7,15 +7,7 @@
 #import "MatchaStackScreen.h"
 #import "MatchaSwitchView.h"
 #import "MatchaButtonGestureRecognizer.h"
-#import "MatchaTextInput.h"
 #import "MatchaScrollView.h"
-#import "MatchaButton.h"
-#import "MatchaSlider.h"
-#import "MatchaBasicView.h"
-#import "MatchaTextView.h"
-#import "MatchaImageView.h"
-#import "MatchaProgressView.h"
-#import "MatchaSegmentView.h"
 
 static NSLock *sLock = nil;
 static NSMutableDictionary *sDict = nil;
