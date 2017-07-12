@@ -219,13 +219,13 @@
 			name = ProgressView;
 			sourceTree = "<group>";
 		};
-		673181A81F15F7A800E1839E /* SegmentedView */ = {
+		673181A81F15F7A800E1839E /* SegmentView */ = {
 			isa = PBXGroup;
 			children = (
 				673181A91F15F7C600E1839E /* MatchaSegmentView.h */,
 				673181AA1F15F7C600E1839E /* MatchaSegmentView.m */,
 			);
-			name = SegmentedView;
+			name = SegmentView;
 			sourceTree = "<group>";
 		};
 		673181AD1F15F81B00E1839E /* segmentview */ = {
@@ -499,7 +499,7 @@
 				67FEBB311F0A1FCF005AFEDA /* TextInput */,
 				67FEBB371F0A203D005AFEDA /* TextView */,
 				67FEBB301F0A1FCA005AFEDA /* TabScreen */,
-				673181A81F15F7A800E1839E /* SegmentedView */,
+				673181A81F15F7A800E1839E /* SegmentView */,
 				67FEBB2F1F0A1FC3005AFEDA /* SwitchView */,
 				67FEBB2E1F0A1FBC005AFEDA /* StackScreen */,
 				67FEBB2D1F0A1FB5005AFEDA /* Slider */,
@@ -511,8 +511,8 @@
 		67FEBB2B1F0A1FA8005AFEDA /* Button */ = {
 			isa = PBXGroup;
 			children = (
-				67FEBAF41F09A18F005AFEDA /* MatchaButton.m */,
 				67FEBAF51F09A18F005AFEDA /* MatchaButton.h */,
+				67FEBAF41F09A18F005AFEDA /* MatchaButton.m */,
 			);
 			name = Button;
 			sourceTree = "<group>";
@@ -538,8 +538,8 @@
 		67FEBB2E1F0A1FBC005AFEDA /* StackScreen */ = {
 			isa = PBXGroup;
 			children = (
-				67FEBAE01F09A18F005AFEDA /* MatchaStackScreen.m */,
 				67FEBAE11F09A18F005AFEDA /* MatchaStackScreen.h */,
+				67FEBAE01F09A18F005AFEDA /* MatchaStackScreen.m */,
 			);
 			name = StackScreen;
 			sourceTree = "<group>";

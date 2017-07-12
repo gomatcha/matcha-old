@@ -1,11 +1,3 @@
-//
-//  MatchaButton.m
-//  basic
-//
-//  Created by Kevin Dang on 6/17/17.
-//  Copyright © 2017 Matcha. All rights reserved.
-//
-
 #import "MatchaButton.h"
 #import "MatchaViewController.h"
 #import "MatchaProtobuf.h"
@@ -17,6 +9,12 @@
 @end
 
 @implementation MatchaButton
+
++ (void)load {
+    MatchaRegisterView(@"gomatcha.io/matcha/view/button", ^(MatchaViewNode *node){
+        return [[MatchaButton alloc] initWithViewNode:node];
+    });
+}
 
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {

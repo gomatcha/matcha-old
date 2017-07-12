@@ -3,6 +3,12 @@
 
 @implementation MatchaSlider
 
++ (void)load {
+    MatchaRegisterView(@"gomatcha.io/matcha/view/slider", ^(MatchaViewNode *node){
+        return [[MatchaSlider alloc] initWithViewNode:node];
+    });
+}
+
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;

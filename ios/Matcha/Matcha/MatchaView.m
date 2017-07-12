@@ -17,19 +17,19 @@
 #import "MatchaProgressView.h"
 #import "MatchaSegmentView.h"
 
-static NSLock *lock = nil;
-static NSMutableDictionary *dict = nil;
+static NSLock *sLock = nil;
+static NSMutableDictionary *sDict = nil;
 
-void MatchaRegisterView(NSString *string, UIView<MatchaChildView> *(^block)(MatchaViewNode*)) {
+void MatchaRegisterView(NSString *string, MatchaViewRegistrationBlock block) {
     static dispatch_once_t sOnce = 0;
     dispatch_once(&sOnce, ^{
-        lock = [[NSLock alloc] init];
-        dict = [NSMutableDictionary dictionary];
+        sLock = [[NSLock alloc] init];
+        sDict = [NSMutableDictionary dictionary];
     });
     
-    [lock lock];
-    dict[string] = block;
-    [lock unlock];
+    [sLock lock];
+    sDict[string] = block;
+    [sLock unlock];
 }
 
 UIGestureRecognizer *MatchaGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MatchaViewNode *viewNode) {
@@ -46,27 +46,14 @@ UIGestureRecognizer *MatchaGestureRecognizerWithPB(int64_t viewId, GPBAny *any, 
 UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *viewNode) {
     NSString *name = node.nativeViewName;
     UIView<MatchaChildView> *child = nil;
-    if ([name isEqual:@""]) {
-        child = [[MatchaBasicView alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"gomatcha.io/matcha/view/textview"]) {
-        child = [[MatchaTextView alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"gomatcha.io/matcha/view/imageview"]) {
-        child = [[MatchaImageView alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"gomatcha.io/matcha/view/button"]) {
-        child = [[MatchaButton alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"gomatcha.io/matcha/view/scrollview"]) {
-        child = [[MatchaScrollView alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"gomatcha.io/matcha/view/switch"]) {
-        child = [[MatchaSwitchView alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"gomatcha.io/matcha/view/textinput"]) {
-        child = [[MatchaTextInput alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"gomatcha.io/matcha/view/slider"]) {
-        child = [[MatchaSlider alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"gomatcha.io/matcha/view/progressview"]) {
-        child = [[MatchaProgressView alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"gomatcha.io/matcha/view/segmentview"]) {
-        child = [[MatchaSegmentView alloc] initWithViewNode:viewNode];
+    
+    [sLock lock];
+    MatchaViewRegistrationBlock block = sDict[name];
+    if (block != nil) {
+        child = block(viewNode);
     }
+    [sLock unlock];
+
     return child;
 }
 

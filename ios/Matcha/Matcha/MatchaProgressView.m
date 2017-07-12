@@ -3,6 +3,12 @@
 
 @implementation MatchaProgressView
 
++ (void)load {
+    MatchaRegisterView(@"gomatcha.io/matcha/view/progressview", ^(MatchaViewNode *node){
+        return [[MatchaProgressView alloc] initWithViewNode:node];
+    });
+}
+
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;        

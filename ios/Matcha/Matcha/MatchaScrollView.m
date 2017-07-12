@@ -4,6 +4,12 @@
 
 @implementation MatchaScrollView
 
++ (void)load {
+    MatchaRegisterView(@"gomatcha.io/matcha/view/scrollview", ^(MatchaViewNode *node){
+        return [[MatchaScrollView alloc] initWithViewNode:node];
+    });
+}
+
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;

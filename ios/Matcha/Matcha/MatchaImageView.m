@@ -7,6 +7,12 @@
 
 @implementation MatchaImageView
 
++ (void)load {
+    MatchaRegisterView(@"gomatcha.io/matcha/view/imageview", ^(MatchaViewNode *node){
+        return [[MatchaImageView alloc] initWithViewNode:node];
+    });
+}
+
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;

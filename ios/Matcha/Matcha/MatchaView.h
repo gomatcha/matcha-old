@@ -16,10 +16,12 @@
 - (void)setMatchaChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs;
 @end
 
+typedef UIView<MatchaChildView> *(^MatchaViewRegistrationBlock)(MatchaViewNode *);
+
 UIGestureRecognizer *MatchaGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MatchaViewNode *viewNode);
 UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *viewNode);
 UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(MatchaNode *node, MatchaViewNode *viewNode);
-void MatchaRegisterView(NSString *string, UIView<MatchaChildView> *(^block)(MatchaViewNode*));
+void MatchaRegisterView(NSString *string, MatchaViewRegistrationBlock block);
 
 @interface MatchaViewNode : NSObject
 - (id)initWithParent:(MatchaViewNode *)node rootVC:(MatchaViewController *)rootVC;

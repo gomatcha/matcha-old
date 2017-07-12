@@ -7,6 +7,12 @@
 
 @implementation MatchaBasicView
 
++ (void)load {
+    MatchaRegisterView(@"", ^(MatchaViewNode *node){
+        return [[MatchaBasicView alloc] initWithViewNode:node];
+    });
+}
+
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;

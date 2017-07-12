@@ -7,6 +7,12 @@
 
 @implementation MatchaTextView
 
++ (void)load {
+    MatchaRegisterView(@"gomatcha.io/matcha/view/textview", ^(MatchaViewNode *node){
+        return [[MatchaTextView alloc] initWithViewNode:node];
+    });
+}
+
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;

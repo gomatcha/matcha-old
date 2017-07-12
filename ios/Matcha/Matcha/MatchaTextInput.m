@@ -5,6 +5,12 @@
 
 @implementation MatchaTextInput
 
++ (void)load {
+    MatchaRegisterView(@"gomatcha.io/matcha/view/textinput", ^(MatchaViewNode *node){
+        return [[MatchaTextInput alloc] initWithViewNode:node];
+    });
+}
+
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;

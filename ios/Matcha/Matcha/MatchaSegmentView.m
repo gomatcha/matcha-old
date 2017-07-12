@@ -2,6 +2,12 @@
 
 @implementation MatchaSegmentView
 
++ (void)load {
+    MatchaRegisterView(@"gomatcha.io/matcha/view/segmentview", ^(MatchaViewNode *node){
+        return [[MatchaSegmentView alloc] initWithViewNode:node];
+    });
+}
+
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;
