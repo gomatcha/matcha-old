@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef GPB_ENUM(MatchaSegmentViewPbView_FieldNumber) {
   MatchaSegmentViewPbView_FieldNumber_Value = 1,
-  MatchaSegmentViewPbView_FieldNumber_TitleArray = 2,
+  MatchaSegmentViewPbView_FieldNumber_TitlesArray = 2,
   MatchaSegmentViewPbView_FieldNumber_Momentary = 3,
   MatchaSegmentViewPbView_FieldNumber_Enabled = 4,
 };
@@ -57,9 +57,9 @@ typedef GPB_ENUM(MatchaSegmentViewPbView_FieldNumber) {
 
 @property(nonatomic, readwrite) int64_t value;
 
-@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *titleArray;
-/** The number of items in @c titleArray without causing the array to be created. */
-@property(nonatomic, readonly) NSUInteger titleArray_Count;
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *titlesArray;
+/** The number of items in @c titlesArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger titlesArray_Count;
 
 @property(nonatomic, readwrite) BOOL momentary;
 

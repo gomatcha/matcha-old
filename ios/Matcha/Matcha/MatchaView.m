@@ -15,6 +15,7 @@
 #import "MatchaTextView.h"
 #import "MatchaImageView.h"
 #import "MatchaProgressView.h"
+#import "MatchaSegmentView.h"
 
 UIGestureRecognizer *MatchaGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MatchaViewNode *viewNode) {
     if ([any.typeURL isEqual:@"type.googleapis.com/matcha.touch.TapRecognizer"]) {
@@ -48,6 +49,8 @@ UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *vi
         child = [[MatchaSlider alloc] initWithViewNode:viewNode];
     } else if ([name isEqual:@"gomatcha.io/matcha/view/progressview"]) {
         child = [[MatchaProgressView alloc] initWithViewNode:viewNode];
+    } else if ([name isEqual:@"gomatcha.io/matcha/view/segmentview"]) {
+        child = [[MatchaSegmentView alloc] initWithViewNode:viewNode];
     }
     return child;
 }

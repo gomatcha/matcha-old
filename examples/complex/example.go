@@ -21,6 +21,7 @@ import (
 	"gomatcha.io/matcha/view/imageview"
 	"gomatcha.io/matcha/view/progressview"
 	"gomatcha.io/matcha/view/scrollview"
+	"gomatcha.io/matcha/view/segmentview"
 	"gomatcha.io/matcha/view/slider"
 	"gomatcha.io/matcha/view/switchview"
 	"gomatcha.io/matcha/view/textview"
@@ -214,6 +215,18 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	_ = l.Add(chl13, func(s *constraint.Solver) {
 		s.TopEqual(g12.Bottom().Add(5))
 		s.LeftEqual(l.Left())
+		s.Width(150)
+	})
+
+	chl14 := segmentview.New(ctx, "14")
+	chl14.Titles = []string{"Title1", "Title2", "Title3"}
+	chl14.OnValueChange = func(v int) {
+		fmt.Println("on value change", v)
+	}
+	chl14.PaintStyle = &paint.Style{BackgroundColor: colornames.White}
+	_ = l.Add(chl14, func(s *constraint.Solver) {
+		s.TopEqual(g5.Bottom())
+		s.RightEqual(g5.Right())
 		s.Width(150)
 	})
 

@@ -1,6 +1,4 @@
 #import "MatchaSegmentView.h"
-#import "MatchaProtobuf.h"
-#import "MatchaViewController.h"
 
 @implementation MatchaSegmentView
 
@@ -14,22 +12,26 @@
 
 - (void)setNode:(MatchaNode *)value {
     _node = value;
-    GPBAny *state = value.nativeViewState;
+
     NSError *error = nil;
-    MatchaSegmentViewPbView *view = (id)[state unpackMessageClass:[MatchaSegmentViewPbView class] error:&error];
-    if (view != nil) {
-        self.selectedSegmentIndex = view.value;
-        self.enabled = view.enabled;
-        self.momentary = view.momentary;
+    MatchaSegmentViewPbView *view = (id)[value.nativeViewState unpackMessageClass:[MatchaSegmentViewPbView class] error:&error];
+    if (error != nil) {
+        NSLog(@"Error:%@", error);
+    }
+    
+    self.selectedSegmentIndex = view.value;
+    self.enabled = view.enabled;
+    self.momentary = view.momentary;
+    [self removeAllSegments];
+    for (NSInteger i = 0; i < view.titlesArray.count; i++) {
+        [self insertSegmentWithTitle:view.titlesArray[i] atIndex:i animated:NO];
     }
 }
 
 - (void)onChange:(id)sender {
-    MatchaPBSwitchViewEvent *event = [[MatchaPBSwitchViewEvent alloc] init];
+    MatchaSegmentViewPbEvent *event = [[MatchaSegmentViewPbEvent alloc] init];
     event.value = self.selectedSegmentIndex;
-    
-    NSData *data = [event data];
-    MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:data];
+    MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:event.data];
     
     [self.viewNode.rootVC call:@"OnChange" viewId:self.node.identifier.longLongValue args:@[value]];
 }

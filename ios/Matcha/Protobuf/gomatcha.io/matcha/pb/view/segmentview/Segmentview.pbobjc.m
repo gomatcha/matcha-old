@@ -48,13 +48,13 @@ static GPBFileDescriptor *MatchaSegmentViewPbSegmentviewRoot_FileDescriptor(void
 @implementation MatchaSegmentViewPbView
 
 @dynamic value;
-@dynamic titleArray, titleArray_Count;
+@dynamic titlesArray, titlesArray_Count;
 @dynamic momentary;
 @dynamic enabled;
 
 typedef struct MatchaSegmentViewPbView__storage_ {
   uint32_t _has_storage_[1];
-  NSMutableArray *titleArray;
+  NSMutableArray *titlesArray;
   int64_t value;
 } MatchaSegmentViewPbView__storage_;
 
@@ -74,11 +74,11 @@ typedef struct MatchaSegmentViewPbView__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
-        .name = "titleArray",
+        .name = "titlesArray",
         .dataTypeSpecific.className = NULL,
-        .number = MatchaSegmentViewPbView_FieldNumber_TitleArray,
+        .number = MatchaSegmentViewPbView_FieldNumber_TitlesArray,
         .hasIndex = GPBNoHasBit,
-        .offset = (uint32_t)offsetof(MatchaSegmentViewPbView__storage_, titleArray),
+        .offset = (uint32_t)offsetof(MatchaSegmentViewPbView__storage_, titlesArray),
         .flags = GPBFieldRepeated,
         .dataType = GPBDataTypeString,
       },

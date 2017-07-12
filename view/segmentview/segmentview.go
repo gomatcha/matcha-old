@@ -14,9 +14,9 @@ type View struct {
 	*view.Embed
 	Enabled       bool
 	Momentary     bool
-	OnValueChange func(value int)
 	Titles        []string
 	Value         int
+	OnValueChange func(value int)
 	PaintStyle    *paint.Style
 }
 
@@ -24,7 +24,7 @@ func New(ctx *view.Context, key string) *View {
 	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
 	}
-	return &View{Embed: ctx.NewEmbed(key)}
+	return &View{Embed: ctx.NewEmbed(key), Enabled: true}
 }
 
 func (v *View) Build(ctx *view.Context) *view.Model {
@@ -45,7 +45,10 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		Layouter:       l,
 		NativeViewName: "gomatcha.io/matcha/view/segmentview",
 		NativeViewState: &segmentview.View{
-			Value: int64(v.Value),
+			Value:     int64(v.Value),
+			Titles:    v.Titles,
+			Enabled:   v.Enabled,
+			Momentary: v.Momentary,
 		},
 		NativeFuncs: map[string]interface{}{
 			"OnChange": func(data []byte) {
