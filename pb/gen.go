@@ -15,6 +15,7 @@ package pb
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/view/progressview/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/view/tabscreen/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/view/textinput/*.proto )"
+//go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/view/segmentview/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/view/button/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/view/slider/*.proto )"
 
@@ -35,3 +36,4 @@ package pb
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=gomatcha.io/matcha/ios/Matcha/Protobuf gomatcha.io/matcha/pb/view/textinput/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=gomatcha.io/matcha/ios/Matcha/Protobuf gomatcha.io/matcha/pb/view/button/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=gomatcha.io/matcha/ios/Matcha/Protobuf gomatcha.io/matcha/pb/view/slider/*.proto )"
+//go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=gomatcha.io/matcha/ios/Matcha/Protobuf gomatcha.io/matcha/pb/view/segmentview/*.proto )"
