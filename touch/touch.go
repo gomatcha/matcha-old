@@ -3,20 +3,24 @@ Package constraint implements touch recognizers.
 
 Create the touch recognizer in the Build function.
 
- tap := &touch.TapRecognizer{
- 	Count: 1,
- 	OnTouch: func(e *touch.TapEvent) {
- 		// Respond to touch events. This callback occurs on main thread.
- 		fmt.Println("view touched")
- 	},
- }
+ func (v *MyView) Build(ctx *view.Context) *view.Model {
+ 	tap := &touch.TapRecognizer{
+ 		Count: 1,
+ 		OnTouch: func(e *touch.TapEvent) {
+ 			// Respond to touch events. This callback occurs on main thread.
+ 			fmt.Println("view touched")
+ 		},
+ 	}
+ 	...
 
 Attach the recognizer to the view.
 
- return &view.Model{
- 	Values: map[interface{}]interface{}{
- 		touch.Key:[]touch.Recognizer{tap},
- 	},
+	...
+ 	return &view.Model{
+ 		Values: map[interface{}]interface{}{
+ 			touch.Key:[]touch.Recognizer{tap},
+ 		},
+ 	}
  }
 */
 package touch
@@ -42,6 +46,7 @@ func init() {
 type key struct{}
 type _idKey struct{}
 
+// Key is the key to use in view.Model.Values. The corresponding value should be a []touch.Recognizer.
 var Key = key{}
 var idKey = _idKey{}
 
@@ -148,7 +153,10 @@ type Recognizer interface {
 	equal(Recognizer) bool
 }
 
+// TapEvent is emitted by TapRecognizer, representing its current state.
 type TapEvent struct {
+	// Kind      EventKind
+
 	Timestamp time.Time
 	Position  layout.Point
 }
@@ -156,10 +164,12 @@ type TapEvent struct {
 func (e *TapEvent) unmarshalProtobuf(ev *pbtouch.TapEvent) error {
 	t, _ := ptypes.Timestamp(ev.Timestamp)
 	e.Timestamp = t
+	// e.Kind = EventKind(ev.Kind)
 	e.Position.UnmarshalProtobuf(ev.Position)
 	return nil
 }
 
+// PressRecognizer is a discrete recognizer that detects a number of taps.
 type TapRecognizer struct {
 	Count   int
 	OnTouch func(*TapEvent)
@@ -202,15 +212,28 @@ func (r *TapRecognizer) marshalProtobuf(ctx *view.Context) (proto.Message, map[s
 		}
 }
 
+// EventKind are the possible recognizer states
+//
+// Discrete gestures:
+//  EventKindPossible -> EventKindFailed
+//  EventKindPossible -> EventKindRecognized
+// Continuous gestures:
+//  EventKindPossible -> EventKindChanged(optionally) -> EventKindFailed
+//  EventKindPossible -> EventKindChanged(optionally) -> EventKindRecognized
 type EventKind int
 
 const (
+	// Finger is down, but before gesture has been recognized.
 	EventKindPossible EventKind = iota
+	// After the continuous gesture has been recognized, while the finger is still down. Only for continuous recognizers.
 	EventKindChanged
+	// Gesture recognition failed or cancelled.
 	EventKindFailed
+	// Gesture recognition succeded.
 	EventKindRecognized
 )
 
+// PressEvent is emitted by PressRecognizer, representing its current state.
 type PressEvent struct {
 	Kind      EventKind
 	Timestamp time.Time
@@ -234,6 +257,7 @@ func (e *PressEvent) unmarshalProtobuf(ev *pbtouch.PressEvent) error {
 	return nil
 }
 
+// PressRecognizer is a continuous recognizer that detects single presses with a given duration.
 type PressRecognizer struct {
 	MinDuration time.Duration
 	OnTouch     func(e *PressEvent)
@@ -275,6 +299,7 @@ func (r *PressRecognizer) marshalProtobuf(ctx *view.Context) (proto.Message, map
 		}
 }
 
+// ButtonEvent is emitted by ButtonRecognizer, representing its current state.
 type ButtonEvent struct {
 	Timestamp time.Time
 	Inside    bool
@@ -292,6 +317,7 @@ func (e *ButtonEvent) unmarshalProtobuf(ev *pbtouch.ButtonEvent) error {
 	return nil
 }
 
+// ButtonRecognizer is a discrete recognizer that mimics the behavior of a button. The recognizer will fail if the touch ends outside of the view's bounds.
 type ButtonRecognizer struct {
 	OnTouch       func(e *ButtonEvent)
 	IgnoresScroll bool

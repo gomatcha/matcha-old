@@ -43,6 +43,7 @@ message TapRecognizer {
 message TapEvent {
     google.protobuf.Timestamp timestamp = 1;
     matcha.layout.Point position = 2;
+    EventKind kind = 3;
 }
 
 message PressRecognizer {

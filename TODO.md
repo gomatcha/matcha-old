@@ -77,7 +77,6 @@ Documentation:
 
 Pro:
 * Debugging
-* Deadlock detection
 * LocalStorage / Keychain / UserDefaults
 * Cliboard
 * Notifications

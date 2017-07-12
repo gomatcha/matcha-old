@@ -389,9 +389,11 @@ typedef struct MatchaPBTouchTapRecognizer__storage_ {
 
 @dynamic hasTimestamp, timestamp;
 @dynamic hasPosition, position;
+@dynamic kind;
 
 typedef struct MatchaPBTouchTapEvent__storage_ {
   uint32_t _has_storage_[1];
+  MatchaPBTouchEventKind kind;
   GPBTimestamp *timestamp;
   MatchaLayoutPBPoint *position;
 } MatchaPBTouchTapEvent__storage_;
@@ -420,6 +422,15 @@ typedef struct MatchaPBTouchTapEvent__storage_ {
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
       },
+      {
+        .name = "kind",
+        .dataTypeSpecific.enumDescFunc = MatchaPBTouchEventKind_EnumDescriptor,
+        .number = MatchaPBTouchTapEvent_FieldNumber_Kind,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MatchaPBTouchTapEvent__storage_, kind),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldHasEnumDescriptor),
+        .dataType = GPBDataTypeEnum,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MatchaPBTouchTapEvent class]
@@ -436,6 +447,18 @@ typedef struct MatchaPBTouchTapEvent__storage_ {
 }
 
 @end
+
+int32_t MatchaPBTouchTapEvent_Kind_RawValue(MatchaPBTouchTapEvent *message) {
+  GPBDescriptor *descriptor = [MatchaPBTouchTapEvent descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MatchaPBTouchTapEvent_FieldNumber_Kind];
+  return GPBGetMessageInt32Field(message, field);
+}
+
+void SetMatchaPBTouchTapEvent_Kind_RawValue(MatchaPBTouchTapEvent *message, int32_t value) {
+  GPBDescriptor *descriptor = [MatchaPBTouchTapEvent descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MatchaPBTouchTapEvent_FieldNumber_Kind];
+  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+}
 
 #pragma mark - MatchaPBTouchPressRecognizer
 

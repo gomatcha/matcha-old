@@ -171,6 +171,7 @@ typedef GPB_ENUM(MatchaPBTouchTapRecognizer_FieldNumber) {
 typedef GPB_ENUM(MatchaPBTouchTapEvent_FieldNumber) {
   MatchaPBTouchTapEvent_FieldNumber_Timestamp = 1,
   MatchaPBTouchTapEvent_FieldNumber_Position = 2,
+  MatchaPBTouchTapEvent_FieldNumber_Kind = 3,
 };
 
 @interface MatchaPBTouchTapEvent : GPBMessage
@@ -183,7 +184,21 @@ typedef GPB_ENUM(MatchaPBTouchTapEvent_FieldNumber) {
 /** Test to see if @c position has been set. */
 @property(nonatomic, readwrite) BOOL hasPosition;
 
+@property(nonatomic, readwrite) MatchaPBTouchEventKind kind;
+
 @end
+
+/**
+ * Fetches the raw value of a @c MatchaPBTouchTapEvent's @c kind property, even
+ * if the value was not defined by the enum at the time the code was generated.
+ **/
+int32_t MatchaPBTouchTapEvent_Kind_RawValue(MatchaPBTouchTapEvent *message);
+/**
+ * Sets the raw value of an @c MatchaPBTouchTapEvent's @c kind property, allowing
+ * it to be set to a value that was not defined by the enum at the time the code
+ * was generated.
+ **/
+void SetMatchaPBTouchTapEvent_Kind_RawValue(MatchaPBTouchTapEvent *message, int32_t value);
 
 #pragma mark - MatchaPBTouchPressRecognizer
 
