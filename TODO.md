@@ -11,11 +11,8 @@ Medium:
 * User registered views.
 
 Low:
-* Remove max lines from Text.Style
 * Have matcha flag that generates a new xcodeproj for easy setup.
 * Add tests around core functionality. Store, etc.
-* Automatically insert copyright notice.
-* StyledText
 * Updating a tabscreen should not trigger a rebuild of its children.
 * Webview
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
@@ -35,6 +32,8 @@ Low:
 * Compile a list of things that should be easy to do and implement them. Button activation cancelled by vertical scrolling but not horizontal, Pinch to zoom, Highlighting a view and dragging outside of it and back in., Horizontal swipe on tableview to show delete button, Touch driven animations. AKA swipe back to navigate.
 
 Very Low:
+* Automatically insert copyright notice.
+* StyledText
 * Text selection.
 * Localization
 * View 3d transforms.

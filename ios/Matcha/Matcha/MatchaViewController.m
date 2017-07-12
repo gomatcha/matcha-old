@@ -33,7 +33,7 @@
 - (id)initWithGoValue:(MatchaGoValue *)value {
     if ((self = [super initWithNibName:nil bundle:nil])) {
         self.goValue = value;
-        self.identifier = [value call:@"Id" args:nil][0].toLongLong;
+        self.identifier = (int)[value call:@"Id" args:nil][0].toLongLong;
         [[MatchaViewController viewControllers] addPointer:(__bridge void *)self];
         self.viewNode = [[MatchaViewNode alloc] initWithParent:nil rootVC:self];
         self.edgesForExtendedLayout = UIRectEdgeNone;

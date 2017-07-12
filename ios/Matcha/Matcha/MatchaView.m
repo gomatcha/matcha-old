@@ -17,6 +17,21 @@
 #import "MatchaProgressView.h"
 #import "MatchaSegmentView.h"
 
+static NSLock *lock = nil;
+static NSMutableDictionary *dict = nil;
+
+void MatchaRegisterView(NSString *string, UIView<MatchaChildView> *(^block)(MatchaViewNode*)) {
+    static dispatch_once_t sOnce = 0;
+    dispatch_once(&sOnce, ^{
+        lock = [[NSLock alloc] init];
+        dict = [NSMutableDictionary dictionary];
+    });
+    
+    [lock lock];
+    dict[string] = block;
+    [lock unlock];
+}
+
 UIGestureRecognizer *MatchaGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MatchaViewNode *viewNode) {
     if ([any.typeURL isEqual:@"type.googleapis.com/matcha.touch.TapRecognizer"]) {
         return [[MatchaTapGestureRecognizer alloc] initWithMatchaVC:viewNode.rootVC viewId:viewId protobuf:any];

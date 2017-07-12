@@ -19,7 +19,7 @@
         NSLog(@"Error:%@", error);
     }
     
-    self.selectedSegmentIndex = view.value;
+    self.selectedSegmentIndex = (int)view.value;
     self.enabled = view.enabled;
     self.momentary = view.momentary;
     [self removeAllSegments];

@@ -110,7 +110,7 @@
     if (self = [super init]) {
         self.frame = guide.frame.toCGRect;
         self.insets = guide.insets.toUIEdgeInsets;
-        self.zIndex = guide.zIndex;
+        self.zIndex = (int)guide.zIndex;
     }
     return self;
 }

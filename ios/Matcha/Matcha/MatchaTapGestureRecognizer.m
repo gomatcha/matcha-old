@@ -21,7 +21,7 @@
         return nil;
     }
     if ((self = [super initWithTarget:self action:@selector(action:)])) {
-        self.numberOfTapsRequired = pbTapRecognizer.count;
+        self.numberOfTapsRequired = (int)pbTapRecognizer.count;
         self.viewController = viewController;
         self.funcId = pbTapRecognizer.recognizedFunc;
         self.viewId = viewId;

@@ -29,7 +29,7 @@
     }
     
     self.viewControllers = viewControllers;
-    self.selectedIndex = pbTabNavigator.selectedIndex;
+    self.selectedIndex = (int)pbTabNavigator.selectedIndex;
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {

@@ -245,7 +245,7 @@
 @implementation UIImage (Matcha)
 
 - (id)initWithProtobuf:(MatchaPBImage *)value {
-    CIImage *image = [CIImage imageWithBitmapData:value.data_p bytesPerRow:value.stride size:CGSizeMake(value.width, value.height) format:kCIFormatRGBA8 colorSpace:CGColorSpaceCreateDeviceRGB()];
+    CIImage *image = [CIImage imageWithBitmapData:value.data_p bytesPerRow:(size_t)value.stride size:CGSizeMake(value.width, value.height) format:kCIFormatRGBA8 colorSpace:CGColorSpaceCreateDeviceRGB()];
     return [self initWithCIImage:image];
 }
 
