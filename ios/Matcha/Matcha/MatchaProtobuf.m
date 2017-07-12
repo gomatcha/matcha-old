@@ -231,7 +231,6 @@
     }
     
     style.lineHeightMultiple = paragraphStyle.lineHeightMultiple;
-    // TODO(KD): AttributeKeyMaxLines
     if (dictionary[NSForegroundColorAttributeName]) {
         style.textColor = ((UIColor *)dictionary[NSForegroundColorAttributeName]).protobuf;
     }  

@@ -74,6 +74,7 @@ Documentation:
     * textview
     * urlimageview
     * progressview
+    * segmentview
 
 Pro:
 * Debugging

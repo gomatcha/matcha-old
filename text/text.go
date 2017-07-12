@@ -1,10 +1,8 @@
+// Package text implements text styling.
 package text
 
 import (
-	"sync"
-
-	"golang.org/x/text/unicode/norm"
-
+	"gomatcha.io/matcha/comm"
 	pb "gomatcha.io/matcha/pb/text"
 )
 
@@ -26,21 +24,23 @@ import (
 // }
 
 type Text struct {
-	bytes         []byte
-	isRune        []bool
-	isGlyph       []bool
-	runeCount     int
-	glyphCount    int
-	positions     map[int64]int
-	positionMaxId int64
-	positionMu    *sync.Mutex
+	group comm.GroupNotifier
+	bytes []byte
+	// isRune        []bool
+	// isGlyph       []bool
+	// runeCount     int
+	// glyphCount    int
+	// positions     map[int64]int
+	// positionMaxId int64
+	// positionMu    *sync.Mutex
 }
 
+// New is a convenience function that returns a new Text that contains string b.
 func New(b string) *Text {
 	t := &Text{}
 	t.bytes = []byte(b)
-	t.positions = map[int64]int{}
-	t.normalize()
+	// t.positions = map[int64]int{}
+	// t.normalize()
 	return t
 }
 
@@ -54,9 +54,18 @@ func (t *Text) MarshalProtobuf() *pb.Text {
 }
 
 func (t *Text) UnmarshalProtobuf(pbtext *pb.Text) error {
-	t.bytes = []byte(pbtext.Text)
-	t.normalize()
+	t.SetString(pbtext.Text)
 	return nil
+}
+
+// Notify implements comm.Notify.
+func (t *Text) Notify(f func()) comm.Id {
+	return t.group.Notify(f)
+}
+
+// Unnotify implements comm.Notify.
+func (t *Text) Unnotify(id comm.Id) {
+	t.group.Unnotify(id)
 }
 
 // // Panics if idx is out of range.
@@ -227,41 +236,42 @@ func (t *Text) UnmarshalProtobuf(pbtext *pb.Text) error {
 // 	return p
 // }
 
-func (t *Text) normalize() {
-	runeCount := 0
-	glyphCount := 0
-	isRune := make([]bool, 0, len(t.bytes))
-	isGlyph := make([]bool, 0, len(t.bytes))
-	bytes := make([]byte, 0, len(t.bytes))
+// func (t *Text) normalize() {
+// 	runeCount := 0
+// 	glyphCount := 0
+// 	isRune := make([]bool, 0, len(t.bytes))
+// 	isGlyph := make([]bool, 0, len(t.bytes))
+// 	bytes := make([]byte, 0, len(t.bytes))
 
-	var iter norm.Iter
-	iter.InitString(norm.NFD, string(t.bytes))
-	for !iter.Done() {
-		glyph := iter.Next()
-		bytes = append(bytes, glyph...)
+// 	var iter norm.Iter
+// 	iter.InitString(norm.NFD, string(t.bytes))
+// 	for !iter.Done() {
+// 		glyph := iter.Next()
+// 		bytes = append(bytes, glyph...)
 
-		for i := range glyph {
-			isGlyph = append(isGlyph, i == 0)
-		}
-		glyphCount += 1
+// 		for i := range glyph {
+// 			isGlyph = append(isGlyph, i == 0)
+// 		}
+// 		glyphCount += 1
 
-		isRuneSub := make([]bool, len(glyph))
-		for i := range string(glyph) {
-			isRuneSub[i] = true
-			runeCount += 1
-		}
-		isRune = append(isRune, isRuneSub...)
-	}
-	t.glyphCount = glyphCount
-	t.runeCount = runeCount
-	t.isGlyph = isGlyph
-	t.isRune = isRune
-	t.bytes = bytes
-}
+// 		isRuneSub := make([]bool, len(glyph))
+// 		for i := range string(glyph) {
+// 			isRuneSub[i] = true
+// 			runeCount += 1
+// 		}
+// 		isRune = append(isRune, isRuneSub...)
+// 	}
+// 	t.glyphCount = glyphCount
+// 	t.runeCount = runeCount
+// 	t.isGlyph = isGlyph
+// 	t.isRune = isRune
+// 	t.bytes = bytes
+// }
 
 func (t *Text) SetString(str string) {
 	t.bytes = []byte(str)
-	t.normalize()
+	// t.normalize()
+	t.group.Signal()
 }
 
 func (t *Text) String() string {

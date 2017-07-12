@@ -3,10 +3,11 @@ package text
 import (
 	"image/color"
 
-	pb2 "gomatcha.io/matcha/pb"
-	pb "gomatcha.io/matcha/pb/text"
+	"gomatcha.io/matcha/pb"
+	pbtext "gomatcha.io/matcha/pb/text"
 )
 
+// Alignment represents a text alignment.
 type Alignment int
 
 const (
@@ -16,10 +17,11 @@ const (
 	AlignmentJustified
 )
 
-func (a Alignment) MarshalProtobuf() pb.TextAlignment {
-	return pb.TextAlignment(a)
+func (a Alignment) MarshalProtobuf() pbtext.TextAlignment {
+	return pbtext.TextAlignment(a)
 }
 
+// StrikethroughStyle represents a text strikethrough style.
 type StrikethroughStyle int
 
 const (
@@ -31,10 +33,11 @@ const (
 	StrikethroughStyleDashed
 )
 
-func (a StrikethroughStyle) MarshalProtobuf() pb.StrikethroughStyle {
-	return pb.StrikethroughStyle(a)
+func (a StrikethroughStyle) MarshalProtobuf() pbtext.StrikethroughStyle {
+	return pbtext.StrikethroughStyle(a)
 }
 
+// StrikethroughStyle represents a text underline style.
 type UnderlineStyle int
 
 const (
@@ -46,24 +49,26 @@ const (
 	UnderlineStyleDashed
 )
 
-func (a UnderlineStyle) MarshalProtobuf() pb.UnderlineStyle {
-	return pb.UnderlineStyle(a)
+func (a UnderlineStyle) MarshalProtobuf() pbtext.UnderlineStyle {
+	return pbtext.UnderlineStyle(a)
 }
 
+// StrikethroughStyle represents a text font.
 type Font struct {
 	Family string
 	Face   string
 	Size   float64
 }
 
-func (f Font) MarshalProtobuf() *pb.Font {
-	return &pb.Font{
+func (f Font) MarshalProtobuf() *pbtext.Font {
+	return &pbtext.Font{
 		Family: f.Family,
 		Face:   f.Face,
 		Size:   f.Size,
 	}
 }
 
+// StrikethroughStyle represents how text is wrapped.
 type Wrap int
 
 const (
@@ -72,10 +77,11 @@ const (
 	WrapCharacter
 )
 
-func (a Wrap) MarshalProtobuf() pb.TextWrap {
-	return pb.TextWrap(a)
+func (a Wrap) MarshalProtobuf() pbtext.TextWrap {
+	return pbtext.TextWrap(a)
 }
 
+// Truncation represents how text is truncated to fit within the bounds.
 type Truncation int
 
 const (
@@ -85,8 +91,8 @@ const (
 	TruncationEnd
 )
 
-func (a Truncation) MarshalProtobuf() pb.Truncation {
-	return pb.Truncation(a)
+func (a Truncation) MarshalProtobuf() pbtext.Truncation {
+	return pbtext.Truncation(a)
 }
 
 type styleKey int
@@ -100,13 +106,14 @@ const (
 	styleKeyFont
 	styleKeyHyphenation
 	styleKeyLineHeightMultiple
-	styleKeyMaxLines
+	styleKeyMaxLines // Deprecated
 	styleKeyTextColor
 	styleKeyWrap
 	styleKeyTruncation
 	styleKeyTruncationString
 )
 
+// Style holds a group of text formatting options.
 type Style struct {
 	attributes map[styleKey]interface{}
 	cleared    map[styleKey]bool
@@ -189,6 +196,7 @@ func (f *Style) copy() *Style {
 	return c
 }
 
+// Applies the styels from u to f.
 func (f *Style) Update(u *Style) {
 	for k, v := range u.attributes {
 		f.attributes[k] = v
@@ -198,22 +206,21 @@ func (f *Style) Update(u *Style) {
 	}
 }
 
-func (f *Style) MarshalProtobuf() *pb.TextStyle {
+func (f *Style) MarshalProtobuf() *pbtext.TextStyle {
 	if f == nil {
 		f = &Style{}
 	}
 
-	return &pb.TextStyle{
+	return &pbtext.TextStyle{
 		TextAlignment:      f.get(styleKeyAlignment).(Alignment).MarshalProtobuf(),
 		StrikethroughStyle: f.get(styleKeyStrikethroughStyle).(StrikethroughStyle).MarshalProtobuf(),
-		StrikethroughColor: pb2.ColorEncode(f.get(styleKeyStrikethroughColor).(color.Color)),
+		StrikethroughColor: pb.ColorEncode(f.get(styleKeyStrikethroughColor).(color.Color)),
 		UnderlineStyle:     f.get(styleKeyUnderlineStyle).(UnderlineStyle).MarshalProtobuf(),
-		UnderlineColor:     pb2.ColorEncode(f.get(styleKeyUnderlineColor).(color.Color)),
+		UnderlineColor:     pb.ColorEncode(f.get(styleKeyUnderlineColor).(color.Color)),
 		Font:               f.get(styleKeyFont).(Font).MarshalProtobuf(),
 		Hyphenation:        f.get(styleKeyHyphenation).(float64),
 		LineHeightMultiple: f.get(styleKeyLineHeightMultiple).(float64),
-		MaxLines:           int64(f.get(styleKeyMaxLines).(int)),
-		TextColor:          pb2.ColorEncode(f.get(styleKeyTextColor).(color.Color)),
+		TextColor:          pb.ColorEncode(f.get(styleKeyTextColor).(color.Color)),
 		Wrap:               f.get(styleKeyWrap).(Wrap).MarshalProtobuf(),
 		Truncation:         f.get(styleKeyTruncation).(Truncation).MarshalProtobuf(),
 		TruncationString:   f.get(styleKeyTruncationString).(string),
@@ -228,7 +235,7 @@ func (f *Style) SetAlignment(v Alignment) {
 	f.set(styleKeyAlignment, v)
 }
 
-func (f *Style) DeleteAlignment() {
+func (f *Style) ClearAlignment() {
 	f.clear(styleKeyAlignment)
 }
 
@@ -314,18 +321,6 @@ func (f *Style) SetLineHeightMultiple(v float64) {
 
 func (f *Style) ClearLineHeightMultiple() {
 	f.clear(styleKeyLineHeightMultiple)
-}
-
-func (f *Style) MaxLines() int {
-	return f.get(styleKeyMaxLines).(int)
-}
-
-func (f *Style) SetMaxLines(v int) {
-	f.set(styleKeyMaxLines, v)
-}
-
-func (f *Style) ClearMaxLines() {
-	f.clear(styleKeyMaxLines)
 }
 
 func (f *Style) TextColor() color.Color {
