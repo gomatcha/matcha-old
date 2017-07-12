@@ -155,7 +155,7 @@ type Recognizer interface {
 
 // TapEvent is emitted by TapRecognizer, representing its current state.
 type TapEvent struct {
-	// Kind      EventKind
+	// Kind      EventKind // TODO(KD):
 
 	Timestamp time.Time
 	Position  layout.Point
@@ -235,7 +235,7 @@ const (
 
 // PressEvent is emitted by PressRecognizer, representing its current state.
 type PressEvent struct {
-	Kind      EventKind
+	Kind      EventKind // TODO(KD): Does this work?
 	Timestamp time.Time
 	Position  layout.Point
 	Duration  time.Duration

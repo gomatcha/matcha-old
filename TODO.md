@@ -59,7 +59,6 @@ Documentation:
 * examples
 * layout
 * text
-* touch
 * view 
     * basicview
     * button
