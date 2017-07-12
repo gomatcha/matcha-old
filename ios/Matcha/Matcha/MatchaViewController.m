@@ -36,6 +36,9 @@
         self.identifier = [value call:@"Id" args:nil][0].toLongLong;
         [[MatchaViewController viewControllers] addPointer:(__bridge void *)self];
         self.viewNode = [[MatchaViewNode alloc] initWithParent:nil rootVC:self];
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        self.extendedLayoutIncludesOpaqueBars=NO;
+        self.automaticallyAdjustsScrollViewInsets=NO;
     }
     return self;
 }
@@ -70,5 +73,7 @@
 @end
 
 void MatchaConfigureChildViewController(UIViewController *vc) {
-    vc.edgesForExtendedLayout = UIRectEdgeNone;
+    vc.edgesForExtendedLayout=UIRectEdgeNone;
+    vc.extendedLayoutIncludesOpaqueBars=NO;
+    vc.automaticallyAdjustsScrollViewInsets=NO;
 }

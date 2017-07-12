@@ -31,31 +31,31 @@ type App struct {
 func NewApp() *App {
 	app := &App{}
 
-	app.stackScreen1 = stackscreen.New()
+	app.stackScreen1 = &stackscreen.Screen{}
 	app.Set("1", app.stackScreen1)
 	app.stackScreen1.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.stackScreen2 = stackscreen.New()
+	app.stackScreen2 = &stackscreen.Screen{}
 	app.Set("2", app.stackScreen2)
 	app.stackScreen2.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.stackScreen3 = stackscreen.New()
+	app.stackScreen3 = &stackscreen.Screen{}
 	app.Set("3", app.stackScreen3)
 	app.stackScreen3.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.stackScreen4 = stackscreen.New()
+	app.stackScreen4 = &stackscreen.Screen{}
 	app.Set("4", app.stackScreen4)
 	app.stackScreen4.SetChildren(
 		NewTouchScreen(app, colornames.Green),
 	)
 
-	app.tabScreen = tabscreen.New()
+	app.tabScreen = &tabscreen.Screen{}
 	app.Set("5", app.tabScreen)
 	app.tabScreen.SetChildren(
 		app.stackScreen1,

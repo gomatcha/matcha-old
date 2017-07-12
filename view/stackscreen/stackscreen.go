@@ -16,10 +16,6 @@ type Screen struct {
 	screens []view.Screen
 }
 
-func New() *Screen {
-	return &Screen{}
-}
-
 func (s *Screen) View(ctx *view.Context) view.View {
 	return newView(ctx, "", s)
 }
@@ -50,8 +46,9 @@ func (s *Screen) Pop() {
 
 type stackView struct {
 	*view.Embed
-	screen   *Screen
-	children []view.View
+	screen       *Screen
+	children     []view.View
+	childScreens []view.Screen
 }
 
 func newView(ctx *view.Context, key string, s *Screen) *stackView {

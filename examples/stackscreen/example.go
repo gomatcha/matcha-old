@@ -41,7 +41,7 @@ func NewApp() *App {
 	screen3 := NewTouchScreen(app, colornames.Yellow)
 	screen4 := NewTouchScreen(app, colornames.Green)
 
-	app.stackScreen = stackscreen.New()
+	app.stackScreen = &stackscreen.Screen{}
 	app.Set("stackscreen", app.stackScreen)
 	app.stackScreen.SetChildren(
 		stackscreen.WithBar(screen1, bar1),

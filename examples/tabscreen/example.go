@@ -45,7 +45,7 @@ func NewApp() *App {
 	screen3 := NewTouchScreen(app, colornames.Yellow)
 	screen4 := NewTouchScreen(app, colornames.Green)
 
-	app.tabScreen = tabscreen.New()
+	app.tabScreen = &tabscreen.Screen{}
 	app.Set("0", app.tabScreen)
 	app.tabScreen.SetSelectedIndex(1)
 	app.tabScreen.SetChildren(

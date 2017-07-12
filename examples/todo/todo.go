@@ -1,6 +1,7 @@
 package todo
 
 import (
+	"fmt"
 	"image/color"
 	"strconv"
 
@@ -18,21 +19,26 @@ import (
 	"gomatcha.io/matcha/view/basicview"
 	"gomatcha.io/matcha/view/imageview"
 	"gomatcha.io/matcha/view/scrollview"
+	"gomatcha.io/matcha/view/stackscreen"
 	"gomatcha.io/matcha/view/textinput"
 	"gomatcha.io/matcha/view/textview"
 )
 
 func init() {
+	stack := &stackscreen.Screen{}
+	stack.SetChildren(view.ScreenFunc(func(ctx *view.Context) view.View {
+		fmt.Println("newApp")
+		app := NewAppView(ctx, "")
+		app.Todos = []*Todo{
+			&Todo{Title: "Title1"},
+			&Todo{Title: "Title2"},
+			&Todo{Title: "Title3"},
+		}
+		return app
+	}))
+
 	bridge.RegisterFunc("gomatcha.io/matcha/examples/todo New", func() *view.Root {
-		return view.NewRootFunc(func(ctx *view.Context) view.View {
-			app := NewAppView(ctx, "")
-			app.Todos = []*Todo{
-				&Todo{Title: "Title1"},
-				&Todo{Title: "Title2"},
-				&Todo{Title: "Title3"},
-			}
-			return app
-		})
+		return view.NewRoot(stack)
 	})
 }
 

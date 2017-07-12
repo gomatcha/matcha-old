@@ -19,10 +19,6 @@ type Screen struct {
 	selectedIndex int
 }
 
-func New() *Screen {
-	return &Screen{}
-}
-
 func (s *Screen) View(ctx *view.Context) view.View {
 	return newView(ctx, "", s)
 }

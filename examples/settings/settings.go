@@ -43,7 +43,7 @@ func NewApp() *App {
 		return NewRootView(ctx, "", app)
 	})
 
-	app.stackScreen = stackscreen.New()
+	app.stackScreen = &stackscreen.Screen{}
 	app.stackScreen.SetChildren(rootScreen, rootScreen, rootScreen)
 	app.Set("stackScreen", app.stackScreen)
 
