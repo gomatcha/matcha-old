@@ -17,11 +17,13 @@
 @end
 
 typedef UIView<MatchaChildView> *(^MatchaViewRegistrationBlock)(MatchaViewNode *);
+typedef UIViewController<MatchaChildViewController> *(^MatchaViewControllerRegistrationBlock)(MatchaViewNode *);
 
 UIGestureRecognizer *MatchaGestureRecognizerWithPB(int64_t viewId, GPBAny *any, MatchaViewNode *viewNode);
 UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *viewNode);
 UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(MatchaNode *node, MatchaViewNode *viewNode);
 void MatchaRegisterView(NSString *string, MatchaViewRegistrationBlock block);
+void MatchaRegisterViewController(NSString *string, MatchaViewControllerRegistrationBlock block);
 
 @interface MatchaViewNode : NSObject
 - (id)initWithParent:(MatchaViewNode *)node rootVC:(MatchaViewController *)rootVC;

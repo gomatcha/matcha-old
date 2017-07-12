@@ -2,25 +2,36 @@
 #import "MatchaProtobuf.h"
 #import "MatchaTapGestureRecognizer.h"
 #import "MatchaPressGestureRecognizer.h"
-#import "MatchaTabScreen.h"
 #import "MatchaViewController.h"
-#import "MatchaStackScreen.h"
 #import "MatchaSwitchView.h"
 #import "MatchaButtonGestureRecognizer.h"
 #import "MatchaScrollView.h"
 
 static NSLock *sLock = nil;
-static NSMutableDictionary *sDict = nil;
+static NSMutableDictionary *sViewDict = nil;
+static NSMutableDictionary *sViewControllerDict = nil;
 
-void MatchaRegisterView(NSString *string, MatchaViewRegistrationBlock block) {
+void MatchaRegisterInit();
+void MatchaRegisterInit() {
     static dispatch_once_t sOnce = 0;
     dispatch_once(&sOnce, ^{
         sLock = [[NSLock alloc] init];
-        sDict = [NSMutableDictionary dictionary];
+        sViewDict = [NSMutableDictionary dictionary];
+        sViewControllerDict = [NSMutableDictionary dictionary];
     });
-    
+}
+
+void MatchaRegisterView(NSString *string, MatchaViewRegistrationBlock block) {
+    MatchaRegisterInit();
     [sLock lock];
-    sDict[string] = block;
+    sViewDict[string] = block;
+    [sLock unlock];
+}
+
+void MatchaRegisterViewController(NSString *string, MatchaViewControllerRegistrationBlock block) {
+    MatchaRegisterInit();
+    [sLock lock];
+    sViewControllerDict[string] = block;
     [sLock unlock];
 }
 
@@ -40,7 +51,7 @@ UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *vi
     UIView<MatchaChildView> *child = nil;
     
     [sLock lock];
-    MatchaViewRegistrationBlock block = sDict[name];
+    MatchaViewRegistrationBlock block = sViewDict[name];
     if (block != nil) {
         child = block(viewNode);
     }
@@ -52,13 +63,14 @@ UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *vi
 UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(MatchaNode *node, MatchaViewNode *viewNode) {
     NSString *name = node.nativeViewName;
     UIViewController<MatchaChildViewController> *child = nil;
-    if ([name isEqual:@"gomatcha.io/matcha/view/tabscreen"]) {
-        child = [[MatchaTabScreen alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"gomatcha.io/matcha/view/stacknav"]) {
-        child = [[MatchaStackScreen alloc] initWithViewNode:viewNode];
-    } else if ([name isEqual:@"gomatcha.io/matcha/view/stacknav Bar"]) {
-        child = [[MatchaStackBar alloc] initWithViewNode:viewNode];
+    
+    [sLock lock];
+    MatchaViewControllerRegistrationBlock block = sViewControllerDict[name];
+    if (block != nil) {
+        child = block(viewNode);
     }
+    [sLock unlock];
+
     return child;
 }
 

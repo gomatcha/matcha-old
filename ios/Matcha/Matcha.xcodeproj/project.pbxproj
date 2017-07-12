@@ -556,8 +556,8 @@
 		67FEBB301F0A1FCA005AFEDA /* TabScreen */ = {
 			isa = PBXGroup;
 			children = (
-				67FEBADC1F09A18F005AFEDA /* MatchaTabScreen.m */,
 				67FEBADD1F09A18F005AFEDA /* MatchaTabScreen.h */,
+				67FEBADC1F09A18F005AFEDA /* MatchaTabScreen.m */,
 			);
 			name = TabScreen;
 			sourceTree = "<group>";

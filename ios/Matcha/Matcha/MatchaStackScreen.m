@@ -5,6 +5,15 @@
 
 @implementation MatchaStackScreen
 
++ (void)load {
+    MatchaRegisterViewController(@"gomatcha.io/matcha/view/stacknav", ^(MatchaViewNode *node){
+        return [[MatchaStackScreen alloc] initWithViewNode:node];
+    });
+    MatchaRegisterViewController(@"gomatcha.io/matcha/view/stacknav Bar", ^(MatchaViewNode *node){
+        return [[MatchaStackBar alloc] initWithViewNode:node];
+    });
+}
+
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super init])) {
         self.viewNode = viewNode;

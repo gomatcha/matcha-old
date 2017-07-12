@@ -5,6 +5,12 @@
 
 @implementation MatchaTabScreen
 
++ (void)load {
+    MatchaRegisterViewController(@"gomatcha.io/matcha/view/tabscreen", ^(MatchaViewNode *node){
+        return [[MatchaTabScreen alloc] initWithViewNode:node];
+    });
+}
+
 - (id)initWithViewNode:(MatchaViewNode *)viewNode {
     if ((self = [super init])) {
         self.viewNode = viewNode;
