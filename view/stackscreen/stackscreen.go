@@ -13,7 +13,9 @@ import (
 
 type Screen struct {
 	store.Node
-	screens []view.Screen
+	ids      []int64
+	children map[int64]view.Screen
+	maxId    int64
 }
 
 func (s *Screen) View(ctx *view.Context) view.View {
@@ -23,32 +25,49 @@ func (s *Screen) View(ctx *view.Context) view.View {
 func (s *Screen) SetChildren(ss ...view.Screen) {
 	s.Signal()
 
-	s.screens = ss
+	s.children = map[int64]view.Screen{}
+	s.ids = []int64{}
+	for _, i := range ss {
+		s.maxId += 1
+		s.ids = append(s.ids, s.maxId)
+		s.children[s.maxId] = i
+	}
 }
 
 func (s *Screen) Children() []view.Screen {
-	return s.screens
+	children := []view.Screen{}
+	for _, i := range s.ids {
+		children = append(children, s.children[i])
+	}
+	return children
 }
 
 func (s *Screen) Push(vs view.Screen) {
 	s.Signal()
 
-	s.screens = append(s.screens, vs)
+	if s.children == nil {
+		s.children = map[int64]view.Screen{}
+	}
+	s.maxId += 1
+	s.children[s.maxId] = vs
+	s.ids = append(s.ids, s.maxId)
 }
 
 func (s *Screen) Pop() {
 	s.Signal()
 
-	if len(s.screens) > 0 {
-		s.screens = s.screens[:len(s.screens)-1]
+	if len(s.ids) > 0 {
+		id := s.ids[len(s.ids)-1]
+		s.ids = s.ids[:len(s.ids)-1]
+		delete(s.children, id)
 	}
 }
 
 type stackView struct {
 	*view.Embed
-	screen       *Screen
-	children     []view.View
-	childScreens []view.Screen
+	screen   *Screen
+	children map[int64]view.View
+	ids      []int64
 }
 
 func newView(ctx *view.Context, key string, s *Screen) *stackView {
@@ -70,28 +89,36 @@ func (v *stackView) Build(ctx *view.Context) *view.Model {
 	v.screen.Lock()
 	defer v.screen.Unlock()
 
-	// Unsubscribe from old views
-	for _, i := range v.children {
-		v.Unsubscribe(i)
-	}
-
-	v.children = []view.View{}
+	children := map[int64]view.View{}
 	childrenPb := []*stacknav.ChildView{}
-	for idx, i := range v.screen.Children() {
-		ctx := ctx.WithPrefix(strconv.Itoa(idx))
-		chld := i.View(ctx.WithPrefix("view"))
+	v.ids = append([]int64(nil), v.screen.ids...)
+	for _, i := range v.ids {
+		key := strconv.Itoa(int(i))
 
+		// Create the child if necessary and subscribe to it.
+		chld, ok := v.children[i]
+		if !ok {
+			chld = v.screen.children[i].View(ctx.WithPrefix("view" + key))
+			children[i] = chld
+			v.Subscribe(chld)
+		} else {
+			children[i] = chld
+			delete(v.children, i)
+		}
+
+		// Create the bar.
 		var bar *Bar
 		if childView, ok := chld.(ChildView); ok {
-			bar = childView.StackBar(ctx.WithPrefix("bar"))
+			bar = childView.StackBar(ctx.WithPrefix("bar" + key))
 		} else {
 			bar = &Bar{
 				Title: "Title",
 			}
 		}
 
+		// Add the bar.
 		barV := &barView{
-			Embed: view.NewEmbed(ctx.NewId(strconv.Itoa(idx))),
+			Embed: view.NewEmbed(ctx.NewId(key)),
 			bar:   bar,
 		}
 		l.Add(barV, func(s *constraint.Solver) {
@@ -101,20 +128,26 @@ func (v *stackView) Build(ctx *view.Context) *view.Model {
 			s.HeightEqual(constraint.Const(44))
 		})
 
-		v.Subscribe(chld)
-		v.children = append(v.children, chld)
-		childrenPb = append(childrenPb, &stacknav.ChildView{
-			ViewId: int64(chld.Id()),
-			BarId:  int64(barV.Id()),
-		})
-
+		// Add the child.
 		l.Add(chld, func(s *constraint.Solver) {
 			s.TopEqual(constraint.Const(0))
 			s.LeftEqual(constraint.Const(0))
 			s.WidthEqual(l.MaxGuide().Width())
 			s.HeightEqual(l.MaxGuide().Height().Add(-64)) // TODO(KD): Respect bar actual height, shorter when rotated, etc...
 		})
+
+		// Add ids to protobuf.
+		childrenPb = append(childrenPb, &stacknav.ChildView{
+			ViewId: int64(chld.Id()),
+			BarId:  int64(barV.Id()),
+		})
 	}
+
+	// Unsubscribe from old views
+	for _, chld := range v.children {
+		v.Unsubscribe(chld)
+	}
+	v.children = children
 
 	return &view.Model{
 		Children:       l.Views(),

@@ -1,7 +1,6 @@
 package todo
 
 import (
-	"fmt"
 	"image/color"
 	"strconv"
 
@@ -27,7 +26,6 @@ import (
 func init() {
 	stack := &stackscreen.Screen{}
 	stack.SetChildren(view.ScreenFunc(func(ctx *view.Context) view.View {
-		fmt.Println("newApp")
 		app := NewAppView(ctx, "")
 		app.Todos = []*Todo{
 			&Todo{Title: "Title1"},

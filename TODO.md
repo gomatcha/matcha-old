@@ -16,7 +16,7 @@ Low:
 * Add tests around core functionality. Store, etc.
 * Automatically insert copyright notice.
 * StyledText
-* Updating a tabscreen or stackscreen should not trigger a rebuild of its children.
+* Updating a tabscreen should not trigger a rebuild of its children.
 * Webview
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
 * Constraints should force views onto pixel boundries
