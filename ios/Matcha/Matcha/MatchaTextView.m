@@ -1,10 +1,5 @@
 #import "MatchaTextView.h"
 
-@interface MatchaTextView ()
-@property (nonatomic, weak) MatchaViewNode *viewNode;
-@property (nonatomic, strong) MatchaNode *node;
-@end
-
 @implementation MatchaTextView
 
 + (void)load {

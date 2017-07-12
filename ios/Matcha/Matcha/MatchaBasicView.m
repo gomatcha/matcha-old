@@ -1,10 +1,5 @@
 #import "MatchaBasicView.h"
 
-@interface MatchaBasicView ()
-@property (nonatomic, weak) MatchaViewNode *viewNode;
-@property (nonatomic, strong) MatchaNode *node;
-@end
-
 @implementation MatchaBasicView
 
 + (void)load {

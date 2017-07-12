@@ -2,12 +2,6 @@
 #import "MatchaViewController.h"
 #import "MatchaProtobuf.h"
 
-@interface MatchaButton ()
-@property (nonatomic, strong) UIButton *button;
-@property (nonatomic, weak) MatchaViewNode *viewNode;
-@property (nonatomic, strong) MatchaNode *node;
-@end
-
 @implementation MatchaButton
 
 + (void)load {

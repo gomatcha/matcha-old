@@ -1,10 +1,5 @@
 #import "MatchaImageView.h"
 
-@interface MatchaImageView ()
-@property (nonatomic, weak) MatchaViewNode *viewNode;
-@property (nonatomic, strong) MatchaNode *node;
-@end
-
 @implementation MatchaImageView
 
 + (void)load {
