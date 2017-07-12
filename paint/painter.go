@@ -65,7 +65,7 @@ func (s *Style) Unnotify(id comm.Id) {
 }
 
 type notifier struct {
-	notifier *comm.GroupNotifier
+	notifier *comm.Group
 	id       comm.Id
 }
 
@@ -117,7 +117,7 @@ func (as *AnimatedStyle) PaintStyle() Style {
 
 // Notify implements the Painter interface.
 func (as *AnimatedStyle) Notify(f func()) comm.Id {
-	n := &comm.GroupNotifier{}
+	n := &comm.Group{}
 
 	if as.Transparency != nil {
 		n.Subscribe(as.Transparency)

@@ -24,7 +24,7 @@ import (
 // }
 
 type Text struct {
-	group comm.GroupNotifier
+	group comm.Group
 	bytes []byte
 	// isRune        []bool
 	// isGlyph       []bool
@@ -278,5 +278,10 @@ func (t *Text) String() string {
 	if t == nil {
 		return "nil"
 	}
+	return string(t.bytes)
+}
+
+// Value implements comm.StringNotifier
+func (t *Text) Value() string {
 	return string(t.bytes)
 }

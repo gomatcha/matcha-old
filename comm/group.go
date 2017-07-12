@@ -4,14 +4,14 @@ import (
 	"sync"
 )
 
-type GroupNotifier struct {
+type Group struct {
 	mu    sync.Mutex
 	subs  map[Notifier]Id
 	funcs map[Id]func()
 	maxId Id
 }
 
-func (bn *GroupNotifier) Subscribe(n Notifier) {
+func (bn *Group) Subscribe(n Notifier) {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
@@ -34,7 +34,7 @@ func (bn *GroupNotifier) Subscribe(n Notifier) {
 	bn.subs[n] = id
 }
 
-func (bn *GroupNotifier) Unsubscribe(n Notifier) {
+func (bn *Group) Unsubscribe(n Notifier) {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
@@ -46,7 +46,7 @@ func (bn *GroupNotifier) Unsubscribe(n Notifier) {
 	delete(bn.subs, n)
 }
 
-func (bn *GroupNotifier) Notify(f func()) Id {
+func (bn *Group) Notify(f func()) Id {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
@@ -58,7 +58,7 @@ func (bn *GroupNotifier) Notify(f func()) Id {
 	return bn.maxId
 }
 
-func (bn *GroupNotifier) Unnotify(id Id) {
+func (bn *Group) Unnotify(id Id) {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 
@@ -68,7 +68,7 @@ func (bn *GroupNotifier) Unnotify(id Id) {
 	delete(bn.funcs, id)
 }
 
-func (bn *GroupNotifier) Signal() {
+func (bn *Group) Signal() {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
 

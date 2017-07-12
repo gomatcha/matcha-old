@@ -664,7 +664,7 @@ func (l *Layouter) Add(v view.View, solveFunc func(*Solver)) *Guide {
 }
 
 type notifier struct {
-	notifier *comm.GroupNotifier
+	notifier *comm.Group
 	id       comm.Id
 }
 
@@ -674,7 +674,7 @@ func (l *Layouter) Notify(f func()) comm.Id {
 		return 0
 	}
 
-	n := &comm.GroupNotifier{}
+	n := &comm.Group{}
 	for _, i := range l.notifiers {
 		n.Subscribe(i)
 	}

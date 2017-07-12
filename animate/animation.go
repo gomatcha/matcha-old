@@ -12,7 +12,7 @@ import (
 // Value is an struct that runs Animations and emits float64s.
 type Value struct {
 	value     float64
-	batch     comm.GroupNotifier
+	batch     comm.Group
 	animation *animation
 }
 
