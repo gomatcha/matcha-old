@@ -1,3 +1,4 @@
+// Package button implements a native button view.
 package button
 
 import (
@@ -30,23 +31,25 @@ func (l *layouter) Unnotify(id comm.Id) {
 	// no-op
 }
 
-type Button struct {
+type View struct {
 	*view.Embed
 	Text       string
 	OnPress    func()
 	PaintStyle *paint.Style
 }
 
-func New(ctx *view.Context, key string) *Button {
-	if v, ok := ctx.Prev(key).(*Button); ok {
+// New returns either the previous View in ctx with matching key, or a new View if none exists.
+func New(ctx *view.Context, key string) *View {
+	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
 	}
-	return &Button{
+	return &View{
 		Embed: ctx.NewEmbed(key),
 	}
 }
 
-func (v *Button) Build(ctx *view.Context) *view.Model {
+// Build implements view.View.
+func (v *View) Build(ctx *view.Context) *view.Model {
 	style := &text.Style{}
 	style.SetAlignment(text.AlignmentCenter)
 	style.SetFont(text.Font{

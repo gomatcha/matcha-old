@@ -1,3 +1,4 @@
+// Package button implements a view that can display an image.
 package imageview
 
 import (
@@ -19,9 +20,13 @@ import (
 type ResizeMode int
 
 const (
+	// The image is resized proportionally such that a single axis is filled.
 	ResizeModeFit ResizeMode = iota
+	// The image is resized proportionally such that the entire view is filled.
 	ResizeModeFill
+	// The image is stretched to fill the view.
 	ResizeModeStretch
+	// The image is centered in the view with its natural size.
 	ResizeModeCenter
 )
 
@@ -74,6 +79,7 @@ type View struct {
 	pbImage    *pb.ImageOrResource
 }
 
+// New returns either the previous View in ctx with matching key, or a new View if none exists.
 func New(ctx *view.Context, key string) *View {
 	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
@@ -83,6 +89,7 @@ func New(ctx *view.Context, key string) *View {
 	}
 }
 
+// Build implements view.View.
 func (v *View) Build(ctx *view.Context) *view.Model {
 	if v.Image != v.image {
 		v.image = v.Image

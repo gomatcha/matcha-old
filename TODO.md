@@ -58,11 +58,7 @@ Documentation:
 * env
 * examples
 * layout
-* text
 * view 
-    * basicview
-    * button
-    * imageview
     * scrollview
     * slider
     * stackscreen
