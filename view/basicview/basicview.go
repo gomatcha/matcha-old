@@ -2,8 +2,6 @@
 package basicview
 
 import (
-	"fmt"
-
 	"gomatcha.io/matcha/layout"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/view"

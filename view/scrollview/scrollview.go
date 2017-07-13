@@ -1,3 +1,4 @@
+// Package button implements a native scroll view.
 package scrollview
 
 import (
@@ -16,6 +17,7 @@ import (
 	"gomatcha.io/matcha/view/basicview"
 )
 
+// Direction represents the X and Y axis.
 type Direction int
 
 const (
@@ -23,15 +25,13 @@ const (
 	Vertical
 )
 
-type ScrollView struct {
+type View struct {
 	*view.Embed
-	Directions                     Direction
-	ScrollEnabled                  bool // TODO(KD): replace with Directions flag
-	ShowsHorizontalScrollIndicator bool // TODO(KD): replace with Directions flag
-	ShowsVerticalScrollIndicator   bool
-
-	ScrollPosition *ScrollPosition
-	OnScroll       func(position layout.Point)
+	Direction                Direction
+	ScrollIndicatorDirection Direction
+	ScrollEnabled            bool
+	ScrollPosition           *ScrollPosition
+	OnScroll                 func(position layout.Point)
 
 	ContentChildren []view.View
 	ContentPainter  paint.Painter
@@ -39,20 +39,21 @@ type ScrollView struct {
 	PaintStyle      *paint.Style
 }
 
-func New(ctx *view.Context, key string) *ScrollView {
-	if v, ok := ctx.Prev(key).(*ScrollView); ok {
+// New returns either the previous View in ctx with matching key, or a new View if none exists.
+func New(ctx *view.Context, key string) *View {
+	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
 	}
-	return &ScrollView{
-		Embed:                          ctx.NewEmbed(key),
-		Directions:                     Vertical,
-		ShowsHorizontalScrollIndicator: true,
-		ShowsVerticalScrollIndicator:   true,
-		ScrollEnabled:                  true,
+	return &View{
+		Embed:                    ctx.NewEmbed(key),
+		Direction:                Vertical,
+		ScrollIndicatorDirection: Vertical | Horizontal,
+		ScrollEnabled:            true,
 	}
 }
 
-func (v *ScrollView) Build(ctx *view.Context) *view.Model {
+// Build implements view.View.
+func (v *View) Build(ctx *view.Context) *view.Model {
 	child := basicview.New(ctx, "child")
 	child.Children = v.ContentChildren
 	child.Layouter = v.ContentLayouter
@@ -71,14 +72,14 @@ func (v *ScrollView) Build(ctx *view.Context) *view.Model {
 		Children: []view.View{child},
 		Painter:  painter,
 		Layouter: &layouter{
-			directions: v.Directions,
+			directions: v.Direction,
 			position:   position,
 		},
 		NativeViewName: "gomatcha.io/matcha/view/scrollview",
 		NativeViewState: &scrollview.View{
 			ScrollEnabled:                  v.ScrollEnabled,
-			ShowsHorizontalScrollIndicator: v.ShowsHorizontalScrollIndicator,
-			ShowsVerticalScrollIndicator:   v.ShowsVerticalScrollIndicator,
+			ShowsHorizontalScrollIndicator: v.ScrollIndicatorDirection&Horizontal == Horizontal,
+			ShowsVerticalScrollIndicator:   v.ScrollIndicatorDirection&Vertical == Vertical,
 			ScrollEvents:                   v.OnScroll != nil,
 		},
 		NativeFuncs: map[string]interface{}{
@@ -139,7 +140,7 @@ func (l *layouter) Unnotify(id comm.Id) {
 type ScrollPosition struct {
 	X           animate.Value
 	Y           animate.Value
-	batch       comm.Group
+	group       comm.Group
 	initialized bool
 }
 
@@ -148,18 +149,18 @@ func (p *ScrollPosition) initialize() {
 		return
 	}
 	p.initialized = true
-	p.batch.Subscribe(&p.X)
-	p.batch.Subscribe(&p.Y)
+	p.group.Subscribe(&p.X)
+	p.group.Subscribe(&p.Y)
 }
 
 func (p *ScrollPosition) Notify(f func()) comm.Id {
 	p.initialize()
-	return p.batch.Notify(f)
+	return p.group.Notify(f)
 }
 
 func (p *ScrollPosition) Unnotify(id comm.Id) {
 	p.initialize()
-	p.batch.Unnotify(id)
+	p.group.Unnotify(id)
 }
 
 func (p *ScrollPosition) Value() layout.Point {
@@ -174,8 +175,9 @@ func (p *ScrollPosition) SetValue(val layout.Point) {
 	p.Y.SetValue(val.Y)
 }
 
-func (p *ScrollPosition) ScrollToPoint(val layout.Point) {
-}
+// TODO(KD):
+// func (p *ScrollPosition) ScrollToPoint(val layout.Point) {
+// }
 
-func (p *ScrollPosition) ScrollToChild(id comm.Id) {
-}
+// func (p *ScrollPosition) ScrollToChild(id comm.Id) {
+// }
