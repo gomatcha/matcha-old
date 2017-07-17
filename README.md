@@ -1,6 +1,6 @@
 # Matcha - iOS apps in Go
 
-* [Docs](https://godoc.org/gomatcha.io/matcha)
+* [Documentation](https://godoc.org/gomatcha.io/matcha)
 * [Slack](https://gophers.slack.com/messages/matcha)
 
 Matcha is in early development! There are many rough edges and APIs may still change. Please file issues for any bugs you find.
