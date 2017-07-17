@@ -48,7 +48,7 @@ func Bind(flags *Flags, args []string) error {
 	// Get toolchain version.
 	installedVersion, err := ReadFile(flags, filepath.Join(gomobilepath, "version"))
 	if err != nil {
-		return errors.New("toolchain partially installed, run `gomobile init`")
+		return errors.New("toolchain partially installed, run `matcha init`")
 	}
 
 	// Get go version.
@@ -59,7 +59,7 @@ func Bind(flags *Flags, args []string) error {
 
 	// Check toolchain matches go version.
 	if !bytes.Equal(installedVersion, goVersion) && flags.ShouldRun() {
-		return errors.New("toolchain out of date, run `gomobile init`")
+		return errors.New("toolchain out of date, run `matcha init`")
 	}
 
 	// Get current working directory.

@@ -1,3 +1,4 @@
+// Package switchview implements a native switch.
 package switchview
 
 import (
@@ -17,6 +18,7 @@ type View struct {
 	PaintStyle    *paint.Style
 }
 
+// New returns either the previous View in ctx with matching key, or a new View if none exists.
 func New(ctx *view.Context, key string) *View {
 	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
@@ -26,6 +28,7 @@ func New(ctx *view.Context, key string) *View {
 	}
 }
 
+// Build implements view.View.
 func (v *View) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {

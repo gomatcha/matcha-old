@@ -1,116 +1,183 @@
-# Matcha - A cross platform mobile UI framework in Go
+# Matcha - iOS apps in Go
 
-## Goals
-* It should be straight forward to build general purpose UIs
-	* Implementing swipe to delete and animated table views should not require complex logic
-* Composable components over inheritance hierarchies
-	* This is just good design. Components can evolve over time independently.
-* Conceptually consistent
-* Follow Go idioms while pushing a common set of idioms ourselves
-	* There should be one right way to do things.
-* Favor conciseness over extra hooks
-	* This seems to be the general trend in popular frameworks
-	* Most of the hooks I leave myself I never use.
-* System desgin should be visible in the API. Minimize action at a distance
-	* Using the API should help you learn how the framework works, rather than hide it away
-* Scalability
-	* Support large programs with large numbers of dependencies, with large teams of programmers working on them.
+Matcha is in early development! There are many rough edges and APIs may still change. Please file issues for any bugs you find.
 
-## Example
+### What is Matcha?
 
-```go
-type TodoView struct {
-	*Embed
-	Items []string
-	Input string
+Matcha is a package for building iOS applications and frameworks in Go. Matcha provides a UI compenent library similar to ReactNative and exposes bindings to Objective-C code through reflection. The library also provides Go APIs for common app tasks. Matcha makes it easy to build complex mobile apps and integrate with existing projects. 
+
+### Getting Started
+
+Matcha requires macOS, Xcode 8.3 and Go 1.8. To start, fetch the project and install the matcha command.
+
+    go get gomatcha.io/...`
+
+Now we build the standard library for the device and the simulator with the following command. The output is installed at `$GOPATH/matcha`.
+
+    matcha init
+
+With this in place, build the example project. The output is installed at `$GOPATH/src/gomatcha.io/matcha/ios/MatchaBridge/MatchaBridge/MatchaBridge.a`.
+
+    matcha build gomatcha.io/matcha/examples
+
+Thats it! We can now open the example Xcode project and run the app! 
+
+    open $GOPATH/src/gomatcha.io/matcha/examples/ios-app/SampleApp.xcworkspace
+
+### Tutorial
+
+Here we will walk you through the steps for building a simple Hello World app. It assumes basic knowledge of iOS and Go development. Please go through the Getting Started guide if you have not already done so. 
+
+Crate a directory for your app in your $GOPATH. Adding it to version control is not necessary but probably a good idea.
+
+    mkdir -p $GOPATH/src/github.com/overcyn/tutorial
+    cd $GOPATH/src/github.com/overcyn/tutorial
+    git init
+    
+Now create a Xcode workspace in this directory and add the projects found in `$GOPATH/src/gomatcha.io/matcha/ios/`. There are 3 projects, Matcha, MatchaBridge, and Protobuf. You can do this by dragging the projects into your workspace. At this point you should be able to build the Matcha.framework.
+
+![tutorial-1](tutorial-1.png)
+
+Create a new Xcode project containing a Single View Application in your directory, and add it to the workspace.
+
+<!-- ![tutorial-2](tutorial-2.png) -->
+![tutorial-3](tutorial-3.png)
+
+Your workspace should now enclose 4 projects. We now need to make some changes to the Xcode project settings.
+
+* Select your development team in General > Signing > Team.
+* Disable Bitcode in Build Settings > Build Settings > Enable Bitcode.
+* Link and copy in frameworks in Build Phases > Link Binaries with Libraries and Build Phases > Copy Files.
+
+![tutorial-4](tutorial-4.png)
+
+Thats all the setup thats needed, now to start writing code! Create a new go file in the directory with the following snippet. This is a lot to take in at once, but we'll try to go through it step by step in the comments.
+
+```
+package tutorial
+
+import (
+    "golang.org/x/image/colornames"
+    "gomatcha.io/matcha/layout/constraint"
+    "gomatcha.io/matcha/paint"
+    "gomatcha.io/matcha/text"
+    "gomatcha.io/matcha/view"
+    "gomatcha.io/matcha/view/textview"
+)
+
+// Here is our root view.
+type TutorialView struct {
+    // All components must implement the view.View interface. A basic implementation
+    // is provided by view.Embed.
+    *view.Embed
 }
 
-func NewTodoView(ctx *view.Context, key string) *TodoView {
-	if v, ok := ctx.Prev(key).(*TodoView); ok {
-		return v
-	}
-	return &TodoView{
-		Embed:  view.NewEmbed(ctx.NewId(key)),
-	}
+// This is our view's initializer.
+func New(ctx *view.Context, key string) *TutorialView {
+    // To prevent rebuilding the entire tree on every rerender, initializers will return
+    // the previous view if it already exists. Most views will contain this bit
+    // of boilerplate.
+    if v, ok := ctx.Prev(key).(*TutorialView); ok {
+        return v
+    }
+    // If there was no matching view, we create a new one.
+    return &TutorialView{Embed: ctx.NewEmbed(key)}
 }
 
-func (v *TodoView) Update(p *Node) *Node {
-	l := &constraint.New()
-	n := &Node{}
-	n.layouter = l
+// Similar to React's render function. Views specify their properties and
+// children in Build().
+func (v *TutorialView) Build(ctx *view.Context) *view.Model {
+    l := constraint.New()
 
-	var prev *constraint.Guide
-	{
-		// Label
-		chl := NewLabel(ctx, "title")
-		chl.Text = "TODO"
-		n.Set(labelId, chl)
+    // Get the textview for the given key (hellotext), either initializing it or fetching
+    // the previous one.
+    textv := textview.New(ctx, "hellotext")
+    textv.String = "Hello World"
+    textv.Style.SetTextColor(colornames.Red)
+    textv.Style.SetFont(text.Font{
+        Family: "Helvetica Neue",
+        Face:   "Bold",
+        Size:   50,
+    })
+    textv.PaintStyle = &paint.Style{BackgroundColor: colornames.Blue}
 
-		prev = l.Add(labelId, func(constraint.Solver *s){
-			s.WidthEqual(l.Width().Multiply(0.5))
-			s.HeightEqual(l.Height().Multiply(0.5))
-			s.TopEqual(constraint.Const(10))
-			s.BottomEqual(constraint.Const(10))
-		})
-	}
-	{
-		// List
-		chl := NewList(p.Get(listId))
-		chl.Items = v.Items
-		n.Set(listID, chl)
+    // Layout is primarily done using a constraints. More info can be
+    // found in the matcha/layout/constraints docs.
+    l.Add(textv, func(s *constraint.Solver) {
+        s.Top(20)
+        s.Left(0)
+    })
 
-		prev = l.Add(listId, func(constraint.Solver *s){
-			s.TopEqual(prev.Bot())
-			s.BotLess(l.Bot())
-		})
-	}
-	{
-		// Text Input
-		chl := NewTextField(p.Get(textFieldId))
-		chl.Input = v.Input
-		chl.OnChange = func(str string) {
-			v.Input = str
-			v.NeedsUpdate()
-		}
-		n.Set(textFieldId, chl)
+    // Returns the view's children, layout, and styling.
+    return &view.Model{
+        Children: []view.View{textv},
+        Layouter: l,
+        Painter:  &paint.Style{BackgroundColor: colornames.Lightgray},
+    }
+}
 
-		prev = l.Add(textFieldId, func(constraint.Solver *s){
-			s.TopEqual(prev.Bot())
-			s.BotLess(l.Bot())
-		})
-	}
-	{
-		// Button
-		chl := NewButton(p.Get(buttonId))
-		chl.OnClick = func() {
-			if v.Input == "" {
-				return
-			}
-			append(v.Items, v.Input)
-			v.Input = ""
-			v.NeedsUpdate()
-		}
-		n.Set(buttonId, chl)
+```
 
-		prev = l.Add(buttonId, func(constraint.Solver *s){
-			s.TopEqual(prev.Bot())
-			s.BotLess(l.Bot())
-		})
-	}
+Build the Go code.
 
-	l.Solve(func(constraint.Solver *s){
-		s.BotEqual(prev.Bot())
-	})
-	return n
+```
+matcha build github.com/overcyn/tutorial
+```
+
+Now that we have our view in Go, we need to be call it from Objective C. We can do this with the `gomatcha.io/bridge` package. 
+
+```
+import "gomatcha.io/bridge"
+
+func init() {
+    // Registers a function with the objc bridge. This function returns
+    // a view.Root, which can be display in MatchaViewController.
+    bridge.RegisterFunc("github.com/overcyn/tutorial New", func() *view.Root {
+        return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
+            
+            // Call the TutorialView initializer.
+            return New(ctx, "")
+        }))
+    })
 }
 ```
 
-Similar Libraries
+Now for the Objective C code. Add imports for Matcha in `AppDelegate.m`.
 
+```
+#import <Matcha/Matcha.h>
+```
+
+And replace `application:didFinishLaunchingWithOptions:` with the following.
+
+```
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
+    [[MatchaObjcBridge sharedBridge] configure];
+    
+    MatchaGoValue *rootVC = [[[MatchaGoValue alloc] initWithFunc:@"github.com/overcyn/tutorial New"] call:nil args:nil][0];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.rootViewController = [[MatchaViewController alloc] initWithGoValue:rootVC];
+    [self.window makeKeyAndVisible];
+    return YES;
+}
+```
+
+And run your application! Well done!
+
+![tutorial-5](tutorial-5.png)
+
+### FAQ
+
+#### Is there Bitcode support?
+
+Bitcode is an LLVM feature that is not supported by Go at this time.
+
+#### What are other similar libaries?
+
+* https://github.com/golang/mobile
 * https://github.com/murlokswarm/app
 * https://github.com/andlabs/ui
 * https://github.com/golang/exp/tree/master/shiny
 * https://github.com/cztomczak/cef2go
 * https://github.com/google/gxui
 * https://github.com/go-ui/ui
-* https://sciter.com

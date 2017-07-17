@@ -30,6 +30,7 @@ Low:
 * Table ScrollBehaviors, Table Direction
 * Custom painters.
 * Compile a list of things that should be easy to do and implement them. Button activation cancelled by vertical scrolling but not horizontal, Pinch to zoom, Highlighting a view and dragging outside of it and back in., Horizontal swipe on tableview to show delete button, Touch driven animations. AKA swipe back to navigate.
+* Building for iPhone 5 Simulator doesn't work.
 
 Very Low:
 * Automatically insert copyright notice.
@@ -59,16 +60,11 @@ Documentation:
 * examples
 * layout
 * view 
-    * scrollview
-    * slider
     * stackscreen
     * switchview
     * tabscrceen
     * textinput
     * textview
-    * urlimageview
-    * progressview
-    * segmentview
 
 Pro:
 * Debugging

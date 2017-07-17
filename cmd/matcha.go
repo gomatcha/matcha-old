@@ -172,7 +172,7 @@ func GoMobilePath() (string, error) {
 	gopaths := filepath.SplitList(GoEnv("GOPATH"))
 	gomobilepath := ""
 	for _, p := range gopaths {
-		gomobilepath = filepath.Join(p, "pkg", "gomobile")
+		gomobilepath = filepath.Join(p, "pkg", "matcha")
 		if _, err := os.Stat(gomobilepath); err == nil {
 			break
 		}
@@ -181,7 +181,7 @@ func GoMobilePath() (string, error) {
 		if len(gopaths) == 0 {
 			return "", fmt.Errorf("$GOPATH does not exist")
 		} else {
-			return filepath.Join(gopaths[0], "pkg", "gomobile"), nil
+			return filepath.Join(gopaths[0], "pkg", "matcha"), nil
 		}
 	}
 	return gomobilepath, nil
