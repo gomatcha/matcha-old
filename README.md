@@ -55,7 +55,7 @@ Your workspace should now enclose 4 projects. We now need to make some changes t
 
 Thats all the setup thats needed, now to start writing code! Create a new go file in the directory with the following snippet. This is a lot to take in at once, but we'll try to go through it step by step in the comments.
 
-```
+```go
 package tutorial
 
 import (
@@ -120,15 +120,9 @@ func (v *TutorialView) Build(ctx *view.Context) *view.Model {
 
 ```
 
-Build the Go code.
-
-```
-matcha build github.com/overcyn/tutorial
-```
-
 Now that we have our view in Go, we need to be call it from Objective C. We can do this with the `gomatcha.io/bridge` package. 
 
-```
+```go
 import "gomatcha.io/bridge"
 
 func init() {
@@ -144,15 +138,21 @@ func init() {
 }
 ```
 
-Now for the Objective C code. Add imports for Matcha in `AppDelegate.m`.
+Build the Go code.
 
 ```
+matcha build github.com/overcyn/tutorial
+```
+
+Now for the Objective C code. Add imports for Matcha in `AppDelegate.m`.
+
+```objc
 #import <Matcha/Matcha.h>
 ```
 
 And replace `application:didFinishLaunchingWithOptions:` with the following.
 
-```
+```objc
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     [[MatchaObjcBridge sharedBridge] configure];
     
