@@ -1,6 +1,6 @@
 # Matcha - iOS apps in Go
 
-* [Site](https://gomatcha.io)
+* [Website](https://gomatcha.io)
 * [Documentation](https://godoc.org/gomatcha.io/matcha)
 * [Slack](https://gophers.slack.com/messages/matcha)
 
