@@ -1,5 +1,8 @@
 # Matcha - iOS apps in Go
 
+* [Docs](https://godoc.org/gomatcha.io/matcha)
+* [Slack](https://gophers.slack.com/messages/matcha)
+
 Matcha is in early development! There are many rough edges and APIs may still change. Please file issues for any bugs you find.
 
 ### What is Matcha?
@@ -36,12 +39,11 @@ Crate a directory for your app in your $GOPATH. Adding it to version control is 
     
 Now create a Xcode workspace in this directory and add the projects found in `$GOPATH/src/gomatcha.io/matcha/ios/`. There are 3 projects, Matcha, MatchaBridge, and Protobuf. You can do this by dragging the projects into your workspace. At this point you should be able to build the Matcha.framework.
 
-![tutorial-1](tutorial-1.png)
+![tutorial-1](docs/tutorial-1.png)
 
 Create a new Xcode project containing a Single View Application in your directory, and add it to the workspace.
 
-<!-- ![tutorial-2](tutorial-2.png) -->
-![tutorial-3](tutorial-3.png)
+![tutorial-3](docs/tutorial-3.png)
 
 Your workspace should now enclose 4 projects. We now need to make some changes to the Xcode project settings.
 
@@ -49,7 +51,7 @@ Your workspace should now enclose 4 projects. We now need to make some changes t
 * Disable Bitcode in Build Settings > Build Settings > Enable Bitcode.
 * Link and copy in frameworks in Build Phases > Link Binaries with Libraries and Build Phases > Copy Files.
 
-![tutorial-4](tutorial-4.png)
+![tutorial-4](docs/tutorial-4.png)
 
 Thats all the setup thats needed, now to start writing code! Create a new go file in the directory with the following snippet. This is a lot to take in at once, but we'll try to go through it step by step in the comments.
 
@@ -164,13 +166,14 @@ And replace `application:didFinishLaunchingWithOptions:` with the following.
 
 And run your application! Well done!
 
-![tutorial-5](tutorial-5.png)
+![tutorial-5](docs/tutorial-5.png)
 
 ### FAQ
 
 #### Is there Bitcode support?
 
 Bitcode is an LLVM feature that is not supported by Go at this time.
+
 
 #### What are other similar libaries?
 
