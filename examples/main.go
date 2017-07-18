@@ -4,6 +4,7 @@ import (
 	_ "gomatcha.io/matcha/examples/animate"
 	_ "gomatcha.io/matcha/examples/complex"
 	_ "gomatcha.io/matcha/examples/constraints"
+	_ "gomatcha.io/matcha/examples/custom"
 	_ "gomatcha.io/matcha/examples/imageview"
 	_ "gomatcha.io/matcha/examples/paint"
 	_ "gomatcha.io/matcha/examples/screen"

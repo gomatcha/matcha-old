@@ -22,9 +22,7 @@
 
 - (void)setNode:(MatchaNode *)value {
     _node = value;
-    GPBAny *state = value.nativeViewState;
-    NSError *error = nil;
-    MatchaButtonPBView *pbbutton = (id)[state unpackMessageClass:[MatchaButtonPBView class] error:&error];
+    MatchaButtonPBView *pbbutton = (id)[value.nativeViewState unpackMessageClass:[MatchaButtonPBView class] error:NULL];
     
     NSAttributedString *string = [[NSAttributedString alloc] initWithProtobuf:pbbutton.styledText];
     [self.button setAttributedTitle:string forState:UIControlStateNormal];
