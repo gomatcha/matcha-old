@@ -6,13 +6,13 @@ Medium:
 * Only send updated views.
 * Make sure development team isn't packaged with sample app.
 * Table scroll position?
+* Webview
 
 Low:
 * Switching quickly between navigation item causes visual glitch. 2 quick backs.
 * How to respond to memory pressure?
 * Have matcha flag that generates a new xcodeproj for easy setup.
 * Add tests around core functionality. Store, etc.
-* Webview
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
 * Constraints should force views onto pixel boundries
 * Flexbox

@@ -56,7 +56,7 @@
 		67FEBAF81F09A18F005AFEDA /* MatchaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAD21F09A18F005AFEDA /* MatchaViewController.m */; };
 		67FEBAF91F09A18F005AFEDA /* MatchaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAD31F09A18F005AFEDA /* MatchaViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67FEBAFA1F09A18F005AFEDA /* MatchaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAD41F09A18F005AFEDA /* MatchaView.m */; };
-		67FEBAFB1F09A18F005AFEDA /* MatchaView.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAD51F09A18F005AFEDA /* MatchaView.h */; };
+		67FEBAFB1F09A18F005AFEDA /* MatchaView.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAD51F09A18F005AFEDA /* MatchaView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67FEBAFE1F09A18F005AFEDA /* MatchaTextInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAD81F09A18F005AFEDA /* MatchaTextInput.m */; };
 		67FEBAFF1F09A18F005AFEDA /* MatchaTextInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAD91F09A18F005AFEDA /* MatchaTextInput.h */; };
 		67FEBB001F09A18F005AFEDA /* MatchaTapGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBADA1F09A18F005AFEDA /* MatchaTapGestureRecognizer.m */; };
@@ -76,9 +76,9 @@
 		67FEBB0E1F09A18F005AFEDA /* MatchaPressGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAE81F09A18F005AFEDA /* MatchaPressGestureRecognizer.m */; };
 		67FEBB0F1F09A18F005AFEDA /* MatchaPressGestureRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAE91F09A18F005AFEDA /* MatchaPressGestureRecognizer.h */; };
 		67FEBB101F09A18F005AFEDA /* MatchaObjcBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAEA1F09A18F005AFEDA /* MatchaObjcBridge.m */; };
-		67FEBB111F09A18F005AFEDA /* MatchaObjcBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAEB1F09A18F005AFEDA /* MatchaObjcBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		67FEBB111F09A18F005AFEDA /* MatchaObjcBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAEB1F09A18F005AFEDA /* MatchaObjcBridge.h */; };
 		67FEBB121F09A18F005AFEDA /* MatchaNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAEC1F09A18F005AFEDA /* MatchaNode.m */; };
-		67FEBB131F09A18F005AFEDA /* MatchaNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAED1F09A18F005AFEDA /* MatchaNode.h */; };
+		67FEBB131F09A18F005AFEDA /* MatchaNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAED1F09A18F005AFEDA /* MatchaNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67FEBB161F09A18F005AFEDA /* MatchaDeadlockLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAF01F09A18F005AFEDA /* MatchaDeadlockLogger.m */; };
 		67FEBB171F09A18F005AFEDA /* MatchaDeadlockLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBAF11F09A18F005AFEDA /* MatchaDeadlockLogger.h */; };
 		67FEBB181F09A18F005AFEDA /* MatchaButtonGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBAF21F09A18F005AFEDA /* MatchaButtonGestureRecognizer.m */; };
@@ -237,6 +237,17 @@
 			path = segmentview;
 			sourceTree = "<group>";
 		};
+		67783C521F1DFD6C001582F5 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				67FEBAF11F09A18F005AFEDA /* MatchaDeadlockLogger.h */,
+				67FEBAF01F09A18F005AFEDA /* MatchaDeadlockLogger.m */,
+				67FEBAF71F09A18F005AFEDA /* MatchaBridge.h */,
+				67FEBAF61F09A18F005AFEDA /* MatchaBridge.m */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
 		67FEBA611F099EDF005AFEDA = {
 			isa = PBXGroup;
 			children = (
@@ -267,12 +278,7 @@
 				67FEBAE61F09A18F005AFEDA /* MatchaProtobuf.m */,
 				67FEBAEB1F09A18F005AFEDA /* MatchaObjcBridge.h */,
 				67FEBAEA1F09A18F005AFEDA /* MatchaObjcBridge.m */,
-				67FEBAED1F09A18F005AFEDA /* MatchaNode.h */,
-				67FEBAEC1F09A18F005AFEDA /* MatchaNode.m */,
-				67FEBAF11F09A18F005AFEDA /* MatchaDeadlockLogger.h */,
-				67FEBAF01F09A18F005AFEDA /* MatchaDeadlockLogger.m */,
-				67FEBAF71F09A18F005AFEDA /* MatchaBridge.h */,
-				67FEBAF61F09A18F005AFEDA /* MatchaBridge.m */,
+				67783C521F1DFD6C001582F5 /* Utilities */,
 				67FEBA6F1F099EDF005AFEDA /* Info.plist */,
 			);
 			path = Matcha;
@@ -490,6 +496,8 @@
 		67FEBB2A1F09AD3C005AFEDA /* View */ = {
 			isa = PBXGroup;
 			children = (
+				67FEBAED1F09A18F005AFEDA /* MatchaNode.h */,
+				67FEBAEC1F09A18F005AFEDA /* MatchaNode.m */,
 				67FEBAD51F09A18F005AFEDA /* MatchaView.h */,
 				67FEBAD41F09A18F005AFEDA /* MatchaView.m */,
 				67FEBB321F0A1FE4005AFEDA /* BasicView */,

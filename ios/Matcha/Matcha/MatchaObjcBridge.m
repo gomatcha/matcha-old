@@ -8,14 +8,17 @@
 @implementation MatchaObjcBridge (Extensions)
 
 - (void)configure {
-    [MatchaDeadlockLogger sharedLogger]; // Initialize
+    static dispatch_once_t sOnce = 0;
+    dispatch_once(&sOnce, ^{
+        [MatchaDeadlockLogger sharedLogger]; // Initialize
     
-    static CADisplayLink *displayLink = nil;
-    if (displayLink == nil) {
-        displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(screenUpdate)];
-//        displayLink.preferredFramesPerSecond = 1;
-        [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-    }
+        static CADisplayLink *displayLink = nil;
+        if (displayLink == nil) {
+            displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(screenUpdate)];
+    //        displayLink.preferredFramesPerSecond = 1;
+            [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+        }
+    });
 }
 
 - (MatchaGoValue *)sizeForAttributedString:(NSData *)protobuf maxLines:(int)maxLines {

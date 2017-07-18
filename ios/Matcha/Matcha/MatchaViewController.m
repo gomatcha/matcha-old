@@ -2,6 +2,7 @@
 #import "MatchaView.h"
 #import "MatchaBridge.h"
 #import "MatchaNode.h"
+#import "MatchaObjcBridge.h"
 
 @interface MatchaViewController ()
 @property (nonatomic, assign) NSInteger identifier;
@@ -32,6 +33,8 @@
 }
 - (id)initWithGoValue:(MatchaGoValue *)value {
     if ((self = [super initWithNibName:nil bundle:nil])) {
+        [[MatchaObjcBridge sharedBridge] configure];
+        
         self.goValue = value;
         self.identifier = (int)[value call:@"Id" args:nil][0].toLongLong;
         [[MatchaViewController viewControllers] addPointer:(__bridge void *)self];
