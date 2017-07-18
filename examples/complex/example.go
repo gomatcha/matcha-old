@@ -1,4 +1,4 @@
-package example
+package complex
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 
 	"golang.org/x/image/colornames"
 
-	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/animate"
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/layout"
@@ -28,14 +27,6 @@ import (
 	"gomatcha.io/matcha/view/urlimageview"
 )
 
-func init() {
-	bridge.RegisterFunc("gomatcha.io/matcha/examples/complex New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
-			return NewNestedView(ctx, "")
-		}))
-	})
-}
-
 type NestedView struct {
 	*view.Embed
 	counter     int
@@ -43,7 +34,7 @@ type NestedView struct {
 	value       animate.Value
 }
 
-func NewNestedView(ctx *view.Context, key string) *NestedView {
+func New(ctx *view.Context, key string) *NestedView {
 	if v, ok := ctx.Prev(key).(*NestedView); ok {
 		return v
 	}

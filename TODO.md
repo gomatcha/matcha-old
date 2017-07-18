@@ -1,5 +1,4 @@
 High:
-* User registered views.
 
 Medium:
 * Rebuild settings app, Todo App.

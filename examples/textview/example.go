@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"golang.org/x/image/colornames"
-	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/keyboard"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
@@ -14,14 +13,6 @@ import (
 	"gomatcha.io/matcha/view/textinput"
 	"gomatcha.io/matcha/view/textview"
 )
-
-func init() {
-	bridge.RegisterFunc("gomatcha.io/matcha/examples/textview New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
-			return New(ctx, "")
-		}))
-	})
-}
 
 type TextView struct {
 	*view.Embed

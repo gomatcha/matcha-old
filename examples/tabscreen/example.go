@@ -4,19 +4,12 @@ import (
 	"image/color"
 
 	"golang.org/x/image/colornames"
-	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/tabscreen"
 )
-
-func init() {
-	bridge.RegisterFunc("gomatcha.io/matcha/examples/tabscreen New", func() *view.Root {
-		return view.NewRoot(NewApp())
-	})
-}
 
 type App struct {
 	store.Node

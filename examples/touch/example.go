@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"golang.org/x/image/colornames"
-	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/text"
@@ -13,14 +12,6 @@ import (
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/textview"
 )
-
-func init() {
-	bridge.RegisterFunc("gomatcha.io/matcha/examples/touch New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
-			return New(ctx, "")
-		}))
-	})
-}
 
 type TouchView struct {
 	*view.Embed

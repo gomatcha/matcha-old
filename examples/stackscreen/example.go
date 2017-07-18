@@ -4,7 +4,6 @@ import (
 	"image/color"
 
 	"golang.org/x/image/colornames"
-	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/store"
@@ -13,12 +12,6 @@ import (
 	"gomatcha.io/matcha/view/basicview"
 	"gomatcha.io/matcha/view/stackscreen"
 )
-
-func init() {
-	bridge.RegisterFunc("gomatcha.io/matcha/examples/stackscreen New", func() *view.Root {
-		return view.NewRoot(NewApp())
-	})
-}
 
 type App struct {
 	store.Node

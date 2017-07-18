@@ -5,22 +5,13 @@ import (
 	"time"
 
 	"golang.org/x/image/colornames"
-	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/basicview"
 )
 
-func init() {
-	bridge.RegisterFunc("gomatcha.io/matcha/examples/animate New", func() *view.Root {
-		return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
-			return New(ctx, "")
-		}))
-	})
-}
-
-type AnimateView struct {
+type View struct {
 	*view.Embed
 	// ticker      *animate.Ticker
 	// floatTicker comm.Float64Notifier
@@ -30,12 +21,12 @@ type AnimateView struct {
 	// constraintFunc  chan struct{}
 }
 
-func New(ctx *view.Context, key string) *AnimateView {
-	if v, ok := ctx.Prev(key).(*AnimateView); ok {
+func New(ctx *view.Context, key string) *View {
+	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
 	}
 	// ticker := animate.NewTicker(time.Second * 4)
-	return &AnimateView{
+	return &View{
 		Embed: ctx.NewEmbed(key),
 		// ticker:      ticker,
 		// floatTicker: animate.FloatInterpolate(ticker, animate.FloatLerp{Start: 0, End: 500}),
@@ -43,7 +34,7 @@ func New(ctx *view.Context, key string) *AnimateView {
 	}
 }
 
-func (v *AnimateView) Lifecycle(from, to view.Stage) {
+func (v *View) Lifecycle(from, to view.Stage) {
 	if view.EntersStage(from, to, view.StageVisible) {
 		time.AfterFunc(time.Second*2, func() {
 			fmt.Println("Update")
@@ -52,7 +43,7 @@ func (v *AnimateView) Lifecycle(from, to view.Stage) {
 	}
 }
 
-func (v *AnimateView) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) *view.Model {
 	l := constraint.New()
 
 	chl := basicview.New(ctx, "")
