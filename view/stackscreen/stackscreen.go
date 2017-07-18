@@ -34,6 +34,20 @@ func (s *Screen) SetChildren(ss ...view.Screen) {
 	}
 }
 
+func (s *Screen) setChildIds(ids []int64) {
+	s.Signal()
+
+	prevChildren := s.children
+	s.children = map[int64]view.Screen{}
+	s.ids = []int64{}
+	for _, i := range ids {
+		if child, ok := prevChildren[i]; ok {
+			s.children[i] = child
+			s.ids = append(s.ids, i)
+		}
+	}
+}
+
 func (s *Screen) Children() []view.Screen {
 	children := []view.Screen{}
 	for _, i := range s.ids {
@@ -138,8 +152,9 @@ func (v *stackView) Build(ctx *view.Context) *view.Model {
 
 		// Add ids to protobuf.
 		childrenPb = append(childrenPb, &stacknav.ChildView{
-			ViewId: int64(chld.Id()),
-			BarId:  int64(barV.Id()),
+			ViewId:   int64(chld.Id()),
+			BarId:    int64(barV.Id()),
+			ScreenId: i,
 		})
 	}
 
@@ -166,8 +181,7 @@ func (v *stackView) Build(ctx *view.Context) *view.Model {
 				}
 
 				v.screen.Lock()
-				chl := v.screen.Children()[:len(pbevent.Id)]
-				v.screen.SetChildren(chl...)
+				v.screen.setChildIds(pbevent.Id)
 				v.screen.Unlock()
 			},
 		},

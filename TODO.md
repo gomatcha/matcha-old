@@ -1,7 +1,4 @@
 High:
-* Switching quickly between navigation item causes loop. 2 quick backs.
-* How to prevent cycles when sending messages?? We have two trees that need to be kept in sync. The native tree and the go tree.
-* Build website and documentation. Make sure go get "gomatcha.io/..." works.
 
 Medium:
 * Rebuild settings app, Todo App.
@@ -11,6 +8,8 @@ Medium:
 * User registered views.
 
 Low:
+* Switching quickly between navigation item causes visual glitch. 2 quick backs.
+* How to respond to memory pressure?
 * Have matcha flag that generates a new xcodeproj for easy setup.
 * Add tests around core functionality. Store, etc.
 * Updating a tabscreen should not trigger a rebuild of its children.

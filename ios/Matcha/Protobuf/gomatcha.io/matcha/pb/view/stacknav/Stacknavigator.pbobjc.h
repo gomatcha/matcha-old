@@ -51,6 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef GPB_ENUM(MatchaStackScreenPBChildView_FieldNumber) {
   MatchaStackScreenPBChildView_FieldNumber_ViewId = 1,
   MatchaStackScreenPBChildView_FieldNumber_BarId = 2,
+  MatchaStackScreenPBChildView_FieldNumber_ScreenId = 3,
 };
 
 @interface MatchaStackScreenPBChildView : GPBMessage
@@ -58,6 +59,8 @@ typedef GPB_ENUM(MatchaStackScreenPBChildView_FieldNumber) {
 @property(nonatomic, readwrite) int64_t viewId;
 
 @property(nonatomic, readwrite) int64_t barId;
+
+@property(nonatomic, readwrite) int64_t screenId;
 
 @end
 

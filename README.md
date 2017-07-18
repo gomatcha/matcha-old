@@ -14,7 +14,7 @@ Matcha is a package for building iOS applications and frameworks in Go. Matcha p
 
 Matcha requires macOS, Xcode 8.3 and Go 1.8. To start, fetch the project and install the matcha command.
 
-    go get gomatcha.io/...`
+    go get gomatcha.io/...
 
 Now we build the standard library for the device and the simulator with the following command. The output is installed at `$GOPATH/matcha`.
 
@@ -32,11 +32,9 @@ Thats it! We can now open the example Xcode project and run the app!
 
 Here we will walk you through the steps for building a simple Hello World app. It assumes basic knowledge of iOS and Go development. Please go through the Getting Started guide if you have not already done so. 
 
-Crate a directory for your app in your $GOPATH. Adding it to version control is not necessary but probably a good idea.
+Crate a directory for your app in your $GOPATH.
 
     mkdir -p $GOPATH/src/github.com/overcyn/tutorial
-    cd $GOPATH/src/github.com/overcyn/tutorial
-    git init
     
 Now create a Xcode workspace in this directory and add the projects found in `$GOPATH/src/gomatcha.io/matcha/ios/`. There are 3 projects, Matcha, MatchaBridge, and Protobuf. You can do this by dragging the projects into your workspace. At this point you should be able to build the Matcha.framework.
 
@@ -147,13 +145,13 @@ matcha build github.com/overcyn/tutorial
 
 Now for the Objective C code. Add imports for Matcha in `AppDelegate.m`.
 
-```objc
+```objectivec
 #import <Matcha/Matcha.h>
 ```
 
 And replace `application:didFinishLaunchingWithOptions:` with the following.
 
-```objc
+```objectivec
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     [[MatchaObjcBridge sharedBridge] configure];
     
@@ -174,7 +172,6 @@ And run your application! Well done!
 #### Is there Bitcode support?
 
 Bitcode is an LLVM feature that is not supported by Go at this time.
-
 
 #### What are other similar libaries?
 

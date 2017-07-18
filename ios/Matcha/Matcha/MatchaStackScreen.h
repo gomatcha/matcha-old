@@ -8,6 +8,7 @@
 @property (nonatomic, strong) MatchaNode *node;
 
 //Internal
+@property (nonatomic, strong) NSArray<NSNumber *> *prevIds;
 @property (nonatomic, strong) NSArray *prev;
 @end
 

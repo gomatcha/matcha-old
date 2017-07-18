@@ -2,6 +2,30 @@
 #import "MatchaView.h"
 #import "MatchaProtobuf.h"
 #import "MatchaViewController.h"
+#import <objc/runtime.h>
+
+#define VIEW_ID_KEY @"matchaViewId"
+
+@interface UIViewController (MatchaStackScreen)
+- (void)matcha_setViewId:(int64_t)value;
+- (int64_t)matcha_viewId;
+@end
+
+@implementation UIViewController (MatchaStackScreen)
+
+- (void)matcha_setViewId:(int64_t)value {
+    @synchronized (self) {
+        objc_setAssociatedObject(self, VIEW_ID_KEY, @(value), OBJC_ASSOCIATION_RETAIN);
+    }
+}
+
+- (int64_t)matcha_viewId {
+    @synchronized (self) {
+        return ((NSNumber *)objc_getAssociatedObject(self, VIEW_ID_KEY)).longLongValue;
+    }
+}
+
+@end
 
 @implementation MatchaStackScreen
 
@@ -25,9 +49,17 @@
 }
 
 - (void)setMatchaChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs {
-    GPBAny *state = self.node.nativeViewState;
+    MatchaStackScreenPBView *view = (id)[self.node.nativeViewState unpackMessageClass:[MatchaStackScreenPBView class] error:nil];
     
-    MatchaStackScreenPBView *view = (id)[state unpackMessageClass:[MatchaStackScreenPBView class] error:nil];
+    NSMutableArray *prevIds = [NSMutableArray array];
+    for (MatchaStackScreenPBChildView *i in view.childrenArray) {
+        [prevIds addObject:@(i.viewId)];
+    }
+    if ([self.prevIds isEqual:prevIds]) {
+        return;
+    }
+    self.prevIds = prevIds;
+    
     NSMutableArray *viewControllers = [NSMutableArray array];
     for (MatchaStackScreenPBChildView *i in view.childrenArray) {
         MatchaStackBar *bar = (id)childVCs[@(i.barId)];
@@ -41,6 +73,7 @@
         if (bar.customBackButtonTitle) {
             vc.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:bar.backButtonTitle style:UIBarButtonItemStylePlain target:nil action:nil];
         }
+        [vc matcha_setViewId:i.screenId];
         [viewControllers addObject:vc];
     }
     
@@ -61,21 +94,23 @@
 }
 
 - (void)update {
-    // TODO(KD): More accurate comparison.
-    if (self.viewControllers.count == self.prev.count) {
+    NSMutableArray *prevIds = [NSMutableArray array];
+    for (UIViewController *i in self.childViewControllers) {
+        [prevIds addObject:@(i.matcha_viewId)];
+    }
+    if ([self.prevIds isEqual:prevIds]) {
         return;
     }
-    GPBInt64Array *array = [[GPBInt64Array alloc] init];
-    for (NSInteger i = 0; i < self.viewControllers.count; i++) {
-        [array addValue:0];
-    }
+    self.prevIds = prevIds;
     
+    GPBInt64Array *array = [[GPBInt64Array alloc] init];
+    for (NSNumber *i in prevIds) {
+        [array addValue:i.longLongValue];
+    }
     MatchaStackScreenPBStackEvent *event = [[MatchaStackScreenPBStackEvent alloc] init];
     event.idArray = array;
     
-    NSData *data = [event data];
-    MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:data];
-    
+    MatchaGoValue *value = [[MatchaGoValue alloc] initWithData:event.data];
     [self.viewNode.rootVC call:@"OnChange" viewId:self.node.identifier.longLongValue args:@[value]];
 }
 
