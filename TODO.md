@@ -1,25 +1,23 @@
 High:
+* User registered views.
 
 Medium:
 * Rebuild settings app, Todo App.
 * Only send updated views.
 * Make sure development team isn't packaged with sample app.
 * Table scroll position?
-* User registered views.
 
 Low:
 * Switching quickly between navigation item causes visual glitch. 2 quick backs.
 * How to respond to memory pressure?
 * Have matcha flag that generates a new xcodeproj for easy setup.
 * Add tests around core functionality. Store, etc.
-* Updating a tabscreen should not trigger a rebuild of its children.
 * Webview
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
 * Constraints should force views onto pixel boundries
 * Flexbox
 * Picker
 * TextField
-* SegmentedControl
 * AlertView
 * Modal presentation
 * Asset catalog

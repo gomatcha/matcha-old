@@ -98,10 +98,10 @@ func newView(ctx *view.Context, key string, s *Screen) *stackView {
 }
 
 func (v *stackView) Build(ctx *view.Context) *view.Model {
-	l := constraint.New()
-
 	v.screen.Lock()
 	defer v.screen.Unlock()
+
+	l := constraint.New()
 
 	children := map[int64]view.View{}
 	childrenPb := []*stacknav.ChildView{}

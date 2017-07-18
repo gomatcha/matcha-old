@@ -5,7 +5,6 @@ import (
 
 	"golang.org/x/image/colornames"
 	"gomatcha.io/bridge"
-	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/touch"
@@ -29,17 +28,17 @@ func NewApp() *App {
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
 	options1 := &tabscreen.Button{
-		Title:        "Title 1",
-		Badge:        "badge",
-		Icon:         env.MustLoadImage("TabCamera"),
-		SelectedIcon: env.MustLoadImage("TabCameraFilled"),
+		Title: "Title 1",
+		Badge: "badge",
+		// Icon:         env.MustLoadImage("TabCamera"),
+		// SelectedIcon: env.MustLoadImage("TabCameraFilled"),
 	}
 
 	screen2 := NewTouchScreen(app, colornames.Red)
 	options2 := &tabscreen.Button{
-		Title:        "Title 2",
-		Icon:         env.MustLoadImage("TabMap"),
-		SelectedIcon: env.MustLoadImage("TabMapFilled"),
+		Title: "Title 2",
+		// Icon:         env.MustLoadImage("TabMap"),
+		// SelectedIcon: env.MustLoadImage("TabMapFilled"),
 	}
 
 	screen3 := NewTouchScreen(app, colornames.Yellow)
@@ -88,9 +87,9 @@ func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
 		Embed: ctx.NewEmbed(key),
 		app:   app,
 		button: &tabscreen.Button{
-			Title:        "Testing",
-			Icon:         env.MustLoadImage("TabSearch"),
-			SelectedIcon: env.MustLoadImage("TabSearchFilled"),
+			Title: "Testing",
+			// Icon:         env.MustLoadImage("TabSearch"),
+			// SelectedIcon: env.MustLoadImage("TabSearchFilled"),
 		},
 	}
 }
