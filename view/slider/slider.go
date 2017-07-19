@@ -32,14 +32,14 @@ func (l *layouter) Unnotify(id comm.Id) {
 type View struct {
 	*view.Embed
 	PaintStyle    *paint.Style
-	DefaultValue  float64
-	Value         *comm.Float64Value
+	Value         float64
+	ValueNotifier comm.Float64Notifier
+	valueNotifier comm.Float64Notifier
 	MaxValue      float64
 	MinValue      float64
 	OnValueChange func(value float64)
 	OnSubmit      func(value float64) // TODO(KD): naming? OnBeginEdit, OnEndEdit? OnValueBegin, OnValueEnd
 	Enabled       bool
-	initialized   bool
 }
 
 // New returns either the previous View in ctx with matching key, or a new View if none exists.
@@ -57,13 +57,19 @@ func New(ctx *view.Context, key string) *View {
 
 // Build implements view.View.
 func (v *View) Build(ctx *view.Context) *view.Model {
-	val := 0.0
-	if !v.initialized {
-		v.initialized = true
-		val = v.DefaultValue
+	val := v.Value
+	if v.ValueNotifier != nil {
+		val = v.ValueNotifier.Value()
 	}
-	if v.Value != nil {
-		val = v.Value.Value()
+
+	if v.ValueNotifier != v.valueNotifier {
+		if v.valueNotifier != nil {
+			v.Unsubscribe(v.valueNotifier)
+		}
+		if v.ValueNotifier != nil {
+			v.Subscribe(v.ValueNotifier)
+		}
+		v.valueNotifier = v.ValueNotifier
 	}
 
 	painter := paint.Painter(nil)

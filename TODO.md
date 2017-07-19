@@ -1,5 +1,4 @@
 High:
-* Why don't segmented controls and sliders in complex keep their values?
 * Crash when reopening app.
 * Table scroll position?
 

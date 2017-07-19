@@ -157,7 +157,8 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	}
 	chl11 := switchview.New(ctx, "12")
 	chl11.OnValueChange = func(value bool) {
-		fmt.Println("switch tapped", value)
+		v.sliderValue.SetValue(0.2)
+		fmt.Println("switch tapped", value, v.value.Value())
 	}
 	_ = l.Add(chl11, func(s *constraint.Solver) {
 		s.LeftEqual(g6.Right())
@@ -188,11 +189,12 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl12 := slider.New(ctx, "11")
+	chl12.ValueNotifier = &v.sliderValue
 	chl12.MaxValue = 1
 	chl12.MinValue = 0
-	chl12.DefaultValue = 0.5
 	chl12.OnValueChange = func(value float64) {
 		v.sliderValue.SetValue(value)
+		fmt.Println("slider", value, v.sliderValue.Value())
 	}
 	chl12p := view.WithPainter(chl12, &paint.Style{BackgroundColor: colornames.Blue})
 	g12 := l.Add(chl12p, func(s *constraint.Solver) {
