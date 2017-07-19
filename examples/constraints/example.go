@@ -26,7 +26,7 @@ func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
 
 	chl1 := basicview.New(ctx, "1")
 	chl1.Painter = &paint.Style{BackgroundColor: colornames.Blue}
-	g1 := l.Add(chl1, func(s *constraint.Solver) {
+	_ = l.Add(chl1, func(s *constraint.Solver) {
 		s.Top(0)
 		s.Left(0)
 		s.Width(100)
@@ -36,8 +36,8 @@ func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
 	chl2 := basicview.New(ctx, "2")
 	chl2.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
-		s.TopEqual(g1.Bottom())
-		s.LeftEqual(g1.Left())
+		// s.TopEqual(g1.Bottom())
+		// s.LeftEqual(g1.Left())
 		s.Width(300)
 		s.Height(300)
 	})

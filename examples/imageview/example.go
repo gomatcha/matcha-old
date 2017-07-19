@@ -5,6 +5,7 @@ import (
 	_ "image/png"
 
 	"golang.org/x/image/colornames"
+	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/view"

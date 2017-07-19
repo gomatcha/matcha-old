@@ -48,6 +48,9 @@ Package constraint implements a constraint-based layout system.
 	 	Layouter:l,
  	 }
  }
+
+If a child view is unconstrained in x or y, it will try to move as close to the center of the parent as possible.
+If the view is unconstrained in width or height, it will try to match the minGuide as close as possible.
 */
 package constraint
 

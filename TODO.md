@@ -42,9 +42,6 @@ Very Low:
 * Animations: Spring, Delay, Batch, Reverse, Decay, Repeat
 
 Bugs:
-* Constraints crash if unconstrained.
-* Auto disable PNGCrush. "Compress PNG Files" and "Remove Text Metadata from PNG Files"
-* Should we panic if user tries to unnotify with an unknown comm.Id
 
 Documentation:
 * Build process.

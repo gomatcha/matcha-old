@@ -65,6 +65,9 @@ func (bn *Group) Unnotify(id Id) {
 	if bn.funcs == nil {
 		bn.funcs = map[Id]func(){}
 	}
+	if _, ok := bn.funcs[id]; !ok {
+		panic("comm.Unnotify(): on unknown id")
+	}
 	delete(bn.funcs, id)
 }
 
