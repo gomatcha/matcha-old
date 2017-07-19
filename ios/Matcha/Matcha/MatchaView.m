@@ -263,7 +263,11 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
             
         } else if (self.parent.viewController == nil) {
             // let view controllers do their own layout
-            self.materializedView.frame = layoutPaintNode.guide.frame;
+            CGRect f = layoutPaintNode.guide.frame;
+            CGRect prevF = self.materializedView.frame;
+            if (!CGRectEqualToRect(f, prevF)) {
+                self.materializedView.frame = f;
+            }
             self.materializedView.autoresizingMask = UIViewAutoresizingNone;
         } else if (self.viewController) {
             self.viewController.matchaChildLayout = root.layoutPaintNodes;
