@@ -30,22 +30,3 @@
 @property (nonatomic, readonly) NSNumber *buildId;
 @property (nonatomic, readonly) NSDictionary<NSNumber *, GPBAny *> *touchRecognizers;
 @end
-
-@interface MatchaPaintOptions : NSObject
-- (id)initWithProtobuf:(MatchaPaintPBStyle *)style;
-@property (nonatomic, readonly) CGFloat transparency;
-@property (nonatomic, readonly) UIColor *backgroundColor;
-@property (nonatomic, readonly) UIColor *borderColor;
-@property (nonatomic, readonly) CGFloat borderWidth;
-@property (nonatomic, readonly) CGFloat cornerRadius;
-@property (nonatomic, readonly) CGFloat shadowRadius;
-@property (nonatomic, readonly) CGSize shadowOffset;
-@property (nonatomic, readonly) UIColor *shadowColor;
-@end
-
-@interface MatchaLayoutGuide : NSObject
-- (id)initWithProtobuf:(MatchaLayoutPBGuide *)guide;
-@property (nonatomic, readonly) CGRect frame;
-@property (nonatomic, readonly) UIEdgeInsets insets;
-@property (nonatomic, readonly) NSInteger zIndex;
-@end
