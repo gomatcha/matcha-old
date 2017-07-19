@@ -2,14 +2,12 @@
 #import <MatchaBridge/MatchaBridge.h>
 @class MatchaPaintOptions;
 @class MatchaLayoutGuide;
-@class MatchaNode;
 @class MatchaViewPBNode;
 @class MatchaViewPBRoot;
 @class MatchaLayoutPBGuide;
 @class MatchaPaintPBStyle;
 @class MatchaPBRecognizer;
 @class MatchaViewPBLayoutPaintNode;
-@class MatchaLayoutPaintNode;
 @class GPBInt64ObjectDictionary;
 @class MatchaViewPBLayoutPaintNode;
 @class MatchaViewPBBuildNode;
@@ -31,15 +29,6 @@
 @property (nonatomic, readonly) NSNumber *identifier;
 @property (nonatomic, readonly) NSNumber *buildId;
 @property (nonatomic, readonly) NSDictionary<NSNumber *, GPBAny *> *touchRecognizers;
-@end
-
-@interface MatchaLayoutPaintNode : NSObject
-- (id)initWithProtobuf:(MatchaViewPBLayoutPaintNode *)node;
-@property (nonatomic, readonly) NSNumber *identifier;
-@property (nonatomic, readonly) NSNumber *layoutId;
-@property (nonatomic, readonly) NSNumber *paintId;
-@property (nonatomic, readonly) MatchaLayoutGuide *guide;
-@property (nonatomic, readonly) MatchaPaintOptions *paintOptions;
 @end
 
 @interface MatchaPaintOptions : NSObject

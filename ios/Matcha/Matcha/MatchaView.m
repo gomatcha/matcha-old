@@ -87,10 +87,6 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
 
 - (void)setRoot:(MatchaNodeRoot *)root {
     MatchaViewPBLayoutPaintNode *pbLayoutPaintNode = [root.layoutPaintNodes objectForKey:self.identifier.longLongValue];
-    MatchaLayoutPaintNode *layoutPaintNode = nil;
-    if (pbLayoutPaintNode != nil) {
-        layoutPaintNode = [[MatchaLayoutPaintNode alloc] initWithProtobuf:pbLayoutPaintNode];
-    }
     
     MatchaViewPBBuildNode *pbBuildNode = [root.buildNodes objectForKey:self.identifier.longLongValue];
     MatchaBuildNode *buildNode = nil;
@@ -114,7 +110,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     NSMutableArray *unmodifiedKeys = [NSMutableArray array];
     if (buildNode != nil && ![buildNode.buildId isEqual:self.buildNode.buildId]) {
         for (NSNumber *i in self.children) {
-            MatchaNode *child = [root.buildNodes objectForKey:i.longLongValue];
+            MatchaBuildNode *child = [root.buildNodes objectForKey:i.longLongValue];
             if (child == nil) {
                 [removedKeys addObject:i];
             }
@@ -230,7 +226,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     }
 
     // Layout subviews
-    if (layoutPaintNode != nil && ![layoutPaintNode.layoutId isEqual:self.layoutPaintNode.layoutId]) {
+    if (pbLayoutPaintNode != nil && pbLayoutPaintNode.layoutId != self.layoutPaintNode.layoutId) {
         if (self.view) {
             NSArray *sortedKeys = [[children allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
                 MatchaViewPBLayoutPaintNode *layoutPaintNode1 = [root.layoutPaintNodes objectForKey:obj1.longLongValue];
@@ -247,23 +243,22 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
             }
         }
         
-        
+        CGRect f = pbLayoutPaintNode.layoutGuide.frame.toCGRect;
         if ([self.parent.view isKindOfClass:[MatchaScrollView class]]) {
             MatchaScrollView *scrollView = (MatchaScrollView *)self.parent.view;
             bool scrollEvents = scrollView.scrollEvents;
             scrollView.scrollEvents = false;
             
-            CGRect frame = layoutPaintNode.guide.frame;
-            frame.origin = CGPointZero;
-            self.materializedView.frame = frame;
+            CGPoint origin = f.origin;
+            f.origin = CGPointZero;
+            self.materializedView.frame = f;
             self.materializedView.autoresizingMask = UIViewAutoresizingNone;
-            [scrollView setContentOffset:layoutPaintNode.guide.frame.origin];
+            [scrollView setContentOffset:origin];
             
             scrollView.scrollEvents = scrollEvents;
             
         } else if (self.parent.viewController == nil) {
             // let view controllers do their own layout
-            CGRect f = layoutPaintNode.guide.frame;
             CGRect prevF = self.materializedView.frame;
             if (!CGRectEqualToRect(f, prevF)) {
                 self.materializedView.frame = f;
@@ -275,8 +270,8 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     }
     
     // Paint view
-    if (layoutPaintNode != nil && ![layoutPaintNode.paintId isEqual:self.layoutPaintNode.paintId]) {
-        MatchaPaintOptions *paintOptions = layoutPaintNode.paintOptions;
+    if (pbLayoutPaintNode != nil && pbLayoutPaintNode.paintId != self.layoutPaintNode.paintId) {
+        MatchaPaintOptions *paintOptions = [[MatchaPaintOptions alloc] initWithProtobuf:pbLayoutPaintNode.paintStyle];
         self.view.alpha = 1 - paintOptions.transparency;
         self.view.backgroundColor = paintOptions.backgroundColor;
         self.view.layer.borderColor = paintOptions.borderColor.CGColor;
@@ -291,8 +286,8 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
         }
     }
     
-    if (layoutPaintNode != nil) {
-        _layoutPaintNode = layoutPaintNode;
+    if (pbLayoutPaintNode != nil) {
+        _layoutPaintNode = pbLayoutPaintNode;
     }
     if (buildNode != nil) {
         _buildNode = buildNode;

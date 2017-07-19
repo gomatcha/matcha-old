@@ -53,30 +53,6 @@
 
 @end
 
-
-@interface MatchaLayoutPaintNode ()
-@property (nonatomic, readwrite) NSNumber *identifier;
-@property (nonatomic, readwrite) NSNumber *layoutId;
-@property (nonatomic, readwrite) NSNumber *paintId;
-@property (nonatomic, readwrite) MatchaLayoutGuide *guide;
-@property (nonatomic, readwrite) MatchaPaintOptions *paintOptions;
-@end
-
-@implementation MatchaLayoutPaintNode
-
-- (id)initWithProtobuf:(MatchaViewPBLayoutPaintNode *)node {
-    if ((self = [super init])) {
-        self.identifier = @(node.id_p);
-        self.layoutId = @(node.layoutId);
-        self.paintId = @(node.paintId);
-        self.paintOptions = [[MatchaPaintOptions alloc] initWithProtobuf:node.paintStyle];
-        self.guide = [[MatchaLayoutGuide alloc] initWithProtobuf:node.layoutGuide];
-    }
-    return self;
-}
-
-@end
-
 @interface MatchaPaintOptions ()
 @property (nonatomic, assign) CGFloat transparency;
 @property (nonatomic, strong) UIColor *backgroundColor;
