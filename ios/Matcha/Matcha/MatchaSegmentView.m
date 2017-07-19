@@ -18,20 +18,15 @@
 
 - (void)setNode:(MatchaBuildNode *)value {
     _node = value;
-
-    NSError *error = nil;
-    MatchaSegmentViewPbView *view = (id)[value.nativeViewState unpackMessageClass:[MatchaSegmentViewPbView class] error:&error];
-    if (error != nil) {
-        NSLog(@"Error:%@", error);
-    }
+    MatchaSegmentViewPbView *view = (id)[value.nativeViewState unpackMessageClass:[MatchaSegmentViewPbView class] error:nil];
     
-    self.selectedSegmentIndex = (int)view.value;
-    self.enabled = view.enabled;
-    self.momentary = view.momentary;
     [self removeAllSegments];
     for (NSInteger i = 0; i < view.titlesArray.count; i++) {
         [self insertSegmentWithTitle:view.titlesArray[i] atIndex:i animated:NO];
     }
+    self.selectedSegmentIndex = (int)view.value;
+    self.enabled = view.enabled;
+    self.momentary = view.momentary;
 }
 
 - (void)onChange:(id)sender {

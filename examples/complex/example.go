@@ -29,9 +29,10 @@ import (
 
 type NestedView struct {
 	*view.Embed
-	counter     int
-	sliderValue comm.Float64Value
-	value       animate.Value
+	counter      int
+	sliderValue  comm.Float64Value
+	segmentValue int
+	value        animate.Value
 }
 
 func New(ctx *view.Context, key string) *NestedView {
@@ -210,9 +211,11 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 	})
 
 	chl14 := segmentview.New(ctx, "14")
+	chl14.Value = v.segmentValue
 	chl14.Titles = []string{"Title1", "Title2", "Title3"}
-	chl14.OnValueChange = func(v int) {
-		fmt.Println("on value change", v)
+	chl14.OnValueChange = func(a int) {
+		v.segmentValue = a
+		fmt.Println("on value change", a)
 	}
 	chl14.PaintStyle = &paint.Style{BackgroundColor: colornames.White}
 	_ = l.Add(chl14, func(s *constraint.Solver) {
