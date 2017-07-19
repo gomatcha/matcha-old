@@ -74,8 +74,8 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		Children: []view.View{child},
 		Painter:  painter,
 		Layouter: &layouter{
-			directions: v.Direction,
-			position:   scrollPosition.Value(),
+			directions:     v.Direction,
+			scrollPosition: scrollPosition,
 		},
 		NativeViewName: "gomatcha.io/matcha/view/scrollview",
 		NativeViewState: &scrollview.View{
@@ -108,8 +108,8 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 }
 
 type layouter struct {
-	directions Direction
-	position   layout.Point
+	directions     Direction
+	scrollPosition *ScrollPosition
 }
 
 func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
@@ -123,8 +123,9 @@ func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layo
 		minSize.Y = 0
 	}
 
+	position := l.scrollPosition.Value()
 	g := ctx.LayoutChild(ctx.ChildIds[0], minSize, layout.Pt(math.Inf(1), math.Inf(1)))
-	g.Frame = layout.Rt(-l.position.X, -l.position.Y, g.Width()-l.position.X, g.Height()-l.position.Y)
+	g.Frame = layout.Rt(-position.X, -position.Y, g.Width()-position.X, g.Height()-position.Y)
 	gs[ctx.ChildIds[0]] = g
 
 	return layout.Guide{
@@ -133,11 +134,11 @@ func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layo
 }
 
 func (l *layouter) Notify(f func()) comm.Id {
-	return 0 // no-op
+	return l.scrollPosition.Notify(f)
 }
 
 func (l *layouter) Unnotify(id comm.Id) {
-	// no-op
+	l.scrollPosition.Unnotify(id)
 }
 
 type ScrollPosition struct {
