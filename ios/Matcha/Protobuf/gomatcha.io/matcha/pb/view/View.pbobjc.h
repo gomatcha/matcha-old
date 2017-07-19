@@ -32,7 +32,6 @@ CF_EXTERN_C_BEGIN
 @class MatchaPaintPBStyle;
 @class MatchaViewPBBuildNode;
 @class MatchaViewPBLayoutPaintNode;
-@class MatchaViewPBNode;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -49,39 +48,6 @@ NS_ASSUME_NONNULL_BEGIN
  * this file and all files that it depends on.
  **/
 @interface MatchaViewPBViewRoot : GPBRootObject
-@end
-
-#pragma mark - MatchaViewPBNode
-
-typedef GPB_ENUM(MatchaViewPBNode_FieldNumber) {
-  MatchaViewPBNode_FieldNumber_Id_p = 1,
-  MatchaViewPBNode_FieldNumber_BuildId = 2,
-  MatchaViewPBNode_FieldNumber_ChildrenArray = 5,
-  MatchaViewPBNode_FieldNumber_BridgeName = 7,
-  MatchaViewPBNode_FieldNumber_BridgeValue = 8,
-  MatchaViewPBNode_FieldNumber_Values = 10,
-};
-
-@interface MatchaViewPBNode : GPBMessage
-
-@property(nonatomic, readwrite) int64_t id_p;
-
-@property(nonatomic, readwrite) int64_t buildId;
-
-@property(nonatomic, readwrite, copy, null_resettable) NSString *bridgeName;
-
-@property(nonatomic, readwrite, strong, null_resettable) GPBAny *bridgeValue;
-/** Test to see if @c bridgeValue has been set. */
-@property(nonatomic, readwrite) BOOL hasBridgeValue;
-
-@property(nonatomic, readwrite, strong, null_resettable) NSMutableDictionary<NSString*, GPBAny*> *values;
-/** The number of items in @c values without causing the array to be created. */
-@property(nonatomic, readonly) NSUInteger values_Count;
-
-@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MatchaViewPBNode*> *childrenArray;
-/** The number of items in @c childrenArray without causing the array to be created. */
-@property(nonatomic, readonly) NSUInteger childrenArray_Count;
-
 @end
 
 #pragma mark - MatchaViewPBBuildNode
@@ -148,16 +114,11 @@ typedef GPB_ENUM(MatchaViewPBLayoutPaintNode_FieldNumber) {
 #pragma mark - MatchaViewPBRoot
 
 typedef GPB_ENUM(MatchaViewPBRoot_FieldNumber) {
-  MatchaViewPBRoot_FieldNumber_Node = 1,
   MatchaViewPBRoot_FieldNumber_LayoutPaintNodes = 2,
   MatchaViewPBRoot_FieldNumber_BuildNodes = 3,
 };
 
 @interface MatchaViewPBRoot : GPBMessage
-
-@property(nonatomic, readwrite, strong, null_resettable) MatchaViewPBNode *node;
-/** Test to see if @c node has been set. */
-@property(nonatomic, readwrite) BOOL hasNode;
 
 @property(nonatomic, readwrite, strong, null_resettable) GPBInt64ObjectDictionary<MatchaViewPBLayoutPaintNode*> *layoutPaintNodes;
 /** The number of items in @c layoutPaintNodes without causing the array to be created. */

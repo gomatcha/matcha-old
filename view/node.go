@@ -368,7 +368,6 @@ func (root *root) MarshalProtobuf() *pb.Root {
 	root.node.MarshalBuildProtobuf(m2)
 
 	return &pb.Root{
-		Node:             root.node.MarshalProtobuf(),
 		LayoutPaintNodes: m,
 		BuildNodes:       m2,
 	}
@@ -456,37 +455,6 @@ type node struct {
 	paintOptions  paint.Style
 }
 
-func (n *node) MarshalProtobuf() *pb.Node {
-	children := []*pb.Node{}
-	for _, v := range n.children {
-		children = append(children, v.MarshalProtobuf())
-	}
-
-	var nativeViewState *any.Any
-	if a, err := ptypes.MarshalAny(n.model.NativeViewState); err == nil {
-		nativeViewState = a
-	}
-
-	nativeValues := map[string]*google_protobuf.Any{}
-	for k, v := range n.model.NativeValues {
-		a, err := ptypes.MarshalAny(v)
-		if err != nil {
-			fmt.Println("Error enocding native value: ", err)
-			continue
-		}
-		nativeValues[k] = a
-	}
-
-	return &pb.Node{
-		Id:          int64(n.id),
-		BuildId:     n.buildId,
-		Children:    children,
-		BridgeName:  n.model.NativeViewName,
-		BridgeValue: nativeViewState,
-		Values:      nativeValues,
-	}
-}
-
 func (n *node) MarshalLayoutPaintProtobuf(m map[int64]*pb.LayoutPaintNode) {
 	m[int64(n.id)] = &pb.LayoutPaintNode{
 		Id:          int64(n.id),
@@ -501,10 +469,15 @@ func (n *node) MarshalLayoutPaintProtobuf(m map[int64]*pb.LayoutPaintNode) {
 }
 
 func (n *node) MarshalBuildProtobuf(m map[int64]*pb.BuildNode) {
-	// if n.buildPbId == n.buildId {
-	// 	return
-	// }
-	// n.buildPbId = n.buildId
+	for _, v := range n.children {
+		v.MarshalBuildProtobuf(m)
+	}
+
+	// Don't build if nothing has changed
+	if n.buildPbId == n.buildId {
+		return
+	}
+	n.buildPbId = n.buildId
 
 	children := []int64{}
 	for _, v := range n.children {
@@ -533,9 +506,6 @@ func (n *node) MarshalBuildProtobuf(m map[int64]*pb.BuildNode) {
 		BridgeName:  n.model.NativeViewName,
 		BridgeValue: nativeViewState,
 		Values:      nativeValues,
-	}
-	for _, v := range n.children {
-		v.MarshalBuildProtobuf(m)
 	}
 }
 
@@ -758,7 +728,7 @@ func (n *node) debugString() string {
 		all = append(all, lines...)
 	}
 
-	str := fmt.Sprintf("{%p Id:%v View:%v Node:%p Layout:%v}", n, n.id, n.view, n.model, n.layoutGuide.Frame)
+	str := fmt.Sprintf("{%p Id:%v,%v,%v,%v View:%v Node:%p Layout:%v}", n, n.id, n.buildId, n.layoutId, n.paintId, n.view, n.model, n.layoutGuide.Frame)
 	if len(all) > 0 {
 		str += "\n" + strings.Join(all, "\n")
 	}

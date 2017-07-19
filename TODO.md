@@ -2,6 +2,7 @@ High:
 * Only send updated views.
 * Stopping Roots
 * Multiple view controllers.
+* Why don't segmented controls and sliders in complex keep their values?
 
 Medium:
 * Rebuild settings app, Todo App.

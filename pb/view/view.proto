@@ -7,15 +7,6 @@ import "google/protobuf/any.proto";
 option go_package = "view";
 option objc_class_prefix = "MatchaViewPB";
 
-message Node {
-  int64 id = 1;
-  int64 buildId = 2;
-  string bridgeName = 7;
-  google.protobuf.Any bridgeValue = 8;
-  map<string, google.protobuf.Any> values = 10;
-  repeated Node children = 5;
-}
-
 message BuildNode {
   int64 id = 1;
   int64 buildId = 2;
@@ -34,7 +25,6 @@ message LayoutPaintNode {
 }
 
 message Root {
-  Node node = 1;
   map<int64, LayoutPaintNode> layoutPaintNodes = 2;
   map<int64, BuildNode> buildNodes = 3;
 }
