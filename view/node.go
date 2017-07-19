@@ -362,10 +362,10 @@ func (root *root) MarshalProtobuf2() ([]byte, error) {
 
 func (root *root) MarshalProtobuf() *pb.Root {
 	m := map[int64]*pb.LayoutPaintNode{}
-	root.node.MarshalLayoutPaintProtobuf(m)
+	root.node.marshalLayoutPaintProtobuf(m)
 
 	m2 := map[int64]*pb.BuildNode{}
-	root.node.MarshalBuildProtobuf(m2)
+	root.node.marshalBuildProtobuf(m2)
 
 	return &pb.Root{
 		LayoutPaintNodes: m,
@@ -455,22 +455,28 @@ type node struct {
 	paintOptions  paint.Style
 }
 
-func (n *node) MarshalLayoutPaintProtobuf(m map[int64]*pb.LayoutPaintNode) {
+func (n *node) marshalLayoutPaintProtobuf(m map[int64]*pb.LayoutPaintNode) {
+	guide := n.layoutGuide
+	if n.layoutGuide == nil {
+		guide = &layout.Guide{}
+		fmt.Println("View is missing layout guide", n.id, n.view)
+	}
+
 	m[int64(n.id)] = &pb.LayoutPaintNode{
 		Id:          int64(n.id),
 		LayoutId:    n.layoutId,
 		PaintId:     n.paintId,
-		LayoutGuide: n.layoutGuide.MarshalProtobuf(),
+		LayoutGuide: guide.MarshalProtobuf(),
 		PaintStyle:  n.paintOptions.MarshalProtobuf(),
 	}
 	for _, v := range n.children {
-		v.MarshalLayoutPaintProtobuf(m)
+		v.marshalLayoutPaintProtobuf(m)
 	}
 }
 
-func (n *node) MarshalBuildProtobuf(m map[int64]*pb.BuildNode) {
+func (n *node) marshalBuildProtobuf(m map[int64]*pb.BuildNode) {
 	for _, v := range n.children {
-		v.MarshalBuildProtobuf(m)
+		v.marshalBuildProtobuf(m)
 	}
 
 	// Don't build if nothing has changed

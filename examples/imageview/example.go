@@ -38,15 +38,15 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 		s.HeightLess(constraint.Const(200))
 	})
 
-	// chl2 := imageview.New(ctx, "1")
-	// chl2.Image = env.MustLoadImage("TableArrow")
-	// chl2.ResizeMode = imageview.ResizeModeFit
-	// l.Add(chl2, func(s *constraint.Solver) {
-	// 	s.TopEqual(constraint.Const(300))
-	// 	s.LeftEqual(constraint.Const(100))
-	// 	s.WidthEqual(constraint.Const(200))
-	// 	s.HeightEqual(constraint.Const(200))
-	// })
+	chl2 := imageview.New(ctx, "1")
+	chl2.Image = env.MustLoadImage("TableArrow")
+	chl2.ResizeMode = imageview.ResizeModeFit
+	l.Add(chl2, func(s *constraint.Solver) {
+		s.TopEqual(constraint.Const(300))
+		s.LeftEqual(constraint.Const(100))
+		s.WidthEqual(constraint.Const(200))
+		s.HeightEqual(constraint.Const(200))
+	})
 
 	return &view.Model{
 		Children: l.Views(),

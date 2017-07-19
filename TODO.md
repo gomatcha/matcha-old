@@ -1,5 +1,4 @@
 High:
-* Crash when reopening app.
 
 Medium:
 * Rebuild settings app, Todo App.
@@ -8,6 +7,7 @@ Medium:
 * Multiple view controllers.
 
 Low:
+* Crash when reopening app?
 * Improve function call performance.
 * Switching quickly between navigation item causes visual glitch. 2 quick backs.
 * How to respond to memory pressure?
@@ -42,7 +42,6 @@ Very Low:
 * Animations: Spring, Delay, Batch, Reverse, Decay, Repeat
 
 Bugs:
-* Crash in protobuf if view does not have a layout guide.
 * Constraints crash if unconstrained.
 * Auto disable PNGCrush. "Compress PNG Files" and "Remove Text Metadata from PNG Files"
 * Should we panic if user tries to unnotify with an unknown comm.Id

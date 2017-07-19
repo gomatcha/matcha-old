@@ -36,11 +36,6 @@ func (v *ConstraintsView) Build(ctx *view.Context) *view.Model {
 	chl2 := basicview.New(ctx, "2")
 	chl2.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
 	g2 := l.Add(chl2, func(s *constraint.Solver) {
-		// s.TopEqualAnchor(g1.Bottom())
-		// s.LeftEqualAnchor(g1.Left())
-		// s.WidthEqual(300)
-		// s.HeightEqual(300)
-
 		s.TopEqual(g1.Bottom())
 		s.LeftEqual(g1.Left())
 		s.Width(300)

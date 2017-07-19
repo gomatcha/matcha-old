@@ -13,6 +13,7 @@ import (
 	"gomatcha.io/matcha/pb/env"
 )
 
+// Disable "Compress PNG Files" and "Remove Text Metadata from PNG Files" if loading image resources is not working.
 type Resource struct {
 	path string
 }
