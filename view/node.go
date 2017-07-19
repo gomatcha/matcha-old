@@ -437,6 +437,7 @@ type node struct {
 	stage Stage
 
 	buildId       int64
+	buildPbId     int64
 	buildNotify   bool
 	buildNotifyId comm.Id
 	model         *Model
@@ -500,6 +501,11 @@ func (n *node) MarshalLayoutPaintProtobuf(m map[int64]*pb.LayoutPaintNode) {
 }
 
 func (n *node) MarshalBuildProtobuf(m map[int64]*pb.BuildNode) {
+	// if n.buildPbId == n.buildId {
+	// 	return
+	// }
+	// n.buildPbId = n.buildId
+
 	children := []int64{}
 	for _, v := range n.children {
 		children = append(children, int64(v.id))

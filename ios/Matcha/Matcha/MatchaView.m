@@ -86,9 +86,18 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
 }
 
 - (void)setRoot:(MatchaNodeRoot *)root {
-    MatchaLayoutPaintNode *layoutPaintNode = [[MatchaLayoutPaintNode alloc] initWithProtobuf:[root.layoutPaintNodes objectForKey:self.identifier.longLongValue]];
-    MatchaBuildNode *buildNode = [[MatchaBuildNode alloc] initWithProtobuf:[root.buildNodes objectForKey:self.identifier.longLongValue]];
-    NSAssert(self.buildNode == nil || [self.buildNode.nativeViewName isEqual:buildNode.nativeViewName], @"Node with different name");
+    MatchaViewPBLayoutPaintNode *pbLayoutPaintNode = [root.layoutPaintNodes objectForKey:self.identifier.longLongValue];
+    MatchaLayoutPaintNode *layoutPaintNode = nil;
+    if (pbLayoutPaintNode != nil) {
+        layoutPaintNode = [[MatchaLayoutPaintNode alloc] initWithProtobuf:pbLayoutPaintNode];
+    }
+    
+    MatchaViewPBBuildNode *pbBuildNode = [root.buildNodes objectForKey:self.identifier.longLongValue];
+    MatchaBuildNode *buildNode = nil;
+    if (pbBuildNode != nil) {
+        buildNode = [[MatchaBuildNode alloc] initWithProtobuf:pbBuildNode];
+    }
+//    NSAssert(self.buildNode == nil || [self.buildNode.nativeViewName isEqual:buildNode.nativeViewName], @"Node with different name");
     
     if (self.view == nil && self.viewController == nil) {
         self.view = MatchaViewWithNode(buildNode, self);
@@ -103,7 +112,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     NSMutableArray *addedKeys = [NSMutableArray array];
     NSMutableArray *removedKeys = [NSMutableArray array];
     NSMutableArray *unmodifiedKeys = [NSMutableArray array];
-    if (![buildNode.buildId isEqual:self.buildNode.buildId]) {
+    if (buildNode != nil && ![buildNode.buildId isEqual:self.buildNode.buildId]) {
         for (NSNumber *i in self.children) {
             MatchaNode *child = [root.buildNodes objectForKey:i.longLongValue];
             if (child == nil) {
@@ -139,7 +148,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
         [child setRoot:root];
     }
     
-    if (![buildNode.buildId isEqual:self.buildNode.buildId]) {
+    if (buildNode != nil && ![buildNode.buildId isEqual:self.buildNode.buildId]) {
         // Update the views with native values
         if (self.view) {
             self.view.node = buildNode;
@@ -179,10 +188,8 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
                 [child.viewController removeFromParentViewController];
             }
         }
-    }
-    
-    // Update gesture recognizers
-    {
+        
+        // Update gesture recognizers
         if (self.view) {
             NSMutableArray *addedKeys = [NSMutableArray array];
             NSMutableArray *removedKeys = [NSMutableArray array];
@@ -223,7 +230,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     }
 
     // Layout subviews
-    if (![layoutPaintNode.layoutId isEqual:self.layoutPaintNode.layoutId]) {
+    if (layoutPaintNode != nil && ![layoutPaintNode.layoutId isEqual:self.layoutPaintNode.layoutId]) {
         if (self.view) {
             NSArray *sortedKeys = [[children allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
                 MatchaViewPBLayoutPaintNode *layoutPaintNode1 = [root.layoutPaintNodes objectForKey:obj1.longLongValue];
@@ -264,7 +271,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     }
     
     // Paint view
-    if (![layoutPaintNode.paintId isEqual:self.layoutPaintNode.paintId]) {
+    if (layoutPaintNode != nil && ![layoutPaintNode.paintId isEqual:self.layoutPaintNode.paintId]) {
         MatchaPaintOptions *paintOptions = layoutPaintNode.paintOptions;
         self.view.alpha = 1 - paintOptions.transparency;
         self.view.backgroundColor = paintOptions.backgroundColor;
@@ -280,8 +287,12 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
         }
     }
     
-    _layoutPaintNode = layoutPaintNode;
-    _buildNode = buildNode;
+    if (layoutPaintNode != nil) {
+        _layoutPaintNode = layoutPaintNode;
+    }
+    if (buildNode != nil) {
+        _buildNode = buildNode;
+    }
     self.children = children;
 }
 
