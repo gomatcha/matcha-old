@@ -154,6 +154,109 @@ typedef struct MatchaViewPBNode__storage_ {
 
 @end
 
+#pragma mark - MatchaViewPBBuildNode
+
+@implementation MatchaViewPBBuildNode
+
+@dynamic id_p;
+@dynamic buildId;
+@dynamic bridgeName;
+@dynamic hasBridgeValue, bridgeValue;
+@dynamic values, values_Count;
+@dynamic childrenArray, childrenArray_Count;
+
+typedef struct MatchaViewPBBuildNode__storage_ {
+  uint32_t _has_storage_[1];
+  NSString *bridgeName;
+  GPBAny *bridgeValue;
+  NSMutableDictionary *values;
+  GPBInt64Array *childrenArray;
+  int64_t id_p;
+  int64_t buildId;
+} MatchaViewPBBuildNode__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "id_p",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaViewPBBuildNode_FieldNumber_Id_p,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MatchaViewPBBuildNode__storage_, id_p),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "buildId",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaViewPBBuildNode_FieldNumber_BuildId,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MatchaViewPBBuildNode__storage_, buildId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "bridgeName",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaViewPBBuildNode_FieldNumber_BridgeName,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MatchaViewPBBuildNode__storage_, bridgeName),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "bridgeValue",
+        .dataTypeSpecific.className = GPBStringifySymbol(GPBAny),
+        .number = MatchaViewPBBuildNode_FieldNumber_BridgeValue,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(MatchaViewPBBuildNode__storage_, bridgeValue),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "values",
+        .dataTypeSpecific.className = GPBStringifySymbol(GPBAny),
+        .number = MatchaViewPBBuildNode_FieldNumber_Values,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(MatchaViewPBBuildNode__storage_, values),
+        .flags = GPBFieldMapKeyString,
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "childrenArray",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaViewPBBuildNode_FieldNumber_ChildrenArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(MatchaViewPBBuildNode__storage_, childrenArray),
+        .flags = (GPBFieldFlags)(GPBFieldRepeated | GPBFieldPacked),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MatchaViewPBBuildNode class]
+                                     rootClass:[MatchaViewPBViewRoot class]
+                                          file:MatchaViewPBViewRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MatchaViewPBBuildNode__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\003\002\007\000\003\n\000\004\013\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 #pragma mark - MatchaViewPBLayoutPaintNode
 
 @implementation MatchaViewPBLayoutPaintNode
@@ -235,7 +338,7 @@ typedef struct MatchaViewPBLayoutPaintNode__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\003\010\000\004\007\000\006\013\000\t\n\000";
+        "\004\002\010\000\003\007\000\004\013\000\005\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -252,11 +355,13 @@ typedef struct MatchaViewPBLayoutPaintNode__storage_ {
 
 @dynamic hasNode, node;
 @dynamic layoutPaintNodes, layoutPaintNodes_Count;
+@dynamic buildNodes, buildNodes_Count;
 
 typedef struct MatchaViewPBRoot__storage_ {
   uint32_t _has_storage_[1];
   MatchaViewPBNode *node;
   GPBInt64ObjectDictionary *layoutPaintNodes;
+  GPBInt64ObjectDictionary *buildNodes;
 } MatchaViewPBRoot__storage_;
 
 // This method is threadsafe because it is initially called
@@ -283,6 +388,15 @@ typedef struct MatchaViewPBRoot__storage_ {
         .flags = (GPBFieldFlags)(GPBFieldMapKeyInt64 | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
       },
+      {
+        .name = "buildNodes",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaViewPBBuildNode),
+        .number = MatchaViewPBRoot_FieldNumber_BuildNodes,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(MatchaViewPBRoot__storage_, buildNodes),
+        .flags = (GPBFieldFlags)(GPBFieldMapKeyInt64 | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MatchaViewPBRoot class]
@@ -294,7 +408,7 @@ typedef struct MatchaViewPBRoot__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\002\020\000";
+        "\002\002\020\000\003\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

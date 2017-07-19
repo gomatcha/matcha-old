@@ -18,7 +18,7 @@
     return self;
 }
 
-- (void)setNode:(MatchaNode *)value {
+- (void)setNode:(MatchaBuildNode *)value {
     _node = value;
     
     if (self.subviews.count > 0) {

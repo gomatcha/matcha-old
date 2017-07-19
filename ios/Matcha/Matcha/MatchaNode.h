@@ -12,17 +12,31 @@
 @class MatchaLayoutPaintNode;
 @class GPBInt64ObjectDictionary;
 @class MatchaViewPBLayoutPaintNode;
+@class MatchaViewPBBuildNode;
+@class GPBInt64Array;
 @class GPBAny;
 
 @interface MatchaNodeRoot : NSObject // view.root
 - (id)initWithProtobuf:(MatchaViewPBRoot *)data;
 @property (nonatomic, readonly) MatchaNode *node;
 @property (nonatomic, readonly) GPBInt64ObjectDictionary *layoutPaintNodes;
+@property (nonatomic, readonly) GPBInt64ObjectDictionary *buildNodes;
 @end
 
 @interface MatchaNode : NSObject // view.node
 - (id)initWithProtobuf:(MatchaViewPBNode *)node;
 @property (nonatomic, readonly) NSDictionary<NSNumber *, MatchaNode *> *nodeChildren;
+@property (nonatomic, readonly) NSMutableDictionary<NSString*, GPBAny*> *nativeValues;
+@property (nonatomic, readonly) NSString *nativeViewName;
+@property (nonatomic, readonly) GPBAny *nativeViewState;
+@property (nonatomic, readonly) NSNumber *identifier;
+@property (nonatomic, readonly) NSNumber *buildId;
+@property (nonatomic, readonly) NSDictionary<NSNumber *, GPBAny *> *touchRecognizers;
+@end
+
+@interface MatchaBuildNode : NSObject
+- (id)initWithProtobuf:(MatchaViewPBBuildNode *)node;
+@property (nonatomic, readonly) GPBInt64Array *childIds;
 @property (nonatomic, readonly) NSMutableDictionary<NSString*, GPBAny*> *nativeValues;
 @property (nonatomic, readonly) NSString *nativeViewName;
 @property (nonatomic, readonly) GPBAny *nativeViewState;

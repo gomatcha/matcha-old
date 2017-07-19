@@ -32,7 +32,7 @@ type middleware interface {
 }
 
 type Root struct {
-	id     comm.Id
+	id     int64
 	root   *root
 	size   layout.Point
 	ticker *internal.Ticker
@@ -42,7 +42,7 @@ type Root struct {
 func NewRoot(s Screen) *Root {
 	r := &Root{
 		root: newRoot(s),
-		id:   comm.Id(atomic.AddInt64(&maxId, 1)),
+		id:   atomic.AddInt64(&maxId, 1),
 	}
 	r.start()
 	return r
@@ -52,7 +52,7 @@ func NewRoot(s Screen) *Root {
 func NewRootFunc(f func(*Context) View) *Root {
 	r := &Root{
 		root: newRoot(ScreenFunc(f)),
-		id:   comm.Id(atomic.AddInt64(&maxId, 1)),
+		id:   atomic.AddInt64(&maxId, 1),
 	}
 	r.start()
 	return r
@@ -82,7 +82,7 @@ func (r *Root) start() {
 			fmt.Println("err", err)
 			return
 		}
-		bridge.Bridge().Call("updateId:withProtobuf:", bridge.Int64(int64(id)), bridge.Bytes(pb))
+		bridge.Bridge().Call("updateId:withProtobuf:", bridge.Int64(id), bridge.Bytes(pb))
 
 		// fmt.Println(r.root.node.debugString())
 	})
@@ -106,11 +106,18 @@ func (r *Root) Call(funcId string, viewId int64, args []reflect.Value) []reflect
 }
 
 // Id returns the unique identifier for r.
-func (r *Root) Id() comm.Id {
+func (r *Root) Id() int64 {
 	MainMu.Lock()
 	defer MainMu.Unlock()
 
 	return r.id
+}
+
+func (r *Root) ViewId() matcha.Id {
+	MainMu.Lock()
+	defer MainMu.Unlock()
+
+	return r.root.node.id
 }
 
 // Size returns the size of r.
@@ -357,9 +364,13 @@ func (root *root) MarshalProtobuf() *pb.Root {
 	m := map[int64]*pb.LayoutPaintNode{}
 	root.node.MarshalLayoutPaintProtobuf(m)
 
+	m2 := map[int64]*pb.BuildNode{}
+	root.node.MarshalBuildProtobuf(m2)
+
 	return &pb.Root{
 		Node:             root.node.MarshalProtobuf(),
 		LayoutPaintNodes: m,
+		BuildNodes:       m2,
 	}
 }
 
@@ -485,6 +496,40 @@ func (n *node) MarshalLayoutPaintProtobuf(m map[int64]*pb.LayoutPaintNode) {
 	}
 	for _, v := range n.children {
 		v.MarshalLayoutPaintProtobuf(m)
+	}
+}
+
+func (n *node) MarshalBuildProtobuf(m map[int64]*pb.BuildNode) {
+	children := []int64{}
+	for _, v := range n.children {
+		children = append(children, int64(v.id))
+	}
+
+	var nativeViewState *any.Any
+	if a, err := ptypes.MarshalAny(n.model.NativeViewState); err == nil {
+		nativeViewState = a
+	}
+
+	nativeValues := map[string]*google_protobuf.Any{}
+	for k, v := range n.model.NativeValues {
+		a, err := ptypes.MarshalAny(v)
+		if err != nil {
+			fmt.Println("Error enocding native value: ", err)
+			continue
+		}
+		nativeValues[k] = a
+	}
+
+	m[int64(n.id)] = &pb.BuildNode{
+		Id:          int64(n.id),
+		BuildId:     n.buildId,
+		Children:    children,
+		BridgeName:  n.model.NativeViewName,
+		BridgeValue: nativeViewState,
+		Values:      nativeValues,
+	}
+	for _, v := range n.children {
+		v.MarshalBuildProtobuf(m)
 	}
 }
 

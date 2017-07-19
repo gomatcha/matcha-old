@@ -15,7 +15,7 @@
     return self;
 }
 
-- (void)setNode:(MatchaNode *)value {
+- (void)setNode:(MatchaBuildNode *)value {
     _node = value;
     GPBAny *state = value.nativeViewState;
     NSError *error = nil;

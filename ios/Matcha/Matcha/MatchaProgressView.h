@@ -3,5 +3,5 @@
 
 @interface MatchaProgressView : UIProgressView <MatchaChildView>
 @property (nonatomic, weak) MatchaViewNode *viewNode;
-@property (nonatomic, strong) MatchaNode *node;
+@property (nonatomic, strong) MatchaBuildNode *node;
 @end

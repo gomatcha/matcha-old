@@ -1,5 +1,7 @@
 High:
 * Only send updated views.
+* Stopping Roots
+* Multiple view controllers.
 
 Medium:
 * Rebuild settings app, Todo App.

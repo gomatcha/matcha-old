@@ -38,7 +38,7 @@
         self.goValue = value;
         self.identifier = (int)[value call:@"Id" args:nil][0].toLongLong;
         [[MatchaViewController viewControllers] addPointer:(__bridge void *)self];
-        self.viewNode = [[MatchaViewNode alloc] initWithParent:nil rootVC:self];
+        self.viewNode = [[MatchaViewNode alloc] initWithParent:nil rootVC:self identifier:@([value call:@"ViewId" args:nil][0].toLongLong)];
         self.edgesForExtendedLayout = UIRectEdgeNone;
         self.extendedLayoutIncludesOpaqueBars=NO;
         self.automaticallyAdjustsScrollViewInsets=NO;
@@ -63,7 +63,7 @@
 
 
 - (void)update:(MatchaNodeRoot *)root {
-    [self.viewNode setNode:root.node root:root];
+    [self.viewNode setRoot:root];
     if (!self.loaded) {
         self.loaded = TRUE;
         UIView *view = self.viewNode.view ?: self.viewNode.viewController.view;

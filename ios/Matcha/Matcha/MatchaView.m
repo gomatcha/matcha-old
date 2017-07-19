@@ -46,7 +46,7 @@ UIGestureRecognizer *MatchaGestureRecognizerWithPB(int64_t viewId, GPBAny *any, 
     return nil;
 }
 
-UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *viewNode) {
+UIView<MatchaChildView> *MatchaViewWithNode(MatchaBuildNode *node, MatchaViewNode *viewNode) {
     NSString *name = node.nativeViewName;
     UIView<MatchaChildView> *child = nil;
     
@@ -60,7 +60,7 @@ UIView<MatchaChildView> *MatchaViewWithNode(MatchaNode *node, MatchaViewNode *vi
     return child;
 }
 
-UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(MatchaNode *node, MatchaViewNode *viewNode) {
+UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(MatchaBuildNode *node, MatchaViewNode *viewNode) {
     NSString *name = node.nativeViewName;
     UIViewController<MatchaChildViewController> *child = nil;
     
@@ -76,23 +76,25 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
 
 @implementation MatchaViewNode
 
-- (id)initWithParent:(MatchaViewNode *)node rootVC:(MatchaViewController *)rootVC {
+- (id)initWithParent:(MatchaViewNode *)node rootVC:(MatchaViewController *)rootVC identifier:(NSNumber *)identifier {
     if ((self = [super init])) {
         self.parent = node;
+        self.identifier = identifier;
         self.rootVC = rootVC; 
     }
     return self;
 }
 
-- (void)setNode:(MatchaNode *)node root:(MatchaNodeRoot *)root {
-    NSAssert(self.node == nil || [self.node.nativeViewName isEqual:node.nativeViewName], @"Node with different name");
-    MatchaLayoutPaintNode *layoutPaintNode = [[MatchaLayoutPaintNode alloc] initWithProtobuf:[root.layoutPaintNodes objectForKey:node.identifier.longLongValue]];
+- (void)setRoot:(MatchaNodeRoot *)root {
+    MatchaLayoutPaintNode *layoutPaintNode = [[MatchaLayoutPaintNode alloc] initWithProtobuf:[root.layoutPaintNodes objectForKey:self.identifier.longLongValue]];
+    MatchaBuildNode *buildNode = [[MatchaBuildNode alloc] initWithProtobuf:[root.buildNodes objectForKey:self.identifier.longLongValue]];
+    NSAssert(self.buildNode == nil || [self.buildNode.nativeViewName isEqual:buildNode.nativeViewName], @"Node with different name");
     
     if (self.view == nil && self.viewController == nil) {
-        self.view = MatchaViewWithNode(node, self);
-        self.viewController = MatchaViewControllerWithNode(node, self);
+        self.view = MatchaViewWithNode(buildNode, self);
+        self.viewController = MatchaViewControllerWithNode(buildNode, self);
         if (self.view == nil && self.viewController == nil) {
-            NSLog(@"Cannot find corresponding view or view controller for node: %@", node.nativeViewName);
+            NSLog(@"Cannot find corresponding view or view controller for node: %@", buildNode.nativeViewName);
         }
     }
     
@@ -101,26 +103,27 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     NSMutableArray *addedKeys = [NSMutableArray array];
     NSMutableArray *removedKeys = [NSMutableArray array];
     NSMutableArray *unmodifiedKeys = [NSMutableArray array];
-    if (![node.buildId isEqual:self.node.buildId]) {
+    if (![buildNode.buildId isEqual:self.buildNode.buildId]) {
         for (NSNumber *i in self.children) {
-            MatchaNode *child = node.nodeChildren[i];
+            MatchaNode *child = [root.buildNodes objectForKey:i.longLongValue];
             if (child == nil) {
                 [removedKeys addObject:i];
             }
         }
-        for (NSNumber *i in node.nodeChildren) {
-            MatchaViewNode *prevChild = self.children[i];
+        for (NSInteger i = 0; i < buildNode.childIds.count; i++) {
+            NSNumber *childId = @([buildNode.childIds valueAtIndex:i]);
+            MatchaViewNode *prevChild = self.children[childId];
             if (prevChild == nil) {
-                [addedKeys addObject:i];
+                [addedKeys addObject:childId];
             } else {
-                [unmodifiedKeys addObject:i];
+                [unmodifiedKeys addObject:childId];
             }
         }
         
         // Add/remove child nodes
         NSMutableDictionary<NSNumber *, MatchaViewNode *> *mutChildren = [NSMutableDictionary dictionary];
         for (NSNumber *i in addedKeys) {
-            mutChildren[i] = [[MatchaViewNode alloc] initWithParent:self rootVC:self.rootVC];
+            mutChildren[i] = [[MatchaViewNode alloc] initWithParent:self rootVC:self.rootVC identifier:i];
         }
         for (NSNumber *i in unmodifiedKeys) {
             mutChildren[i] = self.children[i];
@@ -133,15 +136,15 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     // Update children
     for (NSNumber *i in children) {
         MatchaViewNode *child = children[i];
-        [child setNode:node.nodeChildren[i] root:root];
+        [child setRoot:root];
     }
     
-    if (![node.buildId isEqual:self.node.buildId]) {
+    if (![buildNode.buildId isEqual:self.buildNode.buildId]) {
         // Update the views with native values
         if (self.view) {
-            self.view.node = node;
+            self.view.node = buildNode;
         } else if (self.viewController) {
-            self.viewController.node = node;
+            self.viewController.node = buildNode;
             
             NSMutableDictionary<NSNumber *, UIViewController *> *childVCs = [NSMutableDictionary dictionary];
             for (NSNumber *i in children) {
@@ -154,7 +157,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
         // Add/remove subviews
         for (NSNumber *i in addedKeys) {
             MatchaViewNode *child = children[i];
-            child.view.node = node.nodeChildren[i];
+            child.view.node = [[MatchaBuildNode alloc] initWithProtobuf:[root.buildNodes objectForKey:i.longLongValue]];
             
             if (self.viewController) {
                 // no-op. The view controller will handle this itself.
@@ -184,14 +187,14 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
             NSMutableArray *addedKeys = [NSMutableArray array];
             NSMutableArray *removedKeys = [NSMutableArray array];
             NSMutableArray *unmodifiedKeys = [NSMutableArray array];
-            for (NSNumber *i in self.node.touchRecognizers) {
-                GPBAny *child = node.touchRecognizers[i];
+            for (NSNumber *i in self.buildNode.touchRecognizers) {
+                GPBAny *child = buildNode.touchRecognizers[i];
                 if (child == nil) {
                     [removedKeys addObject:i];
                 }
             }
-            for (NSNumber *i in node.touchRecognizers) {
-                GPBAny *prevChild = self.node.touchRecognizers[i];
+            for (NSNumber *i in buildNode.touchRecognizers) {
+                GPBAny *prevChild = self.buildNode.touchRecognizers[i];
                 if (prevChild == nil) {
                     [addedKeys addObject:i];
                 } else {
@@ -206,13 +209,13 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
                 [self.view removeGestureRecognizer:recognizer];
             }
             for (NSNumber *i in addedKeys) {
-                UIGestureRecognizer *recognizer = MatchaGestureRecognizerWithPB(node.identifier.longLongValue, node.touchRecognizers[i], self);
+                UIGestureRecognizer *recognizer = MatchaGestureRecognizerWithPB(buildNode.identifier.longLongValue, buildNode.touchRecognizers[i], self);
                 [self.view addGestureRecognizer:recognizer];
                 touchRecognizers[i] = recognizer;
             }
             for (NSNumber *i in unmodifiedKeys) {
                 UIGestureRecognizer *recognizer = self.touchRecognizers[i];
-                [(id)recognizer updateWithProtobuf:node.touchRecognizers[i]];
+                [(id)recognizer updateWithProtobuf:buildNode.touchRecognizers[i]];
                 touchRecognizers[i] = recognizer;
             }
             self.touchRecognizers = touchRecognizers;
@@ -278,7 +281,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     }
     
     _layoutPaintNode = layoutPaintNode;
-    _node = node;
+    _buildNode = buildNode;
     self.children = children;
 }
 
