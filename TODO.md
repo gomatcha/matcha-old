@@ -1,6 +1,5 @@
 High:
 * Crash when reopening app.
-* Table scroll position?
 
 Medium:
 * Rebuild settings app, Todo App.
@@ -59,7 +58,6 @@ Documentation:
 * layout
 * view 
     * stackscreen
-    * switchview
     * tabscrceen
     * textinput
     * textview

@@ -20,7 +20,7 @@ var RootCmd = &cobra.Command{
 	Short: "Matcha is a very fast static site generator",
 	Long: `A Fast and Flexible Static Site Generator built with
                 love by spf13 and friends in Go.
-                Complete documentation is available at http://hugo.spf13.com`,
+                Complete documentation is available at https://gomatcha.io`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Do Stuff Here
 	},
@@ -52,10 +52,7 @@ func init() {
 var InitCmd = &cobra.Command{
 	Use:   "init",
 	Short: "install mobile compiler toolchain",
-	Long: `Init builds copies of the Go standard library for mobile devices.
-It uses Xcode, if available, to build for iOS and uses the Android
-NDK from the ndk-bundle SDK package or from the -ndk flag, to build
-for Android.`,
+	Long:  ``,
 	Run: func(command *cobra.Command, args []string) {
 		flags := &cmd.Flags{
 			BuildN:       buildN,
@@ -85,11 +82,8 @@ func init() {
 
 var BuildCmd = &cobra.Command{
 	Use:   "build",
-	Short: "install mobile compiler toolchain",
-	Long: `Init builds copies of the Go standard library for mobile devices.
-It uses Xcode, if available, to build for iOS and uses the Android
-NDK from the ndk-bundle SDK package or from the -ndk flag, to build
-for Android.`,
+	Short: "builds matcha static library",
+	Long:  ``,
 	Run: func(command *cobra.Command, args []string) {
 		flags := &cmd.Flags{
 			BuildN:       buildN,
@@ -121,7 +115,7 @@ func init() {
 
 var InstallCmd = &cobra.Command{
 	Use:   "install",
-	Short: "internal dev command",
+	Short: "builds matcha static library and copies ios frameworks",
 	Long:  ``,
 	Run: func(command *cobra.Command, args []string) {
 		flags := &cmd.Flags{

@@ -31,6 +31,7 @@ type View struct {
 	ScrollIndicatorDirection Direction
 	ScrollEnabled            bool
 	ScrollPosition           *ScrollPosition
+	scrollPosition           *ScrollPosition
 	OnScroll                 func(position layout.Point)
 
 	ContentChildren []view.View
@@ -49,6 +50,7 @@ func New(ctx *view.Context, key string) *View {
 		Direction:                Vertical,
 		ScrollIndicatorDirection: Vertical | Horizontal,
 		ScrollEnabled:            true,
+		scrollPosition:           &ScrollPosition{},
 	}
 }
 
@@ -59,9 +61,9 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	child.Layouter = v.ContentLayouter
 	child.Painter = v.ContentPainter
 
-	var position layout.Point
-	if v.ScrollPosition != nil {
-		position = v.ScrollPosition.Value()
+	scrollPosition := v.ScrollPosition
+	if scrollPosition == nil {
+		scrollPosition = v.scrollPosition
 	}
 
 	var painter paint.Painter
@@ -73,14 +75,13 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		Painter:  painter,
 		Layouter: &layouter{
 			directions: v.Direction,
-			position:   position,
+			position:   scrollPosition.Value(),
 		},
 		NativeViewName: "gomatcha.io/matcha/view/scrollview",
 		NativeViewState: &scrollview.View{
 			ScrollEnabled:                  v.ScrollEnabled,
 			ShowsHorizontalScrollIndicator: v.ScrollIndicatorDirection&Horizontal == Horizontal,
 			ShowsVerticalScrollIndicator:   v.ScrollIndicatorDirection&Vertical == Vertical,
-			ScrollEvents:                   v.OnScroll != nil,
 		},
 		NativeFuncs: map[string]interface{}{
 			"OnScroll": func(data []byte) {
@@ -91,12 +92,14 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 					return
 				}
 
+				var offset layout.Point
+				(&offset).UnmarshalProtobuf(event.ContentOffset)
+
+				v.scrollPosition.SetValue(offset)
+				if v.ScrollPosition != nil {
+					v.ScrollPosition.SetValue(offset)
+				}
 				if v.OnScroll != nil {
-					var offset layout.Point
-					(&offset).UnmarshalProtobuf(event.ContentOffset)
-					if v.ScrollPosition != nil {
-						v.ScrollPosition.SetValue(offset)
-					}
 					v.OnScroll(offset)
 				}
 			},

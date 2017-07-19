@@ -51,7 +51,6 @@ static GPBFileDescriptor *MatchaScrollViewPBScrollviewRoot_FileDescriptor(void) 
 @dynamic scrollEnabled;
 @dynamic showsHorizontalScrollIndicator;
 @dynamic showsVerticalScrollIndicator;
-@dynamic scrollEvents;
 
 typedef struct MatchaScrollViewPBView__storage_ {
   uint32_t _has_storage_[1];
@@ -90,15 +89,6 @@ typedef struct MatchaScrollViewPBView__storage_ {
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeBool,
       },
-      {
-        .name = "scrollEvents",
-        .dataTypeSpecific.className = NULL,
-        .number = MatchaScrollViewPBView_FieldNumber_ScrollEvents,
-        .hasIndex = 6,
-        .offset = 7,  // Stored in _has_storage_ to save space.
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeBool,
-      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MatchaScrollViewPBView class]
@@ -110,7 +100,7 @@ typedef struct MatchaScrollViewPBView__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\001\r\000\002\036\000\003\034\000\004\014\000";
+        "\003\001\r\000\002\036\000\003\034\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

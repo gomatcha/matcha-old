@@ -246,16 +246,15 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
         CGRect f = pbLayoutPaintNode.layoutGuide.frame.toCGRect;
         if ([self.parent.view isKindOfClass:[MatchaScrollView class]]) {
             MatchaScrollView *scrollView = (MatchaScrollView *)self.parent.view;
-            bool scrollEvents = scrollView.scrollEvents;
-            scrollView.scrollEvents = false;
             
             CGPoint origin = f.origin;
+            origin.x *= -1;
+            origin.y *= -1;
             f.origin = CGPointZero;
             self.materializedView.frame = f;
             self.materializedView.autoresizingMask = UIViewAutoresizingNone;
-            [scrollView setContentOffset:origin];
-            
-            scrollView.scrollEvents = scrollEvents;
+            scrollView.matchaContentOffset = origin;
+            scrollView.contentOffset = origin;
             
         } else if (self.parent.viewController == nil) {
             // let view controllers do their own layout

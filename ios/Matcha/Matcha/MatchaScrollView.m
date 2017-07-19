@@ -14,6 +14,7 @@
     if ((self = [super initWithFrame:CGRectZero])) {
         self.viewNode = viewNode;
         self.delegate = self;
+        self.alwaysBounceVertical = true; // TODO(KD):
     }
     return self;
 }
@@ -32,13 +33,11 @@
         self.scrollEnabled = pbscrollview.scrollEnabled;
         self.showsVerticalScrollIndicator = pbscrollview.showsVerticalScrollIndicator;
         self.showsHorizontalScrollIndicator = pbscrollview.showsHorizontalScrollIndicator;
-        self.alwaysBounceVertical = true;
-        self.scrollEvents = pbscrollview.scrollEvents;
     }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (!self.scrollEvents) {
+    if (CGPointEqualToPoint(self.contentOffset, self.matchaContentOffset)) {
         return;
     }
     

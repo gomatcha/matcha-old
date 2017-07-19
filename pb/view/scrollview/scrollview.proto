@@ -9,7 +9,6 @@ message View {
   bool scrollEnabled = 1;
   bool showsHorizontalScrollIndicator = 2;
   bool showsVerticalScrollIndicator = 3;
-  bool scrollEvents = 4;
 }
 
 message ScrollEvent {
