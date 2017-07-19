@@ -1,16 +1,16 @@
 High:
-* Only send updated views.
-* Stopping Roots
-* Multiple view controllers.
 * Why don't segmented controls and sliders in complex keep their values?
+* Crash when reopening app.
+* Table scroll position?
 
 Medium:
 * Rebuild settings app, Todo App.
 * Make sure development team isn't packaged with sample app.
-* Table scroll position?
-* Webview
+* Stopping Roots
+* Multiple view controllers.
 
 Low:
+* Improve function call performance.
 * Switching quickly between navigation item causes visual glitch. 2 quick backs.
 * How to respond to memory pressure?
 * Have matcha flag that generates a new xcodeproj for easy setup.
@@ -66,6 +66,7 @@ Documentation:
     * textview
 
 Pro:
+* Webview
 * Debugging
 * LocalStorage / Keychain / UserDefaults
 * Cliboard

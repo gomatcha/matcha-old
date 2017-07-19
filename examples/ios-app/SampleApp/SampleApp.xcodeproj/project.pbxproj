@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		67783C8A1F1E8820001582F5 /* CustomView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67783C891F1E8820001582F5 /* CustomView.framework */; };
-		67783C8C1F1E8830001582F5 /* CustomView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 67783C891F1E8820001582F5 /* CustomView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67FEBB501F0A246C005AFEDA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBB4F1F0A246C005AFEDA /* main.m */; };
 		67FEBB531F0A246C005AFEDA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBB521F0A246C005AFEDA /* AppDelegate.m */; };
 		67FEBB5B1F0A246C005AFEDA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67FEBB5A1F0A246C005AFEDA /* Assets.xcassets */; };
@@ -28,7 +26,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				67783C8C1F1E8830001582F5 /* CustomView.framework in Embed Frameworks */,
 				67FEBBEB1F0ADFBC005AFEDA /* Matcha.framework in Embed Frameworks */,
 				67FEBBEE1F0ADFBC005AFEDA /* MatchaBridge.framework in Embed Frameworks */,
 				67FEBBF11F0ADFBC005AFEDA /* Protobuf.framework in Embed Frameworks */,
@@ -57,7 +54,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67783C8A1F1E8820001582F5 /* CustomView.framework in Frameworks */,
 				67FEBBEA1F0ADFBC005AFEDA /* Matcha.framework in Frameworks */,
 				67FEBBED1F0ADFBC005AFEDA /* MatchaBridge.framework in Frameworks */,
 				67FEBBF01F0ADFBC005AFEDA /* Protobuf.framework in Frameworks */,
