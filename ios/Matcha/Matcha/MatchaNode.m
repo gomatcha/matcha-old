@@ -3,6 +3,7 @@
 
 @interface MatchaNodeRoot ()
 @property (nonatomic, strong) MatchaNode *node;
+@property (nonatomic, strong) GPBInt64ObjectDictionary<MatchaViewPBLayoutPaintNode*> *layoutPaintNodes;
 @end
 
 @implementation MatchaNodeRoot
@@ -10,6 +11,7 @@
     if ((self = [super init])) {
         if (pbroot.node) {
             self.node = [[MatchaNode alloc] initWithProtobuf:pbroot.node];
+            self.layoutPaintNodes = pbroot.layoutPaintNodes;
         }
     }
     return self;
@@ -19,12 +21,8 @@
 @interface MatchaNode ()
 @property (nonatomic, strong) NSDictionary *nodeChildren;
 @property (nonatomic, strong) MatchaGoValue *goValue;
-@property (nonatomic, strong) MatchaLayoutGuide *guide;
-@property (nonatomic, strong) MatchaPaintOptions *paintOptions;
 @property (nonatomic, strong) NSNumber *identifier;
 @property (nonatomic, strong) NSNumber *buildId;
-@property (nonatomic, strong) NSNumber *layoutId;
-@property (nonatomic, strong) NSNumber *paintId;
 @property (nonatomic, strong) NSString *nativeViewName;
 @property (nonatomic, strong) GPBAny *nativeViewState;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, GPBAny*> *nativeValues;
@@ -37,10 +35,6 @@
     if ((self = [super init])) {
         self.identifier = @(node.id_p);
         self.buildId = @(node.buildId);
-        self.layoutId = @(node.layoutId);
-        self.paintId = @(node.paintId);
-        self.paintOptions = [[MatchaPaintOptions alloc] initWithProtobuf:node.paintStyle];
-        self.guide = [[MatchaLayoutGuide alloc] initWithProtobuf:node.layoutGuide];
         self.nativeViewName = node.bridgeName;
         self.nativeViewState = node.bridgeValue;
         self.nativeValues = node.values;
@@ -62,6 +56,29 @@
             }
             self.touchRecognizers = touchRecognizers;
         }
+    }
+    return self;
+}
+
+@end
+
+@interface MatchaLayoutPaintNode ()
+@property (nonatomic, readwrite) NSNumber *identifier;
+@property (nonatomic, readwrite) NSNumber *layoutId;
+@property (nonatomic, readwrite) NSNumber *paintId;
+@property (nonatomic, readwrite) MatchaLayoutGuide *guide;
+@property (nonatomic, readwrite) MatchaPaintOptions *paintOptions;
+@end
+
+@implementation MatchaLayoutPaintNode
+
+- (id)initWithProtobuf:(MatchaViewPBLayoutPaintNode *)node {
+    if ((self = [super init])) {
+        self.identifier = @(node.id_p);
+        self.layoutId = @(node.layoutId);
+        self.paintId = @(node.paintId);
+        self.paintOptions = [[MatchaPaintOptions alloc] initWithProtobuf:node.paintStyle];
+        self.guide = [[MatchaLayoutGuide alloc] initWithProtobuf:node.layoutGuide];
     }
     return self;
 }

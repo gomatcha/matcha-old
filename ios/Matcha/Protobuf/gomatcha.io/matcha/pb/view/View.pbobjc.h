@@ -30,6 +30,7 @@ CF_EXTERN_C_BEGIN
 @class GPBAny;
 @class MatchaLayoutPBGuide;
 @class MatchaPaintPBStyle;
+@class MatchaViewPBLayoutPaintNode;
 @class MatchaViewPBNode;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -54,13 +55,9 @@ NS_ASSUME_NONNULL_BEGIN
 typedef GPB_ENUM(MatchaViewPBNode_FieldNumber) {
   MatchaViewPBNode_FieldNumber_Id_p = 1,
   MatchaViewPBNode_FieldNumber_BuildId = 2,
-  MatchaViewPBNode_FieldNumber_LayoutId = 3,
-  MatchaViewPBNode_FieldNumber_PaintId = 4,
   MatchaViewPBNode_FieldNumber_ChildrenArray = 5,
-  MatchaViewPBNode_FieldNumber_LayoutGuide = 6,
   MatchaViewPBNode_FieldNumber_BridgeName = 7,
   MatchaViewPBNode_FieldNumber_BridgeValue = 8,
-  MatchaViewPBNode_FieldNumber_PaintStyle = 9,
   MatchaViewPBNode_FieldNumber_Values = 10,
 };
 
@@ -69,10 +66,6 @@ typedef GPB_ENUM(MatchaViewPBNode_FieldNumber) {
 @property(nonatomic, readwrite) int64_t id_p;
 
 @property(nonatomic, readwrite) int64_t buildId;
-
-@property(nonatomic, readwrite) int64_t layoutId;
-
-@property(nonatomic, readwrite) int64_t paintId;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *bridgeName;
 
@@ -88,6 +81,26 @@ typedef GPB_ENUM(MatchaViewPBNode_FieldNumber) {
 /** The number of items in @c childrenArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger childrenArray_Count;
 
+@end
+
+#pragma mark - MatchaViewPBLayoutPaintNode
+
+typedef GPB_ENUM(MatchaViewPBLayoutPaintNode_FieldNumber) {
+  MatchaViewPBLayoutPaintNode_FieldNumber_Id_p = 1,
+  MatchaViewPBLayoutPaintNode_FieldNumber_LayoutId = 3,
+  MatchaViewPBLayoutPaintNode_FieldNumber_PaintId = 4,
+  MatchaViewPBLayoutPaintNode_FieldNumber_LayoutGuide = 6,
+  MatchaViewPBLayoutPaintNode_FieldNumber_PaintStyle = 9,
+};
+
+@interface MatchaViewPBLayoutPaintNode : GPBMessage
+
+@property(nonatomic, readwrite) int64_t id_p;
+
+@property(nonatomic, readwrite) int64_t layoutId;
+
+@property(nonatomic, readwrite) int64_t paintId;
+
 @property(nonatomic, readwrite, strong, null_resettable) MatchaLayoutPBGuide *layoutGuide;
 /** Test to see if @c layoutGuide has been set. */
 @property(nonatomic, readwrite) BOOL hasLayoutGuide;
@@ -102,6 +115,7 @@ typedef GPB_ENUM(MatchaViewPBNode_FieldNumber) {
 
 typedef GPB_ENUM(MatchaViewPBRoot_FieldNumber) {
   MatchaViewPBRoot_FieldNumber_Node = 1,
+  MatchaViewPBRoot_FieldNumber_LayoutPaintNodes = 2,
 };
 
 @interface MatchaViewPBRoot : GPBMessage
@@ -109,6 +123,10 @@ typedef GPB_ENUM(MatchaViewPBRoot_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) MatchaViewPBNode *node;
 /** Test to see if @c node has been set. */
 @property(nonatomic, readwrite) BOOL hasNode;
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBInt64ObjectDictionary<MatchaViewPBLayoutPaintNode*> *layoutPaintNodes;
+/** The number of items in @c layoutPaintNodes without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger layoutPaintNodes_Count;
 
 @end
 

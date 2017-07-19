@@ -62,8 +62,8 @@
 }
 
 
-- (void)update:(MatchaNode *)node {
-    self.viewNode.node = node;
+- (void)update:(MatchaNodeRoot *)root {
+    [self.viewNode setNode:root.node root:root];
     if (!self.loaded) {
         self.loaded = TRUE;
         UIView *view = self.viewNode.view ?: self.viewNode.viewController.view;

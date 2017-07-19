@@ -1,13 +1,13 @@
 #import <UIKit/UIKit.h>
 #import <MatchaBridge/MatchaBridge.h>
-@class MatchaNode;
+@class MatchaNodeRoot;
 
 @interface MatchaViewController : UIViewController // view.Root
 + (NSPointerArray *)viewControllers;
 + (MatchaViewController *)viewControllerWithIdentifier:(NSInteger)identifier;
 
 - (id)initWithGoValue:(MatchaGoValue *)value;
-- (void)update:(MatchaNode *)node;
+- (void)update:(MatchaNodeRoot *)node;
 - (NSArray<MatchaGoValue *> *)call:(NSString *)funcId viewId:(int64_t)viewId args:(NSArray<MatchaGoValue *> *)args;
 @property (nonatomic, readonly) NSInteger identifier;
 @end

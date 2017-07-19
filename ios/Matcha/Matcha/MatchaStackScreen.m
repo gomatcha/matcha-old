@@ -114,6 +114,10 @@
     [self.viewNode.rootVC call:@"OnChange" viewId:self.node.identifier.longLongValue args:@[value]];
 }
 
+- (void)setMatchaChildLayout:(GPBInt64ObjectDictionary *)layoutPaintNodes {
+    // no-op
+}
+
 @end
 
 @implementation MatchaStackBar
@@ -126,38 +130,53 @@
 }
 
 - (void)setMatchaChildViewControllers:(NSDictionary<NSNumber *,UIViewController *> *)childVCs {
-    GPBAny *state = self.node.nativeViewState;
-    MatchaStackScreenPBBar *bar = (id)[state unpackMessageClass:[MatchaStackScreenPBBar class] error:nil];
+    MatchaStackScreenPBBar *bar = (id)[self.node.nativeViewState unpackMessageClass:[MatchaStackScreenPBBar class] error:nil];
+    
     self.titleString = bar.title;
     self.backButtonHidden = bar.backButtonHidden;
     self.backButtonTitle = bar.backButtonTitle;
     self.customBackButtonTitle = bar.customBackButtonTitle;
     self.titleView = childVCs[@(bar.titleViewId)].view;
-    if (self.titleView) {
-        MatchaNode *n = self.node.nodeChildren[@(bar.titleViewId)];
-        self.titleView.frame = n.guide.frame;
-    }
+    self.titleViewId = bar.titleViewId;
+
     NSMutableArray *rightViews = [NSMutableArray array];
     for (NSInteger i = 0; i < bar.rightViewIdsArray.count; i++) {
         int64_t childId = [bar.rightViewIdsArray valueAtIndex:i];
         UIView *rightView = childVCs[@(childId)].view;
-        MatchaNode *n = self.node.nodeChildren[@(childId)];
-        rightView.frame = n.guide.frame;
         UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:rightView];
         [rightViews addObject:item];
     }
     self.rightViews = rightViews;
+    self.rightViewIds = bar.rightViewIdsArray;
     
     NSMutableArray *leftViews = [NSMutableArray array];
     for (NSInteger i = 0; i < bar.leftViewIdsArray.count; i++) {
         int64_t childId = [bar.leftViewIdsArray valueAtIndex:i];
         UIView *leftView = childVCs[@(childId)].view;
-        MatchaNode *n = self.node.nodeChildren[@(childId)];
-        leftView.frame = n.guide.frame;
         UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:leftView];
         [leftViews addObject:item];
     }
     self.leftViews = leftViews;
+    self.leftViewIds = bar.leftViewIdsArray;
+}
+
+- (void)setMatchaChildLayout:(GPBInt64ObjectDictionary *)layoutPaintNodes {
+    if (self.titleView) {
+        MatchaLayoutPaintNode *n = [[MatchaLayoutPaintNode alloc] initWithProtobuf:[layoutPaintNodes objectForKey:self.titleViewId]];
+        self.titleView.frame = n.guide.frame;
+    }
+    for (NSInteger i = 0; i < self.rightViewIds.count; i++) {
+        int64_t childId = [self.rightViewIds valueAtIndex:i];
+        MatchaLayoutPaintNode *n = [[MatchaLayoutPaintNode alloc] initWithProtobuf:[layoutPaintNodes objectForKey:childId]];
+        UIBarButtonItem *rightView = self.rightViews[i];
+        rightView.customView.frame = n.guide.frame;
+    }
+    for (NSInteger i = 0; i < self.leftViewIds.count; i++) {
+        int64_t childId = [self.leftViewIds valueAtIndex:i];
+        MatchaLayoutPaintNode *n = [[MatchaLayoutPaintNode alloc] initWithProtobuf:[layoutPaintNodes objectForKey:childId]];
+        UIBarButtonItem *leftView = self.leftViews[i];
+        leftView.customView.frame = n.guide.frame;
+    }
 }
 
 @end

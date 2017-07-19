@@ -48,4 +48,8 @@
     [self.viewNode.rootVC call:@"OnSelect" viewId:self.node.identifier.longLongValue args:@[value]];
 }
 
+- (void)setMatchaChildLayout:(GPBInt64ObjectDictionary *)layoutPaintNodes {
+    // no-op
+}
+
 @end

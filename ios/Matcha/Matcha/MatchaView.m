@@ -84,8 +84,9 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     return self;
 }
 
-- (void)setNode:(MatchaNode *)node {
+- (void)setNode:(MatchaNode *)node root:(MatchaNodeRoot *)root {
     NSAssert(self.node == nil || [self.node.nativeViewName isEqual:node.nativeViewName], @"Node with different name");
+    MatchaLayoutPaintNode *layoutPaintNode = [[MatchaLayoutPaintNode alloc] initWithProtobuf:[root.layoutPaintNodes objectForKey:node.identifier.longLongValue]];
     
     if (self.view == nil && self.viewController == nil) {
         self.view = MatchaViewWithNode(node, self);
@@ -132,7 +133,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     // Update children
     for (NSNumber *i in children) {
         MatchaViewNode *child = children[i];
-        child.node = node.nodeChildren[i];
+        [child setNode:node.nodeChildren[i] root:root];
     }
     
     if (![node.buildId isEqual:self.node.buildId]) {
@@ -219,10 +220,12 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     }
 
     // Layout subviews
-    if (![node.layoutId isEqual:self.node.layoutId]) {
+    if (![layoutPaintNode.layoutId isEqual:self.layoutPaintNode.layoutId]) {
         if (self.view) {
             NSArray *sortedKeys = [[children allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
-                return node.nodeChildren[obj1].guide.zIndex > node.nodeChildren[obj2].guide.zIndex;
+                MatchaViewPBLayoutPaintNode *layoutPaintNode1 = [root.layoutPaintNodes objectForKey:obj1.longLongValue];
+                MatchaViewPBLayoutPaintNode *layoutPaintNode2 = [root.layoutPaintNodes objectForKey:obj2.longLongValue];
+                return layoutPaintNode1.layoutGuide.zIndex > layoutPaintNode2.layoutGuide.zIndex;
             }];
             
             for (NSInteger i = 0; i < sortedKeys.count; i++) {
@@ -240,24 +243,26 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
             bool scrollEvents = scrollView.scrollEvents;
             scrollView.scrollEvents = false;
             
-            CGRect frame = node.guide.frame;
+            CGRect frame = layoutPaintNode.guide.frame;
             frame.origin = CGPointZero;
             self.materializedView.frame = frame;
             self.materializedView.autoresizingMask = UIViewAutoresizingNone;
-            [scrollView setContentOffset:node.guide.frame.origin];
+            [scrollView setContentOffset:layoutPaintNode.guide.frame.origin];
             
             scrollView.scrollEvents = scrollEvents;
             
         } else if (self.parent.viewController == nil) {
             // let view controllers do their own layout
-            self.materializedView.frame = node.guide.frame;
+            self.materializedView.frame = layoutPaintNode.guide.frame;
             self.materializedView.autoresizingMask = UIViewAutoresizingNone;
+        } else if (self.viewController) {
+            self.viewController.matchaChildLayout = root.layoutPaintNodes;
         }
     }
     
     // Paint view
-    if (![node.paintId isEqual:self.node.paintId]) {
-        MatchaPaintOptions *paintOptions = node.paintOptions;
+    if (![layoutPaintNode.paintId isEqual:self.layoutPaintNode.paintId]) {
+        MatchaPaintOptions *paintOptions = layoutPaintNode.paintOptions;
         self.view.alpha = 1 - paintOptions.transparency;
         self.view.backgroundColor = paintOptions.backgroundColor;
         self.view.layer.borderColor = paintOptions.borderColor.CGColor;
@@ -272,6 +277,7 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
         }
     }
     
+    _layoutPaintNode = layoutPaintNode;
     _node = node;
     self.children = children;
 }

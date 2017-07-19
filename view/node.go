@@ -354,8 +354,12 @@ func (root *root) MarshalProtobuf2() ([]byte, error) {
 }
 
 func (root *root) MarshalProtobuf() *pb.Root {
+	m := map[int64]*pb.LayoutPaintNode{}
+	root.node.MarshalLayoutPaintProtobuf(m)
+
 	return &pb.Root{
-		Node: root.node.MarshalProtobuf(),
+		Node:             root.node.MarshalProtobuf(),
+		LayoutPaintNodes: m,
 	}
 }
 
@@ -464,14 +468,23 @@ func (n *node) MarshalProtobuf() *pb.Node {
 	return &pb.Node{
 		Id:          int64(n.id),
 		BuildId:     n.buildId,
-		LayoutId:    n.layoutId,
-		PaintId:     n.paintId,
 		Children:    children,
-		LayoutGuide: n.layoutGuide.MarshalProtobuf(),
-		PaintStyle:  n.paintOptions.MarshalProtobuf(),
 		BridgeName:  n.model.NativeViewName,
 		BridgeValue: nativeViewState,
 		Values:      nativeValues,
+	}
+}
+
+func (n *node) MarshalLayoutPaintProtobuf(m map[int64]*pb.LayoutPaintNode) {
+	m[int64(n.id)] = &pb.LayoutPaintNode{
+		Id:          int64(n.id),
+		LayoutId:    n.layoutId,
+		PaintId:     n.paintId,
+		LayoutGuide: n.layoutGuide.MarshalProtobuf(),
+		PaintStyle:  n.paintOptions.MarshalProtobuf(),
+	}
+	for _, v := range n.children {
+		v.MarshalLayoutPaintProtobuf(m)
 	}
 }
 

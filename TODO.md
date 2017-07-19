@@ -1,8 +1,8 @@
 High:
+* Only send updated views.
 
 Medium:
 * Rebuild settings app, Todo App.
-* Only send updated views.
 * Make sure development team isn't packaged with sample app.
 * Table scroll position?
 * Webview

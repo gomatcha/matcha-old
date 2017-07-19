@@ -50,7 +50,7 @@
     MatchaNodeRoot *root = [[MatchaNodeRoot alloc] initWithProtobuf:pbroot];
     
     MatchaViewController *vc = [MatchaViewController viewControllerWithIdentifier:identifier];
-    [vc update:root.node];
+    [vc update:root];
 }
 
 - (NSString *)assetsDir {
