@@ -39,6 +39,7 @@ Very Low:
 * Debug constraints.
 * Collect native resources into assets.
 * Animations: Spring, Delay, Batch, Reverse, Decay, Repeat
+* Rework Slider.FloatNotifier to use comm.Float64Value and give it a better name InOutValue?
 
 Bugs:
 

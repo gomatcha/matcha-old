@@ -217,3 +217,40 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 func (v *WifiView) StackBar(ctx *view.Context) *stackscreen.Bar {
 	return &stackscreen.Bar{Title: "Wi-Fi"}
 }
+
+type WifiNetworkView struct {
+	*view.Embed
+	app          *App
+	networkStore *WifiNetworkStore
+}
+
+func NewWifiNetworkView(ctx *view.Context, key string, app *App, networkStore *WifiNetworkStore) *WifiNetworkView {
+	if v, ok := ctx.Prev(key).(*WifiNetworkView); ok {
+		return v
+	}
+	v := &WifiNetworkView{
+		Embed:        ctx.NewEmbed(key),
+		app:          app,
+		networkStore: networkStore,
+	}
+	v.Subscribe(networkStore)
+	return v
+}
+
+func (v *WifiNetworkView) Build(ctx *view.Context) *view.Model {
+	v.networkStore.Lock()
+	defer v.networkStore.Unlock()
+	network := v.networkStore.Network()
+	_ = network
+
+	l := &table.Layouter{}
+
+	scrollView := scrollview.New(ctx, "scroll")
+	scrollView.ContentChildren = l.Views()
+	scrollView.ContentLayouter = l
+
+	return &view.Model{
+		Children: []view.View{scrollView},
+		Painter:  &paint.Style{BackgroundColor: backgroundColor},
+	}
+}

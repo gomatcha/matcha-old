@@ -38,7 +38,7 @@ type View struct {
 	MaxValue      float64
 	MinValue      float64
 	OnValueChange func(value float64)
-	OnSubmit      func(value float64) // TODO(KD): naming? OnBeginEdit, OnEndEdit? OnValueBegin, OnValueEnd
+	OnSubmit      func(value float64)
 	Enabled       bool
 }
 
