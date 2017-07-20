@@ -14,7 +14,7 @@ Matcha is a package for building iOS applications and frameworks in Go. Matcha p
 
 Matcha requires macOS, Xcode 8.3 and Go 1.8. To start, fetch the project and install the matcha command.
 
-    go get gomatcha.io/...
+    go get gomatcha.io/matcha/...
 
 Now we build the standard library for the device and the simulator with the following command. The output is installed at `$GOPATH/matcha`.
 
