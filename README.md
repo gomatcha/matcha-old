@@ -24,7 +24,7 @@ With this in place, build the example project. The output is installed at `$GOPA
 
     matcha build gomatcha.io/matcha/examples
 
-Thats it! We can now open the example Xcode project and run the app! 
+Thats it! We can now open the example Xcode project and run the app! You may also need to set the Development Team under General > Signing.
 
     open $GOPATH/src/gomatcha.io/matcha/examples/ios-app/SampleApp.xcworkspace
 
