@@ -46,6 +46,10 @@
     return self;
 }
 
+- (void)dealloc {
+    [self.goValue call:@"Stop" args:nil];
+}
+
 - (void)viewDidLayoutSubviews {
     if (!CGRectEqualToRect(self.lastFrame, self.view.frame)) {
         self.lastFrame = self.view.frame;

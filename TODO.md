@@ -3,7 +3,6 @@ High:
 Medium:
 * Rebuild settings app, Todo App.
 * Make sure development team isn't packaged with sample app.
-* Stopping Roots
 * Multiple view controllers.
 
 Low:
@@ -44,7 +43,6 @@ Very Low:
 Bugs:
 
 Documentation:
-* Build process.
 * cmd
 * comm
 * store
