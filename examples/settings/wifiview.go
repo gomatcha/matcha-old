@@ -102,7 +102,7 @@ func NewWifiView(ctx *view.Context, key string, app *App, wifiStore *WifiStore) 
 	return v
 }
 
-func (v *WifiView) Build(ctx *view.Context) *view.Model {
+func (v *WifiView) Build(ctx *view.Context) view.Model {
 	v.wifiStore.Lock()
 	defer v.wifiStore.Unlock()
 	wifi := v.wifiStore.Wifi()
@@ -208,7 +208,7 @@ func (v *WifiView) Build(ctx *view.Context) *view.Model {
 	scrollView.ContentChildren = l.Views()
 	scrollView.ContentLayouter = l
 
-	return &view.Model{
+	return view.Model{
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}
@@ -237,7 +237,7 @@ func NewWifiNetworkView(ctx *view.Context, key string, app *App, networkStore *W
 	return v
 }
 
-func (v *WifiNetworkView) Build(ctx *view.Context) *view.Model {
+func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 	v.networkStore.Lock()
 	defer v.networkStore.Unlock()
 	network := v.networkStore.Network()
@@ -249,7 +249,7 @@ func (v *WifiNetworkView) Build(ctx *view.Context) *view.Model {
 	scrollView.ContentChildren = l.Views()
 	scrollView.ContentLayouter = l
 
-	return &view.Model{
+	return view.Model{
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}

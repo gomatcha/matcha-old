@@ -28,7 +28,7 @@ func New(ctx *view.Context, key string) *TouchView {
 	}
 }
 
-func (v *TouchView) Build(ctx *view.Context) *view.Model {
+func (v *TouchView) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
 	chl1 := NewTouchChildView(ctx, "1")
@@ -93,7 +93,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 	})
 	_ = g5
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
@@ -114,7 +114,7 @@ func NewPressChildView(ctx *view.Context, key string) *PressChildView {
 	}
 }
 
-func (v *PressChildView) Build(ctx *view.Context) *view.Model {
+func (v *PressChildView) Build(ctx *view.Context) view.Model {
 	tap := &touch.PressRecognizer{
 		MinDuration: time.Second / 2,
 		OnTouch: func(e *touch.PressEvent) {
@@ -122,7 +122,7 @@ func (v *PressChildView) Build(ctx *view.Context) *view.Model {
 		},
 	}
 
-	return &view.Model{
+	return view.Model{
 		Painter: &paint.Style{BackgroundColor: colornames.Blue},
 		Values: map[interface{}]interface{}{
 			touch.Key: []touch.Recognizer{tap},
@@ -144,7 +144,7 @@ func NewTouchChildView(ctx *view.Context, key string) *TouchChildView {
 	}
 }
 
-func (v *TouchChildView) Build(ctx *view.Context) *view.Model {
+func (v *TouchChildView) Build(ctx *view.Context) view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
 		OnTouch: func(e *touch.TapEvent) {
@@ -152,7 +152,7 @@ func (v *TouchChildView) Build(ctx *view.Context) *view.Model {
 		},
 	}
 
-	return &view.Model{
+	return view.Model{
 		Painter: &paint.Style{BackgroundColor: colornames.Blue},
 		Values: map[interface{}]interface{}{
 			touch.Key: []touch.Recognizer{tap},
@@ -174,14 +174,14 @@ func NewButtonChildView(ctx *view.Context, key string) *ButtonChildView {
 	}
 }
 
-func (v *ButtonChildView) Build(ctx *view.Context) *view.Model {
+func (v *ButtonChildView) Build(ctx *view.Context) view.Model {
 	button := &touch.ButtonRecognizer{
 		OnTouch: func(e *touch.ButtonEvent) {
 			fmt.Println("On Touch:s", e.Kind)
 		},
 	}
 
-	return &view.Model{
+	return view.Model{
 		Painter: &paint.Style{BackgroundColor: colornames.Blue},
 		Values: map[interface{}]interface{}{
 			touch.Key: []touch.Recognizer{button},

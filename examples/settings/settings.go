@@ -101,7 +101,7 @@ func NewRootView(ctx *view.Context, key string, app *App) *RootView {
 	return v
 }
 
-func (v *RootView) Build(ctx *view.Context) *view.Model {
+func (v *RootView) Build(ctx *view.Context) view.Model {
 	v.app.Lock()
 	defer v.app.Unlock()
 
@@ -238,7 +238,7 @@ func (v *RootView) Build(ctx *view.Context) *view.Model {
 	scrollView.ContentChildren = l.Views()
 	scrollView.ContentLayouter = l
 
-	return &view.Model{
+	return view.Model{
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}
@@ -293,7 +293,7 @@ func NewSeparator(ctx *view.Context, key string) *Separator {
 	return &Separator{Embed: ctx.NewEmbed(key)}
 }
 
-func (v *Separator) Build(ctx *view.Context) *view.Model {
+func (v *Separator) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(0.5)
@@ -308,7 +308,7 @@ func (v *Separator) Build(ctx *view.Context) *view.Model {
 		s.RightEqual(l.Right())
 	})
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: cellColor},
@@ -330,14 +330,14 @@ func NewSpacer(ctx *view.Context, key string) *Spacer {
 	}
 }
 
-func (v *Spacer) Build(ctx *view.Context) *view.Model {
+func (v *Spacer) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(v.Height)
 		s.WidthEqual(l.MaxGuide().Width())
 	})
 
-	return &view.Model{
+	return view.Model{
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}
@@ -359,7 +359,7 @@ func NewSpacerHeader(ctx *view.Context, key string) *SpacerHeader {
 	}
 }
 
-func (v *SpacerHeader) Build(ctx *view.Context) *view.Model {
+func (v *SpacerHeader) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(v.Height)
@@ -383,7 +383,7 @@ func (v *SpacerHeader) Build(ctx *view.Context) *view.Model {
 	})
 	_ = titleGuide
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
@@ -402,7 +402,7 @@ func NewSpacerDescription(ctx *view.Context, key string) *SpacerDescription {
 	return &SpacerDescription{Embed: ctx.NewEmbed(key)}
 }
 
-func (v *SpacerDescription) Build(ctx *view.Context) *view.Model {
+func (v *SpacerDescription) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
 	titleView := textview.New(ctx, "title")
@@ -424,7 +424,7 @@ func (v *SpacerDescription) Build(ctx *view.Context) *view.Model {
 		s.WidthEqual(l.MaxGuide().Width())
 	})
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
@@ -450,7 +450,7 @@ func NewBasicCell(ctx *view.Context, key string) *BasicCell {
 	return &BasicCell{Embed: ctx.NewEmbed(key)}
 }
 
-func (v *BasicCell) Build(ctx *view.Context) *view.Model {
+func (v *BasicCell) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(44)
@@ -557,7 +557,7 @@ func (v *BasicCell) Build(ctx *view.Context) *view.Model {
 		color = cellColor
 	}
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: color},

@@ -26,7 +26,7 @@ func New(ctx *view.Context, key string) *TableView {
 	}
 }
 
-func (v *TableView) Build(ctx *view.Context) *view.Model {
+func (v *TableView) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
 	childLayouter := &table.Layouter{}
@@ -49,7 +49,7 @@ func (v *TableView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(400))
 	})
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
@@ -72,7 +72,7 @@ func NewTableCell(ctx *view.Context, key string) *TableCell {
 	}
 }
 
-func (v *TableCell) Build(ctx *view.Context) *view.Model {
+func (v *TableCell) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.HeightEqual(constraint.Const(50))
@@ -90,7 +90,7 @@ func (v *TableCell) Build(ctx *view.Context) *view.Model {
 		s.CenterYEqual(l.CenterY())
 	})
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  v.Painter,

@@ -26,7 +26,7 @@ func New(ctx *view.Context, key string) *ImageView {
 	}
 }
 
-func (v *ImageView) Build(ctx *view.Context) *view.Model {
+func (v *ImageView) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
 	chl := urlimageview.New(ctx, "0")
@@ -49,7 +49,7 @@ func (v *ImageView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(200))
 	})
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},

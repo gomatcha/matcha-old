@@ -6,7 +6,7 @@ Package table implements a vertical, single column layout system. Views are laye
  childView := NewChildView(...)
  l.Add(childView, nil) // The height of the view is determined by the child's layouter.
 
- return &view.Model{
+ return view.Model{
  	Views: l.Views(),
  	Layouter:l,
  }

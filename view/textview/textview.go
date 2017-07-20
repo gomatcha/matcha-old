@@ -48,7 +48,7 @@ func New(ctx *view.Context, key string) *View {
 	}
 }
 
-func (v *View) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) view.Model {
 	t := v.Text
 	if t == nil {
 		t = text.New(v.String)
@@ -60,7 +60,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	if v.PaintStyle != nil {
 		painter = v.PaintStyle
 	}
-	return &view.Model{
+	return view.Model{
 		Painter:         painter,
 		Layouter:        &layouter{styledText: st, maxLines: v.MaxLines},
 		NativeViewName:  "gomatcha.io/matcha/view/textview",

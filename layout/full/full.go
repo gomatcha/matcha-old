@@ -6,7 +6,7 @@ Package full implements a layout system where the view and all direct children a
  childView := NewChildView(...)
  views = append(views, childView)
 
- return &view.Model{
+ return view.Model{
  	Views: views,
  	Layouter:&full.Layouter{},
  }

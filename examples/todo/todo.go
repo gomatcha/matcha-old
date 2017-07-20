@@ -57,7 +57,7 @@ func NewAppView(ctx *view.Context, key string) *AppView {
 	return &AppView{Embed: ctx.NewEmbed(key)}
 }
 
-func (v *AppView) Build(ctx *view.Context) *view.Model {
+func (v *AppView) Build(ctx *view.Context) view.Model {
 	l := &table.Layouter{}
 
 	for i, todo := range v.Todos {
@@ -85,7 +85,7 @@ func (v *AppView) Build(ctx *view.Context) *view.Model {
 	scrollView := scrollview.New(ctx, "scrollView")
 	scrollView.ContentChildren = l.Views()
 	scrollView.ContentLayouter = l
-	return &view.Model{
+	return view.Model{
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: colornames.White},
 	}
@@ -108,7 +108,7 @@ func NewAddView(ctx *view.Context, key string) *AddView {
 	}
 }
 
-func (v *AddView) Build(ctx *view.Context) *view.Model {
+func (v *AddView) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(50)
@@ -159,7 +159,7 @@ func (v *AddView) Build(ctx *view.Context) *view.Model {
 		s.BottomEqual(l.Bottom())
 	})
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 	}
@@ -179,7 +179,7 @@ func NewTodoView(ctx *view.Context, key string) *TodoView {
 	return &TodoView{Embed: ctx.NewEmbed(key)}
 }
 
-func (v *TodoView) Build(ctx *view.Context) *view.Model {
+func (v *TodoView) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(50)
@@ -223,7 +223,7 @@ func (v *TodoView) Build(ctx *view.Context) *view.Model {
 		s.BottomEqual(l.Bottom())
 	})
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 	}
@@ -242,7 +242,7 @@ func NewCheckbox(ctx *view.Context, key string) *Checkbox {
 	return &Checkbox{Embed: ctx.NewEmbed(key)}
 }
 
-func (v *Checkbox) Build(ctx *view.Context) *view.Model {
+func (v *Checkbox) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.Width(40)
@@ -270,7 +270,7 @@ func (v *Checkbox) Build(ctx *view.Context) *view.Model {
 		},
 	}
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		// Painter:  painter,
 		Layouter: l,
@@ -292,7 +292,7 @@ func NewDeleteButton(ctx *view.Context, key string) *DeleteButton {
 	return &DeleteButton{Embed: ctx.NewEmbed(key)}
 }
 
-func (v *DeleteButton) Build(ctx *view.Context) *view.Model {
+func (v *DeleteButton) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.Width(40)
@@ -316,7 +316,7 @@ func (v *DeleteButton) Build(ctx *view.Context) *view.Model {
 		},
 	}
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Values: map[interface{}]interface{}{

@@ -25,8 +25,8 @@ func New(ctx *view.Context, key string) *View {
 }
 
 // Build implements view.View.
-func (v *View) Build(ctx *view.Context) *view.Model {
-	return &view.Model{
+func (v *View) Build(ctx *view.Context) view.Model {
+	return view.Model{
 		Children: v.Children,
 		Painter:  v.Painter,
 		Layouter: v.Layouter,

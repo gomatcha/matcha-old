@@ -22,7 +22,7 @@ func New(ctx *view.Context, key string) *PaintView {
 	}
 }
 
-func (v *PaintView) Build(ctx *view.Context) *view.Model {
+func (v *PaintView) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
 	chl1 := basicview.New(ctx, "1")
@@ -70,7 +70,7 @@ func (v *PaintView) Build(ctx *view.Context) *view.Model {
 		s.HeightEqual(constraint.Const(100))
 	})
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},

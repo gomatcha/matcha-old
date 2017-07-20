@@ -90,7 +90,7 @@ func New(ctx *view.Context, key string) *View {
 }
 
 // Build implements view.View.
-func (v *View) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) view.Model {
 	if v.Image != v.image {
 		v.image = v.Image
 		v.pbImage = env.ImageMarshalProtobuf(v.image)
@@ -113,7 +113,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	if v.PaintStyle != nil {
 		painter = v.PaintStyle
 	}
-	return &view.Model{
+	return view.Model{
 		Painter:        painter,
 		Layouter:       &layouter{bounds: bounds, resizeMode: resizeMode, scale: scale},
 		NativeViewName: "gomatcha.io/matcha/view/imageview",

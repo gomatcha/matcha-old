@@ -29,7 +29,7 @@ func New(ctx *view.Context, key string) *View {
 }
 
 // Build implements view.View.
-func (v *View) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.HeightEqual(constraint.Const(31))
@@ -42,7 +42,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	if v.PaintStyle != nil {
 		painter = v.PaintStyle
 	}
-	return &view.Model{
+	return view.Model{
 		Painter:        painter,
 		Layouter:       l,
 		NativeViewName: "gomatcha.io/matcha/view/switch",

@@ -100,7 +100,7 @@ func NewBluetoothView(ctx *view.Context, key string, app *App, bts *BluetoothSto
 	return v
 }
 
-func (v *BluetoothView) Build(ctx *view.Context) *view.Model {
+func (v *BluetoothView) Build(ctx *view.Context) view.Model {
 	v.bluetooth.Lock()
 	defer v.bluetooth.Unlock()
 	bt := v.bluetooth.Bluetooth()
@@ -171,7 +171,7 @@ func (v *BluetoothView) Build(ctx *view.Context) *view.Model {
 	scrollView.ContentLayouter = l
 	scrollView.ContentChildren = l.Views()
 
-	return &view.Model{
+	return view.Model{
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}

@@ -97,7 +97,7 @@ func newView(ctx *view.Context, key string, s *Screen) *stackView {
 	}
 }
 
-func (v *stackView) Build(ctx *view.Context) *view.Model {
+func (v *stackView) Build(ctx *view.Context) view.Model {
 	v.screen.Lock()
 	defer v.screen.Unlock()
 
@@ -164,7 +164,7 @@ func (v *stackView) Build(ctx *view.Context) *view.Model {
 	}
 	v.children = children
 
-	return &view.Model{
+	return view.Model{
 		Children:       l.Views(),
 		Layouter:       l,
 		NativeViewName: "gomatcha.io/matcha/view/stacknav",
@@ -198,7 +198,7 @@ type barView struct {
 	bar *Bar
 }
 
-func (v *barView) Build(ctx *view.Context) *view.Model {
+func (v *barView) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
 	// iOS does the layouting for us. We just need the correct sizes.
@@ -234,7 +234,7 @@ func (v *barView) Build(ctx *view.Context) *view.Model {
 		})
 	}
 
-	return &view.Model{
+	return view.Model{
 		Layouter:       l,
 		Children:       l.Views(),
 		NativeViewName: "gomatcha.io/matcha/view/stacknav Bar",

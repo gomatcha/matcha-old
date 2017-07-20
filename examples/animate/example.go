@@ -43,7 +43,7 @@ func (v *View) Lifecycle(from, to view.Stage) {
 	}
 }
 
-func (v *View) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
 	chl := basicview.New(ctx, "")
@@ -55,7 +55,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 		// s.HeightEqual(constraint.Notifier(v.floatTicker))
 	})
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},

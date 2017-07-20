@@ -76,7 +76,7 @@ func newView(ctx *view.Context, key string, s *Screen) *tabView {
 	}
 }
 
-func (v *tabView) Build(ctx *view.Context) *view.Model {
+func (v *tabView) Build(ctx *view.Context) view.Model {
 	v.screen.Lock()
 	defer v.screen.Unlock()
 
@@ -133,7 +133,7 @@ func (v *tabView) Build(ctx *view.Context) *view.Model {
 	}
 	v.children = children
 
-	return &view.Model{
+	return view.Model{
 		Children:       l.Views(),
 		Layouter:       l,
 		NativeViewName: "gomatcha.io/matcha/view/tabscreen",

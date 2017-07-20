@@ -8,7 +8,7 @@ Package absolute implements a fixed layout system similar to HTML absolute posit
  childView := NewChildView(...)
  l.Add(childView, layout.Guide{Frame: layout.Rt(10, 10, 90, 90)})
 
- return &view.Model{
+ return view.Model{
  	Views: l.Views(),
  	Layouter:l,
  }

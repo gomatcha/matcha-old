@@ -1,7 +1,7 @@
 /*
 Package constraint implements a constraint-based layout system.
 
- func (v *View) Build(ctx *view.Context) *view.Model {
+ func (v *View) Build(ctx *view.Context) view.Model {
  	 // Create a new constraint system.
 	 l := constraint.New()
 
@@ -43,7 +43,7 @@ Package constraint implements a constraint-based layout system.
 
  	 // Solvers do not run simultaneously! Child2 is still 10x20 since at the time it was added Child1 was 5x10.
 
-	 return &view.Model{
+	 return view.Model{
 	 	Views: l.Views(),
 	 	Layouter:l,
  	 }

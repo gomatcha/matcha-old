@@ -527,7 +527,8 @@ func (n *node) build(prevIds map[viewCacheKey]matcha.Id, prevNodes map[matcha.Id
 
 		// Generate the new viewModel.
 		ctx := &Context{node: n, prevIds: prevIds, prevNodes: prevNodes}
-		viewModel := n.view.Build(ctx)
+		temp := n.view.Build(ctx)
+		viewModel := &temp
 		viewModelChildren := map[matcha.Id]View{}
 		for _, i := range viewModel.Children {
 			viewModelChildren[i.Id()] = i

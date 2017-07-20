@@ -101,7 +101,7 @@ func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
 	}
 }
 
-func (v *TouchView) Build(ctx *view.Context) *view.Model {
+func (v *TouchView) Build(ctx *view.Context) view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
 		OnTouch: func(e *touch.TapEvent) {
@@ -112,7 +112,7 @@ func (v *TouchView) Build(ctx *view.Context) *view.Model {
 		},
 	}
 
-	return &view.Model{
+	return view.Model{
 		Painter: &paint.Style{BackgroundColor: v.Color},
 		Values: map[interface{}]interface{}{
 			touch.Key: []touch.Recognizer{tap},

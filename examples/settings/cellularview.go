@@ -19,7 +19,7 @@ func NewCellularView(ctx *view.Context, key string, app *App) *CellularView {
 	return &CellularView{Embed: ctx.NewEmbed(key), app: app}
 }
 
-func (v *CellularView) Build(ctx *view.Context) *view.Model {
+func (v *CellularView) Build(ctx *view.Context) view.Model {
 	l := &table.Layouter{}
 	chlds := []view.View{}
 
@@ -27,7 +27,7 @@ func (v *CellularView) Build(ctx *view.Context) *view.Model {
 	scrollView.ContentLayouter = l
 	scrollView.ContentChildren = chlds
 
-	return &view.Model{
+	return view.Model{
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
 	}

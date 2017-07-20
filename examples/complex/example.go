@@ -55,7 +55,7 @@ func (v *NestedView) Lifecycle(from, to view.Stage) {
 	}
 }
 
-func (v *NestedView) Build(ctx *view.Context) *view.Model {
+func (v *NestedView) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
 	value := animate.FloatLerp{Start: 0, End: 150}.Notifier(&v.value)
@@ -226,7 +226,7 @@ func (v *NestedView) Build(ctx *view.Context) *view.Model {
 		s.Width(150)
 	})
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
@@ -248,7 +248,7 @@ func NewTableCell(ctx *view.Context, key string) *TableCell {
 	}
 }
 
-func (v *TableCell) Build(ctx *view.Context) *view.Model {
+func (v *TableCell) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
 	l.Solve(func(s *constraint.Solver) {
@@ -267,7 +267,7 @@ func (v *TableCell) Build(ctx *view.Context) *view.Model {
 		s.CenterYEqual(l.CenterY())
 	})
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  v.Painter,

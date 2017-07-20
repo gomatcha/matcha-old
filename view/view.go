@@ -34,7 +34,7 @@ func (f ScreenFunc) Unlock() {
 }
 
 type View interface {
-	Build(*Context) *Model
+	Build(*Context) Model
 	Lifecycle(from, to Stage)
 	Id() matcha.Id
 	comm.Notifier
@@ -53,8 +53,8 @@ func NewEmbed(id matcha.Id) *Embed {
 }
 
 // Build is an empty implementation of View's Build method.
-func (e *Embed) Build(ctx *Context) *Model {
-	return &Model{}
+func (e *Embed) Build(ctx *Context) Model {
+	return Model{}
 }
 
 // Id returns the id passed into NewEmbed
@@ -136,7 +136,7 @@ type painterView struct {
 	painter paint.Painter
 }
 
-func (v *painterView) Build(ctx *Context) *Model {
+func (v *painterView) Build(ctx *Context) Model {
 	m := v.View.Build(ctx)
 	m.Painter = v.painter
 	return m
@@ -152,7 +152,7 @@ type valuesView struct {
 	values map[interface{}]interface{}
 }
 
-func (v *valuesView) Build(ctx *Context) *Model {
+func (v *valuesView) Build(ctx *Context) Model {
 	m := v.View.Build(ctx)
 	if m.Values == nil {
 		m.Values = map[interface{}]interface{}{}

@@ -3,7 +3,7 @@ Package constraint implements touch recognizers.
 
 Create the touch recognizer in the Build function.
 
- func (v *MyView) Build(ctx *view.Context) *view.Model {
+ func (v *MyView) Build(ctx *view.Context) view.Model {
  	tap := &touch.TapRecognizer{
  		Count: 1,
  		OnTouch: func(e *touch.TapEvent) {
@@ -16,7 +16,7 @@ Create the touch recognizer in the Build function.
 Attach the recognizer to the view.
 
 	...
- 	return &view.Model{
+ 	return view.Model{
  		Values: map[interface{}]interface{}{
  			touch.Key:[]touch.Recognizer{tap},
  		},

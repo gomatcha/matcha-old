@@ -50,7 +50,7 @@ func New(ctx *view.Context, key string) *View {
 	return v
 }
 
-func (v *View) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) view.Model {
 	style := v.Style
 	if style == nil {
 		style = &text.Style{}
@@ -90,7 +90,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	if v.PaintStyle != nil {
 		painter = v.PaintStyle
 	}
-	return &view.Model{
+	return view.Model{
 		Layouter:       &layouter{styledText: st, multiline: v.Multiline},
 		Painter:        painter,
 		NativeViewName: "gomatcha.io/matcha/view/textinput",

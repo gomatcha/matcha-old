@@ -38,7 +38,7 @@ func (v *TextView) Lifecycle(from, to view.Stage) {
 	}
 }
 
-func (v *TextView) Build(ctx *view.Context) *view.Model {
+func (v *TextView) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
 	chl := textview.New(ctx, "a")
@@ -91,7 +91,7 @@ func (v *TextView) Build(ctx *view.Context) *view.Model {
 		},
 	}
 
-	return &view.Model{
+	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},

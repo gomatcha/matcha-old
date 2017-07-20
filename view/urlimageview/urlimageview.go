@@ -66,7 +66,7 @@ func New(ctx *view.Context, key string) *View {
 }
 
 // Build implements view.View.
-func (v *View) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) view.Model {
 	v.reload()
 
 	chl := imageview.New(ctx, "")
@@ -78,7 +78,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	if v.PaintStyle != nil {
 		painter = v.PaintStyle
 	}
-	return &view.Model{
+	return view.Model{
 		Painter:  painter,
 		Layouter: layouter{},
 		Children: []view.View{chl},

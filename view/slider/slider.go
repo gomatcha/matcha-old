@@ -56,7 +56,7 @@ func New(ctx *view.Context, key string) *View {
 }
 
 // Build implements view.View.
-func (v *View) Build(ctx *view.Context) *view.Model {
+func (v *View) Build(ctx *view.Context) view.Model {
 	val := v.Value
 	if v.ValueNotifier != nil {
 		val = v.ValueNotifier.Value()
@@ -76,7 +76,7 @@ func (v *View) Build(ctx *view.Context) *view.Model {
 	if v.PaintStyle != nil {
 		painter = v.PaintStyle
 	}
-	return &view.Model{
+	return view.Model{
 		Painter:        painter,
 		Layouter:       &layouter{},
 		NativeViewName: "gomatcha.io/matcha/view/slider",
