@@ -70,7 +70,7 @@ import (
 type TutorialView struct {
     // All components must implement the view.View interface. A basic implementation
     // is provided by view.Embed.
-    *view.Embed
+    view.Embed
 }
 
 // This is our view's initializer.
@@ -87,7 +87,7 @@ func New(ctx *view.Context, key string) *TutorialView {
 
 // Similar to React's render function. Views specify their properties and
 // children in Build().
-func (v *TutorialView) Build(ctx *view.Context) *view.Model {
+func (v *TutorialView) Build(ctx *view.Context) view.Model {
     l := constraint.New()
 
     // Get the textview for the given key (hellotext), either initializing it or fetching
@@ -110,7 +110,7 @@ func (v *TutorialView) Build(ctx *view.Context) *view.Model {
     })
 
     // Returns the view's children, layout, and styling.
-    return &view.Model{
+    return view.Model{
         Children: []view.View{textv},
         Layouter: l,
         Painter:  &paint.Style{BackgroundColor: colornames.Lightgray},

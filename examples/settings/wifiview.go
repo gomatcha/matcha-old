@@ -84,7 +84,7 @@ type WifiNetwork struct {
 }
 
 type WifiView struct {
-	*view.Embed
+	view.Embed
 	app       *App
 	wifiStore *WifiStore
 }
@@ -219,7 +219,7 @@ func (v *WifiView) StackBar(ctx *view.Context) *stackscreen.Bar {
 }
 
 type WifiNetworkView struct {
-	*view.Embed
+	view.Embed
 	app          *App
 	networkStore *WifiNetworkStore
 }

@@ -57,7 +57,7 @@ func (s *Screen) SelectedIndex() int {
 }
 
 type tabView struct {
-	*view.Embed
+	view.Embed
 	screen   *Screen
 	children map[int64]view.View
 	ids      []int64

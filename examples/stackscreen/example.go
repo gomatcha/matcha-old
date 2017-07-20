@@ -62,7 +62,7 @@ func NewTouchScreen(app *App, c color.Color) view.Screen {
 }
 
 type TouchView struct {
-	*view.Embed
+	view.Embed
 	app   *App
 	Color color.Color
 	bar   *stackscreen.Bar

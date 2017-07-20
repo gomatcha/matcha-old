@@ -82,7 +82,7 @@ type BluetoothDevice struct {
 }
 
 type BluetoothView struct {
-	*view.Embed
+	view.Embed
 	app       *App
 	bluetooth *BluetoothStore
 }

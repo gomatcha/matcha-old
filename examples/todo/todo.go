@@ -46,7 +46,7 @@ type Todo struct {
 }
 
 type AppView struct {
-	*view.Embed
+	view.Embed
 	Todos []*Todo
 }
 
@@ -92,7 +92,7 @@ func (v *AppView) Build(ctx *view.Context) view.Model {
 }
 
 type AddView struct {
-	*view.Embed
+	view.Embed
 	text      *text.Text
 	responder keyboard.Responder
 	OnAdd     func(title string)
@@ -166,7 +166,7 @@ func (v *AddView) Build(ctx *view.Context) view.Model {
 }
 
 type TodoView struct {
-	*view.Embed
+	view.Embed
 	Todo       *Todo
 	OnDelete   func()
 	OnComplete func(check bool)
@@ -230,7 +230,7 @@ func (v *TodoView) Build(ctx *view.Context) view.Model {
 }
 
 type Checkbox struct {
-	*view.Embed
+	view.Embed
 	Value         bool
 	OnValueChange func(value bool)
 }
@@ -281,7 +281,7 @@ func (v *Checkbox) Build(ctx *view.Context) view.Model {
 }
 
 type DeleteButton struct {
-	*view.Embed
+	view.Embed
 	OnPress func()
 }
 

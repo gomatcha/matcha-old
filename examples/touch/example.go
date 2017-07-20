@@ -14,7 +14,7 @@ import (
 )
 
 type TouchView struct {
-	*view.Embed
+	view.Embed
 	counter      int
 	pressCounter int
 }
@@ -101,7 +101,7 @@ func (v *TouchView) Build(ctx *view.Context) view.Model {
 }
 
 type PressChildView struct {
-	*view.Embed
+	view.Embed
 	OnPress func()
 }
 
@@ -131,7 +131,7 @@ func (v *PressChildView) Build(ctx *view.Context) view.Model {
 }
 
 type TouchChildView struct {
-	*view.Embed
+	view.Embed
 	OnTouch func()
 }
 
@@ -161,7 +161,7 @@ func (v *TouchChildView) Build(ctx *view.Context) view.Model {
 }
 
 type ButtonChildView struct {
-	*view.Embed
+	view.Embed
 	OnTouch func()
 }
 

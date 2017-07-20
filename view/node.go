@@ -203,7 +203,7 @@ func (ctx *Context) PrevModel() *Model {
 }
 
 // NewEmbed generates a new Embed for a given key. NewEmbed is a convenience around NewEmbed(ctx.NewId(key)).
-func (ctx *Context) NewEmbed(key string) *Embed {
+func (ctx *Context) NewEmbed(key string) Embed {
 	return NewEmbed(ctx.NewId(key))
 }
 

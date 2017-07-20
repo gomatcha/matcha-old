@@ -10,7 +10,7 @@ import (
 )
 
 type View struct {
-	*view.Embed
+	view.Embed
 	Progress         float64
 	ProgressNotifier comm.Float64Notifier
 	PaintStyle       *paint.Style

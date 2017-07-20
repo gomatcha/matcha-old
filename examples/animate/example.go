@@ -12,7 +12,7 @@ import (
 )
 
 type View struct {
-	*view.Embed
+	view.Embed
 	// ticker      *animate.Ticker
 	// floatTicker comm.Float64Notifier
 	// colorTicker comm.ColorNotifier

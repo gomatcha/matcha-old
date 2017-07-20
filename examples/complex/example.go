@@ -28,7 +28,7 @@ import (
 )
 
 type NestedView struct {
-	*view.Embed
+	view.Embed
 	counter      int
 	sliderValue  comm.Float64Value
 	segmentValue int
@@ -234,7 +234,7 @@ func (v *NestedView) Build(ctx *view.Context) view.Model {
 }
 
 type TableCell struct {
-	*view.Embed
+	view.Embed
 	String  string
 	Painter paint.Painter
 }

@@ -78,7 +78,7 @@ func (s *Screen) Pop() {
 }
 
 type stackView struct {
-	*view.Embed
+	view.Embed
 	screen   *Screen
 	children map[int64]view.View
 	ids      []int64
@@ -194,7 +194,7 @@ type ChildView interface {
 }
 
 type barView struct {
-	*view.Embed
+	view.Embed
 	bar *Bar
 }
 

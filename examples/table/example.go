@@ -14,7 +14,7 @@ import (
 )
 
 type TableView struct {
-	*view.Embed
+	view.Embed
 }
 
 func New(ctx *view.Context, key string) *TableView {
@@ -58,7 +58,7 @@ func (v *TableView) Build(ctx *view.Context) view.Model {
 }
 
 type TableCell struct {
-	*view.Embed
+	view.Embed
 	String  string
 	Painter paint.Painter
 }

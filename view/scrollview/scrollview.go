@@ -26,7 +26,7 @@ const (
 )
 
 type View struct {
-	*view.Embed
+	view.Embed
 	Direction                Direction
 	ScrollIndicatorDirection Direction
 	ScrollEnabled            bool

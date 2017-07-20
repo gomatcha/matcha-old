@@ -12,7 +12,7 @@ import (
 )
 
 type View struct {
-	*view.Embed
+	view.Embed
 	Enabled       bool
 	Momentary     bool
 	Titles        []string

@@ -14,7 +14,7 @@ import (
 )
 
 type ImageView struct {
-	*view.Embed
+	view.Embed
 }
 
 func New(ctx *view.Context, key string) *ImageView {

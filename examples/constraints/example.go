@@ -9,7 +9,7 @@ import (
 )
 
 type ConstraintsView struct {
-	*view.Embed
+	view.Embed
 }
 
 func New(ctx *view.Context, key string) *ConstraintsView {

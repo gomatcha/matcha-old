@@ -86,7 +86,7 @@ func (app *App) AirplaneMode() bool {
 }
 
 type RootView struct {
-	*view.Embed
+	view.Embed
 	app *App
 }
 
@@ -282,7 +282,7 @@ func AddSeparators(ctx *view.Context, vs []view.View) []view.View {
 }
 
 type Separator struct {
-	*view.Embed
+	view.Embed
 	LeftPadding float64
 }
 
@@ -316,7 +316,7 @@ func (v *Separator) Build(ctx *view.Context) view.Model {
 }
 
 type Spacer struct {
-	*view.Embed
+	view.Embed
 	Height float64
 }
 
@@ -344,7 +344,7 @@ func (v *Spacer) Build(ctx *view.Context) view.Model {
 }
 
 type SpacerHeader struct {
-	*view.Embed
+	view.Embed
 	Height float64
 	Title  string
 }
@@ -391,7 +391,7 @@ func (v *SpacerHeader) Build(ctx *view.Context) view.Model {
 }
 
 type SpacerDescription struct {
-	*view.Embed
+	view.Embed
 	Description string
 }
 
@@ -432,7 +432,7 @@ func (v *SpacerDescription) Build(ctx *view.Context) view.Model {
 }
 
 type BasicCell struct {
-	*view.Embed
+	view.Embed
 	HasIcon       bool
 	Icon          *env.ImageResource
 	Title         string

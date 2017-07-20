@@ -8,7 +8,7 @@ import (
 )
 
 type CellularView struct {
-	*view.Embed
+	view.Embed
 	app *App
 }
 

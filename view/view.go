@@ -40,16 +40,16 @@ type View interface {
 	comm.Notifier
 }
 
-// Embed is a convenience struct that provides a default implementation of View. It also wraps a comm.GroupNotifier.
+// Embed is a convenience struct that provides a default implementation of View. It also wraps a comm.Relay.
 type Embed struct {
-	mu       sync.Mutex
-	id       matcha.Id
-	notifier comm.Relay
+	mu    sync.Mutex
+	id    matcha.Id
+	relay comm.Relay
 }
 
 // NewEmbed creates a new Embed with the given Id.
-func NewEmbed(id matcha.Id) *Embed {
-	return &Embed{id: id}
+func NewEmbed(id matcha.Id) Embed {
+	return Embed{id: id}
 }
 
 // Build is an empty implementation of View's Build method.
@@ -67,29 +67,29 @@ func (e *Embed) Lifecycle(from, to Stage) {
 	// no-op
 }
 
-// Notify calls Notify(id) on the underlying comm.GroupNotifier.
+// Notify calls Notify(id) on the underlying comm.Relay.
 func (e *Embed) Notify(f func()) comm.Id {
-	return e.notifier.Notify(f)
+	return e.relay.Notify(f)
 }
 
-// Unnotify calls Unnotify(id) on the underlying comm.GroupNotifier.
+// Unnotify calls Unnotify(id) on the underlying comm.Relay.
 func (e *Embed) Unnotify(id comm.Id) {
-	e.notifier.Unnotify(id)
+	e.relay.Unnotify(id)
 }
 
-// Subscribe calls Subscribe(n) on the underlying comm.GroupNotifier.
+// Subscribe calls Subscribe(n) on the underlying comm.Relay.
 func (e *Embed) Subscribe(n comm.Notifier) {
-	e.notifier.Subscribe(n)
+	e.relay.Subscribe(n)
 }
 
-// Unsubscribe calls Unsubscribe(n) on the underlying comm.GroupNotifier.
+// Unsubscribe calls Unsubscribe(n) on the underlying comm.Relay.
 func (e *Embed) Unsubscribe(n comm.Notifier) {
-	e.notifier.Unsubscribe(n)
+	e.relay.Unsubscribe(n)
 }
 
-// Update calls Signal() on the underlying comm.GroupNotifier.
+// Update calls Signal() on the underlying comm.Relay.
 func (e *Embed) Signal() {
-	e.notifier.Signal()
+	e.relay.Signal()
 }
 
 type Stage int

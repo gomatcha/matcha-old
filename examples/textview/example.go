@@ -15,7 +15,7 @@ import (
 )
 
 type TextView struct {
-	*view.Embed
+	view.Embed
 	text      *text.Text
 	responder *keyboard.Responder
 }

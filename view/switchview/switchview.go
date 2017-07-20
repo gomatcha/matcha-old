@@ -12,7 +12,7 @@ import (
 )
 
 type View struct {
-	*view.Embed
+	view.Embed
 	Value         bool
 	OnValueChange func(value bool)
 	PaintStyle    *paint.Style

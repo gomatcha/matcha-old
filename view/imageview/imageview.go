@@ -70,7 +70,7 @@ func (l *layouter) Unnotify(id comm.Id) {
 }
 
 type View struct {
-	*view.Embed
+	view.Embed
 	Image      image.Image
 	ResizeMode ResizeMode
 	Tint       color.Color

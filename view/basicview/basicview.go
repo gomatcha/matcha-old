@@ -8,7 +8,7 @@ import (
 )
 
 type View struct {
-	*view.Embed
+	view.Embed
 	Painter  paint.Painter
 	Layouter layout.Layouter
 	Children []view.View

@@ -30,7 +30,7 @@ func (l *layouter) Unnotify(id comm.Id) {
 }
 
 type View struct {
-	*view.Embed
+	view.Embed
 	PaintStyle    *paint.Style
 	Value         float64
 	ValueNotifier comm.Float64Notifier

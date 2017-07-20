@@ -10,7 +10,7 @@ import (
 )
 
 type PaintView struct {
-	*view.Embed
+	view.Embed
 }
 
 func New(ctx *view.Context, key string) *PaintView {

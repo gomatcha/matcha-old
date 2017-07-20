@@ -17,7 +17,7 @@ import (
 
 // View mutates the Text and StyledText fields in place.
 type View struct {
-	*view.Embed
+	view.Embed
 	PaintStyle         *paint.Style
 	Text               *text.Text
 	text               *text.Text

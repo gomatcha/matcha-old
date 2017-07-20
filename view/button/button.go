@@ -32,7 +32,7 @@ func (l *layouter) Unnotify(id comm.Id) {
 }
 
 type View struct {
-	*view.Embed
+	view.Embed
 	Text       string
 	OnPress    func()
 	PaintStyle *paint.Style
