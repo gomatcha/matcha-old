@@ -4,78 +4,78 @@ import (
 	"sync"
 )
 
-type Group struct {
+type Relay struct {
 	mu    sync.Mutex
 	subs  map[Notifier]Id
 	funcs map[Id]func()
 	maxId Id
 }
 
-func (bn *Group) Subscribe(n Notifier) {
-	bn.mu.Lock()
-	defer bn.mu.Unlock()
+func (r *Relay) Subscribe(n Notifier) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
 	// Multiple subscriptions on the same object are ignored.
-	if _, ok := bn.subs[n]; ok {
+	if _, ok := r.subs[n]; ok {
 		return
 	}
 
 	id := n.Notify(func() {
-		bn.mu.Lock()
-		defer bn.mu.Unlock()
+		r.mu.Lock()
+		defer r.mu.Unlock()
 
-		for _, f := range bn.funcs {
+		for _, f := range r.funcs {
 			f()
 		}
 	})
-	if bn.subs == nil {
-		bn.subs = map[Notifier]Id{}
+	if r.subs == nil {
+		r.subs = map[Notifier]Id{}
 	}
-	bn.subs[n] = id
+	r.subs[n] = id
 }
 
-func (bn *Group) Unsubscribe(n Notifier) {
-	bn.mu.Lock()
-	defer bn.mu.Unlock()
+func (r *Relay) Unsubscribe(n Notifier) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
-	id, ok := bn.subs[n]
+	id, ok := r.subs[n]
 	if !ok {
 		return
 	}
 	n.Unnotify(id)
-	delete(bn.subs, n)
+	delete(r.subs, n)
 }
 
-func (bn *Group) Notify(f func()) Id {
-	bn.mu.Lock()
-	defer bn.mu.Unlock()
+func (r *Relay) Notify(f func()) Id {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
-	if bn.funcs == nil {
-		bn.funcs = map[Id]func(){}
+	if r.funcs == nil {
+		r.funcs = map[Id]func(){}
 	}
-	bn.maxId += 1
-	bn.funcs[bn.maxId] = f
-	return bn.maxId
+	r.maxId += 1
+	r.funcs[r.maxId] = f
+	return r.maxId
 }
 
-func (bn *Group) Unnotify(id Id) {
-	bn.mu.Lock()
-	defer bn.mu.Unlock()
+func (r *Relay) Unnotify(id Id) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
-	if bn.funcs == nil {
-		bn.funcs = map[Id]func(){}
+	if r.funcs == nil {
+		r.funcs = map[Id]func(){}
 	}
-	if _, ok := bn.funcs[id]; !ok {
+	if _, ok := r.funcs[id]; !ok {
 		panic("comm.Unnotify(): on unknown id")
 	}
-	delete(bn.funcs, id)
+	delete(r.funcs, id)
 }
 
-func (bn *Group) Signal() {
-	bn.mu.Lock()
-	defer bn.mu.Unlock()
+func (r *Relay) Signal() {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
-	for _, f := range bn.funcs {
+	for _, f := range r.funcs {
 		f()
 	}
 }

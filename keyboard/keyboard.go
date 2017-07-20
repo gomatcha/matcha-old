@@ -88,7 +88,7 @@ func (t ReturnType) MarshalProtobuf() keyboard.ReturnType {
 // Responder is a model object that represents the keyboard's state. To use Responder it must be attached to a textinput.View.
 type Responder struct {
 	visible bool
-	value   comm.Group
+	value   comm.Relay
 }
 
 // Show displays the keyboard.

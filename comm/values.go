@@ -80,7 +80,7 @@ package comm
 
 type Float64Value struct {
 	value float64
-	batch Group
+	relay Relay
 }
 
 func NewFloat64Value(val float64) *Float64Value {
@@ -90,11 +90,11 @@ func NewFloat64Value(val float64) *Float64Value {
 }
 
 func (v *Float64Value) Notify(f func()) Id {
-	return v.batch.Notify(f)
+	return v.relay.Notify(f)
 }
 
 func (v *Float64Value) Unnotify(id Id) {
-	v.batch.Unnotify(id)
+	v.relay.Unnotify(id)
 }
 
 func (v *Float64Value) Value() float64 {
@@ -103,5 +103,5 @@ func (v *Float64Value) Value() float64 {
 
 func (v *Float64Value) SetValue(val float64) {
 	v.value = val
-	v.batch.Signal()
+	v.relay.Signal()
 }

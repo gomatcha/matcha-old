@@ -144,7 +144,7 @@ func (l *layouter) Unnotify(id comm.Id) {
 type ScrollPosition struct {
 	X           animate.Value
 	Y           animate.Value
-	group       comm.Group
+	group       comm.Relay
 	initialized bool
 }
 

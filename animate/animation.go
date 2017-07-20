@@ -12,18 +12,18 @@ import (
 // Value is an struct that runs Animations and emits float64s.
 type Value struct {
 	value     float64
-	batch     comm.Group
+	relay     comm.Relay
 	animation *animation
 }
 
 // Notify implements the comm.Notifier interface.
 func (v *Value) Notify(f func()) comm.Id {
-	return v.batch.Notify(f)
+	return v.relay.Notify(f)
 }
 
 // Unnotify implements the comm.Notifier interface.
 func (v *Value) Unnotify(id comm.Id) {
-	v.batch.Unnotify(id)
+	v.relay.Unnotify(id)
 }
 
 // Value returns the current value of v.
@@ -41,7 +41,7 @@ func (v *Value) SetValue(val float64) {
 
 func (v *Value) setValue(val float64) {
 	v.value = val
-	v.batch.Signal()
+	v.relay.Signal()
 }
 
 // Run runs animation a on v. Cancels any previously running animations on v.

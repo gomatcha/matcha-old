@@ -24,7 +24,7 @@ import (
 // }
 
 type Text struct {
-	group comm.Group
+	group comm.Relay
 	bytes []byte
 	// isRune        []bool
 	// isGlyph       []bool

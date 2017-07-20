@@ -44,7 +44,7 @@ type View interface {
 type Embed struct {
 	mu       sync.Mutex
 	id       matcha.Id
-	notifier comm.Group
+	notifier comm.Relay
 }
 
 // NewEmbed creates a new Embed with the given Id.
