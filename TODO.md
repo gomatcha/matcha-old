@@ -2,7 +2,6 @@ High:
 
 Medium:
 * Rebuild settings app, Todo App.
-* Make sure development team isn't packaged with sample app.
 * Multiple view controllers.
 
 Low:
