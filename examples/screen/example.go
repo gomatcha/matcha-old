@@ -1,11 +1,12 @@
 package screen
 
 import (
+	"fmt"
 	"image/color"
 
 	"golang.org/x/image/colornames"
+
 	"gomatcha.io/matcha/paint"
-	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/stackscreen"
@@ -13,77 +14,66 @@ import (
 )
 
 type App struct {
-	store.Node
-	tabScreen    *tabscreen.Screen
-	stackScreen1 *stackscreen.Screen
-	stackScreen2 *stackscreen.Screen
-	stackScreen3 *stackscreen.Screen
-	stackScreen4 *stackscreen.Screen
+	tabScreen *tabscreen.Screen
+	stack1    *stackscreen.Stack
+	stack2    *stackscreen.Stack
+	stack3    *stackscreen.Stack
+	stack4    *stackscreen.Stack
 }
 
 func NewApp() *App {
 	app := &App{}
 
-	app.stackScreen1 = &stackscreen.Screen{}
-	app.Set("1", app.stackScreen1)
-	app.stackScreen1.SetChildren(
-		NewTouchScreen(app, colornames.Green),
-	)
+	app.stack1 = &stackscreen.Stack{}
+	app.stack1.SetChildren(NewTouchView(nil, "", app))
 
-	app.stackScreen2 = &stackscreen.Screen{}
-	app.Set("2", app.stackScreen2)
-	app.stackScreen2.SetChildren(
-		NewTouchScreen(app, colornames.Green),
-	)
+	// app.stack2 = &stackscreen.Stack{}
+	// app.stack2.SetChildren(NewTouchView(nil, "", app))
 
-	app.stackScreen3 = &stackscreen.Screen{}
-	app.Set("3", app.stackScreen3)
-	app.stackScreen3.SetChildren(
-		NewTouchScreen(app, colornames.Green),
-	)
+	// app.stack3 = &stackscreen.Stack{}
+	// app.stack3.SetChildren(NewTouchView(nil, "", app))
 
-	app.stackScreen4 = &stackscreen.Screen{}
-	app.Set("4", app.stackScreen4)
-	app.stackScreen4.SetChildren(
-		NewTouchScreen(app, colornames.Green),
-	)
+	// stackView := stackscreen.New(nil)
+	// app.stack4 = &stackscreen.Stack{}
+	// app.stack4.SetChildren(NewTouchView(nil, "", app))
 
-	app.tabScreen = &tabscreen.Screen{}
-	app.Set("5", app.tabScreen)
-	app.tabScreen.SetChildren(
-		app.stackScreen1,
-		app.stackScreen2,
-		app.stackScreen3,
-		app.stackScreen4,
-	)
+	// app.tabScreen = &tabscreen.Screen{}
+	// app.tabScreen.SetChildren(
+	// 	app.stack1,
+	// 	app.stack2,
+	// 	app.stack3,
+	// 	app.stack4,
+	// )
 	return app
 }
 
-func (app *App) CurrentStackScreen() *stackscreen.Screen {
+func (app *App) CurrentStackScreen() *stackscreen.Stack {
 	switch app.tabScreen.SelectedIndex() {
 	case 0:
-		return app.stackScreen1
+		return app.stack1
 	case 1:
-		return app.stackScreen2
+		return app.stack2
 	case 2:
-		return app.stackScreen3
+		return app.stack3
 	case 3:
-		return app.stackScreen4
+		return app.stack4
 	}
 	return nil
 }
 
 func (app *App) View(ctx *view.Context) view.View {
-	return app.tabScreen.View(ctx)
+	ss := stackscreen.New(ctx, "")
+	ss.Stack = app.stack1
+	return ss
 }
 
-func NewTouchScreen(app *App, c color.Color) view.Screen {
-	return view.ScreenFunc(func(ctx *view.Context) view.View {
-		chl := NewTouchView(ctx, "", app)
-		chl.Color = c
-		return chl
-	})
-}
+// func NewTouchScreen(app *App, c color.Color) view.Screen {
+// 	return view.ScreenFunc(func(ctx *view.Context) view.View {
+// 		chl := NewTouchView(ctx, "", app)
+// 		chl.Color = c
+// 		return chl
+// 	})
+// }
 
 type TouchView struct {
 	view.Embed
@@ -97,6 +87,7 @@ func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
 	}
 	return &TouchView{
 		Embed: ctx.NewEmbed(key),
+		Color: colornames.White,
 		app:   app,
 	}
 }
@@ -105,10 +96,10 @@ func (v *TouchView) Build(ctx *view.Context) view.Model {
 	tap := &touch.TapRecognizer{
 		Count: 1,
 		OnTouch: func(e *touch.TapEvent) {
-			v.app.Lock()
-			defer v.app.Unlock()
-
-			v.app.CurrentStackScreen().Push(NewTouchScreen(v.app, colornames.Blue))
+			child := NewTouchView(nil, "", v.app)
+			child.Color = colornames.Red
+			v.app.stack1.Push(child)
+			fmt.Println("child", child)
 		},
 	}
 

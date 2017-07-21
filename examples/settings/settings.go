@@ -24,7 +24,7 @@ import (
 
 type App struct {
 	store.Node
-	stackScreen    *stackscreen.Screen
+	stackScreen    *stackscreen.Stack
 	airplaneMode   bool
 	wifiStore      *WifiStore
 	bluetoothStore *BluetoothStore
@@ -36,9 +36,8 @@ func NewApp() *App {
 		return NewRootView(ctx, "", app)
 	})
 
-	app.stackScreen = &stackscreen.Screen{}
+	app.stackScreen = &stackscreen.Stack{}
 	app.stackScreen.SetChildren(rootScreen, rootScreen, rootScreen)
-	app.Set("stackScreen", app.stackScreen)
 
 	app.wifiStore = NewWifiStore()
 	app.Set("wifi", app.wifiStore)
@@ -55,7 +54,7 @@ func (app *App) View(ctx *view.Context) view.View {
 	return app.StackScreen().View(ctx)
 }
 
-func (app *App) StackScreen() *stackscreen.Screen {
+func (app *App) StackScreen() *stackscreen.Stack {
 	return app.stackScreen
 }
 

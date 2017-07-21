@@ -24,7 +24,7 @@ import (
 )
 
 func init() {
-	stack := &stackscreen.Screen{}
+	stack := &stackscreen.Stack{}
 	stack.SetChildren(view.ScreenFunc(func(ctx *view.Context) view.View {
 		app := NewAppView(ctx, "")
 		app.Todos = []*Todo{

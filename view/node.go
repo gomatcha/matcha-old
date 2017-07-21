@@ -159,6 +159,9 @@ func (ctx *Context) Prev(key string) View {
 }
 
 func (ctx *Context) prev(key string, prefix string) View {
+	if ctx == nil {
+		return nil
+	}
 	if ctx.parent != nil {
 		return ctx.parent.prev(key, ctx.prefix+"|"+prefix)
 	}
@@ -209,6 +212,9 @@ func (ctx *Context) NewEmbed(key string) Embed {
 
 // NewId generates a new identifier for a given key.
 func (ctx *Context) NewId(key string) matcha.Id {
+	if ctx == nil {
+		return matcha.Id(atomic.AddInt64(&maxId, 1))
+	}
 	return ctx.newId(key, "")
 }
 

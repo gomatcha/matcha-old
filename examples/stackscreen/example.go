@@ -15,7 +15,7 @@ import (
 
 type App struct {
 	store.Node
-	stackScreen *stackscreen.Screen
+	stackScreen *stackscreen.Stack
 }
 
 func NewApp() *App {
@@ -34,7 +34,7 @@ func NewApp() *App {
 	screen3 := NewTouchScreen(app, colornames.Yellow)
 	screen4 := NewTouchScreen(app, colornames.Green)
 
-	app.stackScreen = &stackscreen.Screen{}
+	app.stackScreen = &stackscreen.Stack{}
 	app.Set("stackscreen", app.stackScreen)
 	app.stackScreen.SetChildren(
 		stackscreen.WithBar(screen1, bar1),
@@ -49,7 +49,7 @@ func (app *App) View(ctx *view.Context) view.View {
 	return app.StackScreen().View(ctx)
 }
 
-func (app *App) StackScreen() *stackscreen.Screen {
+func (app *App) StackScreen() *stackscreen.Stack {
 	return app.stackScreen
 }
 
