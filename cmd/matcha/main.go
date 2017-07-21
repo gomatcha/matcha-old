@@ -17,10 +17,9 @@ func main() {
 
 var RootCmd = &cobra.Command{
 	Use:   "matcha",
-	Short: "Matcha is a very fast static site generator",
-	Long: `A Fast and Flexible Static Site Generator built with
-                love by spf13 and friends in Go.
-                Complete documentation is available at https://gomatcha.io`,
+	Short: "Matcha is a tool for building iOS apps in Go",
+	Long: `Matcha is a tool for building iOS apps in Go. 
+Complete documentation is available at https://gomatcha.io`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Do Stuff Here
 	},
