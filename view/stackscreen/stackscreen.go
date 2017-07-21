@@ -19,6 +19,8 @@ type Screen struct {
 }
 
 func (s *Screen) View(ctx *view.Context) view.View {
+	s.Lock()
+	defer s.Unlock()
 	return newView(ctx, "", s)
 }
 
@@ -89,12 +91,12 @@ func newView(ctx *view.Context, key string, s *Screen) *stackView {
 		return v
 	}
 
-	embed := ctx.NewEmbed(key)
-	embed.Subscribe(s)
-	return &stackView{
-		Embed:  embed,
+	v := &stackView{
+		Embed:  ctx.NewEmbed(key),
 		screen: s,
 	}
+	v.Subscribe(s)
+	return v
 }
 
 func (v *stackView) Build(ctx *view.Context) view.Model {

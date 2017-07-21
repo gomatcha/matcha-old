@@ -303,9 +303,6 @@ type root struct {
 }
 
 func newRoot(s Screen) *root {
-	s.Lock()
-	defer s.Unlock()
-
 	v := s.View(&Context{})
 	id := v.Id()
 

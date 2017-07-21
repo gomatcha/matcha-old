@@ -139,11 +139,25 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell2.Icon = env.MustLoadImage("Wifi")
 		cell2.Chevron = true
 		cell2.OnTap = func() {
+			// v.app.Lock()
+			// defer v.app.Unlock()
+
+			// v.stackGroup.Push(NewWifiView(nil, "", v.app, v.app.WifiStore()))
+
+			// stackscreen.Push(v, NewWifiScreen(v.app, v.app.WifiStore()))
+
+			// v.app.Stackscreen.Push(NewWifiScreen(v.app, v.app.WifiStore()))
+			// app.StackScreen().PushFunc(func() view.View {
+			// 	return NewWifiView(nil, "", app, wifi)
+			// })
+
 			v.app.Lock()
 			defer v.app.Unlock()
-			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
-				// TODO(KD): Do we need to lock/unlock here?
-				return NewWifiView(ctx, "", v.app, v.app.WifiStore())
+
+			app := v.app
+			wifi := v.app.WifiStore()
+			app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
+				return NewWifiView(ctx, "", app, wifi)
 			}))
 		}
 		group = append(group, cell2)
@@ -161,8 +175,11 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell3.OnTap = func() {
 			v.app.Lock()
 			defer v.app.Unlock()
+
+			app := v.app
+			bluetooth := v.app.BluetoothStore()
 			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
-				return NewBluetoothView(ctx, "", v.app, v.app.BluetoothStore())
+				return NewBluetoothView(ctx, "", app, bluetooth)
 			}))
 		}
 		group = append(group, cell3)
@@ -175,8 +192,10 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell4.OnTap = func() {
 			v.app.Lock()
 			defer v.app.Unlock()
+
+			app := v.app
 			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
-				return NewCellularView(ctx, "", v.app)
+				return NewCellularView(ctx, "", app)
 			}))
 		}
 		group = append(group, cell4)

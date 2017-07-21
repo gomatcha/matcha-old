@@ -68,12 +68,12 @@ func newView(ctx *view.Context, key string, s *Screen) *tabView {
 		return v
 	}
 
-	embed := ctx.NewEmbed(key)
-	embed.Subscribe(s)
-	return &tabView{
-		Embed:  embed,
+	v := &tabView{
+		Embed:  ctx.NewEmbed(key),
 		screen: s,
 	}
+	v.Subscribe(s)
+	return v
 }
 
 func (v *tabView) Build(ctx *view.Context) view.Model {
