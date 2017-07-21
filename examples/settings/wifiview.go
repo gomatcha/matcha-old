@@ -226,16 +226,16 @@ type WifiNetworkView struct {
 	networkStore *WifiNetworkStore
 }
 
-func NewWifiNetworkView(ctx *view.Context, key string, app *App, networkStore *WifiNetworkStore) *WifiNetworkView {
+func NewWifiNetworkView(ctx *view.Context, key string, app *App, network *WifiNetworkStore) *WifiNetworkView {
 	if v, ok := ctx.Prev(key).(*WifiNetworkView); ok {
 		return v
 	}
 	v := &WifiNetworkView{
 		Embed:        ctx.NewEmbed(key),
 		app:          app,
-		networkStore: networkStore,
+		networkStore: network,
 	}
-	v.Subscribe(networkStore)
+	v.Subscribe(network)
 	return v
 }
 

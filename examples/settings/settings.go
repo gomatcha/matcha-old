@@ -27,18 +27,11 @@ type App struct {
 	Store *Store
 }
 
-type Store struct {
-	store.Node
-	airplaneMode   bool
-	wifiStore      *WifiStore
-	bluetoothStore *BluetoothStore
-}
-
 func NewApp() *App {
 	st := &Store{
 		wifiStore:      NewWifiStore(),
 		bluetoothStore: NewBluetoothStore(),
-		airplaneMode:   true,
+		airplaneMode:   false,
 	}
 	st.Set("wifi", st.wifiStore)
 	st.Set("bluetooth", st.bluetoothStore)
@@ -57,6 +50,13 @@ func (app *App) View(ctx *view.Context) view.View {
 	return v
 }
 
+type Store struct {
+	store.Node
+	airplaneMode   bool
+	wifiStore      *WifiStore
+	bluetoothStore *BluetoothStore
+}
+
 func (st *Store) WifiStore() *WifiStore {
 	return st.wifiStore
 }
@@ -70,11 +70,11 @@ func (st *Store) SetAirplaneMode(v bool) {
 	st.Signal()
 
 	wifi := st.wifiStore.Wifi()
-	wifi.Enabled = st.airplaneMode
+	wifi.Enabled = !st.airplaneMode
 	st.wifiStore.SetWifi(wifi)
 
 	bt := st.bluetoothStore.Bluetooth()
-	bt.Enabled = st.airplaneMode
+	bt.Enabled = !st.airplaneMode
 	st.bluetoothStore.SetBluetooth(bt)
 }
 
@@ -154,7 +154,7 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		}
 		cell3.Chevron = true
 		cell3.OnTap = func() {
-			v.app.Stack.Push(NewBluetoothView(ctx, "", v.app))
+			v.app.Stack.Push(NewBluetoothView(nil, "", v.app))
 		}
 		group = append(group, cell3)
 
@@ -164,7 +164,7 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell4.Title = "Cellular"
 		cell4.Chevron = true
 		cell4.OnTap = func() {
-			v.app.Stack.Push(NewCellularView(ctx, "", v.app))
+			v.app.Stack.Push(NewCellularView(nil, "", v.app))
 		}
 		group = append(group, cell4)
 

@@ -147,6 +147,7 @@ type Context struct {
 	prefix string
 	parent *Context
 
+	valid     bool
 	node      *node
 	prevIds   map[viewCacheKey]matcha.Id
 	prevNodes map[matcha.Id]*node
@@ -164,6 +165,9 @@ func (ctx *Context) prev(key string, prefix string) View {
 	}
 	if ctx.parent != nil {
 		return ctx.parent.prev(key, ctx.prefix+"|"+prefix)
+	}
+	if !ctx.valid {
+		panic("view.Context.Prev() called on invalid context")
 	}
 	if ctx.node == nil {
 		return nil
@@ -199,6 +203,9 @@ func (ctx *Context) PrevModel() *Model {
 	if ctx.parent != nil {
 		return ctx.PrevModel()
 	}
+	if !ctx.valid {
+		panic("view.Context.PrevModel() called on invalid context")
+	}
 	if ctx.node == nil {
 		return nil
 	}
@@ -221,6 +228,9 @@ func (ctx *Context) NewId(key string) matcha.Id {
 func (ctx *Context) newId(key string, prefix string) matcha.Id {
 	if ctx.parent != nil {
 		return ctx.parent.newId(key, ctx.prefix+"|"+prefix)
+	}
+	if !ctx.valid {
+		panic("view.Context.Prev() called on invalid context")
 	}
 	if prefix != "" {
 		key = prefix + "|" + key
@@ -309,7 +319,9 @@ type root struct {
 }
 
 func newRoot(s Screen) *root {
-	v := s.View(&Context{})
+	ctx := &Context{valid: true}
+	v := s.View(ctx)
+	ctx.valid = false
 	id := v.Id()
 
 	root := &root{}
@@ -529,7 +541,7 @@ func (n *node) build(prevIds map[viewCacheKey]matcha.Id, prevNodes map[matcha.Id
 		}
 
 		// Generate the new viewModel.
-		ctx := &Context{node: n, prevIds: prevIds, prevNodes: prevNodes}
+		ctx := &Context{valid: true, node: n, prevIds: prevIds, prevNodes: prevNodes}
 		temp := n.view.Build(ctx)
 		viewModel := &temp
 		viewModelChildren := map[matcha.Id]View{}
@@ -541,6 +553,7 @@ func (n *node) build(prevIds map[viewCacheKey]matcha.Id, prevNodes map[matcha.Id
 		for _, i := range n.root.middlewares {
 			i.Build(ctx, viewModel)
 		}
+		ctx.valid = false
 
 		// Diff the old children (n.children) with new children (viewModelChildren).
 		addedIds := []matcha.Id{}
@@ -584,14 +597,10 @@ func (n *node) build(prevIds map[viewCacheKey]matcha.Id, prevNodes map[matcha.Id
 			// Mark as needing rebuild
 			n.root.updateFlags[id] |= buildFlag
 		}
-		// Reuse old context for unupdated keys.
+		// Mark unupdated keys as needing rebuild.
 		for _, id := range unchangedIds {
 			children[id] = n.children[id]
-
-			// Mark as needing rebuild
-			if _, ok := ctx.skipBuild[id]; !ok {
-				n.root.updateFlags[id] |= buildFlag
-			}
+			n.root.updateFlags[id] |= buildFlag
 		}
 		// Send lifecycle event to removed childern.
 		for _, id := range removedIds {
