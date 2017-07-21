@@ -16,7 +16,7 @@ Matcha requires macOS, Xcode 8.3 and Go 1.8. To start, fetch the project and ins
 
     go get gomatcha.io/matcha/...
 
-Now we build the standard library for the device and the simulator with the following command. The output is installed at `$GOPATH/matcha`.
+Now we build the standard library for the device and the simulator with the following command. The output is installed at `$GOPATH/pkg/matcha`. If your path doesn't contain $GOPATH/bin, you may need to replace these calls with `$GOPATH/bin/matcha`.
 
     matcha init
 
