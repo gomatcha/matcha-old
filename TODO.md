@@ -1,6 +1,9 @@
 High:
+* README: Calling matcha doesn't work if your gopath isn't in your path
+* Commands should have some sort of output.
 
 Medium:
+* Rotation
 * Rebuild settings app, Todo App.
 * Multiple view controllers.
 
@@ -20,7 +23,6 @@ Low:
 * Modal presentation
 * Asset catalog
 * StackBar height / hidden, color
-* Rotation
 * More Touch Recognizers: Pan, Swipe, Pinch, EdgePan, Rotation
 * Table ScrollBehaviors, Table Direction
 * Custom painters.
