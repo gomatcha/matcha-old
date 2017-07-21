@@ -17,7 +17,7 @@ type Stack struct {
 	children []view.View
 }
 
-func (s *Stack) SetChildren(ss ...view.View) {
+func (s *Stack) SetViews(ss ...view.View) {
 	s.children = ss
 	s.relay.Signal()
 }
@@ -37,7 +37,7 @@ func (s *Stack) setChildIds(ids []int64) {
 	s.relay.Signal()
 }
 
-func (s *Stack) Children() []view.View {
+func (s *Stack) Views() []view.View {
 	return s.children
 }
 
@@ -91,7 +91,7 @@ func (v *View) Build(ctx *view.Context) view.Model {
 	}
 
 	childrenPb := []*stacknav.ChildView{}
-	for _, chld := range v.Stack.Children() {
+	for _, chld := range v.Stack.Views() {
 		key := strconv.Itoa(int(chld.Id()))
 
 		// v.Subscribe(chld)

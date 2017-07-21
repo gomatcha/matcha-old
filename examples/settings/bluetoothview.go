@@ -87,16 +87,18 @@ type BluetoothView struct {
 	bluetooth *BluetoothStore
 }
 
-func NewBluetoothView(ctx *view.Context, key string, app *App, bts *BluetoothStore) *BluetoothView {
+func NewBluetoothView(ctx *view.Context, key string, app *App) *BluetoothView {
 	if v, ok := ctx.Prev(key).(*BluetoothView); ok {
 		return v
 	}
+	app.Store.Lock()
+	defer app.Store.Unlock()
 	v := &BluetoothView{
 		Embed:     ctx.NewEmbed(key),
 		app:       app,
-		bluetooth: bts,
+		bluetooth: app.Store.BluetoothStore(),
 	}
-	v.Subscribe(bts)
+	v.Subscribe(v.bluetooth)
 	return v
 }
 

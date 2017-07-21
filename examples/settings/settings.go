@@ -23,65 +23,63 @@ import (
 )
 
 type App struct {
+	Stack *stackscreen.Stack
+	Store *Store
+}
+
+type Store struct {
 	store.Node
-	stackScreen    *stackscreen.Stack
 	airplaneMode   bool
 	wifiStore      *WifiStore
 	bluetoothStore *BluetoothStore
 }
 
 func NewApp() *App {
-	app := &App{}
-	rootScreen := view.ScreenFunc(func(ctx *view.Context) view.View {
-		return NewRootView(ctx, "", app)
-	})
+	st := &Store{
+		wifiStore:      NewWifiStore(),
+		bluetoothStore: NewBluetoothStore(),
+		airplaneMode:   true,
+	}
+	st.Set("wifi", st.wifiStore)
+	st.Set("bluetooth", st.bluetoothStore)
 
-	app.stackScreen = &stackscreen.Stack{}
-	app.stackScreen.SetChildren(rootScreen, rootScreen, rootScreen)
-
-	app.wifiStore = NewWifiStore()
-	app.Set("wifi", app.wifiStore)
-
-	app.bluetoothStore = NewBluetoothStore()
-	app.Set("bluetooth", app.bluetoothStore)
-
-	app.airplaneMode = true
-
+	app := &App{
+		Stack: &stackscreen.Stack{},
+		Store: st,
+	}
+	app.Stack.SetViews(NewRootView(nil, "", app))
 	return app
 }
 
 func (app *App) View(ctx *view.Context) view.View {
-	return app.StackScreen().View(ctx)
+	v := stackscreen.New(ctx, "")
+	v.Stack = app.Stack
+	return v
 }
 
-func (app *App) StackScreen() *stackscreen.Stack {
-	return app.stackScreen
+func (st *Store) WifiStore() *WifiStore {
+	return st.wifiStore
 }
 
-func (app *App) WifiStore() *WifiStore {
-	return app.wifiStore
+func (st *Store) BluetoothStore() *BluetoothStore {
+	return st.bluetoothStore
 }
 
-func (app *App) BluetoothStore() *BluetoothStore {
-	return app.bluetoothStore
+func (st *Store) SetAirplaneMode(v bool) {
+	st.airplaneMode = v
+	st.Signal()
+
+	wifi := st.wifiStore.Wifi()
+	wifi.Enabled = st.airplaneMode
+	st.wifiStore.SetWifi(wifi)
+
+	bt := st.bluetoothStore.Bluetooth()
+	bt.Enabled = st.airplaneMode
+	st.bluetoothStore.SetBluetooth(bt)
 }
 
-func (app *App) SetAirplaneMode(v bool) {
-	app.airplaneMode = v
-	app.Signal()
-
-	wifi := app.wifiStore.Wifi()
-	wifi.Enabled = app.airplaneMode
-	app.wifiStore.SetWifi(wifi)
-
-	bt := app.bluetoothStore.Bluetooth()
-	bt.Enabled = app.airplaneMode
-	app.bluetoothStore.SetBluetooth(bt)
-
-}
-
-func (app *App) AirplaneMode() bool {
-	return app.airplaneMode
+func (st *Store) AirplaneMode() bool {
+	return st.airplaneMode
 }
 
 type RootView struct {
@@ -93,16 +91,19 @@ func NewRootView(ctx *view.Context, key string, app *App) *RootView {
 	if v, ok := ctx.Prev(key).(*RootView); ok {
 		return v
 	}
+	app.Store.Lock()
+	defer app.Store.Unlock()
+
 	v := &RootView{Embed: ctx.NewEmbed(key), app: app}
-	v.Subscribe(app)
-	v.Subscribe(app.WifiStore())
-	v.Subscribe(app.BluetoothStore())
+	v.Subscribe(app.Store)
+	v.Subscribe(app.Store.WifiStore())
+	v.Subscribe(app.Store.BluetoothStore())
 	return v
 }
 
 func (v *RootView) Build(ctx *view.Context) view.Model {
-	v.app.Lock()
-	defer v.app.Unlock()
+	v.app.Store.Lock()
+	defer v.app.Store.Unlock()
 
 	l := &table.Layouter{}
 	{
@@ -113,11 +114,11 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		l.Add(spacer, nil)
 
 		switchView := switchview.New(ctx, "switch")
-		switchView.Value = v.app.AirplaneMode()
+		switchView.Value = v.app.Store.AirplaneMode()
 		switchView.OnValueChange = func(value bool) {
-			v.app.Lock()
-			defer v.app.Unlock()
-			v.app.SetAirplaneMode(value)
+			v.app.Store.Lock()
+			defer v.app.Store.Unlock()
+			v.app.Store.SetAirplaneMode(value)
 		}
 		cell1 := NewBasicCell(ctx, "airplane")
 		cell1.Title = "Airplane Mode"
@@ -126,7 +127,7 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell1.HasIcon = true
 		group = append(group, cell1)
 
-		wifi := v.app.WifiStore().Wifi()
+		wifi := v.app.Store.WifiStore().Wifi()
 		cell2 := NewBasicCell(ctx, "wifi")
 		cell2.Title = "Wi-Fi"
 		if wifi.Enabled {
@@ -138,26 +139,7 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell2.Icon = env.MustLoadImage("Wifi")
 		cell2.Chevron = true
 		cell2.OnTap = func() {
-			// v.app.Lock()
-			// defer v.app.Unlock()
-
-			// v.stackGroup.Push(NewWifiView(nil, "", v.app, v.app.WifiStore()))
-
-			// stackscreen.Push(v, NewWifiScreen(v.app, v.app.WifiStore()))
-
-			// v.app.Stackscreen.Push(NewWifiScreen(v.app, v.app.WifiStore()))
-			// app.StackScreen().PushFunc(func() view.View {
-			// 	return NewWifiView(nil, "", app, wifi)
-			// })
-
-			v.app.Lock()
-			defer v.app.Unlock()
-
-			app := v.app
-			wifi := v.app.WifiStore()
-			app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
-				return NewWifiView(ctx, "", app, wifi)
-			}))
+			v.app.Stack.Push(NewWifiView(nil, "", v.app))
 		}
 		group = append(group, cell2)
 
@@ -165,21 +147,14 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell3.HasIcon = true
 		cell3.Icon = env.MustLoadImage("Bluetooth")
 		cell3.Title = "Bluetooth"
-		if v.app.BluetoothStore().Bluetooth().Enabled {
+		if v.app.Store.BluetoothStore().Bluetooth().Enabled {
 			cell3.Subtitle = "On"
 		} else {
 			cell3.Subtitle = ""
 		}
 		cell3.Chevron = true
 		cell3.OnTap = func() {
-			v.app.Lock()
-			defer v.app.Unlock()
-
-			app := v.app
-			bluetooth := v.app.BluetoothStore()
-			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
-				return NewBluetoothView(ctx, "", app, bluetooth)
-			}))
+			v.app.Stack.Push(NewBluetoothView(ctx, "", v.app))
 		}
 		group = append(group, cell3)
 
@@ -189,13 +164,7 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell4.Title = "Cellular"
 		cell4.Chevron = true
 		cell4.OnTap = func() {
-			v.app.Lock()
-			defer v.app.Unlock()
-
-			app := v.app
-			v.app.StackScreen().Push(view.ScreenFunc(func(ctx *view.Context) view.View {
-				return NewCellularView(ctx, "", app)
-			}))
+			v.app.Stack.Push(NewCellularView(ctx, "", v.app))
 		}
 		group = append(group, cell4)
 

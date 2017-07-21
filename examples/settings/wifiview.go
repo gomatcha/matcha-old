@@ -89,16 +89,18 @@ type WifiView struct {
 	wifiStore *WifiStore
 }
 
-func NewWifiView(ctx *view.Context, key string, app *App, wifiStore *WifiStore) *WifiView {
+func NewWifiView(ctx *view.Context, key string, app *App) *WifiView {
 	if v, ok := ctx.Prev(key).(*WifiView); ok {
 		return v
 	}
+	app.Store.Lock()
+	defer app.Store.Unlock()
 	v := &WifiView{
 		Embed:     ctx.NewEmbed(key),
 		app:       app,
-		wifiStore: wifiStore,
+		wifiStore: app.Store.WifiStore(),
 	}
-	v.Subscribe(wifiStore)
+	v.Subscribe(v.wifiStore)
 	return v
 }
 

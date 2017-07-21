@@ -3,102 +3,80 @@ package tabscreen
 import (
 	"fmt"
 	"image"
-	"strconv"
 
 	"github.com/gogo/protobuf/proto"
+	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/layout/constraint"
 	tabnavpb "gomatcha.io/matcha/pb/view/tabscreen"
-	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/view"
 )
 
-type Screen struct {
-	store.Node
+type Tabs struct {
+	relay         comm.Relay
+	children      []view.View
 	selectedIndex int
-	ids           []int64
-	children      map[int64]view.Screen
-	maxId         int64
 }
 
-func (s *Screen) View(ctx *view.Context) view.View {
-	return newView(ctx, "", s)
+func (s *Tabs) SetViews(ss ...view.View) {
+	s.children = ss
+	s.relay.Signal()
 }
 
-func (s *Screen) SetChildren(ss ...view.Screen) {
-	s.Signal()
-
-	s.children = map[int64]view.Screen{}
-	s.ids = []int64{}
-	for _, i := range ss {
-		s.maxId += 1
-		s.ids = append(s.ids, s.maxId)
-		s.children[s.maxId] = i
-	}
+func (s *Tabs) Views() []view.View {
+	return s.children
 }
 
-func (s *Screen) Children() []view.Screen {
-	children := []view.Screen{}
-	for _, i := range s.ids {
-		children = append(children, s.children[i])
-	}
-	return children
-}
-
-func (s *Screen) SetSelectedIndex(idx int) {
+func (s *Tabs) SetSelectedIndex(idx int) {
 	if idx != s.selectedIndex {
-		s.Signal()
 		s.selectedIndex = idx
+		s.relay.Signal()
 	}
 }
 
-func (s *Screen) SelectedIndex() int {
+func (s *Tabs) SelectedIndex() int {
 	return s.selectedIndex
 }
 
-type tabView struct {
-	view.Embed
-	screen   *Screen
-	children map[int64]view.View
-	ids      []int64
+func (s *Tabs) Notify(f func()) comm.Id {
+	return s.relay.Notify(f)
 }
 
-func newView(ctx *view.Context, key string, s *Screen) *tabView {
-	if v, ok := ctx.Prev(key).(*tabView); ok && v.screen == s {
+func (s *Tabs) Unnotify(id comm.Id) {
+	s.relay.Unnotify(id)
+}
+
+type View struct {
+	view.Embed
+	Group *Tabs
+	group *Tabs
+}
+
+func New(ctx *view.Context, key string) *View {
+	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
 	}
-
-	v := &tabView{
-		Embed:  ctx.NewEmbed(key),
-		screen: s,
+	return &View{
+		Embed: ctx.NewEmbed(key),
 	}
-	v.Subscribe(s)
-	return v
 }
 
-func (v *tabView) Build(ctx *view.Context) view.Model {
-	v.screen.Lock()
-	defer v.screen.Unlock()
-
+func (v *View) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
-	children := map[int64]view.View{}
-	childrenPb := []*tabnavpb.ChildView{}
-	v.ids = append([]int64(nil), v.screen.ids...)
-	for _, i := range v.ids {
-		key := strconv.Itoa(int(i))
-
-		// Create the child if necessary and subscribe to it.
-		chld, ok := v.children[i]
-		if !ok {
-			chld = v.screen.children[i].View(ctx.WithPrefix("view" + key))
-			children[i] = chld
-			v.Subscribe(chld)
-		} else {
-			children[i] = chld
-			delete(v.children, i)
+	// Subscribe to the group
+	if v.Group != v.group {
+		if v.group != nil {
+			v.Unsubscribe(v.group)
 		}
+		if v.Group != nil {
+			v.Subscribe(v.Group)
+		}
+		v.group = v.Group
+	}
 
+	childrenPb := []*tabnavpb.ChildView{}
+	for _, chld := range v.Group.Views() {
 		// Create the button
 		var button *Button
 		if childView, ok := chld.(ChildView); ok {
@@ -127,11 +105,56 @@ func (v *tabView) Build(ctx *view.Context) view.Model {
 		})
 	}
 
-	// Unsubscribe from old views
-	for _, chld := range v.children {
-		v.Unsubscribe(chld)
-	}
-	v.children = children
+	// children := map[int64]view.View{}
+	// childrenPb := []*tabnavpb.ChildView{}
+	// v.ids = append([]int64(nil), v.Group.ids...)
+	// for _, i := range v.ids {
+	// 	key := strconv.Itoa(int(i))
+
+	// 	// Create the child if necessary and subscribe to it.
+	// 	chld, ok := v.children[i]
+	// 	if !ok {
+	// 		chld = v.Group.children[i].View(ctx.WithPrefix("view" + key))
+	// 		children[i] = chld
+	// 		v.Subscribe(chld)
+	// 	} else {
+	// 		children[i] = chld
+	// 		delete(v.children, i)
+	// 	}
+
+	// // Create the button
+	// var button *Button
+	// if childView, ok := chld.(ChildView); ok {
+	// 	button = childView.TabButton(ctx)
+	// } else {
+	// 	button = &Button{
+	// 		Title: "Title",
+	// 	}
+	// }
+
+	// // Add the child.
+	// l.Add(chld, func(s *constraint.Solver) {
+	// 	s.TopEqual(constraint.Const(0))
+	// 	s.LeftEqual(constraint.Const(0))
+	// 	s.WidthEqual(l.MaxGuide().Width())
+	// 	s.HeightEqual(l.MaxGuide().Height())
+	// })
+
+	// // Add to protobuf.
+	// childrenPb = append(childrenPb, &tabnavpb.ChildView{
+	// 	Id:           int64(chld.Id()),
+	// 	Title:        button.Title,
+	// 	Icon:         env.ImageMarshalProtobuf(button.Icon),
+	// 	SelectedIcon: env.ImageMarshalProtobuf(button.SelectedIcon),
+	// 	Badge:        button.Badge,
+	// })
+	// }
+
+	// // Unsubscribe from old views
+	// for _, chld := range v.children {
+	// 	v.Unsubscribe(chld)
+	// }
+	// v.children = children
 
 	return view.Model{
 		Children:       l.Views(),
@@ -139,7 +162,7 @@ func (v *tabView) Build(ctx *view.Context) view.Model {
 		NativeViewName: "gomatcha.io/matcha/view/tabscreen",
 		NativeViewState: &tabnavpb.View{
 			Screens:       childrenPb,
-			SelectedIndex: int64(v.screen.SelectedIndex()),
+			SelectedIndex: int64(v.Group.SelectedIndex()),
 		},
 		NativeFuncs: map[string]interface{}{
 			"OnSelect": func(data []byte) {
@@ -150,9 +173,7 @@ func (v *tabView) Build(ctx *view.Context) view.Model {
 					return
 				}
 
-				v.screen.Lock()
-				defer v.screen.Unlock()
-				v.screen.SetSelectedIndex(int(pbevent.SelectedIndex))
+				v.Group.SetSelectedIndex(int(pbevent.SelectedIndex))
 			},
 		},
 	}

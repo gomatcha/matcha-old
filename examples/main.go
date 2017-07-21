@@ -10,14 +10,10 @@ import (
 	"gomatcha.io/matcha/examples/paint"
 	"gomatcha.io/matcha/examples/screen"
 	"gomatcha.io/matcha/examples/settings"
-	"gomatcha.io/matcha/examples/stackscreen"
 	"gomatcha.io/matcha/examples/table"
-	"gomatcha.io/matcha/examples/tabscreen"
 	"gomatcha.io/matcha/examples/textview"
-	"gomatcha.io/matcha/examples/todo"
 	"gomatcha.io/matcha/examples/touch"
 	"gomatcha.io/matcha/view"
-	ss "gomatcha.io/matcha/view/stackscreen"
 )
 
 func init() {
@@ -47,26 +43,26 @@ func New(str string) *view.Root {
 		s = screen.NewApp()
 	case "settings":
 		s = settings.NewApp()
-	case "stackscreen":
-		s = stackscreen.NewApp()
+	// case "stackscreen":
+	// 	s = stackscreen.NewApp()
 	case "table":
 		v = func(ctx *view.Context) view.View { return table.New(ctx, "") }
-	case "tabscreen":
-		s = tabscreen.NewApp()
+	// case "tabscreen":
+	// 	s = tabscreen.NewApp()
 	case "textview":
 		v = func(ctx *view.Context) view.View { return textview.New(ctx, "") }
-	case "todo":
-		stack := &ss.Screen{}
-		stack.SetChildren(view.ScreenFunc(func(ctx *view.Context) view.View {
-			app := todo.NewAppView(ctx, "")
-			app.Todos = []*todo.Todo{
-				&todo.Todo{Title: "Title1"},
-				&todo.Todo{Title: "Title2"},
-				&todo.Todo{Title: "Title3"},
-			}
-			return app
-		}))
-		s = stack
+	// case "todo":
+	// 	stack := &ss.Screen{}
+	// 	stack.SetChildren(view.ScreenFunc(func(ctx *view.Context) view.View {
+	// 		app := todo.NewAppView(ctx, "")
+	// 		app.Todos = []*todo.Todo{
+	// 			&todo.Todo{Title: "Title1"},
+	// 			&todo.Todo{Title: "Title2"},
+	// 			&todo.Todo{Title: "Title3"},
+	// 		}
+	// 		return app
+	// 	}))
+	// 	s = stack
 	case "touch":
 		v = func(ctx *view.Context) view.View { return touch.New(ctx, "") }
 	}
