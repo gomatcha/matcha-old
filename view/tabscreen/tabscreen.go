@@ -48,8 +48,8 @@ func (s *Tabs) Unnotify(id comm.Id) {
 
 type View struct {
 	view.Embed
-	Group *Tabs
-	group *Tabs
+	Tabs *Tabs
+	tabs *Tabs
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -65,18 +65,18 @@ func (v *View) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 
 	// Subscribe to the group
-	if v.Group != v.group {
-		if v.group != nil {
-			v.Unsubscribe(v.group)
+	if v.Tabs != v.tabs {
+		if v.tabs != nil {
+			v.Unsubscribe(v.tabs)
 		}
-		if v.Group != nil {
-			v.Subscribe(v.Group)
+		if v.Tabs != nil {
+			v.Subscribe(v.Tabs)
 		}
-		v.group = v.Group
+		v.tabs = v.Tabs
 	}
 
 	childrenPb := []*tabnavpb.ChildView{}
-	for _, chld := range v.Group.Views() {
+	for _, chld := range v.Tabs.Views() {
 		// Create the button
 		var button *Button
 		if childView, ok := chld.(ChildView); ok {
@@ -162,7 +162,7 @@ func (v *View) Build(ctx *view.Context) view.Model {
 		NativeViewName: "gomatcha.io/matcha/view/tabscreen",
 		NativeViewState: &tabnavpb.View{
 			Screens:       childrenPb,
-			SelectedIndex: int64(v.Group.SelectedIndex()),
+			SelectedIndex: int64(v.Tabs.SelectedIndex()),
 		},
 		NativeFuncs: map[string]interface{}{
 			"OnSelect": func(data []byte) {
@@ -173,7 +173,7 @@ func (v *View) Build(ctx *view.Context) view.Model {
 					return
 				}
 
-				v.Group.SetSelectedIndex(int(pbevent.SelectedIndex))
+				v.Tabs.SetSelectedIndex(int(pbevent.SelectedIndex))
 			},
 		},
 	}

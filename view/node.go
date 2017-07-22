@@ -39,19 +39,9 @@ type Root struct {
 }
 
 // NewRoot initializes a Root with screen s.
-func NewRoot(s Screen) *Root {
+func NewRoot(v View) *Root {
 	r := &Root{
-		root: newRoot(s),
-		id:   atomic.AddInt64(&maxId, 1),
-	}
-	r.start()
-	return r
-}
-
-// NewRootFunc initializes a Root with func f. This is a convenience method around. NewRoot(ScreenFunc())
-func NewRootFunc(f func(*Context) View) *Root {
-	r := &Root{
-		root: newRoot(ScreenFunc(f)),
+		root: newRoot(v),
 		id:   atomic.AddInt64(&maxId, 1),
 	}
 	r.start()
@@ -318,12 +308,8 @@ type root struct {
 	updateFlags map[matcha.Id]updateFlag
 }
 
-func newRoot(s Screen) *root {
-	ctx := &Context{valid: true}
-	v := s.View(ctx)
-	ctx.valid = false
+func newRoot(v View) *root {
 	id := v.Id()
-
 	root := &root{}
 	root.node = &node{
 		id:   id,

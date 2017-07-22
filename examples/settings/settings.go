@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
@@ -22,30 +23,25 @@ import (
 	"gomatcha.io/matcha/view/textview"
 )
 
+func init() {
+	bridge.RegisterFunc("gomatcha.io/matcha/examples/settings New", func() *view.Root {
+		return view.NewRoot(NewAppView())
+	})
+}
+
 type App struct {
 	Stack *stackscreen.Stack
 	Store *Store
 }
 
-func NewApp() *App {
-	st := &Store{
-		wifiStore:      NewWifiStore(),
-		bluetoothStore: NewBluetoothStore(),
-		airplaneMode:   false,
-	}
-	st.Set("wifi", st.wifiStore)
-	st.Set("bluetooth", st.bluetoothStore)
-
+func NewAppView() view.View {
 	app := &App{
 		Stack: &stackscreen.Stack{},
-		Store: st,
+		Store: NewStore(),
 	}
 	app.Stack.SetViews(NewRootView(nil, "", app))
-	return app
-}
 
-func (app *App) View(ctx *view.Context) view.View {
-	v := stackscreen.New(ctx, "")
+	v := stackscreen.New(nil, "")
 	v.Stack = app.Stack
 	return v
 }
@@ -55,6 +51,17 @@ type Store struct {
 	airplaneMode   bool
 	wifiStore      *WifiStore
 	bluetoothStore *BluetoothStore
+}
+
+func NewStore() *Store {
+	st := &Store{
+		wifiStore:      NewWifiStore(),
+		bluetoothStore: NewBluetoothStore(),
+		airplaneMode:   false,
+	}
+	st.Set("wifi", st.wifiStore)
+	st.Set("bluetooth", st.bluetoothStore)
+	return st
 }
 
 func (st *Store) WifiStore() *WifiStore {
