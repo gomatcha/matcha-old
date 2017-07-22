@@ -116,7 +116,6 @@ func (v *TutorialView) Build(ctx *view.Context) view.Model {
         Painter:  &paint.Style{BackgroundColor: colornames.Lightgray},
     }
 }
-
 ```
 
 Now that we have our view in Go, we need to be call it from Objective C. We can do this with the `gomatcha.io/bridge` package. 
@@ -128,11 +127,8 @@ func init() {
     // Registers a function with the objc bridge. This function returns
     // a view.Root, which can be display in MatchaViewController.
     bridge.RegisterFunc("github.com/overcyn/tutorial New", func() *view.Root {
-        return view.NewRoot(view.ScreenFunc(func(ctx *view.Context) view.View {
-            
-            // Call the TutorialView initializer.
-            return New(ctx, "")
-        }))
+        // Call the TutorialView initializer.
+        return view.NewRoot(New(nil, ""))
     })
 }
 ```
