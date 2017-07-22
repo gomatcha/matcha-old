@@ -1,4 +1,4 @@
-package tabscreen
+package tabview
 
 import (
 	"image/color"
@@ -8,7 +8,7 @@ import (
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
-	"gomatcha.io/matcha/view/tabscreen"
+	"gomatcha.io/matcha/view/tabview"
 )
 
 func init() {
@@ -18,14 +18,14 @@ func init() {
 }
 
 type App struct {
-	tabs *tabscreen.Tabs
+	tabs *tabview.Tabs
 }
 
 func NewAppView() view.View {
 	app := &App{}
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
-	options1 := &tabscreen.Button{
+	options1 := &tabview.Button{
 		Title: "Title 1",
 		Badge: "badge",
 		// Icon:         env.MustLoadImage("TabCamera"),
@@ -33,7 +33,7 @@ func NewAppView() view.View {
 	}
 
 	screen2 := NewTouchScreen(app, colornames.Red)
-	options2 := &tabscreen.Button{
+	options2 := &tabview.Button{
 		Title: "Title 2",
 		// Icon:         env.MustLoadImage("TabMap"),
 		// SelectedIcon: env.MustLoadImage("TabMapFilled"),
@@ -42,16 +42,16 @@ func NewAppView() view.View {
 	screen3 := NewTouchScreen(app, colornames.Yellow)
 	screen4 := NewTouchScreen(app, colornames.Green)
 
-	app.tabs = &tabscreen.Tabs{}
+	app.tabs = &tabview.Tabs{}
 	app.tabs.SetSelectedIndex(1)
 	app.tabs.SetViews(
-		tabscreen.WithButton(screen1, options1),
-		tabscreen.WithButton(screen2, options2),
+		tabview.WithButton(screen1, options1),
+		tabview.WithButton(screen2, options2),
 		screen3,
 		screen4,
 	)
 
-	v := tabscreen.New(nil, "")
+	v := tabview.New(nil, "")
 	v.Tabs = app.tabs
 	return v
 }
@@ -66,7 +66,7 @@ type TouchView struct {
 	view.Embed
 	app    *App
 	Color  color.Color
-	button *tabscreen.Button
+	button *tabview.Button
 }
 
 func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
@@ -76,7 +76,7 @@ func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
 	return &TouchView{
 		Embed: ctx.NewEmbed(key),
 		app:   app,
-		button: &tabscreen.Button{
+		button: &tabview.Button{
 			Title: "Testing",
 			// Icon:         env.MustLoadImage("TabSearch"),
 			// SelectedIcon: env.MustLoadImage("TabSearchFilled"),
@@ -102,6 +102,6 @@ func (v *TouchView) Build(ctx *view.Context) view.Model {
 	}
 }
 
-func (v *TouchView) TabButton(*view.Context) *tabscreen.Button {
+func (v *TouchView) TabButton(*view.Context) *tabview.Button {
 	return v.button
 }

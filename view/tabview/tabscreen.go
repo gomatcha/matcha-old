@@ -1,4 +1,4 @@
-package tabscreen
+package tabview
 
 import (
 	"fmt"

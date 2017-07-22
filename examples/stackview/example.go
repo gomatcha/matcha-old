@@ -1,4 +1,4 @@
-package stackscreen
+package stackview
 
 import (
 	"image/color"
@@ -10,7 +10,7 @@ import (
 	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/basicview"
-	"gomatcha.io/matcha/view/stackscreen"
+	"gomatcha.io/matcha/view/stackview"
 )
 
 func init() {
@@ -20,34 +20,34 @@ func init() {
 }
 
 type App struct {
-	stack *stackscreen.Stack
+	stack *stackview.Stack
 }
 
 func NewAppView() view.View {
 	app := &App{}
 
 	screen1 := NewTouchScreen(app, colornames.Blue)
-	bar1 := &stackscreen.Bar{
+	bar1 := &stackview.Bar{
 		Title: "Title 1",
 	}
 
 	screen2 := NewTouchScreen(app, colornames.Red)
-	bar2 := &stackscreen.Bar{
+	bar2 := &stackview.Bar{
 		Title: "Title 2",
 	}
 
 	screen3 := NewTouchScreen(app, colornames.Yellow)
 	screen4 := NewTouchScreen(app, colornames.Green)
 
-	app.stack = &stackscreen.Stack{}
+	app.stack = &stackview.Stack{}
 	app.stack.SetViews(
-		stackscreen.WithBar(screen1, bar1),
-		stackscreen.WithBar(screen2, bar2),
+		stackview.WithBar(screen1, bar1),
+		stackview.WithBar(screen2, bar2),
 		screen3,
 		screen4,
 	)
 
-	v := stackscreen.New(nil, "")
+	v := stackview.New(nil, "")
 	v.Stack = app.stack
 	return v
 }
@@ -62,7 +62,7 @@ type TouchView struct {
 	view.Embed
 	app   *App
 	Color color.Color
-	bar   *stackscreen.Bar
+	bar   *stackview.Bar
 }
 
 func NewTouchView(ctx *view.Context, key string, app *App) *TouchView {
@@ -94,7 +94,7 @@ func (v *TouchView) Build(ctx *view.Context) view.Model {
 	}
 }
 
-func (v *TouchView) StackBar(ctx *view.Context) *stackscreen.Bar {
+func (v *TouchView) StackBar(ctx *view.Context) *stackview.Bar {
 	l := constraint.New()
 	l.Solve(func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
@@ -129,7 +129,7 @@ func (v *TouchView) StackBar(ctx *view.Context) *stackscreen.Bar {
 	leftView.Painter = &paint.Style{BackgroundColor: colornames.Yellow}
 	leftView.Layouter = l3
 
-	return &stackscreen.Bar{
+	return &stackview.Bar{
 		Title:      "Title",
 		TitleView:  titleView,
 		RightViews: []view.View{rightView},

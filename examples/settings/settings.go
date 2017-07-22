@@ -18,7 +18,7 @@ import (
 	"gomatcha.io/matcha/view/basicview"
 	"gomatcha.io/matcha/view/imageview"
 	"gomatcha.io/matcha/view/scrollview"
-	"gomatcha.io/matcha/view/stackscreen"
+	"gomatcha.io/matcha/view/stackview"
 	"gomatcha.io/matcha/view/switchview"
 	"gomatcha.io/matcha/view/textview"
 )
@@ -30,18 +30,18 @@ func init() {
 }
 
 type App struct {
-	Stack *stackscreen.Stack
+	Stack *stackview.Stack
 	Store *Store
 }
 
 func NewAppView() view.View {
 	app := &App{
-		Stack: &stackscreen.Stack{},
+		Stack: &stackview.Stack{},
 		Store: NewStore(),
 	}
 	app.Stack.SetViews(NewRootView(nil, "", app))
 
-	v := stackscreen.New(nil, "")
+	v := stackview.New(nil, "")
 	v.Stack = app.Stack
 	return v
 }
@@ -238,8 +238,8 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 	}
 }
 
-func (v *RootView) StackBar(ctx *view.Context) *stackscreen.Bar {
-	return &stackscreen.Bar{Title: "Settings"}
+func (v *RootView) StackBar(ctx *view.Context) *stackview.Bar {
+	return &stackview.Bar{Title: "Settings"}
 }
 
 var (

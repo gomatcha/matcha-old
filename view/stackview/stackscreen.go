@@ -1,4 +1,4 @@
-package stackscreen
+package stackview
 
 import (
 	"fmt"

@@ -6,7 +6,7 @@ import (
 	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/scrollview"
-	"gomatcha.io/matcha/view/stackscreen"
+	"gomatcha.io/matcha/view/stackview"
 	"gomatcha.io/matcha/view/switchview"
 )
 
@@ -216,8 +216,8 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 	}
 }
 
-func (v *WifiView) StackBar(ctx *view.Context) *stackscreen.Bar {
-	return &stackscreen.Bar{Title: "Wi-Fi"}
+func (v *WifiView) StackBar(ctx *view.Context) *stackview.Bar {
+	return &stackview.Bar{Title: "Wi-Fi"}
 }
 
 type WifiNetworkView struct {
