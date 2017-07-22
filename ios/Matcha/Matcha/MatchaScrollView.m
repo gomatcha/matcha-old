@@ -37,7 +37,7 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (CGPointEqualToPoint(self.contentOffset, self.matchaContentOffset)) {
+    if (self.viewNode.rootVC.updating || CGPointEqualToPoint(self.contentOffset, self.matchaContentOffset)) {
         return;
     }
     

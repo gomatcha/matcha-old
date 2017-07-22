@@ -10,6 +10,7 @@
 - (void)update:(MatchaNodeRoot *)node;
 - (NSArray<MatchaGoValue *> *)call:(NSString *)funcId viewId:(int64_t)viewId args:(NSArray<MatchaGoValue *> *)args;
 @property (nonatomic, readonly) NSInteger identifier;
+@property (nonatomic, assign) BOOL updating;
 @end
 
 

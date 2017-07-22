@@ -67,6 +67,7 @@
 
 
 - (void)update:(MatchaNodeRoot *)root {
+    self.updating = true;
     [self.viewNode setRoot:root];
     if (!self.loaded) {
         self.loaded = TRUE;
@@ -75,6 +76,7 @@
         self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         view.frame = self.view.bounds;
     }
+    self.updating = false;
 }
 
 @end

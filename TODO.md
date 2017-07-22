@@ -1,5 +1,6 @@
 High:
 * Commands should have some sort of output.
+* Delay any ui events while viwecontroller is updating.
 
 Medium:
 * Rotation
@@ -7,7 +8,6 @@ Medium:
 * Multiple view controllers.
 
 Low:
-* Crash when reopening app?
 * Improve function call performance.
 * Switching quickly between navigation item causes visual glitch. 2 quick backs.
 * How to respond to memory pressure?
