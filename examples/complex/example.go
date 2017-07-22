@@ -7,6 +7,7 @@ import (
 
 	"golang.org/x/image/colornames"
 
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/animate"
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/layout"
@@ -26,6 +27,12 @@ import (
 	"gomatcha.io/matcha/view/textview"
 	"gomatcha.io/matcha/view/urlimageview"
 )
+
+func init() {
+	bridge.RegisterFunc("gomatcha.io/matcha/examples/complex New", func() *view.Root {
+		return view.NewRoot(New(nil, ""))
+	})
+}
 
 type NestedView struct {
 	view.Embed
@@ -157,8 +164,18 @@ func (v *NestedView) Build(ctx *view.Context) view.Model {
 	}
 	chl11 := switchview.New(ctx, "12")
 	chl11.OnValueChange = func(value bool) {
+		a := 0.0
+		if value {
+			a = 1.0
+		}
+
 		v.sliderValue.SetValue(0.2)
-		fmt.Println("switch tapped", value, v.value.Value())
+		v.value.Run(&animate.Basic{
+			Start: v.value.Value(),
+			End:   a,
+			Ease:  animate.DefaultEase,
+			Dur:   2 * time.Second,
+		})
 	}
 	_ = l.Add(chl11, func(s *constraint.Solver) {
 		s.LeftEqual(g6.Right())

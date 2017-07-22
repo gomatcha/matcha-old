@@ -2,11 +2,18 @@ package constraints
 
 import (
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/basicview"
 )
+
+func init() {
+	bridge.RegisterFunc("gomatcha.io/matcha/examples/constraints New", func() *view.Root {
+		return view.NewRoot(New(nil, ""))
+	})
+}
 
 type ConstraintsView struct {
 	view.Embed

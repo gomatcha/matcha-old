@@ -191,22 +191,10 @@ type Button struct {
 	Badge        string
 }
 
-func WithButton(s view.Screen, button *Button) view.Screen {
-	return &screenWrapper{
-		Screen: s,
-		button: button,
-	}
-}
-
-type screenWrapper struct {
-	view.Screen
-	button *Button
-}
-
-func (s *screenWrapper) View(ctx *view.Context) view.View {
+func WithButton(s view.View, button *Button) view.View {
 	return &viewWrapper{
-		View:   s.Screen.View(ctx),
-		button: s.button,
+		View:   s,
+		button: button,
 	}
 }
 

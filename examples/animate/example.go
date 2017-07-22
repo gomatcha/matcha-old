@@ -5,32 +5,29 @@ import (
 	"time"
 
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/basicview"
 )
 
+func init() {
+	bridge.RegisterFunc("gomatcha.io/matcha/examples/animate New", func() *view.Root {
+		return view.NewRoot(New(nil, ""))
+	})
+}
+
 type View struct {
 	view.Embed
-	// ticker      *animate.Ticker
-	// floatTicker comm.Float64Notifier
-	// colorTicker comm.ColorNotifier
-
-	// floatTickerFunc chan struct{}
-	// constraintFunc  chan struct{}
 }
 
 func New(ctx *view.Context, key string) *View {
 	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
 	}
-	// ticker := animate.NewTicker(time.Second * 4)
 	return &View{
 		Embed: ctx.NewEmbed(key),
-		// ticker:      ticker,
-		// floatTicker: animate.FloatInterpolate(ticker, animate.FloatLerp{Start: 0, End: 500}),
-		// colorTicker: animate.ColorInterpolate(ticker, animate.RGBALerp{Start: colornames.Red, End: colornames.Yellow}),
 	}
 }
 

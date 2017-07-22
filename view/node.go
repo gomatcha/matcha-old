@@ -22,7 +22,7 @@ import (
 	pb "gomatcha.io/matcha/pb/view"
 )
 
-var MainMu sync.Mutex
+var MainMu sync.Mutex // TODO(KD): rename to something better
 
 var maxId int64
 

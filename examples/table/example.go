@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
@@ -12,6 +13,12 @@ import (
 	"gomatcha.io/matcha/view/scrollview"
 	"gomatcha.io/matcha/view/textview"
 )
+
+func init() {
+	bridge.RegisterFunc("gomatcha.io/matcha/examples/table New", func() *view.Root {
+		return view.NewRoot(New(nil, ""))
+	})
+}
 
 type TableView struct {
 	view.Embed

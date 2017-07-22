@@ -2,12 +2,19 @@ package paint
 
 import (
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/layout"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/basicview"
 )
+
+func init() {
+	bridge.RegisterFunc("gomatcha.io/matcha/examples/paint New", func() *view.Root {
+		return view.NewRoot(New(nil, ""))
+	})
+}
 
 type PaintView struct {
 	view.Embed

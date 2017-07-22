@@ -5,6 +5,7 @@ import (
 	_ "image/png"
 
 	"golang.org/x/image/colornames"
+	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
@@ -12,6 +13,12 @@ import (
 	"gomatcha.io/matcha/view/imageview"
 	"gomatcha.io/matcha/view/urlimageview"
 )
+
+func init() {
+	bridge.RegisterFunc("gomatcha.io/matcha/examples/imageview New", func() *view.Root {
+		return view.NewRoot(New(nil, ""))
+	})
+}
 
 type ImageView struct {
 	view.Embed

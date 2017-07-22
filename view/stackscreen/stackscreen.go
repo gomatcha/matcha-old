@@ -312,22 +312,10 @@ type Bar struct {
 	LeftViews  []view.View
 }
 
-func WithBar(s view.Screen, bar *Bar) view.Screen {
-	return &screenWrapper{
-		Screen:   s,
-		stackBar: bar,
-	}
-}
-
-type screenWrapper struct {
-	view.Screen
-	stackBar *Bar
-}
-
-func (s *screenWrapper) View(ctx *view.Context) view.View {
+func WithBar(s view.View, bar *Bar) view.View {
 	return &viewWrapper{
-		View:     s.Screen.View(ctx),
-		stackBar: s.stackBar,
+		View:     s,
+		stackBar: bar,
 	}
 }
 
