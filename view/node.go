@@ -464,11 +464,18 @@ func (n *node) marshalLayoutPaintProtobuf(m map[int64]*pb.LayoutPaintNode) {
 	}
 
 	m[int64(n.id)] = &pb.LayoutPaintNode{
-		Id:          int64(n.id),
-		LayoutId:    n.layoutId,
-		PaintId:     n.paintId,
-		LayoutGuide: guide.MarshalProtobuf(),
-		PaintStyle:  n.paintOptions.MarshalProtobuf(),
+		Id:       int64(n.id),
+		LayoutId: n.layoutId,
+		PaintId:  n.paintId,
+
+		// LayoutGuide: guide.MarshalProtobuf(),
+		Minx:   guide.Frame.Min.X,
+		Miny:   guide.Frame.Min.Y,
+		Maxx:   guide.Frame.Max.X,
+		Maxy:   guide.Frame.Max.Y,
+		ZIndex: int64(guide.ZIndex),
+
+		PaintStyle: n.paintOptions.MarshalProtobuf(),
 	}
 	for _, v := range n.children {
 		v.marshalLayoutPaintProtobuf(m)

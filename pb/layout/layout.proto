@@ -23,6 +23,5 @@ message Insets {
 
 message Guide {
   Rect frame = 1;
-  Insets insets = 2;
   int64 zIndex = 3;
 }

@@ -162,20 +162,17 @@
 
 - (void)setMatchaChildLayout:(GPBInt64ObjectDictionary *)layoutPaintNodes {
     if (self.titleView) {
-        MatchaLayoutPBGuide *n = ((MatchaViewPBLayoutPaintNode *)[layoutPaintNodes objectForKey:self.titleViewId]).layoutGuide;
-        self.titleView.frame = n.frame.toCGRect;
+        self.titleView.frame = ((MatchaViewPBLayoutPaintNode *)[layoutPaintNodes objectForKey:self.titleViewId]).frame;
     }
     for (NSInteger i = 0; i < self.rightViewIds.count; i++) {
         int64_t childId = [self.rightViewIds valueAtIndex:i];
-        MatchaLayoutPBGuide *n = ((MatchaViewPBLayoutPaintNode *)[layoutPaintNodes objectForKey:childId]).layoutGuide;
         UIBarButtonItem *rightView = self.rightViews[i];
-        rightView.customView.frame = n.frame.toCGRect;
+        rightView.customView.frame = ((MatchaViewPBLayoutPaintNode *)[layoutPaintNodes objectForKey:childId]).frame;
     }
     for (NSInteger i = 0; i < self.leftViewIds.count; i++) {
         int64_t childId = [self.leftViewIds valueAtIndex:i];
-        MatchaLayoutPBGuide *n = ((MatchaViewPBLayoutPaintNode *)[layoutPaintNodes objectForKey:childId]).layoutGuide;
         UIBarButtonItem *leftView = self.leftViews[i];
-        leftView.customView.frame = n.frame.toCGRect;
+        leftView.customView.frame = ((MatchaViewPBLayoutPaintNode *)[layoutPaintNodes objectForKey:childId]).frame;
     }
 }
 

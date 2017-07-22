@@ -24,6 +24,16 @@
 
 @end
 
+
+CGColorRef MatchaCGColorWithProtobuf(MatchaPBColor *value) {
+    if (value == nil) {
+        return nil;
+    }
+    CGFloat colors[4] = {((double)value.red)/0xffff, ((double)value.green)/0xffff, ((double)value.blue)/0xffff, ((double)value.alpha)/0xffff};
+    return CGColorCreate(CGColorSpaceCreateDeviceRGB(), colors);
+}
+
+
 @implementation NSAttributedString (Matcha)
 
 - (id)initWithProtobuf:(MatchaPBStyledText *)value {
@@ -261,6 +271,12 @@
     return nil;
 }
 
+@end
+
+@implementation MatchaViewPBLayoutPaintNode (Matcha)
+- (CGRect)frame {
+    return CGRectMake(self.minx, self.miny, self.maxx - self.minx, self.maxy - self.miny);
+}
 @end
 
 @implementation UIFont (Matcha)

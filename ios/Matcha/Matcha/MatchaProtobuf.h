@@ -43,6 +43,10 @@
 - (MatchaPBImage *)protobuf;
 @end
 
+@interface MatchaViewPBLayoutPaintNode (Matcha)
+@property (nonatomic, readonly) CGRect frame;
+@end
+
 @interface MatchaLayoutPBRect (Matcha)
 - (id)initWithCGRect:(CGRect)rect;
 @property (nonatomic, readonly) CGRect toCGRect;
@@ -64,6 +68,7 @@
 @property (nonatomic, readonly) NSDate *toDate;
 @end
 
+CGColorRef MatchaCGColorWithProtobuf(MatchaPBColor *value);
 UIKeyboardType MatchaKeyboardTypeWithProtobuf(MatchaKeyboardPBType t);
 UIKeyboardAppearance MatchaKeyboardAppearanceWithProtobuf(MatchaKeyboardPBAppearance t);
 UIReturnKeyType MatchaReturnTypeWithProtobuf(MatchaKeyboardPBReturnType t);

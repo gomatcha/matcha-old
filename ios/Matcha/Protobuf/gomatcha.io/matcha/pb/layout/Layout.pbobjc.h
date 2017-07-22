@@ -27,7 +27,6 @@
 
 CF_EXTERN_C_BEGIN
 
-@class MatchaLayoutPBInsets;
 @class MatchaLayoutPBPoint;
 @class MatchaLayoutPBRect;
 
@@ -107,7 +106,6 @@ typedef GPB_ENUM(MatchaLayoutPBInsets_FieldNumber) {
 
 typedef GPB_ENUM(MatchaLayoutPBGuide_FieldNumber) {
   MatchaLayoutPBGuide_FieldNumber_Frame = 1,
-  MatchaLayoutPBGuide_FieldNumber_Insets = 2,
   MatchaLayoutPBGuide_FieldNumber_ZIndex = 3,
 };
 
@@ -116,10 +114,6 @@ typedef GPB_ENUM(MatchaLayoutPBGuide_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) MatchaLayoutPBRect *frame;
 /** Test to see if @c frame has been set. */
 @property(nonatomic, readwrite) BOOL hasFrame;
-
-@property(nonatomic, readwrite, strong, null_resettable) MatchaLayoutPBInsets *insets;
-/** Test to see if @c insets has been set. */
-@property(nonatomic, readwrite) BOOL hasInsets;
 
 @property(nonatomic, readwrite) int64_t zIndex;
 

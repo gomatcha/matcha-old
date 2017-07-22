@@ -20,7 +20,6 @@
 #endif
 
  #import "gomatcha.io/matcha/pb/view/View.pbobjc.h"
- #import "gomatcha.io/matcha/pb/layout/Layout.pbobjc.h"
  #import "gomatcha.io/matcha/pb/paint/Paint.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
@@ -161,16 +160,24 @@ typedef struct MatchaViewPBBuildNode__storage_ {
 @dynamic id_p;
 @dynamic layoutId;
 @dynamic paintId;
-@dynamic hasLayoutGuide, layoutGuide;
+@dynamic minx;
+@dynamic miny;
+@dynamic maxx;
+@dynamic maxy;
+@dynamic zIndex;
 @dynamic hasPaintStyle, paintStyle;
 
 typedef struct MatchaViewPBLayoutPaintNode__storage_ {
   uint32_t _has_storage_[1];
-  MatchaLayoutPBGuide *layoutGuide;
   MatchaPaintPBStyle *paintStyle;
   int64_t id_p;
   int64_t layoutId;
   int64_t paintId;
+  double minx;
+  double miny;
+  double maxx;
+  double maxy;
+  int64_t zIndex;
 } MatchaViewPBLayoutPaintNode__storage_;
 
 // This method is threadsafe because it is initially called
@@ -207,19 +214,55 @@ typedef struct MatchaViewPBLayoutPaintNode__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
-        .name = "layoutGuide",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaLayoutPBGuide),
-        .number = MatchaViewPBLayoutPaintNode_FieldNumber_LayoutGuide,
+        .name = "minx",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaViewPBLayoutPaintNode_FieldNumber_Minx,
         .hasIndex = 3,
-        .offset = (uint32_t)offsetof(MatchaViewPBLayoutPaintNode__storage_, layoutGuide),
+        .offset = (uint32_t)offsetof(MatchaViewPBLayoutPaintNode__storage_, minx),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeDouble,
+      },
+      {
+        .name = "miny",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaViewPBLayoutPaintNode_FieldNumber_Miny,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(MatchaViewPBLayoutPaintNode__storage_, miny),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeDouble,
+      },
+      {
+        .name = "maxx",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaViewPBLayoutPaintNode_FieldNumber_Maxx,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(MatchaViewPBLayoutPaintNode__storage_, maxx),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeDouble,
+      },
+      {
+        .name = "maxy",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaViewPBLayoutPaintNode_FieldNumber_Maxy,
+        .hasIndex = 6,
+        .offset = (uint32_t)offsetof(MatchaViewPBLayoutPaintNode__storage_, maxy),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeDouble,
+      },
+      {
+        .name = "zIndex",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaViewPBLayoutPaintNode_FieldNumber_ZIndex,
+        .hasIndex = 7,
+        .offset = (uint32_t)offsetof(MatchaViewPBLayoutPaintNode__storage_, zIndex),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeMessage,
+        .dataType = GPBDataTypeInt64,
       },
       {
         .name = "paintStyle",
         .dataTypeSpecific.className = GPBStringifySymbol(MatchaPaintPBStyle),
         .number = MatchaViewPBLayoutPaintNode_FieldNumber_PaintStyle,
-        .hasIndex = 4,
+        .hasIndex = 8,
         .offset = (uint32_t)offsetof(MatchaViewPBLayoutPaintNode__storage_, paintStyle),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeMessage,
@@ -235,7 +278,7 @@ typedef struct MatchaViewPBLayoutPaintNode__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\002\010\000\003\007\000\004\013\000\005\n\000";
+        "\004\002\010\000\003\007\000\010\006\000\t\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

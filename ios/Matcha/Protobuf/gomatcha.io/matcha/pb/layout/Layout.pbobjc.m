@@ -232,13 +232,11 @@ typedef struct MatchaLayoutPBInsets__storage_ {
 @implementation MatchaLayoutPBGuide
 
 @dynamic hasFrame, frame;
-@dynamic hasInsets, insets;
 @dynamic zIndex;
 
 typedef struct MatchaLayoutPBGuide__storage_ {
   uint32_t _has_storage_[1];
   MatchaLayoutPBRect *frame;
-  MatchaLayoutPBInsets *insets;
   int64_t zIndex;
 } MatchaLayoutPBGuide__storage_;
 
@@ -258,19 +256,10 @@ typedef struct MatchaLayoutPBGuide__storage_ {
         .dataType = GPBDataTypeMessage,
       },
       {
-        .name = "insets",
-        .dataTypeSpecific.className = GPBStringifySymbol(MatchaLayoutPBInsets),
-        .number = MatchaLayoutPBGuide_FieldNumber_Insets,
-        .hasIndex = 1,
-        .offset = (uint32_t)offsetof(MatchaLayoutPBGuide__storage_, insets),
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeMessage,
-      },
-      {
         .name = "zIndex",
         .dataTypeSpecific.className = NULL,
         .number = MatchaLayoutPBGuide_FieldNumber_ZIndex,
-        .hasIndex = 2,
+        .hasIndex = 1,
         .offset = (uint32_t)offsetof(MatchaLayoutPBGuide__storage_, zIndex),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,

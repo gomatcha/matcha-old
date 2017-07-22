@@ -28,7 +28,6 @@
 CF_EXTERN_C_BEGIN
 
 @class GPBAny;
-@class MatchaLayoutPBGuide;
 @class MatchaPaintPBStyle;
 @class MatchaViewPBBuildNode;
 @class MatchaViewPBLayoutPaintNode;
@@ -89,8 +88,12 @@ typedef GPB_ENUM(MatchaViewPBLayoutPaintNode_FieldNumber) {
   MatchaViewPBLayoutPaintNode_FieldNumber_Id_p = 1,
   MatchaViewPBLayoutPaintNode_FieldNumber_LayoutId = 2,
   MatchaViewPBLayoutPaintNode_FieldNumber_PaintId = 3,
-  MatchaViewPBLayoutPaintNode_FieldNumber_LayoutGuide = 4,
-  MatchaViewPBLayoutPaintNode_FieldNumber_PaintStyle = 5,
+  MatchaViewPBLayoutPaintNode_FieldNumber_Minx = 4,
+  MatchaViewPBLayoutPaintNode_FieldNumber_Miny = 5,
+  MatchaViewPBLayoutPaintNode_FieldNumber_Maxx = 6,
+  MatchaViewPBLayoutPaintNode_FieldNumber_Maxy = 7,
+  MatchaViewPBLayoutPaintNode_FieldNumber_ZIndex = 8,
+  MatchaViewPBLayoutPaintNode_FieldNumber_PaintStyle = 9,
 };
 
 @interface MatchaViewPBLayoutPaintNode : GPBMessage
@@ -101,10 +104,31 @@ typedef GPB_ENUM(MatchaViewPBLayoutPaintNode_FieldNumber) {
 
 @property(nonatomic, readwrite) int64_t paintId;
 
-@property(nonatomic, readwrite, strong, null_resettable) MatchaLayoutPBGuide *layoutGuide;
-/** Test to see if @c layoutGuide has been set. */
-@property(nonatomic, readwrite) BOOL hasLayoutGuide;
+/**
+ * matcha.layout.Guide layoutGuide = 4;
+ * Guide
+ **/
+@property(nonatomic, readwrite) double minx;
 
+@property(nonatomic, readwrite) double miny;
+
+@property(nonatomic, readwrite) double maxx;
+
+@property(nonatomic, readwrite) double maxy;
+
+@property(nonatomic, readwrite) int64_t zIndex;
+
+/**
+ * PaintStyle
+ * double transparency = 1;
+ * matcha.Color backgroundColor = 2;
+ * matcha.Color borderColor = 3;
+ * double borderWidth = 4;
+ * double cornerRadius = 5;
+ * double shadowRadius = 7;
+ * matcha.layout.Point shadowOffset = 8;
+ * matcha.Color shadowColor = 9;
+ **/
 @property(nonatomic, readwrite, strong, null_resettable) MatchaPaintPBStyle *paintStyle;
 /** Test to see if @c paintStyle has been set. */
 @property(nonatomic, readwrite) BOOL hasPaintStyle;
