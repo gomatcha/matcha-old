@@ -1,5 +1,4 @@
 High:
-* README: Calling matcha doesn't work if your gopath isn't in your path
 * Commands should have some sort of output.
 
 Medium:
