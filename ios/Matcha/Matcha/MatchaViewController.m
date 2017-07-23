@@ -86,3 +86,7 @@ void MatchaConfigureChildViewController(UIViewController *vc) {
     vc.extendedLayoutIncludesOpaqueBars=NO;
     vc.automaticallyAdjustsScrollViewInsets=NO;
 }
+
+bool MatchaColorEqualToColor(MatchaColor a, MatchaColor b) {
+    return a.red == b.red && a.blue == b.blue && a.green == b.green && a.alpha == b.alpha;
+}

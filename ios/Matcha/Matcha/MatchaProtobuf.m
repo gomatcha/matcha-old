@@ -274,9 +274,22 @@ CGColorRef MatchaCGColorWithProtobuf(MatchaPBColor *value) {
 @end
 
 @implementation MatchaViewPBLayoutPaintNode (Matcha)
+
 - (CGRect)frame {
     return CGRectMake(self.minx, self.miny, self.maxx - self.minx, self.maxy - self.miny);
 }
+
+- (MatchaColor) matchaBackgroundColor {
+    MatchaPBColor *c = self.paintStyle.backgroundColor;
+    MatchaColor color = {
+        .red = c.red,
+        .green = c.green,
+        .blue = c.blue,
+        .alpha = c.alpha,
+    };
+    return color;
+}
+
 @end
 
 @implementation UIFont (Matcha)

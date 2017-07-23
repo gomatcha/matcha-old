@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 #import <MatchaBridge/MatchaBridge.h>
+#import <Matcha/MatchaViewController.h>
 #import <Protobuf/Protobuf.h>
 #import "View.pbobjc.h"
 #import "Layout.pbobjc.h"
@@ -45,6 +46,7 @@
 
 @interface MatchaViewPBLayoutPaintNode (Matcha)
 @property (nonatomic, readonly) CGRect frame;
+@property (nonatomic, readonly) MatchaColor matchaBackgroundColor;
 @end
 
 @interface MatchaLayoutPBRect (Matcha)

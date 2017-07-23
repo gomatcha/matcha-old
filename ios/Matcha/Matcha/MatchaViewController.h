@@ -15,3 +15,13 @@
 
 
 void MatchaConfigureChildViewController(UIViewController *vc);
+
+
+typedef struct MatchaColor {
+    uint32_t red;
+    uint32_t blue;
+    uint32_t green;
+    uint32_t alpha;
+} MatchaColor;
+
+bool MatchaColorEqualToColor(MatchaColor a, MatchaColor b);

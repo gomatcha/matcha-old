@@ -3,6 +3,7 @@ package view
 import (
 	"fmt"
 	"reflect"
+	"sort"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -463,17 +464,41 @@ func (n *node) marshalLayoutPaintProtobuf(m map[int64]*pb.LayoutPaintNode) {
 		fmt.Println("View is missing layout guide", n.id, n.view)
 	}
 
+	// Sort children by zIndex for performance reasons.
+	childOrder := []struct {
+		id int64
+		z  int
+	}{}
+	for _, i := range n.children {
+		z := 0
+		if i.layoutGuide != nil {
+			z = i.layoutGuide.ZIndex
+		}
+		childOrder = append(childOrder, struct {
+			id int64
+			z  int
+		}{id: int64(i.id), z: z})
+	}
+	sort.Slice(childOrder, func(i, j int) bool {
+		return childOrder[i].z < childOrder[j].z
+	})
+	order := []int64{}
+	for _, i := range childOrder {
+		order = append(order, i.id)
+	}
+
 	m[int64(n.id)] = &pb.LayoutPaintNode{
 		Id:       int64(n.id),
 		LayoutId: n.layoutId,
 		PaintId:  n.paintId,
 
 		// LayoutGuide: guide.MarshalProtobuf(),
-		Minx:   guide.Frame.Min.X,
-		Miny:   guide.Frame.Min.Y,
-		Maxx:   guide.Frame.Max.X,
-		Maxy:   guide.Frame.Max.Y,
-		ZIndex: int64(guide.ZIndex),
+		Minx:       guide.Frame.Min.X,
+		Miny:       guide.Frame.Min.Y,
+		Maxx:       guide.Frame.Max.X,
+		Maxy:       guide.Frame.Max.Y,
+		ZIndex:     int64(guide.ZIndex),
+		ChildOrder: order,
 
 		PaintStyle: n.paintOptions.MarshalProtobuf(),
 	}

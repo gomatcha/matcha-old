@@ -101,6 +101,8 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
         if (self.view == nil && self.viewController == nil) {
             NSLog(@"Cannot find corresponding view or view controller for node: %@", buildNode.nativeViewName);
         }
+        self.view.autoresizingMask = UIViewAutoresizingNone;
+        self.view.backgroundColor = [UIColor clearColor];
     }
     
     // Build children
@@ -228,14 +230,8 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     // Layout subviews
     if (pbLayoutPaintNode != nil && pbLayoutPaintNode.layoutId != self.layoutPaintNode.layoutId) {
         if (self.view) {
-            NSArray *sortedKeys = [[children allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
-                MatchaViewPBLayoutPaintNode *layoutPaintNode1 = [root.layoutPaintNodes objectForKey:obj1.longLongValue];
-                MatchaViewPBLayoutPaintNode *layoutPaintNode2 = [root.layoutPaintNodes objectForKey:obj2.longLongValue];
-                return layoutPaintNode1.zIndex > layoutPaintNode2.zIndex;
-            }];
-            
-            for (NSInteger i = 0; i < sortedKeys.count; i++) {
-                NSNumber *key = sortedKeys[i];
+            for (NSInteger i = 0; i < pbLayoutPaintNode.childOrderArray.count; i++) {
+                NSNumber *key = @([pbLayoutPaintNode.childOrderArray valueAtIndex:i]);
                 UIView *subview = children[key].view;
                 if ([self.view.subviews indexOfObject:subview] != i) {
                     [self.view insertSubview:subview atIndex:i];
@@ -252,17 +248,15 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
             origin.y *= -1;
             f.origin = CGPointZero;
             self.materializedView.frame = f;
-            self.materializedView.autoresizingMask = UIViewAutoresizingNone;
             scrollView.matchaContentOffset = origin;
             scrollView.contentOffset = origin;
             
         } else if (self.parent.viewController == nil) {
             // let view controllers do their own layout
-            CGRect prevF = self.materializedView.frame;
-            if (!CGRectEqualToRect(f, prevF)) {
+            if (!CGRectEqualToRect(f, self.frame)) {
                 self.materializedView.frame = f;
+                self.frame = f;
             }
-            self.materializedView.autoresizingMask = UIViewAutoresizingNone;
         } else if (self.viewController) {
             self.viewController.matchaChildLayout = root.layoutPaintNodes;
         }
@@ -270,8 +264,17 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     
     // Paint view
     if (pbLayoutPaintNode != nil && pbLayoutPaintNode.paintId != self.layoutPaintNode.paintId) {
+        if (self.hasBackgroundColor != pbLayoutPaintNode.paintStyle.hasBackgroundColor || (self.hasBackgroundColor && !MatchaColorEqualToColor(self.backgroundColor, pbLayoutPaintNode.matchaBackgroundColor))) {
+            self.hasBackgroundColor = pbLayoutPaintNode.paintStyle.hasBackgroundColor;
+            self.backgroundColor = pbLayoutPaintNode.matchaBackgroundColor;
+            if (self.hasBackgroundColor) {
+                self.view.backgroundColor = [[UIColor alloc] initWithProtobuf:pbLayoutPaintNode.paintStyle.backgroundColor];
+            } else {
+                self.view.backgroundColor = [UIColor clearColor];
+            }
+        }
+        
         self.view.alpha = 1 - pbLayoutPaintNode.paintStyle.transparency;
-        self.view.backgroundColor = pbLayoutPaintNode.paintStyle.hasBackgroundColor ? [[UIColor alloc] initWithProtobuf:pbLayoutPaintNode.paintStyle.backgroundColor] : [UIColor clearColor];
         self.view.layer.borderColor = MatchaCGColorWithProtobuf(pbLayoutPaintNode.paintStyle.borderColor);
         self.view.layer.borderWidth = pbLayoutPaintNode.paintStyle.borderWidth;
         self.view.layer.cornerRadius = pbLayoutPaintNode.paintStyle.cornerRadius;

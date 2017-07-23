@@ -27,8 +27,9 @@ message LayoutPaintNode {
   double maxx = 6;
   double maxy = 7;
   int64 zIndex = 8;
+  repeated int64 childOrder = 9;
   
-  matcha.paint.Style paintStyle = 9;
+  matcha.paint.Style paintStyle = 10;
   // PaintStyle
   // double transparency = 1;
   // matcha.Color backgroundColor = 2;

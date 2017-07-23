@@ -93,7 +93,8 @@ typedef GPB_ENUM(MatchaViewPBLayoutPaintNode_FieldNumber) {
   MatchaViewPBLayoutPaintNode_FieldNumber_Maxx = 6,
   MatchaViewPBLayoutPaintNode_FieldNumber_Maxy = 7,
   MatchaViewPBLayoutPaintNode_FieldNumber_ZIndex = 8,
-  MatchaViewPBLayoutPaintNode_FieldNumber_PaintStyle = 9,
+  MatchaViewPBLayoutPaintNode_FieldNumber_ChildOrderArray = 9,
+  MatchaViewPBLayoutPaintNode_FieldNumber_PaintStyle = 10,
 };
 
 @interface MatchaViewPBLayoutPaintNode : GPBMessage
@@ -117,6 +118,10 @@ typedef GPB_ENUM(MatchaViewPBLayoutPaintNode_FieldNumber) {
 @property(nonatomic, readwrite) double maxy;
 
 @property(nonatomic, readwrite) int64_t zIndex;
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBInt64Array *childOrderArray;
+/** The number of items in @c childOrderArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger childOrderArray_Count;
 
 /**
  * PaintStyle

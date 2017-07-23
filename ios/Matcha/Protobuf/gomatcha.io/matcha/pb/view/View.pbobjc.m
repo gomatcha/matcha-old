@@ -165,10 +165,12 @@ typedef struct MatchaViewPBBuildNode__storage_ {
 @dynamic maxx;
 @dynamic maxy;
 @dynamic zIndex;
+@dynamic childOrderArray, childOrderArray_Count;
 @dynamic hasPaintStyle, paintStyle;
 
 typedef struct MatchaViewPBLayoutPaintNode__storage_ {
   uint32_t _has_storage_[1];
+  GPBInt64Array *childOrderArray;
   MatchaPaintPBStyle *paintStyle;
   int64_t id_p;
   int64_t layoutId;
@@ -259,6 +261,15 @@ typedef struct MatchaViewPBLayoutPaintNode__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
+        .name = "childOrderArray",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaViewPBLayoutPaintNode_FieldNumber_ChildOrderArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(MatchaViewPBLayoutPaintNode__storage_, childOrderArray),
+        .flags = (GPBFieldFlags)(GPBFieldRepeated | GPBFieldPacked | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
         .name = "paintStyle",
         .dataTypeSpecific.className = GPBStringifySymbol(MatchaPaintPBStyle),
         .number = MatchaViewPBLayoutPaintNode_FieldNumber_PaintStyle,
@@ -278,7 +289,7 @@ typedef struct MatchaViewPBLayoutPaintNode__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\004\002\010\000\003\007\000\010\006\000\t\n\000";
+        "\005\002\010\000\003\007\000\010\006\000\t\000childOrder\000\n\n\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

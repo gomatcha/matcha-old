@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 #import <Matcha/MatchaNode.h>
+#import <Matcha/MatchaViewController.h>
 @class MatchaViewConfig;
 @class MatchaViewController;
 @class MatchaViewNode;
@@ -43,4 +44,8 @@ void MatchaRegisterViewController(NSString *string, MatchaViewControllerRegistra
 - (UIViewController *)materializedViewController;
 - (UIViewController *)wrappedViewController;
 - (UIView *)materializedView;
+
+@property (nonatomic, assign) CGRect frame;
+@property (nonatomic, assign) MatchaColor backgroundColor;
+@property (nonatomic, assign) BOOL hasBackgroundColor;
 @end
