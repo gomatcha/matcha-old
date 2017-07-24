@@ -74,7 +74,6 @@ func (st *Store) BluetoothStore() *BluetoothStore {
 
 func (st *Store) SetAirplaneMode(v bool) {
 	st.airplaneMode = v
-	st.Signal()
 
 	wifi := st.wifiStore.Wifi()
 	wifi.Enabled = !st.airplaneMode
@@ -83,6 +82,8 @@ func (st *Store) SetAirplaneMode(v bool) {
 	bt := st.bluetoothStore.Bluetooth()
 	bt.Enabled = !st.airplaneMode
 	st.bluetoothStore.SetBluetooth(bt)
+
+	st.Signal()
 }
 
 func (st *Store) AirplaneMode() bool {

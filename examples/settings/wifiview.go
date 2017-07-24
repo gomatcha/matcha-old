@@ -15,6 +15,12 @@ import (
 	"gomatcha.io/matcha/view/switchview"
 )
 
+type Wifi struct {
+	Enabled     bool
+	Networks    []*WifiNetworkStore
+	CurrentSSID string
+}
+
 type WifiStore struct {
 	store.Node
 	wifi Wifi
@@ -51,19 +57,16 @@ func (s *WifiStore) Wifi() Wifi {
 	return s.wifi
 }
 
-func (s *WifiStore) NetworkWithSSID(ssid string) *WifiNetworkStore {
-	for _, i := range s.Wifi().Networks {
-		if i.Network().SSID == ssid {
-			return i
-		}
-	}
-	return nil
-}
-
-type Wifi struct {
-	Enabled     bool
-	Networks    []*WifiNetworkStore
-	CurrentSSID string
+type WifiNetwork struct {
+	SSID          string
+	Locked        bool
+	Signal        int
+	IPAddress     string
+	SubnetMask    string
+	Router        string
+	DNS           string
+	SearchDomains string
+	ClientID      string
 }
 
 type WifiNetworkStore struct {
@@ -95,18 +98,6 @@ func (s *WifiNetworkStore) SetNetwork(v WifiNetwork) {
 	s.network = v
 	s.network.SSID = s.ssid // Don't allow the network's ssid to change.
 	s.Signal()
-}
-
-type WifiNetwork struct {
-	SSID          string
-	Locked        bool
-	Signal        int
-	IPAddress     string
-	SubnetMask    string
-	Router        string
-	DNS           string
-	SearchDomains string
-	ClientID      string
 }
 
 type WifiView struct {
@@ -218,7 +209,6 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 		}
 		{
 			ctx := ctx.WithPrefix("3")
-			group := []view.View{}
 
 			spacer := NewSpacer(ctx, "spacer")
 			l.Add(spacer, nil)
@@ -227,9 +217,8 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 			cell1 := NewBasicCell(ctx, "join")
 			cell1.Title = "Ask to Join Networks"
 			cell1.AccessoryView = switchView
-			group = append(group, cell1)
 
-			for _, i := range AddSeparators(ctx, group) {
+			for _, i := range AddSeparators(ctx, []view.View{cell1}) {
 				l.Add(i, nil)
 			}
 		}
@@ -276,27 +265,24 @@ func NewWifiNetworkView(ctx *view.Context, key string, app *App, network *WifiNe
 func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 	v.networkStore.Lock()
 	defer v.networkStore.Unlock()
-	network := v.networkStore.Network()
+	n := v.networkStore.Network()
 
 	l := &table.Layouter{}
 	{
 		ctx := ctx.WithPrefix("1")
-		group := []view.View{}
 
 		spacer := NewSpacer(ctx, "spacer")
 		l.Add(spacer, nil)
 
 		cell1 := NewBasicCell(ctx, "forget")
 		cell1.Title = "Forget This Network"
-		group = append(group, cell1)
 
-		for _, i := range AddSeparators(ctx, group) {
+		for _, i := range AddSeparators(ctx, []view.View{cell1}) {
 			l.Add(i, nil)
 		}
 	}
 	{
 		ctx := ctx.WithPrefix("2")
-		group := []view.View{}
 
 		spacer := NewSpacerHeader(ctx, "spacer")
 		spacer.Title = "IP Address"
@@ -304,51 +290,43 @@ func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 
 		cell1 := NewBasicCell(ctx, "ip")
 		cell1.Title = "IP Address"
-		cell1.Subtitle = network.IPAddress
-		group = append(group, cell1)
+		cell1.Subtitle = n.IPAddress
 
 		cell2 := NewBasicCell(ctx, "subnet")
 		cell2.Title = "Subnet Mask"
-		cell2.Subtitle = network.SubnetMask
-		group = append(group, cell2)
+		cell2.Subtitle = n.SubnetMask
 
 		cell3 := NewBasicCell(ctx, "router")
 		cell3.Title = "Router"
-		cell3.Subtitle = network.Router
-		group = append(group, cell3)
+		cell3.Subtitle = n.Router
 
 		cell4 := NewBasicCell(ctx, "dns")
 		cell4.Title = "DNS"
-		cell4.Subtitle = network.DNS
-		group = append(group, cell4)
+		cell4.Subtitle = n.DNS
 
 		cell5 := NewBasicCell(ctx, "clientid")
 		cell5.Title = "Client ID"
-		cell5.Subtitle = network.ClientID
-		group = append(group, cell5)
+		cell5.Subtitle = n.ClientID
 
-		for _, i := range AddSeparators(ctx, group) {
+		for _, i := range AddSeparators(ctx, []view.View{cell1, cell2, cell3, cell4, cell5}) {
 			l.Add(i, nil)
 		}
 	}
 	{
 		ctx := ctx.WithPrefix("3")
-		group := []view.View{}
 
 		spacer := NewSpacer(ctx, "spacer")
 		l.Add(spacer, nil)
 
 		cell1 := NewBasicCell(ctx, "renew")
 		cell1.Title = "Renew Lease"
-		group = append(group, cell1)
 
-		for _, i := range AddSeparators(ctx, group) {
+		for _, i := range AddSeparators(ctx, []view.View{cell1}) {
 			l.Add(i, nil)
 		}
 	}
 	{
 		ctx := ctx.WithPrefix("4")
-		group := []view.View{}
 
 		spacer := NewSpacerHeader(ctx, "spacer")
 		spacer.Title = "HTTP Proxy"
@@ -356,24 +334,21 @@ func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 
 		cell1 := NewBasicCell(ctx, "renew")
 		cell1.Title = "Renew Lease"
-		group = append(group, cell1)
 
-		for _, i := range AddSeparators(ctx, group) {
+		for _, i := range AddSeparators(ctx, []view.View{cell1}) {
 			l.Add(i, nil)
 		}
 	}
 	{
 		ctx := ctx.WithPrefix("5")
-		group := []view.View{}
 
 		spacer := NewSpacer(ctx, "spacer")
 		l.Add(spacer, nil)
 
 		cell1 := NewBasicCell(ctx, "manage")
 		cell1.Title = "Manage This Network"
-		group = append(group, cell1)
 
-		for _, i := range AddSeparators(ctx, group) {
+		for _, i := range AddSeparators(ctx, []view.View{cell1}) {
 			l.Add(i, nil)
 		}
 	}
