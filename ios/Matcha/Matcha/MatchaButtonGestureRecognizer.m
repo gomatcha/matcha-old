@@ -77,6 +77,21 @@
     [self.viewController call:[NSString stringWithFormat:@"%@", @(self.funcId)] viewId:self.viewId args:@[value]];
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    UIView *view = touch.view;
+    while (true) {
+        if (view == self.view) {
+            break;
+        }
+        for (UIGestureRecognizer *i in view.gestureRecognizers) {
+            if ([i isKindOfClass:[MatchaButtonGestureRecognizer class]]) {
+                return false;
+            }
+        }
+    }
+    return YES;
+}
+
 #pragma mark - STuff
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {

@@ -46,6 +46,4 @@ void MatchaRegisterViewController(NSString *string, MatchaViewControllerRegistra
 - (UIView *)materializedView;
 
 @property (nonatomic, assign) CGRect frame;
-@property (nonatomic, assign) MatchaColor backgroundColor;
-@property (nonatomic, assign) BOOL hasBackgroundColor;
 @end

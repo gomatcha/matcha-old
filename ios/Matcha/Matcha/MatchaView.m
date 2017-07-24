@@ -264,14 +264,10 @@ UIViewController<MatchaChildViewController> *MatchaViewControllerWithNode(Matcha
     
     // Paint view
     if (pbLayoutPaintNode != nil && pbLayoutPaintNode.paintId != self.layoutPaintNode.paintId) {
-        if (self.hasBackgroundColor != pbLayoutPaintNode.paintStyle.hasBackgroundColor || (self.hasBackgroundColor && !MatchaColorEqualToColor(self.backgroundColor, pbLayoutPaintNode.matchaBackgroundColor))) {
-            self.hasBackgroundColor = pbLayoutPaintNode.paintStyle.hasBackgroundColor;
-            self.backgroundColor = pbLayoutPaintNode.matchaBackgroundColor;
-            if (self.hasBackgroundColor) {
-                self.view.backgroundColor = [[UIColor alloc] initWithProtobuf:pbLayoutPaintNode.paintStyle.backgroundColor];
-            } else {
-                self.view.backgroundColor = [UIColor clearColor];
-            }
+        if (pbLayoutPaintNode.paintStyle.hasBackgroundColor) {
+            self.view.layer.backgroundColor = MatchaCGColorWithProtobuf(pbLayoutPaintNode.paintStyle.backgroundColor);
+        } else {
+            self.view.backgroundColor = [UIColor clearColor];
         }
         
         self.view.alpha = 1 - pbLayoutPaintNode.paintStyle.transparency;

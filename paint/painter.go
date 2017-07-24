@@ -51,6 +51,9 @@ func (s *Style) MarshalProtobuf() *paint.Style {
 
 // PaintStyle implements the Painter interface.
 func (s *Style) PaintStyle() Style {
+	if s == nil {
+		return Style{}
+	}
 	return *s
 }
 

@@ -1,10 +1,15 @@
 package settings
 
 import (
+	"golang.org/x/image/colornames"
+	"gomatcha.io/matcha/env"
+	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/store"
+	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
+	"gomatcha.io/matcha/view/imageview"
 	"gomatcha.io/matcha/view/scrollview"
 	"gomatcha.io/matcha/view/stackview"
 	"gomatcha.io/matcha/view/switchview"
@@ -46,6 +51,15 @@ func (s *WifiStore) Wifi() Wifi {
 	return s.wifi
 }
 
+func (s *WifiStore) NetworkWithSSID(ssid string) *WifiNetworkStore {
+	for _, i := range s.Wifi().Networks {
+		if i.Network().SSID == ssid {
+			return i
+		}
+	}
+	return nil
+}
+
 type Wifi struct {
 	Enabled     bool
 	Networks    []*WifiNetworkStore
@@ -62,7 +76,13 @@ func NewWifiNetworkStore(ssid string) *WifiNetworkStore {
 	return &WifiNetworkStore{
 		ssid: ssid,
 		network: WifiNetwork{
-			SSID: ssid,
+			SSID:          ssid,
+			IPAddress:     "10.0.1.25",
+			SubnetMask:    "255.255.255.0",
+			Router:        "10.0.1.1",
+			DNS:           "10.0.1.1",
+			SearchDomains: "hsd1.or.comcast.net.",
+			ClientID:      "",
 		},
 	}
 }
@@ -78,9 +98,15 @@ func (s *WifiNetworkStore) SetNetwork(v WifiNetwork) {
 }
 
 type WifiNetwork struct {
-	SSID   string
-	Locked bool
-	Signal int
+	SSID          string
+	Locked        bool
+	Signal        int
+	IPAddress     string
+	SubnetMask    string
+	Router        string
+	DNS           string
+	SearchDomains string
+	ClientID      string
 }
 
 type WifiView struct {
@@ -154,6 +180,7 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 			l.Add(spacer, nil)
 
 			for _, i := range wifi.Networks {
+				networkStore := i
 				network := i.Network()
 
 				// Don't show the current network in this list.
@@ -161,8 +188,15 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 					continue
 				}
 
+				info := NewInfoButton(ctx, "networkbutton"+network.SSID)
+				info.PaintStyle = &paint.Style{BackgroundColor: colornames.Red}
+				info.OnPress = func() {
+					v.app.Stack.Push(NewWifiNetworkView(nil, "", v.app, networkStore))
+				}
+
 				cell := NewBasicCell(ctx, "network"+network.SSID)
 				cell.Title = network.SSID
+				cell.AccessoryView = info
 				cell.OnTap = func() {
 					v.wifiStore.Lock()
 					defer v.wifiStore.Unlock()
@@ -243,9 +277,108 @@ func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 	v.networkStore.Lock()
 	defer v.networkStore.Unlock()
 	network := v.networkStore.Network()
-	_ = network
 
 	l := &table.Layouter{}
+	{
+		ctx := ctx.WithPrefix("1")
+		group := []view.View{}
+
+		spacer := NewSpacer(ctx, "spacer")
+		l.Add(spacer, nil)
+
+		cell1 := NewBasicCell(ctx, "forget")
+		cell1.Title = "Forget This Network"
+		group = append(group, cell1)
+
+		for _, i := range AddSeparators(ctx, group) {
+			l.Add(i, nil)
+		}
+	}
+	{
+		ctx := ctx.WithPrefix("2")
+		group := []view.View{}
+
+		spacer := NewSpacerHeader(ctx, "spacer")
+		spacer.Title = "IP Address"
+		l.Add(spacer, nil)
+
+		cell1 := NewBasicCell(ctx, "ip")
+		cell1.Title = "IP Address"
+		cell1.Subtitle = network.IPAddress
+		group = append(group, cell1)
+
+		cell2 := NewBasicCell(ctx, "subnet")
+		cell2.Title = "Subnet Mask"
+		cell2.Subtitle = network.SubnetMask
+		group = append(group, cell2)
+
+		cell3 := NewBasicCell(ctx, "router")
+		cell3.Title = "Router"
+		cell3.Subtitle = network.Router
+		group = append(group, cell3)
+
+		cell4 := NewBasicCell(ctx, "dns")
+		cell4.Title = "DNS"
+		cell4.Subtitle = network.DNS
+		group = append(group, cell4)
+
+		cell5 := NewBasicCell(ctx, "clientid")
+		cell5.Title = "Client ID"
+		cell5.Subtitle = network.ClientID
+		group = append(group, cell5)
+
+		for _, i := range AddSeparators(ctx, group) {
+			l.Add(i, nil)
+		}
+	}
+	{
+		ctx := ctx.WithPrefix("3")
+		group := []view.View{}
+
+		spacer := NewSpacer(ctx, "spacer")
+		l.Add(spacer, nil)
+
+		cell1 := NewBasicCell(ctx, "renew")
+		cell1.Title = "Renew Lease"
+		group = append(group, cell1)
+
+		for _, i := range AddSeparators(ctx, group) {
+			l.Add(i, nil)
+		}
+	}
+	{
+		ctx := ctx.WithPrefix("4")
+		group := []view.View{}
+
+		spacer := NewSpacerHeader(ctx, "spacer")
+		spacer.Title = "HTTP Proxy"
+		l.Add(spacer, nil)
+
+		cell1 := NewBasicCell(ctx, "renew")
+		cell1.Title = "Renew Lease"
+		group = append(group, cell1)
+
+		for _, i := range AddSeparators(ctx, group) {
+			l.Add(i, nil)
+		}
+	}
+	{
+		ctx := ctx.WithPrefix("5")
+		group := []view.View{}
+
+		spacer := NewSpacer(ctx, "spacer")
+		l.Add(spacer, nil)
+
+		cell1 := NewBasicCell(ctx, "manage")
+		cell1.Title = "Manage This Network"
+		group = append(group, cell1)
+
+		for _, i := range AddSeparators(ctx, group) {
+			l.Add(i, nil)
+		}
+	}
+	spacer := NewSpacer(ctx, "spacer")
+	l.Add(spacer, nil)
 
 	scrollView := scrollview.New(ctx, "scroll")
 	scrollView.ContentChildren = l.Views()
@@ -254,5 +387,61 @@ func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 	return view.Model{
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: backgroundColor},
+	}
+}
+
+func (v *WifiNetworkView) StackBar(*view.Context) *stackview.Bar {
+	v.networkStore.Lock()
+	defer v.networkStore.Unlock()
+	return &stackview.Bar{
+		Title: v.networkStore.Network().SSID,
+	}
+}
+
+type InfoButton struct {
+	view.Embed
+	OnPress    func()
+	PaintStyle *paint.Style
+}
+
+func NewInfoButton(ctx *view.Context, key string) *InfoButton {
+	if v, ok := ctx.Prev(key).(*InfoButton); ok {
+		return v
+	}
+	return &InfoButton{
+		Embed: ctx.NewEmbed(key),
+	}
+}
+
+func (v *InfoButton) Build(ctx *view.Context) view.Model {
+	l := constraint.New()
+	l.Solve(func(s *constraint.Solver) {
+		s.Width(35)
+		s.Height(44)
+	})
+
+	img := imageview.New(ctx, "image")
+	img.Image = env.MustLoadImage("Info")
+	l.Add(img, func(s *constraint.Solver) {
+		s.Width(22)
+		s.Height(22)
+		s.RightEqual(l.Right())
+	})
+
+	button := &touch.ButtonRecognizer{
+		OnTouch: func(e *touch.ButtonEvent) {
+			if e.Kind == touch.EventKindRecognized && v.OnPress != nil {
+				v.OnPress()
+			}
+		},
+	}
+
+	return view.Model{
+		Children: l.Views(),
+		Layouter: l,
+		Painter:  v.PaintStyle,
+		Values: map[interface{}]interface{}{
+			touch.Key: []touch.Recognizer{button},
+		},
 	}
 }

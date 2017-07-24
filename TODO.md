@@ -6,6 +6,11 @@ Medium:
 * Rotation
 * Rebuild settings app, Todo App.
 * Multiple view controllers.
+* Remove constraint.New()
+* Rename mainMutex
+* Should model.Values be map[string]interface{}??
+* AsyncStore as well as Store?
+* Skip "ctx view.Context, key string, " paramater on views we know are top level?
 
 Low:
 * Improve function call performance.
