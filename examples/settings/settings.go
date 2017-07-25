@@ -11,7 +11,6 @@ import (
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
-	"gomatcha.io/matcha/store"
 	"gomatcha.io/matcha/text"
 	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
@@ -44,50 +43,6 @@ func NewAppView() view.View {
 	v := stackview.New(nil, "")
 	v.Stack = app.Stack
 	return v
-}
-
-type Store struct {
-	store.Node
-	airplaneMode   bool
-	wifiStore      *WifiStore
-	bluetoothStore *BluetoothStore
-}
-
-func NewStore() *Store {
-	st := &Store{
-		wifiStore:      NewWifiStore(),
-		bluetoothStore: NewBluetoothStore(),
-		airplaneMode:   false,
-	}
-	st.Set("wifi", st.wifiStore)
-	st.Set("bluetooth", st.bluetoothStore)
-	return st
-}
-
-func (st *Store) WifiStore() *WifiStore {
-	return st.wifiStore
-}
-
-func (st *Store) BluetoothStore() *BluetoothStore {
-	return st.bluetoothStore
-}
-
-func (st *Store) SetAirplaneMode(v bool) {
-	st.airplaneMode = v
-
-	wifi := st.wifiStore.Wifi()
-	wifi.Enabled = !st.airplaneMode
-	st.wifiStore.SetWifi(wifi)
-
-	bt := st.bluetoothStore.Bluetooth()
-	bt.Enabled = !st.airplaneMode
-	st.bluetoothStore.SetBluetooth(bt)
-
-	st.Signal()
-}
-
-func (st *Store) AirplaneMode() bool {
-	return st.airplaneMode
 }
 
 type RootView struct {
@@ -135,11 +90,11 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell1.HasIcon = true
 		group = append(group, cell1)
 
-		wifi := v.app.Store.WifiStore().Wifi()
+		wifi := v.app.Store.WifiStore()
 		cell2 := NewBasicCell(ctx, "wifi")
 		cell2.Title = "Wi-Fi"
-		if wifi.Enabled {
-			cell2.Subtitle = wifi.CurrentSSID
+		if wifi.Enabled() {
+			cell2.Subtitle = wifi.CurrentSSID()
 		} else {
 			cell2.Subtitle = ""
 		}
