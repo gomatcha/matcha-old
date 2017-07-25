@@ -38,6 +38,7 @@ func (st *App) SetAirplaneMode(v bool) {
 
 type Wifi struct {
 	comm.Relay
+	askToJoin   bool
 	enabled     bool
 	currentSSID string
 	networks    []*WifiNetwork
@@ -71,6 +72,15 @@ func (s *Wifi) Enabled() bool {
 
 func (s *Wifi) SetEnabled(v bool) {
 	s.enabled = v
+	s.Signal()
+}
+
+func (s *Wifi) AskToJoin() bool {
+	return s.askToJoin
+}
+
+func (s *Wifi) SetAskToJoin(v bool) {
+	s.askToJoin = v
 	s.Signal()
 }
 

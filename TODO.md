@@ -1,7 +1,6 @@
 High:
 * Commands should have some sort of output.
 * Delay any ui events while viwecontroller is updating.
-* Make sure all subscribes have an unsubscribe.
 
 Medium:
 * Rotation
@@ -10,10 +9,9 @@ Medium:
 * Remove constraint.New()
 * Rename mainMutex
 * Should model.Values be map[string]interface{}??
-* AsyncStore as well as Store?
-* Skip "ctx view.Context, key string, " paramater on views we know are top level?
 
 Low:
+* Skip "ctx view.Context, key string, " paramater on views we know are top level?
 * Improve function call performance.
 * Switching quickly between navigation item causes visual glitch. 2 quick backs.
 * How to respond to memory pressure?

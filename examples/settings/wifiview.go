@@ -88,7 +88,6 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 				}
 
 				info := NewInfoButton(ctx, "networkbutton"+ssid)
-				info.PaintStyle = &paint.Style{BackgroundColor: colornames.Red}
 				info.OnPress = func() {
 					v.app.Stack.Push(NewWifiNetworkView(nil, "", v.app, network))
 				}
@@ -117,6 +116,10 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 			l.Add(spacer, nil)
 
 			switchView := switchview.New(ctx, "switch")
+			switchView.Value = v.app.Wifi.AskToJoin()
+			switchView.OnValueChange = func(a bool) {
+				v.app.Wifi.SetAskToJoin(a)
+			}
 			cell1 := NewBasicCell(ctx, "join")
 			cell1.Title = "Ask to Join Networks"
 			cell1.AccessoryView = switchView
@@ -224,7 +227,7 @@ func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 		cell5.Title = "Client ID"
 		cell5.Subtitle = props.ClientID
 
-		for _, i := range AddSeparators(ctx, []view.View{cell1, cell2, cell3, cell4, cell5}) {
+		for _, i := range AddSeparators(ctx, []view.View{cell0, cell1, cell2, cell3, cell4, cell5}) {
 			l.Add(i, nil)
 		}
 	}
@@ -325,15 +328,15 @@ func (v *SegmentCell) Build(ctx *view.Context) view.Model {
 		}
 	}
 	l.Add(segment, func(s *constraint.Solver) {
-		s.TopEqual(l.Top().Add(3))
-		s.BottomEqual(l.Bottom().Add(3))
+		s.HeightLess(l.Height())
 		s.RightEqual(l.Right().Add(-15))
-		s.LeftEqual(l.Left().Add(-15))
+		s.LeftEqual(l.Left().Add(15))
 	})
 
 	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
+		Painter:  &paint.Style{BackgroundColor: colornames.White},
 	}
 }
 
