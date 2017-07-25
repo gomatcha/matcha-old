@@ -60,6 +60,7 @@ import (
 
 	"gomatcha.io/matcha"
 	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/internal/device"
 	"gomatcha.io/matcha/layout"
 	"gomatcha.io/matcha/view"
 )
@@ -412,6 +413,9 @@ func (s *Solver) solve(sys *Layouter, ctx *layout.Context) {
 		g = ctx.LayoutChild(s.id, layout.Pt(cr.width.min, cr.height.min), layout.Pt(cr.width.max, cr.height.max))
 		width = g.Width()
 		height = g.Height()
+
+		// Round width and height to screen scale
+		width = math.Floor(width*device.ScreenScale+0.5) / device.ScreenScale
 
 		if width < cr.width.min || height < cr.height.min || width > cr.width.max || height > cr.height.max {
 			fmt.Printf("constraint: child guide is outside of bounds. Min:%v Max:%v Actual:%v\n", layout.Pt(cr.width.min, cr.height.min), layout.Pt(cr.width.max, cr.height.max), layout.Pt(width, height))

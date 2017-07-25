@@ -18,6 +18,9 @@
     //        displayLink.preferredFramesPerSecond = 1;
             [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
         }
+        
+        MatchaGoValue *screenScaleFunc = [[MatchaGoValue alloc] initWithFunc:@"gomatcha.io/matcha/internal/device setScreenScale"];
+        [screenScaleFunc call:nil args:@[[[MatchaGoValue alloc] initWithDouble:UIScreen.mainScreen.scale]]];
     });
 }
 

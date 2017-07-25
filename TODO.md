@@ -6,7 +6,9 @@ Medium:
 * Rotation / orientation
 * Rebuild settings app, Todo App.
 * Multiple view controllers.
-* Constraints should force views onto pixel boundries
+* Picker
+* TextField
+* AlertView
 
 Low:
 * Skip "ctx view.Context, key string, " paramater on views we know are top level?
@@ -16,10 +18,6 @@ Low:
 * Have matcha flag that generates a new xcodeproj for easy setup.
 * Add tests around core functionality. Store, etc.
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
-* Flexbox
-* Picker
-* TextField
-* AlertView
 * Modal presentation
 * Asset catalog
 * StackBar height / hidden, color
@@ -41,6 +39,7 @@ Very Low:
 * Collect native resources into assets.
 * Animations: Spring, Delay, Batch, Reverse, Decay, Repeat
 * Rework Slider.FloatNotifier to use comm.Float64Value and give it a better name InOutValue?
+* Flexbox
 
 Bugs:
 
