@@ -109,8 +109,8 @@ func (v *View) reload() {
 		go func(url, path string) {
 			image, err := loadImageURL(url, path)
 
-			view.MainMu.Lock()
-			defer view.MainMu.Unlock()
+			matcha.MainLocker.Lock()
+			defer matcha.MainLocker.Unlock()
 
 			select {
 			case <-c.Done():

@@ -23,8 +23,6 @@ import (
 	pb "gomatcha.io/matcha/pb/view"
 )
 
-var MainMu sync.Mutex // TODO(KD): rename to something better
-
 var maxId int64
 
 // Middleware is called on the result of View.Build(*context).
@@ -50,8 +48,8 @@ func NewRoot(v View) *Root {
 }
 
 func (r *Root) start() {
-	MainMu.Lock()
-	defer MainMu.Unlock()
+	matcha.MainLocker.Lock()
+	defer matcha.MainLocker.Unlock()
 
 	if r.ticker != nil {
 		return
@@ -60,8 +58,8 @@ func (r *Root) start() {
 	id := r.id
 	r.ticker = internal.NewTicker(time.Hour * 99999)
 	_ = r.ticker.Notify(func() {
-		MainMu.Lock()
-		defer MainMu.Unlock()
+		matcha.MainLocker.Lock()
+		defer matcha.MainLocker.Unlock()
 
 		if !r.root.update(r.size) {
 			// nothing changed
@@ -80,8 +78,8 @@ func (r *Root) start() {
 }
 
 func (r *Root) Stop() {
-	MainMu.Lock()
-	defer MainMu.Unlock()
+	matcha.MainLocker.Lock()
+	defer matcha.MainLocker.Unlock()
 
 	if r.ticker == nil {
 		return
@@ -90,39 +88,39 @@ func (r *Root) Stop() {
 }
 
 func (r *Root) Call(funcId string, viewId int64, args []reflect.Value) []reflect.Value {
-	MainMu.Lock()
-	defer MainMu.Unlock()
+	matcha.MainLocker.Lock()
+	defer matcha.MainLocker.Unlock()
 
 	return r.root.call(funcId, viewId, args)
 }
 
 // Id returns the unique identifier for r.
 func (r *Root) Id() int64 {
-	MainMu.Lock()
-	defer MainMu.Unlock()
+	matcha.MainLocker.Lock()
+	defer matcha.MainLocker.Unlock()
 
 	return r.id
 }
 
 func (r *Root) ViewId() matcha.Id {
-	MainMu.Lock()
-	defer MainMu.Unlock()
+	matcha.MainLocker.Lock()
+	defer matcha.MainLocker.Unlock()
 
 	return r.root.node.id
 }
 
 // Size returns the size of r.
 func (r *Root) Size() layout.Point {
-	MainMu.Lock()
-	defer MainMu.Unlock()
+	matcha.MainLocker.Lock()
+	defer matcha.MainLocker.Unlock()
 
 	return r.size
 }
 
 // SetSize sets the size of r.
 func (r *Root) SetSize(p layout.Point) {
-	MainMu.Lock()
-	defer MainMu.Unlock()
+	matcha.MainLocker.Lock()
+	defer matcha.MainLocker.Unlock()
 
 	r.size = p
 	r.root.addFlag(r.root.node.id, layoutFlag)

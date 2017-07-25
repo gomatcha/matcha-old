@@ -4,9 +4,9 @@ package animate
 import (
 	"time"
 
+	"gomatcha.io/matcha"
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/internal"
-	"gomatcha.io/matcha/view"
 )
 
 // Value is an struct that runs Animations and emits float64s.
@@ -53,8 +53,8 @@ func (v *Value) Run(a Animation) (cancelFunc func()) {
 	start := time.Now()
 	an := &animation{animation: a, ticker: internal.NewTicker(time.Hour * 99), value: v}
 	an.tickerId = an.ticker.Notify(func() {
-		view.MainMu.Lock()
-		defer view.MainMu.Unlock()
+		matcha.MainLocker.Lock()
+		defer matcha.MainLocker.Unlock()
 		if an.cancelled {
 			return
 		}

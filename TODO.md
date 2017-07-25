@@ -7,7 +7,6 @@ Medium:
 * Rebuild settings app, Todo App.
 * Multiple view controllers.
 * Remove constraint.New()
-* Rename mainMutex
 * Should model.Values be map[string]interface{}??
 
 Low:
