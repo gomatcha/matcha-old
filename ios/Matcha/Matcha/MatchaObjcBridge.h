@@ -8,4 +8,5 @@
 - (NSString *)assetsDir;
 - (MatchaGoValue *)imageForResource:(NSString *)path;
 - (MatchaGoValue *)propertiesForResource:(NSString *)path;
+- (void)displayAlert:(NSData *)protobuf;
 @end

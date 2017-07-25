@@ -21,6 +21,7 @@
 #import "Slider.pbobjc.h"
 #import "ProgressView.pbobjc.h"
 #import "SegmentView.pbobjc.h"
+#import "Alert.pbobjc.h"
 
 @interface UIColor (Matcha)
 - (id)initWithProtobuf:(MatchaPBColor *)value;

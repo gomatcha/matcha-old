@@ -16,6 +16,7 @@ import (
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/text"
 	"gomatcha.io/matcha/view"
+	"gomatcha.io/matcha/view/alert"
 	"gomatcha.io/matcha/view/basicview"
 	"gomatcha.io/matcha/view/button"
 	"gomatcha.io/matcha/view/imageview"
@@ -140,9 +141,23 @@ func (v *NestedView) Build(ctx *view.Context) view.Model {
 	chl8 := button.New(ctx, "8")
 	chl8.Text = "Button"
 	chl8.OnPress = func() {
-		fmt.Println("On Click")
 		v.counter += 1
 		v.Signal()
+
+		alert.Alert("Alert", "Message",
+			alert.Button{
+				Title: "OK",
+				OnPress: func() {
+					fmt.Println("OK")
+				},
+			},
+			alert.Button{
+				Title: "Cancel",
+				OnPress: func() {
+					fmt.Println("Cancel")
+				},
+			},
+		)
 	}
 	g8 := l.Add(chl8, func(s *constraint.Solver) {
 		s.BottomEqual(g6.Top())

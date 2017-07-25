@@ -418,7 +418,7 @@ func (s *Solver) solve(sys *Layouter, ctx *layout.Context) {
 		width = math.Floor(width*device.ScreenScale+0.5) / device.ScreenScale
 
 		if width < cr.width.min || height < cr.height.min || width > cr.width.max || height > cr.height.max {
-			fmt.Printf("constraint: child guide is outside of bounds. Min:%v Max:%v Actual:%v\n", layout.Pt(cr.width.min, cr.height.min), layout.Pt(cr.width.max, cr.height.max), layout.Pt(width, height))
+			// fmt.Printf("constraint: child guide is outside of bounds. Min:%v Max:%v Actual:%v\n", layout.Pt(cr.width.min, cr.height.min), layout.Pt(cr.width.max, cr.height.max), layout.Pt(width, height))
 			width = cr.width.min
 			height = cr.height.min
 		}

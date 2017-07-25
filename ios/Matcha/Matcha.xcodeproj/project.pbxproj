@@ -17,6 +17,8 @@
 		673181AC1F15F7C600E1839E /* MatchaSegmentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 673181AA1F15F7C600E1839E /* MatchaSegmentView.m */; };
 		673181B01F15F81B00E1839E /* Segmentview.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 673181AE1F15F81B00E1839E /* Segmentview.pbobjc.h */; };
 		673181B11F15F81B00E1839E /* Segmentview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 673181AF1F15F81B00E1839E /* Segmentview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		67F927091F27FFBB00C068AF /* Alert.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67F927071F27FFBB00C068AF /* Alert.pbobjc.h */; };
+		67F9270A1F27FFBB00C068AF /* Alert.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67F927081F27FFBB00C068AF /* Alert.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67FEBA701F099EDF005AFEDA /* Matcha.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBA6E1F099EDF005AFEDA /* Matcha.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67FEBAAB1F099F1D005AFEDA /* Color.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBA7A1F099F1D005AFEDA /* Color.pbobjc.h */; };
 		67FEBAAC1F099F1D005AFEDA /* Color.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FEBA7B1F099F1D005AFEDA /* Color.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -107,6 +109,8 @@
 		673181AA1F15F7C600E1839E /* MatchaSegmentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaSegmentView.m; sourceTree = "<group>"; };
 		673181AE1F15F81B00E1839E /* Segmentview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Segmentview.pbobjc.h; sourceTree = "<group>"; };
 		673181AF1F15F81B00E1839E /* Segmentview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Segmentview.pbobjc.m; sourceTree = "<group>"; };
+		67F927071F27FFBB00C068AF /* Alert.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alert.pbobjc.h; sourceTree = "<group>"; };
+		67F927081F27FFBB00C068AF /* Alert.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alert.pbobjc.m; sourceTree = "<group>"; };
 		67FEBA6B1F099EDF005AFEDA /* Matcha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Matcha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67FEBA6E1F099EDF005AFEDA /* Matcha.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matcha.h; sourceTree = "<group>"; };
 		67FEBA6F1F099EDF005AFEDA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -248,6 +252,15 @@
 			name = Utilities;
 			sourceTree = "<group>";
 		};
+		67F927061F27FFBB00C068AF /* alert */ = {
+			isa = PBXGroup;
+			children = (
+				67F927071F27FFBB00C068AF /* Alert.pbobjc.h */,
+				67F927081F27FFBB00C068AF /* Alert.pbobjc.m */,
+			);
+			path = alert;
+			sourceTree = "<group>";
+		};
 		67FEBA611F099EDF005AFEDA = {
 			isa = PBXGroup;
 			children = (
@@ -383,6 +396,7 @@
 		67FEBA901F099F1D005AFEDA /* view */ = {
 			isa = PBXGroup;
 			children = (
+				67F927061F27FFBB00C068AF /* alert */,
 				673181AD1F15F81B00E1839E /* segmentview */,
 				6731819A1F0DAB3400E1839E /* progressview */,
 				67FEBA911F099F1D005AFEDA /* button */,
@@ -653,6 +667,7 @@
 				673181A61F14667900E1839E /* UITextView+Placeholder.h in Headers */,
 				67FEBB031F09A18F005AFEDA /* MatchaTabScreen.h in Headers */,
 				67FEBB051F09A18F005AFEDA /* MatchaSwitchView.h in Headers */,
+				67F927091F27FFBB00C068AF /* Alert.pbobjc.h in Headers */,
 				67FEBB011F09A18F005AFEDA /* MatchaTapGestureRecognizer.h in Headers */,
 				67FEBAC91F099F1D005AFEDA /* Textinput.pbobjc.h in Headers */,
 				67FEBB091F09A18F005AFEDA /* MatchaSlider.h in Headers */,
@@ -752,6 +767,7 @@
 				67FEBABC1F099F1D005AFEDA /* Button.pbobjc.m in Sources */,
 				67FEBAC81F099F1D005AFEDA /* Tabscreen.pbobjc.m in Sources */,
 				67FEBABA1F099F1D005AFEDA /* Touch2.pbobjc.m in Sources */,
+				67F9270A1F27FFBB00C068AF /* Alert.pbobjc.m in Sources */,
 				6731819E1F0DAB3400E1839E /* Progressview.pbobjc.m in Sources */,
 				673181A71F14667900E1839E /* UITextView+Placeholder.m in Sources */,
 				67FEBAC61F099F1D005AFEDA /* Switchview.pbobjc.m in Sources */,
