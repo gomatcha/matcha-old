@@ -96,7 +96,7 @@ func (v *TouchView) Build(ctx *view.Context) view.Model {
 
 	return view.Model{
 		Painter: &paint.Style{BackgroundColor: v.Color},
-		Values: map[interface{}]interface{}{
+		Values: map[string]interface{}{
 			touch.Key: []touch.Recognizer{tap},
 		},
 	}

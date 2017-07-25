@@ -102,7 +102,7 @@ func (v *TextView) Build(ctx *view.Context) view.Model {
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
-		Values: map[interface{}]interface{}{
+		Values: map[string]interface{}{
 			touch.Key: []touch.Recognizer{tap},
 		},
 	}

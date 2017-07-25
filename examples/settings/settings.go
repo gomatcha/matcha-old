@@ -475,7 +475,7 @@ func (v *BasicCell) Build(ctx *view.Context) view.Model {
 	})
 	_ = titleGuide
 
-	values := map[interface{}]interface{}{}
+	values := map[string]interface{}{}
 	if v.OnTap != nil {
 		tap := &touch.ButtonRecognizer{
 			OnTouch: func(e *touch.ButtonEvent) {

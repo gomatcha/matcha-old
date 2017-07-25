@@ -270,7 +270,7 @@ func (v *Checkbox) Build(ctx *view.Context) view.Model {
 		Children: l.Views(),
 		// Painter:  painter,
 		Layouter: l,
-		Values: map[interface{}]interface{}{
+		Values: map[string]interface{}{
 			touch.Key: []touch.Recognizer{button},
 		},
 	}
@@ -315,7 +315,7 @@ func (v *DeleteButton) Build(ctx *view.Context) view.Model {
 	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
-		Values: map[interface{}]interface{}{
+		Values: map[string]interface{}{
 			touch.Key: []touch.Recognizer{button},
 		},
 	}

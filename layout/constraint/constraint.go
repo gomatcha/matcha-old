@@ -598,9 +598,9 @@ const (
 
 type Layouter struct {
 	// Guide represents the size of the view that the layouter is attached to. By default Guide is the same size as MinGuide.
-	*Guide
-	min            *Guide
-	max            *Guide
+	Guide
+	min            Guide
+	max            Guide
 	solvers        []*Solver
 	zIndex         int
 	notifiers      []comm.Notifier
@@ -611,12 +611,16 @@ type Layouter struct {
 
 // New creates a new layouter.
 func New() *Layouter {
-	sys := &Layouter{}
-	sys.Guide = &Guide{id: rootId, system: sys, children: map[matcha.Id]*Guide{}}
-	sys.min = &Guide{id: minId, system: sys, children: map[matcha.Id]*Guide{}}
-	sys.max = &Guide{id: maxId, system: sys, children: map[matcha.Id]*Guide{}}
-	sys.groupNotifiers = map[comm.Id]notifier{}
-	return sys
+	return &Layouter{}
+}
+
+func (l *Layouter) initialize() {
+	if l.groupNotifiers == nil {
+		l.Guide = Guide{id: rootId, system: l, children: map[matcha.Id]*Guide{}}
+		l.min = Guide{id: minId, system: l, children: map[matcha.Id]*Guide{}}
+		l.max = Guide{id: maxId, system: l, children: map[matcha.Id]*Guide{}}
+		l.groupNotifiers = map[comm.Id]notifier{}
+	}
 }
 
 // View returns a list of all views added to l.
@@ -626,16 +630,19 @@ func (l *Layouter) Views() []view.View {
 
 // MinGuide returns a guide representing the smallest allowed size for the view.
 func (l *Layouter) MinGuide() *Guide {
-	return l.min
+	l.initialize()
+	return &l.min
 }
 
 // MaxGuide returns a guide representing the largest allowed size for the view.
 func (l *Layouter) MaxGuide() *Guide {
-	return l.max
+	l.initialize()
+	return &l.max
 }
 
 // Layout evaluates the constraints and returns the calculated guide and child guides.
 func (l *Layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {
+	l.initialize()
 	l.min.matchaGuide = &layout.Guide{
 		Frame: layout.Rt(0, 0, ctx.MinSize.X, ctx.MinSize.Y),
 	}
@@ -663,6 +670,7 @@ func (l *Layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layo
 // A corresponding guide is returned, which can be used to position other views or reposition v. If the view is not fully constrained
 // it will try to match the MinGuide in dimension and center. If the child view is not fully constrained it will try to match the parent in center.
 func (l *Layouter) Add(v view.View, solveFunc func(*Solver)) *Guide {
+	l.initialize()
 	return l.Guide.add(v, solveFunc)
 }
 

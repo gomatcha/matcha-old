@@ -17,7 +17,7 @@ Attach the recognizer to the view.
 
 	...
  	return view.Model{
- 		Values: map[interface{}]interface{}{
+ 		Values: map[string]interface{}{
  			touch.Key:[]touch.Recognizer{tap},
  		},
  	}
@@ -40,15 +40,13 @@ import (
 )
 
 func init() {
+	Key = "gomatcha.io/matcha/touch"
 	internal.RegisterMiddleware(func() interface{} { return &middleware{} })
 }
 
-type key struct{}
-type _idKey struct{}
-
 // Key is the key to use in view.Model.Values. The corresponding value should be a []touch.Recognizer.
-var Key = key{}
-var idKey = _idKey{}
+var Key string
+var idKey = "gomatcha.io/matcha/touch2"
 
 type middleware struct {
 	maxId int64
@@ -111,7 +109,7 @@ func (r *middleware) Build(ctx *view.Context, next *view.Model) {
 
 	// Add new list back to next.
 	if next.Values == nil {
-		next.Values = map[interface{}]interface{}{}
+		next.Values = map[string]interface{}{}
 	}
 	next.Values[idKey] = ids
 

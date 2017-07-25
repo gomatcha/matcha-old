@@ -95,7 +95,7 @@ type Model struct {
 	Children []View
 	Layouter layout.Layouter
 	Painter  paint.Painter
-	Values   map[interface{}]interface{}
+	Values   map[string]interface{}
 
 	NativeViewName  string
 	NativeViewState proto.Message
@@ -120,19 +120,19 @@ func (v *painterView) Build(ctx *Context) Model {
 }
 
 // WithValues wraps the view v, and adds the given values to its Model.Values.
-func WithValues(v View, vals map[interface{}]interface{}) View {
+func WithValues(v View, vals map[string]interface{}) View {
 	return &valuesView{View: v, values: vals}
 }
 
 type valuesView struct {
 	View
-	values map[interface{}]interface{}
+	values map[string]interface{}
 }
 
 func (v *valuesView) Build(ctx *Context) Model {
 	m := v.View.Build(ctx)
 	if m.Values == nil {
-		m.Values = map[interface{}]interface{}{}
+		m.Values = map[string]interface{}{}
 	}
 	for k, val := range v.values {
 		m.Values[k] = val

@@ -3,11 +3,11 @@ High:
 * Delay any ui events while viwecontroller is updating.
 
 Medium:
-* Rotation
+* Rotation / orientation
 * Rebuild settings app, Todo App.
 * Multiple view controllers.
 * Remove constraint.New()
-* Should model.Values be map[string]interface{}??
+* Constraints should force views onto pixel boundries
 
 Low:
 * Skip "ctx view.Context, key string, " paramater on views we know are top level?
@@ -17,7 +17,6 @@ Low:
 * Have matcha flag that generates a new xcodeproj for easy setup.
 * Add tests around core functionality. Store, etc.
 * Examples. Start rebuild a few apps. Pintrest, Instagram, Settings, Slack
-* Constraints should force views onto pixel boundries
 * Flexbox
 * Picker
 * TextField
