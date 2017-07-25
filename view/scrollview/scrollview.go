@@ -109,7 +109,7 @@ func (v *View) Build(ctx *view.Context) view.Model {
 
 type layouter struct {
 	directions     Direction
-	scrollPosition *ScrollPosition
+	scrollPosition *ScrollPosition // TODO(KD): Are we unnotifying this correctly?
 }
 
 func (l *layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layout.Guide) {

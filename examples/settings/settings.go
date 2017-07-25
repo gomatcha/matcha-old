@@ -28,16 +28,8 @@ func init() {
 	})
 }
 
-type App struct {
-	Stack *stackview.Stack
-	Store *Store
-}
-
 func NewAppView() view.View {
-	app := &App{
-		Stack: &stackview.Stack{},
-		Store: NewStore(),
-	}
+	app := NewApp()
 	app.Stack.SetViews(NewRootView(nil, "", app))
 
 	v := stackview.New(nil, "")
@@ -54,20 +46,25 @@ func NewRootView(ctx *view.Context, key string, app *App) *RootView {
 	if v, ok := ctx.Prev(key).(*RootView); ok {
 		return v
 	}
-	app.Store.Lock()
-	defer app.Store.Unlock()
+	return &RootView{
+		Embed: ctx.NewEmbed(key),
+		app:   app,
+	}
+}
 
-	v := &RootView{Embed: ctx.NewEmbed(key), app: app}
-	v.Subscribe(app.Store)
-	v.Subscribe(app.Store.WifiStore())
-	v.Subscribe(app.Store.BluetoothStore())
-	return v
+func (v *RootView) Lifecycle(from, to view.Stage) {
+	if view.EntersStage(from, to, view.StageMounted) {
+		v.Subscribe(v.app)
+		v.Subscribe(v.app.Wifi)
+		v.Subscribe(v.app.Bluetooth)
+	} else if view.ExitsStage(from, to, view.StageMounted) {
+		v.Unsubscribe(v.app)
+		v.Unsubscribe(v.app.Wifi)
+		v.Unsubscribe(v.app.Bluetooth)
+	}
 }
 
 func (v *RootView) Build(ctx *view.Context) view.Model {
-	v.app.Store.Lock()
-	defer v.app.Store.Unlock()
-
 	l := &table.Layouter{}
 	{
 		ctx := ctx.WithPrefix("1")
@@ -77,11 +74,9 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		l.Add(spacer, nil)
 
 		switchView := switchview.New(ctx, "switch")
-		switchView.Value = v.app.Store.AirplaneMode()
+		switchView.Value = v.app.AirplaneMode()
 		switchView.OnValueChange = func(value bool) {
-			v.app.Store.Lock()
-			defer v.app.Store.Unlock()
-			v.app.Store.SetAirplaneMode(value)
+			v.app.SetAirplaneMode(value)
 		}
 		cell1 := NewBasicCell(ctx, "airplane")
 		cell1.Title = "Airplane Mode"
@@ -90,11 +85,10 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell1.HasIcon = true
 		group = append(group, cell1)
 
-		wifi := v.app.Store.WifiStore()
 		cell2 := NewBasicCell(ctx, "wifi")
 		cell2.Title = "Wi-Fi"
-		if wifi.Enabled() {
-			cell2.Subtitle = wifi.CurrentSSID()
+		if v.app.Wifi.Enabled() {
+			cell2.Subtitle = v.app.Wifi.CurrentSSID()
 		} else {
 			cell2.Subtitle = ""
 		}
@@ -110,7 +104,7 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell3.HasIcon = true
 		cell3.Icon = env.MustLoadImage("Bluetooth")
 		cell3.Title = "Bluetooth"
-		if v.app.Store.BluetoothStore().Bluetooth().Enabled {
+		if v.app.Bluetooth.Enabled() {
 			cell3.Subtitle = "On"
 		} else {
 			cell3.Subtitle = ""

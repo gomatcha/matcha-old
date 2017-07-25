@@ -41,13 +41,17 @@ func New(ctx *view.Context, key string) *View {
 	if v, ok := ctx.Prev(key).(*View); ok {
 		return v
 	}
-	v := &View{
+	return &View{
 		Embed:     ctx.NewEmbed(key),
 		text:      text.New(""),
 		responder: &keyboard.Responder{},
 	}
-	v.Subscribe(v.responder)
-	return v
+}
+
+func (v *View) Lifecycle(from, to view.Stage) {
+	if view.ExitsStage(from, to, view.StageMounted) {
+		v.Unsubscribe(v.prevResponder)
+	}
 }
 
 func (v *View) Build(ctx *view.Context) view.Model {

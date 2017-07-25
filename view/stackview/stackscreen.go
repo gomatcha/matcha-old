@@ -76,6 +76,14 @@ func New(ctx *view.Context, key string) *View {
 	}
 }
 
+func (v *View) Lifecycle(from, to view.Stage) {
+	if view.ExitsStage(from, to, view.StageMounted) {
+		if v.stack != nil {
+			v.Unsubscribe(v.stack)
+		}
+	}
+}
+
 func (v *View) Build(ctx *view.Context) view.Model {
 	l := constraint.New()
 

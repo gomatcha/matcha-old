@@ -27,6 +27,14 @@ func New(ctx *view.Context, key string) *View {
 	}
 }
 
+func (v *View) Lifecycle(from, to view.Stage) {
+	if view.ExitsStage(from, to, view.StageMounted) {
+		if v.progressNotifier != nil {
+			v.Unsubscribe(v.progressNotifier)
+		}
+	}
+}
+
 // Build implements view.View.
 func (v *View) Build(ctx *view.Context) view.Model {
 	l := constraint.New()

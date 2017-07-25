@@ -10,35 +10,35 @@ import (
 	"gomatcha.io/matcha/view"
 	"gomatcha.io/matcha/view/imageview"
 	"gomatcha.io/matcha/view/scrollview"
+	"gomatcha.io/matcha/view/segmentview"
 	"gomatcha.io/matcha/view/stackview"
 	"gomatcha.io/matcha/view/switchview"
 )
 
 type WifiView struct {
 	view.Embed
-	app  *App
-	wifi *Wifi
+	app *App
 }
 
 func NewWifiView(ctx *view.Context, key string, app *App) *WifiView {
 	if v, ok := ctx.Prev(key).(*WifiView); ok {
 		return v
 	}
-	app.Store.Lock()
-	defer app.Store.Unlock()
-	v := &WifiView{
+	return &WifiView{
 		Embed: ctx.NewEmbed(key),
 		app:   app,
-		wifi:  app.Store.WifiStore(),
 	}
-	v.Subscribe(v.wifi)
-	return v
+}
+
+func (v *WifiView) Lifecycle(from, to view.Stage) {
+	if view.EntersStage(from, to, view.StageMounted) {
+		v.Subscribe(v.app.Wifi)
+	} else if view.ExitsStage(from, to, view.StageMounted) {
+		v.Unsubscribe(v.app.Wifi)
+	}
 }
 
 func (v *WifiView) Build(ctx *view.Context) view.Model {
-	v.wifi.Lock()
-	defer v.wifi.Unlock()
-
 	l := &table.Layouter{}
 	{
 		ctx := ctx.WithPrefix("1")
@@ -48,11 +48,9 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 		l.Add(spacer, nil)
 
 		switchView := switchview.New(ctx, "switch")
-		switchView.Value = v.wifi.Enabled()
+		switchView.Value = v.app.Wifi.Enabled()
 		switchView.OnValueChange = func(value bool) {
-			v.wifi.Lock()
-			defer v.wifi.Unlock()
-			v.wifi.SetEnabled(!v.wifi.Enabled())
+			v.app.Wifi.SetEnabled(!v.app.Wifi.Enabled())
 		}
 
 		cell1 := NewBasicCell(ctx, "wifi")
@@ -60,9 +58,9 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 		cell1.AccessoryView = switchView
 		group = append(group, cell1)
 
-		if v.wifi.CurrentSSID() != "" && v.wifi.Enabled() {
+		if v.app.Wifi.CurrentSSID() != "" && v.app.Wifi.Enabled() {
 			cell2 := NewBasicCell(ctx, "current")
-			cell2.Title = v.wifi.CurrentSSID()
+			cell2.Title = v.app.Wifi.CurrentSSID()
 			group = append(group, cell2)
 		}
 
@@ -71,7 +69,7 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 		}
 	}
 
-	if v.wifi.Enabled() {
+	if v.app.Wifi.Enabled() {
 		{
 			ctx := ctx.WithPrefix("2")
 			group := []view.View{}
@@ -80,12 +78,12 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 			spacer.Title = "Choose a Network..."
 			l.Add(spacer, nil)
 
-			for _, i := range v.wifi.Networks() {
+			for _, i := range v.app.Wifi.Networks() {
 				network := i
 				ssid := network.SSID()
 
 				// Don't show the current network in this list.
-				if ssid == v.wifi.CurrentSSID() {
+				if ssid == v.app.Wifi.CurrentSSID() {
 					continue
 				}
 
@@ -99,10 +97,7 @@ func (v *WifiView) Build(ctx *view.Context) view.Model {
 				cell.Title = ssid
 				cell.AccessoryView = info
 				cell.OnTap = func() {
-					v.wifi.Lock()
-					defer v.wifi.Unlock()
-
-					v.wifi.SetCurrentSSID(ssid)
+					v.app.Wifi.SetCurrentSSID(ssid)
 				}
 				group = append(group, cell)
 			}
@@ -161,18 +156,22 @@ func NewWifiNetworkView(ctx *view.Context, key string, app *App, network *WifiNe
 	if v, ok := ctx.Prev(key).(*WifiNetworkView); ok {
 		return v
 	}
-	v := &WifiNetworkView{
+	return &WifiNetworkView{
 		Embed:   ctx.NewEmbed(key),
 		app:     app,
 		network: network,
 	}
-	v.Subscribe(network)
-	return v
+}
+
+func (v *WifiNetworkView) Lifecycle(from, to view.Stage) {
+	if view.EntersStage(from, to, view.StageMounted) {
+		v.Subscribe(v.network)
+	} else if view.ExitsStage(from, to, view.StageMounted) {
+		v.Unsubscribe(v.network)
+	}
 }
 
 func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
-	v.network.Lock()
-	defer v.network.Unlock()
 	props := v.network.Properties()
 
 	l := &table.Layouter{}
@@ -195,6 +194,15 @@ func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 		spacer := NewSpacerHeader(ctx, "spacer")
 		spacer.Title = "IP Address"
 		l.Add(spacer, nil)
+
+		cell0 := NewSegmentCell(ctx, "segment")
+		cell0.Titles = []string{"DHCP", "BootP", "Static"}
+		cell0.Value = props.Kind
+		cell0.OnValueChange = func(a int) {
+			props := v.network.Properties()
+			props.Kind = a
+			v.network.SetProperties(props)
+		}
 
 		cell1 := NewBasicCell(ctx, "ip")
 		cell1.Title = "IP Address"
@@ -240,8 +248,14 @@ func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 		spacer.Title = "HTTP Proxy"
 		l.Add(spacer, nil)
 
-		cell1 := NewBasicCell(ctx, "renew")
-		cell1.Title = "Renew Lease"
+		cell1 := NewSegmentCell(ctx, "segment")
+		cell1.Titles = []string{"Off", "Manual", "Auto"}
+		cell1.Value = props.Proxy
+		cell1.OnValueChange = func(a int) {
+			props := v.network.Properties()
+			props.Proxy = a
+			v.network.SetProperties(props)
+		}
 
 		for _, i := range AddSeparators(ctx, []view.View{cell1}) {
 			l.Add(i, nil)
@@ -274,11 +288,52 @@ func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 }
 
 func (v *WifiNetworkView) StackBar(*view.Context) *stackview.Bar {
-	v.network.Lock()
-	defer v.network.Unlock()
-
 	return &stackview.Bar{
 		Title: v.network.SSID(),
+	}
+}
+
+type SegmentCell struct {
+	view.Embed
+	Titles        []string
+	Value         int
+	OnValueChange func(value int)
+}
+
+func NewSegmentCell(ctx *view.Context, key string) *SegmentCell {
+	if v, ok := ctx.Prev(key).(*SegmentCell); ok {
+		return v
+	}
+	return &SegmentCell{
+		Embed: ctx.NewEmbed(key),
+	}
+}
+
+func (v *SegmentCell) Build(ctx *view.Context) view.Model {
+	l := constraint.New()
+	l.Solve(func(s *constraint.Solver) {
+		s.Height(44)
+		s.WidthEqual(l.MinGuide().Width())
+	})
+
+	segment := segmentview.New(ctx, "segment")
+	segment.Titles = v.Titles
+	segment.Value = v.Value
+	segment.OnValueChange = func(a int) {
+		if v.OnValueChange != nil {
+			v.OnValueChange(a)
+		}
+	}
+	l.Add(segment, func(s *constraint.Solver) {
+		s.TopEqual(l.Top().Add(3))
+		s.BottomEqual(l.Bottom().Add(3))
+		s.RightEqual(l.Right().Add(-15))
+		s.LeftEqual(l.Left().Add(-15))
+	})
+
+	return view.Model{
+		Children: l.Views(),
+		Layouter: l,
 	}
 }
 

@@ -1,51 +1,43 @@
 package settings
 
-import "gomatcha.io/matcha/store"
+import (
+	"gomatcha.io/matcha/comm"
+	"gomatcha.io/matcha/view/stackview"
+)
 
-type Store struct {
-	store.Node
-	airplaneMode   bool
-	wifiStore      *Wifi
-	bluetoothStore *BluetoothStore
+type App struct {
+	Stack     *stackview.Stack
+	Wifi      *Wifi
+	Bluetooth *Bluetooth
+
+	comm.Relay
+	airplaneMode bool
 }
 
-func NewStore() *Store {
-	st := &Store{
-		wifiStore:      NewWifi(),
-		bluetoothStore: NewBluetoothStore(),
-		airplaneMode:   false,
+func NewApp() *App {
+	return &App{
+		Stack:        &stackview.Stack{},
+		Wifi:         NewWifi(),
+		Bluetooth:    NewBluetooth(),
+		airplaneMode: false,
 	}
-	st.Set("wifi", st.wifiStore)
-	st.Set("bluetooth", st.bluetoothStore)
-	return st
 }
 
-func (st *Store) WifiStore() *Wifi {
-	return st.wifiStore
-}
-
-func (st *Store) BluetoothStore() *BluetoothStore {
-	return st.bluetoothStore
-}
-
-func (st *Store) AirplaneMode() bool {
+func (st *App) AirplaneMode() bool {
 	return st.airplaneMode
 }
 
-func (st *Store) SetAirplaneMode(v bool) {
+func (st *App) SetAirplaneMode(v bool) {
 	st.airplaneMode = v
 
-	st.wifiStore.SetEnabled(!st.airplaneMode)
-
-	bt := st.bluetoothStore.Bluetooth()
-	bt.Enabled = !st.airplaneMode
-	st.bluetoothStore.SetBluetooth(bt)
+	st.Wifi.SetEnabled(!st.airplaneMode)
+	st.Bluetooth.SetEnabled(!st.airplaneMode)
 
 	st.Signal()
 }
 
 type Wifi struct {
-	store.Node
+	comm.Relay
 	enabled     bool
 	currentSSID string
 	networks    []*WifiNetwork
@@ -87,19 +79,12 @@ func (s *Wifi) Networks() []*WifiNetwork {
 }
 
 func (s *Wifi) SetNetworks(n []*WifiNetwork) {
-	for _, i := range s.networks {
-		s.Delete(i.SSID())
-	}
-	for _, i := range n {
-		s.Set(i.SSID(), i)
-	}
-
 	s.networks = n
 	s.Signal()
 }
 
 type WifiNetwork struct {
-	store.Node
+	comm.Relay
 	props WifiNetworkProperties
 }
 
@@ -131,13 +116,78 @@ func (n *WifiNetwork) SetProperties(v WifiNetworkProperties) {
 }
 
 type WifiNetworkProperties struct {
-	SSID          string
-	Locked        bool
-	Signal        int
+	SSID   string
+	Locked bool
+	Signal int
+
+	Kind          int
 	IPAddress     string
 	SubnetMask    string
 	Router        string
 	DNS           string
 	SearchDomains string
 	ClientID      string
+	Proxy         int
+}
+
+type Bluetooth struct {
+	comm.Relay
+	enabled bool
+	devices []*BluetoothDevice
+}
+
+func NewBluetooth() *Bluetooth {
+	n1 := NewBluetoothDevice("JBL Charge 3")
+	n2 := NewBluetoothDevice("Kevin's AirPods")
+	n3 := NewBluetoothDevice("Kevin's Apple Watch")
+	n4 := NewBluetoothDevice("Honda Fit")
+
+	return &Bluetooth{
+		enabled: true,
+		devices: []*BluetoothDevice{n1, n2, n3, n4},
+	}
+}
+
+func (s *Bluetooth) Enabled() bool {
+	return s.enabled
+}
+
+func (s *Bluetooth) SetEnabled(v bool) {
+	s.enabled = v
+	s.Signal()
+}
+
+func (s *Bluetooth) Devices() []*BluetoothDevice {
+	return s.devices
+}
+
+func (s *Bluetooth) SetDevices(v []*BluetoothDevice) {
+	s.devices = v
+	s.Signal()
+}
+
+type BluetoothDevice struct {
+	comm.Relay
+	ssid      string
+	connected bool
+}
+
+func NewBluetoothDevice(ssid string) *BluetoothDevice {
+	return &BluetoothDevice{
+		ssid:      ssid,
+		connected: true,
+	}
+}
+
+func (s *BluetoothDevice) SSID() string {
+	return s.ssid
+}
+
+func (s *BluetoothDevice) Connected() bool {
+	return s.connected
+}
+
+func (s *BluetoothDevice) SetConnected(v bool) {
+	s.connected = v
+	s.Signal()
 }

@@ -1,6 +1,7 @@
 High:
 * Commands should have some sort of output.
 * Delay any ui events while viwecontroller is updating.
+* Make sure all subscribes have an unsubscribe.
 
 Medium:
 * Rotation
