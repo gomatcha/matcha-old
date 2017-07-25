@@ -313,7 +313,7 @@ func NewSegmentCell(ctx *view.Context, key string) *SegmentCell {
 }
 
 func (v *SegmentCell) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(44)
 		s.WidthEqual(l.MinGuide().Width())
@@ -356,7 +356,7 @@ func NewInfoButton(ctx *view.Context, key string) *InfoButton {
 }
 
 func (v *InfoButton) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Width(35)
 		s.Height(44)

@@ -6,7 +6,6 @@ Medium:
 * Rotation / orientation
 * Rebuild settings app, Todo App.
 * Multiple view controllers.
-* Remove constraint.New()
 * Constraints should force views onto pixel boundries
 
 Low:

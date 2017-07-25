@@ -95,7 +95,7 @@ func (v *TouchView) Build(ctx *view.Context) view.Model {
 }
 
 func (v *TouchView) StackBar(ctx *view.Context) *stackview.Bar {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
@@ -107,7 +107,7 @@ func (v *TouchView) StackBar(ctx *view.Context) *stackview.Bar {
 	titleView.Painter = &paint.Style{BackgroundColor: colornames.Red}
 	titleView.Layouter = l
 
-	l2 := constraint.New()
+	l2 := &constraint.Layouter{}
 	l2.Solve(func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))
@@ -118,7 +118,7 @@ func (v *TouchView) StackBar(ctx *view.Context) *stackview.Bar {
 	rightView.Painter = &paint.Style{BackgroundColor: colornames.Blue}
 	rightView.Layouter = l2
 
-	l3 := constraint.New()
+	l3 := &constraint.Layouter{}
 	l3.Solve(func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(0))
 		s.LeftEqual(constraint.Const(0))

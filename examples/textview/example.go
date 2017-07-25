@@ -46,7 +46,7 @@ func (v *TextView) Lifecycle(from, to view.Stage) {
 }
 
 func (v *TextView) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	chl := textview.New(ctx, "a")
 	chl.String = "Subtitle"

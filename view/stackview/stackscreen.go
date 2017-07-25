@@ -85,7 +85,7 @@ func (v *View) Lifecycle(from, to view.Stage) {
 }
 
 func (v *View) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	// Subscribe to the stack
 	if v.Stack != v.stack {
@@ -259,7 +259,7 @@ type barView struct {
 }
 
 func (v *barView) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	// iOS does the layouting for us. We just need the correct sizes.
 	titleViewId := int64(0)

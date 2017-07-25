@@ -36,7 +36,7 @@ func New(ctx *view.Context, key string) *TouchView {
 }
 
 func (v *TouchView) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	chl1 := NewTouchChildView(ctx, "1")
 	chl1.OnTouch = func() {

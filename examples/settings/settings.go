@@ -238,7 +238,7 @@ func NewSeparator(ctx *view.Context, key string) *Separator {
 }
 
 func (v *Separator) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(0.5)
 		s.WidthEqual(l.MaxGuide().Width())
@@ -275,7 +275,7 @@ func NewSpacer(ctx *view.Context, key string) *Spacer {
 }
 
 func (v *Spacer) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(v.Height)
 		s.WidthEqual(l.MaxGuide().Width())
@@ -304,7 +304,7 @@ func NewSpacerHeader(ctx *view.Context, key string) *SpacerHeader {
 }
 
 func (v *SpacerHeader) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(v.Height)
 		s.WidthEqual(l.MaxGuide().Width())
@@ -347,7 +347,7 @@ func NewSpacerDescription(ctx *view.Context, key string) *SpacerDescription {
 }
 
 func (v *SpacerDescription) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	titleView := textview.New(ctx, "title")
 	titleView.String = v.Description
@@ -395,7 +395,7 @@ func NewBasicCell(ctx *view.Context, key string) *BasicCell {
 }
 
 func (v *BasicCell) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(44)
 		s.WidthEqual(l.MaxGuide().Width())

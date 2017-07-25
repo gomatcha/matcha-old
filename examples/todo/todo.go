@@ -105,7 +105,7 @@ func NewAddView(ctx *view.Context, key string) *AddView {
 }
 
 func (v *AddView) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(50)
 		s.WidthEqual(l.MaxGuide().Width())
@@ -176,7 +176,7 @@ func NewTodoView(ctx *view.Context, key string) *TodoView {
 }
 
 func (v *TodoView) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(50)
 		s.WidthEqual(l.MaxGuide().Width())
@@ -239,7 +239,7 @@ func NewCheckbox(ctx *view.Context, key string) *Checkbox {
 }
 
 func (v *Checkbox) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Width(40)
 		s.Height(40)
@@ -289,7 +289,7 @@ func NewDeleteButton(ctx *view.Context, key string) *DeleteButton {
 }
 
 func (v *DeleteButton) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Width(40)
 		s.Height(40)

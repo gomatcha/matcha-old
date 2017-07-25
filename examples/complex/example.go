@@ -63,7 +63,7 @@ func (v *NestedView) Lifecycle(from, to view.Stage) {
 }
 
 func (v *NestedView) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	value := animate.FloatLerp{Start: 0, End: 150}.Notifier(&v.value)
 	// value := animate.FloatInterpolate(animate.FloatLerp{Start: 0, End: 150}, &v.value)
@@ -266,7 +266,7 @@ func NewTableCell(ctx *view.Context, key string) *TableCell {
 }
 
 func (v *TableCell) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(50)

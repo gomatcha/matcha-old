@@ -34,7 +34,7 @@ func New(ctx *view.Context, key string) *ImageView {
 }
 
 func (v *ImageView) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	chl := urlimageview.New(ctx, "0")
 	chl.URL = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"

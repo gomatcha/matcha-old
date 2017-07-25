@@ -37,7 +37,7 @@ func (v *View) Lifecycle(from, to view.Stage) {
 
 // Build implements view.View.
 func (v *View) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(2) // 2.5 if its a bar
 		s.WidthEqual(l.MinGuide().Width())

@@ -70,7 +70,7 @@ func (v *View) Lifecycle(from, to view.Stage) {
 }
 
 func (v *View) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	// Subscribe to the group
 	if v.Tabs != v.tabs {

@@ -41,7 +41,7 @@ func (v *View) Lifecycle(from, to view.Stage) {
 }
 
 func (v *View) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	chl := basicview.New(ctx, "")
 	// chl.Painter = &paint.AnimatedStyle{BackgroundColor: v.colorTicker}

@@ -3,7 +3,7 @@ Package constraint implements a constraint-based layout system.
 
  func (v *View) Build(ctx *view.Context) view.Model {
  	 // Create a new constraint system.
-	 l := constraint.New()
+	 l := &constraint.Layouter{}
 
 	 // Solves for the position of v, given the constraints on s. The result is a 400x100 frame.
 	 l.Solve(func(s *constraint.Solver) {
@@ -609,11 +609,6 @@ type Layouter struct {
 	views          []view.View
 }
 
-// New creates a new layouter.
-func New() *Layouter {
-	return &Layouter{}
-}
-
 func (l *Layouter) initialize() {
 	if l.groupNotifiers == nil {
 		l.Guide = Guide{id: rootId, system: l, children: map[matcha.Id]*Guide{}}
@@ -672,6 +667,11 @@ func (l *Layouter) Layout(ctx *layout.Context) (layout.Guide, map[matcha.Id]layo
 func (l *Layouter) Add(v view.View, solveFunc func(*Solver)) *Guide {
 	l.initialize()
 	return l.Guide.add(v, solveFunc)
+}
+
+func (l *Layouter) Solve(solveFunc func(*Solver)) {
+	l.initialize()
+	l.Guide.Solve(solveFunc)
 }
 
 type notifier struct {

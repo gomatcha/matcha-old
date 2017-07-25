@@ -31,7 +31,7 @@ func New(ctx *view.Context, key string) *View {
 
 // Build implements view.View.
 func (v *View) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.Height(29)
 		s.WidthEqual(l.MaxGuide().Width())

@@ -34,7 +34,7 @@ func New(ctx *view.Context, key string) *TableView {
 }
 
 func (v *TableView) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	childLayouter := &table.Layouter{}
 	for i := 0; i < 20; i++ {
@@ -80,7 +80,7 @@ func NewTableCell(ctx *view.Context, key string) *TableCell {
 }
 
 func (v *TableCell) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
 		s.HeightEqual(constraint.Const(50))
 	})

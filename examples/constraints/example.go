@@ -29,7 +29,7 @@ func New(ctx *view.Context, key string) *ConstraintsView {
 }
 
 func (v *ConstraintsView) Build(ctx *view.Context) view.Model {
-	l := constraint.New()
+	l := &constraint.Layouter{}
 
 	chl1 := basicview.New(ctx, "1")
 	chl1.Painter = &paint.Style{BackgroundColor: colornames.Blue}
