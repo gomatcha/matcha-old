@@ -44,7 +44,7 @@ func (v *BluetoothView) Build(ctx *view.Context) view.Model {
 		switchView := switchview.New(ctx, "switch")
 		switchView.Value = v.app.Bluetooth.Enabled()
 		switchView.OnValueChange = func(value bool) {
-			v.app.Bluetooth.SetEnabled(v.app.Bluetooth.Enabled())
+			v.app.Bluetooth.SetEnabled(!v.app.Bluetooth.Enabled())
 		}
 
 		cell1 := NewBasicCell(ctx, "wifi")
@@ -74,7 +74,8 @@ func (v *BluetoothView) Build(ctx *view.Context) view.Model {
 				cell.Subtitle = "Not Connected"
 			}
 			cell.OnTap = func() {
-				device.SetConnected(device.Connected())
+				device.SetConnected(!device.Connected())
+				v.Signal()
 			}
 			group = append(group, cell)
 		}

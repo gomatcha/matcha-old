@@ -131,6 +131,9 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell5.Title = "Personal Hotspot"
 		cell5.Subtitle = "Off"
 		cell5.Chevron = true
+		cell5.OnTap = func() {
+			v.app.Stack.Push(NewCellularView(nil, "", v.app))
+		}
 		group = append(group, cell5)
 
 		cell6 := NewBasicCell(ctx, "carrier")
@@ -139,6 +142,9 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell6.Title = "Carrier"
 		cell6.Subtitle = "T-Mobile"
 		cell6.Chevron = true
+		cell6.OnTap = func() {
+			v.app.Stack.Push(NewCellularView(nil, "", v.app))
+		}
 		group = append(group, cell6)
 
 		for _, i := range AddSeparators(ctx, group) {
@@ -157,6 +163,9 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell1.Icon = env.MustLoadImage("Notifications")
 		cell1.Title = "Notifications"
 		cell1.Chevron = true
+		cell1.OnTap = func() {
+			v.app.Stack.Push(NewCellularView(nil, "", v.app))
+		}
 		group = append(group, cell1)
 
 		cell2 := NewBasicCell(ctx, "controlcenter")
@@ -164,6 +173,9 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell2.Icon = env.MustLoadImage("ControlCenter")
 		cell2.Title = "Control Center"
 		cell2.Chevron = true
+		cell2.OnTap = func() {
+			v.app.Stack.Push(NewCellularView(nil, "", v.app))
+		}
 		group = append(group, cell2)
 
 		cell3 := NewBasicCell(ctx, "donotdisturb")
@@ -171,6 +183,9 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 		cell3.Icon = env.MustLoadImage("DoNotDisturb")
 		cell3.Title = "Do Not Disturb"
 		cell3.Chevron = true
+		cell3.OnTap = func() {
+			v.app.Stack.Push(NewCellularView(nil, "", v.app))
+		}
 		group = append(group, cell3)
 
 		for _, i := range AddSeparators(ctx, group) {
