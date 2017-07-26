@@ -1,3 +1,12 @@
+// Package alert implements basic alerts.
+//
+//  alert.Alert("Title", "Message") // Has an OK button by default.
+//  alert.Alert("Title", "Message", &Button{
+//      Title:"Cancel",
+//      OnPress: func() {
+//          // Do something
+//      }
+//  })
 package alert
 
 import (
@@ -26,7 +35,7 @@ func init() {
 type _alert struct {
 	Title   string
 	Message string
-	Buttons []Button
+	Buttons []*Button
 }
 
 func (a *_alert) marshalProtobuf(id int64) *pbalert.View {
@@ -55,9 +64,9 @@ func (a *_alert) Display() {
 }
 
 // If no buttons are passed, a default OK button is created.
-func Alert(title, message string, buttons ...Button) {
+func Alert(title, message string, buttons ...*Button) {
 	if len(buttons) == 0 {
-		buttons = []Button{Button{Title: "OK"}}
+		buttons = []*Button{&Button{Title: "OK"}}
 	}
 	a := _alert{
 		Title:   title,

@@ -145,13 +145,13 @@ func (v *NestedView) Build(ctx *view.Context) view.Model {
 		v.Signal()
 
 		alert.Alert("Alert", "Message",
-			alert.Button{
+			&alert.Button{
 				Title: "OK",
 				OnPress: func() {
 					fmt.Println("OK")
 				},
 			},
-			alert.Button{
+			&alert.Button{
 				Title: "Cancel",
 				OnPress: func() {
 					fmt.Println("Cancel")

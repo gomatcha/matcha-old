@@ -8,7 +8,6 @@ Medium:
 * Multiple view controllers.
 * Picker
 * TextField
-* AlertView
 
 Low:
 * Skip "ctx view.Context, key string, " paramater on views we know are top level?
