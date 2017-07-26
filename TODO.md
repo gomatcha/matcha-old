@@ -1,5 +1,5 @@
 High:
-* Commands should have some sort of output.
+* Take screenshots / videos of a running app.
 * Delay any ui events while viwecontroller is updating.
 
 Medium:
@@ -8,6 +8,7 @@ Medium:
 * Multiple view controllers.
 * Picker
 * TextField
+* Stack and Tab styles.
 
 Low:
 * Skip "ctx view.Context, key string, " paramater on views we know are top level?

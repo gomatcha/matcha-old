@@ -10,6 +10,8 @@ Matcha is in early development! There are many rough edges and APIs may still ch
 
 Matcha is a package for building iOS applications and frameworks in Go. Matcha provides a UI compenent library similar to ReactNative and exposes bindings to Objective-C code through reflection. The library also provides Go APIs for common app tasks. Matcha makes it easy to build complex mobile apps and integrate with existing projects. 
 
+[![settings-example](docs/settings.gif)](https://youtu.be/UI4xqGYqSAQ)
+
 ### Getting Started
 
 Matcha requires macOS, Xcode 8.3 and Go 1.8. To start, fetch the project and install the matcha command.
@@ -88,7 +90,7 @@ func New(ctx *view.Context, key string) *TutorialView {
 // Similar to React's render function. Views specify their properties and
 // children in Build().
 func (v *TutorialView) Build(ctx *view.Context) view.Model {
-    l := constraint.New()
+    l := &constraint.Layouter{}
 
     // Get the textview for the given key (hellotext), either initializing it or fetching
     // the previous one.
