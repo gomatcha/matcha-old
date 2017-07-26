@@ -92,7 +92,7 @@ func (a *Button) marshalProtobuf() *pbalert.Button {
 type ButtonStyle int
 
 const (
-	ButtonStyleDefault int = iota
+	ButtonStyleDefault ButtonStyle = iota
 	ButtonStyleCancel
 	ButtonStyleDestructive
 )

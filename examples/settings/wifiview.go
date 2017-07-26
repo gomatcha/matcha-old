@@ -8,6 +8,7 @@ import (
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/touch"
 	"gomatcha.io/matcha/view"
+	"gomatcha.io/matcha/view/alert"
 	"gomatcha.io/matcha/view/imageview"
 	"gomatcha.io/matcha/view/scrollview"
 	"gomatcha.io/matcha/view/segmentview"
@@ -186,6 +187,20 @@ func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 
 		cell1 := NewBasicCell(ctx, "forget")
 		cell1.Title = "Forget This Network"
+		cell1.OnTap = func() {
+			alert.Alert("Forget Wi-Fi Network?", "Your iPhone will no longer join this Wi-Fi network.",
+				&alert.Button{
+					Title: "Cancel",
+					Style: alert.ButtonStyleCancel,
+				},
+				&alert.Button{
+					Title: "Forget",
+					OnPress: func() {
+						v.app.Stack.Pop()
+					},
+				},
+			)
+		}
 
 		for _, i := range AddSeparators(ctx, []view.View{cell1}) {
 			l.Add(i, nil)
@@ -239,6 +254,9 @@ func (v *WifiNetworkView) Build(ctx *view.Context) view.Model {
 
 		cell1 := NewBasicCell(ctx, "renew")
 		cell1.Title = "Renew Lease"
+		cell1.OnTap = func() {
+			alert.Alert("Renewing Lease...", "")
+		}
 
 		for _, i := range AddSeparators(ctx, []view.View{cell1}) {
 			l.Add(i, nil)
@@ -358,7 +376,7 @@ func NewInfoButton(ctx *view.Context, key string) *InfoButton {
 func (v *InfoButton) Build(ctx *view.Context) view.Model {
 	l := &constraint.Layouter{}
 	l.Solve(func(s *constraint.Solver) {
-		s.Width(35)
+		s.Width(44)
 		s.Height(44)
 	})
 
