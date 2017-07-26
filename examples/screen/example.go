@@ -65,7 +65,7 @@ func NewAppView() view.View {
 	return v
 }
 
-func (app *App) CurrentStackScreen() *stackview.Stack {
+func (app *App) CurrentStackView() *stackview.Stack {
 	switch app.tabs.SelectedIndex() {
 	case 0:
 		return app.stack1
@@ -102,7 +102,7 @@ func (v *TouchView) Build(ctx *view.Context) view.Model {
 		OnTouch: func(e *touch.TapEvent) {
 			child := NewTouchView(nil, "", v.app)
 			child.Color = colornames.Red
-			v.app.CurrentStackScreen().Push(child)
+			v.app.CurrentStackView().Push(child)
 			fmt.Println("child", child)
 		},
 	}

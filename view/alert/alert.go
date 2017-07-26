@@ -52,7 +52,7 @@ func (a *_alert) marshalProtobuf(id int64) *pbalert.View {
 	}
 }
 
-func (a *_alert) Display() {
+func (a *_alert) display() {
 	maxId += 1
 	alerts[maxId] = a
 
@@ -63,7 +63,7 @@ func (a *_alert) Display() {
 	bridge.Bridge().Call("displayAlert:", bridge.Bytes(data))
 }
 
-// If no buttons are passed, a default OK button is created.
+// Alert displays an alert with the given title, message and buttons. If no buttons are passed, a default OK button is created.
 func Alert(title, message string, buttons ...*Button) {
 	if len(buttons) == 0 {
 		buttons = []*Button{&Button{Title: "OK"}}
@@ -73,9 +73,10 @@ func Alert(title, message string, buttons ...*Button) {
 		Message: message,
 		Buttons: buttons,
 	}
-	a.Display()
+	a.display()
 }
 
+// Button represents an alert button.
 type Button struct {
 	Title   string
 	Style   ButtonStyle
@@ -89,6 +90,7 @@ func (a *Button) marshalProtobuf() *pbalert.Button {
 	}
 }
 
+// Alert button styles.
 type ButtonStyle int
 
 const (

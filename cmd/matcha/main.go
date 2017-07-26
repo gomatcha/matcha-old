@@ -20,9 +20,6 @@ var RootCmd = &cobra.Command{
 	Short: "Matcha is a tool for building iOS apps in Go",
 	Long: `Matcha is a tool for building iOS apps in Go. 
 Complete documentation is available at https://gomatcha.io`,
-	Run: func(cmd *cobra.Command, args []string) {
-		// Do Stuff Here
-	},
 }
 
 var (
@@ -50,7 +47,7 @@ func init() {
 
 var InitCmd = &cobra.Command{
 	Use:   "init",
-	Short: "install mobile compiler toolchain",
+	Short: "Install the mobile compiler toolchain",
 	Long:  ``,
 	Run: func(command *cobra.Command, args []string) {
 		flags := &cmd.Flags{
@@ -81,7 +78,7 @@ func init() {
 
 var BuildCmd = &cobra.Command{
 	Use:   "build",
-	Short: "builds matcha static library",
+	Short: "Builds the Matcha static library",
 	Long:  ``,
 	Run: func(command *cobra.Command, args []string) {
 		flags := &cmd.Flags{
@@ -114,7 +111,7 @@ func init() {
 
 var InstallCmd = &cobra.Command{
 	Use:   "install",
-	Short: "builds matcha static library and copies ios frameworks",
+	Short: "Builds the Matcha static library and copies iOS frameworks to a directory",
 	Long:  ``,
 	Run: func(command *cobra.Command, args []string) {
 		flags := &cmd.Flags{

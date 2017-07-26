@@ -86,8 +86,9 @@ func Init(flags *Flags) error {
 	// Timing
 	if flags.BuildV {
 		took := time.Since(start) / time.Second * time.Second
-		fmt.Fprintf(os.Stderr, "\nDone, build took %s.\n", took)
+		fmt.Fprintf(os.Stderr, "Build took %s.\n", took)
 	}
+	fmt.Fprintf(os.Stderr, "Matcha initialized.\n")
 	return nil
 }
 
