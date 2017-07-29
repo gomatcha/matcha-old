@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/image/colornames"
 	"gomatcha.io/bridge"
-	"gomatcha.io/matcha/env"
+	"gomatcha.io/matcha/app"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/view"
@@ -47,7 +47,7 @@ func (v *ImageView) Build(ctx *view.Context) view.Model {
 	})
 
 	chl2 := imageview.New(ctx, "1")
-	chl2.Image = env.MustLoadImage("TableArrow")
+	chl2.Image = app.MustLoadImage("TableArrow")
 	chl2.ResizeMode = imageview.ResizeModeFit
 	l.Add(chl2, func(s *constraint.Solver) {
 		s.TopEqual(constraint.Const(300))

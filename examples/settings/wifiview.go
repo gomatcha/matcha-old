@@ -2,7 +2,7 @@ package settings
 
 import (
 	"golang.org/x/image/colornames"
-	"gomatcha.io/matcha/env"
+	"gomatcha.io/matcha/app"
 	"gomatcha.io/matcha/layout/constraint"
 	"gomatcha.io/matcha/layout/table"
 	"gomatcha.io/matcha/paint"
@@ -381,7 +381,7 @@ func (v *InfoButton) Build(ctx *view.Context) view.Model {
 	})
 
 	img := imageview.New(ctx, "image")
-	img.Image = env.MustLoadImage("Info")
+	img.Image = app.MustLoadImage("Info")
 	l.Add(img, func(s *constraint.Solver) {
 		s.Width(22)
 		s.Height(22)

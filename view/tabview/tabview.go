@@ -5,8 +5,8 @@ import (
 	"image"
 
 	"github.com/gogo/protobuf/proto"
+	"gomatcha.io/matcha/app"
 	"gomatcha.io/matcha/comm"
-	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/layout/constraint"
 	tabnavpb "gomatcha.io/matcha/pb/view/tabscreen"
 	"gomatcha.io/matcha/view"
@@ -107,8 +107,8 @@ func (v *View) Build(ctx *view.Context) view.Model {
 		childrenPb = append(childrenPb, &tabnavpb.ChildView{
 			Id:           int64(chld.Id()),
 			Title:        button.Title,
-			Icon:         env.ImageMarshalProtobuf(button.Icon),
-			SelectedIcon: env.ImageMarshalProtobuf(button.SelectedIcon),
+			Icon:         app.ImageMarshalProtobuf(button.Icon),
+			SelectedIcon: app.ImageMarshalProtobuf(button.SelectedIcon),
 			Badge:        button.Badge,
 		})
 	}

@@ -8,8 +8,8 @@ import (
 	_ "image/png"
 
 	"gomatcha.io/matcha"
+	"gomatcha.io/matcha/app"
 	"gomatcha.io/matcha/comm"
-	"gomatcha.io/matcha/env"
 	"gomatcha.io/matcha/layout"
 	"gomatcha.io/matcha/paint"
 	"gomatcha.io/matcha/pb"
@@ -93,7 +93,7 @@ func New(ctx *view.Context, key string) *View {
 func (v *View) Build(ctx *view.Context) view.Model {
 	if v.Image != v.image {
 		v.image = v.Image
-		v.pbImage = env.ImageMarshalProtobuf(v.image)
+		v.pbImage = app.ImageMarshalProtobuf(v.image)
 	}
 
 	// Default to Center if we don't have an image
@@ -104,7 +104,7 @@ func (v *View) Build(ctx *view.Context) view.Model {
 		bounds = v.image.Bounds()
 		resizeMode = v.ResizeMode
 
-		if res, ok := v.image.(*env.ImageResource); ok {
+		if res, ok := v.image.(*app.ImageResource); ok {
 			scale = res.Scale()
 		}
 	}
