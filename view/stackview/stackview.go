@@ -2,13 +2,17 @@ package stackview
 
 import (
 	"fmt"
+	"image/color"
 	"strconv"
 
 	"github.com/gogo/protobuf/proto"
 	"gomatcha.io/matcha"
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/layout/constraint"
+	"gomatcha.io/matcha/pb"
+	pbtext "gomatcha.io/matcha/pb/text"
 	"gomatcha.io/matcha/pb/view/stacknav"
+	"gomatcha.io/matcha/text"
 	"gomatcha.io/matcha/view"
 )
 
@@ -61,8 +65,11 @@ func (s *Stack) Unnotify(id comm.Id) {
 
 type View struct {
 	view.Embed
-	Stack *Stack
-	stack *Stack
+	Stack          *Stack
+	stack          *Stack
+	TitleTextStyle *text.Style
+	BackTextStyle  *text.Style
+	BarColor       color.Color
 	// children map[int64]view.View
 	// ids      []int64
 }
@@ -142,12 +149,25 @@ func (v *View) Build(ctx *view.Context) view.Model {
 		})
 	}
 
+	var titleTextStyle *pbtext.TextStyle
+	if v.TitleTextStyle != nil {
+		titleTextStyle = v.TitleTextStyle.MarshalProtobuf()
+	}
+
+	var backTextStyle *pbtext.TextStyle
+	if v.BackTextStyle != nil {
+		backTextStyle = v.BackTextStyle.MarshalProtobuf()
+	}
+
 	return view.Model{
 		Children:       l.Views(),
 		Layouter:       l,
 		NativeViewName: "gomatcha.io/matcha/view/stacknav",
 		NativeViewState: &stacknav.View{
-			Children: childrenPb,
+			Children:       childrenPb,
+			TitleTextStyle: titleTextStyle,
+			BackTextStyle:  backTextStyle,
+			BarColor:       pb.ColorEncode(v.BarColor),
 		},
 		NativeFuncs: map[string]interface{}{
 			"OnChange": func(data []byte) {

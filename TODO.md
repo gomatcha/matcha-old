@@ -4,6 +4,7 @@ High:
 
 Medium:
 * Rotation / orientation
+* Statusbar color
 * Rebuild settings app, Todo App.
 * Multiple view controllers.
 * Picker

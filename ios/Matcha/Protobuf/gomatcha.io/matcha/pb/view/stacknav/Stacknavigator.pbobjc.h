@@ -27,6 +27,8 @@
 
 CF_EXTERN_C_BEGIN
 
+@class MatchaPBColor;
+@class MatchaPBTextStyle;
 @class MatchaStackScreenPBChildView;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -68,6 +70,9 @@ typedef GPB_ENUM(MatchaStackScreenPBChildView_FieldNumber) {
 
 typedef GPB_ENUM(MatchaStackScreenPBView_FieldNumber) {
   MatchaStackScreenPBView_FieldNumber_ChildrenArray = 1,
+  MatchaStackScreenPBView_FieldNumber_TitleTextStyle = 2,
+  MatchaStackScreenPBView_FieldNumber_BackTextStyle = 3,
+  MatchaStackScreenPBView_FieldNumber_BarColor = 4,
 };
 
 @interface MatchaStackScreenPBView : GPBMessage
@@ -75,6 +80,18 @@ typedef GPB_ENUM(MatchaStackScreenPBView_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<MatchaStackScreenPBChildView*> *childrenArray;
 /** The number of items in @c childrenArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger childrenArray_Count;
+
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBTextStyle *titleTextStyle;
+/** Test to see if @c titleTextStyle has been set. */
+@property(nonatomic, readwrite) BOOL hasTitleTextStyle;
+
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBTextStyle *backTextStyle;
+/** Test to see if @c backTextStyle has been set. */
+@property(nonatomic, readwrite) BOOL hasBackTextStyle;
+
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBColor *barColor;
+/** Test to see if @c barColor has been set. */
+@property(nonatomic, readwrite) BOOL hasBarColor;
 
 @end
 

@@ -204,7 +204,7 @@ func (v *RootView) Build(ctx *view.Context) view.Model {
 }
 
 func (v *RootView) StackBar(ctx *view.Context) *stackview.Bar {
-	return &stackview.Bar{Title: "Settings"}
+	return &stackview.Bar{Title: "Settings Example"}
 }
 
 var (

@@ -30,8 +30,18 @@ func init() {
 		stack := &stackview.Stack{}
 		stack.SetViews(app)
 
+		titleTextStyle := &text.Style{}
+		titleTextStyle.SetFont(text.Font{
+			Family: "Helvetica Neue",
+			Face:   "Medium",
+			Size:   20,
+		})
+		titleTextStyle.SetTextColor(colornames.White)
+
 		v := stackview.New(nil, "")
 		v.Stack = stack
+		v.BarColor = color.RGBA{R: 46, G: 124, B: 190, A: 1}
+		v.TitleTextStyle = titleTextStyle
 		return view.NewRoot(v)
 	})
 }
@@ -85,6 +95,10 @@ func (v *AppView) Build(ctx *view.Context) view.Model {
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: colornames.White},
 	}
+}
+
+func (v *AppView) StackBar(ctx *view.Context) *stackview.Bar {
+	return &stackview.Bar{Title: "To Do Example"}
 }
 
 type AddView struct {

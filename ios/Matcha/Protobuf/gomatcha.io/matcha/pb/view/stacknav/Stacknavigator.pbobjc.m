@@ -14,6 +14,8 @@
 #endif
 
  #import "gomatcha.io/matcha/pb/view/stacknav/Stacknavigator.pbobjc.h"
+ #import "gomatcha.io/matcha/pb/Color.pbobjc.h"
+ #import "gomatcha.io/matcha/pb/text/Text.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -23,8 +25,8 @@
 
 @implementation MatchaStackScreenPBStacknavigatorRoot
 
-// No extensions in the file and no imports, so no need to generate
-// +extensionRegistry.
+// No extensions in the file and none of the imports (direct or indirect)
+// defined extensions, so no need to generate +extensionRegistry.
 
 @end
 
@@ -118,10 +120,16 @@ typedef struct MatchaStackScreenPBChildView__storage_ {
 @implementation MatchaStackScreenPBView
 
 @dynamic childrenArray, childrenArray_Count;
+@dynamic hasTitleTextStyle, titleTextStyle;
+@dynamic hasBackTextStyle, backTextStyle;
+@dynamic hasBarColor, barColor;
 
 typedef struct MatchaStackScreenPBView__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *childrenArray;
+  MatchaPBTextStyle *titleTextStyle;
+  MatchaPBTextStyle *backTextStyle;
+  MatchaPBColor *barColor;
 } MatchaStackScreenPBView__storage_;
 
 // This method is threadsafe because it is initially called
@@ -139,6 +147,33 @@ typedef struct MatchaStackScreenPBView__storage_ {
         .flags = GPBFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
+      {
+        .name = "titleTextStyle",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBTextStyle),
+        .number = MatchaStackScreenPBView_FieldNumber_TitleTextStyle,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(MatchaStackScreenPBView__storage_, titleTextStyle),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "backTextStyle",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBTextStyle),
+        .number = MatchaStackScreenPBView_FieldNumber_BackTextStyle,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MatchaStackScreenPBView__storage_, backTextStyle),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "barColor",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBColor),
+        .number = MatchaStackScreenPBView_FieldNumber_BarColor,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MatchaStackScreenPBView__storage_, barColor),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MatchaStackScreenPBView class]
@@ -148,6 +183,11 @@ typedef struct MatchaStackScreenPBView__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(MatchaStackScreenPBView__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\003\002\016\000\003\r\000\004\010\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
     descriptor = localDescriptor;
   }

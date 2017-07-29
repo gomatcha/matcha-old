@@ -1,5 +1,7 @@
 syntax = "proto3";
 package matcha.view.stacknav;
+import "gomatcha.io/matcha/pb/color.proto";
+import "gomatcha.io/matcha/pb/text/text.proto";
 
 option go_package = "stacknav";
 option objc_class_prefix = "MatchaStackScreenPB";
@@ -12,6 +14,9 @@ message ChildView {
 
 message View {
     repeated ChildView children = 1;
+    matcha.text.TextStyle titleTextStyle = 2;
+    matcha.text.TextStyle backTextStyle = 3;
+    matcha.Color barColor = 4;
 }
 
 message Bar {

@@ -59,6 +59,12 @@
         return;
     }
     self.prevIds = prevIds;
+    self.navigationBar.barTintColor = view.hasBarColor ? [[UIColor alloc] initWithProtobuf:view.barColor] : nil;
+    self.navigationBar.titleTextAttributes = view.hasTitleTextStyle ? [NSAttributedString attributesWithProtobuf:view.titleTextStyle] : nil;
+    if (view.hasBackTextStyle) {
+        [[UIBarButtonItem appearance] setTitleTextAttributes:[NSAttributedString attributesWithProtobuf:view.backTextStyle] forState:UIControlStateNormal];
+    }
+
     
     NSMutableArray *viewControllers = [NSMutableArray array];
     for (MatchaStackScreenPBChildView *i in view.childrenArray) {
