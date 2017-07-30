@@ -100,7 +100,6 @@ type Model struct {
 	Layouter layout.Layouter
 	Painter  paint.Painter
 	Options  []Option
-	Values   map[string]interface{}
 
 	NativeViewName  string
 	NativeViewState proto.Message
@@ -124,23 +123,18 @@ func (v *painterView) Build(ctx *Context) Model {
 	return m
 }
 
-// WithValues wraps the view v, and adds the given values to its Model.Values.
-func WithValues(v View, vals map[string]interface{}) View {
-	return &valuesView{View: v, values: vals}
+// WithOptions wraps the view v, and adds the given options to its Model.Options.
+func WithOptions(v View, opts []Option) View {
+	return &optionsView{View: v, options: opts}
 }
 
-type valuesView struct {
+type optionsView struct {
 	View
-	values map[string]interface{}
+	options []Option
 }
 
-func (v *valuesView) Build(ctx *Context) Model {
+func (v *optionsView) Build(ctx *Context) Model {
 	m := v.View.Build(ctx)
-	if m.Values == nil {
-		m.Values = map[string]interface{}{}
-	}
-	for k, val := range v.values {
-		m.Values[k] = val
-	}
+	m.Options = append(m.Options, v.options...)
 	return m
 }

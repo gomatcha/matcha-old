@@ -179,7 +179,7 @@ func (ctx *Context) prev(key string, prefix string) View {
 		if pv, ok := v.(*painterView); ok {
 			v = pv.View
 			continue
-		} else if vv, ok := v.(*valuesView); ok {
+		} else if vv, ok := v.(*optionsView); ok {
 			v = vv.View
 			continue
 		}
