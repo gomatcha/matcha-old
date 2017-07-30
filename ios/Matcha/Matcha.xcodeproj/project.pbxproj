@@ -17,6 +17,12 @@
 		673181AC1F15F7C600E1839E /* MatchaSegmentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 673181AA1F15F7C600E1839E /* MatchaSegmentView.m */; };
 		673181B01F15F81B00E1839E /* Segmentview.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 673181AE1F15F81B00E1839E /* Segmentview.pbobjc.h */; };
 		673181B11F15F81B00E1839E /* Segmentview.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 673181AF1F15F81B00E1839E /* Segmentview.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6759EE521F2E632C00B8E0A9 /* MatchaMiddleware.h in Headers */ = {isa = PBXBuildFile; fileRef = 6759EE501F2E632C00B8E0A9 /* MatchaMiddleware.h */; };
+		6759EE531F2E632C00B8E0A9 /* MatchaMiddleware.m in Sources */ = {isa = PBXBuildFile; fileRef = 6759EE511F2E632C00B8E0A9 /* MatchaMiddleware.m */; };
+		6759EE561F2E64EC00B8E0A9 /* MatchaStatusBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 6759EE541F2E64EC00B8E0A9 /* MatchaStatusBar.h */; };
+		6759EE571F2E64EC00B8E0A9 /* MatchaStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6759EE551F2E64EC00B8E0A9 /* MatchaStatusBar.m */; };
+		6759EE5B1F2E686A00B8E0A9 /* Statusbar.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 6759EE591F2E686A00B8E0A9 /* Statusbar.pbobjc.h */; };
+		6759EE5C1F2E686A00B8E0A9 /* Statusbar.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6759EE5A1F2E686A00B8E0A9 /* Statusbar.pbobjc.m */; };
 		67F927091F27FFBB00C068AF /* Alert.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67F927071F27FFBB00C068AF /* Alert.pbobjc.h */; };
 		67F9270A1F27FFBB00C068AF /* Alert.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67F927081F27FFBB00C068AF /* Alert.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67FEBA701F099EDF005AFEDA /* Matcha.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBA6E1F099EDF005AFEDA /* Matcha.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -109,6 +115,12 @@
 		673181AA1F15F7C600E1839E /* MatchaSegmentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaSegmentView.m; sourceTree = "<group>"; };
 		673181AE1F15F81B00E1839E /* Segmentview.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Segmentview.pbobjc.h; sourceTree = "<group>"; };
 		673181AF1F15F81B00E1839E /* Segmentview.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Segmentview.pbobjc.m; sourceTree = "<group>"; };
+		6759EE501F2E632C00B8E0A9 /* MatchaMiddleware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaMiddleware.h; sourceTree = "<group>"; };
+		6759EE511F2E632C00B8E0A9 /* MatchaMiddleware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaMiddleware.m; sourceTree = "<group>"; };
+		6759EE541F2E64EC00B8E0A9 /* MatchaStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchaStatusBar.h; sourceTree = "<group>"; };
+		6759EE551F2E64EC00B8E0A9 /* MatchaStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchaStatusBar.m; sourceTree = "<group>"; };
+		6759EE591F2E686A00B8E0A9 /* Statusbar.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Statusbar.pbobjc.h; sourceTree = "<group>"; };
+		6759EE5A1F2E686A00B8E0A9 /* Statusbar.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Statusbar.pbobjc.m; sourceTree = "<group>"; };
 		67F927071F27FFBB00C068AF /* Alert.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alert.pbobjc.h; sourceTree = "<group>"; };
 		67F927081F27FFBB00C068AF /* Alert.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Alert.pbobjc.m; sourceTree = "<group>"; };
 		67FEBA6B1F099EDF005AFEDA /* Matcha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Matcha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -241,6 +253,15 @@
 			path = segmentview;
 			sourceTree = "<group>";
 		};
+		6759EE581F2E686A00B8E0A9 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				6759EE591F2E686A00B8E0A9 /* Statusbar.pbobjc.h */,
+				6759EE5A1F2E686A00B8E0A9 /* Statusbar.pbobjc.m */,
+			);
+			path = app;
+			sourceTree = "<group>";
+		};
 		67783C521F1DFD6C001582F5 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -289,6 +310,10 @@
 				67FEBAE61F09A18F005AFEDA /* MatchaProtobuf.m */,
 				67FEBAEB1F09A18F005AFEDA /* MatchaObjcBridge.h */,
 				67FEBAEA1F09A18F005AFEDA /* MatchaObjcBridge.m */,
+				6759EE501F2E632C00B8E0A9 /* MatchaMiddleware.h */,
+				6759EE511F2E632C00B8E0A9 /* MatchaMiddleware.m */,
+				6759EE541F2E64EC00B8E0A9 /* MatchaStatusBar.h */,
+				6759EE551F2E64EC00B8E0A9 /* MatchaStatusBar.m */,
 				67FEBB291F09AD17005AFEDA /* Touch */,
 				67FEBB2A1F09AD3C005AFEDA /* View */,
 				67783C521F1DFD6C001582F5 /* Utilities */,
@@ -324,6 +349,7 @@
 		67FEBA791F099F1D005AFEDA /* pb */ = {
 			isa = PBXGroup;
 			children = (
+				6759EE581F2E686A00B8E0A9 /* app */,
 				67FEBA7A1F099F1D005AFEDA /* Color.pbobjc.h */,
 				67FEBA7B1F099F1D005AFEDA /* Color.pbobjc.m */,
 				67FEBA7C1F099F1D005AFEDA /* env */,
@@ -641,6 +667,7 @@
 				67FEBAB11F099F1D005AFEDA /* Keyboard.pbobjc.h in Headers */,
 				67FEBABB1F099F1D005AFEDA /* Button.pbobjc.h in Headers */,
 				67FEBAFF1F09A18F005AFEDA /* MatchaTextInput.h in Headers */,
+				6759EE521F2E632C00B8E0A9 /* MatchaMiddleware.h in Headers */,
 				67FEBB1D1F09A18F005AFEDA /* MatchaBridge.h in Headers */,
 				67FEBAC51F099F1D005AFEDA /* Switchview.pbobjc.h in Headers */,
 				67FEBB071F09A18F005AFEDA /* MatchaStackScreen.h in Headers */,
@@ -648,6 +675,7 @@
 				67FEBB3A1F0A2048005AFEDA /* MatchaTextView.h in Headers */,
 				673181A21F0DB38F00E1839E /* MatchaProgressView.h in Headers */,
 				67FEBAAD1F099F1D005AFEDA /* Resource.pbobjc.h in Headers */,
+				6759EE561F2E64EC00B8E0A9 /* MatchaStatusBar.h in Headers */,
 				67FEBAB51F099F1D005AFEDA /* Paint.pbobjc.h in Headers */,
 				67FEBAC31F099F1D005AFEDA /* Stacknavigator.pbobjc.h in Headers */,
 				67FEBB0D1F09A18F005AFEDA /* MatchaProtobuf.h in Headers */,
@@ -666,6 +694,7 @@
 				67FEBAB31F099F1D005AFEDA /* Layout.pbobjc.h in Headers */,
 				673181A61F14667900E1839E /* UITextView+Placeholder.h in Headers */,
 				67FEBB031F09A18F005AFEDA /* MatchaTabScreen.h in Headers */,
+				6759EE5B1F2E686A00B8E0A9 /* Statusbar.pbobjc.h in Headers */,
 				67FEBB051F09A18F005AFEDA /* MatchaSwitchView.h in Headers */,
 				67F927091F27FFBB00C068AF /* Alert.pbobjc.h in Headers */,
 				67FEBB011F09A18F005AFEDA /* MatchaTapGestureRecognizer.h in Headers */,
@@ -747,6 +776,7 @@
 				67FEBB041F09A18F005AFEDA /* MatchaSwitchView.m in Sources */,
 				67FEBACA1F099F1D005AFEDA /* Textinput.pbobjc.m in Sources */,
 				67FEBB081F09A18F005AFEDA /* MatchaSlider.m in Sources */,
+				6759EE571F2E64EC00B8E0A9 /* MatchaStatusBar.m in Sources */,
 				67FEBAB41F099F1D005AFEDA /* Layout.pbobjc.m in Sources */,
 				67FEBAC01F099F1D005AFEDA /* Scrollview.pbobjc.m in Sources */,
 				673181B11F15F81B00E1839E /* Segmentview.pbobjc.m in Sources */,
@@ -769,7 +799,9 @@
 				67FEBABA1F099F1D005AFEDA /* Touch2.pbobjc.m in Sources */,
 				67F9270A1F27FFBB00C068AF /* Alert.pbobjc.m in Sources */,
 				6731819E1F0DAB3400E1839E /* Progressview.pbobjc.m in Sources */,
+				6759EE531F2E632C00B8E0A9 /* MatchaMiddleware.m in Sources */,
 				673181A71F14667900E1839E /* UITextView+Placeholder.m in Sources */,
+				6759EE5C1F2E686A00B8E0A9 /* Statusbar.pbobjc.m in Sources */,
 				67FEBAC61F099F1D005AFEDA /* Switchview.pbobjc.m in Sources */,
 				67FEBB001F09A18F005AFEDA /* MatchaTapGestureRecognizer.m in Sources */,
 				67FEBAF81F09A18F005AFEDA /* MatchaViewController.m in Sources */,

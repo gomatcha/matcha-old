@@ -4,6 +4,7 @@
 @interface MatchaNodeRoot ()
 @property (nonatomic, strong) GPBInt64ObjectDictionary<MatchaViewPBLayoutPaintNode*> *layoutPaintNodes;
 @property (nonatomic, strong) GPBInt64ObjectDictionary<MatchaViewPBBuildNode*> *buildNodes;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, GPBAny*> *middleware;
 @end
 
 @implementation MatchaNodeRoot
@@ -11,6 +12,7 @@
     if ((self = [super init])) {
         self.layoutPaintNodes = pbroot.layoutPaintNodes;
         self.buildNodes = pbroot.buildNodes;
+        self.middleware = pbroot.middleware;
     }
     return self;
 }

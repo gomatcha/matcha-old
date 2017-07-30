@@ -44,4 +44,5 @@ message LayoutPaintNode {
 message Root {
   map<int64, LayoutPaintNode> layoutPaintNodes = 2;
   map<int64, BuildNode> buildNodes = 3;
+  map<string, google.protobuf.Any> middleware = 4;
 }

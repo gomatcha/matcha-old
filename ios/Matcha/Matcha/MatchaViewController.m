@@ -3,6 +3,7 @@
 #import "MatchaBridge.h"
 #import "MatchaNode.h"
 #import "MatchaObjcBridge.h"
+#import "MatchaProtobuf.h"
 
 @interface MatchaViewController ()
 @property (nonatomic, assign) NSInteger identifier;
@@ -31,6 +32,7 @@
     }
     return nil;
 }
+
 - (id)initWithGoValue:(MatchaGoValue *)value {
     if ((self = [super initWithNibName:nil bundle:nil])) {
         [[MatchaObjcBridge sharedBridge] configure];
@@ -65,10 +67,16 @@
     return [self.goValue call:@"Call" args:@[goValue, goViewId, goArgs]];
 }
 
-
 - (void)update:(MatchaNodeRoot *)root {
     self.updating = true;
     [self.viewNode setRoot:root];
+    
+    GPBAny *any = root.middleware[@"gomatcha.io/matcha/app activity"];
+    if (any) {
+        MatchaAppPBActivityIndicator *indicator = (id)[any unpackMessageClass:[MatchaAppPBActivityIndicator class] error:NULL];
+        [UIApplication.sharedApplication setNetworkActivityIndicatorVisible:indicator.visible];
+    }
+    
     if (!self.loaded) {
         self.loaded = TRUE;
         UIView *view = self.viewNode.view ?: self.viewNode.viewController.view;

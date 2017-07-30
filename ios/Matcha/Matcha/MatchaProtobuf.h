@@ -22,6 +22,7 @@
 #import "ProgressView.pbobjc.h"
 #import "SegmentView.pbobjc.h"
 #import "Alert.pbobjc.h"
+#import "Statusbar.pbobjc.h"
 
 @interface UIColor (Matcha)
 - (id)initWithProtobuf:(MatchaPBColor *)value;

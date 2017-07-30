@@ -28,6 +28,8 @@ var maxId int64
 // Middleware is called on the result of View.Build(*context).
 type middleware interface {
 	Build(*Context, *Model)
+	MarshalProtobuf() proto.Message
+	Key() string
 }
 
 type Root struct {
@@ -267,15 +269,15 @@ func (ctx *Context) WithPrefix(key string) *Context {
 // 	return ctx.node.id
 // }
 
-// func (ctx *Context) Path() []matcha.Id {
-// 	if ctx.parent != nil {
-// 		return ctx.parent.Path()
-// 	}
-// 	if ctx.node == nil {
-// 		return []matcha.Id{0}
-// 	}
-// 	return nil
-// }
+func (ctx *Context) Path() []matcha.Id {
+	if ctx.parent != nil {
+		return ctx.parent.Path()
+	}
+	if ctx.node == nil {
+		return []matcha.Id{0}
+	}
+	return ctx.node.path
+}
 
 type updateFlag int
 
@@ -367,9 +369,19 @@ func (root *root) MarshalProtobuf() *pb.Root {
 	m2 := map[int64]*pb.BuildNode{}
 	root.node.marshalBuildProtobuf(m2)
 
+	m3 := map[string]*any.Any{}
+	for _, i := range root.middlewares {
+		var _any *any.Any
+		if a, err := ptypes.MarshalAny(i.MarshalProtobuf()); err == nil {
+			_any = a
+		}
+		m3[i.Key()] = _any
+	}
+
 	return &pb.Root{
 		LayoutPaintNodes: m,
 		BuildNodes:       m2,
+		Middleware:       m3,
 	}
 }
 

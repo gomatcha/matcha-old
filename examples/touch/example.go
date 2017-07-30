@@ -134,6 +134,14 @@ func (v *PressChildView) Build(ctx *view.Context) view.Model {
 		Values: map[string]interface{}{
 			touch.Key: []touch.Recognizer{tap},
 		},
+		// Options: []view.Options{
+		// 	touch.Recognizers([]touch.Recognizer{tap}),
+		// 	app.ActivityIndicator{},
+		// 	app.StatusBar{
+		// 		Hidden: true,
+		// 		Style:StatusBarStyleLight,
+		// 	},
+		// },
 	}
 }
 

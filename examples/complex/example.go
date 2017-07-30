@@ -9,6 +9,7 @@ import (
 
 	"gomatcha.io/bridge"
 	"gomatcha.io/matcha/animate"
+	"gomatcha.io/matcha/app"
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/layout"
 	"gomatcha.io/matcha/layout/constraint"
@@ -262,6 +263,9 @@ func (v *NestedView) Build(ctx *view.Context) view.Model {
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
+		Values: map[string]interface{}{
+			app.ActivityIndicatorKey: v.counter%2 == 0,
+		},
 	}
 }
 

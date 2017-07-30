@@ -10,6 +10,7 @@ Medium:
 * Picker
 * TextField
 * Stack and Tab styles.
+* Optimize middleware so they aren't called on every view.
 
 Low:
 * Skip "ctx view.Context, key string, " paramater on views we know are top level?

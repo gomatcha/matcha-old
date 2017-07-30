@@ -145,6 +145,7 @@ typedef GPB_ENUM(MatchaViewPBLayoutPaintNode_FieldNumber) {
 typedef GPB_ENUM(MatchaViewPBRoot_FieldNumber) {
   MatchaViewPBRoot_FieldNumber_LayoutPaintNodes = 2,
   MatchaViewPBRoot_FieldNumber_BuildNodes = 3,
+  MatchaViewPBRoot_FieldNumber_Middleware = 4,
 };
 
 @interface MatchaViewPBRoot : GPBMessage
@@ -156,6 +157,10 @@ typedef GPB_ENUM(MatchaViewPBRoot_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) GPBInt64ObjectDictionary<MatchaViewPBBuildNode*> *buildNodes;
 /** The number of items in @c buildNodes without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger buildNodes_Count;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableDictionary<NSString*, GPBAny*> *middleware;
+/** The number of items in @c middleware without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger middleware_Count;
 
 @end
 

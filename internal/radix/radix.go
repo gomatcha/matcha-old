@@ -16,6 +16,10 @@ func NewRadix() *Radix {
 	}
 }
 
+func (r *Radix) Range(f func(path []int64, node *Node)) {
+	r.root._range([]int64{}, f)
+}
+
 func (r *Radix) Insert(path []int64) *Node {
 	return r.root.insert(path)
 }
@@ -25,11 +29,11 @@ func (r *Radix) At(path []int64) *Node {
 }
 
 func (r *Radix) Delete(path []int64) {
-	// Cannot delete root node.
-	if len(path) == 0 {
-		return
+	remove := r.root.delete(path)
+	if remove {
+		r.root.Value = nil
+		r.root.exists = false
 	}
-	r.root.delete(path)
 }
 
 func (r *Radix) String() string {
@@ -40,6 +44,18 @@ type Node struct {
 	children map[int64]*Node
 	exists   bool
 	Value    interface{}
+}
+
+func (n *Node) _range(p []int64, f func(path []int64, node *Node)) {
+	if n.exists {
+		f(p, n)
+	}
+
+	p = append(p, 0)
+	for id, i := range n.children {
+		p[len(p)-1] = id
+		i._range(p, f)
+	}
 }
 
 func (n *Node) insert(path []int64) *Node {
@@ -76,11 +92,13 @@ func (n *Node) at(path []int64) *Node {
 func (n *Node) delete(path []int64) bool {
 	if len(path) == 0 {
 		if len(n.children) == 0 { // If node has no children, remove self.
+			n.exists = false
 			n.Value = nil
 			return true
 		}
 		// Otherwise mark as non-existant.
 		n.exists = false
+		n.Value = nil
 		return false
 	}
 

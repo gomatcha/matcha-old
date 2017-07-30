@@ -306,11 +306,13 @@ typedef struct MatchaViewPBLayoutPaintNode__storage_ {
 
 @dynamic layoutPaintNodes, layoutPaintNodes_Count;
 @dynamic buildNodes, buildNodes_Count;
+@dynamic middleware, middleware_Count;
 
 typedef struct MatchaViewPBRoot__storage_ {
   uint32_t _has_storage_[1];
   GPBInt64ObjectDictionary *layoutPaintNodes;
   GPBInt64ObjectDictionary *buildNodes;
+  NSMutableDictionary *middleware;
 } MatchaViewPBRoot__storage_;
 
 // This method is threadsafe because it is initially called
@@ -335,6 +337,15 @@ typedef struct MatchaViewPBRoot__storage_ {
         .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(MatchaViewPBRoot__storage_, buildNodes),
         .flags = (GPBFieldFlags)(GPBFieldMapKeyInt64 | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "middleware",
+        .dataTypeSpecific.className = GPBStringifySymbol(GPBAny),
+        .number = MatchaViewPBRoot_FieldNumber_Middleware,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(MatchaViewPBRoot__storage_, middleware),
+        .flags = GPBFieldMapKeyString,
         .dataType = GPBDataTypeMessage,
       },
     };

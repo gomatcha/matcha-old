@@ -18,6 +18,7 @@
 - (id)initWithProtobuf:(MatchaViewPBRoot *)data;
 @property (nonatomic, readonly) GPBInt64ObjectDictionary *layoutPaintNodes;
 @property (nonatomic, readonly) GPBInt64ObjectDictionary *buildNodes;
+@property (nonatomic, readonly) NSMutableDictionary<NSString*, GPBAny*> *middleware;
 @end
 
 @interface MatchaBuildNode : NSObject

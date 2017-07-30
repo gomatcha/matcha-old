@@ -1,6 +1,7 @@
 package pb
 
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/*.proto )"
+//go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/app/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/env/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/text/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/touch/*.proto )"
@@ -21,6 +22,7 @@ package pb
 //go:generate bash -c "( cd $GOPATH/src && protoc --go_out=. gomatcha.io/matcha/pb/view/alert/*.proto )"
 
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=gomatcha.io/matcha/ios/Matcha/Protobuf gomatcha.io/matcha/pb/*.proto )"
+//go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=gomatcha.io/matcha/ios/Matcha/Protobuf gomatcha.io/matcha/pb/app/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=gomatcha.io/matcha/ios/Matcha/Protobuf gomatcha.io/matcha/pb/env/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=gomatcha.io/matcha/ios/Matcha/Protobuf gomatcha.io/matcha/pb/text/*.proto )"
 //go:generate bash -c "( cd $GOPATH/src && protoc --objc_out=gomatcha.io/matcha/ios/Matcha/Protobuf gomatcha.io/matcha/pb/touch/*.proto )"
