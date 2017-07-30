@@ -14,10 +14,17 @@ const (
 	// values[app.StatusBarKey] = &StatusBar{Hidden:false, Style:StatusBarStyleLight}
 	StatusBarKey = "gomatcha.io/matcha/app statusbar"
 
-	// If any view has set the ActivityIndicatorKey set to true, the activity indicator will be visible.
-	// values[app.ActivityIndicatorKey] = true
-	ActivityIndicatorKey = "gomatcha.io/matcha/app activity"
+	// If any view has set the activityIndicatorKey set to true, the activity indicator will be visible.
+	// values[app.activityIndicatorKey] = true
+	activityIndicatorKey = "gomatcha.io/matcha/app activity"
 )
+
+type ActivityIndicator struct {
+}
+
+func (a ActivityIndicator) OptionsKey() string {
+	return "gomatcha.io/matcha/app activity"
+}
 
 type StatusBarStyle int
 
@@ -40,7 +47,7 @@ type statusBarMiddleware struct {
 // 	path := idSliceToIntSlice(ctx.Path())
 
 // 	add := false
-// 	val, ok := model.Values[ActivityIndicatorKey]
+// 	val, ok := model.Values[activityIndicatorKey]
 // 	if ok {
 // 		if val2, ok := val.(bool); ok {
 // 			add = val2
@@ -64,12 +71,12 @@ type statusBarMiddleware struct {
 // }
 
 // func (m *statusBarMiddleware) Key() string {
-// 	return ActivityIndicatorKey
+// 	return activityIndicatorKey
 // }
 
 func init() {
 	internal.RegisterMiddleware(func() interface{} {
-		return &statusBarMiddleware{
+		return &activityIndicatorMiddleware{
 			radix: radix.NewRadix(),
 		}
 	})
@@ -83,10 +90,9 @@ func (m *activityIndicatorMiddleware) Build(ctx *view.Context, model *view.Model
 	path := idSliceToIntSlice(ctx.Path())
 
 	add := false
-	val, ok := model.Values[ActivityIndicatorKey]
-	if ok {
-		if val2, ok := val.(bool); ok {
-			add = val2
+	for _, i := range model.Options {
+		if _, ok := i.(ActivityIndicator); ok {
+			add = true
 		}
 	}
 	if add {
@@ -107,7 +113,7 @@ func (m *activityIndicatorMiddleware) MarshalProtobuf() proto.Message {
 }
 
 func (m *activityIndicatorMiddleware) Key() string {
-	return ActivityIndicatorKey
+	return activityIndicatorKey
 }
 
 func idSliceToIntSlice(ids []matcha.Id) []int64 {

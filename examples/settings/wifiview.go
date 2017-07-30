@@ -400,8 +400,8 @@ func (v *InfoButton) Build(ctx *view.Context) view.Model {
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  v.PaintStyle,
-		Values: map[string]interface{}{
-			touch.Key: []touch.Recognizer{button},
+		Options: []view.Option{
+			touch.RecognizerList{button},
 		},
 	}
 }

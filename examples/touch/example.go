@@ -131,9 +131,12 @@ func (v *PressChildView) Build(ctx *view.Context) view.Model {
 
 	return view.Model{
 		Painter: &paint.Style{BackgroundColor: colornames.Blue},
-		Values: map[string]interface{}{
-			touch.Key: []touch.Recognizer{tap},
+		Options: []view.Option{
+			touch.RecognizerList{tap},
 		},
+		// Values: map[string]interface{}{
+		// 	touch.Key: []touch.Recognizer{tap},
+		// },
 		// Options: []view.Options{
 		// 	touch.Recognizers([]touch.Recognizer{tap}),
 		// 	app.ActivityIndicator{},
@@ -169,8 +172,8 @@ func (v *TouchChildView) Build(ctx *view.Context) view.Model {
 
 	return view.Model{
 		Painter: &paint.Style{BackgroundColor: colornames.Blue},
-		Values: map[string]interface{}{
-			touch.Key: []touch.Recognizer{tap},
+		Options: []view.Option{
+			touch.RecognizerList{tap},
 		},
 	}
 }
@@ -198,8 +201,8 @@ func (v *ButtonChildView) Build(ctx *view.Context) view.Model {
 
 	return view.Model{
 		Painter: &paint.Style{BackgroundColor: colornames.Blue},
-		Values: map[string]interface{}{
-			touch.Key: []touch.Recognizer{button},
+		Options: []view.Option{
+			touch.RecognizerList{button},
 		},
 	}
 }

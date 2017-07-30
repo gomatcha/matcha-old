@@ -33,23 +33,21 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
+	"gomatcha.io/matcha"
 	"gomatcha.io/matcha/internal"
+	"gomatcha.io/matcha/internal/radix"
 	"gomatcha.io/matcha/layout"
 	pbtouch "gomatcha.io/matcha/pb/touch"
 	"gomatcha.io/matcha/view"
 )
 
 func init() {
-	Key = "gomatcha.io/matcha/touch"
-	internal.RegisterMiddleware(func() interface{} { return &middleware{} })
+	internal.RegisterMiddleware(func() interface{} { return &middleware{radix: radix.NewRadix()} })
 }
-
-// Key is the key to use in view.Model.Values. The corresponding value should be a []touch.Recognizer.
-var Key string
-var idKey = "gomatcha.io/matcha/touch2"
 
 type middleware struct {
 	maxId int64
+	radix *radix.Radix
 }
 
 var maxFuncId int64 = 0
@@ -64,21 +62,20 @@ func (r *middleware) MarshalProtobuf() proto.Message {
 }
 
 func (r *middleware) Build(ctx *view.Context, next *view.Model) {
+	path := idSliceToIntSlice(ctx.Path())
+	node := r.radix.At(path)
 	var prevIds map[int64]Recognizer
-	if prevModel := ctx.PrevModel(); prevModel != nil && prevModel.Values != nil {
-		prevIds, _ = prevModel.Values[idKey].(map[int64]Recognizer)
+	if node != nil {
+		prevIds, _ = node.Value.(map[int64]Recognizer)
 	}
 
 	ids := map[int64]Recognizer{}
 
-	var rs []Recognizer
-	rs1, ok := next.Values[Key]
-	if ok {
-		rs2, ok := rs1.([]Recognizer)
-		if !ok {
-			fmt.Println("Value for recognizer key is not a []touch.Recognizer")
-		} else {
-			rs = rs2
+	var rs RecognizerList
+	for _, i := range next.Options {
+		rs, _ = i.(RecognizerList)
+		if rs != nil {
+			break
 		}
 	}
 
@@ -108,14 +105,15 @@ func (r *middleware) Build(ctx *view.Context, next *view.Model) {
 	}
 
 	if len(ids) == 0 {
+		r.radix.Delete(path)
 		return
 	}
 
 	// Add new list back to next.
-	if next.Values == nil {
-		next.Values = map[string]interface{}{}
+	if node == nil {
+		node = r.radix.Insert(path)
 	}
-	next.Values[idKey] = ids
+	node.Value = ids
 
 	// Serialize into protobuf.
 	pbRecognizers := &pbtouch.RecognizerList{}
@@ -151,7 +149,13 @@ func (r *middleware) Build(ctx *view.Context, next *view.Model) {
 }
 
 func (r *middleware) Key() string {
-	return Key
+	return "gomatcha.io/matcha/touch"
+}
+
+type RecognizerList []Recognizer
+
+func (r RecognizerList) OptionsKey() string {
+	return "gomatcha.io/matcha/touch"
 }
 
 type Recognizer interface {
@@ -364,4 +368,12 @@ func (r *ButtonRecognizer) marshalProtobuf(ctx *view.Context) (proto.Message, ma
 		}, map[string]interface{}{
 			strconv.Itoa(int(funcId)): f,
 		}
+}
+
+func idSliceToIntSlice(ids []matcha.Id) []int64 {
+	ints := make([]int64, len(ids))
+	for idx, i := range ids {
+		ints[idx] = int64(i)
+	}
+	return ints
 }

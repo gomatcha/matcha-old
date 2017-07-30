@@ -17,6 +17,10 @@ type View interface {
 	comm.Notifier
 }
 
+type Option interface {
+	OptionsKey() string
+}
+
 // Embed is a convenience struct that provides a default implementation of View. It also wraps a comm.Relay.
 type Embed struct {
 	mu    sync.Mutex
@@ -95,6 +99,7 @@ type Model struct {
 	Children []View
 	Layouter layout.Layouter
 	Painter  paint.Painter
+	Options  []Option
 	Values   map[string]interface{}
 
 	NativeViewName  string

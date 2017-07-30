@@ -490,7 +490,7 @@ func (v *BasicCell) Build(ctx *view.Context) view.Model {
 	})
 	_ = titleGuide
 
-	values := map[string]interface{}{}
+	var options []view.Option
 	if v.OnTap != nil {
 		tap := &touch.ButtonRecognizer{
 			OnTouch: func(e *touch.ButtonEvent) {
@@ -506,7 +506,7 @@ func (v *BasicCell) Build(ctx *view.Context) view.Model {
 				v.Signal()
 			},
 		}
-		values[touch.Key] = []touch.Recognizer{tap}
+		options = append(options, touch.RecognizerList{tap})
 	}
 
 	var color color.Color
@@ -520,6 +520,6 @@ func (v *BasicCell) Build(ctx *view.Context) view.Model {
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: color},
-		Values:   values,
+		Options:  options,
 	}
 }

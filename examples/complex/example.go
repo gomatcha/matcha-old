@@ -259,13 +259,16 @@ func (v *NestedView) Build(ctx *view.Context) view.Model {
 		s.Width(150)
 	})
 
+	options := []view.Option{}
+	if v.counter%2 == 0 {
+		options = append(options, app.ActivityIndicator{})
+	}
+
 	return view.Model{
 		Children: l.Views(),
 		Layouter: l,
 		Painter:  &paint.Style{BackgroundColor: colornames.Green},
-		Values: map[string]interface{}{
-			app.ActivityIndicatorKey: v.counter%2 == 0,
-		},
+		Options:  options,
 	}
 }
 
