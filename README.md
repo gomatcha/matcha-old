@@ -12,7 +12,7 @@ Matcha is a package for building iOS applications and frameworks in Go. Matcha p
 
 ### Examples
 
-[![settings-example](docs/settings.gif)](https://youtu.be/UI4xqGYqSAQ) [![settings-example](docs/settings.gif)](https://youtu.be/UI4xqGYqSAQ) [![settings-example](docs/settings.gif)](https://youtu.be/UI4xqGYqSAQ)
+[![settings-example](docs/settings.gif)](https://github.com/gomatcha/matcha/tree/master/examples/settings) [![todo-example](docs/todo.gif)](https://github.com/gomatcha/matcha/tree/master/examples/todo)
 
 ### Getting Started
 
