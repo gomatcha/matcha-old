@@ -3,12 +3,16 @@ package tabview
 import (
 	"fmt"
 	"image"
+	"image/color"
 
 	"github.com/gogo/protobuf/proto"
 	"gomatcha.io/matcha/app"
 	"gomatcha.io/matcha/comm"
 	"gomatcha.io/matcha/layout/constraint"
+	"gomatcha.io/matcha/pb"
+	pbtext "gomatcha.io/matcha/pb/text"
 	tabnavpb "gomatcha.io/matcha/pb/view/tabscreen"
+	"gomatcha.io/matcha/text"
 	"gomatcha.io/matcha/view"
 )
 
@@ -48,8 +52,13 @@ func (s *Tabs) Unnotify(id comm.Id) {
 
 type View struct {
 	view.Embed
-	Tabs *Tabs
-	tabs *Tabs
+	Tabs                *Tabs
+	BarColor            color.Color
+	SelectedTextStyle   *text.Style
+	UnselectedTextStyle *text.Style
+	SelectedColor       color.Color
+	UnselectedColor     color.Color
+	tabs                *Tabs
 }
 
 func New(ctx *view.Context, key string) *View {
@@ -113,6 +122,43 @@ func (v *View) Build(ctx *view.Context) view.Model {
 		})
 	}
 
+	var selectedTextStyle *pbtext.TextStyle
+	if v.SelectedTextStyle != nil {
+		selectedTextStyle = v.SelectedTextStyle.MarshalProtobuf()
+	}
+
+	var unselectedTextStyle *pbtext.TextStyle
+	if v.UnselectedTextStyle != nil {
+		unselectedTextStyle = v.UnselectedTextStyle.MarshalProtobuf()
+	}
+
+	return view.Model{
+		Children:       l.Views(),
+		Layouter:       l,
+		NativeViewName: "gomatcha.io/matcha/view/tabscreen",
+		NativeViewState: &tabnavpb.View{
+			Screens:             childrenPb,
+			SelectedIndex:       int64(v.Tabs.SelectedIndex()),
+			BarColor:            pb.ColorEncode(v.BarColor),
+			SelectedColor:       pb.ColorEncode(v.SelectedColor),
+			UnselectedColor:     pb.ColorEncode(v.UnselectedColor),
+			SelectedTextStyle:   selectedTextStyle,
+			UnselectedTextStyle: unselectedTextStyle,
+		},
+		NativeFuncs: map[string]interface{}{
+			"OnSelect": func(data []byte) {
+				pbevent := &tabnavpb.Event{}
+				err := proto.Unmarshal(data, pbevent)
+				if err != nil {
+					fmt.Println("error", err)
+					return
+				}
+
+				v.Tabs.SetSelectedIndex(int(pbevent.SelectedIndex))
+			},
+		},
+	}
+
 	// children := map[int64]view.View{}
 	// childrenPb := []*tabnavpb.ChildView{}
 	// v.ids = append([]int64(nil), v.Group.ids...)
@@ -163,28 +209,6 @@ func (v *View) Build(ctx *view.Context) view.Model {
 	// 	v.Unsubscribe(chld)
 	// }
 	// v.children = children
-
-	return view.Model{
-		Children:       l.Views(),
-		Layouter:       l,
-		NativeViewName: "gomatcha.io/matcha/view/tabscreen",
-		NativeViewState: &tabnavpb.View{
-			Screens:       childrenPb,
-			SelectedIndex: int64(v.Tabs.SelectedIndex()),
-		},
-		NativeFuncs: map[string]interface{}{
-			"OnSelect": func(data []byte) {
-				pbevent := &tabnavpb.Event{}
-				err := proto.Unmarshal(data, pbevent)
-				if err != nil {
-					fmt.Println("error", err)
-					return
-				}
-
-				v.Tabs.SetSelectedIndex(int(pbevent.SelectedIndex))
-			},
-		},
-	}
 }
 
 type ChildView interface {

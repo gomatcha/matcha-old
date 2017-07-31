@@ -22,8 +22,21 @@
 
 - (void)setMatchaChildViewControllers:(NSDictionary<NSNumber *, UIViewController *> *)childVCs {
     GPBAny *state = self.node.nativeViewState;
-    NSError *error = nil;
-    MatchaTabScreenPBView *pbTabNavigator = (id)[state unpackMessageClass:[MatchaTabScreenPBView class] error:&error];
+    MatchaTabScreenPBView *pbTabNavigator = (id)[state unpackMessageClass:[MatchaTabScreenPBView class] error:nil];
+    
+    self.tabBar.barTintColor = pbTabNavigator.hasBarColor ? [[UIColor alloc] initWithProtobuf:pbTabNavigator.barColor] : nil;
+    self.tabBar.tintColor = pbTabNavigator.hasBarColor ? [[UIColor alloc] initWithProtobuf:pbTabNavigator.selectedColor] : nil;
+    if ([self.tabBar respondsToSelector:@selector(unselectedItemTintColor)]) {
+        self.tabBar.unselectedItemTintColor = pbTabNavigator.hasUnselectedColor ? [[UIColor alloc] initWithProtobuf:pbTabNavigator.unselectedColor] : nil; // TODO(KD): iOS 10.10 only
+    }
+    if (pbTabNavigator.hasUnselectedTextStyle) {
+        [[UITabBarItem appearance] setTitleTextAttributes:[NSAttributedString attributesWithProtobuf:pbTabNavigator.unselectedTextStyle] forState:UIControlStateNormal];
+    }
+    if (pbTabNavigator.hasSelectedTextStyle) {
+        [[UITabBarItem appearance] setTitleTextAttributes:[NSAttributedString attributesWithProtobuf:pbTabNavigator.selectedTextStyle] forState:UIControlStateSelected];
+    }
+
+    
     NSMutableArray *viewControllers = [NSMutableArray array];
     for (MatchaTabScreenPBChildView *i in pbTabNavigator.screensArray) {
         UIViewController *vc = childVCs[@(i.id_p)];

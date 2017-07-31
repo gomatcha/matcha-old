@@ -2,7 +2,7 @@ High:
 * Take screenshots / videos of a running app.
 * Delay any ui events while viwecontroller is updating.
 * Scroll is forcing a relayout.
-* UIViewControllerBasedStatusBarAppearance
+* UIViewControllerBasedStatusBarAppearance add docs
 
 Medium:
 * Rotation / orientation
@@ -10,7 +10,6 @@ Medium:
 * Multiple view controllers.
 * Picker
 * TextField
-* Stack and Tab styles.
 * Optimize middleware so they aren't called on every view.
 
 Low:

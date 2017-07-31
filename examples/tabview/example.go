@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	bridge.RegisterFunc("gomatcha.io/matcha/examples/tabscreen New", func() *view.Root {
+	bridge.RegisterFunc("gomatcha.io/matcha/examples/tabview New", func() *view.Root {
 		return view.NewRoot(NewAppView())
 	})
 }
@@ -52,6 +52,9 @@ func NewAppView() view.View {
 	)
 
 	v := tabview.New(nil, "")
+	v.BarColor = colornames.Red
+	v.SelectedColor = colornames.Blue
+	v.UnselectedColor = colornames.Green
 	v.Tabs = app.tabs
 	return v
 }

@@ -15,6 +15,8 @@
 
  #import "gomatcha.io/matcha/pb/view/tabscreen/Tabscreen.pbobjc.h"
  #import "gomatcha.io/matcha/pb/Image.pbobjc.h"
+ #import "gomatcha.io/matcha/pb/Color.pbobjc.h"
+ #import "gomatcha.io/matcha/pb/text/Text.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -142,10 +144,20 @@ typedef struct MatchaTabScreenPBChildView__storage_ {
 
 @dynamic screensArray, screensArray_Count;
 @dynamic selectedIndex;
+@dynamic hasBarColor, barColor;
+@dynamic hasSelectedColor, selectedColor;
+@dynamic hasUnselectedColor, unselectedColor;
+@dynamic hasSelectedTextStyle, selectedTextStyle;
+@dynamic hasUnselectedTextStyle, unselectedTextStyle;
 
 typedef struct MatchaTabScreenPBView__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *screensArray;
+  MatchaPBColor *barColor;
+  MatchaPBColor *selectedColor;
+  MatchaPBColor *unselectedColor;
+  MatchaPBTextStyle *selectedTextStyle;
+  MatchaPBTextStyle *unselectedTextStyle;
   int64_t selectedIndex;
 } MatchaTabScreenPBView__storage_;
 
@@ -173,6 +185,51 @@ typedef struct MatchaTabScreenPBView__storage_ {
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeInt64,
       },
+      {
+        .name = "barColor",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBColor),
+        .number = MatchaTabScreenPBView_FieldNumber_BarColor,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBView__storage_, barColor),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "selectedColor",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBColor),
+        .number = MatchaTabScreenPBView_FieldNumber_SelectedColor,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBView__storage_, selectedColor),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "unselectedColor",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBColor),
+        .number = MatchaTabScreenPBView_FieldNumber_UnselectedColor,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBView__storage_, unselectedColor),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "selectedTextStyle",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBTextStyle),
+        .number = MatchaTabScreenPBView_FieldNumber_SelectedTextStyle,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBView__storage_, selectedTextStyle),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "unselectedTextStyle",
+        .dataTypeSpecific.className = GPBStringifySymbol(MatchaPBTextStyle),
+        .number = MatchaTabScreenPBView_FieldNumber_UnselectedTextStyle,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(MatchaTabScreenPBView__storage_, unselectedTextStyle),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
+        .dataType = GPBDataTypeMessage,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[MatchaTabScreenPBView class]
@@ -184,7 +241,7 @@ typedef struct MatchaTabScreenPBView__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\002\r\000";
+        "\006\002\r\000\003\010\000\006\r\000\007\017\000\010\021\000\t\023\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

@@ -27,7 +27,9 @@
 
 CF_EXTERN_C_BEGIN
 
+@class MatchaPBColor;
 @class MatchaPBImageOrResource;
+@class MatchaPBTextStyle;
 @class MatchaTabScreenPBChildView;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -80,6 +82,11 @@ typedef GPB_ENUM(MatchaTabScreenPBChildView_FieldNumber) {
 typedef GPB_ENUM(MatchaTabScreenPBView_FieldNumber) {
   MatchaTabScreenPBView_FieldNumber_ScreensArray = 1,
   MatchaTabScreenPBView_FieldNumber_SelectedIndex = 2,
+  MatchaTabScreenPBView_FieldNumber_BarColor = 3,
+  MatchaTabScreenPBView_FieldNumber_SelectedColor = 6,
+  MatchaTabScreenPBView_FieldNumber_UnselectedColor = 7,
+  MatchaTabScreenPBView_FieldNumber_SelectedTextStyle = 8,
+  MatchaTabScreenPBView_FieldNumber_UnselectedTextStyle = 9,
 };
 
 @interface MatchaTabScreenPBView : GPBMessage
@@ -89,6 +96,26 @@ typedef GPB_ENUM(MatchaTabScreenPBView_FieldNumber) {
 @property(nonatomic, readonly) NSUInteger screensArray_Count;
 
 @property(nonatomic, readwrite) int64_t selectedIndex;
+
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBColor *barColor;
+/** Test to see if @c barColor has been set. */
+@property(nonatomic, readwrite) BOOL hasBarColor;
+
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBColor *selectedColor;
+/** Test to see if @c selectedColor has been set. */
+@property(nonatomic, readwrite) BOOL hasSelectedColor;
+
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBColor *unselectedColor;
+/** Test to see if @c unselectedColor has been set. */
+@property(nonatomic, readwrite) BOOL hasUnselectedColor;
+
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBTextStyle *selectedTextStyle;
+/** Test to see if @c selectedTextStyle has been set. */
+@property(nonatomic, readwrite) BOOL hasSelectedTextStyle;
+
+@property(nonatomic, readwrite, strong, null_resettable) MatchaPBTextStyle *unselectedTextStyle;
+/** Test to see if @c unselectedTextStyle has been set. */
+@property(nonatomic, readwrite) BOOL hasUnselectedTextStyle;
 
 @end
 
