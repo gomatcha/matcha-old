@@ -17,8 +17,8 @@ Attach the recognizer to the view.
 
 	...
  	return view.Model{
- 		Values: map[string]interface{}{
- 			touch.Key:[]touch.Recognizer{tap},
+ 		Options: []view.Option{
+ 			touch.RecognizerList{tap},
  		},
  	}
  }

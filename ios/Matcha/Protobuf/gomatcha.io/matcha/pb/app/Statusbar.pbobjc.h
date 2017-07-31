@@ -29,6 +29,28 @@ CF_EXTERN_C_BEGIN
 
 NS_ASSUME_NONNULL_BEGIN
 
+#pragma mark - Enum MatchaAppPBStatusBarStyle
+
+typedef GPB_ENUM(MatchaAppPBStatusBarStyle) {
+  /**
+   * Value used if any message's field encounters a value that is not defined
+   * by this enum. The message will also have C functions to get/set the rawValue
+   * of the field.
+   **/
+  MatchaAppPBStatusBarStyle_GPBUnrecognizedEnumeratorValue = kGPBUnrecognizedEnumeratorValue,
+  MatchaAppPBStatusBarStyle_StatusBarStyleDefault = 0,
+  MatchaAppPBStatusBarStyle_StatusBarStyleLight = 1,
+  MatchaAppPBStatusBarStyle_StatusBarStyleDark = 2,
+};
+
+GPBEnumDescriptor *MatchaAppPBStatusBarStyle_EnumDescriptor(void);
+
+/**
+ * Checks to see if the given value is defined by the enum or was not known at
+ * the time this source was generated.
+ **/
+BOOL MatchaAppPBStatusBarStyle_IsValidValue(int32_t value);
+
 #pragma mark - MatchaAppPBStatusbarRoot
 
 /**
@@ -55,6 +77,33 @@ typedef GPB_ENUM(MatchaAppPBActivityIndicator_FieldNumber) {
 @property(nonatomic, readwrite) BOOL visible;
 
 @end
+
+#pragma mark - MatchaAppPBStatusBar
+
+typedef GPB_ENUM(MatchaAppPBStatusBar_FieldNumber) {
+  MatchaAppPBStatusBar_FieldNumber_Hidden = 1,
+  MatchaAppPBStatusBar_FieldNumber_Style = 2,
+};
+
+@interface MatchaAppPBStatusBar : GPBMessage
+
+@property(nonatomic, readwrite) BOOL hidden;
+
+@property(nonatomic, readwrite) MatchaAppPBStatusBarStyle style;
+
+@end
+
+/**
+ * Fetches the raw value of a @c MatchaAppPBStatusBar's @c style property, even
+ * if the value was not defined by the enum at the time the code was generated.
+ **/
+int32_t MatchaAppPBStatusBar_Style_RawValue(MatchaAppPBStatusBar *message);
+/**
+ * Sets the raw value of an @c MatchaAppPBStatusBar's @c style property, allowing
+ * it to be set to a value that was not defined by the enum at the time the code
+ * was generated.
+ **/
+void SetMatchaAppPBStatusBar_Style_RawValue(MatchaAppPBStatusBar *message, int32_t value);
 
 NS_ASSUME_NONNULL_END
 

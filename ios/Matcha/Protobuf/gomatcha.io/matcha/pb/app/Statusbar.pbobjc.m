@@ -43,6 +43,43 @@ static GPBFileDescriptor *MatchaAppPBStatusbarRoot_FileDescriptor(void) {
   return descriptor;
 }
 
+#pragma mark - Enum MatchaAppPBStatusBarStyle
+
+GPBEnumDescriptor *MatchaAppPBStatusBarStyle_EnumDescriptor(void) {
+  static GPBEnumDescriptor *descriptor = NULL;
+  if (!descriptor) {
+    static const char *valueNames =
+        "StatusBarStyleDefault\000StatusBarStyleLigh"
+        "t\000StatusBarStyleDark\000";
+    static const int32_t values[] = {
+        MatchaAppPBStatusBarStyle_StatusBarStyleDefault,
+        MatchaAppPBStatusBarStyle_StatusBarStyleLight,
+        MatchaAppPBStatusBarStyle_StatusBarStyleDark,
+    };
+    GPBEnumDescriptor *worker =
+        [GPBEnumDescriptor allocDescriptorForName:GPBNSStringifySymbol(MatchaAppPBStatusBarStyle)
+                                       valueNames:valueNames
+                                           values:values
+                                            count:(uint32_t)(sizeof(values) / sizeof(int32_t))
+                                     enumVerifier:MatchaAppPBStatusBarStyle_IsValidValue];
+    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
+      [worker release];
+    }
+  }
+  return descriptor;
+}
+
+BOOL MatchaAppPBStatusBarStyle_IsValidValue(int32_t value__) {
+  switch (value__) {
+    case MatchaAppPBStatusBarStyle_StatusBarStyleDefault:
+    case MatchaAppPBStatusBarStyle_StatusBarStyleLight:
+    case MatchaAppPBStatusBarStyle_StatusBarStyleDark:
+      return YES;
+    default:
+      return NO;
+  }
+}
+
 #pragma mark - MatchaAppPBActivityIndicator
 
 @implementation MatchaAppPBActivityIndicator
@@ -84,6 +121,71 @@ typedef struct MatchaAppPBActivityIndicator__storage_ {
 }
 
 @end
+
+#pragma mark - MatchaAppPBStatusBar
+
+@implementation MatchaAppPBStatusBar
+
+@dynamic hidden;
+@dynamic style;
+
+typedef struct MatchaAppPBStatusBar__storage_ {
+  uint32_t _has_storage_[1];
+  MatchaAppPBStatusBarStyle style;
+} MatchaAppPBStatusBar__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "hidden",
+        .dataTypeSpecific.className = NULL,
+        .number = MatchaAppPBStatusBar_FieldNumber_Hidden,
+        .hasIndex = 0,
+        .offset = 1,  // Stored in _has_storage_ to save space.
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "style",
+        .dataTypeSpecific.enumDescFunc = MatchaAppPBStatusBarStyle_EnumDescriptor,
+        .number = MatchaAppPBStatusBar_FieldNumber_Style,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(MatchaAppPBStatusBar__storage_, style),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldHasEnumDescriptor),
+        .dataType = GPBDataTypeEnum,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[MatchaAppPBStatusBar class]
+                                     rootClass:[MatchaAppPBStatusbarRoot class]
+                                          file:MatchaAppPBStatusbarRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(MatchaAppPBStatusBar__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+int32_t MatchaAppPBStatusBar_Style_RawValue(MatchaAppPBStatusBar *message) {
+  GPBDescriptor *descriptor = [MatchaAppPBStatusBar descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MatchaAppPBStatusBar_FieldNumber_Style];
+  return GPBGetMessageInt32Field(message, field);
+}
+
+void SetMatchaAppPBStatusBar_Style_RawValue(MatchaAppPBStatusBar *message, int32_t value) {
+  GPBDescriptor *descriptor = [MatchaAppPBStatusBar descriptor];
+  GPBFieldDescriptor *field = [descriptor fieldWithNumber:MatchaAppPBStatusBar_FieldNumber_Style];
+  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);
+}
 
 
 #pragma clang diagnostic pop

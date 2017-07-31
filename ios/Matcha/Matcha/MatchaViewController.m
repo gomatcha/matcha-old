@@ -77,6 +77,24 @@
         [UIApplication.sharedApplication setNetworkActivityIndicatorVisible:indicator.visible];
     }
     
+    any = root.middleware[@"gomatcha.io/matcha/app statusbar"];
+    if (any) {
+        MatchaAppPBStatusBar *statusBar = (id)[any unpackMessageClass:[MatchaAppPBStatusBar class] error:NULL];
+        UIStatusBarStyle style = 0;
+        if (statusBar.style == MatchaAppPBStatusBarStyle_StatusBarStyleDefault) {
+            style = UIStatusBarStyleDefault;
+        } else if (statusBar.style == MatchaAppPBStatusBarStyle_StatusBarStyleLight) {
+            style = UIStatusBarStyleLightContent;
+        } else if (statusBar.style == MatchaAppPBStatusBarStyle_StatusBarStyleDark) {
+            style = UIStatusBarStyleDefault;
+        }
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+        [UIApplication.sharedApplication setStatusBarStyle:style animated:YES];
+        [UIApplication.sharedApplication setStatusBarHidden:statusBar.hidden withAnimation:YES];
+#pragma GCC diagnostic pop
+    }
+    
     if (!self.loaded) {
         self.loaded = TRUE;
         UIView *view = self.viewNode.view ?: self.viewNode.viewController.view;

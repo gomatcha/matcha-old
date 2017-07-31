@@ -94,6 +94,9 @@ func (v *AppView) Build(ctx *view.Context) view.Model {
 	return view.Model{
 		Children: []view.View{scrollView},
 		Painter:  &paint.Style{BackgroundColor: colornames.White},
+		Options: []view.Option{
+			app.StatusBar{Style: app.StatusBarStyleLight},
+		},
 	}
 }
 

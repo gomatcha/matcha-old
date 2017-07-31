@@ -7,3 +7,14 @@ option objc_class_prefix = "MatchaAppPB";
 message ActivityIndicator {
     bool visible = 1;
 }
+
+message StatusBar {
+    bool hidden = 1;
+    StatusBarStyle style = 2;
+}
+
+enum StatusBarStyle {
+    STATUS_BAR_STYLE_DEFAULT = 0;
+    STATUS_BAR_STYLE_LIGHT = 1;
+    STATUS_BAR_STYLE_DARK = 2;
+}

@@ -22,7 +22,7 @@
 		6759EE561F2E64EC00B8E0A9 /* MatchaStatusBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 6759EE541F2E64EC00B8E0A9 /* MatchaStatusBar.h */; };
 		6759EE571F2E64EC00B8E0A9 /* MatchaStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6759EE551F2E64EC00B8E0A9 /* MatchaStatusBar.m */; };
 		6759EE5B1F2E686A00B8E0A9 /* Statusbar.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 6759EE591F2E686A00B8E0A9 /* Statusbar.pbobjc.h */; };
-		6759EE5C1F2E686A00B8E0A9 /* Statusbar.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6759EE5A1F2E686A00B8E0A9 /* Statusbar.pbobjc.m */; };
+		6759EE5C1F2E686A00B8E0A9 /* Statusbar.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 6759EE5A1F2E686A00B8E0A9 /* Statusbar.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67F927091F27FFBB00C068AF /* Alert.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 67F927071F27FFBB00C068AF /* Alert.pbobjc.h */; };
 		67F9270A1F27FFBB00C068AF /* Alert.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 67F927081F27FFBB00C068AF /* Alert.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		67FEBA701F099EDF005AFEDA /* Matcha.h in Headers */ = {isa = PBXBuildFile; fileRef = 67FEBA6E1F099EDF005AFEDA /* Matcha.h */; settings = {ATTRIBUTES = (Public, ); }; };

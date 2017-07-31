@@ -9,21 +9,12 @@ import (
 	"gomatcha.io/matcha/view"
 )
 
-const (
-	// TODO(KD): If there are multiple views with a StatusBarKey, a random one will be chosen...
-	// values[app.StatusBarKey] = &StatusBar{Hidden:false, Style:StatusBarStyleLight}
-	StatusBarKey = "gomatcha.io/matcha/app statusbar"
-
-	// If any view has set the activityIndicatorKey set to true, the activity indicator will be visible.
-	// values[app.activityIndicatorKey] = true
-	activityIndicatorKey = "gomatcha.io/matcha/app activity"
-)
-
-type ActivityIndicator struct {
-}
-
-func (a ActivityIndicator) OptionsKey() string {
-	return "gomatcha.io/matcha/app activity"
+func init() {
+	internal.RegisterMiddleware(func() interface{} {
+		return &statusBarMiddleware{
+			radix: radix.NewRadix(),
+		}
+	})
 }
 
 type StatusBarStyle int
@@ -39,40 +30,51 @@ type StatusBar struct {
 	Style  StatusBarStyle
 }
 
+func (s StatusBar) OptionsKey() string {
+	return "gomatcha.io/matcha/app statusbar"
+}
+
 type statusBarMiddleware struct {
 	radix *radix.Radix
 }
 
-// func (m *statusBarMiddleware) Build(ctx *view.Context, model *view.Model) {
-// 	path := idSliceToIntSlice(ctx.Path())
+func (m *statusBarMiddleware) Build(ctx *view.Context, model *view.Model) {
+	path := idSliceToIntSlice(ctx.Path())
 
-// 	add := false
-// 	val, ok := model.Values[activityIndicatorKey]
-// 	if ok {
-// 		if val2, ok := val.(bool); ok {
-// 			add = val2
-// 		}
-// 	}
-// 	if add {
-// 		m.radix.Insert(path)
-// 	} else {
-// 		m.radix.Delete(path)
-// 	}
-// }
+	add := false
+	statusBar := StatusBar{}
+	for _, i := range model.Options {
+		var ok bool
+		if statusBar, ok = i.(StatusBar); ok {
+			add = true
+		}
+	}
+	if add {
+		n := m.radix.Insert(path)
+		n.Value = statusBar
+	} else {
+		m.radix.Delete(path)
+	}
+}
 
-// func (m *statusBarMiddleware) MarshalProtobuf() proto.Message {
-// 	visible := false
-// 	m.radix.Range(func(path []int64, node *radix.Node) {
-// 		visible = true
-// 	})
-// 	return &app.ActivityIndicator{
-// 		Visible: visible,
-// 	}
-// }
+func (m *statusBarMiddleware) MarshalProtobuf() proto.Message {
+	var statusBar StatusBar
+	maxId := int64(-1)
+	m.radix.Range(func(path []int64, node *radix.Node) {
+		if len(path) > 0 && path[len(path)-1] > maxId {
+			maxId = path[len(path)-1]
+			statusBar, _ = node.Value.(StatusBar)
+		}
+	})
+	return &app.StatusBar{
+		Hidden: statusBar.Hidden,
+		Style:  app.StatusBarStyle(statusBar.Style),
+	}
+}
 
-// func (m *statusBarMiddleware) Key() string {
-// 	return activityIndicatorKey
-// }
+func (m *statusBarMiddleware) Key() string {
+	return "gomatcha.io/matcha/app statusbar"
+}
 
 func init() {
 	internal.RegisterMiddleware(func() interface{} {
@@ -80,6 +82,17 @@ func init() {
 			radix: radix.NewRadix(),
 		}
 	})
+}
+
+// If any view has an ActivityIndicator option, the spinner will be visible.
+//  return view.Model{
+//  	Options: []view.Option{app.ActivityIndicator{}}
+//  }
+type ActivityIndicator struct {
+}
+
+func (a ActivityIndicator) OptionsKey() string {
+	return "gomatcha.io/matcha/app activity"
 }
 
 type activityIndicatorMiddleware struct {
@@ -113,7 +126,7 @@ func (m *activityIndicatorMiddleware) MarshalProtobuf() proto.Message {
 }
 
 func (m *activityIndicatorMiddleware) Key() string {
-	return activityIndicatorKey
+	return "gomatcha.io/matcha/app activity"
 }
 
 func idSliceToIntSlice(ids []matcha.Id) []int64 {

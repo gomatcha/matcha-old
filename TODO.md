@@ -2,10 +2,10 @@ High:
 * Take screenshots / videos of a running app.
 * Delay any ui events while viwecontroller is updating.
 * Scroll is forcing a relayout.
+* UIViewControllerBasedStatusBarAppearance
 
 Medium:
 * Rotation / orientation
-* Statusbar color
 * Rebuild settings app, Todo App.
 * Multiple view controllers.
 * Picker
@@ -31,6 +31,7 @@ Low:
 * Building for iPhone 5 Simulator doesn't work.
 
 Very Low:
+* Statusbar color
 * Automatically insert copyright notice.
 * StyledText
 * Text selection.
